@@ -69,6 +69,9 @@ def variable(ufo):
     reg_vf = OVERLAP.vf_source(ufo)             # 0.81: struck glyphs as letter and strokes, overlapping
     for u in (reg_vf, bold_ufo, light_ufo):
         u.lib["public.truetype.overlap"] = True
+        for name in OVERLAP.struck_names(ufo):               # 0.81: the glyf flag, per glyph (ufo2ft reads it there)
+            if name in u:
+                u[name].lib["public.truetype.overlap"] = True
     vf = BOLD.variable(reg_vf, bold_ufo, stem, light_ufo)
     from fontTools.otlLib.builder import buildStatTable
     buildStatTable(vf, [dict(tag="wght", name="Weight", values=[          # each named weight, Regular linked to Bold

@@ -33,12 +33,20 @@ CLASSES = [
      ["x", "Whook", "Nhookleft", "whook"], [300, 400, 475, 700]),
     ("7-fallbacks", "No master of their own (0.80: the Regular's outline or upright parts only) / built by rule (0.81)",
      ["uni2318", "uni2196", "uni20A1", "commaturnedabovecomb"], [300, 400, 700]),
+    ("9-g", "The default g and g.ss02 along the axis (0.80 / 0.81; the glyph branch redrew both)",
+     ["g", "g.ss02"], [300, 350, 400, 550, 700]),
+    ("10-alternates", "Alternates along the axis (0.80 / 0.81; a.ss03, l.ss04, zero.ss05, 7 and z ss06 are new in 0.81)",
+     ["a.ss03", "l.ss04", "zero.ss05", "seven.ss06", "z.ss06"], [300, 400, 700]),
+    ("11-symmetric-signs", "Symmetric signs (0.80 / 0.81: each point's move the mean of its images')",
+     ["dagger", "daggerdbl", "asterisk", "uni2318"], [300, 400, 700]),
     ("8-marks", "Wedge accents swelled then pressed into their box (0.80) / swollen into it, level cuts kept (0.81)",
      ["acute", "circumflex", "caron.case", "tilde", "hungarumlaut.case"], [300, 400, 550, 700]),
 ]
 
 
 def cell(m, name, w, s, box, mark=True):
+    if name not in m.R:                                        # new in 0.81: no 0.80 drawing
+        return A.ink([], s, box)
     cs = m.at(name, w, decompose=False)
     im = A.ink(cs, s, box, color=(30, 30, 30))
     return im
@@ -47,7 +55,7 @@ def cell(m, name, w, s, box, mark=True):
 def class_sheet(old, new, key, title, names, weights, out):
     rows, titles = [], []
     for name in names:
-        sets = [m.at(name, w, decompose=False) for m in (old, new) for w in weights]
+        sets = [m.at(name, w, decompose=False) for m in (old, new) for w in weights if name in m.R]
         box = A.box_of(*sets, pad=25)
         s = 150 / max(box[3] - box[1], 1)
         for lab, m in (("0.80", old), ("0.81", new)):

@@ -321,9 +321,9 @@ def stroke_weight(T, u, v):
         w = B.y_target(round(T), True, v)
     elif ang >= 80:
         w = B.x_target(round(T), True, v)
-    else:
-        w = B.diag_target(T, v)
-    return T if w is None else w
+    else:                                                      # 0.81 round 2: a stroke across a letter is a
+        w = T * (1 + (B.HAIR_RATIO - 1) * v["ft"])             # hairline, slanted or not (the thin diagonal's
+    return T if w is None else w                               # 1.32 closed Astroke's pockets from 625)
 
 
 def move_stroke(P, mapx, mapy, v):
@@ -382,3 +382,7 @@ def vf_source(ufo):
                 g.contours.append(copy.deepcopy(c))
         del reg.layers[LAYER]
     return reg
+
+
+def struck_names(ufo):
+    return [g.name for g in ufo.layers[LAYER]] if LAYER in ufo.layers else []

@@ -116,3 +116,52 @@ tail at the bowl, ə's bar, ʕ, ɂ), and two real ones that `audit_axis.py` also
   it (the superiors' hairline 33, every serif tip 30). Towards the Light the second method instead fails any place
   that thins noticeably faster than the stem.
 - No intermediate master was added. No rvrn swap was built.
+
+## Round 2 (after the glyph branch's merge)
+
+| # | What | Rule | Where |
+|---|---|---|---|
+| 11 | Default g in the Bold fell back (node 7, the link's upper edge into its curl, bent 2.8 degrees against 0.2): straightening the handle back onto the line put it past the curve's other handle (the curl's two handles are 2 units apart in the Regular) | After a smooth node's handles go back on one line, the curve's other handle slides along its own direction towards its own node until the two are in order; no tangent changes. It also brought servicemark off its fallback | `bold.order_handles` |
+| 12 | Symmetric signs read arm by arm: the dagger's left arm a larger lobe than its right at 700 | A sign drawn symmetric keeps the symmetry in every master: each point's move, less the glyph's shift (read on the points every symmetry pairs), is the mean of its images' moves turned back, over the group the drawing's mirrors and turns make. A symmetry counts when 0.8 of the points have an image within 6 units (15 for a turn) whose images close on it; applied after the engine and again after the last guards | `bold.symmetries`, `symmetric` |
+| 13 | A stroke across a letter took the thin diagonal's law (1.32 at the Bold) | It is a hairline, slanted or not: 1.24 | `overlap.stroke_weight` |
+
+New check: `audit_axis.py` symmetry. A sign with a symmetry fails when a point's move (less the glyph's shift)
+differs from its image's by more than 1.5 units at a master (a unit, and half a unit for the mean of whole-unit
+moves rounded); moves are linear, so the masters bound every weight between. The 0.80 masters fail it on 20 glyphs
+(Bold) and 23 (Light).
+
+Round strokes against the stem (`tools/weight/round_stem.py`, o's thickest cut over n's stem at 300 / 400 / 700):
+Georgia Pro 1.102 / 1.107 / 1.109; Source Serif 4 1.143 / 1.117 / 1.056; Literata 1.070 / 1.087 / 1.057; Area
+Serif 0.81 1.054 / 1.051 / 1.043. Area's rounds already follow the stem within 1% at their thickest; the second
+method's Light flags on curves (j's hook, J's bowl, the six, g's bowl, r's arm, the section's tail) are places part
+way round a curve, not its thickest cut: there the thick part moves along the stroke as the contrast falls. No
+round-stroke rule was changed for them.
+
+The asterisk is not rotation-symmetric in the Regular (its six arms are drawn up to 15 units apart, turned), so only
+its mirror across the level holds. Building it from one arm turned (`build/axis081/star_try.py`) made a symmetric
+Regular, 7 units of ink from 0.80's, but the engine's reading of the lone upright arm swelled it into a lobe at the
+Bold; not adopted.
+
+Overlaps on screen (`tools/weight/overlap_render.py`): see the final report.
+
+### Round 2 results (build after the merge)
+
+- Fallbacks: none on either side (g and servicemark came off theirs by rule 11).
+- `audit_bold.py` 434/434 on both masters; `--sweep` clean at 325 to 700 (g included); `curvecheck.py` clean.
+- `audit_axis.py`: Bold 23 glyphs (Astroke, Tdiagonalstroke, ampersand, asterisk, at, c_t, commaaccentcomb.case,
+  dagger, daggerdbl, exclam, exclamdown, hookabovecomb.case, lira, multiply, ogonekcomb.case, one.ss01, product,
+  registered, section, thook, uni20B9, uni2318, uni2715); Light 14 (ae, currency, dagger, daggerdbl, g,
+  glottalstopsmall, gstroke, multiply, s_p, uni21E4, uni21E5, uni2318, whook, yhook). The new symmetry check
+  accounts for multiply, uni2318, uni2715 (a turn's moves rounded, 2 to 5 units apart); exclam, exclamdown,
+  asterisk, dagger and daggerdbl gained a turn where the symmetric moves undo `fix_turns`' handle changes. Light g:
+  its loop thins into the link (39 > 13 at 300); a neck rule for crotches between two curves (`curve_crotches`) was
+  tried and reverted (it moved C, Q and others and 12 necks missed their targets).
+- The hairline law for struck strokes did not keep Astroke's and Tdiagonalstroke's pockets open; product, rupee
+  and registered still meet at 675: no white-between-parts floor was built. No stump form was built.
+- Static Regular: the 11 g glyphs the glyph branch redrew differ from 0.80 (theirs); nothing else.
+- Overlaps on screen (`tools/weight/overlap_render.py`, FreeType, 13 / 16 / 64 px, overlaps kept against removed
+  by the instancer): the glyf overlap flag is now set per glyph (it was not: the font-level lib key alone does not
+  reach the variable font's glyf). No white sliver at 400 or 700; at 300, 20 renders have pixels up to 16 of 255
+  lighter (sub-pixel). Where two edges meet, anti-aliasing adds their coverage: 42 glyphs have pixels up to 37 of
+  255 darker. The static Regular has no overlaps left in these glyphs.
+- Kerning per master: not started.

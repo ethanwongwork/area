@@ -204,6 +204,18 @@ def sweep(reg, master, mids, ts, tm, tip_at, fails, lighter=False, w_of=None):
                 fails["counter"].append(f"{name} at {at(s_)} (contour {ci}'s area reaches zero)")
             for ci, k, d, own in X.drift(rc, A, C):
                 fails["drift"].append(f"{name} at {at(0.5)} (contour {ci} node {k} leaves its line by {d} half way; masters {own})")
+        # 0.81: a symmetric sign changes symmetrically: each point's move (less the glyph's whole shift) is its
+        # mirror or turned image's, within a unit, at the master (so at every weight between, moves being linear)
+        if g.unicodes and __import__("unicodedata").category(chr(g.unicodes[0]))[:1] in ("P", "S"):
+            for M, c_, jj, sname in B.symmetries(rc):
+                A0 = np.array([q[:2] for P in rc for q in P], float)
+                mv = np.array([q[:2] for P in bc for q in P], float) - A0
+                ok = jj >= 0
+                paired = np.all([j_ >= 0 for _, _, j_, _ in B.symmetries(rc)], axis=0)
+                mv -= mv[paired].mean(axis=0) if paired.any() else mv.mean(axis=0)
+                diff = np.abs(mv[jj[ok]] @ M - mv[ok]).max() if ok.any() else 0.0
+                if diff > 1.5:                                 # a unit, and half a unit: a mean of whole-unit moves, rounded
+                    fails["symmetry"].append(f"{name} at {w_of(1.0)} ({sname}: a point's move differs from its image's by {diff:.1f})")
         rp = flat(rc)
         base_topo = X.topology([np.array(p) for p in rp]) if len(rc) > 1 else None
         base_thin = thinnest(rp, points=points_of(rc))
@@ -262,7 +274,7 @@ def main():
     mids = bold.layers["mid"] if "mid" in bold.layers else {}
     tm = (dict(B.axis_map(stem))[B.MID_WEIGHT] - B.REG_STEM) / (stem - B.REG_STEM)
     ts = [(w, (st - B.REG_STEM) / (stem - B.REG_STEM)) for w, st in B.axis_map(stem, STOPS)]
-    keys = ("moved", "turns", "crossings", "counter", "drift", "thin", "monotone", "composite")
+    keys = ("moved", "turns", "crossings", "counter", "drift", "symmetry", "thin", "monotone", "composite")
     q = stem / B.REG_STEM
     w_bold = lambda t: round(400 + 300 * math.log((B.REG_STEM + t * (stem - B.REG_STEM)) / B.REG_STEM) / math.log(q))   # noqa: E731
     w_light = lambda t: round(400 - 100 * math.log(B.REG_STEM / (B.REG_STEM - t * (B.REG_STEM - B.LIGHT_STEM))) / math.log(B.REG_STEM / B.LIGHT_STEM))   # noqa: E731

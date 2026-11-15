@@ -1600,6 +1600,9 @@ def bold(contours, width, v, name="", hints=None):
         out.append(keep_tangents(P, N))
     necks = set_necks(contours, out, v, pins)
     out = [P_ if is_dot(P) else no_turn_back(P, no_inflection(P, straighten(no_turn_back(P, P_), P))) for P, P_ in zip(contours, out)]
+    # 0.81 round 2: the last clamp can leave a smooth node off its line (g's link into its curl); its handles back
+    # on one line, the curve's other handle sliding along its own direction to keep the two in order
+    out = [P_ if is_dot(P) else order_handles(P, straighten(P_, P)) for P, P_ in zip(contours, out)]
     for st in strokes:                                         # each slanted stroke across itself at its middle, on
         at = lambda q: moved_to.get(q, (X[q[0]], Y[q[1]]))     # noqa: E731  the whole-unit nodes it ended on
         got, grow = slant_measure(st, at)
@@ -2073,6 +2076,35 @@ def stretch(contours, width, kind, v, below=False):
     return out, 0 if width == 0 else right + dx + round(rsb * v["bearing"]), rep
 
 
+def order_handles(P, N):
+    """0.81: where a curve that runs one way on an axis in the Regular has its two handles out of order (one was
+    turned back onto its node's line), the other handle slides along its own direction, towards its own node,
+    until they are in order: no tangent changes (g's link into its curl, 2 units apart in the Regular)."""
+    class _Q:
+        def __init__(s, q):
+            s.type = q[2]
+    out = list(N)
+    for i, mid, j in segments([_Q(q) for q in P]):
+        if len(mid) != 2:
+            continue
+        for ax in (0, 1):
+            reg = [P[i][ax], P[mid[0]][ax], P[mid[1]][ax], P[j][ax]]
+            d = [b - a for a, b in zip(reg, reg[1:])]
+            if any(x > 0 for x in d) and any(x < 0 for x in d):
+                continue
+            run = out[j][ax] - out[i][ax]
+            h1, h2 = out[mid[0]], out[mid[1]]
+            if run * (h2[ax] - h1[ax]) >= 0:
+                continue
+            dv = (h2[0] - out[j][0], h2[1] - out[j][1])
+            if abs(dv[ax]) < 1e-9:
+                continue
+            k = (h1[ax] - out[j][ax]) / dv[ax]
+            if 0 < k < 1:
+                out[mid[1]] = (round(out[j][0] + dv[0] * k), round(out[j][1] + dv[1] * k), None, False)
+    return out
+
+
 def _swell_into_box(contours, W_, H_, want, cx, base, below, foot):
     """0.81, a wedge mark towards the Bold: its outline is carried into a box that, once the outline has swollen
     about it by d, is the measured box; d is what brings the mean stroke to its measured value. The stroke is
@@ -2145,7 +2177,7 @@ def glyph_bold(g, v):
         return stretch(c, g.width, mark_kind(g.name), v, below=max(q[1] for P in c for q in P) < 100)
     if sound(c, out) and not folded(rep) and all("bends" in e for e in sound(c, out)):
         # 0.81: a smooth node left off its line by the last whole-unit clamp: its handles back on one line
-        out2 = [straighten(N, R) for R, N in zip(c, out)]
+        out2 = [order_handles(R, straighten(N, R)) for R, N in zip(c, out)]
         if not sound(c, out2):
             out = out2
     if sound(c, out) or folded(rep):                           # not a sound second master: upright and level parts
@@ -2379,6 +2411,99 @@ def kin_parts(reg, g, out, rep, v):
     return out, rep
 
 
+def symmetries(contours, tol=6.0):
+    """The symmetries a drawing has, to within tol: [(2x2 matrix, centre, index of each point's image or -1)],
+    point indexes running over all contours; kept when at least 0.8 of the points have an image (the dagger's arms
+    mirror each other point for point, its top neck does not). Mirrors across the upright and the level through the centre of its
+    nodes' box, and turns by a quarter, a fifth, a sixth and an eighth."""
+    pts = [(q[0], q[1], q[2] is None) for P in contours for q in P]
+    on = [p for p in pts if not p[2]]
+    if not on:
+        return []
+    c = ((min(p[0] for p in on) + max(p[0] for p in on)) / 2, (min(p[1] for p in on) + max(p[1] for p in on)) / 2)
+    cands = [((-1.0, 0.0, 0.0, 1.0), "mirror |"), ((1.0, 0.0, 0.0, -1.0), "mirror -")]
+    for n in (4, 5, 6, 8):
+        a = 2 * math.pi / n
+        cands.append(((math.cos(a), -math.sin(a), math.sin(a), math.cos(a)), f"turn 1/{n}"))
+    arr = np.array([p[:2] for p in pts], float)
+    kind = np.array([p[2] for p in pts])
+    out = []
+    corners_ = [q[:2] for P in contours for q in P if q[2] is not None and not q[3]]
+    c_turn = tuple(np.mean(corners_, axis=0)) if len(corners_) >= 3 else c   # a star turns about its crotches
+    for (a, b, c_, d), name in cands:
+        cc = c_turn if name.startswith("turn") else c
+        q = arr - cc
+        img = np.stack([a * q[:, 0] + b * q[:, 1], c_ * q[:, 0] + d * q[:, 1]], axis=1) + cc
+        dist = np.hypot(img[:, None, 0] - arr[None, :, 0], img[:, None, 1] - arr[None, :, 1])
+        dist[kind[:, None] != kind[None, :]] = 1e9
+        j = dist.argmin(axis=1)
+        ok = dist[np.arange(len(arr)), j] <= (2.5 * tol if name.startswith("turn") else tol)   # arms drawn apart
+        jj = np.where(ok, j, -1)
+        back = dist.argmin(axis=0)                             # mutual: i's image is nearest j, j's preimage i
+        for i in range(len(arr)):
+            if jj[i] >= 0 and dist[:, jj[i]].min() < dist[i, jj[i]] - 1e-9:
+                jj[i] = -1
+        del back
+        n_ = 2 if name.startswith("mirror") else int(name.split("/")[1])
+        for i in range(len(arr)):                              # each point's images close on it after n steps
+            k_, ok_ = i, True
+            for _ in range(n_):
+                k_ = jj[k_]
+                if k_ < 0:
+                    ok_ = False
+                    break
+            if not ok_ or k_ != i:
+                jj[i] = -1
+        jj = np.where(jj >= 0, np.where(jj[np.maximum(jj, 0)] >= 0, jj, -1), -1)
+        if (jj >= 0).mean() >= 0.8:                            # a part's symmetry (the dagger's arms) is enough
+            out.append((np.array([[a, b], [c_, d]]), cc, jj, name))
+    return out
+
+
+def symmetric(g, out, rep):
+    """0.81: a sign drawn symmetric (the dagger mirrored, the asterisk turned by a sixth) keeps that symmetry in
+    every master: each point's move, less the glyph's whole shift, is the mean over the drawing's symmetries of its
+    images' moves turned back. The engine read each arm of the dagger and the asterisk afresh, and the readings
+    differed: at 700 the dagger's left arm was a larger lobe than its right."""
+    import unicodedata
+    if not g.unicodes or unicodedata.category(chr(g.unicodes[0]))[:1] not in ("P", "S"):
+        return out, rep
+    R = glyph_contours(g)
+    if [len(P) for P in R] != [len(P) for P in out]:
+        return out, rep
+    syms = symmetries(R)
+    if not syms:
+        return out, rep
+    A = np.array([q[:2] for P in R for q in P], float)
+    Bm = np.array([q[:2] for P in out for q in P], float)
+    mv = Bm - A
+    paired = np.all([j >= 0 for _, _, j, _ in syms], axis=0)  # the glyph's shift, read on the points every symmetry
+    shift = mv[paired].mean(axis=0) if paired.any() else mv.mean(axis=0)   # pairs (an unpaired part would skew it)
+    mv = mv - shift
+    group = [(np.eye(2), np.arange(len(A)))]                   # the group the symmetries make: their powers too
+    for M, c, j, name in syms:
+        Mk, jk = M, j.copy()
+        for _ in range(8):
+            if np.allclose(Mk, np.eye(2), atol=1e-6):
+                break
+            group.append((Mk, jk.copy()))
+            nxt = np.where(jk >= 0, j[np.maximum(jk, 0)], -1)
+            Mk, jk = M @ Mk, np.where(jk >= 0, nxt, -1)
+    acc = np.zeros_like(mv)
+    cnt = np.zeros(len(mv))
+    for M, j in group:
+        ok = j >= 0
+        acc[ok] += mv[j[ok]] @ M                               # M is orthogonal: its inverse is its transpose
+        cnt[ok] += 1
+    mv = acc / cnt[:, None] + shift
+    flat = [(math.floor(x + 0.5), math.floor(y + 0.5)) for x, y in (A + mv)]
+    new, k = [], 0
+    for P in out:
+        new.append([flat[k + i] + q[2:] for i, q in enumerate(P)])
+        k += len(P)
+    return new, dict(rep, symmetric=[s_[3] for s_ in syms])
+
+
 def overlap_masters(reg, font, maps, v, reports, notes):
     """0.81: every struck glyph (overlap.py) in this master: the master's own letter, point for point, at the
     Regular's offset, and each stroke moved by overlap.move_stroke on the letter's node map. Writes the default
@@ -2439,6 +2564,7 @@ def bold_font(reg, stem=STEM, **over):
             continue
         out, w, rep = glyph_bold(g, v)
         out, rep = kin_parts(reg, g, out, rep, v)              # 0.81: a comma wherever it recurs
+        out, rep = symmetric(g, out, rep)                      # 0.81: a symmetric sign stays symmetric
         if g.width:                                            # side bearings: the Regular's plus the measured change
             rc = glyph_contours(g)
             r0, r1 = _zone_edges(rc, g.name)
@@ -2631,6 +2757,13 @@ def bold_font(reg, stem=STEM, **over):
             del layer[g.name]
         apart.append(f"{g.name} {total}")
     notes.append(f"side by side: {len(apart)} glyphs opened ({', '.join(apart)})")
+    for g in reg:                                              # 0.81: last, a symmetric sign made so again
+        if g.contours and not g.components and g.name in font and g.name not in struck:
+            cs = glyph_contours(font[g.name])
+            sym, _ = symmetric(g, cs, {})
+            if sym != cs:
+                for c, P in zip(font[g.name].contours, sym):
+                    c.points = [Point(x, y, t, smooth=s_) for x, y, t, s_ in P]
     # 0.79: a glyph spliced from two letters is spliced again from this master's letters (and from the mid master's,
     # where either letter has one), so its parts are the letters' own at every weight: the single-storey g's bowl
     # is the Bold q's (the engine's own reading of g.ss02 left the bowl light).
