@@ -324,7 +324,8 @@ def sweep(reg, master, mids, ts, tm, tip_at, fails, lighter=False, w_of=None):
                 continue
             th = thinnest(ip, points=points_of(ic))
             tip = tip_at(t)
-            floor = min(base_thin, tip) if not lighter or base_thin is None else min(base_thin, 30) * tip / 30
+            # (0.81 close: a glyph with no span a facing cut crosses has no thinnest stroke: nothing to compare)
+            floor = None if base_thin is None else min(base_thin, tip) if not lighter else min(base_thin, 30) * tip / 30
             if base_thin is not None and th is not None and th < floor - 1.0:
                 fails["thin"].append(f"{name} at {w} ({base_thin:.0f} > {th:.0f}, tip {tip:.0f})")
             a, length = area_len(ip)
