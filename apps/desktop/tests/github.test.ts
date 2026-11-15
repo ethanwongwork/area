@@ -22,6 +22,9 @@ function setup() {
   sh(remote, "init", "--bare", "--initial-branch=main");
   const folder = join(root, "shop");
   sh(root, "clone", remote, folder);
+  // The folder's own identity, as a Mac with git set up has: the engine commits with the folder's config, and a CI
+  // runner has none of its own.
+  sh(folder, "config", "user.name", "David Tee"); sh(folder, "config", "user.email", "david@example.com");
   writeFileSync(join(folder, "app.css"), "button { color: blue; }\n");
   sh(folder, "add", "-A"); sh(folder, "commit", "-m", "Start"); sh(folder, "push", "origin", "main");
   sh(folder, "remote", "set-head", "origin", "main");
@@ -98,6 +101,15 @@ test("github: save makes the project's line of work from the main line and keeps
   assert.equal(published.ok, true, published.error);
   assert.ok(log().some(args => args[1] === "merge" && args.includes("--squash")));
   assert.equal(published.state.branch, "main", "back on the main line");
+});
+
+test("github: a Mac where git doesn't know who's saving says how to fix it", async () => {
+  const { folder, gh } = setup();
+  sh(folder, "config", "--unset", "user.name"); sh(folder, "config", "--unset", "user.email");
+  const env = { ...process.env, GIT_CONFIG_GLOBAL: "/dev/null", GIT_CONFIG_NOSYSTEM: "1", GIT_CONFIG_COUNT: "1", GIT_CONFIG_KEY_0: "user.useConfigOnly", GIT_CONFIG_VALUE_0: "true" };
+  for (const key of ["GIT_AUTHOR_NAME", "GIT_AUTHOR_EMAIL", "GIT_COMMITTER_NAME", "GIT_COMMITTER_EMAIL", "EMAIL"]) delete env[key];
+  writeFileSync(join(folder, "app.css"), "button { color: red; }\n");
+  assert.match((await createGit({ gh, env }).save(folder, "Shop", "Red")).error, /git config --global user\.name/);
 });
 
 test("github: another line of work in the folder is left alone", async () => {
