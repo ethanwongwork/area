@@ -1183,6 +1183,7 @@ def normalize(font):
     print("balance: figures", BALANCE.fig_flats(font))                   # 0.68: 2 5 7 flat strokes 73; N, 1
     print("clean: joins to straights", CLEAN.true_joins(font, HARMONIZE_SET))   # 0.68
     print("clean: 5", CLEAN.five_heel(font))                             # 0.69
+    print("clean: 5", CLEAN.five_bowl(font))                             # 0.79: the bowl's lowest and widest points
     print("balance: capital serifs", BALANCE.cap_serifs(font))           # 0.70: 77 on every upright stem
     print("balance: zero", BALANCE.zero_weight(font))                    # 0.70: sides 87
     print("clean: S curves", CLEAN.even_s(font, HARMONIZE_SET))          # 0.70: 3's hook
@@ -1197,7 +1198,7 @@ def normalize(font):
     n_light, tab = CHARSET.run(font, letters)
     print(f"charset: lightened {n_light} more glyphs; tabular figures {tab}")
     print("charset: single-storey g", CHARSET.single_g(font))    # 0.77: g.ss02, from q and j
-    print("charset: the base's S, s, dollar", CHARSET.base_s(font))  # 0.78: ss03
+    print("charset: the base's dollar", CHARSET.base_s(font))    # 0.78: ss03 (0.79: the dollar alone)
     print("balance: descender feet", BALANCE.desc_feet(font))
     print("clean: uncrossed", CLEAN.uncross(font))        # 0.65: every glyph, last of all
     # a base drawing whose path laps over itself, and (0.70) every letter with a stroke or bar drawn across it: merged
@@ -1222,6 +1223,8 @@ def normalize(font):
         again = CLEAN.true_joins(font, rest, max_deg=15) + CLEAN.true_curves(font, rest, max_deg=9)
         print(f"clean: joins trued after the new nodes {len(again)}", again)   # a shortened handle, on whole units
     CHARSET.cap_strokes(font)                         # 0.75: and the signs' strokes, read at the nodes just added
+    soft = CHARSET.soft_ends(font)                    # 0.79: plain strokes end on the letters' radius
+    print(f"charset: plain stroke ends rounded on {len(soft)} glyphs, {sum(soft.values())} ends")
     CHARSET.turned_pairs(font)                        # 0.74: after the node rules, the turned glyphs once more
     CHARSET.mirrors(font)
     joined, promoted, copied, opened_all = SPACING.finish(font, CHARSET.COVERAGE)   # 0.73: beyond the core

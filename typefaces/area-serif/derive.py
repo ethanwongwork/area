@@ -276,12 +276,11 @@ def _as_base(g, gb):
 
 ALTS = {"one.ss01": ("one", one_footless, "ss01", "Footless 1"),
         "g.ss02": ("g", _as_base, "ss02", "Single-storey g"),
-        # 0.78 (owner, 2026-11-14: "i like the S, s and $ of libre baskerville"): the base's own S and s, through
-        # the general rules only (weight, width, lightening); none of the rules written for Area's S and s runs on
-        # them (the redrawn width, the notch and spur, the trimmed barbs). The dollar follows in charset.base_s.
-        "S.ss03": ("S", _as_base, "ss03", "Baskerville S"),
-        "s.ss03": ("s", _as_base, "ss03", "Baskerville S"),
-        "dollar.ss03": ("dollar", _as_base, "ss03", "Baskerville S")}
+        # 0.78 built the base's own S, s and dollar as ss03. 0.79 (owner: "do not add S as an alternate if it is
+        # not really different in form"): measured, S.ss03 and s.ss03 had the default's form (barb ends, the same
+        # spine 95 / 85 after base_s; S 5 narrower of 489, s 55 of 379) and are gone. The dollar's ends are balls
+        # where the default's are barbs: a different form, so it stays alone.
+        "dollar.ss03": ("dollar", _as_base, "ss03", "Ball-end dollar")}
 
 G_LOOP_LIFT = (66, 72)              # Regular, Bold: the loop's hook rises into the link (owner, 2026-11-11)
 G_LOOP_RAMP = {61: 0.5, 62: 1, 63: 1, 64: 1, 65: 1, 66: 1, 67: 1, 68: 0.5}

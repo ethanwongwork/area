@@ -1296,6 +1296,74 @@ def five_heel(font):
     return ["5 heel: not found"]
 
 
+# 5's lower bowl (0.79; owner, 2026-11-14: "the bottom of the 5 still leans to the right" after 0.77 moved its flag).
+# Measured on the bowl below the upright stroke (tools/five_bowl.py), Area against Georgia Pro and Serrif:
+#   the outer edge's lowest point, share of the bowl's width from its left     0.365   0.446, 0.468   (Area's 3: 0.452)
+#   the outer edge's rightmost point, share of the bowl's height from its foot  0.553   0.535, 0.514
+#   the counter's rightmost point, on the same scale                            0.602   0.531, 0.469
+# So the bowl's lowest point lay well left of its middle, the edge ran from there in one long slope up to the right,
+# and the counter was widest above the outside's widest point: the stroke was heaviest low on the right (at 5
+# degrees under level, seen from the bowl's middle; every face measured has it 10 to 30 above). The base's own 5
+# has the counter the same way (0.609); 0.33's lean of the upright stroke made it show.
+# The rule: each of the three points goes to the two references' mean, along the edge it is an extreme of, and the
+# counter's lowest point goes with the outside's (the stroke under the bowl keeps its thickness). A handle keeps
+# its share of its curve. Nothing else on the figure moves: the ball, the upright stroke and the flag stay.
+FIVE_LOW = 0.457
+FIVE_WIDE = 0.525
+FIVE_IN_WIDE = 0.500
+FIVE_BOWL_TOP = 0.64          # of the figure's height: the bowl is the ink under this
+
+
+def _slide(P, i, ax, to):
+    """Moves node i along one axis to `to`; the handle on each side keeps its share of its own curve."""
+    n = len(P)
+    key = "x" if ax == 0 else "y"
+    N = P[i]
+    old = getattr(N, key)
+    for step in (1, -1):
+        h, far_h, far = P[(i + step) % n], P[(i + 2 * step) % n], P[(i + 3 * step) % n]
+        if h.type is None and far_h.type is None and far.type:
+            span = old - getattr(far, key)
+            if abs(span) > 1e-6:
+                setattr(h, key, round(to + (getattr(h, key) - old) * (to - getattr(far, key)) / span))
+            else:
+                setattr(h, key, round(getattr(h, key) + to - old))
+    setattr(N, key, round(to))
+
+
+def five_bowl_nodes(c, height=712):
+    """The bowl's four extremes in 5's outline: (outer lowest, counter lowest, outer rightmost, counter rightmost),
+    its left side, its foot and its top, by geometry."""
+    P, n = c.points, len(c.points)
+    on = [i for i in range(n) if P[i].type and P[i].y < FIVE_BOWL_TOP * height]
+    level = [i for i in on if P[i - 1].type is None and P[(i + 1) % n].type is None and P[i - 1].y == P[i].y == P[(i + 1) % n].y]
+    upright = [i for i in on if P[i - 1].type is None and P[(i + 1) % n].type is None and P[i - 1].x == P[i].x == P[(i + 1) % n].x]
+    lo = min(level, key=lambda i: P[i].y)
+    right = max(upright, key=lambda i: P[i].x)
+    left = min(P[i].x for i in on)
+    mid = (left + P[right].x) / 2
+    top = max((i for i in level if P[i].x > mid - 40), key=lambda i: P[i].y)
+    in_lo = min((i for i in level if P[i].y > P[lo].y + 20 and abs(P[i].x - P[lo].x) < 60), key=lambda i: P[i].y)
+    in_right = max((i for i in upright if P[i].x < P[right].x - 40 and P[i].x > mid), key=lambda i: P[i].x)
+    return lo, in_lo, right, in_right, left, P[lo].y, P[top].y
+
+
+def five_bowl(font):
+    c = font["five"].contours[0]
+    P = c.points
+    lo, in_lo, right, in_right, left, foot, top = five_bowl_nodes(c)
+    w, h = P[right].x - left, top - foot
+    was = (P[lo].x, P[in_lo].x, P[right].y, P[in_right].y)
+    dx = round(left + FIVE_LOW * w) - P[lo].x
+    _slide(P, in_lo, 0, P[in_lo].x + dx)
+    _slide(P, lo, 0, P[lo].x + dx)
+    _slide(P, right, 1, foot + FIVE_WIDE * h)
+    _slide(P, in_right, 1, foot + FIVE_IN_WIDE * h)
+    return [f"5 bowl: lowest point {was[0]} > {P[lo].x} (counter {was[1]} > {P[in_lo].x}), widest {was[2]} > {P[right].y}, "
+            f"counter widest {was[3]} > {P[in_right].y}"]
+
+
+
 # Two curves that meet with a small bend (0.70). true_joins handles a curve into a straight; this is the same for a
 # node between two curves: where the two handles are 0.6 to max_deg degrees off one line (u's tail 2.0, y's tail 1.7,
 # the swash of the ct and st ligatures 8.2, the cent sign 7.5), both turn onto their shared direction (the mean,

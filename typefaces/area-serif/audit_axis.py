@@ -25,6 +25,7 @@ import ufoLib2
 import bold as B
 
 STOPS = list(range(400, 701, 25))
+FILLET_MAX = 20           # a softened corner (7 a side in the Regular) may grow with the stroke, not past this
 
 
 def contours_of(g):
@@ -49,24 +50,9 @@ def curves(contours):
     return out
 
 
-_T = np.linspace(0.02, 0.98, 33)
-
-
 def turns(c):
-    """(x extremes, y extremes, inflections) inside one cubic: sign changes of x', y' and of the curvature."""
-    t = _T[:, None]
-    d1 = 3 * ((1 - t) ** 2 * (c[1] - c[0]) + 2 * (1 - t) * t * (c[2] - c[1]) + t ** 2 * (c[3] - c[2]))
-    d2 = 6 * ((1 - t) * (c[2] - 2 * c[1] + c[0]) + t * (c[3] - 2 * c[2] + c[1]))
-    cross = d1[:, 0] * d2[:, 1] - d1[:, 1] * d2[:, 0]
-
-    def changes(v, eps):
-        s = np.sign(np.where(np.abs(v) < eps, 0, v))
-        s = s[s != 0]
-        return int(np.sum(s[1:] != s[:-1]))
-    scale = max(1.0, float(np.abs(d1).max()))
-    if float(np.abs(c[3] - c[0]).max()) < 12:                  # a softened corner: whole units decide its shape
-        return 0, 0, 0
-    return changes(d1[:, 0], 0.01 * scale), changes(d1[:, 1], 0.01 * scale), changes(cross, 0.008 * scale * scale)
+    """(x extremes, y extremes, inflections) inside one cubic: bold.curve_turns, the count the Bold's guard uses."""
+    return B.curve_turns(c)
 
 
 def flat(contours, n=8):
@@ -116,26 +102,8 @@ def area_len(polys):
 
 
 def thinnest(polys, step=4):
-    """The thinnest cut that is a stroke: an ink span whose neighbours two scan lines before and two after are
-    spans of about the same width over the same place (a sliver at a curve's extreme or a wedge's tip is not one)."""
-    best = None
-    pts = [q for p in polys for q in p]
-    for ax in (0, 1):
-        lo, hi = min(q[ax] for q in pts), max(q[ax] for q in pts)
-        rows = []
-        v = lo + step / 2
-        while v < hi:
-            rows.append(B.scan(polys, v, ax))
-            v += step
-        for k in range(2, len(rows) - 2):
-            for a, b in rows[k]:
-                w = b - a
-                if best is not None and w >= best:
-                    continue
-                if all(any(min(b, d) - max(a, c) > 0.5 * w and abs((d - c) - w) <= 0.2 * w + 2 for c, d in rows[j])
-                       for j in (k - 2, k - 1, k + 1, k + 2)):
-                    best = w
-    return best
+    """The thinnest cut that is a stroke: bold.thinnest, which the Bold's marks are held to as well."""
+    return B.thinnest(polys, step)
 
 
 def main():
@@ -167,6 +135,7 @@ def main():
         if far > 1:
             fails["moved"].append(f"{name} ({far:.1f} x the bound)")
         base_turns = [turns(c) for c in curves(rc)]
+        small = [float(np.abs(c[3] - c[0]).max()) < 12 for c in curves(rc)]
         rp = flat(rc)
         base_cross = crossings(rp)
         base_thin = thinnest(rp)
@@ -178,6 +147,11 @@ def main():
                 ic = lerp(rc, mc, t / tm) if t <= tm else lerp(mc, bc, (t - tm) / (1 - tm))
             if t > 0:
                 for k, c in enumerate(curves(ic)):
+                    if small[k]:                               # a corner's fillet in the Regular is one at every
+                        if float(np.abs(c[3] - c[0]).max()) > FILLET_MAX:   # weight, while it stays a fillet
+                            fails["turns"].append(f"{name} at {w} (curve {k}: a corner's fillet grew to {float(np.abs(c[3] - c[0]).max()):.0f})")
+                            break
+                        continue
                     got = turns(c)
                     if any(a > b for a, b in zip(got, base_turns[k])):
                         fails["turns"].append(f"{name} at {w} (curve {k}: extremes and inflections {base_turns[k]} > {got})")

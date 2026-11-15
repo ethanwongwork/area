@@ -413,7 +413,7 @@ A dot keeps its centre. A slanted stroke keeps its taper. An accent keeps its fo
 | 5's flag | Ends 19 inside the bowl's right (was 6; the references 2.2 to 3.7% of height) | `normalize.FIVE_FLAG_IN` |
 | f before i, j, accented i with ligatures off | 44 clear of a dot, 16 of an accent | `spacing.F_DOT`, `F_ACCENT`, `f_before_dots` |
 | Thickness round a closed counter | Strays at most 2.75 from one smooth change (aim 2.0); handle lengths only, within 0.75 to 1.3; mean thickness within 1 | `even.py` |
-| Alternates | Built from finished parts or from the base through the general rules; default never changes. ss01 footless 1, ss02 single-storey g (q's bowl, j's tail), ss03 the base's S s $ (spine on Area's ladder) | `derive.ALTS`, `charset.single_g`, `charset.base_s` |
+| Alternates | Built from finished parts or from the base through the general rules; default never changes. An alternate must differ in form, not only in width or weight (owner, 0.79). ss01 footless 1, ss02 single-storey g, ss03 the ball-end dollar | `derive.ALTS`, `charset.single_g`, `charset.base_s` |
 | Text set in Area Serif on a page | No letter-spacing: browsers turn ligatures off under it | evaluation `template.html` |
 
 Measured and left alone: Z and z lean inside the three references. Plain signs: seven of eight serif faces draw
@@ -421,3 +421,25 @@ them as square bars (`tools/sign_ends.py`); options in `tools/sign_options.py`, 
 Open: a's bowl (2.2; needs a node on the counter), `audit_axis.py` outside the letters, dollar.ss03's spine,
 the confusable-pair measure (`tools/confusable.py`: PIL places text on whole pixels, so one size can be an outlier;
 not in QA).
+
+## Build 0.79 (owner's notes on 0.78, 14 November 2026)
+
+| Part | Rule | Where |
+|---|---|---|
+| Plain stroke end | Two straight, parallel edges ended by a straight cut (20 to 62 long, corners 54 to 126 degrees): both corners on the letters' radius, 7. Every glyph outside the letters and figures: dashes, minus, plus, equals, underscore, bar, slashes, fraction bars, arrows, bracket arms, macrons, bars struck through letters and currencies. A meeting stays sharp | `charset.soft_ends`; check `audit_charset` (`sharp_ends`) |
+| Single-storey g (ss02) | q's outline from the stem's top round the whole bowl to the crotch, spliced to j's tail (no cut: a level cut at the baseline slices the bowl's overshoot off). The tail's end 0.959 of the bowl's width left of the stem's right edge, its lowest point at 0.518 (Serrif, Source Serif 4, Literata: 0.973 0.972 0.933; 0.510 0.529 0.515); stem, thickness and ball are j's. The Bold's is spliced from the Bold's q and j | `charset.single_g_points`, `bold.bold_font`; `tools/single_g.py` |
+| 5's bowl | The outer edge's lowest point 0.457 of the bowl's width from its left (Georgia Pro 0.446, Serrif 0.468; Area's 3 0.452); outside widest at 0.525 of the bowl's height, counter widest at 0.500, never above the outside's | `clean.five_bowl`; `tools/five_bowl.py` |
+| f before i or j in a ligature | No dot; the hook's end 0.42 of a stem past the second letter's stem centre (Georgia Pro 0.41, Serrif 0.43); stems at 0.885 of the unligated distance (0.888, 0.882); f's bar runs into the flag. The hook is lengthened by rule: ball as one piece, the arc's top points and every handle keep their share | `charset.f_hook`, `lig_offset`; `tools/ligatures.py` |
+| f into l b h k | The arc is cut at its highest point and runs level at the ascender's top across the whole stem | `charset.f_join` |
+| A ligature's sides and classes | Left side f's, right side the last letter's, in both masters; kerns as f on the left and as its last letter on the right | `charset.kern_like`, `bold.bold_font`; check `audit_charset` |
+| A part lengthened across | Nodes of the rigid piece move together, the extreme between keeps its share, each handle keeps its share of its own curve (`charset.restretch_x`, `clean._slide`). Stems and balls never scale | g's tail, f's hook, 5's bowl |
+| Bold: curves | No curve gains an extreme or an inflection against the Regular's, at the Bold, the sparse master or between: shorter handle first; a turned handle only at a corner or between two curves | `bold.fix_turns` (the count is `bold.curve_turns`, shared with `audit_axis.py`) |
+| Bold: inks side by side | Never closer than `spacing.MIN_GAP` (13) | `bold.keep_apart` |
+| Bold: a glyph spliced from letters | Spliced again from the Bold's letters, never read by the engine | `bold.bold_font` (g.ss02) |
+
+Measured and left alone in 0.79: f before i with ligatures off (inside the references); 3's bowl; ff and ft.
+Removed: S.ss03 and s.ss03 (the default's form at another width).
+Open after 0.79: `audit_axis.py` (inflection 18 glyphs, x among them; crossing 18; thin 30, of which 24 are wedge
+accents' thin ends); no real Bold for Astroke, dagger, uni20A1, uni2318; Bold kerning not fitted; no audit table
+for marks, signs and composites in the Bold; the Bold's plain signs are light; a's bowl (2.2); the survey of other
+alternates with examples.

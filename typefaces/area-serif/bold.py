@@ -1411,6 +1411,184 @@ def bold(contours, width, v, name="", hints=None):
     return out, new_w, {"x": rx, "y": ry, "necks": necks, "where": where, "X": {k: x + dx for k, x in X.items()}, "Y": Y}
 
 
+# 0.79: the last guard, on every outline of the Bold and of the sparse master. audit_axis.py counts, in each curve,
+# the extremes and inflections the Regular's curve does not have; until 0.78 the engine's own no_inflection tried
+# three shorter handles and gave up (43 glyphs kept a new inflection, W, g and x among them). The same count is
+# used here as the test. A curve that fails it is brought back by the smallest of these that passes, in order:
+# one handle shorter along its own direction (the tangent at the node stays), both shorter, and only at a corner
+# node (which has no tangent to keep) a handle turned towards the curve's chord. Nothing is moved on a curve that
+# passes, and no node moves at all.
+_TT = None
+
+
+def curve_turns(c):
+    """(x extremes, y extremes, inflections) inside one cubic [(x, y) x 4]; None for a softened corner."""
+    import numpy as np
+    global _TT
+    if _TT is None:
+        _TT = np.linspace(0.02, 0.98, 33)[:, None]
+    c = np.array(c, dtype=float)
+    t = _TT
+    d1 = 3 * ((1 - t) ** 2 * (c[1] - c[0]) + 2 * (1 - t) * t * (c[2] - c[1]) + t ** 2 * (c[3] - c[2]))
+    d2 = 6 * ((1 - t) * (c[2] - 2 * c[1] + c[0]) + t * (c[3] - 2 * c[2] + c[1]))
+    cross = d1[:, 0] * d2[:, 1] - d1[:, 1] * d2[:, 0]
+
+    def changes(v, eps):
+        s = np.sign(np.where(np.abs(v) < eps, 0, v))
+        s = s[s != 0]
+        return int(np.sum(s[1:] != s[:-1]))
+    scale = max(1.0, float(np.abs(d1).max()))
+    if float(np.abs(c[3] - c[0]).max()) < 12:
+        return 0, 0, 0
+    return changes(d1[:, 0], 0.01 * scale), changes(d1[:, 1], 0.01 * scale), changes(cross, 0.008 * scale * scale)
+
+
+def fix_turns(R, N, at=((0.0, 1.0),)):
+    """R, N: one contour in the Regular and in another master. `at`: [(u, v)] blends of R and N to test as well as N
+    itself (the instances between). Returns (N', fixed, left)."""
+    class _Q:
+        def __init__(s, q):
+            s.type = q[2]
+    out = list(N)
+    fixed = left = 0
+    n = len(R)
+
+    def worst(i, m0, m1, j, cand):
+        base = curve_turns([R[i][:2], R[m0][:2], R[m1][:2], R[j][:2]])
+        if max(abs(R[j][0] - R[i][0]), abs(R[j][1] - R[i][1])) < 12:
+            return 0
+        over = 0
+        for u, v in at:
+            pts = [(R[k][0] * u + cand[k][0] * v, R[k][1] * u + cand[k][1] * v) for k in (i, m0, m1, j)]
+            got = curve_turns(pts)
+            over = max(over, max(g - b_ for g, b_ in zip(got, base)))
+        return over
+    for i, mid, j in segments([_Q(q) for q in R]):
+        if len(mid) != 2:
+            continue
+        m0, m1 = mid
+        if worst(i, m0, m1, j, out) <= 0:
+            continue
+        scales = [1.0, 0.85, 0.7, 0.55, 0.4, 0.3]
+        tries = sorted(((2 - a - b_), a, b_) for a in scales for b_ in scales if (a, b_) != (1.0, 1.0))
+        done = False
+
+        def put(trial, m, own, k, deg=0.0):
+            dx, dy = out[m][0] - out[own][0], out[m][1] - out[own][1]
+            if deg:
+                ca, sa = math.cos(math.radians(deg)), math.sin(math.radians(deg))
+                dx, dy = dx * ca - dy * sa, dx * sa + dy * ca
+            x, y = round(out[own][0] + dx * k), round(out[own][1] + dy * k)
+            if (x, y) == tuple(out[own][:2]):
+                return False
+            trial[m] = (x, y, None, False)
+            return True
+        for _cost, a, b_ in tries:
+            trial = list(out)
+            if put(trial, m0, i, a) and put(trial, m1, j, b_) and worst(i, m0, m1, j, trial) <= 0:
+                out, done = trial, True
+                break
+        if not done:
+            # a corner has no tangent to keep: its handle may turn, and take a length that is a share of the chord
+            # (a handle left one unit long cannot be turned). A smooth node between two curves may turn too, both
+            # its handles together, if the curve on its other side keeps its own turns.
+            chord = math.hypot(out[j][0] - out[i][0], out[j][1] - out[i][1])
+            prev_seg = (i - 3) % n if R[i - 1][2] is None and R[(i - 2) % n][2] is None and R[(i - 3) % n][2] is not None else None
+            next_seg = j if R[(j + 1) % n][2] is None and R[(j + 2) % n][2] is None and R[(j + 3) % n][2] is not None else None
+            kind_i = "corner" if not R[i][3] else ("smooth" if prev_seg is not None else None)
+            kind_j = "corner" if not R[j][3] else ("smooth" if next_seg is not None else None)
+            angles = [0.0] + [s * d for d in (4, 8, 12, 16, 22, 30, 40) for s in (1, -1)]
+            best = None
+
+            def turned(trial, m, own, deg, length=None):
+                dx, dy = out[m][0] - out[own][0], out[m][1] - out[own][1]
+                L = math.hypot(dx, dy)
+                if L < 0.5:
+                    return False
+                ca, sa = math.cos(math.radians(deg)), math.sin(math.radians(deg))
+                dx, dy = dx * ca - dy * sa, dx * sa + dy * ca
+                k = (length / L) if length else 1.0
+                x, y = round(out[own][0] + dx * k), round(out[own][1] + dy * k)
+                if (x, y) == tuple(out[own][:2]):
+                    return False
+                trial[m] = (x, y, None, False)
+                return True
+            for da in (angles if kind_i else [0.0]):
+                for db in (angles if kind_j else [0.0]):
+                    if not da and not db:
+                        continue
+                    for share in (None, 0.33, 0.2, 0.45):
+                        trial = list(out)
+                        ok = turned(trial, m0, i, da, share and share * chord if kind_i == "corner" else None) and \
+                            turned(trial, m1, j, db, share and share * chord if kind_j == "corner" else None)
+                        if ok and da and kind_i == "smooth":
+                            ok = turned(trial, (i - 1) % n, i, da) and worst(prev_seg, (prev_seg + 1) % n, (prev_seg + 2) % n, i, trial) <= 0
+                        if ok and db and kind_j == "smooth":
+                            ok = turned(trial, (j + 1) % n, j, db) and worst(j, (j + 1) % n, (j + 2) % n, (j + 3) % n, trial) <= 0
+                        if ok and worst(i, m0, m1, j, trial) <= 0:
+                            cost = abs(da) + abs(db) + (8 if share else 0)
+                            if best is None or cost < best[0]:
+                                best = (cost, trial)
+            if best:
+                out, done = best[1], True
+        fixed += done
+        left += not done
+    return out, fixed, left
+
+
+def keep_apart(R, N, ratio, least):
+    """Contours standing side by side: per-contour x shifts that keep each neighbouring pair's white at
+    max(least, the Regular's x ratio), or None when nothing needs to move."""
+    def box(P):
+        xs, ys = [q[0] for q in P], [q[1] for q in P]
+        return min(xs), min(ys), max(xs), max(ys)
+    rb = [box(P) for P in R]
+    # islands: a contour inside another's box belongs to it
+    owner = list(range(len(R)))
+    for i, a in enumerate(rb):
+        for j, c in enumerate(rb):
+            if i != j and c[0] <= a[0] and c[1] <= a[1] and c[2] >= a[2] and c[3] >= a[3]:
+                owner[i] = owner[j]
+    isl = sorted(set(owner), key=lambda k: (rb[k][0] + rb[k][2]) / 2)
+    if len(isl) < 2:
+        return None
+
+    def gap(A, C, dx=0.0):
+        pa, pc = np.array(_flat8([A])[0]), np.array(_flat8([C])[0]) + np.array([dx, 0.0])
+        d = np.hypot(pa[:, None, 0] - pc[None, :, 0], pa[:, None, 1] - pc[None, :, 1])
+        return float(d.min())
+
+    def crosses(A, C, dx):
+        pa, pc = np.array(_flat8([A])[0]), np.array(_flat8([C])[0]) + np.array([dx, 0.0])
+        return bool(pc[:, 0].min() < pa[:, 0].max() - 0.5 and _poly_hit(pa, pc))
+    shifts, total = [0] * len(R), 0
+    for a, c in zip(isl, isl[1:]):
+        ba, bc_ = rb[a], rb[c]
+        if min(ba[2], bc_[2]) - max(ba[0], bc_[0]) > 0:
+            continue                                           # one over the other, or lapped: not side by side
+        want = min(least, gap(R[a], R[c]))
+        dx = 0
+        while (crosses(N[a], N[c], dx) or gap(N[a], N[c], dx) < want - 0.5) and dx < 200:
+            dx += 1
+        if dx:
+            total += dx
+        for k in range(len(R)):
+            if owner[k] == c or (rb[owner[k]][0] + rb[owner[k]][2]) / 2 > (bc_[0] + bc_[2]) / 2:
+                shifts[k] += dx
+    return (shifts, total) if total else None
+
+
+def _poly_hit(pa, pc):
+    """Do two closed polylines cross?"""
+    S1, S2 = np.hstack([pa, np.roll(pa, -1, axis=0)]), np.hstack([pc, np.roll(pc, -1, axis=0)])
+    ax, ay, bx, by = [S1[:, k][:, None] for k in range(4)]
+    cx, cy, dx, dy = [S2[:, k][None, :] for k in range(4)]
+
+    def o(px, py, qx, qy, rx, ry):
+        return (qx - px) * (ry - py) - (qy - py) * (rx - px)
+    return bool(((o(ax, ay, bx, by, cx, cy) * o(ax, ay, bx, by, dx, dy) < 0) & (o(cx, cy, dx, dy, ax, ay) * o(cx, cy, dx, dy, bx, by) < 0)).any())
+
+
 def glyph_contours(g):
     return [[(p.x, p.y, p.type, p.smooth) for p in c.points] for c in g.contours]
 
@@ -1574,6 +1752,47 @@ def swell(P, d):
     return out
 
 
+def thinnest(polys, step=4):
+    """The thinnest cut that is a stroke: an ink span whose neighbours two scan lines before and two after are
+    spans of about the same width over the same place (a sliver at a curve's extreme or a wedge's tip is not one)."""
+    best = None
+    pts = [q for p in polys for q in p]
+    for ax in (0, 1):
+        lo, hi = min(q[ax] for q in pts), max(q[ax] for q in pts)
+        rows = []
+        v = lo + step / 2
+        while v < hi:
+            rows.append(scan(polys, v, ax))
+            v += step
+        for k in range(2, len(rows) - 2):
+            for a, b in rows[k]:
+                w = b - a
+                if best is not None and w >= best:
+                    continue
+                if all(any(min(b, d) - max(a, c) > 0.5 * w and abs((d - c) - w) <= 0.2 * w + 2 for c, d in rows[j])
+                       for j in (k - 2, k - 1, k + 1, k + 2)):
+                    best = w
+    return best
+
+
+def _flat8(contours, n=8):
+    class _Q:
+        def __init__(s, q):
+            s.type = q[2]
+    out = []
+    for P in contours:
+        pts = []
+        for i, mid, j in segments([_Q(q) for q in P]):
+            if len(mid) == 2:
+                c = [P[i][:2], P[mid[0]][:2], P[mid[1]][:2], P[j][:2]]
+                pts += [_bez(c, k / n) for k in range(n)]
+            else:
+                pts.append(P[i][:2])
+        if len(pts) > 2:
+            out.append(pts)
+    return out
+
+
 def stretch(contours, width, kind, v, below=False):
     """A mark with no stroke read (a wedge, a wave): it reaches its kind's measured width, height and mean stroke.
     Wider and taller by the measured ratios, about its middle, from its foot (from its top when it hangs below the
@@ -1593,11 +1812,14 @@ def stretch(contours, width, kind, v, below=False):
         yb = base - H_ if below else base
         return [[(cx - W_ / 2 + (x - x0) * sx, yb + (y - y0) * sy, t, s_) for x, y, t, s_ in P] for P in cs]
     cur = fit([list(P) for P in contours])
+    # 0.79: the swell goes in steps of at most 1.5 units. Taken in one step, the capital breves' tips folded over
+    # (their box is small for their stroke): mean stroke 55.8 for 64.2, thinner than the Regular at the tips, and
+    # lighter at 700 than at 650. In steps they reach 60.3 with nothing under the Regular's thinnest cut.
     for _ in range(60):
         d = (want - mean_stroke(cur)) / 2
         if abs(d) < 0.05:
             break
-        cur = fit([swell(P, d) for P in cur])
+        cur = fit([swell(P, max(-1.5, min(1.5, d))) for P in cur])
     out = [straighten(no_turn_back(R, [(round(x), round(y), t, s_) for x, y, t, s_ in P]), R) for P, R in zip(cur, contours)]
     lsb, rsb = min(xs), width - max(xs)
     left, right = min(q[0] for P in out for q in P if q[2]), max(q[0] for P in out for q in P if q[2])
@@ -1828,9 +2050,99 @@ def bold_font(reg, stem=STEM, **over):
             c.points = [Point(x, y, t, smooth=s_) for x, y, t, s_ in P]
             mg.contours.append(c)
         notes.append(f"{g.name}: a master at weight {MID_WEIGHT} (its neck sags between the two)")
+    import charset as CHARSET
+    # 0.79: no curve of either master gains an extreme or an inflection, here or half way (fix_turns)
+    n_fixed = n_left = 0
+    tm0 = (dict(axis_map(stem))[MID_WEIGHT] - REG_STEM) / (stem - REG_STEM)
+    for g in reg:
+        if not g.contours or reports.get(g.name, {}).get("fallback", "").startswith("left as the Regular"):
+            continue
+        for f_, blends in ((layer, ((0.0, 1.0), (0.5, 0.5))), (font, ((0.0, 1.0), (0.5, 0.5), (0.75, 0.25), (0.25, 0.75)))):
+            if g.name not in f_:
+                continue
+            for c, rc in zip(f_[g.name].contours, g.contours):
+                R_ = [(q.x, q.y, q.type, q.smooth) for q in rc.points]
+                N_ = [(q.x, q.y, q.type, q.smooth) for q in c.points]
+                if len(R_) != len(N_):
+                    continue
+                M_, fx, lf = fix_turns(R_, N_, blends)
+                n_fixed += fx
+                n_left += lf
+                if fx:
+                    c.points = [Point(x, y, t, smooth=s_) for x, y, t, s_ in M_]
+    notes.append(f"curves: {n_fixed} brought back to the Regular's turns, {n_left} not")
+    # 0.79: two inks that stand side by side without touching in the Regular (the two marks of a double quote, a
+    # dieresis's dots, a bar beside an arrow) never come closer than spacing.MIN_GAP, the face's own least white
+    # between two inks. Until 0.78 such glyphs closed up and crossed between 600 and 700. Marks that lap over each
+    # other (the double acute and double grave over capitals) are not this rule's.
+    import spacing as SPACING
+    apart = []
+    for g in reg:
+        if len(g.contours) < 2 or g.components or g.name not in font:
+            continue
+        moved = keep_apart(glyph_contours(g), glyph_contours(font[g.name]), v["bearing"], SPACING.MIN_GAP)
+        if not moved:
+            continue
+        shifts, total = moved
+        centre = g.width == 0 or is_mark(g)
+        for c, dx in zip(font[g.name].contours, shifts):
+            for q in c.points:
+                q.x += dx - (round(total / 2) if centre else 0)
+        if not centre:
+            font[g.name].width += total
+        if g.name in layer:
+            del layer[g.name]
+        apart.append(f"{g.name} {total}")
+    notes.append(f"side by side: {len(apart)} glyphs opened ({', '.join(apart)})")
+    # 0.79: a glyph spliced from two letters is spliced again from this master's letters (and from the mid master's,
+    # where either letter has one), so its parts are the letters' own at every weight: the single-storey g's bowl
+    # is the Bold q's (the engine's own reading of g.ss02 left the bowl light).
+    if "g.ss02" in font and "q" in font and "j" in font:
+        CHARSET.single_g(font)
+        reports["g.ss02"] = {"x": [], "y": [], "necks": [], "spliced": "q and j"}
+        if "g.ss02" in layer:
+            del layer["g.ss02"]
+        if "q" in layer or "j" in layer:
+            tm = (dict(axis_map(stem))[MID_WEIGHT] - REG_STEM) / (stem - REG_STEM)
+
+            def at_mid(name):
+                if name in layer:
+                    return [[(q.x, q.y, q.type, q.smooth) for q in c.points] for c in layer[name].contours]
+                return [[(round(a.x + (b_.x - a.x) * tm), round(a.y + (b_.y - a.y) * tm), a.type, a.smooth)
+                         for a, b_ in zip(c.points, cb.points)] for c, cb in zip(reg[name].contours, font[name].contours)]
+            qm, jm = at_mid("q"), at_mid("j")
+            mg = layer.newGlyph("g.ss02")
+            mg.width = round(reg["q"].width + (font["q"].width - reg["q"].width) * tm)
+            for P in CHARSET.single_g_points(max(qm, key=len), min(qm, key=len), max(jm, key=len)):
+                c = Contour()
+                c.points = [Point(x, y, t, smooth=s_) for x, y, t, s_ in P]
+                mg.contours.append(c)
+            notes.append(f"g.ss02: a master at weight {MID_WEIGHT}, spliced from q's and j's")
+    # 0.79: an f ligature's sides are its letters' (0.78: every one 4 wider on the left than f, ff 22 on the right)
+    def _sides(f_, n):
+        xs = [q.x for c in f_[n].contours for q in c.points]
+        return min(xs), f_[n].width - max(xs)
+    tm_ = (dict(axis_map(stem))[MID_WEIGHT] - REG_STEM) / (stem - REG_STEM)
+    for name, rest in CHARSET.LIGATURES.items():
+        last = {"i": "idotless", "j": "jdotless"}.get(rest[0], rest[0]) if rest else "f"
+        if name not in font or last not in font or font[name].components:
+            continue
+        wl, wr = _sides(font, "f")[0], _sides(font, last)[1]
+        todo = [(font, wl, wr)]
+        if name in layer:                                      # its mid master: the letters' sides at that weight
+            ml = _sides(layer, "f")[0] if "f" in layer else _sides(reg, "f")[0] + (wl - _sides(reg, "f")[0]) * tm_
+            mr = _sides(layer, last)[1] if last in layer else _sides(reg, last)[1] + (wr - _sides(reg, last)[1]) * tm_
+            todo.append((layer, round(ml), round(mr)))
+        for f_, sl, sr in todo:
+            d = sl - _sides(f_, name)[0]
+            for c in f_[name].contours:
+                for q in c.points:
+                    q.x += d
+            for an in f_[name].anchors:
+                an.x += d
+            f_[name].width = max(q.x for c in f_[name].contours for q in c.points) + sr
     # Kerning: the Regular's pairs and groups, unchanged (a pair keeps its designed fit; both masters share one set
     # of groups), then the Regular's own collision pass on the Bold's ink: no pair closer than spacing.MIN_GAP.
-    import charset as CHARSET
     import spacing as SPACING
     opened = SPACING.open_all(font, CHARSET.COVERAGE)
     notes.append(f"kerning: {len(opened)} pairs opened to {SPACING.MIN_GAP} on the Bold's ink")

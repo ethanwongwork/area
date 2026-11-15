@@ -186,3 +186,15 @@ font's version and both pages' build.
 - `references/audit.md`: finding classes, evidence, the report.
 - `references/references.md`: working from licensed reference fonts.
 - `references/NOTICE.md`: attribution for adapted material.
+
+## Notes from 0.79
+
+- **Ligatures**: measure with HarfBuzz, on and off (`tools/ligatures.py`); proofs that need features, a weight of
+  the variable font or a face in memory go through `tools/shapelib.py` (it fills by winding number: the variable
+  font keeps its overlaps). `tools/weight_samples.py` draws the four named weights; `tools/ba_079.py` is the
+  pattern for a before-over-after figure from a snapshot folder.
+- **Snapshot the previous build first** (`build/snap<NNN>/` with the Regular TTF and UFO, the Bold UFO and the
+  variable TTF) and add it to `EVAL_PREVS` in `build/ev.sh`: both pages and every before-over-after need it.
+- **A full build is about 4 minutes and `qa.py --skip-build` about 6**: run them in the background with a log.
+  Try a rule on the built UFO first (load it, apply the one function, save to `build/look/`, draw it) before
+  paying for a build.

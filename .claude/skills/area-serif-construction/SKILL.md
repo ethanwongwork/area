@@ -88,6 +88,9 @@ the fastest change (under 0.5 units of thickness per unit travelled on a branch,
 | Node at every extreme and inflection | A curve is cut where it passes an extreme or changes direction; the cut does not move the outline | every letter and figure | `clean.add_nodes` | `test_curves.py` (extreme, inflection), `pathlint` |
 | Accent placement | Ink centre at `MARK_X` over each base (mean of both references); one height on capitals; lowercase accents 90 over the x-height | every accented letter | `charset.centre_marks`, `case_marks`, `drop_marks` | `audit_charset` marks |
 | Plain strokes | The minus's 52, upright and level | + ± ¬ | ¦ _ / \ | `charset.plain_strokes` | `audit_charset` plain strokes |
+| Plain stroke end | Two straight parallel edges and a straight cut: both corners on radius 7, as the letters' cut ends (0.79) | every glyph outside the letters and figures: dashes, maths, bars, slashes, arrows, bracket arms, macrons, struck bars | `charset.soft_ends` | `audit_charset` (`sharp_ends`) |
+| f's hook in a ligature | Lengthened by rule to end 0.42 stems past the next stem's centre; into an ascender, cut at its top and run level across the stem | fi ffi fj ffj; fl fb fh fk and their ff forms | `charset.f_hook`, `f_join` | `audit_charset` ligatures |
+| 5's bowl | Lowest point 0.457 across, outside widest 0.525 up, counter widest 0.500 | 5 | `clean.five_bowl` | `audit_charset` |
 | Sign from a letter | The finished letter and a stroke of the case's hairline (47, 43) | $ ¢ ¥ ĸ, ₩ ₽ ₺ ₫ | `charset.letter_signs`, `kra`, `currencies` | `audit_charset` letter signs |
 | Mirrored pair | The left form turned over, point for point | ) ] } » › > | `charset.mirrors` | `audit_charset` mirrors |
 | Bracket test | A curve meeting a diagonal across a corner over 60 degrees is not its bracket | every serif on a diagonal; the ampersand's arm | `derive.BRACKET_MAX_TURN` | `audit_charset` ampersand |
@@ -186,8 +189,9 @@ masters match point for point and every weight between them is sound. Read `bold
 - **What cannot be read is named** in `bold.HINTS` with its reason (e's bar; s's turns). Keep it short.
 - **A glyph that is not a sound second master falls back** (upright parts only, then the Regular's outline) and
   says so in `build/bold-notes.txt`. A fallback is a debt: list it in the build's changes.
-- **Known debts** (0.76): Ⱥ Ƙ ₩ † on a fallback; the number sign; the exclamation mark's top; guillemets; capital
-  breves; Bold kerning not fitted afresh; no part audit for marks, signs and composites.
+- **Known debts** (0.79): Ⱥ ₡ † ⌘ on a fallback; `audit_axis.py` fails (inflection 18 glyphs, crossing 18, thin 30);
+  wedge accents' thin ends 1 to 5 under the Regular's; Bold kerning not fitted afresh; no part audit for marks,
+  signs and composites; the Bold's plain signs are light.
 
 ## What is still outside the system
 
@@ -215,5 +219,23 @@ Say this in every report until it is closed:
 - **A shape made of strokes meeting in a point** is one outline with a mitre, never a union of strokes and a
   filler (`charset.arrows`; `audit_charset.scraps` finds ragged vertices in any glyph).
 - **Alternates** never change a default. Build them from finished parts (`charset.single_g`) or from the base
-  through the general rules, then bring the one part that is off the ladder onto it (`charset.base_s`: the spine).
-  One stylistic set per idea; `derive.ALTS` groups glyphs by tag.
+  through the general rules. One stylistic set per idea; `derive.ALTS` groups glyphs by tag.
+- **An alternate differs in form** (owner, 0.79). Measure it against the default with an overlay first (ends,
+  spine, width); if only proportion or weight differs, do not add it (S.ss03 and s.ss03 were removed for this).
+
+## Splices, lengthened parts, and the Bold's guards (0.79)
+
+- **Take a part by splicing points, never by a level cut.** A cut at the baseline slices a bowl's overshoot off
+  (0.78's single-storey g stood on a 138-unit flat). `charset.single_g_points` joins q's and j's point lists at
+  the stem's two edges.
+- **A part made longer keeps its pieces**: the rigid piece (a ball) moves as one, the extreme between keeps its
+  share of the span, each handle keeps its share of its own curve (`charset.restretch_x`, `clean._slide`). A
+  smooth node stretched on one side only gets its handle turned back onto the other side's line.
+- **A glyph spliced from letters is spliced again in the Bold** from the Bold's letters (`bold.bold_font`), and in
+  the sparse master where either letter has one. The engine's reading of the spliced outline is not used.
+- **The Bold's last guards** run on every outline: `fix_turns` (no new extreme or inflection in any curve, with
+  the audit's own count) and `keep_apart` (side-by-side inks never under 13). A curve the guard cannot bring back
+  is a fault in where the engine put a node; list it, do not bend the tangent of a curve that runs into a line.
+- **A check that reads a four-point bar must still read it after its corners are rounded** (`charset._level_cut`
+  rebuilds the corners from the four straight edges). When a rule changes point structure, re-run the checks that
+  read that structure and make sure none passes by skipping.

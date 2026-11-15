@@ -7,7 +7,6 @@
 <style>
 @font-face { font-family: "Area Serif Build"; src: url(data:font/woff2;base64,/*AREA_WOFF2*/) format("woff2"); font-weight: 400; font-display: block; }
 @font-face { font-family: "Area Serif Weight"; src: url(data:font/woff2;base64,/*AREA_VF*/) format("woff2"); font-weight: 400 700; font-display: block; }
-@font-face { font-family: "Area Serif Weight 128"; src: url(data:font/woff2;base64,/*AREA_VF_128*/) format("woff2"); font-weight: 400 700; font-display: block; }
 @font-face { font-family: "Georgia Pro Local"; src: local("Georgia Pro"), local("GeorgiaPro-Regular"); font-weight: 400; }
 @font-face { font-family: "Georgia Pro Local"; src: local("Georgia Pro Bold"), local("GeorgiaPro-Bold"); font-weight: 700; }
 @font-face { font-family: "Serrif Local"; src: local("Serrif Collection VF-TRIAL"), local("SerrifCollectionVFTRIAL"); font-weight: 400; }
@@ -208,7 +207,7 @@ input[type=text] { font: 14px/1.4 var(--sans); color: var(--ink); background: va
 
  <section class="section" aria-labelledby="weight-title">
   <h2 id="weight-title">Weight</h2>
-  <p class="sub">New in 0.76: a Bold made from the Regular's own points, and every weight between. Two Bolds are here to choose from: a stem of 140 (the one in the build) and 128. Move the weight to see both along the way. Georgia Pro and Serrif show at their own Bold where they're installed.</p>
+  <p class="sub">One design from Regular to Bold: the Bold is made from the Regular's own points, and every weight between comes from the two. First the four named weights, at a headline size and at 16, 14 and 13 px; then the alternates and the ligatures at each weight; then a slider for any weight, with Georgia Pro and Serrif at their own Bold where they're installed. What is not finished along the axis is listed under What changed.</p>
   <div class="tester-controls">
    <input type="text" id="weight-text" value="Hamburgefonstiv 0123 · Saved to Projects, shared with David Tee" spellcheck="false" aria-label="Text to set in each weight">
    <label for="weight-w">Weight <input type="range" id="weight-w" min="400" max="700" step="25" value="700"><output id="weight-w-out">700</output></label>
@@ -362,12 +361,23 @@ const DATA = /*DATA*/;
   function weights() {
     const w = +$("weight-w").value, text = esc($("weight-text").value);
     $("weight-w-out").textContent = w;
-    const rows = [["Area Serif, Bold stem 140", "'Area Serif Weight', Georgia, serif", `font-weight:${w};font-variation-settings:'wght' ${w}`],
-                  ["Area Serif, Bold stem 128", "'Area Serif Weight 128', Georgia, serif", `font-weight:${w};font-variation-settings:'wght' ${w}`],
+    const fam = "'Area Serif Weight', Georgia, serif", names = { 400: "Regular 400", 500: "Medium 500", 600: "SemiBold 600", 700: "Bold 700" };
+    const row = (label, st, size, t) => `<div class="face-row"><span class="face-name">${label}</span><span class="face-text" style="font-family:${fam};font-size:${size}px;${st}">${t}</span></div>`;
+    const at = v => `font-weight:${v};font-variation-settings:'wght' ${v}`;
+    let html = "";
+    for (const size of [40, 16, 14, 13]) for (const v of [400, 500, 600, 700]) html += row(`${names[v]}, ${size} px`, at(v), size, text);
+    const alt = "Signing 1 pig for $51 · office fjord affluent shelfful";
+    for (const v of [400, 500, 600, 700]) {
+      html += row(`${names[v]}, default`, at(v), 26, alt);
+      html += row(`${names[v]}, alternates on (ss01, ss02, ss03)`, at(v) + `;font-feature-settings:'ss01','ss02','ss03'`, 26, alt);
+      html += row(`${names[v]}, ligatures off`, at(v) + `;font-variant-ligatures:none`, 26, alt);
+    }
+    const rows = [[`Area Serif at ${w}`, fam, at(w)],
                   ["Georgia Pro", "'Georgia Pro Local', Georgia, serif", `font-weight:${w >= 550 ? 700 : 400}`],
                   ["Serrif", "'Serrif Local', Georgia, serif", `font-variation-settings:'wght' ${w}, 'wdth' 100`]];
-    $("weight-out").innerHTML = [40, 18, 16, 14, 13].map(size => rows.filter((r, i) => size === 40 || i < 2).map(([label, fam, st]) =>
-      `<div class="face-row"><span class="face-name">${label}, ${size} px</span><span class="face-text" style="font-family:${fam};font-size:${size}px;${st}">${text}</span></div>`).join("")).join("");
+    html += [40, 16].map(size => rows.filter((r, i) => size === 40 || i < 1).map(([label, f, st]) =>
+      `<div class="face-row"><span class="face-name">${label}, ${size} px</span><span class="face-text" style="font-family:${f};font-size:${size}px;${st}">${text}</span></div>`).join("")).join("");
+    $("weight-out").innerHTML = html;
   }
   $("weight-text").addEventListener("input", weights); $("weight-w").addEventListener("input", weights);
   weights();
