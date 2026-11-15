@@ -1,5 +1,51 @@
 [
  {
+  "build": "0.81",
+  "date": "2026-11-15",
+  "items": [
+   {
+    "glyphs": "g",
+    "chars": "g",
+    "text": "The default g's lower loop is rebuilt, as you asked me to confirm. You were right: in 0.80 its left side was a nearly straight stroke ending in a knob that overlapped the link, and in the variable font the overlap left a white sliver at 550 and 700. Now the loop is four quarters at the bowl's tensions, its left side meets the link as a branch (the same 32-unit neck as every other branch), and its counter is a contour of its own. Curvature runs smoothly round it (worst ratio across a node 1.13, was 1.56)."
+   },
+   {
+    "glyphs": "g.ss02 j y a",
+    "chars": "gjya",
+    "text": "One tail family. The single-storey g's tail is a half-ellipse: both edges leave the stem at the ball's height, the lowest point half way to the tail's end, the ball 0.030 of the x-height under the baseline. j's and y's tails and the a's curled exit now follow the same rule: from the stem round the lowest point to the ball the curve only tightens, and it is equal on both sides of the lowest point. In the Bold the g's ball rises only as far as the white between it and the bowl keeps the white law (it fell to 38 units at 700; now 52)."
+   },
+   {
+    "glyphs": "Alternates",
+    "chars": "al07z",
+    "text": "The alternates are in the font, each in its own stylistic set: footless 1 (ss01), single-storey g (ss02), single-storey a with its 31 accented forms (ss03; four constructions were drawn and the one whose width is the references' share of n was chosen), tailed l (ss04), slashed zero (zero), dotted zero (ss05), barred 7 and z (ss06). They exist at every weight."
+   },
+   {
+    "glyphs": "Struck glyphs",
+    "chars": "ȺŁØĐ₩",
+    "text": "Letters with a stroke through them (Ł Ø Đ Ħ Ⱥ ₩ ₦ and 52 others) are, in the variable font, the letter plus the stroke as two overlapping shapes, so nothing has to be re-cut between weights. The static Regular is unchanged. Where a stroke would lie exactly along the letter's own edge (Ɍ in the Light, for 74 units) it now stops where that edge begins, so no seam can show. Ⱥ and the T with a diagonal stroke still fill their small pocket of white at the Bold: that is your decision (figure 9: keep the honest overlap, or cut the stroke inside the letter)."
+   },
+   {
+    "glyphs": "Signs",
+    "chars": "*†‡!\"",
+    "text": "Signs made of arms (asterisk, daggers, exclamation, straight quotes) are now each arm's centre line with its width profile, thickened by one number per weight, and drawn symmetric from one half. The asterisk looked nearly Regular in Bold text: its ink gained 0.74 of n's gain where Georgia Pro, Source Serif 4 and Literata gain 0.82 to 0.94. Its arms now reach a little further at the Bold (1.047, the references' own asterisk growth), which leaves room for heavier arms under the white law."
+   },
+   {
+    "glyphs": "Weight axis",
+    "chars": "anHRg",
+    "text": "The weight axis is now checked exactly over the whole range, not at 25-unit stops, and a second method measures every stroke across itself on the variable font. New rules from what they found: along a tapering stroke (a tail, a hook, a flag) each place keeps the share of its thickness its kind keeps (a stem's place the stem's, a hairline's place the hairline's, in between in proportion), so eng's tail no longer thins faster than its stem; a crotch with one straight side keeps its neck towards the Light; a mirrored pair (⇤ ⇥) is one drawing at every weight; an S's turn drawn at a node stays at that node. White between two parts is held like a counter. 434 of 434 parts are on target at the Light and the Bold."
+   },
+   {
+    "glyphs": "Kerning",
+    "chars": "AVTo",
+    "text": "Kerning is fitted per weight. Each master's pairs come from its own outlines by one rule measured on Georgia Pro and Serrif: a pair's white scales with the control white (nn, HH) of that weight. Then each is compared with the references at the same weight and opened where two letters come too close. AV goes -83 / -79 / -93 at 300 / 400 / 700 where it was -79 at every weight. The Regular's own pairs were measured again on the new letters: 772 of 4,796 measured pairs moved, most by a unit; the largest (19) are r before round letters and capitals, because r's right side changed."
+   },
+   {
+    "glyphs": "Open",
+    "chars": "",
+    "text": "Not finished: in the Bold, @ (the a's bowl where it runs into the ring thins) and the capital hook above (its curl closes at 550); Ⱥ and the T with a diagonal stroke wait for your decision. The second measuring method still flags about thirty glyphs, mostly hooked IPA letters at 300 and the terminals of C and c by 2 to 4 units; they are listed with pictures in the axis write-up."
+   }
+  ]
+ },
+ {
   "build": "0.80",
   "date": "2026-11-14",
   "items": [

@@ -1659,6 +1659,73 @@ def curve_turns(c):
     return changes(d1[:, 0], 0.01 * scale), changes(d1[:, 1], 0.01 * scale), changes(cross, 0.008 * scale * scale)
 
 
+def inflection_nodes(R, N, least=0.02):
+    """0.81 (integration): an S drawn with its inflection at a node (the curvature changes sign across the node: c_t's
+    arc into t's stem), or a curve leaving a straight (the section's lower turn), keeps its start bending the
+    Regular's way in every master. The engine moved the curve's ends by
+    different rules; the curve after the node began bending the old way, so the inflection slid into it (a new
+    inflection in that curve at 431 and 514). Where a curve's start (or end) bends the other way from the Regular's,
+    its far handle slides along its own direction towards its node, its tangent kept, until the start bends the
+    Regular's way again by the least amount (sin `least`). Returns (N', [(node, handle, share kept)])."""
+    def cr(a, c):
+        return a[0] * c[1] - a[1] * c[0]
+
+    def sin_(a, c):
+        return cr(a, c) / ((math.hypot(*a) * math.hypot(*c)) or 1)
+    N = list(N)
+    log = []
+
+    class _Q:
+        def __init__(s, q):
+            s.type = q[2]
+    segs = [(i, mid, j) for i, mid, j in segments([_Q(q) for q in R]) if len(mid) == 2]
+    for i, (m0, m1), j in segs:
+        for side in ("start", "end"):
+            if side == "start":
+                node, near, far, other = i, m0, m1, j
+            else:
+                node, near, far, other = j, m1, m0, i
+            sR = sin_(_sub(R[near], R[node]), _sub(R[far], R[near])) * (1 if side == "start" else -1)
+            sN = sin_(_sub(N[near], N[node]), _sub(N[far], N[near])) * (1 if side == "start" else -1)
+            if abs(sR) < 1e-3 or sR * sN >= 0 or not R[node][3]:
+                continue
+            # the curve on the node's other side must bend the other way in the Regular: an inflection at the node
+            prev = [s_ for s_ in segs if (s_[2] == node if side == "start" else s_[0] == node)]
+            if not prev:                                       # a straight on the node's other side: the curve's
+                n_ = len(R)                                    # end bends the Regular's way out of the straight
+                other_side = R[node][2] == "line" if side == "start" else R[(node + 1) % n_][2] == "line"
+                if other_side:
+                    prev = None
+                else:
+                    continue
+            if prev is None:
+                so = -sR
+            elif side == "start":
+                pi, (pm0, pm1), pj = prev[0]
+                so = sin_(_sub(R[pm1], R[pm0]), _sub(R[pj], R[pm1]))       # the curve before: its end
+            else:
+                pi, (pm0, pm1), pj = prev[0]
+                so = sin_(_sub(R[pm0], R[pi]), _sub(R[pm1], R[pm0]))       # the curve after: its start
+            if so * sR >= 0:
+                continue
+            base, h = N[other][:2], N[far][:2]
+            best = None
+            for k in range(100, 4, -1):
+                cand = (round(base[0] + (h[0] - base[0]) * k / 100), round(base[1] + (h[1] - base[1]) * k / 100))
+                s2 = sin_(_sub(N[near], N[node]), _sub(cand, N[near])) * (1 if side == "start" else -1)
+                if s2 * sR > 0 and abs(s2) >= least:
+                    best = (cand, k)
+                    break
+            if best:
+                N[far] = best[0] + tuple(N[far][2:])
+                log.append((node, far, best[1] / 100))
+    return N, log
+
+
+def _sub(a, c):
+    return (a[0] - c[0], a[1] - c[1])
+
+
 def fix_turns(R, N, at=((0.0, 1.0),), exact=True):
     """R, N: one contour in the Regular and in another master. `at`: [(u, v)] blends of R and N to test as well as N
     itself (the instances between); `exact` (0.81): every blend between R and N as well, by axis_exact's Bernstein
@@ -2822,13 +2889,14 @@ def bold_font(reg, stem=STEM, **over):
                 law = WHITE.Law(reg, font)
                 notes.append(repr(law))
             R_ = glyph_contours(g)
-            f_ = ARMS.capped(R_, sign_ratio(v), law.least)
-            mapped = ARMS.master(R_, f_, engine=out)
+            reach_ = ARMS.reach_of(g.name, v)                 # 0.81: a star's arms reach as the references' do
+            f_ = ARMS.capped(R_, sign_ratio(v), law.least, reach=reach_)
+            mapped = ARMS.master(R_, f_, engine=out, reach=reach_)
             out = [[(x, y) + q[2:] for (x, y), q in zip(M_, P_)] for M_, P_ in zip(mapped, R_)]
             rep = {"x": [], "y": [], "necks": [], "where": {}, "arms": f"f {f_:.3f} (law {sign_ratio(v):.3f})",
                    "X": {min(q[0] for P_ in R_ for q in P_): min(q[0] for P_ in out for q in P_),
                          max(q[0] for P_ in R_ for q in P_): max(q[0] for P_ in out for q in P_)}, "Y": {}}
-            notes.append(f"{g.name}: arms at f {f_:.3f} (the sign law {sign_ratio(v):.3f})")
+            notes.append(f"{g.name}: arms at f {f_:.3f} (the sign law {sign_ratio(v):.3f}), reach {reach_:.3f}")
         out, rep = symmetric(g, out, rep)                      # 0.81: a symmetric sign stays symmetric
         if g.width:                                            # side bearings: the Regular's plus the measured change
             rc = glyph_contours(g)
@@ -3149,6 +3217,23 @@ def bold_font(reg, stem=STEM, **over):
                 n_left += lf
                 if fx:
                     c.points = [Point(x, y, t, smooth=s_) for x, y, t, s_ in M_]
+    infl = []                                                  # 0.81: an inflection drawn at a node stays there
+    for g in reg:
+        if not g.contours or g.name in struck or g.name in signs:
+            continue
+        for f_ in (layer, font):
+            if g.name not in f_:
+                continue
+            for c, rc in zip(f_[g.name].contours, g.contours):
+                R_ = [(q.x, q.y, q.type, q.smooth) for q in rc.points]
+                N_ = [(q.x, q.y, q.type, q.smooth) for q in c.points]
+                if len(R_) != len(N_):
+                    continue
+                M_, lg = inflection_nodes(R_, N_)
+                if lg:
+                    c.points = [Point(x, y, t, smooth=s_) for x, y, t, s_ in M_]
+                    infl.append(f"{g.name} {lg}")
+    notes.append(f"inflections at nodes: {len(infl)} kept there ({'; '.join(infl)})")
     notes.append(f"curves: {n_fixed} brought back to the Regular's turns, {n_left} not")
     for name in struck:                                        # 0.81: the struck glyphs' letters as they now are
         info = reg.layers[OVERLAP.LAYER][name].lib["area.overlap"]

@@ -70,14 +70,24 @@ ALTS = {"ss01": "1", "ss02": "g", "ss03": "a", "ss04": "l", "zero": "0", "ss05":
 STEPS = (300, 350, 400, 450, 500, 550, 600, 650, 700)
 
 
+def side(imgs, gap=24):
+    imgs = [i.convert("RGB") for i in imgs]
+    out = Image.new("RGB", (sum(i.width for i in imgs) + gap * (len(imgs) - 1), max(i.height for i in imgs)), "white")
+    x = 0
+    for i in imgs:
+        out.paste(i, (x, 0))
+        x += i.width + gap
+    return out
+
+
 def waterfall(out):
     blocks = []
-    for line, feats, label in (("abcdefghijklmnopqrstuvwxyz", {}, "a-z"), ("ABCDEFGHIJKLMNOPQRSTUVWXYZ", {}, "A-Z"),
-                               ("0123456789", {}, "0-9")) + tuple((t, {k: True}, f"{k} on") for k, t in ALTS.items()):
-        imgs = []
-        for w in STEPS:
-            imgs.append(S.strip(at(w), line, feats, 56 if len(line) > 12 else 72, ss=2, pad=0.2))
-        blocks.append((f"{label} at {', '.join(map(str, STEPS))}", imgs))
+    for line, label in (("abcdefghijklmnopqrstuvwxyz", "a-z"), ("ABCDEFGHIJKLMNOPQRSTUVWXYZ", "A-Z")):
+        blocks.append((f"{label} at {', '.join(map(str, STEPS))}", [S.strip(at(w), line, {}, 48, ss=2, pad=0.2) for w in STEPS]))
+    blocks.append((f"0-9, then each alternate on (ss01 1, ss02 g, ss03 a, ss04 l, zero, ss05 0, ss06 7 z) at "
+                   f"{', '.join(map(str, STEPS))}",
+                   [side([S.strip(at(w), "0123456789", {}, 48, ss=2, pad=0.2)]
+                         + [S.strip(at(w), t, {k: True}, 48, ss=2, pad=0.1) for k, t in ALTS.items()]) for w in STEPS]))
     page(blocks, out)
 
 

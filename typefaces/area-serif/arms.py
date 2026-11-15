@@ -162,14 +162,14 @@ class Arm:
         dx, dy = p[0] - s.J[0], p[1] - s.J[1]
         return dx * s.u[0] + dy * s.u[1], dx * s.n[0] + dy * s.n[1]
 
-    def along(s, x, f):
-        """s' and ds'/ds at s."""
+    def along(s, x, f, reach=1.0):
+        """s' and ds'/ds at s. reach (0.81): the arm's length in the master over the Regular's (REACH)."""
         L, z0, z1 = s.L, s.z0, s.z1
-        a0, a1 = f * z0, L - f * z1
+        a0, a1 = f * z0, reach * L - f * z1
         if x <= z0:
             return f * x, f
         if x >= L - z1:
-            return L - f * (L - x), f
+            return reach * L - f * (L - x), f
         span = (L - z1) - z0
         k = (a1 - a0) / span if span > 1e-9 else f
         return a0 + (x - z0) * k, k
@@ -178,9 +178,9 @@ class Arm:
         """The body's length in the master (under 0: the zones overlap, no room)."""
         return (s.L - f * s.z1) - f * s.z0
 
-    def map(s, p, f):
+    def map(s, p, f, reach=1.0):
         x, h = s.local(p)
-        x2, k = s.along(x, f)
+        x2, k = s.along(x, f, reach)
         return (s.J[0] + x2 * s.u[0] + f * h * s.n[0], s.J[1] + x2 * s.u[1] + f * h * s.n[1]), k
 
 
@@ -316,9 +316,10 @@ def _handles(P):
     return own
 
 
-def master(contours, f, engine=None):
+def master(contours, f, engine=None, reach=1.0):
     """The sign at a master: every arm's points mapped by its profile at f; dots as the engine made them (the
-    period's rule). contours: the Regular's; engine: the engine's output (for the dots). Floats."""
+    period's rule). contours: the Regular's; engine: the engine's output (for the dots). reach: each arm's length
+    over the Regular's (REACH). Floats."""
     got = read(contours, _axis(contours))
     if got is None:
         return None
@@ -341,7 +342,7 @@ def master(contours, f, engine=None):
                 stretch[i] = (None, f)
             else:
                 arm = arms[r]
-                new[i], k = arm.map(q[:2], f)
+                new[i], k = arm.map(q[:2], f, reach)
                 stretch[i] = (arm, k)
         for i, q in enumerate(P):
             if q[2] is not None:
@@ -360,7 +361,7 @@ def master(contours, f, engine=None):
                 a_ = hv[0] * arm.u[0] + hv[1] * arm.u[1]       # an affine map in each zone, so a curve keeps its
                 b_ = hv[0] * arm.n[0] + hv[1] * arm.n[1]       # inflections; a level or upright handle stays so
                 mid = arm.local(((q[0] + P[o][0]) / 2, (q[1] + P[o][1]) / 2))[0]
-                _, k = arm.along(mid, f)
+                _, k = arm.along(mid, f, reach)
                 nv = (a_ * k * arm.u[0] + b_ * f * arm.n[0], a_ * k * arm.u[1] + b_ * f * arm.n[1])
                 if abs(hv[1]) < 1e-9 or abs(hv[0]) < 1e-9:
                     ln = math.hypot(*nv)
@@ -368,6 +369,24 @@ def master(contours, f, engine=None):
             new[i] = (new[o][0] + nv[0], new[o][1] + nv[1])
         out.append([new[i] for i in range(len(P))])
     return out
+
+
+# 0.81 (integration): a star's arms reach further at the Bold and less far at the Light, as the references' asterisks
+# do (span, width and height, master over Regular: Georgia Pro 1.035 / 1.045, Source Serif 4 1.017 / 1.018, Literata
+# 1.092 / 1.077 at Bold; 0.981 / 0.976, 0.989 / 0.987, 0.987 / 0.981 at Light; tools/sheets_081.py). With the arms
+# kept at the Regular's length the white law capped the Bold asterisk at f 1.199: its ink gained 0.74 of n's gain
+# where the references' gain 0.82 to 0.94 of theirs, and it read nearly Regular beside Bold text. REACH: the mean
+# span ratio at each end of the axis; a master between takes it in proportion to its stem step (f).
+REACH = {"asterisk": (1.047, 0.983)}
+
+
+def reach_of(name, v):
+    r = REACH.get(name)
+    if not r:
+        return 1.0
+    import bold as B
+    f_light = B.vector(B.LIGHT_STEM)["f"]
+    return r[0] ** v["f"] if v["f"] >= 0 else r[1] ** (v["f"] / f_light)
 
 
 def _axis(contours):
@@ -382,11 +401,11 @@ def arm_pairs(arms):
     return [a for a in arms if isinstance(a, Arm)]
 
 
-def white_between(contours, f, step=3.0):
+def white_between(contours, f, step=3.0, reach=1.0):
     """The least white between two different arms' outer halves (s over half the arm's length) at f."""
     got = read(contours, _axis(contours))
     arms, roles = got
-    mapped = master(contours, f)
+    mapped = master(contours, f, reach=reach)
     pts = {}
     import bold as B
     for ci, P in enumerate(contours):
@@ -423,19 +442,19 @@ def white_between(contours, f, step=3.0):
     return best
 
 
-def capped(contours, f, least_of):
+def capped(contours, f, least_of, reach=1.0):
     """f, or the largest f under it at which no two arms' white falls under least_of(the Regular's white): the
     white between parts' own law (white.least)."""
     w0 = white_between(contours, 1.0)
     if w0 is None:
         return f
     least = least_of(w0)
-    if f <= 1.0 or white_between(contours, f) >= least:
+    if f <= 1.0 or white_between(contours, f, reach=reach) >= least:
         return f
     lo, hi = 1.0, f
     for _ in range(30):
         mid = (lo + hi) / 2
-        if white_between(contours, mid) >= least:
+        if white_between(contours, mid, reach=reach) >= least:
             lo = mid
         else:
             hi = mid
