@@ -213,7 +213,9 @@ def thinnest(polys, step=4, points=(), across=None):
                     m = np.array(mid, float)
                     D = np.stack([np.cos(base + angs), np.sin(base + angs)], axis=1)
                     got = [g_ for g_ in chords(E, m, D) if g_ is not None]
-                    w = min(got + [w])
+                    if not got:                                # no cut through it ends on two facing edges:
+                        continue                               # the span crosses no one stroke (a horn's tip)
+                    w = min(got)
                 if best is None or w < best:
                     best = w
     return best
