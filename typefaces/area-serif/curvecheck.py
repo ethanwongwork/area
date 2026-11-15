@@ -39,13 +39,6 @@ TAILS = {"g.ss02", "j", "y"}
 # Faults found on parts 0.81 did not change (default letters stay point for point as 0.80's), listed so the check
 # fails on anything new. Each goes when its part is redrawn. (glyph, words of the fault): reason
 EXPECTED = {
-    ("j", "node 0 "): "j's outside: 1.30 times the curvature on one side of its lowest point as the other",
-    ("y", "curve 52-55"): "y's tail leaves the diagonal through a flat place (radius 109 to 188 to 27)",
-    ("y", "curve 64-67"): "y's ball meets its tail through a flat place (radius 53 to 94 to 48)",
-    ("y", "curve 67-70"): "y's tail's outside opens from the ball (49) to 235 and closes to 98 at the diagonal",
-    ("y", "tail 52-58"): "the same, along y's tail",
-    ("y", "tail 58-70"): "the same, along y's tail",
-    ("a.ss03", "curve 17-20"): "the two-storey a's exit, carried whole: its outside runs radius 108 to 155 to 57",
 }
 
 # glyph: (contours, y range) of the part checked: every contour; a node, curve or join counts when its curves lie in
@@ -57,6 +50,7 @@ REGIONS = {
     "j": ("all", (-300, 10)),
     "y": ("all", (-300, -40)),
     "a.ss03": ("all", (-20, 140)),
+    "a": ("all", (-20, 140), (400, 2000)),             # the exit only: from the stem's lowest point to the cut end
     "l.ss04": ("all", (-20, 200)),
 }
 
@@ -142,7 +136,12 @@ def contour(points_lists, chooser):
 
 
 def inside(s, yr):
+    """yr: (y0, y1) or (y0, y1, x0, x1)."""
     ys = [p[1] for p in s[1]]
+    if len(yr) == 4:
+        xs = [p[0] for p in s[1]]
+        if not (yr[2] <= min(xs) and max(xs) <= yr[3]):
+            return False
     return yr[0] <= min(ys) and max(ys) <= yr[1]
 
 
@@ -308,7 +307,8 @@ def main(path=UFO):
     import ufoLib2
     font = ufoLib2.Font.open(path)
     fails = []
-    for name, (chooser, yr) in REGIONS.items():
+    for name, (chooser, yr, *xr) in REGIONS.items():
+        yr = tuple(yr) + (tuple(xr[0]) if xr else ())
         if name not in font:
             if "." not in name:
                 fails.append(f"{name}: missing")
