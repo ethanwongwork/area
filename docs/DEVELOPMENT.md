@@ -54,20 +54,21 @@ Rendered lengths, corners, marks, header bars, the dark floating edge and the ga
 
 ## Continuous integration
 
-`.github/workflows/ci.yml` runs on every pull request and on `main` (Ubuntu, Node 24,
-about ten minutes, most of it the icon build). It runs:
+`.github/workflows/ci.yml` runs on every pull request and on `main` (Ubuntu, Node 24) as two jobs side by side.
+**Token, axis and contrast tests** (`npm ci`, then `npm test`; about 20 minutes, since its sweeps cover every
+setting position; its own job since 2026-11-15, when it outgrew the shared 30-minute limit). **checks** (about
+fifteen minutes, most of it the build) runs:
 
 1. `npm ci`;
 2. `build`, which lints every icon;
 3. `typecheck`;
-4. `npm test`;
-5. `test:contracts`;
-6. `test:icons`;
-7. the React suites;
-8. the desktop app's tests (`test:desktop`; since 2026-11-07);
-9. the desktop build with `check:playgrounds`, `check:docs` and `check:app-css`;
-10. `test:consumer`;
-11. a check that the build left tracked files unchanged.
+4. `test:contracts`;
+5. `test:icons`;
+6. the React suites;
+7. the desktop app's tests (`test:desktop`; since 2026-11-07);
+8. the desktop build with `check:playgrounds`, `check:docs` and `check:app-css`;
+9. `test:consumer`;
+10. a check that the build left tracked files unchanged.
 
 It skips the Electron binary and checks nothing in a browser. Preview, rendered contrast,
 forced colours and a 1x display still need a session. `npm ci` refuses a lockfile that
