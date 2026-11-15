@@ -131,6 +131,10 @@ def bounds(p):
 
 
 SCRAP = 150             # square units
+# 0.81: a glyph made of a finished letter and strokes across it is one merged outline in the static Regular, and the
+# letter's own contours plus each stroke as its own overlapping contour in the variable font's masters (overlap.py),
+# so no corner where a stroke's edge meets the letter's has to travel between the masters. name: (letter, [Paths]).
+STRUCK = {}
 REBUILT, COMPOSED = set(), set()     # glyphs this module draws or composes (see follow_rebuilt)
 
 
@@ -413,6 +417,7 @@ def bars(font, m):
         else:
             st = stems[which]
             x0, x1 = st[0] - left * S, st[1] + right * S
+        STRUCK[name] = (base, [rect(x0, band(y, w)[0], x1, band(y, w)[1])])
         p = union(b, rect(x0, band(y, w)[0], x1, band(y, w)[1]))
         put(font, name, p, font[base].width)
     if "Eth" in font and font["Eth"].components:
@@ -426,6 +431,7 @@ def bars(font, m):
         st = [s for s in scan_h(b, y) if s[1] - s[0] < S * 1.4][0]
         cx = (st[0] + st[1]) / 2
         d = run * S
+        STRUCK[name] = (base, [bar((cx - d, y - d * rise), (cx + d, y + d * rise), w)])
         p = union(b, bar((cx - d, y - d * rise), (cx + d, y + d * rise), w))
         put(font, name, p, font[base].width)
     for name, (base, past, inset) in O_SLASH.items():
@@ -433,6 +439,7 @@ def bars(font, m):
         x0, y0, x1, y1 = bounds(b)
         w = (m.cap_bar if base.isupper() else m.low_bar)
         h = y1 - y0
+        STRUCK[name] = (base, [bar((x0 + inset * (x1 - x0), y0 - past * h), (x1 - inset * (x1 - x0), y1 + past * h), w)])
         p = union(b, bar((x0 + inset * (x1 - x0), y0 - past * h), (x1 - inset * (x1 - x0), y1 + past * h), w))
         put(font, name, p, font[base].width)
 
@@ -1157,6 +1164,7 @@ def currencies(font, m):
     # ruble: P with a second bar across its stem below the bowl
     P = gp(font, "P")
     ps = _stem_x(P, 200)
+    STRUCK["uni20BD"] = ("P", [rect(ps[0] - 0.9 * S, 0.24 * CAP_HEIGHT - cb / 2, ps[1] + 1.7 * S, 0.24 * CAP_HEIGHT + cb / 2)])
     put(font, "uni20BD", union(P, rect(ps[0] - 0.9 * S, 0.24 * CAP_HEIGHT - cb / 2, ps[1] + 1.7 * S,
                                        0.24 * CAP_HEIGHT + cb / 2)), font["P"].width, [0x20BD])
     # lira (Turkish): L's stem crossed by two rising bars, as the sign is drawn
@@ -1165,16 +1173,21 @@ def currencies(font, m):
     cx = (ls[0] + ls[1]) / 2
     bars2 = union(bar((cx - 1.0 * S, 0.36 * CAP_HEIGHT), (cx + 1.6 * S, 0.50 * CAP_HEIGHT), cb),
                   bar((cx - 1.0 * S, 0.52 * CAP_HEIGHT), (cx + 1.6 * S, 0.66 * CAP_HEIGHT), cb))
+    STRUCK["uni20BA"] = ("L", [bar((cx - 1.0 * S, 0.36 * CAP_HEIGHT), (cx + 1.6 * S, 0.50 * CAP_HEIGHT), cb),
+                               bar((cx - 1.0 * S, 0.52 * CAP_HEIGHT), (cx + 1.6 * S, 0.66 * CAP_HEIGHT), cb)])
     put(font, "uni20BA", union(L, bars2), font["L"].width, [0x20BA])
     # won: W with two level bars across
     W = gp(font, "W")
     x0, _, x1, _ = bounds(W)
+    STRUCK["uni20A9"] = ("W", [rect(x0 - 10, 0.42 * CAP_HEIGHT - cb / 2, x1 + 10, 0.42 * CAP_HEIGHT + cb / 2),
+                               rect(x0 - 10, 0.62 * CAP_HEIGHT - cb / 2, x1 + 10, 0.62 * CAP_HEIGHT + cb / 2)])
     put(font, "uni20A9", union(W, rect(x0 - 10, 0.42 * CAP_HEIGHT - cb / 2, x1 + 10, 0.42 * CAP_HEIGHT + cb / 2),
                                rect(x0 - 10, 0.62 * CAP_HEIGHT - cb / 2, x1 + 10, 0.62 * CAP_HEIGHT + cb / 2)),
         font["W"].width, [0x20A9])
     # dong: d-bar over a bar under the baseline
     db = gp(font, "dcroat")
     x0, _, x1, _ = bounds(db)
+    STRUCK["dong"] = ("dcroat", [rect(x0 + 20, -150 - lb, x1 - 20, -150)])
     put(font, "dong", union(db, rect(x0 + 20, -150 - lb, x1 - 20, -150)), font["d"].width, [0x20AB])
     # rupee: a level top bar, a second bar under it, and the bowl's stroke turning into a long diagonal leg
     r = m.cap_bar
@@ -1890,6 +1903,7 @@ def letter_signs(font, m):
     cb = bounds(c)
     xc = cb[0] + (cb[2] - cb[0]) * ((st[0] + st[1]) / 2 - ob[0]) / (ob[2] - ob[0])
     sx = band(xc, STROKE_LOW)
+    STRUCK["cent"] = ("c", [rect(sx[0], cb[1] + (ob[1] - old_bot), sx[1], cb[3] + (ob[3] - old_top))])
     p = union(c, rect(sx[0], cb[1] + (ob[1] - old_bot), sx[1], cb[3] + (ob[3] - old_top)))
     w0 = font["cent"].width
     put(font, "cent", p, 0, lsb=ob[0], rsb=w0 - ob[2])
@@ -1911,6 +1925,7 @@ def letter_signs(font, m):
         bars_ = [rect(cx - half, band((a + b) / 2, m.cap_bar)[0], cx + half, band((a + b) / 2, m.cap_bar)[1])
                  for a, b in ((ys[0], ys[1]), (ys[2], ys[3]))]
         w0 = g.width
+        STRUCK["yen"] = ("Y", list(bars_))
         put(font, "yen", union(Y, *bars_), 0, lsb=ob[0], rsb=w0 - ob[2])
         done.append(f"yen: Y + bars {ys[1] - ys[0]:.0f}>{m.cap_bar:.0f}")
     else:
@@ -2491,11 +2506,14 @@ def letter_currencies(font, m):
         return band(y * CAP_HEIGHT, cb)
     N = gp(font, "N")
     x0, _, x1, _ = bounds(N)
+    STRUCK["uni20A6"] = ("N", [rect(x0 - 10, lev(0.42)[0], x1 + 10, lev(0.42)[1]), rect(x0 - 10, lev(0.59)[0], x1 + 10, lev(0.59)[1])])
     done("uni20A6", 0x20A6, union(N, rect(x0 - 10, lev(0.42)[0], x1 + 10, lev(0.42)[1]),       # 0.426, 0.418
                                   rect(x0 - 10, lev(0.59)[0], x1 + 10, lev(0.59)[1])), "N")    # 0.595, 0.582
     P = gp(font, "P")
     ps = _stem_x(P, 200)
     px1 = bounds(P)[2]
+    STRUCK["uni20B1"] = ("P", [rect(ps[0] - 0.9 * S, lev(0.62)[0], px1 + 0.25 * S, lev(0.62)[1]),
+                               rect(ps[0] - 0.9 * S, lev(0.78)[0], px1 + 0.25 * S, lev(0.78)[1])])
     done("uni20B1", 0x20B1, union(P, rect(ps[0] - 0.9 * S, lev(0.62)[0], px1 + 0.25 * S, lev(0.62)[1]),   # 0.588, 0.645
                                   rect(ps[0] - 0.9 * S, lev(0.78)[0], px1 + 0.25 * S, lev(0.78)[1])), "P")  # 0.756, 0.810
     T = gp(font, "T")
@@ -2508,18 +2526,23 @@ def letter_currencies(font, m):
     out = round(0.155 * CAP_HEIGHT)                                                  # 0.14 / 0.13 and 0.18 / 0.18
     xs = (round(bs[1] + 0.35 * S), round(bs[1] + 1.75 * S))
     stubs = [rect(x, -out, x + hair, 20) for x in xs] + [rect(x, CAP_HEIGHT - 20, x + hair, CAP_HEIGHT + out) for x in xs]
+    STRUCK["uni20BF"] = ("B", list(stubs))
     done("uni20BF", 0x20BF, union(B, *stubs), "B")
     K = gp(font, "K")
     ks = _stem_x(K, 200)
+    STRUCK["uni20AD"] = ("K", [rect(ks[0] - 0.9 * S, lev(0.51)[0], ks[1] + 2.4 * S, lev(0.51)[1])])
     done("uni20AD", 0x20AD, union(K, rect(ks[0] - 0.9 * S, lev(0.51)[0], ks[1] + 2.4 * S, lev(0.51)[1])), "K")   # Georgia Pro 0.510
     ts = _stem_x(T, 200)
     cx = (ts[0] + ts[1]) / 2
+    STRUCK["uni20AE"] = ("T", [bar((cx - 1.3 * S, 0.30 * CAP_HEIGHT), (cx + 1.3 * S, 0.44 * CAP_HEIGHT), cb),
+                               bar((cx - 1.3 * S, 0.46 * CAP_HEIGHT), (cx + 1.3 * S, 0.60 * CAP_HEIGHT), cb)])
     done("uni20AE", 0x20AE, union(T, bar((cx - 1.3 * S, 0.30 * CAP_HEIGHT), (cx + 1.3 * S, 0.44 * CAP_HEIGHT), cb),
                                   bar((cx - 1.3 * S, 0.46 * CAP_HEIGHT), (cx + 1.3 * S, 0.60 * CAP_HEIGHT), cb)), "T")
     out = round(0.14 * CAP_HEIGHT)                                                   # Georgia Pro 0.16 below, 0.12 above
     G = gp(font, "G")
     gb = bounds(G)
     gx = band(gb[0] + 0.50 * (gb[2] - gb[0]), hair)
+    STRUCK["uni20B2"] = ("G", [rect(gx[0], -out, gx[1], CAP_HEIGHT + out)])
     done("uni20B2", 0x20B2, union(G, rect(gx[0], -out, gx[1], CAP_HEIGHT + out)), "G")
     C_ = gp(font, "C")
     c0 = bounds(C_)
@@ -2527,7 +2550,9 @@ def letter_currencies(font, m):
     lean = 0.16 * CAP_HEIGHT
     strokes = [bar((ccx + dx - lean / 2, -out - 40), (ccx + dx + lean / 2, CAP_HEIGHT + out + 40), hair) for dx in (-0.55 * S, 0.55 * S)]
     p = union(C_, *strokes)
-    p = op(p, union(rect(-500, -500, 3000, -out), rect(-500, CAP_HEIGHT + out, 3000, 3000)), pathops.PathOp.DIFFERENCE)
+    clip = union(rect(-500, -500, 3000, -out), rect(-500, CAP_HEIGHT + out, 3000, 3000))
+    STRUCK["uni20A1"] = ("C", [op(s_, clip, pathops.PathOp.DIFFERENCE) for s_ in strokes])
+    p = op(p, clip, pathops.PathOp.DIFFERENCE)
     done("uni20A1", 0x20A1, p, "C")
     return made
 

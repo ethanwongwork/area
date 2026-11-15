@@ -326,6 +326,8 @@ def thick_gain(t, straight, v):
 def x_target(t, straight, v):
     if t > 130:
         return None
+    if v.get("sub") == "small sign" and THIN_READ <= t < 130:   # 0.81: SIGN_K
+        return t * sign_ratio(v)
     if v.get("sub") == "sign":
         if 56 <= t < 76:
             return t * (1 + (SIGN_UPRIGHT - 1) * v["f"])
@@ -337,18 +339,40 @@ def x_target(t, straight, v):
         return t + SUB_ROUND[v.get("sub", "loop")] * THICK["round"] * v["f"]
     if t >= 35:
         return t * (1 + (THIN_UPRIGHT - 1) * v["ft"])
-    return None
+    if t >= THIN_READ:                           # 0.81: an upright stroke thinner than a hairline (the asterisk's
+        return t * v["tip"]                      # arms, a small figure's hairline) follows the serif tip, as a level
+    return None                                  # one under 36 always has (y_target); 0.80 left it to the slack
+
+
+THIN_READ = 18                                   # thinner than this across is a corner or a sliver, not a stroke
+# 0.81: a sign's parts that are not plain strokes (the asterisk's arms and their round ends, the daggers' stems,
+# bars and ends, the small T and M of the trademark) change with weight by part(w) / part(400) = (stem(w) /
+# stem(400)) ** SIGN_K, on both sides. Measured (tools/weight/sign_k.py, scan lines on Georgia Pro's Light, Regular
+# and Bold and on Serrif, Crimson Pro, Literata, Source Serif 4, Newsreader, Merriweather, Lora at 300, 400, 700):
+# asterisk arm 0.81 / 0.77 (Light side / Bold side medians), dagger stem 0.75 / 0.90, trademark's T 0.71 / 0.68;
+# the mean of the six, 0.77. Those signs: SMALL_SIGNS (the signs the measure was made on and their kin), drawn at
+# a size of their own with no part at a stem's weight. Georgia Pro holds its signs (0.26 to 0.47), Merriweather lets them run with the stem
+# (0.6 to 1.1). Until 0.80 they took the letters' rules: a petal 60 wide gained the round stroke's 64 (a balloon at
+# 700) and lost the hairline's share at 300 (the asterisk's arms 23 > 15).
+SIGN_K = 0.77
+SMALL_SIGNS = ("asterisk", "dagger", "daggerdbl", "trademark", "servicemark")
+
+
+def sign_ratio(v):
+    return (v["stem"] / REG_STEM) ** SIGN_K
 
 
 def y_target(t, straight, v):
     f = v["ft"]
     if t <= 36:
-        return t * v["tip"]
+        return t * (sign_ratio(v) if v.get("sub") == "small sign" and t >= THIN_READ else v["tip"])
     if t >= 64:                                  # a thick level stroke: only a curved one (the top of g's loop,
         return None if straight or t > 130 else t * (1 + (LEVEL_THICK - 1) * v["f"])   # Q's tail); bold() lets through
         #                                          only those between two facing extremes
     if v.get("sub") == "sign" and straight and 50 <= t <= 55:
         return t * (1 + (SIGN - 1) * f)
+    if v.get("sub") == "small sign" and THIN_READ <= t <= 130:
+        return t * sign_ratio(v)
     table = BAR if straight else HAIR
     if t in table:
         return t + (table[t] - t) * f
@@ -373,6 +397,8 @@ DIAG = dict(thick_lc=59, thick_cap=60, thin_lc=1.27, thin_cap=1.32)
 
 def diag_target(t, v):
     f = v["f"]
+    if v.get("sub") == "small sign":
+        return t * sign_ratio(v)
     if v.get("sub") == "sign" and 50 <= t <= 55:
         return t * (1 + (SIGN - 1) * f)
     if t >= 64:
@@ -794,6 +820,8 @@ def spine(contours, up, low, v, t=None):
         nrm = (-nrm[0], -nrm[1])
     across = d[0] * nrm[0] + d[1] * nrm[1]
     gain = SPINE * v["f"] if across >= 64 else across * (DIAG["thin_lc"] - 1) * v["ft"]
+    if v.get("sub") == "small sign":                           # 0.81: SIGN_K, as every other part of such a sign
+        gain = abs(across) * (sign_ratio(v) - 1)
     cons = {"x": [], "y": []}
     for ax, key in ((0, "x"), (1, "y")):
         a, b = sorted((low[ax], up[ax]))
@@ -1102,12 +1130,37 @@ def set_necks(reg, new, v, pinned=()):
                 if mid and not (cj == ci and i in (a, b)):
                     segs.append([Q[a][:2]] + [Q[m][:2] for m in mid] + [Q[b][:2]])
         nx, ny = N[i][:2]
-        best = min(range(ny - 60, ny + 61), key=lambda yy: abs(min(PARTS.neck((nx, yy), sg) for sg in segs) - want))
+        rng = neck_range(P, N, i, h)
+        if rng is None:
+            continue
+        best = min(range(max(ny - 60, rng[0]), min(ny + 60, rng[1]) + 1), key=lambda yy: abs(min(PARTS.neck((nx, yy), sg) for sg in segs) - want),
+                   default=ny)
         dy = best - ny
         N[i] = (nx, best) + N[i][2:]
         N[h] = (N[h][0], N[h][1] + dy, None, False)
         done.append((x, y, d, round(want, 1), round(min(PARTS.neck((nx, best), sg) for sg in segs), 1), dy))
     return done
+
+
+def neck_range(P, N, i, h):
+    """0.81: where a crotch may go: (lowest y, highest y) in the other master N. The curves on both sides of it keep
+    running the way they run in the Regular: the crotch never passes the level of either neighbouring node. 0.80
+    moved a comma's crotch 57 up its tail past the ball's top (the quotes' balls swallowed their crotch and the
+    curve turned), and dropped glottal stop's crotch 19 under the near-level curve leaving it, which turned back."""
+    n = len(P)
+    lo, hi = -10 ** 6, 10 ** 6
+    for step in (-1, 1):
+        far = (i + step) % n
+        while P[far][2] is None:
+            far = (far + step) % n
+        if P[far][1] < P[i][1]:
+            lo = max(lo, N[far][1])
+        elif P[far][1] > P[i][1]:
+            hi = min(hi, N[far][1])
+        else:
+            lo, hi = max(lo, N[far][1]), min(hi, N[far][1])
+    del h
+    return (lo, hi) if lo <= hi else None
 
 
 # A neck is a distance between a point and a curve that both travel in straight lines from one master to the
@@ -1251,7 +1304,7 @@ def bold(contours, width, v, name="", hints=None):
         else:
             half.append((q, o, t))
     for ax, lo, hi, o, lo2, hi2 in bl:
-        r = 1 + (BALL - 1) * v["f"]
+        r = sign_ratio(v) if v.get("sub") == "small sign" else 1 + (BALL - 1) * v["f"]
         (extra_x if ax == 0 else extra_y).append((lo, hi, (hi - lo) * r, "ball"))
         (extra_y if ax == 0 else extra_x).append((lo2, hi2, (hi2 - lo2) * r, "ball"))
     for up, low in hints.get("spine", []):
@@ -1832,7 +1885,19 @@ def stretch(contours, width, kind, v, below=False):
         y0, y1 = min(q[1] for P in cs for q in P if q[2]), max(q[1] for P in cs for q in P if q[2])
         sx, sy = W_ / (x1 - x0), H_ / (y1 - y0)
         yb = base - H_ if below else base
-        return [[(cx - W_ / 2 + (x - x0) * sx, yb + (y - y0) * sy, t, s_) for x, y, t, s_ in P] for P in cs]
+        out_ = [[(cx - W_ / 2 + (x - x0) * sx, yb + (y - y0) * sy, t, s_) for x, y, t, s_ in P] for P in cs]
+        # 0.81: the nodes a mark stands on (its foot: every node on its bottom in the Regular, its top when it hangs
+        # below) stay on that line. The swell moves a corner along its bisector, further at an acute corner than an
+        # obtuse one, so a level cut at an arm's end tilted and the arm ended in a sliver (acute 27 > 24).
+        for ci, idx in foot:
+            P = out_[ci]
+            for i in idx:
+                dy = base - P[i][1]
+                for k in (i - 1, i, (i + 1) % len(P)):
+                    if k == i or P[k][2] is None:
+                        P[k] = (P[k][0], P[k][1] + dy) + P[k][2:]
+        return out_
+    foot = [(ci, [i for i, q in enumerate(P) if q[2] is not None and q[1] == base]) for ci, P in enumerate(contours)]
     cur = fit([list(P) for P in contours])
     # 0.79: the swell goes in steps of at most 1.5 units. Taken in one step, the capital breves' tips folded over
     # (their box is small for their stroke): mean stroke 55.8 for 64.2, thinner than the Regular at the tips, and
@@ -1844,7 +1909,9 @@ def stretch(contours, width, kind, v, below=False):
     if v["f"] < 0:
         th0 = thinnest(_flat8(contours))
         floor = th0 * v["tip"] if th0 is not None else None
-    for _ in range(60):
+    if v["f"] > 0:
+        cur = _swell_into_box(contours, W_, H_, want, cx, base, below, foot)
+    for _ in range(0 if v["f"] > 0 else 60):
         d = (want - mean_stroke(cur)) / 2
         if abs(d) < 0.05:
             break
@@ -1867,6 +1934,46 @@ def stretch(contours, width, kind, v, below=False):
     return out, 0 if width == 0 else right + dx + round(rsb * v["bearing"]), rep
 
 
+def _swell_into_box(contours, W_, H_, want, cx, base, below, foot):
+    """0.81, a wedge mark towards the Bold: its outline is carried into a box that, once the outline has swollen
+    about it by d, is the measured box; d is what brings the mean stroke to its measured value. The stroke is
+    swollen last and never pressed back into the box (0.80 swelled, then fitted the swollen outline into the box,
+    which pressed every stroke across itself: an acute's thin end 27 > 24, a circumflex's arm's end to a sliver).
+    The foot stays on its line. Returns float contours."""
+    xs = [q[0] for P in contours for q in P if q[2]]
+    ys = [q[1] for P in contours for q in P if q[2]]
+    x0, x1, y0, y1 = min(xs), max(xs), min(ys), max(ys)
+
+    def place(Wi, Hi, d):
+        sx, sy = Wi / (x1 - x0), Hi / (y1 - y0)
+        sc = [[(cx + (x - (x0 + x1) / 2) * sx, (base - (y1 - y) * sy) if below else (base + (y - y0) * sy), t, s_)
+               for x, y, t, s_ in P] for P in contours]
+        sw = [swell(P, d) for P in sc]
+        nx = [q[0] for P in sw for q in P if q[2]]
+        ny = [q[1] for P in sw for q in P if q[2]]
+        dx, dy = cx - (min(nx) + max(nx)) / 2, (base - max(ny)) if below else (base - min(ny))
+        out_ = [[(x + dx, y + dy, t, s_) for x, y, t, s_ in P] for P in sw]
+        for ci, idx in foot:                                   # the foot on its line, handles with their node
+            P = out_[ci]
+            for i in idx:
+                e = base - P[i][1]
+                for k in (i - 1, i, (i + 1) % len(P)):
+                    if k == i or P[k][2] is None:
+                        P[k] = (P[k][0], P[k][1] + e) + P[k][2:]
+        return out_
+    Wi, Hi, d = W_, H_, 0.0
+    cur = place(Wi, Hi, d)
+    for _ in range(40):
+        nx = [q[0] for P in cur for q in P if q[2]]
+        ny = [q[1] for P in cur for q in P if q[2]]
+        ew, eh, em = W_ - (max(nx) - min(nx)), H_ - (max(ny) - min(ny)), want - mean_stroke(cur)
+        if abs(ew) < 0.2 and abs(eh) < 0.2 and abs(em) < 0.05:
+            break
+        Wi, Hi, d = max(10.0, Wi + ew), max(10.0, Hi + eh), d + em / 2
+        cur = place(Wi, Hi, d)
+    return cur
+
+
 def is_mark(g):
     return any(a.name.startswith("_") for a in g.anchors) or mark_kind(g.name) is not None and not g.name[0].isupper() \
         and g.name.split(".")[0] in ("acute", "grave", "circumflex", "caron", "tilde", "macron", "ring", "cedilla", "breve",
@@ -1881,7 +1988,7 @@ def glyph_bold(g, v):
     import unicodedata
     cat = unicodedata.category(chr(g.unicodes[0])) if g.unicodes else ("L" if g.name.split(".")[0].split("_")[0] in ("f", "c", "s", "t") or g.name[:1].isalpha() and len(g.name.split(".")[0]) == 1 else "")
     if not mark and cat[:1] in ("P", "S") and g.name not in HINTS:
-        hints = {"sub": "sign"}                                # punctuation and symbols: a sign's strokes
+        hints = {"sub": "small sign" if g.name in SMALL_SIGNS else "sign"}   # punctuation and symbols: a sign's strokes
     out, w, rep = bold(c, g.width, v, g.name, hints)
     folded = lambda r: any(row[5] == "turned over" for row in r.get("x", []) + r.get("y", []))   # noqa: E731
     if folded(rep) and mark and mark_kind(g.name):
@@ -1952,6 +2059,206 @@ def bearing_change(name, v):
     return d[0] * BEARING_SCALE * v["f"], d[1] * BEARING_SCALE * v["f"]
 
 
+# 0.81: a part drawn again in other glyphs moves, in every master, as its own glyph does. The comma's ball and tail
+# recur in the quotes, the apostrophe, the comma accent and the turned comma above, each drawn on the comma's 19
+# points at its own size and turn (0.69 to 0.92 of it, upright or turned half round; within 7 to 21 units of the
+# comma so placed). The engine read each of them afresh, and read them differently: the apostrophe's tail was not
+# read at all (42 > 20 at 300), the turned comma above's ball swelled over its tail (crossings from 600), the
+# quotes' crotch climbed their tails. Now each such contour takes the comma's own move at every point, turned and
+# sized as the contour is. KIN: the glyph whose contour is the part, and the most a drawing may stray from it.
+KIN = {"comma": 25}
+_KIN = {}
+
+
+def _similar(base, P, tol):
+    """(scale, rotation matrix, residual) placing base's points on P's (same order), or None."""
+    A, C = np.array(base, float), np.array(P, float)
+    Ac, Cc = A - A.mean(0), C - C.mean(0)
+    U, S, Vt = np.linalg.svd(Ac.T @ Cc)
+    Rm = (U @ Vt).T
+    if np.linalg.det(Rm) < 0:
+        return None
+    sc = S.sum() / (Ac ** 2).sum()
+    res = float(np.abs(Cc - sc * (Ac @ Rm.T)).max())
+    ang = math.degrees(math.atan2(Rm[1, 0], Rm[0, 0]))
+    if res > tol or not 0.6 <= sc <= 1.1 or min(abs(ang), abs(abs(ang) - 180)) > 6:
+        return None
+    return sc, Rm, res
+
+
+# 0.81: the small figures and the ordinals are their letter or figure at charset.SUP_SCALE with charset.SUP_BOLD
+# added round them (charset.small_figures). In every master each of their points moves by its figure's point's
+# move, at that scale; the added weight stays what it is. 0.80 read them afresh, and a superior's strokes took the
+# full-size gains (the Light six superior's upper stroke 24 > 16 at 300). This gives them the heavier relative
+# weight small glyphs have in every reference (their stem goes 54 > 88 to the Bold and 54 > 42 to the Light,
+# a share of the stem's step of 0.82 and 0.74 in the weight research's exponent; their hairline 0.3 and 0.4).
+SMALL = {f + s_: f for f in ("zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine")
+         for s_ in ("superior", "inferior")}
+SMALL.update(ordfeminine="a", ordmasculine="o")
+
+
+def _match(B_, P, scale, far=20.0, skip=20.0):
+    """For each point of P, the index of the point of B_ (scaled about its box and set on P's box) it was made
+    from, or None for a point the figure no longer has (a node added to one since): the cheapest alignment of the
+    two in order round the contour (a point to a point of the same kind within `far`; a point of P left out costs
+    `skip`, a point of B_ left out nothing)."""
+    bx, by = [q[0] for q in B_], [q[1] for q in B_]
+    px, py = [q[0] for q in P], [q[1] for q in P]
+    cx = (min(px) + max(px)) / 2 - (min(bx) + max(bx)) / 2 * scale
+    cy = (min(py) + max(py)) / 2 - (min(by) + max(by)) / 2 * scale
+    T = [(q[0] * scale + cx, q[1] * scale + cy, q[2]) for q in B_]
+    n, m = len(T), len(P)
+    INF = float("inf")
+    best = None
+    for k in range(n):
+        Tk = T[k:] + T[:k]
+        D = [[INF] * (n + 1) for _ in range(m + 1)]
+        W = [[None] * (n + 1) for _ in range(m + 1)]
+        D[0][0] = 0.0
+        for i in range(m + 1):
+            for j in range(n + 1):
+                c = D[i][j]
+                if c == INF:
+                    continue
+                if j < n and c < D[i][j + 1]:                  # the figure's point left out
+                    D[i][j + 1], W[i][j + 1] = c, (i, j, None)
+                if i < m and c + skip < D[i + 1][j]:           # the small glyph's point left out
+                    D[i + 1][j], W[i + 1][j] = c + skip, (i, j, None)
+                if i < m and j < n and (Tk[j][2] is None) == (P[i][2] is None):
+                    dd = math.dist(Tk[j][:2], P[i][:2])
+                    if dd <= far and c + dd < D[i + 1][j + 1]:
+                        D[i + 1][j + 1], W[i + 1][j + 1] = c + dd, (i, j, (k + j) % n)
+        if best is None or D[m][n] < best[0]:
+            idx = [None] * m
+            i, j = m, n
+            while (i, j) != (0, 0):
+                pi, pj, hit = W[i][j]
+                if hit is not None and pi == i - 1 and pj == j - 1:
+                    idx[pi] = hit
+                i, j = pi, pj
+            best = (D[m][n], idx)
+    if best is None or best[0] == INF or sum(x is None for x in best[1]) > max(4, m // 6):
+        return None
+    return best[1]
+
+
+def kin_parts(reg, g, out, rep, v):
+    """Contours of g that are a KIN part: each point moved by the part's own glyph's move, turned and scaled; or a
+    SMALL glyph: each point moved by its figure's point's move, at the small glyphs' scale."""
+    if g.name in SMALL and SMALL[g.name] in reg:
+        import charset as CHARSET
+        base_name = SMALL[g.name]
+        key = (base_name, v["stem"], "small")
+        if key not in _KIN:
+            _KIN[key] = (glyph_contours(reg[base_name]), glyph_bold(reg[base_name], v)[0])
+        bR, bB = _KIN[key]
+        mine = glyph_contours(g)
+        if len(bR) != len(mine):
+            return out, rep
+        new = []
+        for P, BR, BB in zip(mine, bR, bB):
+            idx = _match(BR, P, CHARSET.SUP_SCALE)
+            if idx is None or len(BR) != len(BB):
+                return out, rep
+            mv = [None if j is None else ((BB[j][0] - BR[j][0]) * CHARSET.SUP_SCALE, (BB[j][1] - BR[j][1]) * CHARSET.SUP_SCALE)
+                  for j in idx]
+            for i in range(len(mv)):                           # a point the figure has not: its neighbours' move
+                if mv[i] is None:
+                    a_ = next(mv[(i - d) % len(mv)] for d in range(1, len(mv)) if mv[(i - d) % len(mv)] is not None)
+                    b_ = next(mv[(i + d) % len(mv)] for d in range(1, len(mv)) if mv[(i + d) % len(mv)] is not None)
+                    mv[i] = ((a_[0] + b_[0]) / 2, (a_[1] + b_[1]) / 2)
+            new.append([(round(q[0] + dx), round(q[1] + dy), q[2], q[3]) for q, (dx, dy) in zip(P, mv)])
+        rep = dict(rep, kin=[f"{base_name}'s move x {CHARSET.SUP_SCALE}"])
+        rep.pop("fallback", None)
+        return new, rep
+    if not g.contours or g.name in KIN:
+        return out, rep
+    done = []
+    for kname, tol in KIN.items():
+        if kname not in reg:
+            continue
+        key = (kname, v["stem"])
+        if key not in _KIN:
+            base = glyph_contours(reg[kname])[0]
+            bo = glyph_bold(reg[kname], v)[0][0]
+            _KIN[key] = (base, bo)
+        base, bo = _KIN[key]
+        mv = np.array([q[:2] for q in bo], float) - np.array([q[:2] for q in base], float)
+        mv -= mv.mean(0)                                       # the part's change of shape, not its place
+        for ci, P in enumerate(glyph_contours(g)):
+            if len(P) != len(base) or [q[2] for q in P] != [q[2] for q in base]:
+                continue
+            fit_ = _similar([q[:2] for q in base], [q[:2] for q in P], tol)
+            if fit_ is None:
+                continue
+            sc, Rm, res = fit_
+            d = sc * (mv @ Rm.T)
+            N = [(round(q[0] + dx), round(q[1] + dy), q[2], q[3]) for q, (dx, dy) in zip(P, d)]
+            for k, q in enumerate(P):                          # a handle level or upright on its node stays so
+                if q[2] is not None:                           # (the drawing's turn is not the comma's exactly)
+                    continue
+                own = k - 1 if P[k - 1][2] is not None else (k + 1) % len(P)
+                for ax in (0, 1):
+                    if q[ax] == P[own][ax]:
+                        N[k] = tuple(N[own][ax] if a == ax else N[k][a] for a in (0, 1)) + N[k][2:]
+            cx = (min(q[0] for q in out[ci]) + max(q[0] for q in out[ci])) / 2   # where the engine put it, across
+            nx = (min(q[0] for q in N) + max(q[0] for q in N)) / 2
+            N = [(x + round(cx - nx), y, t, s_) for x, y, t, s_ in N]
+            out[ci] = N
+            done.append(f"contour {ci}: {kname}'s move x {sc:.2f}{' turned' if abs(Rm[0, 0] + 1) < 0.2 else ''} (drawn {res:.0f} from it)")
+    if done:
+        rep = dict(rep, kin=done)
+        rep.pop("fallback", None)
+    return out, rep
+
+
+def overlap_masters(reg, font, maps, v, reports, notes):
+    """0.81: every struck glyph (overlap.py) in this master: the master's own letter, point for point, at the
+    Regular's offset, and each stroke moved by overlap.move_stroke on the letter's node map. Writes the default
+    layer of `font`; returns the names done."""
+    import overlap as OVERLAP
+    from ufoLib2.objects import Contour, Point
+    if OVERLAP.LAYER not in reg.layers:
+        return set()
+    layer = reg.layers[OVERLAP.LAYER]
+    order = sorted(layer.keys(), key=lambda n: layer[n].lib.get("area.overlap", {}).get("letter") in layer)
+    done = set()
+    for name in order:
+        og = layer[name]
+        info = og.lib.get("area.overlap")
+        if not info or name not in font:
+            continue
+        letter, (ox, oy), nl = info["letter"], info["offset"], info["letter_contours"]
+        if letter not in font or letter not in maps:
+            notes.append(f"{name}: its letter {letter} has no map; left as the engine read it")
+            continue
+        X, Y = maps[letter]
+        rl = [[(q.x, q.y, q.type, q.smooth) for q in c.points] for c in reg[letter].contours] if letter not in layer \
+            else [[(q.x, q.y, q.type, q.smooth) for q in c.points] for c in layer[letter].contours]
+        bl = [[(q.x, q.y, q.type, q.smooth) for q in c.points] for c in font[letter].contours]
+        if len(rl) != nl or [len(P) for P in rl] != [len(c.points) for c in og.contours[:nl]]:
+            notes.append(f"{name}: its letter part is not {letter}'s points; left as the engine read it")
+            continue
+        mx = lambda x: _interp(X, x - ox) + ox if X else x     # noqa: E731
+        my = lambda y: _interp(Y, y - oy) + oy if Y else y     # noqa: E731
+        strokes = [[(q.x, q.y, q.type, q.smooth) for q in c.points] for c in og.contours[nl:]]
+        new = [[(x + ox, y + oy, t, s_) for x, y, t, s_ in P] for P in bl] + [OVERLAP.move_stroke(P, mx, my, v) for P in strokes]
+        g = font[name]
+        g.clearContours()
+        for P in new:
+            c = Contour()
+            c.points = [Point(x, y, t, smooth=s_) for x, y, t, s_ in P]
+            g.contours.append(c)
+        g.width = og.width + (font[letter].width - reg[letter].width)
+        for a, na in zip(og.anchors, g.anchors):
+            na.x, na.y = round(mx(a.x)), round(my(a.y))
+        maps[name] = ({k + ox: mx(k + ox) for k in X} if X else {}, {k + oy: my(k + oy) for k in Y} if Y else {})
+        reports[name] = {"x": [], "y": [], "necks": [], "overlap": letter}
+        done.add(name)
+    notes.append(f"overlap: {len(done)} struck glyphs as this master's letter and its strokes")
+    return done
+
+
 def bold_font(reg, stem=STEM, **over):
     """The Bold master: every outline by rule, every anchor carried by its glyph's own node map, every component
     moved by what its two anchors moved. Returns (font, {glyph: report}, [notes])."""
@@ -1964,6 +2271,7 @@ def bold_font(reg, stem=STEM, **over):
         if not g.contours:
             continue
         out, w, rep = glyph_bold(g, v)
+        out, rep = kin_parts(reg, g, out, rep, v)              # 0.81: a comma wherever it recurs
         if g.width:                                            # side bearings: the Regular's plus the measured change
             rc = glyph_contours(g)
             r0, r1 = _zone_edges(rc, g.name)
@@ -1986,6 +2294,8 @@ def bold_font(reg, stem=STEM, **over):
         for a, na in zip(g.anchors, ng.anchors):
             if maps[g.name][0]:
                 na.x, na.y = round(_interp(maps[g.name][0], a.x)), round(_interp(maps[g.name][1], a.y))
+
+    struck = overlap_masters(reg, font, maps, v, reports, notes)   # 0.81: letter and strokes, overlapping
 
     def anchors(font_, name):
         g = font_[name]
@@ -2071,7 +2381,7 @@ def bold_font(reg, stem=STEM, **over):
     for g in reg:
         if not g.contours:
             continue
-        if reports.get(g.name, {}).get("fallback") or not reports.get(g.name, {}).get("necks"):
+        if reports.get(g.name, {}).get("fallback") or not reports.get(g.name, {}).get("necks") or g.name in struck:
             continue
         mc = mid_master(glyph_contours(g), glyph_contours(font[g.name]), v)
         if mc is None:
@@ -2084,12 +2394,31 @@ def bold_font(reg, stem=STEM, **over):
             c.points = [Point(x, y, t, smooth=s_) for x, y, t, s_ in P]
             mg.contours.append(c)
         notes.append(f"{g.name}: a master at weight {MID_WEIGHT} (its neck sags between the two)")
+    import overlap as OVERLAP                                  # 0.81: a struck glyph whose letter has a mid master
+    if OVERLAP.LAYER in reg.layers:                            # takes it, with its strokes half way as they go
+        tm_s = (dict(axis_map(stem))[MID_WEIGHT] - REG_STEM) / (stem - REG_STEM)
+        for name in sorted(struck):
+            og = reg.layers[OVERLAP.LAYER][name]
+            info = og.lib["area.overlap"]
+            letter, (ox, oy), nl = info["letter"], info["offset"], info["letter_contours"]
+            if letter not in layer:
+                continue
+            mg = layer.newGlyph(name)
+            mg.width = round(og.width + (font[name].width - og.width) * tm_s)
+            parts_ = [[(q.x + ox, q.y + oy, q.type, q.smooth) for q in c.points] for c in layer[letter].contours]
+            parts_ += [[(round(a.x + (b_.x - a.x) * tm_s), round(a.y + (b_.y - a.y) * tm_s), a.type, a.smooth)
+                        for a, b_ in zip(c.points, cb.points)] for c, cb in zip(og.contours[nl:], font[name].contours[nl:])]
+            for P in parts_:
+                c = Contour()
+                c.points = [Point(x, y, t, smooth=s_) for x, y, t, s_ in P]
+                mg.contours.append(c)
+            notes.append(f"{name}: a master at weight {MID_WEIGHT}, its letter {letter}'s")
     import charset as CHARSET
     # 0.79: no curve of either master gains an extreme or an inflection, here or half way (fix_turns)
     n_fixed = n_left = 0
     tm0 = (dict(axis_map(stem))[MID_WEIGHT] - REG_STEM) / (stem - REG_STEM)
     for g in reg:
-        if not g.contours or reports.get(g.name, {}).get("fallback", "").startswith("left as the Regular"):
+        if not g.contours or reports.get(g.name, {}).get("fallback", "").startswith("left as the Regular") or g.name in struck:
             continue
         for f_, blends in ((layer, ((0.0, 1.0), (0.5, 0.5))), (font, ((0.0, 1.0), (0.5, 0.5), (0.75, 0.25), (0.25, 0.75)))):
             if g.name not in f_:
@@ -2105,6 +2434,13 @@ def bold_font(reg, stem=STEM, **over):
                 if fx:
                     c.points = [Point(x, y, t, smooth=s_) for x, y, t, s_ in M_]
     notes.append(f"curves: {n_fixed} brought back to the Regular's turns, {n_left} not")
+    for name in struck:                                        # 0.81: the struck glyphs' letters as they now are
+        info = reg.layers[OVERLAP.LAYER][name].lib["area.overlap"]
+        letter, (ox, oy), nl = info["letter"], info["offset"], info["letter_contours"]
+        for f_ in (font, layer):
+            if name in f_ and letter in f_:
+                for c, lc in zip(f_[name].contours[:nl], f_[letter].contours):
+                    c.points = [Point(q.x + ox, q.y + oy, q.type, smooth=q.smooth) for q in lc.points]
     # 0.79: two inks that stand side by side without touching in the Regular (the two marks of a double quote, a
     # dieresis's dots, a bar beside an arrow) never come closer than spacing.MIN_GAP, the face's own least white
     # between two inks. Until 0.78 such glyphs closed up and crossed between 600 and 700. Marks that lap over each
@@ -2112,7 +2448,7 @@ def bold_font(reg, stem=STEM, **over):
     import spacing as SPACING
     apart = []
     for g in reg:
-        if len(g.contours) < 2 or g.components or g.name not in font:
+        if len(g.contours) < 2 or g.components or g.name not in font or g.name in struck:
             continue
         moved = keep_apart(glyph_contours(g), glyph_contours(font[g.name]), v["bearing"], SPACING.MIN_GAP)
         if not moved:
@@ -2181,6 +2517,9 @@ def bold_font(reg, stem=STEM, **over):
     import spacing as SPACING
     opened = SPACING.open_all(font, CHARSET.COVERAGE)
     notes.append(f"kerning: {len(opened)} pairs opened to {SPACING.MIN_GAP} on the Bold's ink")
+    import overlap as OVERLAP
+    if OVERLAP.LAYER in font.layers:                           # the master's own default layer holds these now
+        del font.layers[OVERLAP.LAYER]
     font.info.styleName = "Bold"
     font.info.openTypeOS2WeightClass = 700
     return font, reports, notes

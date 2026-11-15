@@ -1,0 +1,384 @@
+"""Area Serif 0.81: a letter with strokes across it, as overlapping contours in the variable font.
+
+The static Regular keeps one merged outline per struck glyph (normalize, charset.put). A merged outline has corners
+where a stroke's edge meets the letter's edge; such a corner is where two edge lines cross, and when both lines move
+between two masters the crossing does not move in a straight line (it misses by about t(1 - t) times the move over
+the sine of the angle between them), so the instance between the masters gains slivers, crossings and turns that no
+master has (Astroke, Estroke, cstroke, won, the colon sign: build 0.80). In the variable font's masters such a glyph
+is the finished letter's own contours and each stroke as one closed contour of its own, overlapping it; the
+renderer fills the union (non-zero winding, the overlap flag set). Every master takes the letter as that master's
+letter, point for point, and each stroke by one rule (`move_stroke`): its two ends ride the letter's node map, its
+two long sides stay parallel and part by the stroke's own weight rule.
+
+Where it lives: the Regular UFO's layer "overlap" holds the overlapping form of each struck glyph; the Bold and
+Light UFOs hold it in their default layer; build.variable puts the overlap layer in the Regular source.
+"""
+import math
+
+import pathops
+
+LAYER = "overlap"
+
+
+def _path_contours(path):
+    """A pathops Path's contours as [[(x, y, type, smooth)]], whole units, curves cubic."""
+    import ufoLib2
+    import charset as CHARSET
+    f = ufoLib2.Font()
+    g = f.newGlyph("_")
+    CHARSET._draw_cubic(path, g.getPen())
+    return [[(round(p.x), round(p.y), p.type, p.smooth) for p in c.points] for c in g.contours]
+
+
+def _soft(contours):
+    """The letters' soft corners (charset.soft_ends) on a lone stroke's cut ends."""
+    import ufoLib2
+    from ufoLib2.objects import Contour, Point
+    import charset as CHARSET
+    f = ufoLib2.Font()
+    g = f.newGlyph("_stroke")
+    for P in contours:
+        c = Contour()
+        c.points = [Point(x, y, t, smooth=s) for x, y, t, s in P]
+        g.contours.append(c)
+    CHARSET.soft_ends(f, skip=set())
+    return [[(p.x, p.y, p.type, p.smooth) for p in c.points] for c in g.contours]
+
+
+def _ccw(P):
+    a = sum(P[i][0] * P[(i + 1) % len(P)][1] - P[(i + 1) % len(P)][0] * P[i][1] for i in range(len(P)))
+    return a > 0
+
+
+def _orient(P, ccw):
+    """A closed contour turned to run the other way when its direction is not `ccw` (start point kept on a node)."""
+    if _ccw(P) == ccw:
+        return P
+    on = [i for i, q in enumerate(P) if q[2] is not None]
+    # reverse: segment types move to the other end of each segment
+    n = len(P)
+    rev = list(reversed(P))
+    types = [q[2] for q in P]
+    out = []
+    # In reversed order, a node's type is the type of the node that followed it in the original (what arrives at
+    # it now is what left it before).
+    for k, q in enumerate(rev):
+        i = n - 1 - k
+        if q[2] is None:
+            out.append(q)
+            continue
+        j = (i + 1) % n                     # original next point
+        while P[j][2] is None:
+            j = (j + 1) % n
+        nxt_type = types[j]
+        out.append((q[0], q[1], "curve" if P[(i + 1) % n][2] is None else "line", q[3]) if nxt_type else q)
+    del on
+    return out
+
+
+def letter_contours(font, letter):
+    """A letter's own contours (its overlapping form when it is struck itself, as dong's dcroat), components drawn."""
+    src = font.layers[LAYER][letter] if LAYER in font.layers and letter in font.layers[LAYER] else font[letter]
+    out = [[(p.x, p.y, p.type, p.smooth) for p in c.points] for c in src.contours]
+    for comp in src.components:
+        t = comp.transformation
+        for P in letter_contours(font, comp.baseGlyph):
+            out.append([(t[0] * x + t[2] * y + t[4], t[1] * x + t[3] * y + t[5], ty, s) for x, y, ty, s in P])
+    return out
+
+
+def source_struck(font):
+    """Before normalize merges them: every source glyph that is a letter (one component) and strokes (its own
+    contours). {name: (letter, (dx, dy), [contours])}."""
+    import re
+    out = {}
+    for g in font:
+        if g.components and g.contours and re.search(r"(stroke|bar|middletilde)$", g.name) and len(g.components) == 1:
+            c = g.components[0]
+            t = tuple(c.transformation)
+            if t[:4] != (1, 0, 0, 1):
+                continue
+            out[g.name] = (c.baseGlyph, (t[4], t[5]), [[(p.x, p.y, p.type, p.smooth) for p in k.points] for k in g.contours])
+    return out
+
+
+def ink_deviation(a_contours, merged_glyph, font, px=4):
+    """How far the ink of `a_contours` (non-zero winding) strays from the merged glyph's ink, in units: both are
+    filled at `px` pixels a unit, and the widest piece of ink that one has and the other has not is measured across
+    (twice the largest circle inside it). A second method: rasterised ink, not the outlines' own arithmetic. An
+    edge moved by e reads e; a 3-unit sliver of white that the merge filled reads 3, wherever it sits."""
+    import numpy as np
+    from scipy import ndimage
+    m = [[(p.x, p.y, p.type, p.smooth) for p in c.points] for c in merged_glyph.contours]
+    for comp in merged_glyph.components:
+        t = comp.transformation
+        m += [[(t[0] * x + t[2] * y + t[4], t[1] * x + t[3] * y + t[5], ty, sm) for x, y, ty, sm in P]
+              for P in letter_contours(font, comp.baseGlyph)]
+    A, M = raster(a_contours, px, m), raster(m, px, a_contours)
+    D = A ^ M
+    if not D.any():
+        return 0.0
+    return 2 * float(ndimage.distance_transform_edt(D).max()) / px
+
+
+def contour_deviation(a_contours, b_contours, px=4):
+    """ink_deviation between two sets of contours (both filled non-zero)."""
+    from scipy import ndimage
+    A, M = raster(a_contours, px, b_contours), raster(b_contours, px, a_contours)
+    D = A ^ M
+    return 0.0 if not D.any() else 2 * float(ndimage.distance_transform_edt(D).max()) / px
+
+
+def raster(contours, px, also=()):
+    """A boolean image of contours' ink, non-zero winding, px pixels a unit, over the box of both sets."""
+    import numpy as np
+    import skia
+    pts = [q for P in list(contours) + list(also) for q in P]
+    x0, y0 = min(q[0] for q in pts) - 4, min(q[1] for q in pts) - 4
+    x1, y1 = max(q[0] for q in pts) + 4, max(q[1] for q in pts) + 4
+    W, H = int((x1 - x0) * px) + 1, int((y1 - y0) * px) + 1
+    path = skia.Path()
+    path.setFillType(skia.PathFillType.kWinding)
+    tr = lambda q: ((q[0] - x0) * px, (y1 - q[1]) * px)    # noqa: E731
+    for P in contours:
+        on = [i for i, q in enumerate(P) if q[2] is not None]
+        n = len(P)
+        s0 = on[0]
+        path.moveTo(*tr(P[s0]))
+        buf = []
+        for step in range(1, n + 1):
+            q = P[(s0 + step) % n]
+            if q[2] is None:
+                buf.append(q)
+                continue
+            if len(buf) == 2:
+                path.cubicTo(*tr(buf[0]), *tr(buf[1]), *tr(q))
+            elif len(buf) == 1:
+                path.quadTo(*tr(buf[0]), *tr(q))
+            else:
+                path.lineTo(*tr(q))
+            buf = []
+        path.close()
+    surf = skia.Surface(W, H)
+    c = surf.getCanvas()
+    c.clear(skia.ColorBLACK)
+    paint = skia.Paint(Color=skia.ColorWHITE, AntiAlias=False)
+    c.drawPath(path, paint)
+    img = surf.makeImageSnapshot().toarray()
+    return img[..., 0] > 127
+
+
+def _draw(P, pen):
+    on = [i for i, q in enumerate(P) if q[2] is not None]
+    n = len(P)
+    s = on[0]
+    pen.moveTo(P[s][:2])
+    k = s
+    buf = []
+    for step in range(1, n + 1):
+        i = (s + step) % n
+        q = P[i]
+        if q[2] is None:
+            buf.append(q[:2])
+            continue
+        if buf:
+            pen.curveTo(*buf, q[:2])
+        else:
+            pen.lineTo(q[:2])
+        buf = []
+        k = i
+    del k
+    pen.closePath()
+
+
+def _flatten(path, step=1.0):
+    pts = []
+    cur = start = None
+    for verb, P in path.segments:
+        if verb == "moveTo":
+            cur = start = P[0]
+            pts.append(cur)
+        elif verb == "lineTo":
+            a, b = cur, P[0]
+            n = max(1, int(math.hypot(b[0] - a[0], b[1] - a[1]) / step))
+            pts += [(a[0] + (b[0] - a[0]) * k / n, a[1] + (b[1] - a[1]) * k / n) for k in range(1, n + 1)]
+            cur = b
+        elif verb == "curveTo":
+            a, (b, c, d) = cur, P
+            for k in range(1, 17):
+                t = k / 16
+                u = 1 - t
+                pts.append((u ** 3 * a[0] + 3 * u * u * t * b[0] + 3 * u * t * t * c[0] + t ** 3 * d[0],
+                            u ** 3 * a[1] + 3 * u * u * t * b[1] + 3 * u * t * t * c[1] + t ** 3 * d[1]))
+            cur = d
+        elif verb == "qCurveTo":
+            for q in P:
+                pts.append(q)
+            cur = P[-1]
+        elif verb == "closePath" and start is not None and cur is not None:
+            a, b = cur, start
+            n = max(1, int(math.hypot(b[0] - a[0], b[1] - a[1]) / step))
+            pts += [(a[0] + (b[0] - a[0]) * k / n, a[1] + (b[1] - a[1]) * k / n) for k in range(1, n)]
+    return pts
+
+
+def build_layer(font, source, charset_struck):
+    """The layer of overlapping forms, after every rule has run on the merged glyphs. source: source_struck()'s
+    result, taken before the merge; charset_struck: charset.STRUCK. Returns {name: ink deviation from the merged}."""
+    from ufoLib2.objects import Contour, Point
+    if LAYER in font.layers:
+        del font.layers[LAYER]
+    layer = font.layers.newLayer(LAYER)
+    plan = {}
+    for name, (letter, off, strokes) in source.items():
+        plan[name] = (letter, off, [P for P in strokes])
+    for name, (letter, paths) in charset_struck.items():
+        cs = []
+        for p in paths:
+            cs += _path_contours(pathops.op(p, pathops.Path(), pathops.PathOp.UNION, fix_winding=True, keep_starting_points=False, clockwise=False))
+        plan[name] = (letter, None, cs)
+    report = {}
+    order = sorted(plan, key=lambda n: plan[n][0] in plan)       # a struck letter before what is built on it
+    for name in order:
+        if name not in font:
+            continue
+        letter, off, strokes = plan[name]
+        L = letter_contours(font, letter)
+        merged = font[name]
+        mx = [p.x for c in merged.contours for p in c.points]
+        if off is None:                                        # charset placed the union by its bearings
+            import charset as CHARSET
+            lp = CHARSET.glyph_path(font, letter)
+            u = CHARSET.union(lp, *[_to_path([P]) for P in strokes])
+            off = (round(min(mx) - CHARSET.bounds(u)[0]), 0)
+        L = [[(x + off[0], y + off[1], t, s) for x, y, t, s in P] for P in L]
+        S = [[(x + (off[0] if name not in source else 0), y + (off[1] if name not in source else 0), t, s) for x, y, t, s in P]
+             for P in strokes]
+        S = [[(round(x), round(y), t, s) for x, y, t, s in P] for P in S]
+        outer_ccw = _ccw(max(L, key=lambda P: abs(sum(P[i][0] * P[(i + 1) % len(P)][1] - P[(i + 1) % len(P)][0] * P[i][1] for i in range(len(P))))))
+        S = _soft([_orient(P, outer_ccw) for P in S])
+        g = layer.newGlyph(name)
+        g.width = merged.width
+        g.unicodes = list(merged.unicodes)
+        for P in L + S:
+            c = Contour()
+            c.points = [Point(x, y, t, smooth=s) for x, y, t, s in P]
+            g.contours.append(c)
+        for a in merged.anchors:
+            g.appendAnchor({"name": a.name, "x": a.x, "y": a.y})
+        g.lib["area.overlap"] = {"letter": letter, "offset": list(off), "letter_contours": len(L)}
+        report[name] = round(ink_deviation(L + S, merged, font), 2)
+    return report
+
+
+def _to_path(contours):
+    p = pathops.Path()
+    pen = p.getPen()
+    for P in contours:
+        _draw(P, pen)
+    return p
+
+
+# ---------------------------------------------------------------- the stroke in another master
+
+def _frame(P):
+    """A stroke contour's axis: (centre, u along, n across, s range, d range) from its longest straight edge."""
+    on = [q for q in P if q[2] is not None]
+    best = None
+    n = len(P)
+    for i, q in enumerate(P):
+        if q[2] is None:
+            continue
+        j = (i + 1) % n
+        if P[j][2] == "line":
+            L = math.dist(q[:2], P[j][:2])
+            if best is None or L > best[0]:
+                best = (L, q, P[j])
+    if best is None:                                           # no straight edge: the box's long side
+        xs, ys = [q[0] for q in on], [q[1] for q in on]
+        u = (1.0, 0.0) if max(xs) - min(xs) >= max(ys) - min(ys) else (0.0, 1.0)
+    else:
+        d = (best[2][0] - best[1][0], best[2][1] - best[1][1])
+        L = math.hypot(*d)
+        u = (d[0] / L, d[1] / L)
+        if u[0] < -1e-9 or (abs(u[0]) < 1e-9 and u[1] < 0):
+            u = (-u[0], -u[1])
+    nrm = (-u[1], u[0])
+    cx = sum(q[0] for q in on) / len(on)
+    cy = sum(q[1] for q in on) / len(on)
+    s = [(q[0] - cx) * u[0] + (q[1] - cy) * u[1] for q in P]
+    d = [(q[0] - cx) * nrm[0] + (q[1] - cy) * nrm[1] for q in P]
+    return (cx, cy), u, nrm, s, d
+
+
+def stroke_weight(T, u, v):
+    """A stroke's thickness in another master: a level bar by the bars' rule, an upright one by the upright thin
+    strokes', a slanted one by the thin diagonals' (bold.y_target, x_target, diag_target)."""
+    import bold as B
+    ang = abs(math.degrees(math.atan2(u[1], u[0])))
+    ang = min(ang, 180 - ang)
+    if ang <= 10:
+        w = B.y_target(round(T), True, v)
+    elif ang >= 80:
+        w = B.x_target(round(T), True, v)
+    else:
+        w = B.diag_target(T, v)
+    return T if w is None else w
+
+
+def move_stroke(P, mapx, mapy, v):
+    """One stroke contour into another master. Its two ends ride the letter's node map (mapx, mapy: functions of a
+    Regular coordinate); its long sides stay straight and parallel and part by stroke_weight; each end cap (the
+    corners within one stroke width of the end) moves with its end without changing shape."""
+    (cx, cy), u, nrm, s, d = _frame(P)
+    on = [k for k, q in enumerate(P) if q[2] is not None]
+    s0, s1 = min(s[k] for k in on), max(s[k] for k in on)
+    d0, d1 = min(d[k] for k in on), max(d[k] for k in on)
+    T = d1 - d0
+    dm = (d0 + d1) / 2
+    ends = [(cx + u[0] * sv + nrm[0] * dm, cy + u[1] * sv + nrm[1] * dm) for sv in (s0, s1)]
+    new_ends = [(mapx(e[0]), mapy(e[1])) for e in ends]
+    du = (new_ends[1][0] - new_ends[0][0], new_ends[1][1] - new_ends[0][1])
+    L1 = math.hypot(*du)
+    u2 = (du[0] / L1, du[1] / L1)
+    n2 = (-u2[1], u2[0])
+    T2 = stroke_weight(T, u, v)
+    grow = (T2 - T) / 2
+    cap = min(T, (s1 - s0) / 3)
+    out = []
+    for k, q in enumerate(P):
+        b = d[k] - dm
+        side = 1 if b > 0 else -1 if b < 0 else 0
+        b2 = b + side * grow if abs(b) > 0.25 * T else b * T2 / T
+        if s[k] - s0 <= cap:
+            a = s[k] - s0
+            base = new_ends[0]
+        elif s1 - s[k] <= cap:
+            a = s[k] - s1
+            base = new_ends[1]
+        else:                                                  # along the long sides: in proportion
+            a = (s[k] - s0) * (L1 / (s1 - s0) if s1 > s0 else 1)
+            base = new_ends[0]
+            if s[k] - s0 > (s1 - s0) / 2:
+                a = (s[k] - s1) * (L1 / (s1 - s0) if s1 > s0 else 1)
+                base = new_ends[1]
+        x = base[0] + u2[0] * a + n2[0] * b2
+        y = base[1] + u2[1] * a + n2[1] * b2
+        out.append((round(x), round(y), q[2], q[3]))
+    return out
+
+
+def vf_source(ufo):
+    """The Regular as the variable font's default master: the static Regular, with each struck glyph's merged
+    outline replaced by its letter and strokes as overlapping contours (the layer normalize wrote). The static
+    TTF keeps the merged outlines, overlaps removed."""
+    import copy
+    reg = copy.deepcopy(ufo)
+    if LAYER in reg.layers:
+        for og in reg.layers[LAYER]:
+            g = reg[og.name]
+            g.clearContours()
+            for c in og.contours:
+                g.contours.append(copy.deepcopy(c))
+        del reg.layers[LAYER]
+    return reg

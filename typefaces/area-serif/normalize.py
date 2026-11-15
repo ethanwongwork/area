@@ -1205,6 +1205,8 @@ def normalize(font):
     # here, in the source. Left to the TrueType build's overlap removal, a stroke that meets the letter within a unit
     # of a node left a crossing (Astroke, 0.69) or a 19-unit scrap (Estroke, 0.70) whenever the letter changed.
     import re
+    import overlap as OVERLAP                         # 0.81: each struck glyph's letter and strokes, before the merge
+    struck_parts = OVERLAP.source_struck(font)
     struck = [g.name for g in font if g.components and g.contours and re.search(r"(stroke|bar|middletilde)$", g.name)]
     for name in ["Eopen"] + sorted(struck):
         CHARSET.put(font, name, CHARSET.glyph_path(font, name), font[name].width)
@@ -1233,6 +1235,9 @@ def normalize(font):
     import collections as _c
     print("spacing: opened, by first glyph", _c.Counter(o[0] for o in opened_all).most_common(40))
     print("spacing: opened, by second glyph", _c.Counter(o[1] for o in opened_all).most_common(40))
+    dev = OVERLAP.build_layer(font, struck_parts, CHARSET.STRUCK)   # 0.81: the variable font's overlapping forms
+    print(f"overlap: {len(dev)} struck glyphs as letter and strokes; merged ink apart by at most "
+          f"{max(dev.values()) if dev else 0} units", sorted(dev.items(), key=lambda kv: -kv[1])[:12])
     for g in font:                           # derive.py's bracket marks were for this build only
         for c in g.contours:
             for p in c.points:

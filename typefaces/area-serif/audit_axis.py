@@ -27,6 +27,7 @@ import bold as B
 STOPS = list(range(400, 701, 25))
 LIGHT_STOPS = [375, 350, 325, 300]
 FILLET_MAX = 20           # a softened corner (7 a side in the Regular) may grow with the stroke, not past this
+FILLET_SMALL = 12         # a curve whose ends are this close in the Regular is a softened corner
 
 
 def contours_of(g):
@@ -102,16 +103,74 @@ def area_len(polys):
     return abs(a), length
 
 
-def thinnest(polys, step=4):
-    """The thinnest cut that is a stroke: bold.thinnest, which the Bold's marks are held to as well."""
-    return B.thinnest(polys, step)
+def thinnest(polys, step=4, points=()):
+    """The thinnest cut that is a stroke: bold.thinnest's reading (an ink span whose neighbours two scan lines
+    before and two after are spans of about the same width over the same place). 0.81: a cut that lies within one
+    mean stroke of a pointed end (`points`: ink corners under 60 degrees, a wedge accent's tip, an arrow's point)
+    is not a stroke's thickness: there the reading is how sharp the point is, which falls as a wedge flattens
+    while every stroke of it gains weight (build/figures/axis-081/thin-at-points.png)."""
+    if not points:
+        return B.thinnest(polys, step)
+    a, length = area_len(polys)
+    reach = 2 * a / length if length else 0
+    best = None
+    pts = [q for p in polys for q in p]
+    for ax in (0, 1):
+        lo, hi = min(q[ax] for q in pts), max(q[ax] for q in pts)
+        rows, vs = [], []
+        v = lo + step / 2
+        while v < hi:
+            rows.append(B.scan(polys, v, ax))
+            vs.append(v)
+            v += step
+        for k in range(2, len(rows) - 2):
+            for a_, b_ in rows[k]:
+                w = b_ - a_
+                if best is not None and w >= best:
+                    continue
+                mid = ((a_ + b_) / 2, vs[k]) if ax == 1 else (vs[k], (a_ + b_) / 2)
+                if any(math.dist(mid, p) < reach for p in points):
+                    continue
+                if all(any(min(b_, d) - max(a_, c) > 0.5 * w and abs((d - c) - w) <= 0.2 * w + 2 for c, d in rows[j])
+                       for j in (k - 2, k - 1, k + 1, k + 2)):
+                    best = w
+    return best
 
 
-def sweep(reg, master, mids, ts, tm, tip_at, fails, lighter=False):
-    """Every glyph at each (weight, t): t is the share of the way from the Regular to `master`. Towards the Bold a
-    stroke may not be thinner than in the Regular (or than the serif tip at that weight) and the ink never steps
-    back; towards the Light (lighter) no stroke may be thinner than a serif's tip is at that weight unless it
-    was thinner than a tip in the Regular, when it thins as the tip does, and the ink never steps up."""
+def points_of(contours, max_deg=60):
+    """Pointed ends: corner nodes where the ink's inside angle is under max_deg."""
+    out = []
+    for P in contours:
+        n = len(P)
+        area = sum(P[i][0] * P[(i + 1) % n][1] - P[(i + 1) % n][0] * P[i][1] for i in range(n))
+        for i, q in enumerate(P):
+            if q[2] is None or q[3]:
+                continue
+            a, b = P[i - 1], P[(i + 1) % n]
+            u = (a[0] - q[0], a[1] - q[1])
+            w = (b[0] - q[0], b[1] - q[1])
+            if not any(u) or not any(w):
+                continue
+            ang = math.degrees(math.acos(max(-1, min(1, (u[0] * w[0] + u[1] * w[1]) / (math.hypot(*u) * math.hypot(*w))))))
+            cross = u[0] * w[1] - u[1] * w[0]
+            if ang < max_deg and (cross < 0) == (area > 0):       # the ink lies inside the angle
+                out.append(q[:2])
+    return out
+
+
+def sweep(reg, master, mids, ts, tm, tip_at, fails, lighter=False, w_of=None):
+    """Every glyph between the Regular and `master`. ts: the stops [(weight, t)], t the share of the way from the
+    Regular to `master`; w_of(t): the weight at a share. Towards the Bold a stroke may not be thinner than in the
+    Regular (or than the serif tip at that weight) and the ink never steps back; towards the Light (lighter) no
+    stroke may be thinner than a serif's tip is at that weight unless it was thinner than a tip in the Regular,
+    when it thins as the tip does, and the ink never steps up.
+
+    0.81: turns, crossings within a contour, counters and drift are tested over the whole of each master pair
+    (Regular to the sparse master, sparse master to the Bold, or Regular to the master), not at the stops
+    (axis_exact.py); crossings between contours are allowed where the union keeps the Regular's outer contours and
+    holes (a stroke laid over its letter on purpose), and fail where it does not (two parts that collide)."""
+    import axis_exact as X
+    w_of = w_of or (lambda t: round(t, 3))
     n_out = n_comp = 0
     for g in reg:
         name = g.name
@@ -126,39 +185,44 @@ def sweep(reg, master, mids, ts, tm, tip_at, fails, lighter=False):
             continue
         n_out += 1
         rc, bc = contours_of(g), contours_of(master[name])
+        if [[q[2] for q in P] for P in rc] != [[q[2] for q in P] for P in bc]:
+            fails["moved"].append(f"{name} (not the Regular's points)")
+            continue
         mc = contours_of(mids[name]) if name in mids else None
         shift = min(q[0] for P in bc for q in P) - min(q[0] for P in rc for q in P)
         far = max(max(abs(b[0] - shift - a[0]) / 320, abs(b[1] - a[1]) / 140) for P, Q in zip(rc, bc) for a, b in zip(P, Q))
         if far > 1:
             fails["moved"].append(f"{name} ({far:.1f} x the bound)")
-        base_turns = [turns(c) for c in curves(rc)]
-        small = [float(np.abs(c[3] - c[0]).max()) < 12 for c in curves(rc)]
+        pairs = [(rc, bc, 0.0, 1.0)] if mc is None else [(rc, mc, 0.0, tm), (mc, bc, tm, 1.0)]
+        for A, C, t0, t1 in pairs:
+            at = lambda s: w_of(t0 + s * (t1 - t0))            # noqa: E731
+            for k, s_, why in X.turns(rc, A, C, FILLET_SMALL, FILLET_MAX):
+                fails["turns"].append(f"{name} at {at(s_)} (curve {k}: {why})")
+            for ci, s_, b0, b1 in X.crossings(rc, A, C):
+                fails["crossings"].append(f"{name} at {at(s_)} (contour {ci} crosses itself: {b0} > {b1})")
+            for ci, s_ in X.counters(rc, A, C):
+                fails["counter"].append(f"{name} at {at(s_)} (contour {ci}'s area reaches zero)")
+            for ci, k, d, own in X.drift(rc, A, C):
+                fails["drift"].append(f"{name} at {at(0.5)} (contour {ci} node {k} leaves its line by {d} half way; masters {own})")
         rp = flat(rc)
-        base_cross = crossings(rp)
-        base_thin = thinnest(rp)
+        base_topo = X.topology([np.array(p) for p in rp]) if len(rc) > 1 else None
+        base_thin = thinnest(rp, points=points_of(rc))
         a0, l0 = area_len(rp)
         prev = (2 * a0 / l0, a0) if lighter else None
-        for w, t in ts:
+        mids_t = [((t0 + t1) / 2) for _, _, t0, t1 in pairs]
+        for w, t in sorted(ts + [(w_of(t), t) for t in mids_t], key=lambda x: x[1]):
             if mc is None:
                 ic = lerp(rc, bc, t)
             else:
                 ic = lerp(rc, mc, t / tm) if t <= tm else lerp(mc, bc, (t - tm) / (1 - tm))
-            if t > 0:
-                for k, c in enumerate(curves(ic)):
-                    if small[k]:                               # a corner's fillet in the Regular is one at every
-                        if float(np.abs(c[3] - c[0]).max()) > FILLET_MAX:   # weight, while it stays a fillet
-                            fails["turns"].append(f"{name} at {w} (curve {k}: a corner's fillet grew to {float(np.abs(c[3] - c[0]).max()):.0f})")
-                            break
-                        continue
-                    got = turns(c)
-                    if any(a > b for a, b in zip(got, base_turns[k])):
-                        fails["turns"].append(f"{name} at {w} (curve {k}: extremes and inflections {base_turns[k]} > {got})")
-                        break
             ip = flat(ic)
-            x = crossings(ip)
-            if x > base_cross:
-                fails["crossings"].append(f"{name} at {w} ({base_cross} > {x})")
-            th = thinnest(ip)
+            if base_topo is not None:
+                topo = X.topology([np.array(p) for p in ip])
+                if topo != base_topo:
+                    fails["crossings"].append(f"{name} at {w} (parts meet: outer contours and holes {base_topo} > {topo})")
+            if (w, t) not in ts:
+                continue
+            th = thinnest(ip, points=points_of(ic))
             tip = tip_at(t)
             floor = min(base_thin, tip) if not lighter or base_thin is None else min(base_thin, 30) * tip / 30
             if base_thin is not None and th is not None and th < floor - 1.0:
@@ -188,16 +252,20 @@ def report(title, fails, path):
 
 def main():
     import os
-    reg = ufoLib2.Font.open("build/AreaSerif-Regular.ufo")
+    import overlap as OVERLAP
+    reg = OVERLAP.vf_source(ufoLib2.Font.open("build/AreaSerif-Regular.ufo"))   # 0.81: as the variable font has it
     bold = ufoLib2.Font.open("build/AreaSerif-Bold.ufo")
     stem = int(sys.argv[1]) if len(sys.argv) > 1 else B.STEM
     v = B.vector(stem)
     mids = bold.layers["mid"] if "mid" in bold.layers else {}
     tm = (dict(B.axis_map(stem))[B.MID_WEIGHT] - B.REG_STEM) / (stem - B.REG_STEM)
     ts = [(w, (st - B.REG_STEM) / (stem - B.REG_STEM)) for w, st in B.axis_map(stem, STOPS)]
-    keys = ("moved", "turns", "crossings", "thin", "monotone", "composite")
+    keys = ("moved", "turns", "crossings", "counter", "drift", "thin", "monotone", "composite")
+    q = stem / B.REG_STEM
+    w_bold = lambda t: round(400 + 300 * math.log((B.REG_STEM + t * (stem - B.REG_STEM)) / B.REG_STEM) / math.log(q))   # noqa: E731
+    w_light = lambda t: round(400 - 100 * math.log(B.REG_STEM / (B.REG_STEM - t * (B.REG_STEM - B.LIGHT_STEM))) / math.log(B.REG_STEM / B.LIGHT_STEM))   # noqa: E731
     fails = {k: [] for k in keys}
-    n_out, n_comp = sweep(reg, bold, mids, ts, tm, lambda t: 30 * (1 + (v["tip"] - 1) * t), fails)
+    n_out, n_comp = sweep(reg, bold, mids, ts, tm, lambda t: 30 * (1 + (v["tip"] - 1) * t), fails, w_of=w_bold)
     bad = report(f"weight axis, stem {stem}: {n_out} outlined glyphs and {n_comp} composites, {len(STOPS)} stops ({STOPS[0]} to {STOPS[-1]})",
                  fails, "build/weight/audit-axis.txt")
     if os.path.exists("build/AreaSerif-Light.ufo"):            # 0.80: the Light side, 375 down to 300
@@ -205,7 +273,7 @@ def main():
         lv = B.vector(B.LIGHT_STEM)
         lts = [(w, (B.REG_STEM - st) / (B.REG_STEM - B.LIGHT_STEM)) for w, st in B.axis_map(stem, LIGHT_STOPS)]
         lfails = {k: [] for k in keys}
-        sweep(reg, light, {}, lts, 1, lambda t: 30 * (1 + (lv["tip"] - 1) * t), lfails, lighter=True)
+        sweep(reg, light, {}, lts, 1, lambda t: 30 * (1 + (lv["tip"] - 1) * t), lfails, lighter=True, w_of=w_light)
         bad += report(f"weight axis, Light stem {B.LIGHT_STEM}: {len(LIGHT_STOPS)} stops ({LIGHT_STOPS[0]} down to {LIGHT_STOPS[-1]})",
                       lfails, "build/weight/audit-axis-light.txt")
     sys.exit(1 if bad else 0)

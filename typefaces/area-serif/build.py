@@ -65,9 +65,11 @@ def variable(ufo):
     with open(os.path.join(OUT, "light-notes.txt"), "w") as f:
         f.write("\n".join(lnotes + [f"{n}: {r['fallback']}" for n, r in sorted(lreports.items()) if r.get("fallback")]))
     lfb = [n for n, r in lreports.items() if r.get("fallback")]
-    for u in (ufo, bold_ufo, light_ufo):
+    import overlap as OVERLAP
+    reg_vf = OVERLAP.vf_source(ufo)             # 0.81: struck glyphs as letter and strokes, overlapping
+    for u in (reg_vf, bold_ufo, light_ufo):
         u.lib["public.truetype.overlap"] = True
-    vf = BOLD.variable(ufo, bold_ufo, stem, light_ufo)
+    vf = BOLD.variable(reg_vf, bold_ufo, stem, light_ufo)
     from fontTools.otlLib.builder import buildStatTable
     buildStatTable(vf, [dict(tag="wght", name="Weight", values=[          # each named weight, Regular linked to Bold
         dict(value=300, name="Light"), dict(value=400, name="Regular", flags=0x2, linkedValue=700), dict(value=500, name="Medium"),
