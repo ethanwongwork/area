@@ -3,6 +3,7 @@ import type { HTMLAttributes, MouseEvent, ReactElement, ReactNode } from "react"
 import { drawerVariants, type VariantProps, MANIFESTS } from "../variants.ts";
 import { Button } from "./Button.tsx";
 import { Glyph } from "./Glyph.tsx";
+import { focusInitial, lockPageScroll, useBackdropDismiss } from "./modal.ts";
 import { useOpenState } from "./overlay.ts";
 import { ScrollArea } from "./ScrollArea.tsx";
 
@@ -55,16 +56,16 @@ export const Drawer = forwardRef<HTMLDivElement, DrawerProps>(function Drawer(
 ) {
   const id = useId();
   const modal = useRef<HTMLDialogElement | null>(null);
-  const backdropPress = useRef(false);
   const returnFocus = useRef<HTMLElement | null>(null);
   const [open, setOpen] = useOpenState(openProp, defaultOpen, onOpenChange);
   useEffect(() => {
     const node = modal.current;
     if (!node || typeof node.showModal !== "function") return;
     if (isModal) {
-      if (open && !node.open) node.showModal();
+      const release = open ? lockPageScroll() : undefined; // before showModal(), as Dialog's
+      if (open && !node.open) { node.showModal(); focusInitial(node.firstElementChild as HTMLElement | null); }
       if (!open && node.open) node.close();
-      return;
+      return release;
     }
     // Non-modal: a manual popover, so it sits in the top layer over every stacking context without
     // making the page inert. The platform moves no focus for a popover, so the drawer does.
@@ -73,13 +74,14 @@ export const Drawer = forwardRef<HTMLDivElement, DrawerProps>(function Drawer(
     if (open && !shown) {
       returnFocus.current = document.activeElement as HTMLElement | null;
       node.showPopover();
-      node.querySelector<HTMLElement>("[autofocus], button:not(:disabled), [href], input:not(:disabled), select:not(:disabled), textarea:not(:disabled), [tabindex]:not([tabindex='-1'])")?.focus();
+      focusInitial(node.firstElementChild as HTMLElement | null);
     }
     if (!open && shown) {
       node.hidePopover();
       if (node.contains(document.activeElement)) returnFocus.current?.focus();
     }
   }, [open, isModal]);
+  const backdrop = useBackdropDismiss(() => setOpen(false));
   const { "aria-label": ariaLabel, "aria-labelledby": ariaLabelledBy, "aria-describedby": ariaDescribedBy, ...surfaceRest } = rest;
   const labelled = {
     "aria-label": ariaLabel,
@@ -111,8 +113,7 @@ export const Drawer = forwardRef<HTMLDivElement, DrawerProps>(function Drawer(
       // A non-modal dialog gets no platform Escape; give it the same close.
       onKeyDown={event => { if (!isModal && event.key === "Escape" && !event.defaultPrevented) { event.preventDefault(); setOpen(false); } }}
       // The surface covers only its edge: a press that starts and ends on the <dialog> itself is on the scrim.
-      onPointerDown={event => { backdropPress.current = event.target === event.currentTarget; }}
-      onClick={event => { if (event.target === event.currentTarget && backdropPress.current) setOpen(false); backdropPress.current = false; }}>
+      {...backdrop}>
       {surface}
     </dialog>
   </>;

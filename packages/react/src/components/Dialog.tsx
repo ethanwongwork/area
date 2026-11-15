@@ -4,6 +4,7 @@ import { Button } from "./Button.tsx";
 import { Glyph } from "./Glyph.tsx";
 import { ScrollArea } from "./ScrollArea.tsx";
 import { useOpenState } from "./overlay.ts";
+import { focusInitial, lockPageScroll, useBackdropDismiss } from "./modal.ts";
 import { cloneElement, forwardRef, useEffect, useId, useRef, useState } from "react";
 import type { MouseEvent, ReactElement, ReactNode } from "react";
 import { createVariants } from "../variants.ts";
@@ -33,8 +34,8 @@ export interface DialogProps extends Omit<Div, "title" | "onClose"> {
   footer?: ReactNode;
   /**
    * Opens the dialog as a native modal (`showModal()`) when this element is clicked. The
-   * platform supplies the focus trap, Escape, the backdrop and focus return; a click on the
-   * backdrop also closes it.
+   * platform supplies the focus trap, Escape, the backdrop and focus return; a press on the
+   * backdrop also closes it unless `dismissOnBackdrop` is false.
    */
   trigger?: ReactElement<{ onClick?: (event: MouseEvent<HTMLElement>) => void }>;
   /**
@@ -50,6 +51,11 @@ export interface DialogProps extends Omit<Div, "title" | "onClose"> {
   onDismiss?: () => void;
   /** Called when the modal opens or closes. */
   onOpenChange?: (open: boolean) => void;
+  /**
+   * Whether a press on the backdrop closes the modal. On by default; Confirm dialog turns it off, so a forced choice
+   * is made with its buttons or Escape (owner, plan C5.4; the APG alert dialog).
+   */
+  dismissOnBackdrop?: boolean;
   /** @deprecated Use `onDismiss`. */
   onClose?: () => void;
 }
@@ -62,7 +68,7 @@ export interface DialogProps extends Omit<Div, "title" | "onClose"> {
  * `<dialog class="area-dialog__modal">` and opened with `showModal()`.
  */
 export const Dialog = /* @__PURE__ */ forwardRef<HTMLDivElement, DialogProps>(function Dialog(
-  { title, description, footer, size, fullHeight, showCloseButton = true, onDismiss, dismissLabel = "Close dialog", onClose, trigger, open: openProp, defaultOpen, onOpenChange, className, children, ...rest },
+  { title, description, footer, size, fullHeight, showCloseButton = true, onDismiss, dismissLabel = "Close dialog", onClose, trigger, open: openProp, defaultOpen, onOpenChange, dismissOnBackdrop = true, className, children, ...rest },
   ref,
 ) {
   const id = useId();
@@ -70,15 +76,20 @@ export const Dialog = /* @__PURE__ */ forwardRef<HTMLDivElement, DialogProps>(fu
   // A rule under the header once the body has scrolled (`data-scrolled`, V1): the header then reads as fixed above
   // content passing under it. Set from the body's scroll position; React skips the render when it doesn't change.
   const [scrolled, setScrolled] = useState(false);
-  const backdropPress = useRef(false);
   const [open, setOpen] = useOpenState(openProp, defaultOpen, onOpenChange);
   const isModal = trigger !== undefined || openProp !== undefined || defaultOpen !== undefined;
+  // One modal rule (plan C5.3, modal.ts): focus starts on [autofocus] or the body's first control, never the close;
+  // the page keeps its scrollbar's gutter while it is locked.
   useEffect(() => {
     const node = modal.current;
     if (!node || typeof node.showModal !== "function") return;
-    if (open && !node.open) node.showModal();
+    // Measured before showModal(): once the modal is open the page's overflow is hidden and its bar is gone.
+    const release = open ? lockPageScroll() : undefined;
+    if (open && !node.open) { node.showModal(); focusInitial(node.firstElementChild as HTMLElement | null); }
     if (!open && node.open) node.close();
+    return release;
   }, [open]);
+  const backdrop = useBackdropDismiss(() => modal.current?.close(), dismissOnBackdrop);
   // The name belongs to the element with the dialog role: the surface inline, the native
   // <dialog> with a trigger. A consumer's aria-label names a dialog without a title.
   const { "aria-label": ariaLabel, "aria-labelledby": ariaLabelledBy, "aria-describedby": ariaDescribedBy, role, ...surfaceRest } = rest;
@@ -134,11 +145,9 @@ export const Dialog = /* @__PURE__ */ forwardRef<HTMLDivElement, DialogProps>(fu
         className="area-dialog__modal"
         {...labelled}
         onClose={() => { if (open) setOpen(false); }}
-        // A click whose target is the <dialog> itself landed on the backdrop: the surface fills it.
-        // A backdrop press closes only when it also began on the backdrop: a drag out of the
-        // surface that ends on the scrim no longer closes the dialog (audit E-20).
-        onPointerDown={event => { backdropPress.current = event.target === event.currentTarget; }}
-        onClick={event => { if (event.target === event.currentTarget && backdropPress.current) event.currentTarget.close(); backdropPress.current = false; }}
+        // A click whose target is the <dialog> itself landed on the backdrop: the surface fills it. It closes only when
+        // the press also began there: a drag out of the surface that ends on the scrim doesn't (audit E-20).
+        {...backdrop}
       >
         {surface}
       </dialog>

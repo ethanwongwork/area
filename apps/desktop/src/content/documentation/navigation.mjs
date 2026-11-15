@@ -457,6 +457,8 @@ export default {
     keyboard: [
       ["Cmd+K or Ctrl+K", "With hotkey=\"mod+k\", opens or closes the palette: Cmd on Apple platforms, Ctrl elsewhere."],
       ["Up or Down", "Moves the highlight, wrapping and skipping disabled rows."],
+      ["Ctrl+N or Ctrl+J", "Moves the highlight down, as Down."],
+      ["Ctrl+P or Ctrl+K", "Moves the highlight up, as Up; where Ctrl+K is the hotkey, it closes the palette instead."],
       ["Ctrl+Home or Ctrl+End", "Highlights the first or last enabled row."],
       ["Enter", "Runs the highlighted row and closes the palette, unless the item keeps it open."],
       ["Escape", "Clears the search, then leaves a step, then closes the palette."],
@@ -637,7 +639,7 @@ export default {
     ],
     // Spec: Variants, Behavior and accessibility; source: primitives.tsx Dialog JSDoc.
     practices: [
-      ["Do", "Pass trigger to open it as a native modal: focus moves inside and stays there, and returns to the trigger on close."],
+      ["Do", "Pass trigger to open it as a native modal: focus moves to the first control in the body (or an autofocus one, never the close control), stays inside, and returns to the trigger on close."],
       ["Do", "Use open and onOpenChange to open it without a trigger, such as from a menu item."],
       ["Do", "Give it a title, which names it; without one, pass aria-label."],
       ["Do", "Put the actions in footer; they end-align and go full width on a narrow screen."],
@@ -659,7 +661,7 @@ export default {
       dismiss: "The corner close: a ghost icon Button named by dismissLabel (\"Close dialog\"), its glyph on the inset and its corner the dialog's less its distance from the edge. It calls onDismiss, then closes the dialog.",
       body: "Your content, in a Scroll area: it scrolls when the dialog runs out of room and leaves space for focus rings at its edges.",
       footer: "The actions, end-aligned, each text button at least 2.25 times its height; full width on a narrow screen. A rule shows over it only while the body can scroll further.",
-      modal: "The native dialog element around the surface, with the scrim behind it; a press that starts and ends on the scrim closes it.",
+      modal: "The native dialog element around the surface, with the scrim behind it; a press that starts and ends on the scrim closes it, unless dismissOnBackdrop is false. The page behind neither scrolls nor shifts.",
     },
     states: {
       scrolled: "The body has scrolled from its top: a rule in the separator's line shows under the header.",
@@ -693,7 +695,7 @@ export default {
       ["Do", "Return a promise from onConfirm: the action shows loading and the dialog stays open until it settles, and stays open if it fails."],
       ["Do", "Open it from a menu item with open and onOpenChange, or from a button with trigger."],
       ["Don't", "Confirm an action that can be undone; act and offer Undo instead."],
-      ["Don't", "Add a close control or an icon. Escape, Cancel and the scrim already cancel, and the action carries the tone."],
+      ["Don't", "Add a close control or an icon. Escape and Cancel already cancel, and the action carries the tone. A press on the scrim does nothing: the choice is made with the buttons."],
     ],
     // Manifest: no elements; spec: Decisions.
     parts: {

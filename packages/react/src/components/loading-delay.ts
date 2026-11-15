@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { LOADING } from "./timing.ts";
 /* --- Skeleton, Spinner, Progress ------------------------------------------ */
 
 /**
@@ -7,7 +8,7 @@ import { useEffect, useState } from "react";
  */
 export type LoadingDelay = boolean | "short" | "long" | number;
 /* spec: docs/research/components-audit-2026-11-07/primer.md, Spinner `delay` (src/Spinner/Spinner.tsx:27-28). */
-export const LOADING_DELAY = { short: 300, long: 1000 } as const;
+export const LOADING_DELAY = { short: LOADING.short, long: LOADING.long } as const;
 const loadingDelayMs = (delay: LoadingDelay | undefined) =>
   delay === undefined || delay === false ? 0 : delay === true ? LOADING_DELAY.long
     : typeof delay === "number" ? Math.max(0, delay) : LOADING_DELAY[delay];

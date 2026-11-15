@@ -4,6 +4,7 @@ import { forwardRef, useEffect, useRef, useState } from "react";
 import type { HTMLAttributes, InputHTMLAttributes, KeyboardEvent, ReactNode, SyntheticEvent } from "react";
 import { editableTextVariants, type VariantProps, MANIFESTS } from "../variants.ts";
 import { Tooltip } from "./Tooltip.tsx";
+import { composing } from "./composing.ts";
 
 type EditableTextVariants = VariantProps<typeof MANIFESTS.editableText>;
 
@@ -82,7 +83,7 @@ export const EditableText = forwardRef<HTMLSpanElement, EditableTextProps>(funct
   const onInputKey = (event: KeyboardEvent<HTMLInputElement>) => {
     inputProps?.onKeyDown?.(event);
     // Enter that confirms an IME composition (Japanese, Chinese) is not a commit.
-    if (event.key === "Enter" && !event.nativeEvent.isComposing) { event.preventDefault(); finish(true, true, event); }
+    if (event.key === "Enter" && !composing(event)) { event.preventDefault(); finish(true, true, event); }
     else if (event.key === "Escape") { event.preventDefault(); event.stopPropagation(); finish(false, true, event); }
   };
   const shown = editing ? draft : value;

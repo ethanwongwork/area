@@ -10,10 +10,10 @@ import { Input } from "./Input.tsx";
 import { MENU_OFFSET, OVERLAY_PADDING } from "./Overlays.tsx";
 import { announce } from "./announce.ts";
 import { highlightMatch } from "./highlight.tsx";
+import { TYPEAHEAD } from "./timing.ts";
 /** The empty collection, one reference so effects keyed on it stay still. */
 const NO_ITEMS: never[] = [];
 /** How long typed letters keep adding to one typeahead search (APG select-only combobox). */
-const TYPEAHEAD_MS = 500;
 const PAGE = 10;
 
 export interface CustomSelectOption {
@@ -313,7 +313,7 @@ export const CustomSelect = forwardRef<HTMLButtonElement, CustomSelectProps>(fun
   // one; repeating one letter cycles through the labels that start with it.
   const typeahead = (key: string) => {
     const now = Date.now();
-    const text = now - typed.current.at > TYPEAHEAD_MS ? key : typed.current.text + key;
+    const text = now - typed.current.at > TYPEAHEAD.reset ? key : typed.current.text + key;
     typed.current = { text, at: now };
     const query = text.length > 1 && [...text].every(char => char === text[0]) ? text[0]! : text;
     const from = open ? active : rows.findIndex(option => option.value === selected);
@@ -366,7 +366,7 @@ export const CustomSelect = forwardRef<HTMLButtonElement, CustomSelectProps>(fun
       case "Enter": event.preventDefault(); choose(active, event); if (!multiple) close(); break;
       case " ":
         // A space inside a typeahead search is part of the label, not a choice.
-        if (Date.now() - typed.current.at < TYPEAHEAD_MS) { const match = typeahead(key); if (match >= 0) setActive(match); event.preventDefault(); break; }
+        if (Date.now() - typed.current.at < TYPEAHEAD.reset) { const match = typeahead(key); if (match >= 0) setActive(match); event.preventDefault(); break; }
         event.preventDefault(); choose(active, event); if (!multiple) close(); break;
       case "Escape": event.preventDefault(); close(); break;
       case "Tab": {

@@ -1,8 +1,10 @@
 import { createContext, useCallback, useContext, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import type { ReactNode } from "react";
+import { createPortal } from "react-dom";
 import { cx } from "../variants.ts";
 import { Toast, type ToastProps } from "./Toast.tsx";
 import { announce } from "./announce.ts";
+import { TOAST } from "./timing.ts";
 
 export interface ToastOptions extends Omit<ToastProps, "children" | "onDismiss"> {
   /** The message. Plain text is also what the shared announcer says. */
@@ -61,12 +63,22 @@ const transitionMs = (node: Element | null | undefined) => {
  * (`announce`, components audit D1); danger is assertive, as Alert's. Timers pause while the pointer or
  * focus is in the region (WCAG 2.2.1), a toast with an action waits to be dismissed, F8 reaches
  * the region, and toasts stack newest last at the end corner.
+ *
+ * The region is a manual popover (plan C5.1), so it sits in the top layer above every popover and modal opened before
+ * the newest toast. A modal dialog makes the rest of the page inert, so while one is open the region moves into it, as
+ * the shared announcer does: a toast raised over a dialog can be pressed and F8 reaches it. Timers also pause while
+ * the window is in the background or unfocused, and resume with the time they had left.
  */
-export function Toaster({ children, label = "Notifications", duration = 5000, hotkey = "F8", className }: ToasterProps) {
+export function Toaster({ children, label = "Notifications", duration = TOAST.duration, hotkey = "F8", className }: ToasterProps) {
   const [entries, setEntries] = useState<Entry[]>([]);
   const nextId = useRef(1);
   const region = useRef<HTMLElement | null>(null);
   const paused = useRef(false);
+  // Why the timers are paused: the pointer or focus in the region, or the window hidden or unfocused.
+  const holds = useRef(new Set<string>());
+  // After mount the region renders through a portal into a container this component owns, so the container can move
+  // into an open modal and back without React losing track of the region (the first render stays in place: SSR).
+  const [container, setContainer] = useState<HTMLElement | null>(null);
   const timers = useRef(new Map<number, { left: number; started: number; handle?: ReturnType<typeof setTimeout> }>());
 
   const items = useRef(new Map<number, HTMLLIElement>());
@@ -113,6 +125,42 @@ export function Toaster({ children, label = "Notifications", duration = 5000, ho
     void region.current?.offsetHeight;
     for (const [item] of moved) { item.style.transition = ""; item.style.translate = ""; }
   }, [entries]);
+  useEffect(() => {
+    const node = document.createElement("div");
+    node.setAttribute("data-area-toaster-host", "");
+    node.style.display = "contents";
+    document.body.append(node);
+    setContainer(node);
+    return () => node.remove();
+  }, []);
+  // The topmost open modal hosts the region; then the region is shown again so it is the newest top-layer entry.
+  const raise = useCallback(() => {
+    const node = region.current;
+    if (!container || !node) return;
+    let host: HTMLElement = document.body;
+    for (const dialog of Array.from(document.querySelectorAll<HTMLDialogElement>("dialog[open]")).reverse()) {
+      try { if (dialog.matches(":modal")) { host = dialog; break; } } catch { /* :modal unsupported */ }
+    }
+    if (container.parentNode !== host) host.append(container);
+    if (typeof node.showPopover !== "function" || !node.childElementCount || node.hidden) return;
+    try {
+      if (node.matches(":popover-open")) node.hidePopover();
+      node.showPopover();
+    } catch { /* not connected yet */ }
+  }, [container]);
+  useLayoutEffect(() => {
+    const node = region.current;
+    if (!node || typeof node.hidePopover !== "function") return;
+    if (entries.length) raise();
+    else if (node.matches(":popover-open")) node.hidePopover();
+  }, [entries.length, raise, container]);
+  // A modal opening or closing while toasts show moves the region with it.
+  useEffect(() => {
+    if (!container || typeof MutationObserver === "undefined") return;
+    const observer = new MutationObserver(records => { if (records.some(record => (record.target as Element).localName === "dialog")) raise(); });
+    observer.observe(document.body, { attributes: true, attributeFilter: ["open"], subtree: true });
+    return () => observer.disconnect();
+  }, [container, raise]);
   const arm = useCallback((id: number) => {
     const timer = timers.current.get(id);
     if (!timer || paused.current || !Number.isFinite(timer.left)) return;
@@ -131,7 +179,8 @@ export function Toaster({ children, label = "Notifications", duration = 5000, ho
     return id;
   }, [arm, duration]);
 
-  const pause = () => {
+  const hold = (reason: string) => {
+    holds.current.add(reason);
     if (paused.current) return;
     paused.current = true;
     for (const timer of timers.current.values()) {
@@ -141,8 +190,9 @@ export function Toaster({ children, label = "Notifications", duration = 5000, ho
       timer.left -= Date.now() - timer.started;
     }
   };
-  const resume = () => {
-    if (!paused.current) return;
+  const release = (reason: string) => {
+    holds.current.delete(reason);
+    if (!paused.current || holds.current.size) return;
     paused.current = false;
     for (const id of timers.current.keys()) arm(id);
   };
@@ -156,18 +206,29 @@ export function Toaster({ children, label = "Notifications", duration = 5000, ho
     addEventListener("keydown", onKey);
     return () => removeEventListener("keydown", onKey);
   }, [hotkey]);
+  useEffect(() => {
+    const visibility = () => { if (document.visibilityState === "hidden") hold("hidden"); else release("hidden"); };
+    const blur = () => hold("blur");
+    const focus = () => release("blur");
+    document.addEventListener("visibilitychange", visibility);
+    addEventListener("blur", blur);
+    addEventListener("focus", focus);
+    return () => {
+      document.removeEventListener("visibilitychange", visibility);
+      removeEventListener("blur", blur);
+      removeEventListener("focus", focus);
+    };
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps -- hold and release read refs only
   useEffect(() => () => {
     for (const timer of timers.current.values()) if (timer.handle) clearTimeout(timer.handle);
     for (const handle of removals.current.values()) clearTimeout(handle);
   }, []);
 
   const api = useMemo(() => ({ show, dismiss }), [show, dismiss]);
-  return <ToasterContext.Provider value={api}>
-    {children}
-    <section ref={region} className={cx("area-toaster", className)} aria-label={`${label} (${hotkey})`} tabIndex={-1}
-      hidden={entries.length === 0}
-      onPointerEnter={pause} onPointerLeave={() => { if (!region.current?.contains(document.activeElement)) resume(); }}
-      onFocus={pause} onBlur={event => { if (!event.currentTarget.contains(event.relatedTarget as Node | null) && !event.currentTarget.matches(":hover")) resume(); }}>
+  const toaster = <section ref={region} className={cx("area-toaster", className)} aria-label={`${label} (${hotkey})`} tabIndex={-1}
+      hidden={entries.length === 0} popover="manual"
+      onPointerEnter={() => hold("pointer")} onPointerLeave={() => { if (!region.current?.contains(document.activeElement)) { release("pointer"); release("focus"); } }}
+      onFocus={() => hold("focus")} onBlur={event => { if (!event.currentTarget.contains(event.relatedTarget as Node | null) && !event.currentTarget.matches(":hover")) { release("focus"); release("pointer"); } }}>
       <ol className="area-toaster__list">
         {entries.map(({ toastId, leaving, message, duration: _duration, announcement: _announcement, ...toast }) => <li key={toastId}
           data-leaving={leaving ? "" : undefined}
@@ -175,6 +236,9 @@ export function Toaster({ children, label = "Notifications", duration = 5000, ho
           <Toast {...toast} live={false} onDismiss={() => dismiss(toastId)}>{message}</Toast>
         </li>)}
       </ol>
-    </section>
+    </section>;
+  return <ToasterContext.Provider value={api}>
+    {children}
+    {container ? createPortal(toaster, container) : toaster}
   </ToasterContext.Provider>;
 }

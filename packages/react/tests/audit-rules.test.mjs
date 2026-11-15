@@ -167,7 +167,7 @@ test('Toaster speaks through the shared announcer, not regions of its own; a dan
   const { Toaster, Toast } = await import('../dist/modules/index.js');
   const html = renderToString(h(Toaster, null, h('p', null, 'App')));
   assert.doesNotMatch(html, /aria-live|role="status"|role="alert"/);
-  assert.match(html, /<section class="area-toaster" aria-label="Notifications \(F8\)" tabindex="-1" hidden="">/);
+  assert.match(html, /<section class="area-toaster" aria-label="Notifications \(F8\)" tabindex="-1" hidden="" popover="manual">/);
   assert.match(renderToString(h(Toast, { tone: 'danger' }, 'Failed')), /class="area-toast__content" role="alert"/);
   assert.match(renderToString(h(Toast, null, 'Saved')), /class="area-toast__content" role="status"/);
 });

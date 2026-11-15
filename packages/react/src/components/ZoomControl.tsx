@@ -9,6 +9,7 @@ import { Input } from "./Input.tsx";
 import { Button, type ButtonProps } from "./Button.tsx";
 import { Menu, MenuItem, MenuSeparator } from "./Menu.tsx";
 import { Tooltip } from "./Tooltip.tsx";
+import { composing } from "./composing.ts";
 
 export interface ZoomControlProps extends Omit<ButtonProps, "value" | "defaultValue" | "children" | "onChange"> {
   /** The zoom as a scale: 1 is 100% (controlled). */
@@ -92,7 +93,7 @@ export const ZoomControl = /* @__PURE__ */ forwardRef<HTMLButtonElement, ZoomCon
   };
   // Typed zoom: "150", "150%" or "1.5x"; Enter applies it and closes, as Figma's field.
   const onFieldKey = (event: KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === "Enter" && !event.nativeEvent.isComposing) {
+    if (event.key === "Enter" && !composing(event)) {
       event.preventDefault();
       const match = /^\s*(\d+(?:\.\d+)?)\s*(%|x)?\s*$/i.exec(text);
       if (!match || Number(match[1]) <= 0) { setInvalid(true); return; }

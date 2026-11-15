@@ -2140,3 +2140,27 @@ test('hover-revealed content hides only where there is hover (plan B7.11)', () =
   }
   assert.ok(hidden >= 12, `only ${hidden} hiding rules found`);
 });
+
+// Plan C6 and C4 (docs/MOTION.md "Timing"; composing.ts): behaviour timings come from timing.ts, and every Enter
+// handler on a text input steps aside for an input-method composition.
+const componentSources = () => {
+  const dir = new URL('../src/components/', import.meta.url);
+  return readdirSync(dir).filter(name => /\.(tsx|ts)$/.test(name) && name !== 'timing.ts').map(name => ({ name, source: readFileSync(new URL(name, dir), 'utf8') }));
+};
+test('timings come from timing.ts: no literal setTimeout delay of 50 ms or more (plan C6)', () => {
+  const found = [];
+  for (const { name, source } of componentSources())
+    for (const match of source.matchAll(/setTimeout\([^;]*?,\s*(\d{2,})\s*\)/g)) if (Number(match[1]) >= 50) found.push(`${name}: ${match[0].slice(0, 60)}`);
+  for (const { name, source } of componentSources())
+    for (const match of source.matchAll(/(?:delay|Delay|DELAY|_MS|timeout)\s*=\s*(\d{3,})\b/g)) found.push(`${name}: ${match[0]}`);
+  assert.deepEqual(found, []);
+});
+test('every Enter handler on a text entry checks composing() (plan C4)', () => {
+  const families = ['CommandPalette.tsx', 'Approval.tsx', 'ColorField.tsx', 'DatePicker.tsx', 'EditableText.tsx', 'ZoomControl.tsx', 'NumberField.tsx', 'Composer.tsx', 'TagPicker.tsx', 'Combobox.tsx', 'SearchField.tsx'];
+  const sources = Object.fromEntries(componentSources().map(({ name, source }) => [name, source]));
+  for (const name of families) {
+    assert.ok(sources[name], `${name} exists`);
+    assert.match(sources[name], /composing\(event(\.nativeEvent)?\)/, `${name} guards Enter with composing()`);
+    assert.doesNotMatch(sources[name], /nativeEvent\.isComposing/, `${name} reads isComposing directly instead of composing()`);
+  }
+});

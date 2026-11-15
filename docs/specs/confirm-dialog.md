@@ -61,8 +61,9 @@ Toast (after the fact, with Undo when undo is possible: prefer that to a confirm
 ## Behavior and accessibility
 
 Dialog's native modal with `role="alertdialog"` (Dialog now passes `role` to its `<dialog>`),
-named by the title and described by the description. Focus starts on Cancel; Escape, Cancel or a
-press on the scrim closes without acting (`onCancel`). `onConfirm` may return a promise: the action
+named by the title and described by the description. Focus starts on Cancel; Escape or Cancel
+closes without acting (`onCancel`). A press on the scrim does nothing (`dismissOnBackdrop={false}`, owner 2026-11-11,
+plan C5.4; the APG alert dialog and Radix AlertDialog never close on an outside press). `onConfirm` may return a promise: the action
 shows Button's loading state and the dialog stays open until it settles. `inline` renders the
 surface in place for documentation.
 
@@ -250,3 +251,6 @@ starts at y 328.07. That is Dialog's, reported to the lead rather than changed h
 ## Shared bars and corners (plan B4), 2026-11-14
 
 - B4.2: no close of its own; Dialog's corner control does not apply.
+
+## Behaviour engine (plan C5), 2026-11-15
+- C5.4 (owner's pick "Buttons or Escape only"): the scrim no longer cancels; Dialog's new `dismissOnBackdrop` is passed false. C5.3: the page keeps its scrollbar gutter while locked (modal.ts `lockPageScroll`). Verified by tests/behaviour modal suite.

@@ -6,6 +6,7 @@ import { cx } from "../variants.ts";
 import { Glyph } from "./Glyph.tsx";
 import { Input, InputAction, type InputProps } from "./Input.tsx";
 import { Kbd } from "./Kbd.tsx";
+import { composing } from "./composing.ts";
 
 export interface SearchFieldProps extends Omit<InputProps, "type" | "value" | "defaultValue" | "trailingAction" | "trailingIcon" | "suffix" | "onSubmit"> {
   /** The query (controlled). */
@@ -66,7 +67,7 @@ export const SearchField = /* @__PURE__ */ forwardRef<HTMLInputElement, SearchFi
   };
   const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
     onKeyDown?.(event);
-    if (event.defaultPrevented || event.nativeEvent.isComposing || readOnly) return;
+    if (event.defaultPrevented || composing(event) || readOnly) return;
     if (event.key === "Escape" && query !== "") {
       // Handled here, so a dialog around the field stays open; a second Escape reaches it.
       event.preventDefault();

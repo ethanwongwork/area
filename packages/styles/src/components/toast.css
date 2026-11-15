@@ -12,8 +12,9 @@
    */
   /*
    * Toaster (audit E-11): the end corner of the viewport, newest toast last. Not captured: the
-   * 16 offset and 8 stack gap are the system's surface inset and row gap; the layer is the
-   * product z-toast scale step (floating menus use the top layer instead).
+   * 16 offset and 8 stack gap are the system's surface inset and row gap. The region is a manual
+   * popover in the top layer, shown again as each toast arrives and moved into an open modal
+   * (plan C5.1); z-toast is the layer where the Popover API is missing.
    */
   .area-toaster {
     position: fixed;
@@ -22,6 +23,17 @@
     inset-inline-end: var(--area-space-16);
     max-inline-size: calc(100vw - var(--area-space-32));
     outline: none;
+  }
+  /* The region is a manual popover (plan C5.1): the top layer above modals. Undo the UA popover box. */
+  .area-toaster[popover] {
+    inset-block-start: auto;
+    inset-inline-start: auto;
+    margin: 0;
+    border: 0;
+    padding: 0;
+    overflow: visible;
+    background: none;
+    color: inherit;
   }
   .area-toaster[hidden] { display: none; }
   .area-toaster:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-gap); border-radius: var(--area-radius-container); }

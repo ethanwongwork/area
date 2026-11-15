@@ -6,6 +6,8 @@ import type { MANIFESTS, VariantProps } from "../variants.ts";
 import { Glyph } from "./Glyph.tsx";
 import { Button } from "./Button.tsx";
 import { Kbd } from "./Kbd.tsx";
+import { APPEAR_GUARD } from "./timing.ts";
+import { composing } from "./composing.ts";
 
 export interface ApprovalOption {
   value: string;
@@ -22,7 +24,7 @@ export interface ApprovalOption {
 }
 
 /** How long keys are ignored after the approval appears. */
-const GUARD_MS = 500;
+const GUARD_MS = APPEAR_GUARD;
 
 interface ApprovalBaseProps extends Omit<HTMLAttributes<HTMLElement>, "title"> {
   /**
@@ -204,7 +206,7 @@ export const Approval = forwardRef<HTMLElement, ApprovalProps>(function Approval
             <input className="area-approval__field" type="text" aria-label={insteadPlaceholder} placeholder={insteadPlaceholder} value={instead}
               aria-keyshortcuts={insteadKey}
               onChange={event => setInstead(event.currentTarget.value)}
-              onKeyDown={event => { if (event.key === "Enter" && instead.trim()) { event.preventDefault(); onInstead(instead.trim()); setInstead(""); } }} />
+              onKeyDown={event => { if (event.key === "Enter" && !composing(event) && instead.trim()) { event.preventDefault(); onInstead(instead.trim()); setInstead(""); } }} />
             {skipInRow ? <Button className="area-approval__skip" variant="ghost" tone="neutral" size="sm" aria-keyshortcuts="Escape" onClick={onDismiss}>{skipLabel}</Button> : null}
           </label>
         ) : null}

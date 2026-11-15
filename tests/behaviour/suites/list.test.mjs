@@ -124,7 +124,7 @@ behaviour("list", ({ it, gap }) => {
     });
   });
 
-  gap("C2.1", `Custom select: one typeahead window with Menu and List box (${TYPEAHEAD_RESET} ms), so a run continues at ${TYPEAHEAD_RESET - 100} ms`, async page => {
+  it(`Custom select: one typeahead window with Menu and List box (${TYPEAHEAD_RESET} ms), so a run continues at ${TYPEAHEAD_RESET - 100} ms`, async page => {
     await focusEl(page, "#cs");
     await page.press("ArrowDown"); await page.settle(); await page.press("Home");
     await page.step("b, then r 900 ms later, is the run \"br\"", async () => {
@@ -192,13 +192,34 @@ behaviour("list", ({ it, gap }) => {
     });
   });
 
-  gap("C4", "Command palette: Enter that confirms an input-method composition doesn't run the highlighted command (I7)", async page => {
+  it("Command palette: Enter that confirms an input-method composition doesn't run the highlighted command (I7)", async page => {
     await page.click("#open-palette"); await page.settle();
     must(await page.eval(() => document.activeElement?.localName === "input"), "the palette's field has focus");
     await page.compose("にほん"); await page.settle();
     await page.step("Enter while composing (keyCode 229)", async () => {
       await page.press("Enter", { keyCode: 229 }); await page.commitComposition("にほん"); await page.settle();
       assert.deepEqual(await page.eval(() => window.__log), []);
+    });
+  });
+
+  it("Command palette: Ctrl+N and Ctrl+P move the highlight, as Down and Up (C2.3)", async page => {
+    await page.click("#open-palette"); await page.settle();
+    const highlighted = () => page.eval(() => document.querySelector("dialog:modal [role=option][aria-selected=true], dialog:modal [data-highlighted]")?.textContent.trim());
+    must((await highlighted()) === "Export", "the first row is highlighted");
+    await page.step("Ctrl+N", async () => { await page.press("n", { modifiers: ["Control"] }); assert.equal(await highlighted(), "にほんご"); });
+    await page.step("Ctrl+P", async () => { await page.press("p", { modifiers: ["Control"] }); assert.equal(await highlighted(), "Export"); });
+  });
+
+  it("Tag picker: tags are one Tab stop with the field; ← reaches them and Backspace removes one (C2.3)", async page => {
+    await focusEl(page, "#tp");
+    await page.step("Tab from the field leaves the picker", async () => { await page.press("Tab"); assert.equal((await page.active()).name, "After tags"); });
+    await focusEl(page, "#tp");
+    await page.step("← from the empty field focuses the last tag's remove button", async () => { await page.press("ArrowLeft"); assert.match((await page.active()).name, /Remove .*Green/i); });
+    await page.step("← moves to the previous tag", async () => { await page.press("ArrowLeft"); assert.match((await page.active()).name, /Remove .*Blue/i); });
+    await page.step("Backspace removes it and focus goes to its neighbour", async () => {
+      await page.press("Backspace"); await page.frames(2); await page.settle();
+      assert.deepEqual(await page.eval(() => [...document.querySelectorAll(".area-tag-picker__field > .area-tag")].map(t => t.textContent.trim()).filter(Boolean)), ["Red", "Green"]);
+      assert.match((await page.active()).name, /Remove .*Red/i);
     });
   });
 });

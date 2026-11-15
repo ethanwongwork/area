@@ -20,7 +20,7 @@ export interface ConfirmDialogProps {
   tone?: ConfirmTone;
   /** Runs the action. Return a promise to keep the dialog open, the action busy, until it settles. */
   onConfirm?: (event: MouseEvent<HTMLButtonElement>) => void | Promise<unknown>;
-  /** Called when the person cancels: the button, Escape or the backdrop. */
+  /** Called when the person cancels: the button or Escape. */
   onCancel?: () => void;
   /** Opens it when clicked (a menu item or button). */
   trigger?: ReactElement<{ onClick?: (event: MouseEvent<HTMLElement>) => void }>;
@@ -41,7 +41,8 @@ export interface ConfirmDialogProps {
 /**
  * A forced choice before an action that can't be undone ("Delete chat?"). An
  * `alertdialog` on Dialog's native modal: focus starts on Cancel, the least destructive choice;
- * Escape, Cancel and the backdrop close it without acting.
+ * Escape and Cancel close it without acting. A press on the backdrop does nothing: a forced choice is made with
+ * its buttons (owner, plan C5.4; the APG alert dialog, Radix AlertDialog).
  */
 export const ConfirmDialog = forwardRef<HTMLDivElement, ConfirmDialogProps>(function ConfirmDialog(
   { title, description, confirmLabel, cancelLabel = "Cancel", tone = "neutral", onConfirm, onCancel, trigger, open: openProp, defaultOpen = false,
@@ -75,7 +76,7 @@ export const ConfirmDialog = forwardRef<HTMLDivElement, ConfirmDialogProps>(func
     } else setOpen(false);
   };
   return <Dialog ref={ref} role="alertdialog" className={confirmDialogVariants({}, className)} title={title} description={description}
-    showCloseButton={false} {...(inline ? {} : { trigger, open, onOpenChange: (next: boolean) => { if (!next) onCancel?.(); setOpen(next); } })}
+    showCloseButton={false} dismissOnBackdrop={false} {...(inline ? {} : { trigger, open, onOpenChange: (next: boolean) => { if (!next) onCancel?.(); setOpen(next); } })}
     footer={<>
       <Button ref={cancelRef} variant="soft" tone="neutral" disabled={busy} onClick={() => { onCancel?.(); setOpen(false); }}>{cancelLabel}</Button>
       <Button variant={tone === "danger" ? "soft" : "solid"} tone={tone} loading={busy} onClick={confirm}>{confirmLabel}</Button>

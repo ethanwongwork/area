@@ -1,6 +1,32 @@
 # Handoff
 
-## Current state (2026-11-14)
+## Current state (2026-11-15)
+- **Project evaluation and Phase 3 start (worktree `area-project-eval-3594b0`, 2026-11-15, uncommitted).** Where it
+  stands: origin/main through #234 holds Phases 0–2 of the system evaluation (PR #233) and CI split (#234); no open PRs.
+  6 families are owner-Complete, 119 In review with reasons (Phases 1–2 reopened them), 1 intentionally unrefined, 2
+  deprecated: the owner's review is the bottleneck, and the Phase 2 review page (owner questions listed in the
+  2026-11-14 entry below) is still not built. Baseline on main: build green, behaviour 426/427 (one states sweep timed
+  out at 30 s under load, not an assertion). Phase 3 (plan §5 C) built here, owner picks from artifact 44oLG9Tk…
+  (`verdicts`, all "take-every-recommendation"): **C6** `timing.ts` (every wait in one module, MOTION.md "Timing",
+  cohesion test against literal delays; Custom select's typeahead joins the 1 s window); **C5.6** tooltips open at 300;
+  **C5.1** the Toaster region is a manual popover rendered through a portal into a container that moves into the open
+  modal (react-dom is now a peer dependency; toasts over a Dialog or Drawer can be pressed), timers pause while the
+  window is hidden or unfocused; **C5.3** `modal.ts` (focusInitial: autofocus, body's first control, footer's first
+  action, never the close; useBackdropDismiss; lockPageScroll pads the body by the classic bar's width because
+  Chromium drops the root's `scrollbar-gutter` while a modal is open; anotherModalOpen), adopted by Dialog, Drawer and
+  Command palette (palette: drag-out no longer closes, page locked, hotkey subscribed once, ignores repeats and waits
+  for another modal); **C5.4** Confirm dialog ignores backdrop presses (`dismissOnBackdrop`); **C4** `composing.ts`
+  in every Enter handler on text entry (palette and Approval newly guarded; cohesion test); **C2.3** palette Ctrl+N/P
+  and Ctrl+J/K (the hotkey wins where they meet), Tag picker tags out of the Tab order and reached with ← (Backspace /
+  Delete removes, focus to the neighbour; onDismiss), Combobox group ids from the index; **C5.5** (part) Hover card
+  stays open when Tab moves into it and Escape returns focus without reopening. Behaviour gaps closed and unmarked:
+  C5.1 ×2, C5.3 ×7, C4, C2.1 (Custom select window); new tests for palette Ctrl keys and Tag picker keys. Not done in
+  Phase 3: C1.1 menu engine + submenu intent (6 gaps), C1.2, C1.3 (owner: swallow), C2.1 list navigation and
+  typeahead cycling (2 gaps), C2.2 roving focus, C3 useFormField, C5.2 arrows, C5.5's toast/chip/tag focus rescue and
+  Scroll area Tab stop, tooltip scroll dismissal (C5.6), LOADING.minVisible, C7 performance and delivery, C8.
+  Housekeeping found: ~160 worktrees, most stale; `kanji-variable-typeface-8093cf` (101 files) and
+  `animated-data-diagram-f5e981` (126) hold uncommitted experiments work; the main checkout has 4 modified experiment
+  files and `.git-stray-refs-backup-2026-10-14/`. Nothing deleted.
 - **System evaluation, worktree `design-system-audit-6f0eac` (2026-11-11; research and plan only, nothing built, uncommitted).**
   Owner: evaluate "all components as a whole design system" in every detail, research other products deeply, then "come
   up with a plan". Fourteen cited reports in `docs/research/system-evaluation-2026-11-11/` (five source audits, five

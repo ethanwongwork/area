@@ -141,8 +141,11 @@ it renders the trigger (`aria-haspopup="dialog"`, `aria-controls`) and a native
 calls `showModal()`. `open` / `defaultOpen` control the modal through the shared
 `useOpenState`; without a trigger, `open` alone opens the native modal (a menu item asking for
 confirmation). Escape, the close control and the backdrop report `false` through
-`onOpenChange`. The platform supplies the focus trap, Escape and focus return; a click
-on the scrim closes it. The close button calls `onDismiss`, then closes the enclosing native
+`onOpenChange`. The platform supplies the focus trap, Escape and focus return; a press that starts and ends
+on the scrim closes it unless `dismissOnBackdrop` is false (Confirm dialog). One modal rule for Dialog, Drawer and
+Command palette (plan C5.3, `modal.ts`): focus starts on an `[autofocus]` element, else the body's first control, else
+the footer's first action, else the surface, never the close control; the page neither scrolls nor shifts by its
+scrollbar's width while the modal is open (`scrollbar-gutter: stable` where a classic bar shows). The close button calls `onDismiss`, then closes the enclosing native
 dialog; `dismissLabel` names it (default "Close dialog"). `onClose` remains as a deprecated
 alias (`primitives.tsx:1625-1636`, `:1699-1701`). A `role` prop (`alertdialog`, for Confirm dialog) lands on
 the element that carries the dialog role: the native `<dialog>`, or the surface inline. While a modal is open
@@ -342,3 +345,6 @@ Open questions: none new.
 - The examples' and the API demo's Cancel is the pair's soft neutral (stroke groups, analytics, the display demo); a test now reads every Dialog, Drawer and Popover footer in the app's sources for it.
 - Why: docs/research/system-evaluation-2026-11-11 (plan B6.1, B6.5, B8.2, B2.2; README §5, phase2/leftovers.md); the owner took every recommendation on 2026-11-11. Fix the rule, not the instance.
 - Verdict: awaiting the owner.
+
+## Behaviour engine (plan C5), 2026-11-15
+- C5.3: initial focus moved off the close control to the body's first control (`focusInitial`); the scrollbar gutter is kept while the page is locked (`lockPageScroll`); the backdrop rule is the shared `useBackdropDismiss`. C5.4: `dismissOnBackdrop` (default true). C5.1: a toast raised over an open dialog is in the top layer inside it and can be pressed. Verified by tests/behaviour modal suite; supersedes "focus on the close" in Verification above.

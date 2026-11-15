@@ -8,6 +8,7 @@ import type { MouseEvent, ReactNode } from "react";
 import { Button, type ButtonProps } from "./Button.tsx";
 import { cx } from "../variants.ts";
 import { announce } from "./announce.ts";
+import { COPY_FEEDBACK } from "./timing.ts";
 
 /**
  * The copy glyphs are the two cuts the documentation's own toolbar uses, so the React control and the
@@ -31,7 +32,7 @@ export type CopyState = "idle" | "copied" | "failed";
 export type CopyValue = string | (() => string | Promise<string>);
 
 /** How long the check (or the failure) shows before the control returns to rest. */
-export const COPY_FEEDBACK_MS = 2000;
+export const COPY_FEEDBACK_MS = COPY_FEEDBACK;
 
 /**
  * The copy behaviour on its own, for a control that is not a Button (Token row copies from its whole row).

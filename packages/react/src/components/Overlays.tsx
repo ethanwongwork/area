@@ -7,6 +7,7 @@ import { cloneElement, isValidElement, useEffect, useId, useRef, useState } from
 import type { FocusEvent as ReactFocusEvent, HTMLAttributes, KeyboardEvent as ReactKeyboardEvent, MouseEvent as ReactMouseEvent, PointerEvent as ReactPointerEvent, ReactElement, ReactNode, Ref, RefObject } from "react";
 import { assignRef, clearToolbar, useAnchoredPosition, useHoverIntent, useNativePopover, useOpenState } from "./overlay.ts";
 import type { OverlayAlign, OverlaySide } from "./overlay.ts";
+import { TOOLTIP, TYPEAHEAD } from "./timing.ts";
 
 /*
  * spec: docs/specs/overlay.md, "Decisions". Menus and tooltips sit 4px from their trigger
@@ -22,12 +23,12 @@ export const POPOVER_ARROW_REACH = 17;
 /** Tooltip arrow: an 8px square, half outside the surface. */
 export const TOOLTIP_ARROW_REACH = 4;
 export const OVERLAY_PADDING = 8;
-/* spec: 500ms to show, instant for 300ms after another closes (Ariakit 500/300; Radix skip 300). */
-export const TOOLTIP_DELAY = 500;
-export const TOOLTIP_SKIP_DELAY = 300;
-export const TOOLTIP_CLOSE_DELAY = 0;
-/* spec: typeahead forgets after 1s (Radix, React Aria). */
-export const TYPEAHEAD_RESET = 1000;
+/* Timings live in timing.ts (plan C6); these names stay exported for consumers. Tooltip 300 to show (owner, plan C5.6;
+ * Claude 300, Cursor 300), instant for 300 after another closes (Radix skip 300). Typeahead forgets after 1 s. */
+export const TOOLTIP_DELAY = TOOLTIP.delay;
+export const TOOLTIP_SKIP_DELAY = TOOLTIP.skip;
+export const TOOLTIP_CLOSE_DELAY = TOOLTIP.close;
+export const TYPEAHEAD_RESET = TYPEAHEAD.reset;
 
 type Div = HTMLAttributes<HTMLDivElement>;
 type Trigger = ReactElement<Record<string, unknown> & { ref?: Ref<HTMLElement> }>;

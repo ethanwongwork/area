@@ -6,6 +6,7 @@ import { Input } from "./Input.tsx";
 import { Popover } from "./Popover.tsx";
 import { assignRef, useOpenState } from "./overlay.ts";
 import { resolveValidation, validationAttributes, type ValidationStatus } from "./validation.ts";
+import { composing } from "./composing.ts";
 
 type Manifest = VariantProps<typeof MANIFESTS.datePicker>;
 
@@ -133,7 +134,7 @@ export const DatePicker = forwardRef<HTMLButtonElement, DatePickerProps>(functio
     return true;
   };
   const handleTextKey = (event: KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === "Enter" && !event.nativeEvent.isComposing) { event.preventDefault(); if (commitText(event)) finish(); }
+    if (event.key === "Enter" && !composing(event)) { event.preventDefault(); if (commitText(event)) finish(); }
   };
 
   // A form reset returns an uncontrolled picker to its first date.

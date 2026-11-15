@@ -8,6 +8,7 @@ import { ScrollArea } from "./ScrollArea.tsx";
 import { announce } from "./announce.ts";
 import { MENU_OFFSET, OVERLAY_PADDING } from "./Overlays.tsx";
 import { Input, InputAction, type InputProps } from "./Input.tsx";
+import { composing } from "./composing.ts";
 /** The empty collection, one reference so effects keyed on it stay still. */
 const NO_ITEMS: never[] = [];
 
@@ -207,7 +208,7 @@ export const Combobox = forwardRef<HTMLInputElement, ComboboxProps>(function Com
   const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
     onKeyDown?.(event);
     // Enter while an input method is composing confirms the composition, not an option (audit B-13).
-    if (event.defaultPrevented || event.nativeEvent.isComposing || event.keyCode === 229) return;
+    if (event.defaultPrevented || composing(event)) return;
     switch (event.key) {
       case "ArrowDown":
         event.preventDefault();
@@ -296,9 +297,10 @@ export const Combobox = forwardRef<HTMLInputElement, ComboboxProps>(function Com
       aria-labelledby={typeof rest["aria-label"] === "string" ? undefined : rest["aria-labelledby"]}
       popover="manual" className="area-menu area-combobox__listbox" tabIndex={-1} viewportProps={{ tabIndex: undefined }}>
       {listRows.length === 0 ? <div className="area-menu__empty" role="presentation"><span className="area-menu__text">{emptyText}</span></div> : null}
-      {[...groups].map(([group, list]) => group
-        ? <div key={group} role="group" aria-labelledby={`${id}-group-${group}`} className="area-combobox__group">
-            <div id={`${id}-group-${group}`} className="area-menu__label" role="presentation"><span className="area-menu__label-text">{group}</span></div>
+      {/* Group ids come from the index: a label with a space ("Recent files") made an id the group couldn't name (C2.3). */}
+      {[...groups].map(([group, list], g) => group
+        ? <div key={group} role="group" aria-labelledby={`${id}-group-${g}`} className="area-combobox__group">
+            <div id={`${id}-group-${g}`} className="area-menu__label" role="presentation"><span className="area-menu__label-text">{group}</span></div>
             {list.map(renderRow)}
           </div>
         : list.map(renderRow))}
