@@ -29,6 +29,12 @@ TITLES = [
     ("8-kerning.png", "Kerning: 0.80 over 0.81 at 300 and 700"),
     ("9-stump-struck.png", "Your decision: Ⱥ and the T with a diagonal stroke at the Bold, honest overlap or stump"),
     ("10-taper.png", "Thickness along j, y, f and eng at 300, 400, 700: before over after the taper law"),
+    ("11-rays-flags.png", "What the second method still flags, each drawn (grey 400, red the flagged weight)"),
+    ("12-quotes.png", "Quotes at 400 and 700 (the Bold's wider quotes in text)"),
+    ("12-asterisk.png", "The asterisk among Bold punctuation"),
+    ("12-marks.png", "Every composite with two or more marks at 300, 400, 700"),
+    ("12-necks-light.png", "The neck rule in the Light: S, z, superiors, barred z"),
+    ("12-ae-bold.png", "ae at 400, 550, 700 (the arm-crotch rule)"),
 ]
 
 
@@ -60,10 +66,12 @@ def main():
     out = sys.argv[3] if len(sys.argv) > 3 else page
     s = open(page, encoding="utf-8").read()
     s = re.sub(r"<section id='changed-081'.*?</section>", "", s, flags=re.S)
-    if 'name="viewport"' not in s:
-        s = s.replace("<head>", '<head><meta name="viewport" content="width=device-width, initial-scale=1">', 1)
     m = re.search(r"<body[^>]*>", s)
-    s = s[:m.end()] + section(figdir) + s[m.end():]
+    if m:                                                      # a whole document
+        at = m.end()
+    else:                                                      # a fragment (the artifact wraps it): before the first
+        at = re.search(r"<(main|header|div|section|h1|nav)\b", s).start()   # element of the page's own markup
+    s = s[:at] + section(figdir) + s[at:]
     open(out, "w", encoding="utf-8").write(s)
     print(out, f"{os.path.getsize(out) // 1024} KB")
 

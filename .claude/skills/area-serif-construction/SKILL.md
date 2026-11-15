@@ -203,7 +203,7 @@ masters match point for point and every weight between them is sound. Read `bold
   `AREA_KERN_FIT=1`); fallbacks none; wedge accents' thin ends no longer read as strokes. Left: `audit_axis.py` Bold
   side `at` (the a's bowl running into @'s ring is read by neither the upright nor the level strokes and thins
   29 > 17 at 550), `hookabovecomb.case` (its curl is a loop of the outline round its ball, which the engine does not
-  read as a ball: it closes and crosses at 552); Astroke and Tdiagonalstroke held for the owner (stump form,
+  read as a ball: it closes and crosses at 552), commaaccentcomb.case (an upright cut through a slanted tail, 1.4 under) and ogonekcomb.case (2 under at a node); Astroke and Tdiagonalstroke held for the owner (stump form,
   `audit_axis.AWAITING`); `audit_rays.py` flags (C/c terminals 2 to 4 units, junction rays in ə ʕ ɂ & ®, hooks of
   the IPA set at 300 at nodes the taper's handles cannot reach); the Bold asterisk is light (ink gain 0.74 of n's against the references' 0.82 to 0.94: longer arms, `arms.REACH`, bent its curves, so the Bold keeps reach 1); no part audit for marks, signs and composites.
 

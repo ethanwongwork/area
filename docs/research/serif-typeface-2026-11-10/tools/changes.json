@@ -26,7 +26,7 @@
    {
     "glyphs": "Signs",
     "chars": "*†‡!\"",
-    "text": "Signs made of arms (asterisk, daggers, exclamation, straight quotes) are now each arm's centre line with its width profile, thickened by one number per weight, and drawn symmetric from one half. Not fixed: the asterisk still looks nearly Regular in Bold text. Its ink gains 0.74 of n's gain where Georgia Pro, Source Serif 4 and Literata gain 0.82 to 0.94; it is held back by the white between its arms. I tried letting its arms reach further at the Bold, as the references' asterisks do (4.7% longer); that made it heavy enough (0.83) but bent its curves between 400 and 700, so the Bold keeps the Regular's arm length for now. The Light's asterisk is 1.7% shorter, as the references' are."
+    "text": "Signs made of arms (asterisk, daggers, exclamation, straight quotes) are now each arm's centre line with its width profile, thickened by one number per weight, and drawn symmetric from one half. Not fixed: the asterisk still looks nearly Regular in Bold text. Its ink gains 0.74 of n's gain where Georgia Pro, Source Serif 4 and Literata gain 0.82 to 0.94; it is held back by the white between its arms. I tried letting its arms reach further at the Bold, as the references' asterisks do (4.7% longer); that made it heavy enough (0.83) but bent its curves between 400 and 700, so the Bold keeps the Regular's arm length (1.003) for now. The Light's asterisk is 1.7% shorter, as the references' are."
    },
    {
     "glyphs": "Weight axis",
@@ -41,7 +41,7 @@
    {
     "glyphs": "Open",
     "chars": "",
-    "text": "Not finished: in the Bold, @ (the a's bowl where it runs into the ring thins) and the capital hook above (its curl closes at 550); Ⱥ and the T with a diagonal stroke wait for your decision. The second measuring method still flags about thirty glyphs, mostly hooked IPA letters at 300 and the terminals of C and c by 2 to 4 units; they are listed with pictures in the axis write-up."
+    "text": "Not finished: in the Bold, @ (the a's bowl where it runs into the ring thins), the capital hook above (its curl closes at 550), and two accents by one or two units (the comma accent below a capital, the capital ogonek). Ⱥ and the T with a diagonal stroke wait for your decision. The second measuring method still flags 33 glyphs, mostly hooked IPA letters at 300 and the terminals of C and c by 2 to 4 units; they are drawn one by one in the figures."
    }
   ]
  },

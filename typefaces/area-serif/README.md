@@ -39,7 +39,7 @@ measurement-only references; nothing from them is in the sources.
 | `bold_bearings.json` | What the references' side bearings change from Regular to Bold, per letter and side (`tools/weight/bold_bearings.py`). |
 | `audit_bold.py` | Every letter's and figure's parts measured on the Bold against their targets; `--sweep` the same at every 25 units of weight. Fails on a miss (in `qa.py`). |
 | `white.py` | The white between parts (0.81): the white law (a narrow white is a counter), parts kept touching, necks at every crotch, arm crotches, and along a tapering stroke the ladder's law (`keep_taper`). |
-| `arms.py` | Signs of arms (0.81): each arm a centreline and width profile; a star's arms reach as the references' do (`REACH`). |
+| `arms.py` | Signs of arms (0.81): each arm a centreline and width profile; a star's arms reach as the references' do where no curve turns (`REACH`). |
 | `axis_exact.py` | The exact axis tests (0.81): Bernstein turns, self-contact, counter areas, drift, over whole master pairs. |
 | `loops.py`, `alternates.py`, `curvecheck.py` | g's loop and the tail family (0.81); the alternates and their sets; curvature continuity. |
 | `audit_kern.py` | Every pair's least white along the axis (0.81); `AREA_KERN_WEIGHTS` for more stops. |
@@ -74,7 +74,7 @@ Rules added in 0.81:
 - **Exact axis audit** (`axis_exact.py`, `audit_axis.py`): turns, crossings, counters, drift over whole master
   pairs; symmetry, mirrored pairs and seams checked per master; `audit_rays.py` the second method.
 - **Sign arms** (`arms.py`): a sign of arms is centreline times width profile, one f, capped by the white law;
-  the asterisk's arms reach by the references' span change.
+  the asterisk's arms reach by the references' span change where no curve turns (the Light; the Bold stays).
 - **White law** (`white.py`): a narrow white between parts (and g.ss02's ball under its bowl, inside one contour)
   keeps max(white x counter ratio, min(white, floor)); necks at every crotch towards the Light, a straight-sided
   crotch solved along its straight side; along a tapering stroke each place keeps its ladder law's share.

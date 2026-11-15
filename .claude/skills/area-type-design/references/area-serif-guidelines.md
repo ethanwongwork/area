@@ -481,5 +481,5 @@ g.ss02 before j touches.
 | Kerning per master | k_M = s_M (N_R + k_R) - N_M (s: the master's control white over the Regular's), then the same-weight fit against Georgia Pro Light/Bold and Serrif 300/700, then collisions at the master's floor (MIN_GAP x s); the Light's bearings from light_bearings.json through bold.bearing_change | `spacing.kern_master`, `build.kern_masters`; check `audit_kern.py` |
 
 Open after 0.81: Astroke and Tdiagonalstroke wait for the owner's pick (honest overlap or stump form,
-`img/081/stump-struck.png`); `at` and `hookabovecomb.case` in the Bold; the second method's remaining flags
+`img/081/stump-struck.png`); `at`, `hookabovecomb.case`, `commaaccentcomb.case` and `ogonekcomb.case` in the Bold; the second method's remaining flags
 (`axis-0.81.md`, integration round).

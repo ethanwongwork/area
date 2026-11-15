@@ -1724,8 +1724,8 @@ for _f in FINDINGS:
     if _f["id"] == "axis-all":
         _f.update(N81, status="open",
                   after="0.81. The axis is now tested exactly over every pair of masters, not at stops. Bold side: "
-                        "@ (the a's bowl running into the ring thins, 29 > 17 at 550) and the capital hook above "
-                        "(its curl closes at 552) fail; Ⱥ and the T with a diagonal stroke are held for your "
+                        "@ (the a's bowl running into the ring thins, 29 > 17 at 550), the capital hook above "
+                        "(its curl closes at 552), the capital comma accent and ogonek (1 to 2 units) fail; Ⱥ and the T with a diagonal stroke are held for your "
                         "decision (honest overlap or stump form). Light side: nothing fails. Every part of the "
                         "letters and figures is on target at the Light and the Bold (434 of 434).")
     if _f["id"] == "bold-open":
@@ -1736,7 +1736,7 @@ CHANGES += [
     ["0.81", "g's loop: worst curvature ratio across a node", "1.56", "1.13", "loops.g_loop"],
     ["0.81", "Tails j y g.ss02 and a's exit: curvecheck faults", "j 1, y 5, g.ss02 1", "0", "loops.round_tail"],
     ["0.81", "Alternates in the font", "none (candidates)", "ss01 to ss06, zero; 63 glyphs", "alternates.py"],
-    ["0.81", "audit_axis.py, Bold / Light glyphs (exact test)", "45 / 26 (0.80 masters)", "2 + 2 held / 0", "axis 0.81"],
+    ["0.81", "audit_axis.py, Bold / Light glyphs (exact test)", "45 / 26 (0.80 masters)", "4 + 2 held / 0", "axis 0.81"],
     ["0.81", "eng's tail at 300, of the Regular", "0.667", "0.694 (stem 0.705)", "white.keep_taper"],
     ["0.81", "g.ss02: ball to bowl at 700", "38", "52 (white law)", "charset.single_g_points"],
     ["0.81", "Asterisk at 700: ink gain over n's", "0.737", "0.737 (open; references 0.82 to 0.94)", "arms.REACH (guarded)"],
