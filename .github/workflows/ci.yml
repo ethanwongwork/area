@@ -1,6 +1,8 @@
 # Area's checks on every pull request and on main: the package build (which also lints every icon),
 # typecheck, token and contrast tests, manifest contracts, icon and React tests, the desktop app's
 # build and playground mapping, and a consumer install of the built packages. See docs/DEVELOPMENT.md.
+# The token and contrast tests sweep every setting position (tens of thousands of cases, about 20 minutes on a
+# runner), so they run as their own job beside the others rather than inside the other job's time limit.
 name: CI
 
 on:
@@ -17,6 +19,26 @@ permissions:
   contents: read
 
 jobs:
+  tokens:
+    name: Token, axis and contrast tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install
+        run: npm ci --no-audit --no-fund
+        env:
+          ELECTRON_SKIP_BINARY_DOWNLOAD: "1"
+
+      - name: Token, axis and contrast tests
+        run: npm test
+
   checks:
     runs-on: ubuntu-latest
     timeout-minutes: 30
@@ -39,9 +61,6 @@ jobs:
 
       - name: Typecheck
         run: npm run typecheck
-
-      - name: Token, axis and contrast tests
-        run: npm test
 
       - name: Manifest contracts
         run: npm run test:contracts

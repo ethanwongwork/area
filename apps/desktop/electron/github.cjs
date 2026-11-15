@@ -96,6 +96,9 @@ function createGit({ git = findTool("git"), gh = findTool("gh", process.env.AREA
     const added = await run(git, ["add", "--all"], folder);
     if (!added.ok) return { error: plain(added.err) };
     const made = await run(git, ["commit", "--message", words, "--no-verify"], folder);
+    if (!made.ok && /empty ident|identity unknown|no email was given|auto-detect email/i.test(made.err)) {
+      return { error: "Git doesn't know who's saving. Run git config --global user.name and user.email in Terminal, then save." };
+    }
     if (!made.ok) return { error: `Couldn't save: ${plain(made.err || made.out)}` };
     return { ok: true, state: await state(folder, project) };
   }
