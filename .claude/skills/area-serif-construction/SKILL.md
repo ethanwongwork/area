@@ -98,7 +98,9 @@ the fastest change (under 0.5 units of thickness per unit travelled on a branch,
 | Tail off a stem (g.ss02) | A half-ellipse: both edges leave the stem at the ball's height, the lowest point half way to the tail's end, the stroke 1.15 hairlines there; the curve from the lowest point to the ball solved so curvature only rises toward the ball and meets the ball's; ball 0.030 x-height under the baseline (forms in `G_TAIL_FORMS`) | g.ss02 | `charset.single_g_points`, `_round_tail` | `curvecheck.py` (tail valley), `audit_charset` |
 | Tails of j and y, the a's exit (0.81) | g.ss02's tail rule on each: from the straight edge (stem, thin diagonal) round the lowest point to the ball, curvature only rising toward the ball and equal across the lowest point; ball, depth, stroke and reach kept; lowest point at the references' share of the reach (j 0.673, y 0.681). The a's exit: its two handles solved the same way, its ends fixed | j y a (and ȷ ĵ ij fj ffj eng ý..., a.ss03 ª ⱥ) | `loops.round_tail`, `loops.a_exit` | `curvecheck.py` |
 | Alternates (0.81) | ɑ: the b d p q bowl narrowed across the counter to the references' advance (0.945 n), q's spur, a's exit; tailed l: t's hook on l's stem; zeros: the zero's hairline slash inside the oval, a dot of the side stroke's width; barred 7 z: a level bar of the class hairline, half the top arm | a.ss03 l.ss04 zero.zero zero.ss05 seven.ss06 z.ss06 and families | `alternates.py` | `audit_charset` (`audit_081`), `curvecheck.py` |
-| Along a tapering stroke (0.81) | Each place keeps its ladder law's share of the Regular's thickness there: the stem's ratio at a stem, the hairline's at a hairline, the tip's at an end, interpolated by the Regular thickness between (one continuous law); Light everywhere, Bold where the engine read a place thinner than the Regular. Handle lengths only, no new turn, no place past its law | tails, hooks, flags, terminals (j y eng f r a c e ƒ, the hooked letters) | `white.keep_taper`, `taper_law` | `audit_rays.py`; `tools/taper_plot.py` |
+| Along a tapering stroke (0.81) | Each place keeps its ladder law's share of the Regular's thickness there: the stem's ratio at a stem, the hairline's at a hairline, the tip's at an end, interpolated by the Regular thickness between (one continuous law); Light everywhere, Bold where the engine read a place thinner than the Regular. Handle lengths first; a place still short by more than 3% of its law (the JND) moves its places: the smooth nodes of its curve and of the curve its ray ends on, each rigidly with its handles (a node with level handles moves level only), and a straight cut end under 30 grows along itself; corners never. No new turn or crossing, no place past its law | tails, hooks, flags, terminals (j y eng f r a c e ƒ, the hooked letters) | `white.keep_taper`, `taper_law`, `_taper_places` | `audit_rays.py`; `tools/taper_plot.py` |
+| Slanted stem with one straight side (0.81, close) | A stroke whose one side is a line 5 to 35 degrees off upright and whose other side is a curve's upright extreme facing it across the ink is a stroke: its level width at the extreme takes `x_target`; the extreme moves level and every point of its contour between it and the contour's far extreme by its share of the move (the engine's knot map corrected at the knot a line lacks) | the a of @ | `white.slanted_stems`, `keep_slanted_stems` | `audit_axis.py` thin |
+| A star's reach (0.81, close) | Towards the Bold a star's arms reach the least that brings its ink gain over n's to the references' least (Georgia Pro 0.819), within the references' span changes (at most 1.092); the outer part of each arm, from its innermost smooth node out, is its Regular scaled about the tip and carried out whole (a similarity: no curve turns); the junction scales by f, the part between takes up the length. f stays capped by the white law | asterisk (Bold reach 1.065, f 1.197) | `arms.INK_GAIN`, `REACH_MAX`, `Arm.along`; `bold.bold_font` | `audit_axis.py` turns, symmetry |
 | Neck at any crotch (0.81) | The nearest approach across the ink at a branch, whatever its sides; a straight-sided crotch slides along its straight side to the neck (as `parts.solve`); a Regular neck under the tip is no branch | every crotch (Light) | `white.keep_necks` | `audit_axis.py` thin; `audit_bold.py 55` |
 | Mirrored pair (masters, 0.81) | The right-hand form is the master's left-hand form turned over, point for point | `charset.MIRRORS` (with ⇤ ⇥, ⌫ ⌦) | `bold.mirror_pairs`, `turn_over` | `audit_axis.py` mirror |
 | Inflection at a node (0.81) | A curve's end bends the Regular's way at an S's node or out of a straight: its far handle slides along itself until it does | c_t, section | `bold.inflection_nodes` | `audit_axis.py` turns |
@@ -165,6 +167,10 @@ Fit is measured, like shapes (`tools/fit/fit.py`, numbers only from the referenc
   `normalize`: families, then the collision pass over every glyph of `charset.COVERAGE`. `audit_charset.py` fails
   on a family member outside its letter's class and on any pair closer than 10.
 - Ink never closer than `MIN_GAP` 13. Proof words with `tools/joins/plain.py` (HarfBuzz kerning).
+- **A word space is fit too** (0.81, close). fit.py's pair measure reads only rows where both glyphs have ink, so a
+  descender running under the space before it is never seen. The least white across "x␣j" (HarfBuzz, every a to z)
+  was 63 under the nearer reference's at 400: space before j's class is kerned by that median
+  (`spacing.SPACE_BEFORE`). Measure a word space this way after any change to a descender's reach.
 
 ## When a corner is rounded
 
@@ -277,3 +283,20 @@ Say this in every report until it is closed:
   and left a white sliver in the variable font at 550 and 700. Draw the join as one outline with its crotch.
 - **When handles cannot reach a smooth curve, move the places, not the tension**: g.ss02's tail could not tighten
   evenly into a ball at 0.138; at 0.100 it does with ordinary handles.
+
+## Reading a stroke (0.81, close)
+
+- **Across the stroke, never along a scan line.** `audit_axis.thinnest` reads a span that is a stroke as the
+  shortest cut through its middle, turned up to 60 degrees, ending on two edges that face each other within 40
+  degrees. A level or upright cut through a slanted tail reads w / cos(slant), and changes when the slant does (the
+  comma accent below a capital: 43.0 > 39.9 upright, its stroke across itself kept). Changing a reading changes many
+  numbers (410 of 978 glyph-sides' Regular readings moved by over 0.5): rerun the whole audit and list every glyph
+  whose result changed, both ways.
+- **An end is not a stroke.** A cut or a ray within half its own length of a stroke's cut end (an outward turn of
+  60 degrees within 12 units of outline: a terminal's corners, soft or sharp) reads how the end is cut
+  (`audit_rays.end_corners`, `END_ZONE`); the pointed-end rule (under 60 degrees) still holds.
+- **A junction drawn soft is a junction** (a concave turn of 90 degrees within 12 units), and **a ray across one
+  stroke comes back**: from where it leaves, a ray along that edge's normal lands within half its length of where it
+  started; one that crossed a junction with smooth sides does not (`audit_rays.RECIPROCAL`).
+- These are reading rules, not tolerances: each was checked on the glyph that raised it by drawing the ray or cut
+  (`build/figures/081/`), and the places they leave out are counted in the audit's own summary line.

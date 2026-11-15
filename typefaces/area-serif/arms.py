@@ -165,7 +165,7 @@ class Arm:
     def along(s, x, f, reach=1.0):
         """s' and ds'/ds at s. reach (0.81): the arm's length in the master over the Regular's (REACH).
 
-        0.81 (close): a longer or shorter arm moves its outer part whole. From the arm's innermost smooth node out to
+        0.81 (close): a longer arm moves its outer part whole. From the arm's innermost smooth node out to
         its tip (s_split: on a turned arm the node at its own extreme, whose handle is level or upright) the arm is
         its Regular scaled by f about the tip and carried out along the axis by (reach - 1) L: a similarity, so no
         curve there gains an extreme or an inflection; the junction is scaled by f as always, and the part between
@@ -173,7 +173,8 @@ class Arm:
         tilted the turned arms' level handles against their curves: four inflections at reach 1.047.)"""
         L, z0, z1 = s.L, s.z0, s.z1
         sp = getattr(s, "s_split", None)
-        if reach != 1.0 and sp is not None and not s.far_junction and z0 < sp < L:
+        if reach > 1.0 and sp is not None and not s.far_junction and z0 < sp < L:   # a longer arm (the Light's
+            # shorter one, 0.983, keeps 0.81's even map: it turns no curve)
             E = (reach - 1.0) * L
             if x <= z0:
                 return f * x, f

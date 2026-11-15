@@ -119,7 +119,7 @@ def rays(polys):
     del inside
     ends = end_corners(polys)
     cav = np.vstack([cav, crossings_of(polys)])               # round 3: where two contours' inks overlap
-    cav = np.vstack([cav, end_corners(polys, -1)])            # 0.81 (close): a crotch drawn soft (Q's tail into its bowl)
+    cav = np.vstack([cav, end_corners(polys, -1, SOFT_TURN)])   # 0.81 (close): a crotch drawn soft
     A = np.vstack([P for P in polys])
     Bv = np.vstack([np.roll(P, -1, axis=0) for P in polys])
     E = Bv - A
@@ -170,7 +170,7 @@ def rays(polys):
             # of its cut, soft or sharp) reads how the end is cut, from its side, not the stroke across itself: c's
             # and C's barbs read 30.9 > 28.6 there while their strokes thicken (audit_axis already leaves the
             # places by a pointed end out; this is the same reading at a cut end)
-            if len(ends) and float(np.hypot(*(ends - P[i]).T).min()) < JUNCTION * sx:
+            if len(ends) and float(np.hypot(*(ends - P[i]).T).min()) < END_ZONE * sx:
                 continue
             # 0.81 (close): across one stroke the cut is the same both ways. From where the ray leaves, a ray along
             # that edge's own normal into the ink comes back to where this one started (within RECIPROCAL of its
@@ -190,7 +190,7 @@ def rays(polys):
     return np.concatenate([r for r, _ in out]), np.concatenate([e for _, e in out])
 
 
-RECIPROCAL = 0.35           # a return ray may land this share of the ray's length from its start
+RECIPROCAL = 0.5            # a return ray may land this share of the ray's length from its start
 
 
 def _first_exit(p, d, A, E, polys):
@@ -211,9 +211,11 @@ def _first_exit(p, d, A, E, polys):
 
 END_TURN = 60.0             # degrees of outward turn ...
 END_ARC = 12.0              # ... within this much outline: a corner (a cut end's soft corners are 7 units round)
+END_ZONE = 0.5              # a ray that starts within this share of its own length of such a corner reads the end's cut
+SOFT_TURN = 90.0            # a concave turn this sharp within END_ARC is a crotch, however soft its corner
 
 
-def end_corners(polys, sign=1):
+def end_corners(polys, sign=1, least=None):
     """Convex corners (sign -1: concave ones, a crotch whose corner is soft or drawn as a tight curve): places where the outline turns outward by END_TURN or more within END_ARC of outline (a
     stroke's cut end, its corners soft or sharp, a serif's tip, a pointed end). A smooth curve turns far less in so
     little outline (the tightest round in the face, a ball 88 across, turns 16 degrees in 12 units)."""
@@ -239,7 +241,7 @@ def end_corners(polys, sign=1):
                 k -= 1
                 arc += seg[k % n]
                 tot += convex[k % n]
-            if tot >= END_TURN:
+            if tot >= (least or END_TURN):
                 out.append(P[i])
     return np.array(out) if out else np.zeros((0, 2))
 

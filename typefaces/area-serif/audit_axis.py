@@ -166,6 +166,10 @@ def thinnest(polys, step=4, points=(), across=None):
         a, length = area_len(polys)
         reach = 2 * a / length if length else 0
     E = _edges(polys) if across else None
+    ends = None
+    if across:                                                # a stroke's cut ends, as audit_rays reads them
+        import audit_rays as AR
+        ends = AR.end_corners([np.asarray(p, float) for p in polys])
     angs = np.radians(np.arange(-ACROSS_DEG, ACROSS_DEG + 0.1, 3.0))
     best = None
     pts = [q for p in polys for q in p]
@@ -189,6 +193,10 @@ def thinnest(polys, step=4, points=(), across=None):
                            for j in (k - 2, k - 1, k + 1, k + 2)):
                     continue
                 if across:
+                    # a cut whose middle lies within END_ZONE of its own length from a stroke's cut end reads how the
+                    # end is cut, not the stroke (audit_rays' end zone; c's terminal 26 > 24.9 at its cut)
+                    if len(ends) and float(np.hypot(*(ends - np.array(mid)).T).min()) < AR.END_ZONE * w:
+                        continue
                     base = 0.0 if ax == 1 else math.pi / 2                  # the scan line's own direction
                     m = np.array(mid, float)
                     got = [chord(E, m, (math.cos(base + t), math.sin(base + t))) for t in angs]

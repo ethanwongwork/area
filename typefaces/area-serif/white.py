@@ -1053,9 +1053,10 @@ def _slant_width(N, ec, m, lc, i, j):
 def keep_slanted_stems(R, N, target):
     """0.81 (close): a slanted stem with one straight side (slanted_stems) is a stroke like any other: its width at
     the facing extreme's height, read level as the engine reads every stroke, takes the engine's own target for it
-    (target(width in R), bold.x_target for a straight stroke). The extreme moves level, rigidly with its handles
-    (it stays an extreme, its curves keep their tensions); the line stays where the engine put it. Returns
-    contours and [(contour, node, before, target, after)]."""
+    (target(width in R), bold.x_target for a straight stroke). The extreme moves level, and the points of its
+    contour between it and the contour's far extreme by their share of the move (the engine's knot map, corrected
+    at the knot it lacked); the line stays where the engine put it. Returns contours and [(contour, node, before,
+    target, after)]."""
     N = [list(P) for P in N]
     log = []
     for ec, m, lc, i, j, w0 in slanted_stems(R):
@@ -1068,9 +1069,10 @@ def keep_slanted_stems(R, N, target):
         if abs(d) < 1.0:
             continue
         dx = sgn * d                                           # the extreme's move (towards the line when too wide)
-        # the knot map, corrected at this knot: every node of the extreme's own contour whose x the engine took
-        # between the contour's far upright extreme and this one moves by its share of the move (as the engine's
-        # map interpolates between knots), its handles with it; the far extreme stays
+        # the knot map, corrected at this knot: every point of the extreme's own contour (nodes and handles) whose x
+        # the engine took between the contour's far upright extreme and this one moves by its share of the move,
+        # read by its x in the Regular, as the engine's map interpolates between knots (so a curve between two
+        # moved nodes is stretched, not bent: its handles keep their share of it); the far extreme stays
         P0 = R[ec]
         ext = [k for k, q in enumerate(P0) if q[2] is not None and q[3] and P0[(k - 1) % len(P0)][2] is None
                and P0[(k + 1) % len(P0)][2] is None and abs(P0[(k - 1) % len(P0)][0] - q[0]) < 0.5
@@ -1078,19 +1080,15 @@ def keep_slanted_stems(R, N, target):
         xe = P0[m][0]
         far = [k for k in ext if (P0[k][0] - xe) * sgn < 0]   # on the side away from the line
         x_far = max((P0[k][0] for k in far), key=lambda x: abs(x - xe)) if far else None
-        n = len(N[ec])
-        on = [k for k, q in enumerate(P0) if q[2] is not None]
         moves = {}
-        for k in on:
-            if k == m:
-                w_ = 1.0
-            elif x_far is None or not min(x_far, xe) < P0[k][0] < max(x_far, xe):
+        for k, q in enumerate(P0):
+            if abs(q[0] - xe) < 0.5:
+                w_ = 1.0                                       # the extreme and its upright handles
+            elif x_far is None or not min(x_far, xe) < q[0] < max(x_far, xe):
                 continue
             else:
-                w_ = (P0[k][0] - x_far) / (xe - x_far)
-            for h in (k, (k - 1) % n, (k + 1) % n):
-                if h == k or P0[h][2] is None:
-                    moves[h] = round(dx * w_)
+                w_ = (q[0] - x_far) / (xe - x_far)
+            moves[k] = round(dx * w_)
         for h, ddx in moves.items():
             q = N[ec][h]
             N[ec][h] = (q[0] + ddx, q[1]) + tuple(q[2:])
