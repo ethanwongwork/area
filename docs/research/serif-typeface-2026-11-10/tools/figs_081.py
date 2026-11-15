@@ -162,7 +162,7 @@ def weights(out):
     for w in (300, 400, 700):
         tt = instantiateVariableFont(TTFont(os.path.join(SERIF, "build", "AreaSerif[wght].ttf")), {"wght": w})
         f2 = dict(feats)
-        blocks.append((f"{w}: every set on (ss05 then zero last wins: dotted)", [S.strip(tt, text, f2, 72, ss=2),
+        blocks.append((f"{w}: every set on (zero and ss05 both on: the slashed zero shows), then off", [S.strip(tt, text, f2, 72, ss=2),
                                                                                S.strip(tt, text, {}, 72, ss=2)]))
     return page(blocks, out)
 

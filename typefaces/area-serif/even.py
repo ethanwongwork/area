@@ -167,10 +167,22 @@ def _objective(g, ci):
     return max([shelf(run)[0] + rate_jump(run)[0] for run in runs(polys, ci)] or [0.0])
 
 
+# 0.81: g's lower loop is its own counter (loops.py). Its top is the link, a straight stroke of the stem's weight,
+# and its far edge jumps from the link to the bowl and the ear: one smooth change of thickness round it is not the
+# rule there. The loop is held by its own construction and checked by curvecheck.py (curvature) and measured by
+# tools/loop_profile.py (thickness by angle against four references).
+OWN_RULE = {"g": lambda poly: max(p[1] for p in poly) < 60}
+
+
+def _counters(g, polys):
+    skip = OWN_RULE.get(g.name)
+    return [ci for ci in counters(polys) if not (skip and skip(polys[ci]))]
+
+
 def worst(g):
     """(largest shelf, largest rate jump) over the glyph's counters."""
     polys = glyph_polys(g)
-    rs = [run for ci in counters(polys) for run in runs(polys, ci)]
+    rs = [run for ci in _counters(g, polys) for run in runs(polys, ci)]
     return (max([shelf(r)[0] for r in rs] or [0.0]), max([rate_jump(r)[0] for r in rs] or [0.0]))
 
 
@@ -189,7 +201,7 @@ def even(g, tries=(0.85, 0.93, 1.07, 1.15)):
     mean thickness stays within a unit. Returns [(counter, before, after)]."""
     done = []
     polys = glyph_polys(g)
-    for ci in counters(polys):
+    for ci in _counters(g, polys):
         if max([shelf(run)[0] for run in runs(polys, ci)] or [0.0]) <= SHELF_AIM:
             continue
         before = _objective(g, ci)
