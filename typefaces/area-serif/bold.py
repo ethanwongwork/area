@@ -2896,7 +2896,7 @@ def bold_font(reg, stem=STEM, **over):
             def _arms(rc_):
                 f0 = ARMS.capped(R_, sign_ratio(v), law.least, reach=rc_)
                 mp_ = ARMS.master(R_, f0, engine=eng_, reach=rc_)
-                o_ = [[(round(x), round(y)) + q[2:] for (x, y), q in zip(M_, P_)] for M_, P_ in zip(mp_, R_)]
+                o_ = [[(x, y) + q[2:] for (x, y), q in zip(M_, P_)] for M_, P_ in zip(mp_, R_)]
                 o_, _r = symmetric(g, o_, {})
                 return f0, mp_, len(_X.turns(R_, R_, o_))
             f_, mapped, t_ = _arms(reach_)
@@ -3347,7 +3347,7 @@ def bold_font(reg, stem=STEM, **over):
                     f_.newGlyph(b_)
                 nb = f_[b_]
                 old_ = glyph_contours(nb)                      # its own sides, as bearing_change set them
-                keep = (min(q[0] for P in old_ for q in P), nb.width) if old_ else None
+                keep = (min(q[0] for P in old_ for q in P), nb.width - max(q[0] for P in old_ for q in P)) if old_ else None
                 nb.clearContours()
                 new_ = turn_over(glyph_contours(f_[a_]), f_[a_].width, mp, types_)
                 if keep:
@@ -3357,7 +3357,7 @@ def bold_font(reg, stem=STEM, **over):
                     c = Contour()
                     c.points = [Point(x, y, t, smooth=s_) for x, y, t, s_ in P]
                     nb.contours.append(c)
-                nb.width = keep[1] if keep else f_[a_].width
+                nb.width = round(max(q[0] for P in new_ for q in P) + keep[1]) if keep else f_[a_].width
             elif b_ in f_ and f_ is layer:
                 del layer[b_]
         turned.append(b_)
