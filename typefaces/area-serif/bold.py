@@ -3160,7 +3160,10 @@ def bold_font(reg, stem=STEM, **over):
         big = cat in ("Lu", "Lt", "Nd") or g.name[:1].isupper()
         st_, hr_ = (CAP_STEM, CAP_HAIR) if big else (REG_STEM, LC_HAIR)
         laws = [(st_, stem / REG_STEM), (hr_, 1 + (HAIR_RATIO - 1) * v["ft"]), (30, v["tip"])]
-        new_, log_ = WHITE.keep_taper(glyph_contours(g), cs, laws, only_thinner=v["f"] > 0)
+        # 0.81 (close): the places move (white._taper_places) towards the Light only; towards the Bold they moved the
+        # quotes' nodes on the Bold master alone, and between it and the quotes' mid master the tail dipped
+        # (quotedblleft 40.8 > 35.3 at 675)
+        new_, log_ = WHITE.keep_taper(glyph_contours(g), cs, laws, only_thinner=v["f"] > 0, nodes=v["f"] < 0)
         if log_:
             for c, P in zip(font[g.name].contours, new_):
                 c.points = [Point(x, y, t, smooth=s_) for x, y, t, s_ in P]
@@ -3172,8 +3175,11 @@ def bold_font(reg, stem=STEM, **over):
     # carried move by the corrected map (white.keep_slanted_stems; @'s stem stayed 92 > 91 at the Bold while its
     # counter rode the knots 44 right into the bowl's lower stroke, 29 > 17 at 550). After the tapers: their handle
     # lengths, retuned on the engine's counter, would otherwise press the moved counter back into the bowl's stroke.
+    # Towards the Bold only: towards the Light the corrected map ran @'s counter into the a's top crotch (contour 0,
+    # which the map does not carry) and the stroke between them fell to 10 at 350; the Light keeps the engine's
+    # reading (its stem 95 > 92, a debt) until the crotch moves with the map.
     slanted = []
-    for g in reg:
+    for g in (reg if v["f"] > 0 else []):
         if not g.contours or g.components or g.name in struck or g.name in signs or g.name not in font:
             continue
         cs = glyph_contours(font[g.name])
