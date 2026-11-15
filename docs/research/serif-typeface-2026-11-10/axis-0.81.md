@@ -262,3 +262,37 @@ cent and Oslash, difference in colour), none at the overlaps: they come from pat
 when it removes the overlaps, not from the overlaps. Coinciding edges: no struck stroke's straight edge lies on a
 letter's edge (within 2 units over more than 2) in the Regular or the Bold; in the Light, Rstroke's stroke lies on
 R's edge for 74 units. No inset rule was written (one case).
+
+## Integration round (the three branches merged, 15 November 2026)
+
+Merged tree before this round (`build/m1/`): `audit_axis.py` Bold side 11 glyphs (Astroke, Tdiagonalstroke,
+hookabovecomb.case crossings; at, commaaccentcomb.case, ogonekcomb.case, one.ss01, thook thin; c_t, lira, section
+turns), Light side 5 (ae turn; uni21E5 crossing; glottalstopsmall, s_p, yhook thin); `audit_rays.py` 72 glyphs;
+`audit_kern.py` pass at 300 350 400 550 700; `audit_bold.py` 434/434 both masters.
+
+| # | Item | Cause | Rule | Where | Before > after |
+|---|---|---|---|---|---|
+| 21 | The Light's side bearings, two paths | build.py swapped `bold.bearing_change` for `spacing.light_bearing_change`; `bold.light_bearings()` read light_bearings.json in a format it does not have (it fell through to the rest value, which by chance equals the Bold's run back) | One path: `bold.bearing_change` reads the file's `sides` per character for the Light; the swap is gone. Equal to the kerning branch's function for all 1,102 glyphs. A glyph whose outline a later rule changes (crotches, necks, tapers) takes its sides again | `bold.bearing_change`, `light_bearings`, `check_light_bearings` (in qa.py) | S's left side 1.1 off in the Light > 0 |
+| 22 | Along a tapering stroke (eng 61.8 > 41.2 at 300; 55 Light ray flags) | The engine reads a stroke at its extremes; part way along a tail or hook the thickness followed knots | Each place keeps its ladder law's share of the Regular's thickness there: stem 0.705, hairline 0.847, tip 0.767 at 300, interpolated by the Regular thickness between (one continuous law, `taper_law`). Read as audit_rays reads a place; the curve the place lies on and the curve its ray ends on retune their two handle lengths only, no new turn, no place past its law. Towards the Bold the same law holds only places the engine read thinner than the Regular | `white.keep_taper`; `tools/taper_plot.py` (`img/081/10-taper.png`) | Light ray flags of this kind 55 > 13; eng 0.667 > 0.694 at its worst place (a node; the rays floor is 0.684) |
+| 23 | glottalstopsmall, s_p, yhook pinch (Light) | The neck rule read curve-curve crotches only | Every crotch; a straight-sided crotch slides along its straight side until the neck is the hairline's share (parts.solve's rule); a Regular neck under the tip is no branch (E F L Z AE OE corners, 20 to 28, untouched) | `white.keep_necks` | thin 3 > 0; yhook 8.5 > 29.3 at 300; k, kgreenlandic, f_k, eth necks held as well; 434/434 kept |
+| 24 | uni21E5 crossing (Light 300) | ⇤ was two contours (arrow and bar touching), ⇥ one merged outline; the engine read each on its own | ⇥ is ⇤ turned over in the Regular (charset.MIRRORS, with ⌫/⌦) and in every master (`mirror_pairs`, `turn_over`); `audit_axis.py` mirror check (0.80's Light fails it: braceright) | `charset.MIRRORS`, `bold.mirror_pairs` | crossing gone |
+| 25 | at, thook, one.ss01, comma accent, ogonek (Bold thin) | Strokes no reading rule reached: the one.ss01 flag's underside followed knots (its points kept their y), the ogonek's tail and thook's hook likewise; the comma accent's upright cut is a slanted tail's (rays across it stay 0.99) | Row 22's law towards the Bold for places read thinner than the Regular | `white.keep_taper(only_thinner)` | thook, one.ss01, commaaccentcomb.case, ogonekcomb.case pass; at remains (below) |
+| 26 | Turns in c_t, lira, section (Bold), ae (Light) | One cause: `fix_turns` tested blends (halves and quarters) and the instances turned between them (t 0.08 to 0.45). c_t and section were also S-turns drawn at a node (c_t's start sin -0.03 in the Regular, +0.48 in the Bold) | `fix_turns` tests the whole pair exactly (axis_exact's Bernstein test), and mid to Bold; an S's inflection at a node (or a curve out of a straight) keeps its start bending the Regular's way: its far handle slides along itself until it does (`inflection_nodes`) | `bold.fix_turns(exact)`, `inflection_nodes` | lira, ae fixed by the exact guard; c_t and section by the node rule |
+| 27 | g.ss02's ball under its bowl (62 > 38 at 700; law 52) | The white law was held between contours only | The ball's rise towards the Bold stops where the white inside the one contour (ball to bowl, nearest approach) keeps the law; the mid master takes the law's counter at 550 | `charset.single_g_points(least_white)`, `ball_white` | 38.2 > 52.0 at 700 |
+| 28 | Ɍ's stroke on R's edge (Light, 74 units) | The stroke's top (hairline law) landed on the counter's floor | A stroke whose side would lie on its letter's edge ends where that edge begins (plus its corner radius); the letter's own bar carries on. Ink change in the Light -125 square units (the stroke stood 2 units below R's bar); `audit_axis.py` seam check | `overlap.inset_ends` | seam gone |
+| 29 | Astroke, Tdiagonalstroke (Bold 625 to 700) | Pocket closes (round 3) | Held as the one expected failure: `audit_axis.AWAITING`, printed every run and in qa.py's summary as HELD; `stump-struck.png` now shows both glyphs (it dropped the second row) | `audit_axis.py`, `qa.py`, `tools/weight/stump.py` | the owner's decision |
+| 30 | The asterisk at 700 nearly Regular | Capped at f 1.199 by the white between its arms | Its arms reach by the references' asterisk span change (Bold 1.047, Light 0.983; Georgia Pro, Source Serif 4, Literata); cap 1.199 > 1.286. Ink gain over n's: Area 0.737 before, references 0.82 to 0.94 | `arms.REACH`, `reach_of` | |
+
+Still failing after this round, and why:
+
+| Glyphs | Side | Why |
+|---|---|---|
+| at | Bold 575 to 700 | The a's bowl runs diagonally into the ring: an oblique round stroke that neither the upright nor the level strokes read. The counter's nodes take the upright strokes' map, the junction notch other knots, and the stroke between collapses (29 > 17 at 550); handle lengths (row 22) cannot open it. Needs a reading for an oblique stroke between a counter and a notch |
+| hookabovecomb.case | Bold 552 | Its curl is a loop of the outline round its ball (34 points, the lowercase hook's at 0.712 within 4.6 units). The engine does not read the loop as a ball; it keeps the lowercase's size and collapses in the capital form. Taking the lowercase's move (KIN) did not open it (tried, reverted) |
+| Astroke, Tdiagonalstroke | Bold | HELD: the owner's decision |
+
+`audit_rays.py` after this round: the remaining flags are of five kinds (`img/081/rays-flags.png`, each drawn):
+C and c terminals (C ꞓ Ȼ ₡; c ꞓ ȼ ¢), 2 to 4 units at 600 and 700, the ray read from the side of a barb's cut;
+junction rays in ə ʕ ɂ & ® (rays through a bar, a counter or a ring that the junction zones do not catch); Light
+places at nodes on the IPA hooks (ɖ ɲ ɋ Ɩ Ƙ Ⱳ Ƴ ⱳ ƴ), ſp, ƒ, @ and §, where the taper's handles cannot reach (nodes stay);
+Light "thicker" places at crossings (ð, œ, $); and Σ's top arm at 500, Ƒ's hook at 700, ʈ's top at 500.

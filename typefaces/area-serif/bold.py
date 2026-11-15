@@ -3168,7 +3168,7 @@ def bold_font(reg, stem=STEM, **over):
     import overlap as OVERLAP                                  # 0.81: a struck glyph whose letter has a mid master
     if OVERLAP.LAYER in reg.layers:                            # takes it, with its strokes half way as they go
         tm_s = (dict(axis_map(stem))[MID_WEIGHT] - REG_STEM) / (stem - REG_STEM)
-        for name in sorted(struck):
+        for name in sorted(struck, key=lambda n: (reg.layers[OVERLAP.LAYER][n].lib["area.overlap"]["letter"] in struck, n)):
             og = reg.layers[OVERLAP.LAYER][name]
             info = og.lib["area.overlap"]
             letter, (ox, oy), nl = info["letter"], info["offset"], info["letter_contours"]
@@ -3235,7 +3235,10 @@ def bold_font(reg, stem=STEM, **over):
                     infl.append(f"{g.name} {lg}")
     notes.append(f"inflections at nodes: {len(infl)} kept there ({'; '.join(infl)})")
     notes.append(f"curves: {n_fixed} brought back to the Regular's turns, {n_left} not")
-    for name in struck:                                        # 0.81: the struck glyphs' letters as they now are
+    # 0.81 (integration): a struck glyph whose letter is itself struck (₫ on đ) after that letter, so it takes the
+    # letter as it now is (a set's order changed with the process: ₫'s Light bowl moved up to 26 units build to build)
+    struck_order = sorted(struck, key=lambda n: (reg.layers[OVERLAP.LAYER][n].lib["area.overlap"]["letter"] in struck, n))
+    for name in struck_order:                                  # 0.81: the struck glyphs' letters as they now are
         info = reg.layers[OVERLAP.LAYER][name].lib["area.overlap"]
         letter, (ox, oy), nl = info["letter"], info["offset"], info["letter_contours"]
         for f_ in (font, layer):

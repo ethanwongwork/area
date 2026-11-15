@@ -36,7 +36,7 @@
    {
     "glyphs": "Kerning",
     "chars": "AVTo",
-    "text": "Kerning is fitted per weight. Each master's pairs come from its own outlines by one rule measured on Georgia Pro and Serrif: a pair's white scales with the control white (nn, HH) of that weight. Then each is compared with the references at the same weight and opened where two letters come too close. AV goes -83 / -79 / -93 at 300 / 400 / 700 where it was -79 at every weight. The Regular's own pairs were measured again on the new letters: 772 of 4,796 measured pairs moved, most by a unit; the largest (19) are r before round letters and capitals, because r's right side changed."
+    "text": "Kerning is fitted per weight. Each master's pairs come from its own outlines by one rule measured on Georgia Pro and Serrif: a pair's white scales with the control white (nn, HH) of that weight. Then each is compared with the references at the same weight and opened where two letters come too close. AV goes -83 / -79 / -93 at 300 / 400 / 700 where it was -79 at every weight. The Regular's own pairs were measured again on the new letters: 772 of 4,796 measured pairs moved, most by a unit; the largest (15 to 19) are r before round letters, capitals and punctuation: r's outline has not changed since 0.80, but measured afresh it stood 8 or more units looser than both references beside those letters, so the fit brought it in. Why the stored values missed this is not known."
    },
    {
     "glyphs": "Open",

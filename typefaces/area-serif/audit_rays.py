@@ -206,7 +206,7 @@ def mean_stroke(polys):
 
 def main():
     names = [a for a in sys.argv[1:] if not a.startswith("-")]
-    vf = "build/AreaSerif[wght].ttf"
+    vf = _os.environ.get("AREA_VF", "build/AreaSerif[wght].ttf")   # 0.81: another build's font
     fonts = {w: instance(vf, w) for w in WEIGHTS}
     gss = {w: f.getGlyphSet() for w, f in fonts.items()}
     glyf = fonts[400]["glyf"]
@@ -270,7 +270,7 @@ def main():
         rows.append((name, T.shape[1], float(T[i400].min()), float(T[WEIGHTS.index(300)].min()), float(T[WEIGHTS.index(700)].min())))
         if worst:
             fails.append(f"{name}: " + "; ".join(worst))
-    with open("build/weight/audit-rays.txt", "w") as f:
+    with open(_os.environ.get("AREA_RAYS_OUT", "build/weight/audit-rays.txt"), "w") as f:
         f.writelines(f"{r}\n" for r in fails)
         f.writelines(f"{n}\t{k} rays\tthinnest 400 {a:.1f}  300 {b:.1f}  700 {c:.1f}\n" for n, k, a, b, c in rows)
     print(f"rays across the stroke, variable font at {', '.join(map(str, WEIGHTS))}: {len(rows)} glyphs, {n_rays} places")
