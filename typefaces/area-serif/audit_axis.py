@@ -120,30 +120,42 @@ def chord(E, m, d):
     """The ink's length along the line through m in direction d (unit), on the span that holds m (non-zero
     winding), when it is a cut across one stroke: its two ends lie on edges that run within FACE_DEG of each other
     (a cut that leaves through a stroke's end or across a corner is no stroke's thickness). None otherwise."""
+    got = chords(E, m, np.array([d], float))
+    return got[0]
+
+
+def chords(E, m, D):
+    """chord() for many directions D (k, 2) at once."""
     A, Bn = E
     e = Bn - A
-    den = d[0] * e[:, 1] - d[1] * e[:, 0]
+    den = D[:, 0:1] * e[None, :, 1] - D[:, 1:2] * e[None, :, 0]          # (k, edges)
     q = A - m
+    num_s = q[:, 0] * e[:, 1] - q[:, 1] * e[:, 0]                          # (edges,)
     with np.errstate(divide="ignore", invalid="ignore"):
-        s = (q[:, 0] * e[:, 1] - q[:, 1] * e[:, 0]) / den
-        u = (q[:, 0] * d[1] - q[:, 1] * d[0]) / den
-    ok = np.where((np.abs(den) > 1e-12) & (u >= 0) & (u < 1))[0]
-    if not len(ok):
-        return None
-    order = ok[np.argsort(s[ok])]
-    w, start, k0 = 0, None, None
-    for k in order:
-        x = s[k]
-        if w == 0:
-            start, k0 = x, k
-        w += np.sign(den[k])
-        if w == 0 and start is not None and start <= 0 <= x:
-            ea, eb = e[k0], e[k]
-            c = abs(float(ea @ eb)) / (float(np.hypot(*ea)) * float(np.hypot(*eb)) + 1e-12)
-            if c < math.cos(math.radians(FACE_DEG)):
-                return None
-            return float(x - start)
-    return None
+        s = num_s[None, :] / den
+        u = (q[None, :, 0] * D[:, 1:2] - q[None, :, 1] * D[:, 0:1]) / den
+    hit = (np.abs(den) > 1e-12) & (u >= 0) & (u < 1)
+    cosf = math.cos(math.radians(FACE_DEG))
+    out = []
+    for r in range(len(D)):
+        ok = np.where(hit[r])[0]
+        if not len(ok):
+            out.append(None)
+            continue
+        order = ok[np.argsort(s[r, ok])]
+        w, start, k0, val = 0, None, None, None
+        for k in order:
+            x = s[r, k]
+            if w == 0:
+                start, k0 = x, k
+            w += np.sign(den[r, k])
+            if w == 0 and start is not None and start <= 0 <= x:
+                ea, eb = e[k0], e[k]
+                c = abs(float(ea @ eb)) / (float(np.hypot(*ea)) * float(np.hypot(*eb)) + 1e-12)
+                val = float(x - start) if c >= cosf else None
+                break
+        out.append(val)
+    return out
 
 
 def thinnest(polys, step=4, points=(), across=None):
@@ -199,8 +211,8 @@ def thinnest(polys, step=4, points=(), across=None):
                         continue
                     base = 0.0 if ax == 1 else math.pi / 2                  # the scan line's own direction
                     m = np.array(mid, float)
-                    got = [chord(E, m, (math.cos(base + t), math.sin(base + t))) for t in angs]
-                    got = [g_ for g_ in got if g_ is not None]
+                    D = np.stack([np.cos(base + angs), np.sin(base + angs)], axis=1)
+                    got = [g_ for g_ in chords(E, m, D) if g_ is not None]
                     w = min(got + [w])
                 if best is None or w < best:
                     best = w
