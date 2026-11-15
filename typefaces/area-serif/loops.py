@@ -350,3 +350,165 @@ def g_loop(font, name="g"):
     g.contours.append(hole)
     return (f"{name}: loop rebuilt (residual {v:.3f}; neck {neck(S):.1f}; curvature ratio at the solved nodes "
             + ", ".join(f"{k} {math.exp(abs(terms[k])):.2f}" for k in ("OL", "OR", "IR", "IL")) + ")")
+
+
+# ------------------------------------------------------------------------------------------- j's and y's tails
+# 0.81 round 3 (coordinator: "bring j and y into the same tail family"). Measured on 0.80 (curvecheck.py): j's
+# outside jumped 1.30 at its lowest point, and y's tail ran through three flat places (its inside 109, 188, then 27
+# into the neck; its outside 98, 235, then 49 at its lowest point and 53, 94, 48 into the ball). g.ss02's tail rule,
+# carried over: from where the straight edge ends (the stem's for j, the thin diagonal's for y) round the lowest point
+# to the ball, each edge is two curves whose curvature only rises toward the ball and is equal across the lowest
+# point; the outside meets the ball at the ball's own curvature. The ball, the depth, the stroke at the lowest point
+# and the general reach stay. The lowest point is placed at the references' share of the reach (tools/tail_profile.py:
+# j: Georgia Pro 0.681, Source Serif 4 0.673, Literata 0.838, Serrif 0.993; y: 0.681, 0.679, 0.656, 0.654), at the
+# nearest edge of their range to 0.80's (j 0.589, y 0.714); the inside's lowest point stays where 0.80 had it.
+TAIL_LOW = {"j": 0.673, "y": 0.681}
+TAIL_THIN = 0.87        # the stroke's thinnest, in hairlines, no less than the references' least (Source Serif 4's j 0.870)
+
+
+def _ray_y(P0, d, y):
+    t = (y - P0[1]) / d[1]
+    return (P0[0] + t * d[0], P0[1] + t * d[1])
+
+
+def _tail_curves(P_line, d_line, s, B, E, e_dir, z):
+    a, b, c, dd = z
+    P0 = (P_line[0] + s * d_line[0], P_line[1] + s * d_line[1])
+    apex = _ray_y(P0, d_line, B[1])
+    u, w = math.dist(P0, apex), apex[0] - B[0]
+    c1 = (P0, (P0[0] + a * u * d_line[0], P0[1] + a * u * d_line[1]), (B[0] + b * w, B[1]), B)
+    h = math.dist(E, B)
+    c2 = (B, (B[0] - c * (B[0] - E[0]), B[1]), (E[0] - e_dir[0] * dd * h, E[1] - e_dir[1] * dd * h), E)
+    return c1, c2
+
+
+def _tail_score(c1, c2, e_k, s, s0):
+    ks = [abs(_k(c1, i / 16)) for i in range(17)] + [abs(_k(c2, i / 16)) for i in range(1, 17)]
+    fall = sum(max(0.0, (p - q) / p) for p, q in zip(ks, ks[1:]) if p > 1e-9)
+    g2 = abs(_lr(_k(c1, 1), _k(c2, 0)))
+    arrive = 0.0 if e_k is None else abs(_lr(_k(c2, 1), e_k))
+    return (3 * fall) ** 2 + (3 * g2) ** 2 + arrive ** 2 + ((s - s0) / 60) ** 2
+
+
+def _solve_tail(P_line, d_line, s0, s_rng, B, E, e_dir, e_k):
+    def f(v):
+        s, *z = v
+        if not (s_rng[0] <= s <= s_rng[1] and all(0.25 <= q <= 0.85 for q in z)):
+            return 1e9
+        try:
+            c1, c2 = _tail_curves(P_line, d_line, s, B, E, e_dir, z)
+        except ZeroDivisionError:
+            return 1e9
+        return _tail_score(c1, c2, e_k, s, s0)
+    best = None
+    for start in ([s0, 0.55, 0.55, 0.55, 0.55], [s0, 0.7, 0.45, 0.45, 0.4], [s0, 0.45, 0.6, 0.6, 0.35]):
+        v, val = _simplex(f, start, [15, 0.08, 0.08, 0.08, 0.08], 1200)
+        if best is None or val < best[1]:
+            best = (v, val)
+    v = best[0]
+    return _tail_curves(P_line, d_line, v[0], B, E, e_dir, v[1:]), best[1]
+
+
+def _thinnest(inner, outer):
+    """The stroke across itself: the least distance from the inside's points (short of the last fifth, the neck)
+    to the outside edge."""
+    pin = [K.pt(("C", c), i / 30) for c in inner for i in range(31)]
+    pin = pin[: int(len(pin) * 0.8)]
+    pout = [K.pt(("C", c), i / 60) for c in outer for i in range(61)]
+    return min(min(math.dist(p, q) for q in pout) for p in pin)
+
+
+def round_tail(font, name):
+    """j's or y's tail by the rule above; the ball (neck, top, left side) is the letter's own and does not move."""
+    from ufoLib2.objects import Point
+    g = font[name]
+    oc = max(g.contours, key=lambda c: len(c.points))
+    P = oc.points
+    n = len(P)
+    on = [i for i, p in enumerate(P) if p.type]
+    iB = min(on, key=lambda i: (P[i].y, P[i].x))           # the outside's lowest point
+    iC, iN, iBi, iDi = [(iB - 3 * k) % n for k in (1, 3, 4, 5)]
+    iD = (iB + 3) % n
+    assert P[iDi].type == "line" and P[(iD + 1) % n].type == "line", f"{name}: the tail is not drawn as expected"
+    xy = lambda i: (P[i].x, P[i].y)                       # noqa: E731
+    unit = lambda v: (v[0] / math.hypot(*v), v[1] / math.hypot(*v))   # noqa: E731
+    # the straight edges the tail leaves: outside, the line ending at D; inside, the line ending at D'
+    d_out = unit((P[iD].x - P[(iD + 1) % n].x, P[iD].y - P[(iD + 1) % n].y))
+    d_in = unit((P[iDi].x - P[iDi - 1].x, P[iDi].y - P[iDi - 1].y))
+    depth, in_y = P[iB].y, P[iBi].y
+    C, N = xy(iC), xy(iN)
+    # where the straight edge meets the descender zone's top, for the reach (tail_profile's stem_r at -0.05 x-height)
+    edge = _ray_y(xy(iD), d_out, -26)[0]
+    Bx = round(edge - TAIL_LOW[name] * (edge - C[0]))
+    Bix = P[iBi].x                                         # the inside's lowest point stays (it sets the stroke there)
+    ball_k = _k((xy(iC - 3), xy(iC - 2), xy(iC - 1), C), 1.0)
+    after = xy((iN + 1) % n)
+    e_in = unit((after[0] - N[0], after[1] - N[1]))
+    # the stroke's thinnest across itself before (inside points to the outside edge, short of the neck): kept
+    old_in = [tuple((P[(iDi + k) % n].x, P[(iDi + k) % n].y) for k in range(4)),
+              tuple((P[(iBi + k) % n].x, P[(iBi + k) % n].y) for k in range(4))]
+    old_out = [tuple((P[(iC + k) % n].x, P[(iC + k) % n].y) for k in range(4)),
+               tuple((P[(iB + k) % n].x, P[(iB + k) % n].y) for k in range(4))]
+    thin0 = _thinnest(old_in, old_out)
+    (o1, o2), vo = _solve_tail(xy(iD), d_out, 0.0, (-60, 60), (Bx, depth), C, (0.0, 1.0), ball_k)
+    # the inside's lowest point: where it was or toward the outside's move, by steps of 4: the smoothest inside
+    # (least residual) of those that keep the stroke's thinnest at 0.80's or at the references' least, whichever is less
+    cands = []
+    lo = min(Bix, Bix + (Bx - P[iB].x))
+    for x_try in sorted({Bix, *range(int(lo), int(Bix) + 1, 4)}, reverse=True):
+        (c1, c2), v_ = _solve_tail(xy(iDi), d_in, 0.0, (-60, 60), (x_try, in_y), N, e_in, None)
+        th = _thinnest([c1, c2], [o2[::-1], o1[::-1]])
+        cands.append((th < min(thin0 - 1, TAIL_THIN * 43), v_, x_try, c1, c2))
+    _bad, vi, _x, i1, i2 = min(cands, key=lambda c: (c[0], c[1]))       # the smoothest that keeps the stroke
+    R = lambda p: (int(round(p[0])), int(round(p[1])))     # noqa: E731
+    want = {iDi: i1[0], (iDi + 1) % n: i1[1], (iDi + 2) % n: i1[2], iBi: i1[3], (iBi + 1) % n: i2[1],
+            (iBi + 2) % n: i2[2],
+            (iC + 1) % n: o2[2], (iC + 2) % n: o2[1], iB: o1[3], (iB + 1) % n: o1[2], (iB + 2) % n: o1[1], iD: o1[0]}
+    for i, p in want.items():
+        P[i].x, P[i].y = R(p)
+    return (f"{name}: tail rebuilt (lowest point {P[iB].x}, {P[iB].y}; inside's {P[iBi].x}; thinnest "
+            f"{_thinnest([i1, i2], [o2[::-1], o1[::-1]]):.0f}, was {thin0:.0f}; residual outside {vo:.3f}, inside {vi:.3f})")
+
+
+# ------------------------------------------------------------------------------------------- the a's exit
+# Round 3: the two-storey a's curled exit (and a.ss03's, which is the same part) ran radius 108, 155, then 57 from
+# its lowest point to its cut end: a flat place. By the tail rule its two handles are solved (directions kept: level
+# at the lowest point, along the cut end's own tangent there) so the curvature only rises from the lowest point to the
+# end and is equal across the lowest point. The lowest point, the cut end and a's width do not move.
+def a_exit(font, name="a"):
+    g = font[name]
+    oc = max(g.contours, key=lambda c: len(c.points))
+    P = oc.points
+    n = len(P)
+    on = [i for i, p in enumerate(P) if p.type]
+    xr = max(p.x for p in P if p.type == "line" and p.y > 200)          # the stem's right edge
+    # the exit: the curve from the stem's lowest point (level, right of the stem's left edge) to the cut's outer corner
+    iB = min((i for i in on if P[i].x > xr - 100 and P[i].y < 20), key=lambda i: P[i].y)
+    iE = (iB + 3) % n
+    assert P[(iB + 1) % n].type is None and P[(iB + 2) % n].type is None and P[iE].type == "curve", f"{name}: no exit"
+    B, E = (P[iB].x, P[iB].y), (P[iE].x, P[iE].y)
+    h2 = (P[(iB + 2) % n].x - E[0], P[(iB + 2) % n].y - E[1])
+    L2 = math.hypot(*h2)
+    u2 = (h2[0] / L2, h2[1] / L2)
+    prev = (P[(iB - 3) % n], P[(iB - 2) % n], P[(iB - 1) % n], P[iB])
+    k_prev = _k(tuple((q.x, q.y) for q in prev), 1.0)
+    span = E[0] - B[0]
+
+    def curve(a, b):
+        return (B, (B[0] + a * span, B[1]), (E[0] + u2[0] * b * L2, E[1] + u2[1] * b * L2), E)
+
+    def f(z):
+        a, b = z
+        if not (0.2 <= a <= 0.9 and 0.3 <= b <= 1.8):
+            return 1e9
+        c = curve(a, b)
+        ks = [abs(_k(c, i / 24)) for i in range(25)]
+        fall = sum(max(0.0, (p - q) / p) for p, q in zip(ks, ks[1:]))
+        return (3 * fall) ** 2 + (3 * _lr(ks[0], k_prev)) ** 2 + (b - 1) ** 2 * 0.05
+    best = min((f((a / 40, b / 20)), a / 40, b / 20) for a in range(8, 37) for b in range(6, 37))
+    z, _v = _simplex(f, [best[1], best[2]], [0.03, 0.05], 400)
+    c = curve(*z)
+    for k, q in ((1, c[1]), (2, c[2])):
+        P[(iB + k) % n].x, P[(iB + k) % n].y = int(round(q[0])), int(round(q[1]))
+    ks = [abs(_k(c, i / 8)) for i in range(9)]
+    return f"{name}: exit radius {', '.join(str(round(1 / k)) for k in ks[::2])} (lowest point to cut end)"

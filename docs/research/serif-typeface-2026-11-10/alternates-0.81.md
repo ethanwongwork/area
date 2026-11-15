@@ -81,6 +81,48 @@ The collision pass kerns g.ss02 before j, ĵ and ȷ by +57 (the turn off the ste
 hook); every other pair with g.ss02, either side and itself, stands at least 13 units clear
 (`img/081/gss02-neighbours.png`).
 
+## j and y: one tail family (round 3)
+
+j's and y's tails are rebuilt by g.ss02's rule (`loops.round_tail`, after the node rule in normalize): from where the
+straight edge ends (j's stem, y's thin diagonal) round the lowest point to the ball, each edge is two curves whose
+curvature only rises toward the ball and is equal across the lowest point, and the outside meets the ball at the
+ball's curvature. The ball (neck, top, left side), the depth, the stroke at the lowest point and the reach stay: the
+balls hang where the owner's edits put them (j 0.187, y 0.18 of the x-height under the baseline), inside the
+references' range (Georgia Pro, Serrif, Source Serif 4, Literata by `tools/tail_profile.py`: j 0.22-0.33, y
+0.18-0.31), lower than g.ss02's 0.030, as in those faces. What moved is the lowest point: to the nearest edge of the
+references' range of its share of the reach (j 0.589 to 0.673; references 0.673-0.993; y 0.714 to 0.681; references
+0.654-0.681), and the handles. The inside's lowest point stays where it was, or moves toward the outside's by steps
+of 4 when that gives a smoother inside, as long as the stroke keeps 0.80's thinnest or the references' least
+(0.87 hairlines), whichever is less (`loops.TAIL_THIN`): j's moved 15 units left, y's stayed.
+
+| | 0.80 | 0.81 |
+|---|---|---|
+| j, outside, stem to lowest point to ball (radius) | 363, 165, 203 at the lowest point, then 156 to 46 | 289 to 137 at the lowest point, then 134 to 56 |
+| j, ratio at the lowest point | 1.30 | 1.02 |
+| j, inside | 444 to 68, then 85, 103, 41 into the neck (a flat place) | 297 tightening to 63 at the lowest point, then 61 to 47 into the neck |
+| j, the stroke at its thinnest (across itself) | 44 (1.02 hairlines) | 38 (0.88; the references' least is Source Serif 4's 0.87) |
+| y, outside, diagonal to lowest point to ball | 98, 235, 49 at the lowest point; 48, 94, 53 to the ball (two flat places) | 160 to 143 at the lowest point; 141 to 50 at the ball |
+| y, inside | 109, 188, then 27 (a flat place) | 177 tightening to 27 |
+| y, the stroke at its thinnest (across itself) | 39 | 34 (vertically, `tools/tail_profile.py`: 1.11 then 1.18 hairlines) |
+| curvecheck faults | j 1, y 5 | 0, 0 |
+
+Followed: dotless j, ĵ, ǰ, ij, j with stroke, the f-j ligatures (fj, ffj), eng (n's stem on j's tail), ý ÿ ŷ ỳ and
+the other accented y's, y with stroke. ƴ (yhook) has its own tail drawing (none of y's points) and is unchanged. The
+collision pass runs on the new shapes; g.ss02 and U+0261 before j stay at +57.
+
+## The a's exit (round 3)
+
+The two-storey a's curled exit, and a.ss03's (the same part), ran radius 108, 129, 146, 155, 151, 135, 110, 81, 57
+from the lowest point to the cut end: a flat place. Its two handles are re-solved by the tail rule (directions kept:
+level at the lowest point, along the cut's own tangent): now 130, 135, 141, 143, 139, 127, 106, 81, 55, rising only
+by a few units before it tightens (under curvecheck's 10% tolerance) and 1.23 across the lowest point. The lowest
+point, the cut end and a's width do not move (`loops.a_exit`). ª follows; ⱥ follows.
+
+## U+0261 (round 3)
+
+The set carries its neighbours (ɠ U+0260, ɛ U+025B and 21 other IPA letters), so U+0261 is added as a composite of
+g.ss02 (`uni0261`), kerning as g.ss02.
+
 ## The single-storey a (ss03): four constructions, one chosen
 
 The references that have the letter (`tools/single_a.py`):
@@ -154,9 +196,8 @@ Every alternate is in the Light, the Regular and the Bold (the engine reads them
     the engine does not read the junction as a branch. 0.80's Light had the white sliver there instead.
   - (Round 1's `lslash.ss04` thinning at 600 and 700 went with the shorter hook.)
   - Every other new glyph is sound in the Light and Bold (no fallback).
-- j's and y's tails by curvecheck's measure (above); the two-storey a's exit (in a and a.ss03).
 - U+0251 (alpha-latin) is now a.ss03, as a composite (round 2). U+0261 is not in the character set; adding it as a
-  composite of g.ss02 is one line in `alternates.run`. The tabular zero has its slashed and dotted forms
+  composite of g.ss02 (round 3: added). The tabular zero has its slashed and dotted forms
   (zero.tf.zero, zero.tf.ss05); the superior and inferior zeros do not yet.
 - `evenness` (even.py) leaves g's new loop counter to its own construction (`even.OWN_RULE`): its top is the link,
   a straight of the stem's weight, so one smooth change of thickness round it is not the rule there.

@@ -478,14 +478,20 @@ def run(font):
             "ss06": [("seven", "seven.ss06"), ("seven.tf", "seven.tf.ss06"), ("z", "z.ss06")]
             + [(g.name[:-5], g.name) for g in font if g.name.endswith(".ss06") and g.name[0] == "z" and g.name != "z.ss06"]}
     features(font, subs)
-    # round 2: the IPA letters take the alternates' forms where the set has them (U+0251 is here; U+0261 is not)
+    # round 2: the IPA letters take the alternates' forms where the set has them. Round 3: U+0261 is added when
+    # the set carries its neighbours (ɠ U+0260 and ɛ U+025B are here), as g.ss02's alias
+    if not any(0x0261 in g.unicodes for g in font) and all(any(u in g.unicodes for g in font) for u in (0x0260, 0x025B)):
+        font.newGlyph("uni0261").unicodes = [0x0261]
+        order = font.lib.get("public.glyphOrder", [])
+        if "uni0261" not in order:
+            font.lib["public.glyphOrder"] = order + ["uni0261"]
     for cp, alt in ((0x0251, "a.ss03"), (0x0261, "g.ss02")):
         name = next((g.name for g in font if cp in g.unicodes), None)
         if name and alt in font:
             uni = list(font[name].unicodes)
             C.compose(font, name, [(alt, 0, 0)], font[alt].width)
             font[name].unicodes = uni
-            C.kern_like(font, name, *(("d", "a") if alt == "a.ss03" else ("q", "q")))
+            C.kern_like(font, name, *(("d", "a") if alt == "a.ss03" else ("g.ss02", "g.ss02")))
             rep_ipa.append(f"{name}: {alt}")
     for name in ["a.ss03"] + [n + ".ss03" for n in a_acc]:
         C.kern_like(font, name, "d", "a")

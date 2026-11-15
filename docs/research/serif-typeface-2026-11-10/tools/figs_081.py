@@ -13,6 +13,8 @@ BEFORE is a folder holding 0.80's build (r080.ufo, r080.ttf, vf080.ttf); the 0.8
   alternates-weights.png     the same lines at 300, 400 and 700 (the variable font)
   gss02-variants.png         g.ss02's tail: 0.81's first form and three drawn by the same rules (charset.G_TAIL_FORMS),
                              each outlined with combs over 0.80's (red), as built beside j y g, and in words
+  jy-before-after.png        j and y: 0.80 over 0.81 with combs, as built, in words, and beside g and g.ss02
+  a-exit-before-after.png    the a's exit (a and a.ss03), before (0.81 round 2) over after, with combs
 """
 import os
 import sys
@@ -236,6 +238,69 @@ def variants(out, forms=("081", "A", "B", "C")):
     return page(blocks, out)
 
 
+# ---------------------------------------------------------------------------------------- round 3: j, y, a's exit
+def jy_figure(before, out):
+    r0 = ufoLib2.Font.open(os.path.join(before, "r080.ufo"))
+    r1 = ufoLib2.Font.open(os.path.join(SERIF, "build", "AreaSerif-Regular.ufo"))
+    t0, t1 = TTFont(os.path.join(before, "r080.ttf")), TTFont(os.path.join(SERIF, "build", "AreaSerif-Regular.ttf"))
+    blocks = []
+    for n, yr in (("j", (-300, 40)), ("y", (-300, -40))):
+        b0, w0, *_x = K.report(n, K.glyph_points(r0, n), yr)
+        b1, w1, *_x = K.report(n, K.glyph_points(r1, n), yr)
+        box = (-200, -260, 620, 560)
+        blocks.append((f"{n}: 0.80 ({len(b0)} faults, worst ratio across a node {w0:.2f}) then 0.81 ({len(b1)} faults, "
+                       f"{w1:.2f}); red on 0.81 is 0.80's outline",
+                       [side(CB.draw_glyph(K.glyph_points(r0, n), r0[n].width, 0.8, f"{n} 0.80", yr, box=box),
+                             overlay(CB.draw_glyph(K.glyph_points(r1, n), r1[n].width, 0.8, f"{n} 0.81", yr, box=box),
+                                     K.glyph_points(r0, n), box, 0.8),
+                             ink(t0, n, {}, 0.5, "0.80 as built"), ink(t1, n, {}, 0.5, "0.81 as built"))]))
+    words = "jiggy joy yy gjy jay yoyo"
+    blocks.append(("0.80 then 0.81 at 64 px", [S.strip(t0, words, {}, 64, ss=2), S.strip(t1, words, {}, 64, ss=2)]))
+    blocks.append(("0.80 then 0.81 at 16 and 13 px (each pixel 3 times larger)",
+                   [pixels(t0, words, {}, 16), pixels(t1, words, {}, 16), pixels(t0, words, {}, 13), pixels(t1, words, {}, 13)]))
+    blocks.append(("j y g g.ss02 side by side, 0.81: one ball, one tail rule",
+                   [side(S.strip(t1, "jyg", {}, 220, ss=2, pad=0.1), S.strip(t1, "g", {"ss02": True}, 220, ss=2, pad=0.1))]))
+    return page(blocks, out)
+
+
+def overlay(panel, points_lists, box, s):
+    d = ImageDraw.Draw(panel)
+    x0, y0, x1, y1 = box
+    T = lambda q: ((q[0] - x0) * s, 40 + (y1 - q[1]) * s)        # noqa: E731  combs.draw_glyph's frame
+    for Pc in points_lists:
+        line = []
+        for sg in K.segments(Pc):
+            n = 1 if sg[0] == "L" else 30
+            line += [T(K.pt(sg, i / n)) for i in range(n)]
+        d.line(line + line[:1], fill=(220, 40, 40), width=2)
+    return panel
+
+
+def a_exit_figure(before, out):
+    r0 = ufoLib2.Font.open(os.path.join(before, "r081r2.ufo"))
+    r1 = ufoLib2.Font.open(os.path.join(SERIF, "build", "AreaSerif-Regular.ufo"))
+    t0, t1 = TTFont(os.path.join(before, "r081r2.ttf")), TTFont(os.path.join(SERIF, "build", "AreaSerif-Regular.ttf"))
+    box = (300, -60, 680, 300)
+    blocks = []
+    for n in ("a", "a.ss03"):
+        P0 = K.contour(K.glyph_points(r0, n), "longest")
+        P1 = K.contour(K.glyph_points(r1, n), "longest")
+        def radii(P):
+            xmax = max(p[0] for p in P)
+            for sg in K.segments(P):              # the exit: from the lowest point near the right to the cut end
+                if sg[0] == "C" and sg[1][0][1] < 0 and sg[1][3][1] > 20 and sg[1][3][0] > xmax - 40:
+                    return [round(abs(1 / K.curvature(sg, i / 8))) for i in range(9)]
+        blocks.append((f"{n}'s exit: radius from the lowest point to the cut end, before {radii(P0)}, after {radii(P1)}",
+                       [side(CB.draw_glyph(K.glyph_points(r0, n), r0[n].width, 1.6, f"{n} before", (-20, 140, 400, 2000), box=box),
+                             overlay(CB.draw_glyph(K.glyph_points(r1, n), r1[n].width, 1.6, f"{n} after (red: before)",
+                                                   (-20, 140, 400, 2000), box=box), K.glyph_points(r0, n), box, 1.6))]))
+    words = "a banana · data plan · gala"
+    blocks.append(("before then after, 64 / 16 / 13 px",
+                   [S.strip(t0, words, {}, 64, ss=2), S.strip(t1, words, {}, 64, ss=2), pixels(t0, words, {}, 16),
+                    pixels(t1, words, {}, 16), pixels(t0, words, {}, 13), pixels(t1, words, {}, 13)]))
+    return page(blocks, out)
+
+
 if __name__ == "__main__":
     before, outdir = sys.argv[1], sys.argv[2]
     os.makedirs(outdir, exist_ok=True)
@@ -246,3 +311,5 @@ if __name__ == "__main__":
     alternates(os.path.join(outdir, "alternates.png"))
     weights(os.path.join(outdir, "alternates-weights.png"))
     variants(os.path.join(outdir, "gss02-variants.png"))
+    jy_figure(before, os.path.join(outdir, "jy-before-after.png"))
+    a_exit_figure(before, os.path.join(outdir, "a-exit-before-after.png"))

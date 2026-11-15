@@ -117,6 +117,7 @@ def measure(tt, name):
     th_low = min((s for s in v if s[0] < 0), key=lambda s: s[0])
     th_low = th_low[1] - th_low[0]
     thin, thin_x = 9e9, None
+    fat, fat_x = 0, None
     ballw = width * 0.30
     for x in np.arange(reach_x + ballw, stem_l, 3):
         v = [s for s in spans(P, x, ax=0) if s[0] < -0.02 * xh]
@@ -124,12 +125,15 @@ def measure(tt, name):
             s = min(v, key=lambda s: s[0])
             if s[1] - s[0] < thin:
                 thin, thin_x = s[1] - s[0], x
+            if s[1] - s[0] > fat and s[1] < -0.05 * xh:
+                fat, fat_x = s[1] - s[0], x
     # ball: ink height at reach_x + 0.07 xh
     bv = [s for s in spans(P, reach_x + 0.07 * xh, ax=0) if s[1] < 0]
     ball_h = max(s[1] - s[0] for s in bv) if bv else 0
     ball_top = max(s[1] for s in bv) if bv else 0
     return dict(depth=-depth / xh, width=width / xh, low_x=(stem_r - low[0]) / width, k_spread=spread, k_turns=turns,
                 th_stem=th_stem / h, th_low=th_low / h, thin=thin / h, thin_at=(stem_r - thin_x) / width,
+                thick=fat / h, thick_at=((stem_r - fat_x) / width) if fat_x is not None else -1,
                 ball_h=ball_h / h, ball_top=-ball_top / xh)
 
 
