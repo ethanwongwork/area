@@ -1197,8 +1197,8 @@ def normalize(font):
     import charset as CHARSET                         # 0.47: the full character set, on the finished letters
     n_light, tab = CHARSET.run(font, letters)
     print(f"charset: lightened {n_light} more glyphs; tabular figures {tab}")
+    print("clean: flags' undersides", CLEAN.flag_unders(font))            # 0.80: n's and k's, one curve as i's
     print("charset: single-storey g", CHARSET.single_g(font))    # 0.77: g.ss02, from q and j
-    print("charset: the base's dollar", CHARSET.base_s(font))    # 0.78: ss03 (0.79: the dollar alone)
     print("balance: descender feet", BALANCE.desc_feet(font))
     print("clean: uncrossed", CLEAN.uncross(font))        # 0.65: every glyph, last of all
     # a base drawing whose path laps over itself, and (0.70) every letter with a stroke or bar drawn across it: merged

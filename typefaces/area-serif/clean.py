@@ -1442,3 +1442,36 @@ def even_s(font, names):
                         h1.x, h2.x = round(p0.x + run * S_SHARE), round(p3.x - run * S_SHARE)
                     done.append(f"{name} ({p0.x},{p0.y}) handles {a:.2f} / {b:.2f} > {S_SHARE}")
     return done
+
+
+# A flag's underside (0.80; owner, 2026-11-14: "the serifs might need a bit of extra examination ... each form").
+# tools/serif_axis.py measures every foot and flag at five weights. Tips and brackets came out one value per kind
+# at every weight but for two flags: under n's and k's the bracket was drawn as two curves (a short level run, then
+# a quarter turn 26 units smaller), where i j m p r u b d h l have one curve from the tip's corner to the stem. The
+# flag stood 74 tall at the stem against the others' 92, at every weight (68 and 86 at Light, 84 and 102 at Bold).
+# Every flag's underside is the one curve i has, its handles at i's shares of the box (58 of 65 along, 21 of 70 down).
+FLAG_UNDER = (58 / 65, 21 / 70)
+
+
+def flag_unders(font, apply=True):
+    """The flags whose underside is two curves: [(glyph, x, y)]. With apply, each becomes i's one curve."""
+    found = []
+    for g in font:
+        for c in g.contours:
+            P = c.points
+            n = len(P)
+            for i in range(n):
+                A, B, C, D = P[i], P[(i + 3) % n], P[(i + 6) % n], P[(i + 7) % n]
+                if not (A.type == "curve" and B.type == "curve" and C.type == "curve" and D.type == "line" and D.x == C.x
+                        and not P[(i + 1) % n].type and not P[(i + 4) % n].type and P[(i + 1) % n].y == A.y
+                        and 55 <= C.x - A.x <= 75 and 60 <= A.y - C.y <= 80 and D.y < C.y - 100):
+                    continue
+                found.append((g.name, A.x, A.y))
+                if apply:
+                    h1, h2 = P[(i + 1) % n], P[(i + 5) % n]
+                    h1.x, h1.y = round(A.x + FLAG_UNDER[0] * (C.x - A.x)), A.y
+                    h2.x, h2.y = C.x, round(A.y - FLAG_UNDER[1] * (A.y - C.y))
+                    drop = [P[(i + k) % n] for k in (2, 3, 4)]
+                    c.points = [p for p in P if not any(p is d for d in drop)]
+                break
+    return found

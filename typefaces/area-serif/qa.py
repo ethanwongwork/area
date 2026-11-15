@@ -66,6 +66,12 @@ def main():
         code, out = run("bold", [PY, "audit_bold.py"])
         print("\n".join(out.splitlines()[:2] + [l for l in out.splitlines() if l.startswith("  ")][:20]))
         results.append(("bold audit (each part on its target, letters and figures)", code == 0))
+        if os.path.exists(os.path.join(HERE, "build", "AreaSerif-Light.ufo")):     # 0.80: the Light master, the same audit
+            import bold as _B
+            code, out = run("light", [PY, "audit_bold.py", str(_B.LIGHT_STEM)])
+            print("\n".join(out.splitlines()[:2] + [l for l in out.splitlines() if l.startswith("  ")][:20]))
+            results.append(("light audit (each part on its target, letters and figures)", code == 0))
+            code, out = run("bold again (leaves build/weight/audit-bold.txt as the Bold's)", [PY, "audit_bold.py"])
         code, out = run("axis", [PY, "audit_bold.py", "--sweep"])
         print(out)
         results.append(("weight axis (the same audit every 25 units)", code == 0))

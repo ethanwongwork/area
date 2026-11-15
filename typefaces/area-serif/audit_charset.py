@@ -387,7 +387,7 @@ def audit(font):
             bad.append(f"{name}: no rounded end")
 
     # letter signs: the letter's own points, moved as one, are the sign's points (but where the stroke covers them)
-    for sign, letter in (("dollar", "S"), ("cent", "c"), ("yen", "Y")):
+    for sign, letter in (("cent", "c"), ("yen", "Y")):
         S, G = on_points(font, letter), set(on_points(font, sign))
         best = 0
         for dx in range(-80, 81):
@@ -520,9 +520,16 @@ def audit_079(font, bad, notes, bold=None):
             bad.append(f"g.ss02: its tail ends {share:.2f} of the bowl's width left of the stem, not {C.G_TAIL_END}")
     # an alternate is a different form (owner): the base's S and s had the default's form (barb ends, the same
     # spine; S 5 narrower of 489, s 55 of 379) and are not in the font; the dollar, with ball ends, is
-    for name in ("S.ss03", "s.ss03"):
+    for name in ("S.ss03", "s.ss03", "dollar.ss03"):
         if name in font:
-            bad.append(f"{name}: an alternate with the default's form")
+            bad.append(f"{name}: there is one S, one s and one dollar (0.79, 0.80)")
+    # 0.80: the one dollar ends in balls (the owner's pick), so it is not the S, whose ends are barbs
+    S_, D_ = on_points(font, "S"), set(on_points(font, "dollar"))
+    if max(sum(1 for (x, y) in S_ if (x + dx, y) in D_) / len(S_) for dx in range(-80, 81)) > 0.6:
+        bad.append("dollar: it is the S and a stroke (barb ends), not the ball-end dollar")
+    # 0.80: every flag's underside is one curve (n's and k's were two, 18 units shorter at the stem)
+    for name, x, y in CLEAN.flag_unders(font, apply=False):
+        bad.append(f"{name}: the flag at {x},{y} has a two-curve underside, not i's one curve")
     # 5's bowl
     c5 = font["five"].contours[0]
     lo, in_lo, right, in_right, left, foot, top = CLEAN.five_bowl_nodes(c5)

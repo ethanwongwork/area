@@ -198,3 +198,16 @@ font's version and both pages' build.
 - **A full build is about 4 minutes and `qa.py --skip-build` about 6**: run them in the background with a log.
   Try a rule on the built UFO first (load it, apply the one function, save to `build/look/`, draw it) before
   paying for a build.
+
+## Notes from 0.80
+
+- The owner's words on a part that is "not smooth, round, and looks off" meant the construction, not a value: redraw
+  the part from measured places with true quarter turns before tuning numbers.
+- "Choose one": when the owner prefers an alternate, it replaces the default and the set goes; do not keep both.
+- A request to "examine" a class of parts gets a census along the whole axis with a failing check
+  (`tools/serif_axis.py`), a figure at every weight, and a plain list of what was left as decided earlier.
+- A new master's targets are measured on the references' own masters (`tools/light_refs.py`: six faces' Light over
+  Regular), never extrapolated from the Bold's ratios: thin parts behave differently on each side of the Regular.
+- Alternates are shown as candidates first (`tools/alt_candidates.py`, `alternates-2026-11-14.md`); a candidate goes
+  into the font only when picked, with its Light, Bold, accents, kerning classes and a check.
+- Before/after figures at page scale can hide a real difference: crop and enlarge before judging two builds equal.

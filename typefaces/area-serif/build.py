@@ -57,12 +57,20 @@ def variable(ufo):
     bold_ufo.save(os.path.join(OUT, "AreaSerif-Bold.ufo"), overwrite=True)
     with open(os.path.join(OUT, "bold-notes.txt"), "w") as f:
         f.write("\n".join(notes + [f"{n}: {r['fallback']}" for n, r in sorted(reports.items()) if r.get("fallback")]))
-    for u in (ufo, bold_ufo):
+    # 0.80: the Light master, the same engine run below the Regular (bold.LIGHT_STEM); it has no mid master
+    light_ufo, lreports, lnotes = BOLD.bold_font(ufo, BOLD.LIGHT_STEM)
+    if "mid" in light_ufo.layers:
+        del light_ufo.layers["mid"]
+    light_ufo.save(os.path.join(OUT, "AreaSerif-Light.ufo"), overwrite=True)
+    with open(os.path.join(OUT, "light-notes.txt"), "w") as f:
+        f.write("\n".join(lnotes + [f"{n}: {r['fallback']}" for n, r in sorted(lreports.items()) if r.get("fallback")]))
+    lfb = [n for n, r in lreports.items() if r.get("fallback")]
+    for u in (ufo, bold_ufo, light_ufo):
         u.lib["public.truetype.overlap"] = True
-    vf = BOLD.variable(ufo, bold_ufo, stem)
+    vf = BOLD.variable(ufo, bold_ufo, stem, light_ufo)
     from fontTools.otlLib.builder import buildStatTable
     buildStatTable(vf, [dict(tag="wght", name="Weight", values=[          # each named weight, Regular linked to Bold
-        dict(value=400, name="Regular", flags=0x2, linkedValue=700), dict(value=500, name="Medium"),
+        dict(value=300, name="Light"), dict(value=400, name="Regular", flags=0x2, linkedValue=700), dict(value=500, name="Medium"),
         dict(value=600, name="SemiBold"), dict(value=700, name="Bold")])], macNames=False)
     unhinted(vf)
     head = vf["head"]
@@ -73,7 +81,8 @@ def variable(ufo):
     vf.flavor = "woff2"
     vf.save(os.path.join(OUT, "AreaSerif[wght].woff2"))
     fb = [n for n, r in reports.items() if r.get("fallback")]
-    print("built", path, f"(Bold stem {stem}; {len(fb)} glyphs on a fallback: {', '.join(sorted(fb))})")
+    print("built", path, f"(Bold stem {stem}; {len(fb)} glyphs on a fallback: {', '.join(sorted(fb))}; Light stem {BOLD.LIGHT_STEM}; "
+          f"{len(lfb)} on a fallback: {', '.join(sorted(lfb))})")
 
 
 if __name__ == "__main__":

@@ -53,10 +53,30 @@ MATCH = 1.0                                # a scan line's ink edge within this 
 RUN = 10                                   # and for at least this many units, to be a stroke or a counter
 
 
+# 0.80, the Light master: the same engine run below the Regular (f under 0). Thick parts follow the stem as they do
+# towards the Bold. Thin parts do not: a Bold's hairline gains little (contrast rises), and a Light's gives up
+# more of what the stem does (contrast nearly holds). tools/light_refs.py, Light over Regular on six faces (Georgia
+# Pro, Serrif, Source Serif 4, Literata, Newsreader, Merriweather):
+#   n's stem        0.629 0.792 0.576 0.763 0.674 0.766   mean 0.700   Area 78 > 55
+#   o's hairline    0.947 0.902 0.643 0.846 0.666 0.912   mean 0.819
+#   H's bar         0.909 0.886 0.664 0.810 0.680 0.854   mean 0.800
+#   a serif's tip   0.919 0.856 0.714 0.778 0.751 0.870   mean 0.815
+#   i's dot         0.656 0.878 0.670 0.815 0.796 0.868   mean 0.781
+#   n's advance     0.970 0.981 0.998 0.973 0.972 0.985   mean 0.980
+#   a foot's reach  0.986 1.040 1.133 1.000 1.000 1.054   mean 1.036
+# At stem 55 the thick parts' share of the Bold's step is f = -0.371. The share that brings each thin part to its
+# ratio: the hairline -0.78, other curved thins -0.75, upright thins -0.57, the bar -0.61, level strokes -0.61, the
+# tip -0.50: mean -0.64, which is LIGHT_THIN times f. The dot wants -0.43 and the reach and the advance come out at
+# 1.02 and 0.98 on f itself, so those stay on f.
+LIGHT_STEM = 55
+LIGHT_THIN = 1.72
+
+
 def vector(stem=STEM, **over):
     f = (stem - REG_STEM) / (STEM_REF - REG_STEM)
-    v = dict(stem=stem, f=f, tip=1 + (TIP - 1) * f, foot=1 - (1 - FOOT) * f, bearing=1 - (1 - BEARING) * f,
-             dot=1 + (DOT - 1) * f, neck=1 + (NECK - 1) * f)
+    ft = f if f >= 0 else f * LIGHT_THIN
+    v = dict(stem=stem, f=f, ft=ft, tip=1 + (TIP - 1) * ft, foot=1 - (1 - FOOT) * f, bearing=1 - (1 - BEARING) * f,
+             dot=1 + (DOT - 1) * f, neck=1 + (NECK - 1) * ft)
     if "tip" in over:
         v["tip"] = over["tip"] / 30
     return v
@@ -316,16 +336,16 @@ def x_target(t, straight, v):
     if t >= 56 and not straight:
         return t + SUB_ROUND[v.get("sub", "loop")] * THICK["round"] * v["f"]
     if t >= 35:
-        return t * (1 + (THIN_UPRIGHT - 1) * v["f"])
+        return t * (1 + (THIN_UPRIGHT - 1) * v["ft"])
     return None
 
 
 def y_target(t, straight, v):
-    f = v["f"]
+    f = v["ft"]
     if t <= 36:
         return t * v["tip"]
     if t >= 64:                                  # a thick level stroke: only a curved one (the top of g's loop,
-        return None if straight or t > 130 else t * (1 + (LEVEL_THICK - 1) * f)   # Q's tail); bold() lets through
+        return None if straight or t > 130 else t * (1 + (LEVEL_THICK - 1) * v["f"])   # Q's tail); bold() lets through
         #                                          only those between two facing extremes
     if v.get("sub") == "sign" and straight and 50 <= t <= 55:
         return t * (1 + (SIGN - 1) * f)
@@ -357,7 +377,7 @@ def diag_target(t, v):
         return t * (1 + (SIGN - 1) * f)
     if t >= 64:
         return t + (DIAG["thick_lc"] if t < 80 else DIAG["thick_cap"]) * f
-    return t * (1 + ((DIAG["thin_lc"] if t < 44 else DIAG["thin_cap"]) - 1) * f)
+    return t * (1 + ((DIAG["thin_lc"] if t < 44 else DIAG["thin_cap"]) - 1) * v["ft"])
 
 
 def diagonals(contours, polys_, tmax=130):
@@ -773,7 +793,7 @@ def spine(contours, up, low, v, t=None):
     if d[0] * nrm[0] + d[1] * nrm[1] < 0:
         nrm = (-nrm[0], -nrm[1])
     across = d[0] * nrm[0] + d[1] * nrm[1]
-    gain = SPINE * v["f"] if across >= 64 else across * (DIAG["thin_lc"] - 1) * v["f"]
+    gain = SPINE * v["f"] if across >= 64 else across * (DIAG["thin_lc"] - 1) * v["ft"]
     cons = {"x": [], "y": []}
     for ax, key in ((0, "x"), (1, "y")):
         a, b = sorted((low[ax], up[ax]))
@@ -1035,6 +1055,8 @@ def no_inflection(P, N):
 
 def _interp(m, x):
     ks = sorted(m)
+    if not ks:
+        return x
     if x <= ks[0]:
         return m[ks[0]] + (x - ks[0])
     if x >= ks[-1]:
@@ -1136,7 +1158,7 @@ def mid_master(reg, new, v, pinned=None):
 HINTS = {
     # e: the bar keeps its upper edge (the eye gives up only the hairline's gain: Georgia Pro 0.98, Serrif 0.90 of
     # its height) and thickens downward, 41 to 49 (1.02, 1.36)
-    "e": {"y": [(279, 320, lambda v: 41 + 8 * v["f"], "bar")], "ypin": [320]},
+    "e": {"y": [(279, 320, lambda v: 41 + 8 * v["ft"], "bar")], "ypin": [320]},
     "s": {"sub": "turn"},
 }
 _UNUSED = {}                        # glyph: {"x": [(a, b, target or None, kind)], "y": [...], "ypin": [y]}  (see families)
@@ -1314,7 +1336,7 @@ def bold(contours, width, v, name="", hints=None):
     cy_, hy, sy = _cons(yk, ys, yg, extra_y, v, y_target, 1, ky, sp[1])
     sh = [] if plain else shallow(body, pl)
     for lo_e, up_e, t in sh:                                   # each end of each edge: its upright distance to the
-        want = t * (1 + (LEVEL_THICK - 1) * v["f"]) if t >= 64 else t * (1 + (DIAG["thin_lc"] - 1) * v["f"])
+        want = t * (1 + (LEVEL_THICK - 1) * v["f"]) if t >= 64 else t * (1 + (DIAG["thin_lc"] - 1) * v["ft"])
         for edge, other, sign in ((up_e, lo_e, 1.0), (lo_e, up_e, -1.0)):   # other edge grows by the stroke's gain
             (x0, y0), (x1, y1) = other
             sl = (y1 - y0) / (x1 - x0)
@@ -1341,7 +1363,7 @@ def bold(contours, width, v, name="", hints=None):
     for lo_e, up_e, t in sh:
         (x0, y0), (x1, y1) = [(X[p_[0]], Y[p_[1]]) for p_ in lo_e]
         sl = (y1 - y0) / (x1 - x0)
-        want = t * (1 + (LEVEL_THICK - 1) * v["f"]) if t >= 64 else t * (1 + (DIAG["thin_lc"] - 1) * v["f"])
+        want = t * (1 + (LEVEL_THICK - 1) * v["f"]) if t >= 64 else t * (1 + (DIAG["thin_lc"] - 1) * v["ft"])
         for q in up_e:                                         # exact, on whole units
             if q[1] not in pins:
                 Y[q[1]] = round(y0 + (X[q[0]] - x0) * sl + want * math.sqrt(1 + sl * sl))
@@ -1815,11 +1837,23 @@ def stretch(contours, width, kind, v, below=False):
     # 0.79: the swell goes in steps of at most 1.5 units. Taken in one step, the capital breves' tips folded over
     # (their box is small for their stroke): mean stroke 55.8 for 64.2, thinner than the Regular at the tips, and
     # lighter at 700 than at 650. In steps they reach 60.3 with nothing under the Regular's thinnest cut.
+    # 0.80, towards the Light: taking ink off evenly thins a tapered end by more than its share (a breve's ends
+    # 32 > 20 at 300 where a serif's tip goes 30 > 24). A mark stops thinning when its thinnest cut would pass
+    # under the Regular's thinnest cut times the tip's ratio.
+    floor = None
+    if v["f"] < 0:
+        th0 = thinnest(_flat8(contours))
+        floor = th0 * v["tip"] if th0 is not None else None
     for _ in range(60):
         d = (want - mean_stroke(cur)) / 2
         if abs(d) < 0.05:
             break
-        cur = fit([swell(P, max(-1.5, min(1.5, d))) for P in cur])
+        nxt = fit([swell(P, max(-1.5, min(1.5, d))) for P in cur])
+        if floor is not None:
+            th = thinnest(_flat8(nxt))
+            if th is not None and th < floor:
+                break
+        cur = nxt
     out = [straighten(no_turn_back(R, [(round(x), round(y), t, s_) for x, y, t, s_ in P]), R) for P, R in zip(cur, contours)]
     lsb, rsb = min(xs), width - max(xs)
     left, right = min(q[0] for P in out for q in P if q[2]), max(q[0] for P in out for q in P if q[2])
@@ -2113,7 +2147,8 @@ def bold_font(reg, stem=STEM, **over):
             qm, jm = at_mid("q"), at_mid("j")
             mg = layer.newGlyph("g.ss02")
             mg.width = round(reg["q"].width + (font["q"].width - reg["q"].width) * tm)
-            for P in CHARSET.single_g_points(max(qm, key=len), min(qm, key=len), max(jm, key=len)):
+            for P in CHARSET.single_g_points(max(qm, key=len), min(qm, key=len), max(jm, key=len),
+                                                    CHARSET.o_hair(at_mid("o"))):
                 c = Contour()
                 c.points = [Point(x, y, t, smooth=s_) for x, y, t, s_ in P]
                 mg.contours.append(c)
@@ -2154,24 +2189,30 @@ def bold_font(reg, stem=STEM, **over):
 WEIGHTS = (400, 450, 500, 550, 600, 650, 700)
 
 
+LIGHT_WEIGHTS = (300, 350)
+
+
 def axis_map(stem=STEM, weights=WEIGHTS):
     """Weight to stem, an equal ratio a step (the research report: optically even steps lie on a geometric curve;
-    the axis's design values are the lowercase stem, as in Libre Baskerville's own source)."""
+    the axis's design values are the lowercase stem, as in Libre Baskerville's own source). Under 400 the curve
+    runs to the Light's stem at 300 the same way."""
     q = stem / REG_STEM
-    return [(w, REG_STEM * q ** ((w - 400) / 300)) for w in weights]
+    return [(w, REG_STEM * q ** ((w - 400) / 300) if w >= 400 else REG_STEM * (LIGHT_STEM / REG_STEM) ** ((400 - w) / 100))
+            for w in weights]
 
 
-def variable(reg, bold_ufo, stem=STEM):
-    """The two masters as one variable font. Fails on any master ufo2ft cannot interpolate."""
+def variable(reg, bold_ufo, stem=STEM, light_ufo=None):
+    """The masters as one variable font (0.80: with the Light, 300 to 700). Fails on any master ufo2ft cannot
+    interpolate."""
     import logging
     import ufo2ft
     from fontTools.designspaceLib import AxisDescriptor, DesignSpaceDocument, InstanceDescriptor, SourceDescriptor
     ds = DesignSpaceDocument()
     ax = AxisDescriptor()
-    ax.name, ax.tag, ax.minimum, ax.default, ax.maximum = "Weight", "wght", 400, 400, 700
-    ax.map = axis_map(stem)
+    ax.name, ax.tag, ax.minimum, ax.default, ax.maximum = "Weight", "wght", 300 if light_ufo else 400, 400, 700
+    ax.map = (axis_map(stem, LIGHT_WEIGHTS) if light_ufo else []) + axis_map(stem)
     ds.addAxis(ax)
-    for ufo, loc, style in ((reg, REG_STEM, "Regular"), (bold_ufo, stem, "Bold")):
+    for ufo, loc, style in ((reg, REG_STEM, "Regular"), (bold_ufo, stem, "Bold")) + (((light_ufo, LIGHT_STEM, "Light"),) if light_ufo else ()):
         src = SourceDescriptor()
         src.font, src.location, src.familyName, src.styleName = ufo, {"Weight": loc}, reg.info.familyName, style
         ds.addSource(src)
@@ -2180,10 +2221,10 @@ def variable(reg, bold_ufo, stem=STEM):
         src.font, src.layerName, src.familyName, src.styleName = bold_ufo, "mid", reg.info.familyName, "Mid"
         src.location = {"Weight": dict(axis_map(stem))[MID_WEIGHT]}
         ds.addSource(src)
-    for w, style in ((400, "Regular"), (500, "Medium"), (600, "SemiBold"), (700, "Bold")):
+    for w, style in (((300, "Light"),) if light_ufo else ()) + ((400, "Regular"), (500, "Medium"), (600, "SemiBold"), (700, "Bold")):
         inst = InstanceDescriptor()
         inst.familyName, inst.styleName = reg.info.familyName, style
-        inst.location = {"Weight": dict(axis_map(stem))[w]}
+        inst.location = {"Weight": dict(axis_map(stem, LIGHT_WEIGHTS + WEIGHTS))[w]}
         ds.addInstance(inst)
 
     class _Catch(logging.Handler):

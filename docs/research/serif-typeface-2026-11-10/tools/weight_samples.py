@@ -1,11 +1,11 @@
-"""Samples of the weight axis for the owner (0.79): the variable font instanced at 400, 500, 600 and 700, drawn from
+"""Samples of the weight axis for the owner (0.79): the variable font instanced at 300, 400, 500, 600 and 700, drawn from
 its outlines with HarfBuzz layout, as figures. Area Serif only: nothing licensed is drawn, so the figures may be kept.
 
     cd typefaces/area-serif && .venv/bin/python ../../docs/research/serif-typeface-2026-11-10/tools/weight_samples.py OUTDIR
 
   weights-display.png   a headline and the alphabets at 64 px, each weight
   weights-text.png      a paragraph at 16, 14 and 13 px, each weight (2x)
-  weights-alternates.png  ss01, ss02, ss03 and the f ligatures on and off, each weight
+  weights-alternates.png  ss01, ss02 and the f ligatures on and off, each weight
   weights-signs.png     the plain signs with the letters, each weight
 """
 import os
@@ -19,8 +19,8 @@ from fontTools.varLib.instancer import instantiateVariableFont  # noqa: E402
 from PIL import Image, ImageDraw, ImageFont  # noqa: E402
 
 SERIF = os.path.abspath(os.path.join(HERE, "..", "..", "..", "..", "typefaces", "area-serif"))
-WEIGHTS = (400, 500, 600, 700)
-NAMES = {400: "Regular 400", 500: "Medium 500", 600: "SemiBold 600", 700: "Bold 700"}
+WEIGHTS = (300, 400, 500, 600, 700)
+NAMES = {300: "Light 300", 400: "Regular 400", 500: "Medium 500", 600: "SemiBold 600", 700: "Bold 700"}
 PARA = ("The quick brown fox jumps over the lazy dog. Office affluent fjord shelfful: five figures, 1234567890, "
         "re-read pages 12–18 — a/b, x | y, file_name (2 − 1) + 3 = 4. Ångström, façade, Việt Nam.")
 
@@ -76,8 +76,8 @@ def main(outdir):
     out.append(page(blocks, os.path.join(outdir, "weights-text.png")))
     blocks = []
     rows = (("Default", "Signing 1 pig for $51 · office fjord affluent shelfful", {}),
-            ("ss01 footless 1 · ss02 single-storey g · ss03 ball-end dollar", "Signing 1 pig for $51 · office fjord affluent shelfful",
-             {"ss01": True, "ss02": True, "ss03": True}),
+            ("ss01 footless 1 · ss02 single-storey g", "Signing 1 pig for $51 · office fjord affluent shelfful",
+             {"ss01": True, "ss02": True}),
             ("Ligatures off", "Signing 1 pig for $51 · office fjord affluent shelfful", {"liga": False}))
     for w in WEIGHTS:
         for label, text, feats in rows:

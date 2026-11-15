@@ -189,7 +189,7 @@ masters match point for point and every weight between them is sound. Read `bold
 - **What cannot be read is named** in `bold.HINTS` with its reason (e's bar; s's turns). Keep it short.
 - **A glyph that is not a sound second master falls back** (upright parts only, then the Regular's outline) and
   says so in `build/bold-notes.txt`. A fallback is a debt: list it in the build's changes.
-- **Known debts** (0.79): Ⱥ ₡ † ⌘ on a fallback; `audit_axis.py` fails (inflection 18 glyphs, crossing 18, thin 30);
+- **Known debts** (0.80): Ⱥ ₡ † ⌘ on a fallback in the Bold, ₡ and the diagonal arrows in the Light; `audit_axis.py` fails (Bold side inflection 18 glyphs, crossing 18, thin 30; Light side 5, 5, 18);
   wedge accents' thin ends 1 to 5 under the Regular's; Bold kerning not fitted afresh; no part audit for marks,
   signs and composites; the Bold's plain signs are light.
 
@@ -239,3 +239,16 @@ Say this in every report until it is closed:
 - **A check that reads a four-point bar must still read it after its corners are rounded** (`charset._level_cut`
   rebuilds the corners from the four straight edges). When a rule changes point structure, re-run the checks that
   read that structure and make sure none passes by skipping.
+
+## The Light, serifs along the axis, and a part of its own (0.80)
+
+- **A Light is the Bold's engine run backwards, with one difference.** `bold.vector(55)` gives f under 0. Thick parts
+  use f; thin parts use `v["ft"]` (f times `LIGHT_THIN`), because contrast holds towards the Light and rises towards
+  the Bold. A new rule in `bold.py` that scales a thin part must use `ft`, a thick part `f`.
+- **Check serifs as a census, not letter by letter.** `tools/serif_axis.py` measures every foot and flag at five
+  weights and fails on any serif off its kind's median. It found n's and k's two-curve flag bracket, which no
+  per-letter audit had. Run it after any change to serifs, flags or the engine.
+- **When a spliced part looks wrong, stop moving its points and give it its own construction.** g.ss02's tail was
+  j's hook with points slid (0.79) and read flat; as four quarter turns between measured places (0.80) it is round.
+  Quarter turns take their handles at 0.55 of their side.
+- **One sign, one form.** The dollar is the ball-end drawing; do not rebuild it from S and a stroke.

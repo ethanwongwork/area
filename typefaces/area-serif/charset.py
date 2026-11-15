@@ -824,6 +824,25 @@ def features(font):
 # Bold's (bold.bold_font), so its bowl is the Bold q's and the two masters match point for point.
 G_TAIL_END = 0.959
 G_TAIL_LOW = 0.518
+# 0.80 (owner, 2026-11-14, on 0.79's: "needs adjustments to the tail, its not very smooth, round, and looks off").
+# What was wrong: the tail was still j's hook with its points slid sideways. Its inside ran level for 70 units and
+# then turned into the ball in 41 units of height, and the ball sat as low as j's (top 0.187 of the x-height under
+# the baseline; the references' 0.121, 0.158, 0.134), so the tail read as a flat tray with a knob on its end.
+# The tail is its own part now, four quarter turns between five fixed places: the stem's two edges, the lowest
+# point (outside at the descender's depth, inside one tail thickness above it), and the ball. Every quarter's
+# handles are G_ROUND of their side (0.55, a quarter of an ellipse), so no stretch is level or straight.
+#   the ball's top under the baseline, of the x-height: 0.121, 0.158, 0.134                 mean 0.138
+#   the tail's thickness at its lowest point, of the round letters' hairline: 0.97, 1.00, 0.92   mean 0.963
+# The ball itself is still j's, moved whole.
+G_BALL_TOP = 0.138
+G_TAIL_THICK = 0.963
+G_ROUND = 0.55
+# Along the weight axis (Source Serif 4 and Literata at 700, stems 159): the ball's top rises to 0.120, 0.120 of
+# the x-height under the baseline and the lowest point moves to 0.565, 0.554 of the bowl's width (mean 0.560), so
+# the inside of a heavier tail stays a round quarter. Both go with the stem, in a line from the Regular's values.
+G_BALL_TOP_BOLD = 0.120
+G_TAIL_LOW_BOLD = 0.560
+G_STEMS = (78, 140)                # the Regular's and the Bold's lowercase stems, where the two pairs of values hold
 
 
 def _pts(c):
@@ -837,7 +856,13 @@ def _edge_top(P):
     return max(ups, key=lambda i: P[i][1] - P[i - 1][1])
 
 
-def single_g_points(q_outer, q_counter, j_body):
+def o_hair(contours):
+    """The round letters' hairline: o's thickness at its lowest point, from its point lists."""
+    lows = sorted(min(p[1] for p in c) for c in contours)
+    return lows[1] - lows[0]
+
+
+def single_g_points(q_outer, q_counter, j_body, hair):
     """The single-storey g's two contours from q's and j's point lists [(x, y, type, smooth)]."""
     # q: the stem's right edge is the upright line that reaches the x-height; the crotch is where the bowl's lower
     # stroke meets the stem's left edge
@@ -862,43 +887,45 @@ def single_g_points(q_outer, q_counter, j_body):
     for p in tail:
         p[0] += dx
     on = [i for i, p in enumerate(tail) if p[2]]
-    low_in = min((i for i in on if tail[i][0] < stem_l), key=lambda i: (abs(tail[i][1] - min(tail[k][1] for k in on[:len(on) // 2 + 1])), i))
-    low_out = min(on, key=lambda i: tail[i][1])
-    left = min(on, key=lambda i: tail[i][0])
+    assert len(on) == 7, "j's tail is not stem, inner low point, neck, top, left, outer low point, stem"
+    start, neck, left, end = tail[0], on[2], on[4], tail[-1]
+    xh = q_outer[top][1]
     bowl_w = stem_r - bowl_l
-    d_ball = tail[left][0] - (stem_r - G_TAIL_END * bowl_w)
-    d_low = tail[low_out][0] - (stem_r - G_TAIL_LOW * bowl_w)
-    old = [tuple(p[:2]) for p in tail]
-    for i in on:
-        if low_in < i < low_out:
-            tail[i][0] = round(tail[i][0] - d_ball)                # the ball, as one piece
-        elif i in (low_in, low_out):
-            tail[i][0] = round(tail[i][0] - d_low)                 # the two lowest points
-    for a, b2 in zip(on, on[1:]):                                  # handles keep their share of their curve
-        if b2 - a != 3:
-            continue
-        (ox0, _), (ox1, _) = old[a], old[b2]
-        for h, anchor in ((a + 1, a), (b2 - 1, b2)):
-            if ox1 != ox0 and low_in <= a and b2 <= low_out and not (low_in < a and b2 < low_out):
-                s = (tail[b2][0] - tail[a][0]) / (ox1 - ox0)
-                tail[h][0] = round(tail[anchor][0] + (old[h][0] - old[anchor][0]) * s)
-            else:
-                tail[h][0] = round(tail[anchor][0] + (old[h][0] - old[anchor][0]))
-    # a curve stretched on one side of a smooth node and not on the other: the stretched handle turns onto the
-    # other's line, its length kept
-    for k, i in enumerate(on):
-        if not tail[i][3] or i in (low_in, low_out) or i == 0 or i == len(tail) - 1:
-            continue
-        hin, hout = tail[i - 1], tail[i + 1]
-        if hin[2] or hout[2]:
-            continue
-        moved = hin if i - 1 < low_out and on[k - 1] in (low_in, low_out) else hout if on[k + 1] in (low_in, low_out) else None
-        if moved is None:
-            continue
-        other = hout if moved is hin else hin
-        vx, vy = tail[i][0] - other[0], tail[i][1] - other[1]
-        ln, L = math.hypot(vx, vy), math.hypot(moved[0] - tail[i][0], moved[1] - tail[i][1])
-        moved[0], moved[1] = round(tail[i][0] + vx / ln * L), round(tail[i][1] + vy / ln * L)
+    depth = tail[on[5]][1]
+    # the ball, whole: its left side to the tail's end, its top to its height under the baseline
+    ball = [list(p) for p in tail[neck:left + 1]]
+    tw = ((stem_r - stem_l) - G_STEMS[0]) / (G_STEMS[1] - G_STEMS[0])
+    ball_top = G_BALL_TOP + tw * (G_BALL_TOP_BOLD - G_BALL_TOP)
+    tail_low = G_TAIL_LOW + tw * (G_TAIL_LOW_BOLD - G_TAIL_LOW)
+    bx = round(stem_r - G_TAIL_END * bowl_w) - tail[left][0]
+    by = round(-ball_top * xh) - tail[on[3]][1]
+    for p in ball:
+        p[0] += bx
+        p[1] += by
+    nk, lf = ball[0], ball[-1]
+    low_x = round(stem_r - tail_low * bowl_w)
+    in_y = depth + round(G_TAIL_THICK * hair)
+    K = G_ROUND
+
+    def arc(p0, p1, upright_first):
+        """Two handles of a quarter turn from p0 to p1, each K of its side of the box."""
+        if upright_first:
+            return [(p0[0], round(p0[1] + K * (p1[1] - p0[1])), None, False),
+                    (round(p1[0] + K * (p0[0] - p1[0])), p1[1], None, False)]
+        return [(round(p0[0] + K * (p1[0] - p0[0])), p0[1], None, False),
+                (p1[0], round(p1[1] + K * (p0[1] - p1[1])), None, False)]
+
+    # into the neck along the ball's own direction there, so the join is smooth
+    after = ball[1]
+    vx, vy = nk[0] - after[0], nk[1] - after[1]
+    ln = math.hypot(vx, vy)
+    reach = K * (nk[1] - in_y)
+    in_low = (low_x, in_y, "curve", True)
+    out_low = (low_x, depth, "curve", True)
+    tail = ([tuple(start)] + arc(start, in_low, True) + [in_low,
+            (round(low_x + K * (nk[0] - low_x)), in_y, None, False),
+            (round(nk[0] + vx / ln * reach), round(nk[1] + vy / ln * reach), None, False)]
+            + [tuple(p) for p in ball] + arc(lf, out_low, True) + [out_low] + arc(out_low, end, False) + [tuple(end)])
     outer = [tuple(p) for p in tail[1:]] + upper + [tuple(tail[0])]
     # contour order: ... tail's last point (the right edge's foot, a curve's end), q's stem top (line), q's bowl,
     # the crotch, then the tail's first point (line, down the left edge)
@@ -915,7 +942,8 @@ def single_g(font, layer=None):
     j_body = max(j.contours, key=lambda c: len(c.points))       # j without its dot
     g = src["g.ss02"] if "g.ss02" in src else src.newGlyph("g.ss02")
     g.clearContours()
-    for pts in single_g_points(_pts(q_outer), _pts(q_counter), _pts(j_body)):
+    hair = o_hair([_pts(c) for c in src["o"].contours])
+    for pts in single_g_points(_pts(q_outer), _pts(q_counter), _pts(j_body), hair):
         c = Contour()
         c.points = [Point(x, y, t, smooth=s) for x, y, t, s in pts]
         g.contours.append(c)
@@ -946,36 +974,6 @@ def spine_across(path):
             d += t
         best = min(best, d)
     return best
-
-
-def base_s(font):
-    """dollar.ss03 (0.78; owner, 2026-11-14: "i like the S, s and $ of libre baskerville"). 0.79: the S and s of
-    this set are gone (they had the default's form, see derive.ALTS); the dollar stays."""
-    done = []
-    # the dollar: the base's own drawing (its ends are balls, not its S's barbs), so not the S and a stroke as the
-    # default is. Its stroke takes the capital hairline, as the default's: the two upright edges move in, each by
-    # half the excess, wherever they show (the stubs above and below, the sides of the two counters).
-    g = font["dollar.ss03"]
-    p0 = gp(font, "dollar.ss03")
-    b = bounds(p0)
-    st = scan_h(p0, b[3] - 10)[0]
-    over = (st[1] - st[0]) - STROKE_UP
-    for c in g.contours:
-        for q in c.points:
-            if abs(q.x - st[0]) < 1.5:
-                q.x = round(st[0] + over / 2)
-            elif abs(q.x - st[1]) < 1.5:
-                q.x = round(st[1] - over / 2)
-    db = bounds(gp(font, "dollar"))
-    put(font, "dollar.ss03", gp(font, "dollar.ss03"), 0, lsb=db[0], rsb=font["dollar"].width - db[2])
-    font["dollar.ss03"].unicodes = []
-    done.append(("dollar.ss03 stroke", round(st[1] - st[0]), STROKE_UP))
-    done.append(("dollar.ss03", font["dollar.ss03"].width, font["dollar"].width))
-    for alt, base in (("dollar.ss03", "dollar"),):
-        for name, members in font.groups.items():
-            if name.startswith("public.kern") and base in members and alt not in members:
-                members.append(alt)
-    return done
 
 
 def arrows(font, m, adv):
@@ -1864,18 +1862,23 @@ STROKE_UP, STROKE_LOW = 47, 43          # the ladder's hairlines (balance.CAP_TH
 
 def letter_signs(font, m):
     done = []
-    # dollar: S, the stroke through it
-    old = gp(font, "dollar")
-    ob = bounds(old)
-    st = scan_h(old, ob[3] - 20)[0]                              # the stroke's stub above the S
-    S = gp(font, "S")
-    sb = bounds(S)
-    xc = sb[0] + (sb[2] - sb[0]) * ((st[0] + st[1]) / 2 - ob[0]) / (ob[2] - ob[0])
-    sx = band(xc, STROKE_UP)
-    p = union(S, rect(sx[0], ob[1], sx[1], ob[3]))
-    w0 = font["dollar"].width
-    put(font, "dollar", p, 0, lsb=ob[0], rsb=w0 - ob[2])
-    done.append(f"dollar: S + stroke {st[1] - st[0]:.0f}>{STROKE_UP}")
+    # dollar. 0.80 (owner, 2026-11-14: "just choose 1 dollar symbol, i prefer the rounded pill shaped one"): the
+    # base's own drawing, whose ends are balls, is the one dollar; 0.71 to 0.79 built the default from the finished
+    # S (barb ends) and a stroke, and 0.78 and 0.79 kept the base's as dollar.ss03. Its stroke takes the capital
+    # hairline, as every stroke through a letter: the two upright edges move in, each by half the excess, wherever
+    # they show (the stubs above and below, the sides of the two counters).
+    g = font["dollar"]
+    p0 = gp(font, "dollar")
+    b = bounds(p0)
+    st = scan_h(p0, b[3] - 10)[0]
+    over = (st[1] - st[0]) - STROKE_UP
+    for c in g.contours:
+        for q in c.points:
+            if abs(q.x - st[0]) < 1.5:
+                q.x = round(st[0] + over / 2)
+            elif abs(q.x - st[1]) < 1.5:
+                q.x = round(st[1] - over / 2)
+    done.append(f"dollar: the base's, ball ends; stroke {st[1] - st[0]:.0f}>{STROKE_UP}")
     # cent: c at its own size, the stroke through it
     old = gp(font, "cent")
     ob = bounds(old)

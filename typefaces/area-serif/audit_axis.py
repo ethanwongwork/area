@@ -25,6 +25,7 @@ import ufoLib2
 import bold as B
 
 STOPS = list(range(400, 701, 25))
+LIGHT_STOPS = [375, 350, 325, 300]
 FILLET_MAX = 20           # a softened corner (7 a side in the Regular) may grow with the stroke, not past this
 
 
@@ -106,29 +107,25 @@ def thinnest(polys, step=4):
     return B.thinnest(polys, step)
 
 
-def main():
-    reg = ufoLib2.Font.open("build/AreaSerif-Regular.ufo")
-    bold = ufoLib2.Font.open("build/AreaSerif-Bold.ufo")
-    stem = int(sys.argv[1]) if len(sys.argv) > 1 else B.STEM
-    v = B.vector(stem)
-    mids = bold.layers["mid"] if "mid" in bold.layers else {}
-    tm = (dict(B.axis_map(stem))[B.MID_WEIGHT] - B.REG_STEM) / (stem - B.REG_STEM)
-    ts = [(w, (st - B.REG_STEM) / (stem - B.REG_STEM)) for w, st in B.axis_map(stem, STOPS)]
-    fails = {k: [] for k in ("moved", "turns", "crossings", "thin", "monotone", "composite")}
+def sweep(reg, master, mids, ts, tm, tip_at, fails, lighter=False):
+    """Every glyph at each (weight, t): t is the share of the way from the Regular to `master`. Towards the Bold a
+    stroke may not be thinner than in the Regular (or than the serif tip at that weight) and the ink never steps
+    back; towards the Light (lighter) no stroke may be thinner than a serif's tip is at that weight unless it
+    was thinner than a tip in the Regular, when it thins as the tip does, and the ink never steps up."""
     n_out = n_comp = 0
     for g in reg:
         name = g.name
         if g.components:
             n_comp += 1
-            bg = bold[name]
+            bg = master[name]
             if [c.baseGlyph for c in g.components] != [c.baseGlyph for c in bg.components] or \
                     any(tuple(a.transformation)[:4] != tuple(b.transformation)[:4] for a, b in zip(g.components, bg.components)) or \
-                    any(c.baseGlyph not in bold for c in bg.components):
+                    any(c.baseGlyph not in master for c in bg.components):
                 fails["composite"].append(name)
         if not g.contours:
             continue
         n_out += 1
-        rc, bc = contours_of(g), contours_of(bold[name])
+        rc, bc = contours_of(g), contours_of(master[name])
         mc = contours_of(mids[name]) if name in mids else None
         shift = min(q[0] for P in bc for q in P) - min(q[0] for P in rc for q in P)
         far = max(max(abs(b[0] - shift - a[0]) / 320, abs(b[1] - a[1]) / 140) for P, Q in zip(rc, bc) for a, b in zip(P, Q))
@@ -139,7 +136,8 @@ def main():
         rp = flat(rc)
         base_cross = crossings(rp)
         base_thin = thinnest(rp)
-        prev = None
+        a0, l0 = area_len(rp)
+        prev = (2 * a0 / l0, a0) if lighter else None
         for w, t in ts:
             if mc is None:
                 ic = lerp(rc, bc, t)
@@ -161,23 +159,55 @@ def main():
             if x > base_cross:
                 fails["crossings"].append(f"{name} at {w} ({base_cross} > {x})")
             th = thinnest(ip)
-            tip = 30 * (1 + (v["tip"] - 1) * t)
-            if base_thin is not None and th is not None and th < min(base_thin, tip) - 1.0:
+            tip = tip_at(t)
+            floor = min(base_thin, tip) if not lighter or base_thin is None else min(base_thin, 30) * tip / 30
+            if base_thin is not None and th is not None and th < floor - 1.0:
                 fails["thin"].append(f"{name} at {w} ({base_thin:.0f} > {th:.0f}, tip {tip:.0f})")
             a, length = area_len(ip)
             ms = 2 * a / length
-            if prev and (ms < prev[0] - 0.3 or a < prev[1] - 1.0):
+            if prev and not lighter and (ms < prev[0] - 0.3 or a < prev[1] - 1.0):
                 fails["monotone"].append(f"{name} at {w} (mean stroke {prev[0]:.1f} > {ms:.1f})")
+            if prev and lighter and (ms > prev[0] + 0.3 or a > prev[1] + 1.0):
+                fails["monotone"].append(f"{name} at {w} (mean stroke {prev[0]:.1f} < {ms:.1f} as weight falls)")
             prev = (ms, a)
-    print(f"weight axis, stem {stem}: {n_out} outlined glyphs and {n_comp} composites, {len(STOPS)} stops ({STOPS[0]} to {STOPS[-1]})")
+    return n_out, n_comp
+
+
+def report(title, fails, path):
+    print(title)
     bad = 0
     for k, rows in fails.items():
         names = sorted({r.split(" ")[0] for r in rows})
         bad += len(names)
         print(f"  {k:10} {'ok' if not rows else str(len(names)) + ' glyphs: ' + '; '.join(rows[:6]) + (' ...' if len(rows) > 6 else '')}")
-    with open("build/weight/audit-axis.txt", "w") as f:
+    with open(path, "w") as f:
         for k, rows in fails.items():
             f.writelines(f"{k}\t{r}\n" for r in rows)
+    return bad
+
+
+def main():
+    import os
+    reg = ufoLib2.Font.open("build/AreaSerif-Regular.ufo")
+    bold = ufoLib2.Font.open("build/AreaSerif-Bold.ufo")
+    stem = int(sys.argv[1]) if len(sys.argv) > 1 else B.STEM
+    v = B.vector(stem)
+    mids = bold.layers["mid"] if "mid" in bold.layers else {}
+    tm = (dict(B.axis_map(stem))[B.MID_WEIGHT] - B.REG_STEM) / (stem - B.REG_STEM)
+    ts = [(w, (st - B.REG_STEM) / (stem - B.REG_STEM)) for w, st in B.axis_map(stem, STOPS)]
+    keys = ("moved", "turns", "crossings", "thin", "monotone", "composite")
+    fails = {k: [] for k in keys}
+    n_out, n_comp = sweep(reg, bold, mids, ts, tm, lambda t: 30 * (1 + (v["tip"] - 1) * t), fails)
+    bad = report(f"weight axis, stem {stem}: {n_out} outlined glyphs and {n_comp} composites, {len(STOPS)} stops ({STOPS[0]} to {STOPS[-1]})",
+                 fails, "build/weight/audit-axis.txt")
+    if os.path.exists("build/AreaSerif-Light.ufo"):            # 0.80: the Light side, 375 down to 300
+        light = ufoLib2.Font.open("build/AreaSerif-Light.ufo")
+        lv = B.vector(B.LIGHT_STEM)
+        lts = [(w, (B.REG_STEM - st) / (B.REG_STEM - B.LIGHT_STEM)) for w, st in B.axis_map(stem, LIGHT_STOPS)]
+        lfails = {k: [] for k in keys}
+        sweep(reg, light, {}, lts, 1, lambda t: 30 * (1 + (lv["tip"] - 1) * t), lfails, lighter=True)
+        bad += report(f"weight axis, Light stem {B.LIGHT_STEM}: {len(LIGHT_STOPS)} stops ({LIGHT_STOPS[0]} down to {LIGHT_STOPS[-1]})",
+                      lfails, "build/weight/audit-axis-light.txt")
     sys.exit(1 if bad else 0)
 
 
