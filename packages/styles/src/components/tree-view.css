@@ -12,11 +12,13 @@
     --_tree-start: var(--_panel-row-pad, var(--area-ui-row-inset)); /* spec: Nav's glyph edge, 8; a panel's list 6 (panel.css) */
     --_tree-chevron: var(--area-icon-md); /* spec */
     /*
-     * spec (owner, pass 3): chevron, icon and label are spaced evenly, 6px apart, and each
-     * level indents by one slot plus one gap (22px). Every row then sits on one set of
-     * columns: a child's chevron under its parent's icon, its icon under the parent's label.
+     * spec (owner, pass 3): chevron, icon and label are spaced evenly, one gap apart, and each
+     * level indents by one slot plus one gap. Every row then sits on one set of columns: a
+     * child's chevron under its parent's icon, its icon under the parent's label. The gap is every
+     * row's icon-to-label gap, ui-cluster (owner 2026-11-11, plan B2.3; was 6 at every density):
+     * 6 at the app's Compact, 8 at the default, so a level is 22 / 24.
      */
-    --_tree-gap: 6px; /* spec */
+    --_tree-gap: var(--area-ui-cluster);
     --_tree-step: calc(var(--_tree-chevron) + var(--_tree-gap)); /* spec */
     --_tree-label-inset: var(--area-space-0); /* spec */
     --_tree-plate-inset: calc(-1 * var(--area-space-2)); /* spec: 20px plate, 2px clear of the icon (owner, pass 2) */
@@ -41,7 +43,6 @@
     border-radius: var(--area-radius-row);
     cursor: default;
     outline: none;
-    transition: var(--area-transition);
     user-select: none;
   }
 
@@ -54,15 +55,14 @@
      you are, not a selection, and keeps its plate. Checkbox trees already select on the rest fill. */
   .area-tree-view--navigation:not(:focus-within) [role="treeitem"][aria-selected="true"]:not([aria-current="page"]) { background-color: var(--area-bg-component-hover); }
   /*
-   * Motion (docs/MOTION.md, "Hover plate", "Selected"; docs/specs/tree-view.md, "Motion and
-   * interaction, 2026-10-07"). The base `--area-transition` is the leave (fast, ease-out); hover,
-   * press, selected and current land at once. The ring is an outline and never transitions.
+   * Motion (docs/MOTION.md, "List highlight"; docs/specs/tree-view.md; plan A5.3, 2026-11-11): a row's plate lands and
+   * leaves at once (hover, press, selected, current), so the row has no transition; until 2026-11-11 it faded out over
+   * `fast`. The ring is an outline and never transitions.
    */
   /* Pressed (product UI rule 3, docs/PRODUCT_UI.md; DESIGN_SYSTEM.md "Shared state paint"): the row
-     takes the pressed fill while held, one step firmer than selected, landing at once like the hover. */
-  .area-tree-view [role="treeitem"]:active:not([data-disabled], [aria-current="page"], [aria-selected="true"]) { background-color: var(--area-bg-component-pressed); }
-  @media (hover: hover) { .area-tree-view [role="treeitem"]:hover { transition-duration: var(--area-hover-in); } }
-  .area-tree-view [role="treeitem"]:is(:active, [aria-selected="true"], [aria-current="page"]) { transition-duration: var(--area-press-in); }
+     takes the pressed fill while held, one step firmer than selected, landing at once like the hover; a selected or
+     current row presses too (plan B7.2). */
+  .area-tree-view [role="treeitem"]:active:not([data-disabled]) { background-color: var(--area-bg-component-pressed); }
   /* The current row is marked by fill and ink alone; the edge marker was removed (owner, pass 3). */
   /* Inset ring, as Nav and Tabs (audit S11b). */
   .area-tree-view [role="treeitem"]:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: calc(-1 * var(--area-focus-width)); }
@@ -94,6 +94,7 @@
   }
   .area-tree-view__pin:last-child { box-shadow: 0 var(--area-stroke-width) 0 var(--area-edge-dividers); }
   @media (hover: hover) { .area-tree-view__pin:hover { background-image: linear-gradient(var(--area-bg-component-hover), var(--area-bg-component-hover)); } }
+  .area-tree-view__pin:active { background-image: linear-gradient(var(--area-bg-component-pressed), var(--area-bg-component-pressed)); } /* plan B7.3 */
   /*
    * spec: the chevron is a 16px icon slot like any other glyph (Notion 12–20px in a 22px slot).
    * Its hover plate (20px) and pointer target (24px) are drawn outside the slot so the row keeps its rhythm.
@@ -121,8 +122,10 @@
  /* Controls nested on a row hover with the translucent wash, so they show on a hovered or
      current row plate (audit S11c; was bg-component-hover, invisible there). */
   @media (hover: hover) { .area-tree-view__chevron:has(svg):hover::before { background: var(--area-bg-hover); transition-duration: var(--area-hover-in); } }
-  .area-tree-view__actions .area-button.area-button--ghost { --_bg-hover: var(--area-bg-hover); --_bg-active: var(--area-bg-active); }
-  .area-tree-view__icon { display: grid; place-items: center; flex: 0 0 var(--area-icon-md); block-size: var(--area-icon-md); color: var(--area-fg-muted); }
+  /* Every hover plate has its pressed plate, the translucent pressed wash (plan B7.3). */
+  .area-tree-view__chevron:has(svg):active::before { background: var(--area-bg-pressed); transition-duration: var(--area-press-in); }
+  .area-tree-view__actions .area-button.area-button--ghost { --_bg-hover: var(--area-bg-hover); --_bg-active: var(--area-bg-pressed); }
+  .area-tree-view__icon { display: grid; place-items: center; flex: 0 0 var(--area-icon-md); block-size: var(--area-icon-md); } /* ink: the row table's (inset.css) */
   /* spec: the label follows the row's even 6px gap; its own inset is 0 (pass 3). */
   /* A cut label fades out over its last 24 instead of an ellipsis, as a vertical Nav row's (nav.css; owner, 2026-10-31,
      pick p4): the label fills the row to its trailing part, so one that fits ends before the fade. */
@@ -149,13 +152,15 @@
   }
   .area-tree-view__actions > .area-button { --_radius: max(var(--area-radius-floor), calc(var(--area-radius-row) - var(--_action-inset))); }
   .area-tree-view__trailing + .area-tree-view__actions { margin-inline-start: 0; }
-  .area-tree-view__actions > * { opacity: 0; }
   /* Revealed controls appear at once and fade out on fast, as the row's own plate (MOTION.md). */
   .area-tree-view__actions > [data-pinned],
+  .area-tree-view__actions:focus-within > *,
   .area-tree-view [role="treeitem"]:is(:focus-visible, [aria-selected="true"]) .area-tree-view__actions > * { opacity: 1; --_reveal: 0s; }
-  @media (hover: hover) { .area-tree-view [role="treeitem"]:hover .area-tree-view__actions > * { opacity: 1; --_reveal: 0s; } }
-  /* Without hover (touch) the row actions always show, as Message and Card reveals do (audit H-17). */
-  @media (hover: none) { .area-tree-view__actions > * { opacity: 1; } }
+  /* Hidden only where there is hover (plan B7.11): a touch screen always shows the row actions (audit H-17). */
+  @media (hover: hover) {
+    .area-tree-view__actions > * { opacity: 0; }
+    .area-tree-view [role="treeitem"]:hover .area-tree-view__actions > * { opacity: 1; --_reveal: 0s; }
+  }
   .area-tree-view__check { display: grid; place-items: center; flex: 0 0 var(--area-icon-md); inline-size: var(--area-icon-md); block-size: var(--area-icon-md); border: var(--area-stroke-width) solid var(--area-edge-control-hover); transition: var(--area-transition); border-radius: min(max(var(--area-radius-min), round(down, calc(var(--area-icon-md) * var(--area-radius-factor)), 2px)), round(down, calc(var(--area-icon-md) * 7 / 16), 2px)); font-size: var(--area-control-sm-text); line-height: 1; }
   /* The box's edge at rest is Checkbox's, the choice glyphs' `edge-control-hover` (audit S5; consistency pass
      2026-10-12, it was the lighter field edge). Checked paints like Checkbox: the neutral solid face and its mark. It used a tint with a
@@ -172,13 +177,13 @@
     margin: calc(-1 * var(--area-stroke-width));
     opacity: 0;
     scale: 0.6; /* spec: docs/MOTION.md small-mark recipe */
-    transition: scale var(--area-duration-fast) var(--area-ease-out), opacity var(--area-fade-fast) var(--area-ease-out);
+    transition: scale var(--area-duration-fast) var(--area-ease-out), opacity var(--area-fade-fast) var(--area-ease-effects);
   }
   .area-tree-view [aria-checked="true"] .area-tree-view__check svg { opacity: 1; scale: 1; }
   /* Reveal-on-hover fades on the one shared timing (audit F-38). The control keeps its own colour transition beside it
      (motion sweep 2026-10-22: the opacity-only list dropped the ghost button's hover plate at once), and the reveal
      zeroes only the opacity's clock, so a plate leaving the button still fades while the row stays hovered. */
-  .area-tree-view__actions > * { --_reveal: var(--area-duration-fast); transition: var(--area-transition), opacity var(--_reveal) var(--area-ease-out); }
+  .area-tree-view__actions > * { --_reveal: var(--area-duration-fast); transition: var(--area-transition), opacity var(--_reveal) var(--area-ease-effects); }
 
   /* --- sm, guides, status (owner 2026-10-30) ---------------------------------------------------------------------- */
   /*
@@ -212,13 +217,16 @@
     inset-inline-start: round(down, calc(var(--_tree-start) + var(--_tree-chevron) / 2 - 0.5px), 1px);
     inline-size: calc(var(--_tree-depth) * var(--_tree-step));
     background-image: repeating-linear-gradient(to right, var(--area-edge-dividers) 0 var(--area-stroke-width), transparent var(--area-stroke-width) var(--_tree-step));
-    opacity: 0;
     pointer-events: none;
-    transition: opacity var(--area-fade-fast) var(--area-ease-out);
+    transition: opacity var(--area-fade-fast) var(--area-ease-effects);
   }
   .area-tree-view--guides [role="treeitem"]:dir(rtl)::before { background-image: repeating-linear-gradient(to left, var(--area-edge-dividers) 0 var(--area-stroke-width), transparent var(--area-stroke-width) var(--_tree-step)); }
   .area-tree-view--guides:focus-within [role="treeitem"]::before { opacity: 1; transition-duration: 0s; }
-  @media (hover: hover) { .area-tree-view--guides:hover [role="treeitem"]::before { opacity: 1; transition-duration: 0s; } }
+  /* Hidden only where there is hover (plan B7.11): a touch screen always draws the guides. */
+  @media (hover: hover) {
+    .area-tree-view--guides [role="treeitem"]::before { opacity: 0; }
+    .area-tree-view--guides:hover [role="treeitem"]::before { opacity: 1; transition-duration: 0s; }
+  }
   /*
    * A row's status (TreeViewNode status): git's letter at the row's end, Cursor's 12px w500 tabular in the git colour,
    * here the shared change inks (`fg-change-<status>`, components audit D6, 2026-11-07; Governance § 4), the ones Edit summary's counts and Tabs take. The word is read out; the letter is not. `removed`

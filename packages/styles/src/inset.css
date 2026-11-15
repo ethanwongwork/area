@@ -28,7 +28,7 @@
      field's icon is not tucked into the round end (owner, 2026-10-12: a 24 pill field held its
      icon 4 in; now 6). Fields at the default radius never move. */
   .area-input, .area-number-field, .area-select, .area-custom-select__trigger, .area-date-picker__trigger {
-    --_field-corner: min(calc(var(--_box-height) / 2), calc(max(var(--area-radius-min), round(down, calc(var(--_box-height) * var(--area-radius-factor)), 2px)) + var(--area-pill-field) * 9999px));
+    --_field-corner: min(calc(var(--_box-height) / 2), var(--_field-shape)); /* the field shell's corner (input.css) */
     --_corner-clear: round(nearest, calc(var(--_field-corner) / 2 - var(--_box-border)), 1px);
     padding-inline-start: max(var(--_inset-start), var(--_corner-clear));
     padding-inline-end: max(var(--_inset-end), var(--_corner-clear));
@@ -41,8 +41,9 @@
     --_box-start: calc(var(--_box-height) - var(--_inset) * 2);
     font-size: var(--area-ui-size);
     line-height: var(--area-ui-leading);
-    /* Balance the bar's bottom-only divider in its vertical content box. */
-    padding-block-start: var(--area-border-width);
+    /* A bar that counts a rule's width (a small Panel's, panel.css `--_bar-rule`) balances it above, so its title sits on
+       the room's centre; the md bar counts none (plan B4.1). */
+    padding-block-start: var(--_bar-rule, 0px);
   }
   .area-panel--bare-bar > .area-panel__bar { padding-block-start: 0; }
   /* A bar of controls alone (panel.css, 2026-10-18) centres them above its rule, 7 and 7 at the app's scale, as the
@@ -69,7 +70,7 @@
     --_box-border: 0px;
     /* A row's glyph edge is the density's row inset (8 at both densities, as Tree view, Notion,
      * Figma and Cursor; evidence audit R1), not the icon centred in the row. The reserved box is
-     * the row less that inset each side: 16 at default (the icon itself), 8 in a compact 24 row,
+     * the row less that inset each side: 14 on the default 30 row, 12 on Compact's 28 (16 at type 14),
      * so the 16 icon still starts 8 in. docs/research/compact-evidence-2026-10-02/README.md. A panel's list takes the
      * panel's row pad instead, 6 (panel.css --_panel-row-pad; its plates 8 from the edge, Cursor's, 2026-10-31). */
     --_box-icon: calc(var(--area-ui-row) - var(--_panel-row-pad, var(--area-ui-row-inset)) * 2);
@@ -80,24 +81,51 @@
   .area-nav__label, .area-menu__label { --_box-start: var(--_box-icon); }
   /* A Nav heading with actions (a section's New) ends as a row with actions does: the action a nested square 4 in. */
   .area-nav__label:has(> .area-nav__actions) { --_box-end: calc(var(--_box-height) - var(--area-space-4) * 2); }
-  /* A menu group label sits on the icon column, as Nav's (audit D-15; was cap-centred, 11.7), when the rows
-     lead with an icon (Command palette; Notion's palette labels share the icon edge). Over text-only rows it
-     starts on their text column instead, the same cap-centred inset in the rows' type (11 at 32), so the title
-     and the rows line up (owner, review round 2, 2026-10-09; it sat 3 short at 8). */
-  :has(> .area-menu__label):not(:has(.area-menu__icon:first-child)) > .area-menu__label { --_box-start: var(--_box-text); }
-  /* A destination without a leading icon belongs on that same heading column. This is
-   * intentionally asymmetric with generic text-only controls: in a Nav, visual scanning
-   * follows the group column, not each row's cap-height-centred text inset. */
-  .area-nav__item:not(:has(> .area-nav__icon:first-child)) { --_box-start: var(--_box-icon); }
+  /* A row without a leading icon starts its words on that same glyph edge (the row table, below): a list has one start
+   * column for its icons, its headings and its text-only rows. This is intentionally asymmetric with generic
+   * text-only controls: in a list, scanning follows the column, not each row's cap-centred text inset. Menu's and
+   * List box's text-only rows and their group labels sat on the cap-centred inset (10 at type 13), Nav's on 8 (plan
+   * B2.1, VN9); a menu group label over text-only rows followed its rows there (owner, review round 2, 2026-10-09). */
+  .area-nav__item:not(:has(> .area-nav__icon:first-child)),
+  .area-menu__item:not(:has(> .area-menu__icon:first-child)), .area-menu__empty { --_box-start: var(--_box-icon); }
   /* A horizontal plate has no column to share, so a text-only item is centred like a button. */
   .area-nav--horizontal .area-nav__item:not(:has(> .area-nav__icon:first-child)) { --_box-start: var(--_box-text); }
-  /* spec: the shared inset puts a 16px icon 8px in (Notion 8); the row gap (12) then starts the
-   * label 36px in, where ChatGPT and Notion both set it (docs/specs/menu.md). Every icon row
-   * shares that column: Nav moved from gap-md (labels at 32) in audit S11a. */
-  .area-nav__item { gap: var(--area-gap-row); }
+  /* spec: the shared inset puts a 16px icon 8px in; a row's icon-to-label gap (ui-cluster: 6 / 8 / 10 at Compact /
+   * Default / Comfortable) then starts the label 8 + 16 + ui-cluster in: 32 at the default type 13, 30 at the app's
+   * Compact (owner 2026-11-11, plan B2.3: the measured desktop lists set the label at 30 at their density). Every icon
+   * row shares that column: Nav, Tree view, Menu, the palette, List box and the pickers' options. It was gap-row
+   * (labels at 34, 36 at type 14; audit S11a). */
+  .area-nav__item { gap: var(--area-ui-cluster); }
   /* A horizontal plate is tab-like, not a list row: no label column. */
   .area-nav--horizontal .area-nav__item { gap: var(--area-gap-md); }
-  .area-menu__item { gap: var(--_menu-gap, var(--area-gap-md)); }
+  .area-menu__item { gap: var(--_menu-gap, var(--area-ui-cluster)); }
+  /*
+   * One row table (plan B2.1, 2026-11-13; DESIGN_SYSTEM.md, "List rows"). Every list of row plates shares these terms:
+   * Menu and the lists built on its rows (Context menu, Composer menu, Command palette, Combobox, Custom select, Tag
+   * picker, Model picker, List box), Nav, Tree view and native Select's options.
+   *   height       ui-row (28 / 30 / 34 at type 13 Compact / Default / Comfortable), plates ui-row-gap (1) apart by
+   *                `gap`, never by margin
+   *   corner       radius-row on a region (Nav, Tree view); radius-list-row inside a floating list, which is the same
+   *                corner unless the list's corner less its 4 padding is smaller (concentric)
+   *   glyph edge   ui-row-inset (8; a Panel's list 6): an icon, a picture, a heading and a text-only row's words start there
+   *   label        glyph edge + icon slot + ui-cluster: 30 / 32 / 34 at type 13; a list holding a picture reserves the
+   *                picture's width in every row's slot, so the column holds (nav.css)
+   *   icon ink     fg-muted in every state (a current or selected row changes its plate, not its ink); a row whose ink
+   *                is its state, a danger row, gives its icon that ink
+   *   separator    one line round(6 − ui-dense) from the plates either side (5 / 6 / 7), counting the gap it sits in,
+   *                its ends on the plates' edges
+   *   group break  gap-row between runs (8 / 12 / 16), never a fixed margin
+   *   empty line   .area-menu__empty, a row tall on the glyph edge in the muted ink, for empty, loading and no results
+   * The trailing edge mirrors the glyph edge for a check, a chevron, a switch or a glyph shortcut. `rows.test.mjs`
+   * holds every term for every family.
+   */
+  :is(.area-menu__item, .area-nav__item, .area-tree-view [role="treeitem"]) > :is(.area-menu__icon, .area-nav__icon, .area-tree-view__icon) { color: var(--area-fg-muted); }
+  .area-menu__item--danger > .area-menu__icon { color: inherit; }
+  .area-menu__separator, .area-nav__group > .area-nav__separator {
+    margin-block: calc(round(nearest, calc(var(--area-space-6) - 1px * var(--area-ui-dense)), 1px) - var(--area-ui-row-gap));
+    margin-inline: 0;
+  }
+  .area-nav:not(.area-nav--horizontal) > .area-nav__separator { margin-block: round(nearest, calc(var(--area-space-6) - 1px * var(--area-ui-dense)), 1px); margin-inline: 0; }
   /* A trailing check or switch is a glyph edge: 8px from the row's end (Notion's toggle 8). */
   .area-menu__item:has(> :is(.area-menu__check, .area-menu__toggle, .area-menu__sub-chevron):last-child) { --_box-end: var(--_box-icon); }
   /* In a menu with check rows, a plain row's shortcut stands where a check row's does: the row ends on the same icon
@@ -133,6 +161,70 @@
   .area-badge--icon-only, .area-badge--dot-only { padding-inline: 0; }
   /* A plain Badge has no plate to sit inside, so its sides are 0, as transparent tabs align to content. */
   .area-badge--plain:not(.area-badge--icon-only, .area-badge--dot-only) { padding-inline: 0; }
+
+  /*
+   * One mark (plan B5.1, 2026-11-13; DESIGN_SYSTEM.md, "One mark"). Badge, Count, Tag, Kbd, Citation's pill and
+   * Indicator's count are one shape drawn by one recipe. A family sets only its inputs:
+   *   --_mark-height  a rung of the mark ladder, mark-label-sm / md / lg (14 / 18 / 22 at type 13, at every density)
+   *   --_mark-border  the width of a border it really draws (0 when its edge is drawn inside, as a box-shadow)
+   *   --_mark-pill    the pill role's flag (a status or a count): its Pills flag, or 1 for a mark that is always round
+   *   --_mark-chip    1 for the chip role (an object: Tag, Kbd), which takes the small corner instead
+   * and reads the outputs:
+   *   --_mark-side         its text side: (H − 6) / 2 from the outer edge, the edge counted once (4 / 6 / 8)
+   *   --_mark-baseline     the cap's whole-pixel baseline from the plate's top, edge + round((H − 2 · edge + 1cap) / 2),
+   *                        so marks of one height draw their words on one pixel row at every type and density
+   *   --_mark-cap-above/-below  the trimmed text part's block padding that places that baseline (the part fills the box)
+   *   --_mark-slot-shift   how far a dot or icon moves to centre on the label's cap, never on the plate (at most 0.5)
+   *   --_mark-corner       pill role: the Corner setting's corner for H, or full while the Pills flag is set (one value,
+   *                        a pill is radius-full, never full plus a term); chip role: the
+   *                        small corner (radius-small), at most H / 2. At Corner 0 chips are square and pills stay
+   *                        pills while the Pills set lists them (Indicator's count and Citation are always round)
+   *   --_mark-text/-leading  the mark text: text-xs on sm and md, the UI text above md, never moved by density (B5.2)
+   *   --_mark-gap          its internal gap: 2 at sm, 4 above
+   * Every value is whole at type 12 to 16 and every density: the ladder is the small line (14, 16, 18 or 20) plus 0, 4 or
+   * 8, so H, (H − 6) / 2 and the rounded baseline are whole pixels. 1cap resolves on the part that reads it.
+   */
+  :where(.area-badge, .area-count, .area-tag, .area-kbd, .area-citation:not(.area-citation--footnote), .area-indicator--count, .area-stepper-step__marker) {
+    --_mark-border: 0px;
+    --_mark-pill: 1;
+    --_mark-chip: 0;
+    --_mark-side: calc((var(--_mark-height) - var(--area-space-6)) / 2 - var(--_mark-border));
+    --_mark-baseline: calc(var(--area-stroke-width) + round(nearest, calc((var(--_mark-height) - 2 * var(--area-stroke-width) + 1cap) / 2), 1px));
+    --_mark-cap-above: calc(var(--_mark-baseline) - 1cap - var(--_mark-border));
+    --_mark-cap-below: calc(var(--_mark-height) - var(--_mark-baseline) - var(--_mark-border));
+    --_mark-slot-shift: calc(var(--_mark-baseline) - 1cap / 2 - var(--_mark-height) / 2);
+    --_mark-corner: calc((1 - var(--_mark-chip)) * max(var(--area-radius-min), round(down, calc(var(--_mark-height) * var(--area-radius-factor)), 2px), var(--_mark-pill) * var(--area-radius-full)) + var(--_mark-chip) * min(var(--area-radius-small), calc(var(--_mark-height) / 2)));
+    --_mark-lg: max(0, sign(var(--_mark-height) - var(--area-mark-label-md)));
+    --_mark-text: calc(var(--area-control-xs-text) + (var(--area-control-md-text) - var(--area-control-xs-text)) * var(--_mark-lg));
+    --_mark-leading: calc(var(--area-control-xs-leading) + (var(--area-control-md-leading) - var(--area-control-xs-leading)) * var(--_mark-lg));
+    --_mark-gap: calc(var(--area-space-2) * (1 + max(0, sign(var(--_mark-height) - var(--area-mark-label-sm)))));
+  }
+  /* The text part of each mark, trimmed to cap and baseline and padded to fill the plate, so the baseline lands where
+     the recipe puts it (Count and Indicator's count are their own text). */
+  @supports (text-box: trim-both cap alphabetic) {
+    .area-badge > .area-badge__label, .area-tag > .area-tag__label, .area-kbd > .area-kbd__key,
+    .area-citation:not(.area-citation--footnote) > .area-citation__label, .area-count, .area-indicator.area-indicator--count {
+      text-box: trim-both cap alphabetic;
+      padding-block: var(--_mark-cap-above) var(--_mark-cap-below);
+    }
+    .area-badge:not(.area-badge--icon-only, .area-badge--dot-only) > :is(.area-badge__leading-icon, .area-badge__trailing-icon, .area-badge__dot),
+    .area-tag > .area-tag__icon, .area-citation:not(.area-citation--footnote) > .area-citation__icon {
+      translate: 0 var(--_mark-slot-shift);
+    }
+  }
+  /*
+   * An inline chip (inline Code, a soft Mention) runs in a sentence and may break across lines, so it never exceeds its
+   * line (plan B5.1, VC24): its block padding is what the line leaves round the font's content area, (1lh − content) / 2
+   * less its border, so the plate is the line box and wrapped pieces meet without overlapping. Its side is the mark side
+   * on that line, (1lh − 6) / 2 from the outer edge, to a whole pixel. The content area is Geist's and Geist Mono's
+   * ascent plus descent, 1.3em (1005 + 295 of 1000; `--_chip-content`, spec), the one font measure the recipe reads.
+   */
+  :where(.area-code, .area-mention--soft) {
+    --_chip-border: 0px;
+    --_chip-content: 1.3em; /* spec: Geist and Geist Mono hhea ascent + descent */
+    --_chip-pad-block: max(0px, calc((1lh - var(--_chip-content)) / 2 - var(--_chip-border)));
+    --_chip-pad-inline: max(0px, round(nearest, calc((1lh - var(--area-space-6)) / 2 - var(--_chip-border)), 1px));
+  }
 
   .area-button:has(> .area-button__icon:first-child),
   .area-input:has(> .area-input__icon:first-child),
@@ -230,11 +322,6 @@
   .area-menu__item:has(> .area-menu__shortcut > svg:only-child) { --_box-end: var(--_box-icon); }
   .area-menu__shortcut { display: inline-flex; align-items: center; padding-inline-start: 0; }
   .area-menu__shortcut > svg { inline-size: var(--area-icon-md); block-size: var(--area-icon-md); flex-shrink: 0; }
-  .area-menu__shortcut:not(:has(> *)), .area-nav__trailing:not(:has(> *)) {
-    display: block;
-    text-box: trim-both cap alphabetic;
-    padding-block: 0.25em;
-  }
   .area-nav__item:has(> .area-nav__trailing > svg:only-child) { --_box-end: var(--_box-icon); }
   .area-nav__trailing > svg { inline-size: var(--area-icon-md); block-size: var(--area-icon-md); flex-shrink: 0; }
 
@@ -244,46 +331,109 @@
   .area-nav__group--nested .area-nav__item { padding-inline-start: calc(var(--_inset-start) + var(--_nav-indent)); }
   .area-nav--marker .area-nav__group--nested .area-nav__item { padding-inline-start: calc(var(--area-space-16) + var(--_nav-indent)); }
 
-  /* Trim only text slots, never SVGs or containers holding controls (Tag's label joined 2026-10-17: centred by its
-   * line box, its cap sat 1px low at type 13; spacing audit). A second text beside a trimmed one in a centred row
-   * is trimmed too: Command palette's description and Popover's step count, centred on their line box, sat 0.6px off
-   * the label's baseline (round 81; every family's rows swept for it). Symmetric safety padding lets
-   * accents/descenders paint even in an ellipsized label. */
+  /*
+   * One centring model for one line of text (plan B2.2, 2026-11-13; DESIGN_SYSTEM.md, "Optical insets"). A one-line label
+   * or value in a control, row or tab is centred on its cap: the vertical twin of the side rule above, (H − 1cap) / 2
+   * from each edge, less the border. Its text slot is trimmed to cap and baseline (`text-box: trim-both cap alphabetic`)
+   * and centred by its box; untrimmed, the line box is centred instead and the cap sits 0.26 / 0.62 / 0.03 / 0.33 / 0.68
+   * high at type 12 / 13 / 14 / 15 / 16 (the face's ascent less its descent and cap height, plus the half-leading the
+   * line box floors). Three forms, one rule:
+   *   cap slot   a text part in a centred row (below): trimmed, with 0.25em of paint room above and below so accents
+   *              and descenders still draw in an ellipsized label. Its box is 1cap + 0.5em; the row's height is the row's.
+   *   line slot  a text part whose box sets its parent's height (a content-sized plate: Tooltip, a Setting row's one
+   *              line): trimmed, and padded back to its line, `--_line-room` = (1lh − 1cap) / 2 each side, so the box
+   *              stays 1lh and only the glyphs move onto the line's centre. Wrapped lines keep their leading.
+   *   text box   a box that is its own text (a page number, a shortcut string): a block, trimmed, padded
+   *              `--_cap-room` = (H − 1cap) / 2 − border each side, so its border box is H.
+   * The slot must be a block container or an inline box: trim does nothing on a flex or grid container, so a label that
+   * stacks parts (Tabs' strong-width reserve) trims an inner text part. Whole pixels: H, the line and every side inset
+   * are whole at type 12 to 16 and every density; the cap is not (9.23 at 13), so the cap's centre sits on the box's
+   * whole- or half-pixel centre and the baseline falls between pixels: the vertical cap rule (0.1 px) outranks the grid
+   * (above), and the rasteriser places the baseline on the nearest device pixel. A native <input>'s value is not
+   * reachable by trim: Chromium draws it within a device pixel of the trimmed centre at 12, 13, 14 and 16 and 1 px low
+   * at 15 (ink measured 2026-11-13), so a field's own text parts (an affix, a value span, a unit, a segment) join the
+   * cap slots and its native value keeps the browser's metrics. `scripts/rendered/rules/cap-centring.mjs` checks every
+   * listed box within 0.1 px, and `rows.test.mjs` holds the lists.
+   */
   .area-button__label, .area-chip__label, .area-badge__label, .area-tag__label, .area-citation__label,
-  .area-segmented__label, .area-tabs__label, .area-code__label, .area-token__label,
-  .area-nav__text, .area-menu__text, .area-input__affix, .area-command-palette__description, .area-popover__step,
+  .area-segmented__label, .area-tabs__text, .area-code__label, .area-token__label,
+  .area-nav__text, .area-menu__text, .area-input__affix, .area-command-palette__description, .area-command-palette__path,
+  .area-popover__step, .area-composer-menu__path, .area-tree-view__label, .area-tree-view__trailing:not(:has(> *)), .area-tree-view__status,
+  .area-selection-bar__count,
+  .area-custom-select__value, .area-date-picker__value, .area-number-field__unit, .area-otp-field__char,
   .area-avatar > span:not(.area-avatar__icon),
   .area-nav__label > span, .area-nav__toggle > span:first-child, .area-menu__label > span {
     text-box: trim-both cap alphabetic;
     padding-block: 0.25em;
     min-inline-size: 0;
   }
+  /* Line slots: trimmed, the line given back, so the plate keeps its height. */
+  .area-tooltip__text, .area-setting-row__text:not(:has(> .area-setting-row__description)) .area-setting-row__label,
+  .area-panel__row-label, .area-time-field__segment, .area-time-field__literal, .area-accordion-item__label {
+    --_line-room: calc((1lh - 1cap) / 2);
+    text-box: trim-both cap alphabetic;
+    padding-block: var(--_line-room);
+    /* Layout keeps 1/64 px: the two rooms and the cap can sum 0.02 short of the line, so the box rounds up to it. */
+    block-size: calc-size(auto, round(up, size, 1px));
+  }
+  /* Text boxes: a block that is its own text, padded to its box. A string shortcut and a Nav row's trailing text sit
+     in their row; a page number, a menu row's trailing count string, and a text-only Tooltip are their box. */
+  .area-menu__shortcut:not(:has(> *)), .area-nav__trailing:not(:has(> *)), .area-menu__trailing:not(:has(> *)) {
+    display: block;
+    text-box: trim-both cap alphabetic;
+    padding-block: 0.25em;
+  }
+  .area-pagination__page {
+    --_cap-room: calc((var(--_height) - 1cap) / 2);
+    display: inline-block;
+    text-box: trim-both cap alphabetic;
+    padding-block: var(--_cap-room);
+    text-align: center;
+  }
+  /* A field's text-only boxes (plan B2.2 in fields, 2026-11-14): a Number field's scrub letter is its icon square, an
+     Input group's text segment (or a lettered visual square) the group's height inside its edge. A segment holding a
+     glyph and a scrub with an icon keep their centred square. */
+  .area-number-field__scrub:not(:has(> *)) {
+    --_cap-room: calc((var(--_icon) - 1cap) / 2);
+    display: block;
+    text-box: trim-both cap alphabetic;
+    padding-block: var(--_cap-room);
+    block-size: auto;
+    text-align: center;
+  }
+  .area-input-group__text:not(:has(> *)) {
+    --_cap-room: calc((var(--_height) - 1cap) / 2 - var(--area-stroke-width));
+    display: block;
+    text-box: trim-both cap alphabetic;
+    padding-block: var(--_cap-room);
+    text-align: center;
+  }
   /* Marks: optical centre (owner, 2026-10-17, on Tag at Compact: "the type doesnt look as centered vertically as the
    * Public text"). A mark's label is often lowercase (a tag, a tone name, a cited site), and a cap-centred lowercase
    * body sits up to the half-gap between cap height and x-height below a centred dot, icon or x: about 1px in a 14
-   * plate. Tag and Citation centred their label midway, a quarter of that gap above the cap centre (0.5 at 11px, 0.6 at
-   * 14), as Spectrum sets labels above centre (docs/research/spacing-2026-10-17/external.md §5). The slot moves, never a
-   * glyph. Citation keeps it (a cited site is lowercase). Count keeps the cap centre, since digits are cap-height, and so
-   * do Badge since 2026-11-01 (its statuses begin with a capital, and the lift plus its whole-pixel rounding set them 0.9
-   * high) and Tag since 2026-11-07: the three marks that share a line share Badge's whole-pixel cap centre (badge.css,
-   * tag.css, count.css; DESIGN_SYSTEM.md, "Marks on one line"), and Tag sat 0.58 high beside them. */
-  .area-citation__label { --_optical-lift: calc((1cap - 1ex) / 4); }
-  .area-citation > .area-citation__label {
-    padding-block: calc(0.25em - var(--_optical-lift)) calc(0.25em + var(--_optical-lift));
-  }
+   * plate. Tag and Citation centred their label midway, a quarter of that gap above the cap centre, until every mark
+   * took Badge's whole-pixel cap centre: Badge on 2026-11-01, Tag on 2026-11-07 and Citation on 2026-11-13 (plan B5.1,
+   * VS25: it sat 0.6 high beside a Badge). The marks are one recipe (above, "One mark"). */
   .area-chip__label, .area-segmented__label, .area-tabs__label, .area-token__label, .area-code__label {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
 
-  /* Content-sized plates use equal insets; text trim removes outer leading but
-   * preserves leading between lines. No fixed height or clipping of prose. */
+  /* Content-sized plates use equal insets. Tooltip's words are a line slot (above: React wraps them in `__text`), so the
+   * bubble stays the line plus its insets and the words sit on its centre; wrapped lines keep their leading. A
+   * framework-free tooltip of words alone is its own text box: a block, trimmed, given its line back. No fixed height or
+   * clipping of prose. */
   .area-tooltip {
     padding-block: var(--_tooltip-inset-block);
     padding-inline-start: var(--_tooltip-inset-inline);
     padding-inline-end: var(--_tooltip-inset-inline-end);
+  }
+  .area-tooltip:not(:has(> *)) {
+    display: inline-block;
     text-box: trim-both cap alphabetic;
+    padding-block: calc(var(--_tooltip-inset-block) + (1lh - 1cap) / 2);
+    block-size: calc-size(auto, round(up, size, 1px));
   }
   .area-panel__title, .area-panel__heading {
     text-box: trim-both cap alphabetic;
@@ -301,7 +451,6 @@
       line-height: var(--_leading);
       margin-block-start: max(0px, calc((var(--_size) - 1cap) / 2));
     }
-    .area-choice-label:has(> .area-choice-label__description:only-child) { font-size: var(--area-text-xs-size); }
     .area-choice-label__title { text-box: trim-start cap alphabetic; }
     .area-choice-label__description { text-box: trim-end cap alphabetic; }
     .area-choice-label__title:only-child, .area-choice-label__description:only-child { text-box-trim: trim-both; }
@@ -309,24 +458,153 @@
     .area-checkbox__meta, .area-radio__meta { text-box: trim-both cap alphabetic; margin-block-start: max(0px, calc((var(--_size) - 1cap) / 2)); }
   }
   .area-alert__icon, .area-toast__icon { display: inline-flex; align-items: center; justify-content: center; }
-  .area-alert__icon > svg, .area-toast__icon > svg { display: block; inline-size: 100%; block-size: 100%; }
+  /* A leading glyph in a multi-line row (plan B2.4): its box is one first line tall and the glyph centres in it (the box
+     technique, `align-self: flex-start`), never a margin of (line − icon) / 2. Alert, Toast, Card's list, Menu's
+     two-line rows, Board, Plan, Queue, Accordion and Attachment; a picker row's trailing check stays centred. */
+  .area-alert__icon > svg, .area-toast__icon > svg { display: block; inline-size: var(--area-icon-md); block-size: var(--area-icon-md); }
 
   .area-code--swatch:has(> .area-code__swatch:first-child),
   .area-token:has(> .area-token__swatch:first-child) {
     /* The decorative swatch is a direct, named Token slot. The parent reserves its
      * box; it is not a nested action and therefore owns no independent backplate. */
-    padding-inline-start: calc(
+    padding-inline-start: round(nearest, calc(
       (var(--_token-height) - var(--_token-swatch-size)) / 2 - var(--_code-border, var(--area-border-width))
-    );
+    ), 1px); /* whole pixels (plan A11.1) */
   }
   .area-code--swatch:has(> .area-code__swatch:last-child),
   .area-token:has(> .area-token__swatch:last-child) {
-    padding-inline-end: calc(
+    padding-inline-end: round(nearest, calc(
       (var(--_token-height) - var(--_token-swatch-size)) / 2 - var(--_code-border, var(--area-border-width))
-    );
+    ), 1px); /* whole pixels (plan A11.1) */
   }
-  .area-button--start { margin-inline-start: calc(-1 * (var(--_inset-start) + var(--_box-border))); }
-  .area-button--end { margin-inline-end: calc(-1 * (var(--_inset-end) + var(--_box-border))); }
+  /*
+   * Edge ghost buttons (plan B4.3, 2026-11-14; DESIGN_SYSTEM.md, "Edge buttons"). A ghost Button at the edge of a column
+   * or a surface shows no plate at rest, so what is seen is its glyph or its words: it pulls out by its own gutter so
+   * they sit on the column, the text above or beside it. An icon-only one pulls (H − icon) / 2, its glyph on the column;
+   * a labelled one its text side, its words on the column. The plate then overhangs into the margin, where a hover shows
+   * it. A soft, solid or outline Button keeps its plate on the column: the plate is what is seen. `--_pull-start` and
+   * `--_pull-end` are the amounts; `align` (`--start` / `--end`) applies them, and the families that set a ghost action at
+   * an edge (Card's header action, Message's actions) read them. Whole: the inset rule above rounds each side.
+   */
+  .area-button {
+    --_pull-start: calc(var(--_inset-start) + var(--_box-border));
+    --_pull-end: calc(var(--_inset-end) + var(--_box-border));
+  }
+  .area-button--start.area-button--ghost { margin-inline-start: calc(-1 * var(--_pull-start)); }
+  .area-button--end.area-button--ghost { margin-inline-end: calc(-1 * var(--_pull-end)); }
+
+  /*
+   * A corner control (plan B4.2, 2026-11-14; DESIGN_SYSTEM.md, "A button set into a corner"). A control set into a
+   * corner (a close, a dismiss, the last end action, a row's actions, a calendar's steps, a code block's copy) sits
+   * evenly, as far from the side as from the top, and is concentric with the corner it is set into. Inputs, set by the
+   * surface (inherited) or on the control:
+   *   --_cc-corner   the corner it sits in: the surface's drawn corner, or the row's
+   *   --_cc-inset    the surface's content inset from its outer edge, the edge counted once
+   *   --_cc-glyph    1 (the default): the control's glyph sits on the inset, as the text opposite it does, so its plate
+   *                  stands out of the inset by --_cc-pull, (H − icon) / 2; 0: its plate sits on the inset (Calendar's
+   *                  steps line up with its days)
+   *   --_cc-at       instead of the two above, where a bar of fixed height puts the control: (bar − H) / 2 from its
+   *                  edges, plus the surface's edge (Panel, Color picker, Code block, a row's actions)
+   * Outputs, on the control:
+   *   --_cc-distance its plate's distance from both outer edges, which the family places it at
+   *   --_shape       Button's corner, replaced: the corner less that distance, never under the floor (nor under its own
+   *                  corner where that is squarer, so Corner 2 and 4 keep every Button's corner), never past half its
+   *                  height, and a Pills flag keeps it round:
+   *                  min(H / 2, max(min(radius-floor, own), corner − distance × concentric)) + pill × full;
+   *                  at Corner Pill every control is round, so it keeps its own corner there (the third term is
+   *                  far below zero until the factor reaches 0.5, as radius-list-row's)
+   * One named exception, a corner control beside a title (Dialog's and Drawer's close, a titled Popover's close; plan B6.5,
+   * conductor 2026-11-14): the title's cap sits on the surface inset, with or without the control, so every surface keeps
+   * one text grid; the control centres on the title's cap vertically and keeps its glyph on the side column (the edge
+   * ghost rule, B4.3), so it is not equidistant (Dialog at type 13 Default: 6 from the top, 9 from the side). Its family
+   * sets one more input, `--_cc-near`, the nearer of its two distances, and the corner is taken from it, so it stays
+   * concentric with the surface's corner where it is closest. A corner control with no title beside it stays equidistant.
+   * With no corner to sit in (a side Drawer, a flush Panel or Alert, a flush Code block: `--_cc-corner: initial`) the
+   * control keeps its own corner. Whole pixels: H, the icon, the insets and the bars are whole at type 12 to 16 and at
+   * every density, and H − icon is even, so the distance and the corner are whole. Sharp: concentric 0, every corner 0.
+   */
+  :is(.area-dialog__dismiss, .area-drawer__dismiss, .area-popover__header > .area-button,
+    .area-toast > :is(.area-toast__actions, .area-toast__action, .area-toast__dismiss):last-child > .area-button:last-child,
+    .area-alert > .area-alert__dismiss > .area-button, .area-alert > .area-alert__actions:last-child > .area-button:last-child,
+    .area-alert--multiline > .area-alert__actions > .area-button:last-child,
+    .area-calendar__nav > .area-button, .area-queue__item .area-button, .area-edit-summary__head .area-button,
+    .area-edit-summary__file .area-button, .area-panel__bar > .area-button:last-child,
+    .area-color-picker__header > .area-button:last-child,
+    .area-code-block__header > .area-code-block__actions:last-child > .area-button:last-child,
+    .area-code-block > .area-code-block__actions > .area-button:last-child).area-button {
+    --_cc-own: min(var(--_radius), max(var(--area-radius-min), round(down, calc(var(--_height) * var(--area-radius-factor)), 2px)));
+    --_cc-pull: calc((var(--_height) - var(--_icon)) / 2);
+    --_cc-distance: var(--_cc-at, calc(var(--_cc-inset) - var(--_cc-glyph, 1) * var(--_cc-pull)));
+    --_cc-round: max(min(var(--area-radius-floor), var(--_cc-own)), calc(var(--_cc-corner) - var(--_cc-near, var(--_cc-distance)) * var(--area-radius-concentric)), calc(var(--_cc-own) - (0.5 - var(--area-radius-factor)) * 1000px));
+    --_shape: max(min(var(--_height) / 2, var(--_cc-round, var(--_cc-own))), var(--_button-pill) * var(--area-radius-full)); /* a pill is radius-full, one value */
+  }
+
+  /*
+   * Two header bars (plan B4.1, 2026-11-14; DESIGN_SYSTEM.md, "Header bars"). A bar across the top of a region or a
+   * surface that holds its title, its search or its controls is one of two, each built from the control it holds:
+   *   region bar  the small control with the region room, 7, above and below: control-sm + 14 (38 / 40 / 44 at type 13
+   *               Compact / Default / Comfortable). A region's own header: a window bar, a small Titlebar, a Board
+   *               column's header, a Color picker's header.
+   *   tool bar    the medium control with the cluster space above and below: control-md + 2 × ui-cluster (38 / 46 / 54).
+   *               A surface's working bar: Panel's (md), a Titlebar's (md), the Command palette's search, a Toolbar
+   *               surface (md, by its own inset, the same sum).
+   * Each adds the width of the rule it draws, `--_hb-rule` (0 when it draws none), so the room round its controls is the
+   * same with or without the rule. The rooms are published for a bar whose controls sit evenly. Every term is a ladder
+   * token or a fixed step, so both bars are whole at every type and density. A family sets `--_hb-rule` and reads
+   * `--_hb-region` or `--_hb-tool`; it never restates a height. A small Panel keeps its own bar (sm + 2 × ui-stack,
+   * panel.css), the item's open choice taken as it stands.
+   */
+  :where(.area-panel, .area-titlebar, .area-command-palette__search, .area-board-column__header, .area-color-picker, .area-color-picker__header) {
+    --_hb-rule: 0px;
+    --_hb-region-room: calc((var(--area-space-16) - var(--area-space-2)) / 2); /* the owner's 7 above and below */
+    --_hb-tool-room: var(--area-ui-cluster);
+    --_hb-region: calc(var(--area-control-sm) + var(--_hb-region-room) * 2 + var(--_hb-rule));
+    --_hb-tool: calc(var(--area-control-md) + var(--_hb-tool-room) * 2 + var(--_hb-rule));
+  }
+
+  /*
+   * One collapsible head (plan B4.4, 2026-11-14; DESIGN_SYSTEM.md, "Chat cards"). A chat card that folds (Plan, Queue)
+   * opens and closes from one head: a row (ui-row) tall, its title the text's size, strong, in the default ink and cut
+   * short; the chevron right after the title (as Step's and Reasoning's lines), turning on fast; a count or status at
+   * the end, muted, the small text (Plan's count). Its words start on the card's column. Edit summary's and Approval's
+   * heads are the same row with no chevron: they do not fold.
+   */
+  :is(.area-plan__head, .area-queue__head) {
+    display: flex;
+    align-items: center;
+    gap: var(--area-space-8);
+    inline-size: 100%;
+    min-block-size: var(--_chat-head);
+    margin: 0;
+    padding: 0 var(--_card-column);
+    border: 0;
+    background: none;
+    color: inherit;
+    font: inherit;
+    text-align: start;
+    cursor: pointer;
+  }
+  :is(.area-plan__head, .area-queue__head):focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: calc(-1 * var(--area-focus-width)); border-radius: inherit; }
+  :is(.area-plan__title, .area-queue__title) { min-inline-size: 0; overflow: hidden; font-weight: var(--area-weight-strong); color: var(--area-fg-default); text-overflow: ellipsis; white-space: nowrap; }
+  /* The chevron: the 12 glyph in a square the text's line tall, whose plate (the hover) wraps it; the glyph sits 4 after
+     the title. Its plate's corner is the card's less its inset (concentric). */
+  :is(.area-plan__chevron, .area-queue__chevron) {
+    --_plate-in: calc((var(--area-ui-row) - var(--area-text-base-leading)) / 2);
+    position: relative; isolation: isolate; display: inline-flex; flex: none; place-items: center; justify-content: center; align-items: center;
+    inline-size: var(--area-text-base-leading); block-size: var(--area-text-base-leading);
+    margin-inline: calc(-1 * var(--area-space-4));
+    color: var(--area-fg-muted);
+    transform: rotate(-90deg);
+    transition: transform var(--area-duration-fast) var(--area-ease-out); /* MOTION.md: every chevron turns on fast */
+  }
+  /* Closed points along the reading direction, so it mirrors in right-to-left text (Accordion, Tree view). */
+  :is(.area-plan__chevron, .area-queue__chevron):dir(rtl) { transform: rotate(90deg); }
+  :is(.area-plan[data-open], .area-queue[data-open]) :is(.area-plan__chevron, .area-queue__chevron) { transform: none; }
+  :is(.area-plan__chevron, .area-queue__chevron) > svg { inline-size: var(--area-icon-xs); block-size: var(--area-icon-xs); }
+  :is(.area-plan__chevron, .area-queue__chevron)::before { content: ""; position: absolute; inset: 0; z-index: -1; border-radius: max(var(--area-radius-min), calc(var(--area-radius-small) + (var(--_fr-corner) - var(--area-stroke-width) - var(--_plate-in) - var(--area-radius-small)) * var(--area-radius-concentric))); transition: var(--area-transition); }
+  /* The count or status at the end: the small text, muted, figures of one width. */
+  .area-plan__count { flex: none; margin-inline-start: auto; color: var(--area-fg-muted); font-size: var(--area-text-sm-size); letter-spacing: var(--area-text-sm-tracking); font-variant-numeric: tabular-nums; }
+
   /* A trailing pill reserves its own height, so it ends as far from the plate's edge as it
      sits from the top (6 for the 20px Badge), like the Kbd rules below. */
   .area-nav__item:has(> .area-nav__trailing > .area-badge:last-child) { --_box-end: var(--area-mark-label-md); }
@@ -343,4 +621,65 @@
   .area-nav__item:has(> .area-nav__trailing > .area-count--plain:last-child) { --_box-end: var(--_box-icon); }
   .area-nav__trailing > .area-count--plain:last-child { min-inline-size: 0; padding-inline: 0; }
 
+
+  /*
+   * One hit target (plan A11.2; WCAG 2.5.8). A part smaller than 24 on either axis owns an invisible box centred on it,
+   * max(its own size, 24) on each axis, 44 under a coarse pointer, as Badge's and Tag's removes first did. Nothing visible
+   * moves and no measured box changes: the target is a pseudo-element out of flow. A hit area never takes a neighbour's:
+   * where a part sits closer than that to another target, its axis toward the neighbour keeps its own size, or splits
+   * the gap between them (`--_hit-inline`, `--_hit-block`), and the part is listed in DESIGN_SYSTEM.md ("Targets").
+   * Badge's links and removes, Tag's remove, Toggletip, Switch, Splitter and Tree view's chevron keep their own.
+   */
+  .area-input__action-button, .area-number-field__step, .area-chip__action, .area-chip__dismiss, .area-nav__actions > .area-button,
+  .area-split-button > .area-split-button__trigger, .area-segmented__item, .area-toggle-group--soft > .area-button,
+  .area-breadcrumb__link, button.area-breadcrumb__ellipsis, .area-color-swatch-picker__cell, .area-step__row,
+  .area-checkbox__control, .area-radio__control, .area-slider {
+    --_hit: var(--area-space-24);
+    --_hit-coarse: calc(var(--area-space-40) + var(--area-space-4));
+    position: relative;
+  }
+  @media (pointer: coarse) {
+    .area-input__action-button, .area-number-field__step, .area-chip__action, .area-chip__dismiss,
+    .area-split-button > .area-split-button__trigger, .area-segmented__item, .area-toggle-group--soft > .area-button,
+    .area-breadcrumb__link, button.area-breadcrumb__ellipsis, .area-checkbox__control, .area-radio__control, .area-slider { --_hit: var(--_hit-coarse); }
+  }
+  :is(.area-input__action-button, .area-number-field__step, .area-chip__action, .area-chip__dismiss, .area-nav__actions > .area-button,
+  .area-split-button > .area-split-button__trigger, .area-segmented__item, .area-toggle-group--soft > .area-button,
+  .area-breadcrumb__link, button.area-breadcrumb__ellipsis, .area-color-swatch-picker__cell, .area-step__row, .area-slider)::after,
+  :is(.area-checkbox__control, .area-radio__control)::before {
+    content: "";
+    position: absolute;
+    inset: 50% auto auto 50%;
+    translate: -50% -50%;
+    inline-size: max(100%, var(--_hit-inline, var(--_hit)));
+    block-size: max(100%, var(--_hit-block, var(--_hit)));
+  }
+  /* Axes that meet a neighbour (each keeps 24 where the neighbour leaves room, never more). A field's action and a
+     chip's remove sit beside text that is its own target: 24 across. Steppers sit with their centres 24 apart (the
+     gap number-field.css leaves, owner 2026-11-13): 24 across, meeting halfway. Segments and joined items sit 2 apart:
+     their own width. A split trigger abuts its action, so its own box is at least 24 (split-button.css). A chip's label is beside its remove. Nav actions
+     2 apart split the gap; a lone one takes 24. Steps in a group, 4 apart, split the gap; a lone step takes 24.
+     Checkboxes and radios stack about 6 apart: 24 tall, and 44 across under a coarse pointer, over their own label.
+     Breadcrumb parts sit a separator apart: 24 across. Swatch cells sit on a 24 pitch at their smallest: 24 at most. */
+  :is(.area-input__action-button, .area-number-field__step, .area-chip__dismiss, .area-breadcrumb__link, button.area-breadcrumb__ellipsis, .area-color-swatch-picker__cell) { --_hit-inline: var(--area-space-24); }
+  :is(.area-chip__action, .area-split-button > .area-split-button__trigger, .area-segmented__item, .area-toggle-group--soft > .area-button) { --_hit-inline: 100%; }
+  /* A joined split trigger shares its start edge with its action (the border counted once, split-button.css), so its own
+     box takes the action's last pixel. Its target is its ::after alone, from that shared edge to its end: the action owns
+     its whole box, the trigger its own width (at least 24), and the two never overlap. A ghost split has a gap instead. */
+  .area-split-button:not(.area-split-button--ghost) > .area-split-button__trigger { pointer-events: none; }
+  .area-split-button:not(.area-split-button--ghost) > .area-split-button__trigger::after {
+    pointer-events: auto;
+    /* From the padding edge (past the shared start border) through the end border: the box less the shared edge. */
+    inset: 50% auto auto 0;
+    translate: 0 -50%;
+    inline-size: calc(100% + var(--area-stroke-width));
+  }
+  .area-split-button:not(.area-split-button--ghost) > .area-split-button__trigger:dir(rtl)::after { inset: 50% 0 auto auto; }
+  .area-nav__actions > .area-button { --_hit-inline: calc(100% + var(--area-space-2)); --_hit-block: var(--area-space-24); }
+  .area-nav__actions > .area-button:only-child { --_hit-inline: var(--area-space-24); }
+  .area-color-swatch-picker__cell { --_hit-block: var(--area-space-24); }
+  .area-step__row { --_hit-inline: 100%; --_hit-block: var(--area-space-24); }
+  .area-step--group .area-step__items .area-step__row { --_hit-block: calc(100% + var(--area-space-4)); }
+  :is(.area-checkbox__control, .area-radio__control) { --_hit-block: var(--area-space-24); }
+  .area-slider { --_hit-inline: 100%; }
 }

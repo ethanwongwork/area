@@ -25,13 +25,20 @@ export interface AccordionItemProps extends Omit<HTMLAttributes<HTMLDivElement>,
   open?: boolean;
   /** Initial open state when uncontrolled. */
   defaultOpen?: boolean;
+  /** Called with the item's new open state when its trigger opens or closes it. */
   onOpenChange?: (open: boolean) => void;
   /** This item's key in a Accordion's `value`. Defaults to a generated id. */
   value?: string;
   /** Wraps the trigger in a heading of this level (a Accordion defaults to 3). */
   headingLevel?: HeadingLevel;
+  /** The trigger can't be pressed, so the item stays as it is. */
   disabled?: boolean;
+  /**
+   * `plain` (default): items with no rule between them. `divided`: a rule between items. In an Accordion the group's
+   * wins.
+   */
   variant?: AccordionItemVariants["variant"];
+  /** The trigger's height and type: `md` (default) or `sm`. In an Accordion the group's wins. */
   size?: AccordionItemVariants["size"];
 }
 
@@ -97,9 +104,11 @@ export interface AccordionProps extends HTMLAttributes<HTMLDivElement> {
   defaultValue?: string[];
   /** The open items after a change, and the press that made it (absent when a find-in-page reveal opens one). */
   onValueChange?: (value: string[], event?: SyntheticEvent) => void;
-  /** Heading level for every item's trigger (WAI accordion). */
+  /** The heading level that wraps every item's trigger, so the items sit in the page's outline. */
   headingLevel?: HeadingLevel;
+  /** Every item's treatment: `plain` (default) or `divided`, a rule between items. */
   variant?: AccordionItemVariants["variant"];
+  /** Every item's trigger height and type: `md` (default) or `sm`. */
   size?: AccordionItemVariants["size"];
 }
 

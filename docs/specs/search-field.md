@@ -90,7 +90,7 @@ action's box sits 4 in, so its glyph is also 8 from the end at md; the Kbd hint'
 | leading glyph | the package `search` glyph, 16, `input-icon` ink | All three products lead with a magnifier; peer Command palette's search | — |
 | clear · when | shown whenever there is text and the field is editable | ChatGPT, Notion and Figma show it once there is a query; React Aria | Fluent shows it only while focused; not adopted (a filled field you return to should offer clear) |
 | clear · box | InputAction's: field − 8 (20 / 24 / 32), 4 in, concentric radius, ghost plates (hover `bg-component-hover`, pressed `bg-component-active`; soft fields the translucent pair) | Figma 24 square button flush at the end; Notion 24 round; peer InputAction | ChatGPT has a bare 16 button; Notion's resting plate is not adopted (Area's actions show a plate on hover only) |
-| clear · glyph | the package `dismiss-circle` glyph (filled circled ×, the × knocked out), 16 | ChatGPT and Notion (filled circled ×); owner's pick (open question 1) | Figma, Fluent `DismissRegular` and Spectrum draw a plain ×, Area's glyph until 2026-10-10 |
+| clear · glyph | the package `dismiss` glyph (a plain ×), 16, as every field action that clears (plan B3.3, 2026-11-14) | the system's one clear glyph; `dismiss-circle` is a status mark (Attachment, Message, Queue errors) | the filled circled × was the owner's earlier pick (open question 1, 2026-10-10); the plan put it back to one glyph, owner to glance |
 | clear · name | "Clear search" (`clearLabel`), from the action's tooltip | ChatGPT, Figma ("Clear search"), React Aria | — |
 | shortcut hint | a Kbd in the suffix while empty: sm in sm and md fields, md in lg; `aria-hidden`, with the keys set as `aria-keyshortcuts` | Notion's ⌘K trigger; Untitled UI `shortcut`; Kbd's approved search-field tile | — |
 | type | `type="search"`, `enterkeyhint="search"`; the browser's cancel button and decoration hidden (already in input.css) | React Aria, Fluent | — |
@@ -212,3 +212,9 @@ Resolved 2026-10-10 (owner: "proceed with your suggestions"); kept for the recor
 - **What changed:** `onValueChange(query, event)` passes the change, the Escape key or the clear action's click.
 - **Why:** SearchField.tsx:15. From the components audit's internal peer comparison (`docs/research/components-audit-2026-11-07/internal.md`); the owner took every recommendation ("Take all recs", 2026-11-07).
 - **Verdict:** awaiting the owner.
+
+### 2026-11-14 · One field shell (system plan, Phase 2, B3)
+
+- The clear action draws `dismiss`, the one clear glyph; `dismiss-circle` stays a status mark (plan B3.3). Visible: a plain × in place of the filled disc. Owner to glance.
+- Why: docs/research/system-evaluation-2026-11-11 (B3.1, B3.2, B3.3, B2.2 in fields; README §5); the owner took every recommendation on 2026-11-11 and the 24 targets on 2026-11-13. B3.2: field text stays on Button's inset (Keep 10, the pick), so nothing moved.
+- Verdict: awaiting the owner.

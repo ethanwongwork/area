@@ -95,7 +95,7 @@ From the stylesheets (not capture-compare tables; no live captures yet):
 | failed | verb in fg-danger | codex ✘, claude-code failure dot | — |
 | group children | 4 apart, a 1px divider rule, content 12 in | claude-code rail at 12 | the rule keeps a folded run legible at 256 |
 | reasoning body | muted text, pre-wrap | claude-code (secondary), cursor | — |
-| row focus | the focus ring, offset 2, on a small corner | DESIGN_SYSTEM focus | — |
+| row focus | the focus ring, offset 2, on the row's corner (`radius-row`, a full-width row) | DESIGN_SYSTEM focus; plan A2.2 | Was `radius-small` (6) |
 
 ## States
 
@@ -237,3 +237,13 @@ Owner, "Apply both" on Kit Type Decisions (artifact KeEDPx5sUTQXE6iKtu6sw1; docs
 - **Why:** one set of status words across Plan, Stepper, Step, Queue, Attachment, File upload, Edit summary and Turn
   notice (GOVERNANCE.md, "Status words"; owner picked Build on the system gaps review, 2026-11-07).
 - **Verdict:** awaiting the owner.
+- 2026-11-11 · system evaluation A2.2 · the row is a full-width row: radius-row, 6 → 8 at the default. step.css.
+
+## Review note, 2026-11-11 (focus and targets, plan A6, A11.2)
+
+- **What changed:** The row's ring draws inside by its own width (A6.2, S12). The row owns the shared hit target, 24 tall standalone, splitting the 4 gap in a group (A11.2).
+- **Why:** the system evaluation's focus, forced colours and hit target items (docs/research/system-evaluation-2026-11-11, section 5), owner-approved 2026-11-11; the rules are in DESIGN_SYSTEM.md ("The focus ring", "Targets") and CONTRAST.md (Focus).
+
+## State paint (plan B7.11), 2026-11-14
+
+- The chevron hides only inside `@media (hover: hover)`. The row has no hover plate, so nothing to press (B7.3 checked).

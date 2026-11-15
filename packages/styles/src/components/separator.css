@@ -1,0 +1,41 @@
+/* Separator (docs/specs/separator.md). */
+@layer area.components {
+  /* --- Separator ---------------------------------------------------------- */
+  .area-separator {
+    --_separator-gap: 0px;
+    border: 0;
+    background-color: var(--area-edge-dividers); /* the lightest line, border-decorative (owner 2026-10-25: "id prefer to not use dividers in general unless its very necessary and intentional"; "dividers that are inset to have a very light subtle stroke by default"). Was border-divider */
+    flex-shrink: 0;
+  }
+
+  .area-separator--horizontal {
+    margin-block: var(--_separator-gap);
+    inline-size: 100%;
+    block-size: var(--area-stroke-width);
+  }
+
+  .area-separator--vertical {
+    margin-inline: var(--_separator-gap);
+    inline-size: var(--area-stroke-width);
+    block-size: auto;
+    align-self: stretch;
+    /* Outside a flex row there is nothing to stretch to: keep a line's height (audit G-28). */
+    min-block-size: 1lh;
+  }
+
+  .area-separator--inset.area-separator--horizontal {
+    inline-size: auto;
+    align-self: stretch;
+    /* One inset hook for both orientations (audit G-28; horizontal was a fixed 16). */
+    margin-inline: var(--area-separator-inset, var(--area-space-16)); /* the hook's default; a container passes its own inset, at every density */
+  }
+
+  .area-separator--inset.area-separator--vertical {
+    block-size: auto;
+    margin-block: var(--area-separator-inset, var(--area-space-8)); /* the hook's default, at every density */
+  }
+
+  .area-separator--none { --_separator-gap: 0px; }
+  .area-separator--normal { --_separator-gap: var(--area-ui-cluster); }
+
+}

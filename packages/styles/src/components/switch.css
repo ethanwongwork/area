@@ -2,8 +2,8 @@
 @layer area.components {
   .area-switch {
     --_switch-pill: var(--area-pill-switch);
-    --_track-radius: calc(max(var(--area-radius-min), round(down, calc(var(--_h) * var(--area-radius-factor)), 2px)) + var(--_switch-pill) * var(--area-radius-full));
-    --_thumb-radius: max(var(--area-radius-floor), calc(var(--_track-radius) - var(--_inset)));
+    --_track-radius: max(var(--area-radius-min), round(down, calc(var(--_h) * var(--area-radius-factor)), 2px), var(--_switch-pill) * var(--area-radius-full)); /* a pill is radius-full, one value */
+    --_thumb-radius: max(var(--area-radius-floor), calc(var(--_track-radius) - var(--_inset)), var(--_switch-pill) * var(--area-radius-full));
     /* spec: the thumb travels 12px at every size, as in ChatGPT (32 x 20) and Notion (30 x 18). */
     --_travel: var(--area-space-12);
     --_w: calc(var(--_h) + var(--_travel));
@@ -35,7 +35,9 @@
     isolation: isolate;
     min-inline-size: 0;
     max-inline-size: 100%;
-    min-block-size: var(--area-space-24);
+    /* The box is the track's height (or the text's): the 24 target is the native control's, centred on the box and
+       out of flow (below), so a Switch in a row keeps the row's height and centre (plan B2.5, VA3: its 18 track drew at
+       the top of a 24 box, 3 above the line a Select beside it centred on). */
     font-family: var(--area-font-sans);
     font-size: var(--_text);
     line-height: var(--_leading);
@@ -53,14 +55,15 @@
   .area-switch--short { --_track: short; }
   .area-switch--long { --_thumb-width: calc(var(--_thumb) + var(--area-space-8)); --_w: calc(var(--_h) * 2 + var(--area-space-4)); }
 
+  /* The hit area: the whole Switch, and never under 24 on either axis (44 under a coarse pointer), centred on it. */
   .area-switch__control {
+    --_target: var(--area-space-24);
     appearance: none;
     position: absolute;
-    inset: 0;
-    inline-size: 100%;
-    block-size: 100%;
-    min-inline-size: var(--area-space-24);
-    min-block-size: var(--area-space-24);
+    inset: 50% auto auto 50%;
+    translate: -50% -50%;
+    inline-size: max(100%, var(--_target));
+    block-size: max(100%, var(--_target));
     margin: 0;
     padding: 0;
     border: 0;
@@ -75,7 +78,6 @@
     box-sizing: border-box;
     inline-size: var(--_w);
     block-size: var(--_h);
-    margin-block-start: calc((var(--_leading) - var(--_h)) / 2);
     border: var(--area-stroke-width) solid var(--_edge);
     /* A pill while data-area-pills lists `switch` (the default); otherwise the radius setting's corner
        for the track, the thumb concentric. React pill / pill={false} override. */
@@ -100,7 +102,7 @@
     background-color: var(--_off-hover);
     opacity: 0;
     transition:
-      opacity var(--area-fade-fast) var(--area-ease-out),
+      opacity var(--area-fade-fast) var(--area-ease-effects),
       background-color var(--area-duration-base) var(--area-ease-in-out);
   }
 
@@ -148,6 +150,10 @@
   .area-switch:is(:active, [data-active]):not(:is([data-disabled], [data-read-only], [data-loading])) .area-switch__control:checked ~ .area-switch__track .area-switch__thumb { --_x: round(nearest, calc(var(--_w) - var(--_inset) * 2 - var(--_thumb-width) - var(--area-space-2)), 1px); }
   .area-switch__control:focus-visible ~ .area-switch__track,
   .area-switch[data-focus-visible] .area-switch__track { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); }
+  /* On, the track is the ring's own colour at the shipped Selection: the ring stands off by the gap (plan A6.1). */
+  .area-switch__control:checked:focus-visible ~ .area-switch__track,
+  .area-switch[data-focus-visible] .area-switch__track[data-checked],
+  .area-switch[data-focus-visible] .area-switch__control:checked ~ .area-switch__track { outline-offset: var(--area-focus-gap); }
 
   /* Disabled dims the whole control, like Checkbox, Radio and Button, so an on switch still
      reads as on. It used to repaint the track grey, which hid the checked state. */
@@ -155,10 +161,16 @@
   .area-switch[data-read-only] { cursor: default; }
   .area-switch[data-loading] { cursor: progress; }
 
-  .area-switch__text { display: flex; flex-direction: column; gap: 0; min-inline-size: 0; } /* the description is the label's next line, as a choice's (Text pairs, 2026-11-06; was 2) */
+  /* The words take the one centring model on the track (inset.css; plan B2.2, VA2): the label is trimmed to its cap and
+     set (track − 1cap) / 2 down, so its cap centres on the track and a wrapped label or a description runs on below the
+     first line, as Checkbox's and Radio's labels do. Centred on its line box, the label sat 0.62 high at type 13. */
+  .area-switch__text { display: flex; flex-direction: column; gap: 0; min-inline-size: 0; margin-block-start: max(0px, calc((var(--_h) - 1cap) / 2)); } /* the description is the label's next line, as a choice's (Text pairs, 2026-11-06; was 2) */
   .area-switch__label { display: block; font-size: var(--_text); line-height: var(--_leading); overflow-wrap: anywhere; }
-  .area-switch__description { display: block; font-size: var(--area-text-sm-size); line-height: var(--area-text-sm-leading); color: var(--area-fg-muted); overflow-wrap: anywhere; }
-  .area-switch__loading { display: inline-flex; align-items: center; min-block-size: var(--_leading); order: 1; }
+  .area-switch__description { display: block; font-size: var(--_text); line-height: var(--_leading); color: var(--area-fg-muted); overflow-wrap: anywhere; } /* the label's size, muted (plan A9.3) */
+  .area-switch__label { text-box: trim-start cap alphabetic; }
+  .area-switch__description { text-box: trim-end cap alphabetic; }
+  .area-switch__label:only-child { text-box-trim: trim-both; }
+  .area-switch__loading { display: inline-flex; align-items: center; min-block-size: var(--_h); order: 1; }
   .area-switch--end .area-switch__text { order: 2; }
   .area-switch--start .area-switch__text { order: -2; }
   .area-switch--start .area-switch__loading,
@@ -169,12 +181,13 @@
      centre, and its label in the muted ink of a horizontal Field's label (field.css), so the row's name reads as every
      other row's. */
   .area-panel .area-switch--full-width:not(:has(.area-switch__description)) { min-block-size: var(--area-control-sm); align-items: center; }
+  .area-panel .area-switch--full-width:not(:has(.area-switch__description)) .area-switch__text { margin-block-start: 0; }
   .area-panel .area-switch--full-width .area-switch__label { color: var(--area-fg-muted); }
   .area-switch--full-width .area-switch__text { order: -2; flex: 1; }
 
   /* Reduced motion and data-area-motion="0" zero every duration token (emit/css.ts), so the
      thumb, track and hover layer all stop without a rule of their own. */
-  @media (pointer: coarse) { .area-switch { min-block-size: calc(var(--area-space-40) + var(--area-space-4)); min-inline-size: calc(var(--area-space-40) + var(--area-space-4)); } }
+  @media (pointer: coarse) { .area-switch__control { --_target: calc(var(--area-space-40) + var(--area-space-4)); } }
   @media (forced-colors: active) {
     .area-switch { --_on: Highlight; --_on-hover: Highlight; --_off: Canvas; --_off-hover: Canvas; --_edge: CanvasText; }
     .area-switch__track { forced-color-adjust: none; background: Canvas; border-color: CanvasText; }

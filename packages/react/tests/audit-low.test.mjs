@@ -11,7 +11,8 @@ const css = readFileSync(new URL("../../styles/dist/area.css", import.meta.url),
 // The step became one icon column on 2026-11-01 (owner: "fix the alignment here", children 4 short of the parent's name).
 test("a nested Nav group steps its rows in one icon column, onto the parent's name (audit D-20)", () => {
   assert.match(renderToString(h(NavGroup, { nested: true })), /class="area-nav__group area-nav__group--nested"/);
-  assert.match(css, /\.area-nav__group--nested \{\s*--_nav-indent: calc\(var\(--area-icon-md\) \+ var\(--area-gap-row\)\);/);
+  // The column is the row's icon-to-label gap, ui-cluster, since 2026-11-11 (plan B2.3; was gap-row).
+  assert.match(css, /\.area-nav__group--nested \{\s*--_nav-indent: calc\(var\(--area-icon-md\) \+ var\(--area-ui-cluster\)\);/);
   assert.match(css, /\.area-nav__group--nested \.area-nav__item \{ padding-inline-start: calc\(var\(--_inset-start\) \+ var\(--_nav-indent\)\); \}/);
 });
 
@@ -22,11 +23,11 @@ test("Calendar draws its floating plate by default; plain drops it (audit F-21)"
 });
 
 test("the modal Dialog and its scrim fade and scale in on the motion axis (audit E-19)", () => {
-  // Closed carries the exit clock (one step faster, docs/MOTION.md): base out, moderate in.
+  // Closed carries the exit clock (one step faster, docs/MOTION.md): fast out on ease-exit, base in (plan A5.1, 2026-11-11).
   // Command palette shares the rule (system gaps C7, 2026-11-07).
-  assert.match(css, /:is\(\.area-dialog__modal, \.area-command-palette__modal\):not\(\[open\]\) \{ --_overlay-duration: var\(--area-duration-base\); --_overlay-fade: var\(--area-fade-base\); opacity: 0; scale: var\(--_overlay-scale\); \}/);
+  assert.match(css, /:is\(\.area-dialog__modal, \.area-command-palette__modal\):not\(\[open\]\) \{ --_overlay-duration: var\(--area-duration-fast\); --_overlay-fade: var\(--area-fade-fast\); --_overlay-ease: var\(--area-ease-exit\); --_overlay-move: var\(--area-ease-exit\); opacity: 0; scale: var\(--_overlay-scale\); \}/);
   assert.match(css, /@starting-style \{\s*:is\(\.area-dialog__modal, \.area-command-palette__modal\)\[open\] \{ opacity: 0; scale: var\(--_overlay-scale\); \}\s*:is\(\.area-dialog__modal, \.area-command-palette__modal\)\[open\]::backdrop \{ opacity: 0; \}/);
-  assert.match(css, /:is\(\.area-dialog__modal, \.area-command-palette__modal\) \{[^}]*--_overlay-duration: var\(--area-duration-moderate\)/);
+  assert.match(css, /:is\(\.area-dialog__modal, \.area-command-palette__modal\) \{[^}]*--_overlay-duration: var\(--area-duration-base\)/);
 });
 
 test("Popover has a close part and its title level is settable (audit E-8)", async () => {

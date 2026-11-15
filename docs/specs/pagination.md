@@ -240,3 +240,24 @@ Pages press at `bg-component-pressed`, one step past selected (Notion presses at
   evidence and Area's peers → 19 captures, gallery tiles, in review.
 - 2026-10-08 · owner: "go with your recommendations" → the three open questions resolved as recommended; no
   code change.
+
+### 2026-11-11 · Ink, dark and colour (system plan, Phase 1)
+
+- **What changed:** Previous and Next read the muted ink with the pages (plan A3.3, finding VN12): one ink for the bar's inactive items.
+- **Why:** docs/research/system-evaluation-2026-11-11 (README §5); the owner took every recommendation on 2026-11-11.
+- **Verdict:** awaiting the owner.
+
+## Shared parts (plan B2), 2026-11-13
+
+- **Centring (B2.2, VN8).** A page number is a text box: a block trimmed to its cap and padded (H − 1cap) / 2 above and below (inset.css, `--_cap-room`), so its digits sit on the square's centre; centred on its line box they sat 0.62 high. The square, its sides and its corner are unchanged.
+
+### 2026-11-14 · Shared parts, leftovers (system plan, Phase 2, wave 3)
+
+- A pill is one value: while the Pills set rounds it, its corner is `radius-full` itself, `max(corner, flag × full)`, never the corner plus full (it computed the corner plus 9999px). Draws the same; the corners snapshot records 9999px.
+- Listed, not moved: the page side 6 (a control's text side is 9 at the default).
+- Why: docs/research/system-evaluation-2026-11-11 (plan B6.1, B6.5, B8.2, B2.2; README §5, phase2/leftovers.md); the owner took every recommendation on 2026-11-11. Fix the rule, not the instance.
+- Verdict: awaiting the owner.
+
+## State paint (plan B7.2), 2026-11-14
+
+- The current page presses (its plate rule outranked the press).

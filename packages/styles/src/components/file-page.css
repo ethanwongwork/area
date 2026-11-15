@@ -91,8 +91,9 @@
   .area-file-page__icon {
     display: grid;
     place-items: center;
-    inline-size: round(nearest, calc(var(--_size) * 0.32), 2px); /* spec: Finder 132 of 512 is 26%, fuller; 30 at 96 */
-    block-size: round(nearest, calc(var(--_size) * 0.32), 2px);
+    /* Snapped to the glyph's native sizes (plan A11.3, 2026-11-11): 16 at 48, 20 at 64, 32 at 96 (was 30, no native size). */
+    inline-size: round(nearest, calc(var(--_size) * 0.32), 4px); /* spec: Finder 132 of 512 is 26%, fuller */
+    block-size: round(nearest, calc(var(--_size) * 0.32), 4px);
     color: var(--_ink);
   }
   .area-file-page__icon > svg { inline-size: 100%; block-size: 100%; --area-weight-icon: var(--_edge); --area-type-icon-line: 1; }
@@ -102,6 +103,7 @@
   .area-file-page__label {
     color: var(--_ink);
     font-family: var(--area-font-sans);
+    /* Artwork, not text, as Folder's count (plan A9.9): inside the page's image (role img) or an aria-hidden page. */
     font-size: round(nearest, calc(var(--_size) * 0.13), 1px); /* spec: as Folder's count; 12 at 96, 8 at 64 */
     font-weight: var(--area-weight-regular);
     line-height: 1;

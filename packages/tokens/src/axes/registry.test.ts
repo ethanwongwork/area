@@ -41,7 +41,9 @@ describe("axis registry", () => {
         // Stroke groups, 2026-10-30 (axes/stroke-groups.ts).
         "stroke-cards", "stroke-blocks", "stroke-callouts", "stroke-floating", "stroke-regions", "stroke-dividers", "stroke-fields", "stroke-buttons", "stroke-options", "stroke-tracks", "stroke-tags", "stroke-media",
         // Series colours, 2026-11-01 (axes/series.ts).
-        "series-lightness"].sort(),
+        "series-lightness",
+        // Regular weight, 2026-11-13 (axes/regular-weight.ts, plan A9.6).
+        "regular-weight"].sort(),
     );
   });
 });

@@ -48,7 +48,7 @@ export default {
     // Spec: Anatomy.
     parts: {
       root: "The radiogroup: lays out cells in columns, a wrapping row, or a contiguous palette; owns the arrow keys.",
-      cell: "One option: a label around a hidden native radio and a Color swatch; owns hover, the selection ring and the focus ring.",
+      cell: "One option: a label around a hidden native radio and a Color swatch; owns hover, the selected edge (the Selected edge setting's width in the Selection color, inside the cell) and the focus ring.",
     },
     // Source: ColorSwatchPicker.tsx move(); native radio.
     keyboard: [
@@ -87,7 +87,7 @@ export default {
     // Spec: Anatomy, Second pass; source: ColorPicker.tsx.
     parts: {
       root: "The group: the floating surface (or plain), ten rows wide; owns the value, the model, the view and form reset.",
-      header: "An optional row above the editor for a title, tabs or a close action; the editor follows with no rule between.",
+      header: "An optional row above the editor for a title, tabs or a close action, the region bar; its end control sits as far from the end as from the top. The editor follows with no rule between.",
       body: "The editor's column: the view switcher, the contrast row, the area or grid, the controls row and the value row.",
       views: "A small full-width Segmented that switches between spectrum, grid and sliders; shown only with more than one view.",
       contrast: "The contrast row: the pair swatch, the ratio and a pass or fail mark with the level.",
@@ -325,7 +325,7 @@ export default {
     parts: {
       root: "The surface, 240 wide by default (--area-panel-inline-size), with its edge, corner and resting shadow; flush drops them.",
       resize: "With resizable, the separator on one edge, painted as Splitter's handle: drag it, use the arrow keys, or double-click for defaultWidth.",
-      bar: "The header row: the title and an action at its end; no rule beneath it (bareBar is the default now and deprecated).",
+      bar: "The header row, the tool bar at md (a window bar is the region bar): the title and an action at its end, as far from the end as from the top, its corner the panel's less that; no rule beneath it (bareBar is the default now and deprecated).",
       title: "The panel's title, a heading (h2 by default) that names the panel region.",
       body: "A Scroll area between the bar and the footer, holding the sections and rows, inset on every side.",
       section: "A group of rows; the next section's heading and an inset of space separate it, with no rule.",
@@ -349,7 +349,7 @@ export default {
     states: {
       collapsed: "A collapsible section is closed: its rows hide, the chevron turns and the summary shows.",
       resizable: "The panel has a resize separator on one edge.",
-      resizing: "The separator is being dragged: a 2 line in the accent on the panel's edge.",
+      resizing: "The separator is being dragged: a 2 line in the Selection color on the panel's edge.",
     },
     // Source: primitives.tsx separator onKeyDown; native button.
     keyboard: [
@@ -388,10 +388,10 @@ export default {
     parts: {
       root: "The area the two regions share, in a row or a column; it owns nothing else.",
       pane: "A region: the sized one keeps its size, the other takes the rest; each scrolls on its own.",
-      handle: "The 1 line between the regions, with a 4 hit area that grows to 12 after the pointer rests; a 2 line on hover, the accent while dragging.",
+      handle: "The 1 line between the regions, with a 4 hit area that grows to 12 after the pointer rests; a 2 line on hover, the Selection color while dragging.",
     },
     states: {
-      resizing: "The handle is being dragged: the line is the accent and the cursor stays the resize cursor everywhere.",
+      resizing: "The handle is being dragged: the line is the Selection color and the cursor stays the resize cursor everywhere.",
     },
     keyboard: [
       ["Left or Right", "In side-by-side regions, moves the handle by 8 (Shift for 32), reversed right to left."],
@@ -591,6 +591,7 @@ export default {
       ["Do", "Name the scroller with viewportProps' aria-label when it is a region of its own."],
       ["Do", "Keep hover (default) for panels and lists; use scroll for a bar only while scrolling, and always when overflow must be obvious."],
       ["Do", "Use viewportRef to scroll from code or follow new content."],
+      ["Do", "Inside a rounded frame, set --area-scroll-area-corner to the frame's corner, so the bar's ends stay off the curve."],
       ["Don't", "Use it for a list long enough to need virtualising: it renders every child."],
       ["Don't", "Look for a size, a track fill or arrow buttons: the bar is one quiet thumb."],
     ],
@@ -599,7 +600,7 @@ export default {
       root: "The region: you size it; it clips its content and positions the bars.",
       viewport: "The native scroller with its platform bar hidden; a Tab stop by default, so keys scroll it.",
       content: "The content wrapper, watched so the bars follow its size.",
-      scrollbar: "An overlay track at the end edge (bottom for horizontal), one per overflowing axis; press it to bring the thumb to the pointer.",
+      scrollbar: "An overlay track at the end edge (bottom for horizontal), one per overflowing axis, its ends clear of the frame's corner; press it to bring the thumb to the pointer.",
       thumb: "The round thumb, sized to the visible share of the content; drag it to scroll.",
     },
     // Spec: States.
@@ -607,6 +608,7 @@ export default {
       scrolling: "The bar shows while scrolling and hides shortly after the last scroll (scrollHideDelay).",
       "overflow-x": "The content is wider than the region, so a horizontal bar exists.",
       "overflow-y": "The content is taller than the region, so a vertical bar exists.",
+      "scroll-more": "The region can scroll further down; Dialog and Drawer draw a rule over their footer while it is set.",
     },
     // Spec: Behavior and accessibility (the native scroller's keys).
     keyboard: [

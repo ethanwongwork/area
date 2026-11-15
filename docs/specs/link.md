@@ -270,3 +270,9 @@ The hued inks read the hue role table (`--area-hue-<hue>-<role>`, packages/token
 - **Boundary kept:** a Link still goes somewhere or shows more; an action that changes something is a Button. No new variant, size or value: the form is the element only.
 - **Used by:** Components overview (family title, Show all), the flow checks, Setup's notes. Left hand-built: the token reference (a Code chip, not link-shaped) and Setup's answer row (a mark beside its text).
 - **Verification:** packages/react/tests/link.test.mjs (the button's markup, `type` always `button`, native props); seen in the app's Components overview and a flow's checks, light and dark.
+
+## Review note, 2026-11-11 (type rules, plan A9)
+
+- **What changed:** the underline reads `underline-offset` (0.08em), one token for every underline (plan A9.10); no visible change.
+- **Why:** the system evaluation's type rules (docs/research/system-evaluation-2026-11-11, section 5, A9), owner-approved
+  2026-11-11; the rules are in DESIGN_SYSTEM.md ("Ink and weight", "Size and shape", "Text pairs") and the type skill.

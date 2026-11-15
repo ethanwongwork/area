@@ -32,6 +32,7 @@
    * Horizontal: a row of plates. Scrolls rather than wraps, because a nav that reflows to
    * a second line moves every item below it and changes the height of the page chrome.
    */
+  .area-nav--vertical {} /* the default: the column above */
   .area-nav--horizontal {
     inline-size: max-content;
     flex-direction: row;
@@ -61,25 +62,27 @@
    * Notion 4 between sections of 30px rows. Scaled to Area's 32px rows, the 2px item gap plus
    * 12 here puts the label's cap about 26 under the last row, ChatGPT's proportion.
    */
+  /* A group break is gap-row (plan B2.1, the row table in inset.css): 8 / 12 / 16 at type 13, so the break follows
+     density as the rows do. It was 12 at every density. */
   .area-nav__group + .area-nav__group {
-    margin-block-start: var(--area-space-12); /* spec */
+    margin-block-start: var(--area-gap-row);
   }
 
   /*
    * An expandable item's children (audit D-20): the plate stays full width and the content
-   * steps in one icon column, the 16 icon and the row's gap (`gap-row`), so under a parent with an
+   * steps in one icon column, the 16 icon and the row's icon-to-label gap (`ui-cluster`), so under a parent with an
    * icon the children start exactly on its name (owner, 2026-11-01: "fix the alignment here",
    * References' Discover, Following and Saved sat 4 short of its name; Notion's children start on
    * the parent's name). It was Tree view's 22 level step (16 + 6). The inset contract applies it
    * (inset.css).
    */
   .area-nav__group--nested {
-    --_nav-indent: calc(var(--area-icon-md) + var(--area-gap-row)); /* spec */
+    --_nav-indent: calc(var(--area-icon-md) + var(--area-ui-cluster)); /* spec */
   }
   /* A nested run inside a nested run steps in once more, a column each (the desktop app's nav: a system › Foundations ›
      its pages, 2026-10-28). */
-  .area-nav__group--nested .area-nav__group--nested { --_nav-indent: calc((var(--area-icon-md) + var(--area-gap-row)) * 2); /* spec */ }
-  .area-nav__group--nested .area-nav__group--nested .area-nav__group--nested { --_nav-indent: calc((var(--area-icon-md) + var(--area-gap-row)) * 3); /* spec */ }
+  .area-nav__group--nested .area-nav__group--nested { --_nav-indent: calc((var(--area-icon-md) + var(--area-ui-cluster)) * 2); /* spec */ }
+  .area-nav__group--nested .area-nav__group--nested .area-nav__group--nested { --_nav-indent: calc((var(--area-icon-md) + var(--area-ui-cluster)) * 3); /* spec */ }
   .area-nav__group + .area-nav__group--nested { margin-block-start: 0; }
 
   /*
@@ -93,7 +96,7 @@
     display: flex;
     align-items: center;
     block-size: var(--area-ui-row);
-    padding-inline: var(--area-space-8);
+    padding-inline: var(--area-ui-row-inset);
     color: var(--area-fg-muted);
     font-size: var(--area-ui-size);
     line-height: var(--area-ui-leading);
@@ -125,13 +128,16 @@
   .area-nav__toggle::after { content: ""; position: absolute; inset: 0; border-radius: var(--area-radius-row); }
   .area-nav__toggle:focus-visible { outline: none; }
   .area-nav__toggle:focus-visible::after { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: calc(-1 * var(--area-focus-width)); }
-  .area-nav__chevron { display: flex; flex-shrink: 0; opacity: 0; transition: opacity var(--area-fade-fast) var(--area-ease-out); }
+  .area-nav__chevron { display: flex; flex-shrink: 0; transition: opacity var(--area-fade-fast) var(--area-ease-effects); }
   .area-nav__chevron svg { transition: rotate var(--area-duration-fast) var(--area-ease-out); }
   .area-nav__toggle[aria-expanded="false"] .area-nav__chevron svg { rotate: -90deg; }
   .area-nav__toggle[aria-expanded="false"] .area-nav__chevron svg:dir(rtl) { rotate: 90deg; }
   .area-nav__toggle:is([aria-expanded="false"], :focus-visible) .area-nav__chevron { opacity: 1; transition-duration: 0s; }
-  @media (hover: hover) { .area-nav__label:hover .area-nav__chevron { opacity: 1; transition-duration: 0s; } }
-  @media (hover: none) { .area-nav__chevron { opacity: 1; } }
+  /* Hidden only where there is hover (plan B7.11): a touch screen always shows the chevron. */
+  @media (hover: hover) {
+    .area-nav__chevron { opacity: 0; }
+    .area-nav__label:hover .area-nav__chevron { opacity: 1; transition-duration: 0s; }
+  }
   .area-nav__items { display: flex; flex-direction: column; gap: var(--area-ui-row-gap); min-inline-size: 0; }
   .area-nav__items[hidden] { display: none; }
   /* The heading's actions: a row's, a nested square 4 in from the row's end (the row rule below), over the button. */
@@ -172,7 +178,7 @@
     align-items: center;
     min-inline-size: 0;
     block-size: var(--area-ui-row);
-    padding-inline: var(--area-space-8);
+    padding-inline: var(--area-ui-row-inset);
     border: 0;
     /* Capped against the row's own height; see button.css. */
     border-radius: min(
@@ -190,7 +196,6 @@
     text-align: start;
     text-decoration: none;
     cursor: pointer;
-    transition: var(--area-transition);
     user-select: none;
   }
 
@@ -209,9 +214,9 @@
      2026-10-29). The name ends 8 before the action's plate, the 8 the icon stands in from the start; the action draws the
      xs icon, as Tag's, Badge's and Attachment's removes do (a container's close, Dialog's and Drawer's, keeps md), in the
      row's ink (full strength on the current tab). */
-  .area-nav--horizontal .area-nav__row > .area-nav__item { padding-inline-end: calc(var(--area-space-8) - var(--area-space-2)); /* spec: 8 to the action, less the row's 2 gap */ }
+  .area-nav--horizontal .area-nav__row > .area-nav__item { padding-inline-end: calc(var(--area-ui-row-inset) - var(--area-space-2)); /* spec: 8 to the action, less the row's 2 gap */ }
   .area-nav--horizontal .area-nav__actions > .area-button { --_icon: var(--area-icon-xs); }
-  .area-nav--horizontal .area-nav__row:has(> .area-nav__item[aria-current]:not([aria-current="false"])) .area-nav__actions .area-button.area-button--ghost { --_fg: var(--area-fg-default); }
+  /* On the current tab the action is in the row's ink at full strength: the selection scope's (selection.css, plan B7.13). */
 
   /* A horizontal destination with no end annotation is a compact plate, not a left-aligned
    * list row. Centre its single content run; annotated controls retain the end slot. */
@@ -248,27 +253,22 @@
   }
 
   /*
-   * Motion (docs/MOTION.md, "Hover plate", "Selected"; docs/specs/nav.md, "Motion and
-   * interaction, 2026-10-07"). The base `--area-transition` is the leave (fast, ease-out); hover,
-   * press and current land at once. The focus ring is an outline and never transitions.
+   * Motion (docs/MOTION.md, "List highlight"; docs/specs/nav.md; plan A5.3, 2026-11-11): a highlight moving through the
+   * nav lands and leaves at once, so neither an item nor a row has a transition; hover, press and current land and
+   * leave with the pointer. Until 2026-11-11 they faded in over `hover-in` and out over `fast`. The focus ring is an
+   * outline and never transitions.
    */
-  @media (hover: hover) {
-    .area-nav__item:hover,
-    .area-nav__row:hover { transition-duration: var(--area-hover-in); }
-  }
   /* Pressed (product UI rule 3, docs/PRODUCT_UI.md; DESIGN_SYSTEM.md "Shared state paint"): the row
      takes the pressed fill while held, one step firmer than selected, landing at once like the hover. */
   .area-nav__item:active:not([data-disabled], [data-inactive]),
   .area-nav__row:has(> .area-nav__item:active:not([data-disabled], [data-inactive])) { background-color: var(--area-bg-component-pressed); }
-  .area-nav__item:is(:active, [aria-current]:not([aria-current="false"])),
-  .area-nav__row:has(> .area-nav__item[aria-current]:not([aria-current="false"])) { transition-duration: var(--area-hover-in); }
 
   /* A marker is navigation's quiet current-location treatment. Unlike a menu's action
    * highlight, it persists as the reader moves through an outline or sidebar. */
   .area-nav--marker .area-nav__item {
     color: var(--area-fg-muted);
     position: relative;
-    padding-inline-start: var(--area-space-16);
+    padding-inline-start: calc(var(--area-ui-row-inset) * 2);
   }
 
   .area-nav--marker .area-nav__item[aria-current]:not([aria-current="false"]) {
@@ -291,7 +291,7 @@
     block-size: round(nearest, calc(1cap + var(--area-space-4)), 2px); /* spec: cap + 4, even */
     border-radius: var(--area-radius-full);
     background-color: transparent;
-    transition: background-color var(--area-duration-fast) var(--area-ease-out);
+    transition: background-color var(--area-duration-fast) var(--area-ease-effects);
   }
   .area-nav--marker .area-nav__item[aria-current]:not([aria-current="false"])::before {
     /* The Selection role's ink (DESIGN_SYSTEM.md, "Emphasis roles"): the current label's ink
@@ -316,17 +316,22 @@
   .area-nav__item[data-inactive] { cursor: not-allowed; }
   .area-nav__item[data-inactive] > * { opacity: var(--area-opacity-disabled); }
 
+  /* A list holding a picture reserves the picture's width in every row's slot (plan B2.1, G14): the glyph keeps the
+     glyph edge, the slot runs to the picture's width, so every label in the list starts on one column (38 at type 13;
+     picture rows started 4 past icon rows). */
+  .area-nav:has(.area-nav__picture) { --_nav-slot: calc(var(--area-icon-md) * 1.25); /* the picture's width (below) */ }
   .area-nav__icon {
     display: inline-flex;
     align-items: center;
-    justify-content: center;
-    inline-size: var(--area-icon-md);
+    justify-content: flex-start;
+    inline-size: var(--_nav-slot, var(--area-icon-md));
     block-size: var(--area-icon-md);
     flex-shrink: 0;
   }
 
   .area-nav__icon > svg {
-    inline-size: 100%;
+    flex: none;
+    inline-size: var(--area-icon-md);
     block-size: 100%;
   }
 
@@ -364,6 +369,7 @@
     gap: var(--area-space-4);
     color: var(--area-fg-muted);
     font-weight: var(--area-weight-regular);
+    font-variant-numeric: tabular-nums; /* counts line up down the nav, as Tree view's and Menu's (plan A9.8) */
   }
 
   .area-nav--horizontal .area-nav__trailing {
@@ -372,9 +378,9 @@
 
   /* A standalone divider (`border-divider`): `stroke-width`, as Separator and Table's rules (consistency pass
      2026-10-12; it vanished under the Borderless surface preset (was Elevated)). */
+  /* Its room is the row table's (inset.css): 5 / 6 / 7 from the plates at type 13, its ends on theirs (plan B2.1; was 8). */
   .area-nav__separator {
     block-size: var(--area-stroke-width);
-    margin-block: var(--area-space-8);
     background-color: var(--area-edge-dividers); /* the lightest line, border-decorative (owner 2026-10-25: "id prefer to not use dividers in general unless its very necessary and intentional"; "dividers that are inset to have a very light subtle stroke by default"). Was border-divider */
   }
 
@@ -387,7 +393,7 @@
        so the margins are a bit larger"; docs/research/inset-actions-2026-10-16.md). */
     --_nav-action-inset: var(--area-space-4); /* spec */
     /* The row's own height and corner: a row's, unless a container sets its items smaller (Titlebar: the small control,
-       app-shell.css), so the action stays 4 in on every side of the plate it sits in (owner, 2026-10-29: "make sure
+       titlebar.css), so the action stays 4 in on every side of the plate it sits in (owner, 2026-10-29: "make sure
        that the inset spacing around the close button is the same distance to the backplate"). */
     --_nav-action: calc(var(--_nav-row-height, var(--area-ui-row)) - var(--_nav-action-inset) * 2); /* spec */
     display: flex;
@@ -396,14 +402,12 @@
     gap: var(--area-space-2);
     padding-inline-end: var(--_nav-action-inset);
     border-radius: var(--_nav-row-radius, var(--area-radius-row));
-    transition: var(--area-transition);
   }
   @media (hover: hover) { .area-nav__row:has(> .area-nav__item:not([data-disabled], [data-inactive], [aria-current]:not([aria-current="false"]))):hover { background: var(--area-bg-component-hover); } }
   /* Any current value (page, location, step) marks the row, as it marks the item (audit D-29). */
   .area-nav__row:has(> .area-nav__item[aria-current]:not([aria-current="false"])) { background: var(--area-bg-component-active); }
   .area-nav--marker .area-nav__row:has(> .area-nav__item[aria-current]:not([aria-current="false"])) { background: transparent; }
   .area-nav .area-nav__row > .area-nav__item { background: transparent; }
-  .area-nav__row:has(> .area-nav__item:active:not([data-disabled])) { transition-duration: var(--area-press-in); }
   /* Pressed, restated after the row's hover: that rule's :has() outranks the press above, so a held row showed only
      its hover (interaction polish, 2026-10-16). */
   .area-nav__row:has(> .area-nav__item:active:not([data-disabled], [data-inactive])):active { background: var(--area-bg-component-pressed); }
@@ -437,7 +441,7 @@
    * always shows them. They keep their place, so the row's text never reflows.
    */
   @media (hover: hover) {
-    .area-nav__row--reveal > .area-nav__actions { opacity: 0; transition: opacity var(--area-fade-fast) var(--area-ease-out); }
+    .area-nav__row--reveal > .area-nav__actions { opacity: 0; transition: opacity var(--area-fade-fast) var(--area-ease-effects); }
     .area-nav__row--reveal:not(:hover, :focus-within, :has([aria-expanded="true"][aria-haspopup])) > .area-nav__actions { pointer-events: none; }
     .area-nav__row--reveal:is(:hover, :focus-within, :has([aria-expanded="true"][aria-haspopup])) > .area-nav__actions { opacity: 1; transition-duration: 0s; }
     /* A horizontal row keeps its actions while it is current, as Tree view's selected row does (owner, 2026-10-29):
@@ -461,7 +465,7 @@
     --_nav-cover-mask: linear-gradient(to left, transparent var(--_nav-cover), #000 calc(var(--_nav-cover) + var(--area-space-8)));
   }
   .area-nav--horizontal .area-nav__row--reveal:dir(rtl) { --_nav-cover-mask: linear-gradient(to right, transparent var(--_nav-cover), #000 calc(var(--_nav-cover) + var(--area-space-8))); }
-  .area-nav--horizontal .area-nav__row--reveal > .area-nav__item { justify-content: flex-start; padding-inline-end: var(--area-space-8); }
+  .area-nav--horizontal .area-nav__row--reveal > .area-nav__item { justify-content: flex-start; padding-inline-end: var(--area-ui-row-inset); }
   .area-nav--horizontal .area-nav__row--reveal > .area-nav__item > .area-nav__text { flex: 1 1 auto; }
   .area-nav--horizontal .area-nav__row--reveal > .area-nav__actions { position: absolute; inset-block: 0; inset-inline-end: var(--_nav-action-inset); }
   /* Without hover the actions always show, so the name always fades under them. */
@@ -476,7 +480,7 @@
    * at once on hover and back on `fast`. Without hover the actions always show and the count stays hidden.
    */
   .area-nav__row--reveal:has(> .area-nav__item > .area-nav__trailing) { position: relative; padding-inline-end: 0; }
-  .area-nav__row--reveal > .area-nav__item > .area-nav__trailing { transition: opacity var(--area-fade-fast) var(--area-ease-out); }
+  .area-nav__row--reveal > .area-nav__item > .area-nav__trailing { transition: opacity var(--area-fade-fast) var(--area-ease-effects); }
   .area-nav__row--reveal:has(> .area-nav__item > .area-nav__trailing) > .area-nav__actions { position: absolute; inset-block: 0; inset-inline-end: var(--_nav-action-inset); }
   @media (hover: hover) {
     .area-nav__row--reveal:is(:hover, :focus-within, :has([aria-expanded="true"][aria-haspopup])) > .area-nav__item > .area-nav__trailing { opacity: 0; transition-duration: 0s; }

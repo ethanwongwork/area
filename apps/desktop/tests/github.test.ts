@@ -22,8 +22,7 @@ function setup() {
   sh(remote, "init", "--bare", "--initial-branch=main");
   const folder = join(root, "shop");
   sh(root, "clone", remote, folder);
-  // The folder's own identity, as a Mac with git set up has: the engine commits with the folder's config, and a CI
-  // runner has none of its own.
+  // The app's own commits run without the env above: give the project an identity, as a person's machine has one.
   sh(folder, "config", "user.name", "David Tee"); sh(folder, "config", "user.email", "david@example.com");
   writeFileSync(join(folder, "app.css"), "button { color: blue; }\n");
   sh(folder, "add", "-A"); sh(folder, "commit", "-m", "Start"); sh(folder, "push", "origin", "main");

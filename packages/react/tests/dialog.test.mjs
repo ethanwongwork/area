@@ -134,7 +134,9 @@ test("Combobox is a WAI list-autocomplete combobox over a Menu-styled listbox", 
   assert.match(html, new RegExp(`<div class="area-scroll-area area-scroll-area--hover area-menu area-combobox__listbox" id="${list}" role="listbox" aria-label="Font" popover="manual" tabindex="-1">`));
   // Options sit in the Scroll area's scroller; the scroller is no Tab stop (focus stays on the field).
   assert.match(html, /<div class="area-scroll-area__viewport"><div class="area-scroll-area__content">/);
-  assert.match(html, /role="option" aria-selected="true" class="area-menu__item area-combobox__option"><span class="area-menu__text">Inter<\/span>/);
+  // The chosen option shows the active plate and the check (plan B7.7): data-selected is its hook.
+  assert.match(html, /role="option" aria-selected="true" class="area-menu__item area-combobox__option" data-selected=""><span class="area-menu__text">Inter<\/span>/);
+  assert.doesNotMatch(html, /aria-selected="false" class="area-menu__item area-combobox__option" data-selected/);
   assert.match(html, /role="group" aria-labelledby="[^"]+" class="area-combobox__group"><div id="[^"]+" class="area-menu__label" role="presentation"><span class="area-menu__label-text">Recent<\/span><\/div>/);
 });
 
@@ -150,7 +152,7 @@ test("CommandPalette is a search combobox over a grouped listbox of Menu rows", 
   // Kbd names its keys with visually hidden text (kbd.md), not aria-label.
   assert.match(html, /<span class="area-sr-only">Command plus ,<\/span>/);
   const empty = renderToString(h(CommandPalette, { inline: true, items, defaultQuery: "zzz" }));
-  assert.match(empty, /area-command-palette__empty" role="presentation">No results</);
+  assert.match(empty, /area-menu__empty" role="presentation"><span class="area-menu__text">No results</);
 });
 
 test("ContextMenu wraps its area without a box and keeps a closed, named popover menu", async () => {

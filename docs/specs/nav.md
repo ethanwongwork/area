@@ -41,8 +41,9 @@ marker), Breadcrumb (hover plate), Button ghost (row actions)
 ## Job and boundaries
 
 Nav lists destinations and marks the current page, vertically (sidebar, with groups) or
-horizontally (top-level routes). It is not a menu of actions (Menu), a hierarchy with
-expansion state (Tree view) or a view switcher inside a page (Tabs).
+horizontally (top-level routes, or a strip of places: open documents, records). It is not a menu of actions (Menu), a
+hierarchy with expansion state (Tree view) or a view switcher inside a page (Tabs). A document tab's close, dirty mark
+and pin belong on Nav horizontal's items, never on Tabs (COMPONENTS.md, Boundaries; plan B8.1).
 
 ## Variants
 
@@ -124,7 +125,7 @@ opacity 0.5; accent current rgb(72, 62, 223) on rgb(225, 231, 253).
 | row · height | 32 (`control-md`) | Peers Menu, Tree view | Notion 30, Figma 28 / 24, ChatGPT 35, Untitled 36; density is the UI-scale axis's job (second pass, item 18) |
 | row · radius | 8 (`radius-row`, capped at 0.4 × 32) | ChatGPT 8 | Notion 6, Figma 5, Untitled 6 |
 | row · start inset | 8 default, 6 compact (`ui-row-inset`), the icon column | Notion 8 (primary for navigation); Figma page rows 8 | ChatGPT 10; Figma sidebar 4 + 24px icon box. Compact rows are 24 (docs/research/compact-pass-2026-10-01.md); Tree view reads the same inset |
-| icon · size, gap | 16 (`icon-md`), **12** (`--area-gap-row`, `inset.css:62`), so labels sit at 36 as Menu's; horizontal items take `gap-md`, 6 since audit S14 (`inset.css:64`) | ChatGPT and Notion labels at 36; Menu | Was 8 (labels at 32) until audit S11a. Product icons 20–24; Area icon slots are 16 |
+| icon · size, gap | 16 (`icon-md`), **8** (`--area-ui-cluster`, inset.css; 6 Compact, 10 Comfortable; plan B2.3, 2026-11-11), so labels sit at 32 (30 Compact) as Menu's; horizontal items take `gap-md`, 6 since audit S14 (`inset.css:64`) | ChatGPT and Notion labels at 36; Menu | Was 8 (labels at 32) until audit S11a. Product icons 20–24; Area icon slots are 16 |
 | text | 14/20 400 | ChatGPT 14/20 400; Notion 14/21 400 | Figma 11/16 (editor density) |
 | rest ink | **`fg-default`** (marker variant and horizontal items `fg-muted`, since 2026-10-29) | Owner (2026-09-27); ChatGPT rgb(13) (`nav/chatgpt--sidebar-top-group`) | Notion rgb(95, 94, 89); the label carries the quieter ink |
 | hover plate | `bg-component-hover` #f3f3f3 / #333333; ink fixed | Row-plate rule; ChatGPT 5% black; Figma page row #f5 | — |
@@ -135,7 +136,7 @@ opacity 0.5; accent current rgb(72, 62, 223) on rgb(225, 231, 253).
 | item gap | 2 | Untitled 2 (38 pitch, 36 rows) | Notion, Figma single-row captures only |
 | separator | 1px `border-divider` #e2e2e2 / #333333 at `stroke-width` (since the 2026-10-12 consistency pass) | Second pass divider role | Was `border-decorative` |
 | group label | 32px row, **14/20 500** `fg-muted`, start 8 | Owner (2026-09-27, second message): ChatGPT's section title 14/18 500 rgb(143) (`nav/chatgpt--sidebar-section-label`) | Area's 14 leading is 20; rgb(143) is 3.3:1, so the ink is `fg-muted`. Notion's 12/16 was the first message's choice. Menu keeps 12/16 (Notion's menus) |
-| nested group | `NavGroup nested` (`area-nav__group--nested`): the content steps in one icon column, the 16 icon + `gap-row` (28 at type 14 Default, 26 at the app's 13 Compact; `--_nav-indent`, nav.css), added to the row's start inset by the inset contract (`inset.css`), so under a parent with an icon the children start on its name; plates stay full width; no group gap above it. A nested group inside a nested group steps in a column more | Audit D-20 A (owner 2026-09-30); owner 2026-11-01 ("fix the alignment here": children 4 short of the parent's name); Notion's children start on the parent's name | Children used to sit on the parent's column; until 2026-10-28 a second level sat on the first; Tree view's 22 level step until 2026-11-01 |
+| nested group | `NavGroup nested` (`area-nav__group--nested`): the content steps in one icon column, the 16 icon + `ui-cluster` (24 at the default type 13, 22 at the app's Compact; `--_nav-indent`, nav.css; plan B2.3, was `gap-row`), added to the row's start inset by the inset contract (`inset.css`), so under a parent with an icon the children start on its name; plates stay full width; no group gap above it. A nested group inside a nested group steps in a column more | Audit D-20 A (owner 2026-09-30); owner 2026-11-01 ("fix the alignment here": children 4 short of the parent's name); Notion's children start on the parent's name | Children used to sit on the parent's column; until 2026-10-28 a second level sat on the first; Tree view's 22 level step until 2026-11-01 |
 | closable tab | A horizontal row with actions (the desktop app's open tabs): the name `gap-md` after the icon (5 at type 13, as every control's icon and label); the close the **xs** icon (6.8 drawn at 13) in a nested square 4 in on every side (18 in the Titlebar's 26, through `--_nav-row-height` / `--_nav-row-radius`, which a container that shortens the items sets). With `revealActions` the close keeps no slot: the name runs to 8 from the plate's end and the close lands over it on hover, focus and while the row is current (always on touch), the name fading out under it (visible to 4 before the close's plate, an 8 fade). Horizontal rows never shrink; past its room the Nav scrolls | Claude Code's browser tabs (owner's screenshot); Figma desktop `desktop_shell.css` (close shown on `.isTabActive`, `:hover`, `:focus-within`, over a fixed-width tab, the owner's pick); Cursor 3.27.22 `workbench.desktop.main.css` (close at opacity 0 to 1 on `.tab.active`, `:hover`, `:focus`; `.tab-fade-hider`); Tree view's selected-row rule | 2026-10-29 rounds: gap-md 6 and an sm 16 close 2 from the top; then a kept slot (approved, then replaced the same day) |
 | icon-only item | A `NavItem` with an `icon` and no children renders no text slot: a square plate (`aspect-ratio: 1`, no side padding), the icon centred, named by its `aria-label`. In the Titlebar's tabs, 26 by 26 at type 13. Hover changes only the plate, as every horizontal item | Figma desktop `desktop_shell.css` `tab--fileBrowserTab`: `flex: 0 0 40px; height: 38px`, the icon centred, `--color-text-secondary` at rest, `--color-text` on hover and active (Area keeps the ink fixed on hover) | — |
 | group gap | **12** + the 2px item gap | ChatGPT 21 between sections at 35px rows (`nav/chatgpt--sidebar-projects-section`) | Notion 4; was 8 |
@@ -163,6 +164,8 @@ Third pass ([cohesion audit](../research/cohesion-audit.md#third-pass-the-questi
 | current (`aria-current`) | plate `bg-component-active`, `fg-default`, kept under the pointer; marker: no plate, rail | `area--default` row 1, `area--marker`; `notion--sidebar-row-current--hover` |
 | disabled (`data-disabled`) | opacity 0.5, no hover plate, `not-allowed` | `area--state-disabled`; `nav.css:175-178` |
 | inactive (`data-inactive`, `inactiveText`) | its parts at opacity 0.5, the item itself not (its ring stays full), no hover or press plate, `not-allowed`; no href, `role="link"`, `aria-disabled`, a Tab stop (`tabindex="0"`); the reason a Tooltip to the right that describes it | Primer NavList `inactiveText` (`NavList.docs.json:107`); components audit V2; tile `state-inactive` |
+
+**Default class.** `orientation` `vertical` is a manifest value and the default, with an empty class (`--vertical`): the bare block draws the column, and React writes the class.
 
 ## Behavior and accessibility
 
@@ -323,6 +326,7 @@ Nav's separator paints `border-decorative` (#f3). Was `border-divider` (#e2). Th
 - 2026-10-29 · owner: "i like how figma shows the full text or as much of the text as possible, then on hover the dismiss goes over the text and then the text is truncated" (after the tab edge-case sheet: shortest and longest names, 12 tabs) → a horizontal row's revealed actions keep no slot: positioned over the item's end, the name filling the item and masked out under them (`--_nav-cover`, the action and its 4 each side less the item's 8 end; an 8 fade), on hover, focus, current, always without hover; horizontal rows `flex: 0 0 auto` as horizontal items, so a long Nav scrolls instead of squeezing its rows → nav.css. Supersedes the kept slot approved earlier the same day.
 
 - 2026-10-29 · app structure Phase 2: the desktop app's Home is a fixed first tab, icon only, as Figma's file browser tab → a `NavItem` with an icon and no children is a square plate with the icon centred, named by its `aria-label` (Nav.tsx drops the empty text slot; nav.css `.area-nav__item:not(:has(> .area-nav__text))`); gallery tile Horizontal / icon-only item; documentation entry. Nav back in review for this addition.
+- 2026-11-11 · system evaluation F5 · vertical is a manifest value and the default, with an empty class React writes; built stylesheet differs only by the empty rule.
 
 ## Review note, 2026-10-22 (round 67)
 
@@ -442,3 +446,45 @@ Nav's separator paints `border-decorative` (#f3). Was `border-divider` (#e2). Th
   The current page is never made quieter by V15's inactive selection: it is where you are, not a selection.
 - **Why:** docs/research/components-audit-2026-11-07/primer.md (NavList `inactiveText`). The owner took every recommendation ("Take all recs", 2026-11-07).
 - **Verdict:** awaiting the owner.
+- 2026-11-11 · system evaluation B2.3 (owner) · a row's icon-to-label gap is `ui-cluster` (8, Compact 6, Comfortable 10): labels at 32 / 30 (were 34 / 32); a nested group steps 16 + that gap (24, Compact 22).
+
+## Review note, 2026-11-11 (type rules, plan A9)
+
+- **What changed:** trailing counts take tabular figures, as Tree view's and Menu's (plan A9.8).
+- **Why:** the system evaluation's type rules (docs/research/system-evaluation-2026-11-11, section 5, A9), owner-approved
+  2026-11-11; the rules are in DESIGN_SYSTEM.md ("Ink and weight", "Size and shape", "Text pairs") and the type skill.
+
+## Review note, 2026-11-11 (focus and targets, plan A6, A11.2)
+
+- **What changed:** Row actions own the shared hit target: 24 tall, 24 across alone, splitting the 2 gap beside another action (A11.2).
+- **Why:** the system evaluation's focus, forced colours and hit target items (docs/research/system-evaluation-2026-11-11, section 5), owner-approved 2026-11-11; the rules are in DESIGN_SYSTEM.md ("The focus ring", "Targets") and CONTRAST.md (Focus).
+
+## Review note, 2026-11-11 (motion, plan A5)
+
+- **What changed:** items and rows land and leave at once: no transition on either (A5.3; they faded in over `hover-in` and out over `fast`). The marker and the chevron keep theirs.
+- **Why:** the system evaluation's motion items (docs/research/system-evaluation-2026-11-11, section 5, A5), owner-approved
+  2026-11-11; the rules are in docs/MOTION.md (Tokens, Roles, Recipes) and kept by cohesion.test.mjs and
+  tests/behaviour/suites/motion.test.mjs. The motion tables above are history; these values are current.
+
+## Shared parts (plan B2), 2026-11-13
+
+- **Row table (B2.1, G7, G14, VN23).** A separator stands round(6 − ui-dense) from the plates (5 / 6 / 7 at type 13; it was 8 at every density), a group break is gap-row (8 / 12 / 16; it was 12), row icons take the muted ink, and a nav holding a picture reserves the picture's 20 in every row's icon slot (glyphs stay on the glyph edge), so every label starts on one column (38 at type 13; picture rows started 4 past icon rows).
+
+## Boundary with Tabs (plan B8.1), 2026-11-14
+
+Written in COMPONENTS.md, Boundaries: Tabs switch panels in place; a strip of places is Nav horizontal. The editor's
+document tabs (audit V12: close, dirty, pinned) are options on Nav horizontal when built. Nothing changed in Nav's CSS.
+
+### 2026-11-14 · Shared parts, leftovers (system plan, Phase 2, wave 3)
+
+- Row sides read `ui-row-inset` (8 at every density, as Menu's) and marker rows start at `2 × ui-row-inset` (16): the same values, now the row role.
+- Why: docs/research/system-evaluation-2026-11-11 (plan B6.1, B6.5, B8.2, B2.2; README §5, phase2/leftovers.md); the owner took every recommendation on 2026-11-11. Fix the rule, not the instance.
+- Verdict: awaiting the owner.
+
+## Selection paint (plan B7.13), 2026-11-14
+
+- A current row is a selection scope (selection.css): its ghost actions read the row ink; the horizontal tab's own rule is gone, and vertical rows' actions now read full strength too.
+
+## State paint (plan B7.1, B7.11), 2026-11-14
+
+- Row actions keep their pressed ink while their menu is open (owner's ink-only actions; no plate). The heading chevron hides only inside `@media (hover: hover)`; the `(hover: none)` rule is gone.

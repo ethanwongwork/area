@@ -183,7 +183,7 @@ rgba(33,27,23,.05) }`, `.xayv9eh:active` at twice the alpha (10%); ChatGPT's che
 | title hover | the chevron plate (`bg-hover`, pressed `bg-active`) in both variants; the title never underlines; ink fixed | Google "People also ask" (the chevron's circle darkens); Notion, Apple, Figma FAQs show no title change; DESIGN_SYSTEM shared rule | shadcn underlines (`hover:underline`, still on ui.shadcn.com 2026-10-06); it was the only one of six accordions to do so, so divided dropped it |
 | sm title | text sm 14/20 (compact 12/16) | ChatGPT 14, shadcn `text-base` | ChatGPT's 18 leading is its sidebar's; Area's 14 role is 14/20 |
 | motion | chevron rotates over `duration-fast` with `ease-out`; body opens on `slow`, closes on `moderate` (`block-size` + `opacity`, `ease-in-out`) where `interpolate-size` is supported | ChatGPT 150ms transform; MOTION.md accordion recipe | Body motion added 2026-10-07, kept by the owner 2026-10-08 (Settled 1) |
-| focus | 2px `focus-color` outline, `focus-offset`, `radius-small` corners | Button's focus ring | — |
+| focus | 2px `focus-color` outline, `focus-offset`, on the trigger's `radius-row` corner (a full-width row: its height's) | Button's focus ring; plan A2.2 | Was `radius-small` (6) |
 | disabled | `opacity-disabled`, `cursor: not-allowed` on the trigger | Tree view rows (audit D-5) | — |
 
 ## States
@@ -406,3 +406,20 @@ The chevron plate presses at `bg-pressed`, Notion's 10%, as the spec comment sai
 - **What changed:** `onValueChange(open, event)` passes the trigger's click (absent when a find-in-page match opens an item).
 - **Why:** Accordion.tsx:94. From the components audit's internal peer comparison (`docs/research/components-audit-2026-11-07/internal.md`); the owner took every recommendation ("Take all recs", 2026-11-07).
 - **Verdict:** awaiting the owner.
+- 2026-11-11 · system evaluation A2.2 · the trigger is a full-width row: radius-row, 6 → 8 at the default (its focus ring's corner). The chevron plate keeps radius-small. accordion.css.
+- 2026-11-11 · system evaluation A1.5 · plain items take the key-value rhythm, line + 8: 4 between their plates (the 2 pads make 8 between lines; a 30 pitch at md). Divided items unchanged.
+
+## Review note, 2026-11-11 (focus and targets, plan A6, A11.2)
+
+- **What changed:** The trigger is a row: its ring draws inside by its own width, not outside (A6.2, S12).
+- **Why:** the system evaluation's focus, forced colours and hit target items (docs/research/system-evaluation-2026-11-11, section 5), owner-approved 2026-11-11; the rules are in DESIGN_SYSTEM.md ("The focus ring", "Targets") and CONTRAST.md (Focus).
+
+## Shared bars and corners (plan B4), 2026-11-14
+
+- B2.2 leftover: the trigger's title is a line slot on the one centring model (inset.css): trimmed and given its line back, so a one-line title's cap sits on the trigger's centre (it sat 0.62 high at type 13); wrapped titles keep their leading.
+
+### 2026-11-14 · Shared parts, leftovers (system plan, Phase 2, wave 3)
+
+- The trigger's label-to-chevron gap is `2 × ui-cluster`: 12 / 16 / 20 (20 at type 16). Values at type 13 Compact / Default / Comfortable; unchanged at the default.
+- Why: docs/research/system-evaluation-2026-11-11 (plan B6.1, B6.5, B8.2, B2.2; README §5, phase2/leftovers.md); the owner took every recommendation on 2026-11-11. Fix the rule, not the instance.
+- Verdict: awaiting the owner.

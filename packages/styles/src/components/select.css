@@ -1,0 +1,177 @@
+/* Select (docs/specs/select.md). */
+@layer area.components {
+  /* --- Select ------------------------------------------------------------- */
+  /*
+   * A native <select> with its own chevron. The chevron is a background image rather
+   * than a sibling element so the control stays a single focusable node with native
+   * keyboard behaviour intact.
+   */
+  /* The shell, its tiers, soft, focus and status are the one field shell (input.css, "One field shell"); Select reads
+     its own public seam (select-*). Focus shows for keyboard focus only (2026-11-02, owner: a pointer choice left the
+     ring on): a select opens a picker, as a Button does. */
+  .area-select {
+    --_bg: var(--area-select-bg);
+    --_border: var(--area-select-edge);
+    --_border-hover: var(--area-select-edge-hover);
+    --_ink: var(--area-select-text);
+    --_bg-disabled: var(--area-select-bg-disabled);
+    --_tone-invalid: var(--area-select-invalid-color);
+    --_tone-invalid-halo: var(--area-select-invalid-halo-color);
+    --_tone-success: var(--area-select-success-color);
+    --_tone-success-halo: var(--area-select-success-halo-color);
+    --_tone-warning: var(--area-select-warning-color);
+    --_tone-warning-halo: var(--area-select-warning-halo-color);
+    /* Its own gap tier between the value and anything after it, not the browser's base-select 0.5em (7 at type 14,
+       6.5 at 13: spacing audit 2026-10-17). */
+    gap: var(--_gap);
+
+    appearance: none;
+    display: inline-flex;
+    align-items: center;
+    inline-size: var(--area-select-inline-size);
+    max-inline-size: 100%;
+    /* One line: a long option ends in an ellipsis instead of wrapping inside the control. */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    cursor: pointer;
+    outline: none;
+
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='%23888' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round' d='M4.5 6.5L8 10l3.5-3.5'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    /* Position and padding come from the inset contract (inset.css), which loads later (audit B-27). */
+    background-size: var(--_icon);
+  }
+
+  .area-select--full-width { inline-size: 100%; }
+
+  /* An empty-value option chosen is a placeholder: placeholder ink, as Input's (audit B-19). */
+  .area-select:not(:disabled):has(option:checked[value=""]) { color: var(--area-input-placeholder); }
+  /* Disabled is the field shell's (input.css): its own fill, the faint edge, the disabled ink; no second dimming. */
+
+  /* Native customizable picker preserves form values, groups, typeahead and dismissal.
+   * Unsupported browsers keep the ordinary native picker above. */
+  @supports (appearance: base-select) {
+    .area-select, .area-select::picker(select) { appearance: base-select; }
+    /* The chevron and the check are the Area glyphs (chevron-down, check: the paths in glyphs.ts
+       at the default 1.125 icon weight); the chevron in the field's chevron ink (`input-chevron`,
+       custom-select.md Q5, owner 2026-10-08), as Combobox and Custom select draw it; the #888
+       data URI above stays only for the native picker (audit B-3 B, owner 2026-09-30). */
+    .area-select { position: relative; background-image: none; }
+    .area-select::picker-icon {
+      content: "";
+      position: absolute;
+      inset-block: 0;
+      inset-inline-end: var(--_chevron-inset);
+      inline-size: var(--_icon);
+      block-size: var(--_icon);
+      margin-block: auto;
+      background-color: var(--area-input-chevron);
+      -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='black' stroke-width='1.125' stroke-linecap='round' stroke-linejoin='round' d='M3.5 5.5L8 10L12.5 5.5'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
+      mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='black' stroke-width='1.125' stroke-linecap='round' stroke-linejoin='round' d='M3.5 5.5L8 10L12.5 5.5'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
+    }
+    .area-select:disabled::picker-icon { background-color: var(--area-fg-disabled); }
+    /* The browser anchors the native picker; it follows the Combobox list's rules (audit B-5,
+       owner 2026-09-30, replacing the 09-24 no-flip call): 4 below the field, flips when the room
+       runs out, at least a menu's width (160), and 324 tall at most (Figma's font list). */
+    .area-select::picker(select) {
+      margin-block: var(--area-space-4);
+      margin-inline: 0;
+      inset: auto;
+      position-area: block-end span-inline-end;
+      position-try-fallbacks: flip-block;
+      /* Below unless it doesn't fit: the UA's most-block-size order opened it on the roomier side. */
+      position-try-order: normal;
+      min-inline-size: max(anchor-size(self-inline), var(--area-menu-min-inline-size, calc(var(--area-space-96) + var(--area-space-64))));
+      max-block-size: min(324px, 100%); /* spec */
+      overflow: auto;
+      /* The padding, frame, shadow stack (a material's layers included, which it lacked) and the field list's corner,
+         options at the select's corner and the picker concentric round them, are the one floating surface's (popup.css,
+         plan B6.1, B6.3). */
+      font-family: var(--area-font-sans);
+      font-size: var(--area-ui-size);
+      line-height: var(--area-ui-leading);
+      /* Motion (docs/MOTION.md, "select list", as Popover and Menu; plan A5.1, 2026-11-11): opacity and scale from
+         0.97 at the trigger's corner, `fast` both ways, easing out in and accelerating away on `ease-exit` out; it
+         rests at opacity 1, scale 1. The transition takes the clock of the state it goes to, so this closed rule
+         carries the exit. The top-layer hold reads the fade, so reduced motion never cuts the exit's fade. */
+      transform-origin: top left;
+      opacity: 0;
+      scale: var(--area-overlay-scale); /* docs/MOTION.md overlay scale */
+      transition:
+        opacity var(--area-fade-fast) var(--area-ease-exit),
+        scale var(--area-duration-fast) var(--area-ease-exit),
+        overlay var(--area-fade-fast) allow-discrete,
+        display var(--area-fade-fast) allow-discrete;
+    }
+    .area-select:dir(rtl)::picker(select) { transform-origin: top right; }
+    .area-select:open::picker(select) {
+      opacity: 1;
+      scale: 1;
+      transition-timing-function: var(--area-ease-effects), var(--area-ease-out);
+    }
+    @starting-style {
+      .area-select:open::picker(select) { opacity: 0; scale: var(--area-overlay-scale); }
+    }
+    /* Options are Menu rows, the one list model (audit B-4): 32 at every trigger size, text on
+       the inset contract (32 less a cap, halved: 11), the check's edge 8 from the end, 12 between
+       them, and the corner concentric inside the picker's 4px padding. */
+    .area-select option {
+      display: flex;
+      align-items: center;
+      gap: var(--area-ui-cluster); /* the list label column, Menu's (plan B2.3) */
+      box-sizing: border-box;
+      flex-shrink: 0;
+      block-size: var(--area-ui-row);
+      padding-block: 0;
+      padding-inline-start: var(--area-ui-row-inset); /* the row table's glyph edge, every list's text-only start (plan B2.1; was the cap-centred 10) */
+      padding-inline-end: var(--area-ui-row-inset); /* the row's glyph edge, as Menu (compact pass) */
+      font-size: var(--area-ui-size);
+      line-height: var(--area-ui-leading);
+      margin-block: var(--area-ui-row-gap) 0; /* plates 1 apart, the row table's (inset.css; plan B2.1, was 2) */
+      border: 0;
+      /* The picker's corner less its padding, 8: the border left out so the corner stays even (2026-10-03). */
+      border-radius: var(--area-radius-list-row);
+      background: transparent;
+      color: var(--area-fg-default);
+      cursor: pointer;
+      /* As Menu rows (plan A5.3): the plate lands and leaves at once, under the pointer and the keys alike. */
+    }
+    .area-select option:first-child { margin-block-start: 0; }
+    @media (hover: hover) { .area-select option:hover:not(:disabled) { background: var(--area-bg-component-hover); } }
+    .area-select option:focus-visible { background: var(--area-bg-component-hover); }
+    /* Held, the row's pressed plate, one step past its hover (plan B7.3). */
+    .area-select option:active:not(:disabled) { background: var(--area-bg-component-pressed); }
+    /* The chosen option shows the active plate and the check, as every value picker (Combobox, Custom select, List box;
+       plan B7.7: the written rule, Select joining its siblings; it showed the check alone from custom-select.md Q3). The
+       plate outranks the highlight, as a Menu's selected row, and gives way to the press. */
+    .area-select option:checked:not(:disabled, :active) { background: var(--area-bg-component-active); }
+    /* Keyboard focus is the plate alone, as in Menu and Combobox rows (audit B-5). */
+    /* An unavailable option is a row, and a row dims by opacity, as a Menu row (plan B7.8); it takes no plate. */
+    .area-select option:disabled { opacity: var(--area-opacity-disabled); cursor: not-allowed; }
+    .area-select option::checkmark {
+      content: "";
+      order: 1;
+      flex: none;
+      inline-size: var(--area-icon-md);
+      block-size: var(--area-icon-md);
+      margin-inline-start: auto;
+      /* A state mark: the Selection role's ink, as Menu's check (plan B7.7). */
+      background-color: var(--area-fg-selection);
+      -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='black' stroke-width='1.125' stroke-linecap='round' stroke-linejoin='round' d='M3 8L6.5 11.5L13.5 4.5'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
+      mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='black' stroke-width='1.125' stroke-linecap='round' stroke-linejoin='round' d='M3 8L6.5 11.5L13.5 4.5'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
+    }
+    /* A group label is Menu's (plan A9.4, a heading over a run of rows): the rows' size at 500 in the muted ink, a row
+       tall (13/18 on 30 at type 13); the options reset their own weight. */
+    .area-select optgroup {
+      display: grid;
+      grid-template-rows: var(--area-ui-row) auto;
+      padding: 0;
+      color: var(--area-fg-muted);
+      font-size: var(--area-ui-size);
+      line-height: var(--area-ui-leading);
+      font-weight: var(--area-weight-strong);
+    }
+    .area-select optgroup option { font-weight: var(--area-weight-regular); }
+  }
+}

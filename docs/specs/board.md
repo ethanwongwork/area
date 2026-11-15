@@ -65,19 +65,19 @@ area    div.area-board (flex, 12 gap, scrolls sideways)
 
 | Slot · property | Area value | Basis | Reason when it differs from the basis |
 |---|---|---|---|
-| column | 276 wide, 12 apart | Notion | — |
+| column | 276 wide, `gap-row` apart (8 / 12 / 16; 12 at the default) | Notion 12 | — |
 | tint | the hue's translucent ground, `hue-<hue>-bg-translucent` (components audit D5): half the tone's resting tint over what is behind (`color-mix(<tone>-surface 50%, transparent)`), so Tone tint reaches the column; neutral keeps a 3% wash of the default ink | owner 2026-11-03 (Tag and Board on the tone tokens) | was the tone's ink at 3–6.3% per colour |
-| header | 40, the title 18 from the column's edge (on the cards' text), the count 6 after it, actions at the end | Notion; owner round 7 | — |
+| header | the region bar (inset.css, plan B4.1): 38 / 40 / 44 at type 13 Compact / Default / Comfortable (40 measured), the title 18 from the column's edge (on the cards' text), the count 6 after it, actions at the end | Notion; owner round 7 | It was 40 at every density |
 | title | plain text, UI type, `weight-strong` | owner round 7 ("just regular text") | was a Tag in the column's tone |
 | count | a soft Badge sm; in a colour, that tone's soft Badge: its resting tint under its words (`<tone>-surface`, `fg-<tone>`); neutral: muted, darkened with a light page | owner round 7; 2026-11-03 | was the colour at 12% under the colour's ink |
-| add row | "Add new": full width, start-aligned, a card's size (8 10, min 36 at type 14), `radius-row`, the add glyph; neutral: muted, hover `bg-hover`, pressed 7.5% black (light) / `bg-pressed` (dark); in a colour: the tone's words, hover and pressed the tone's own hover and pressed tints | owner round 7; 2026-10-12; 2026-10-16; 2026-10-18; 2026-11-03 | hover and pressed were the ink at 6% and 12% |
-| card | 8 10 padding, `bg-surface`, `radius-row` (8 at the default, 6 compact), `shadow-edge` + `shadow-resting` (Elevation's resting role) and the colour's 1px ring at 8% (Contrast takes it to the card frame, or the colour's ink) | Notion; owner 2026-10-18 (corner) | Notion's corner is 10; Area's row plate is 8 |
+| add row | "Add new": full width, start-aligned, a card's size (8 10, min 36 at type 14), `radius-row`, the add glyph; neutral: muted, hover `bg-hover`, pressed `bg-pressed-track` (plan B7.4); in a colour: the tone's words, hover and pressed the tone's own hover and pressed tints | owner round 7; 2026-10-12; 2026-10-16; 2026-10-18; 2026-11-03 | hover and pressed were the ink at 6% and 12% |
+| card | `inset-surface-sm` less 2 by `inset-surface-sm` padding (6 10 / 8 10 / 12 14 at type 13 Compact / Default / Comfortable; 8 10 at the default), `bg-surface`, `radius-row` (8 at the default, 6 compact), `shadow-edge` + `shadow-resting` (Elevation's resting role) and the colour's 1px ring at 8% (Contrast takes it to the card frame, or the colour's ink) | Notion; owner 2026-10-18 (corner) | Notion's corner is 10; Area's row plate is 8 |
 | card title | UI type, `weight-strong` | Notion 15/22.5 500 | Area's ramp has no 15 |
 | icon | `icon-md` glyph in a square one UI line tall, `fg-muted` | Notion's 18 icon in a 24 button | Area's UI icon in a box one title line tall |
 | card link | the title is the link; its ::after covers the card | Notion's whole card is a link | Lets actions be separate controls (no button inside a link) |
 | actions | Nav's row actions: 24 squares (`ui-row` − 8) centred on the title's first line, ink-only hover, on the card's paint with a 24 fade, shown on hover, focus or an open menu | Nav (owner rounds 27, 29); ChatGPT's sidebar fade | Was Notion's white plate with a lift and the floating frame until round 30 |
 | hover | neutral: the card darkens to `bg-component-hover`; in a colour, the colour at **6%** in the surface; ink fixed | Notion, measured 2026-10-12: the column's tint laid over the column (purple L 0.960, chroma 0.015) | 6% caps every colour at Notion's chroma (Area's Tag inks are more saturated: 8% gave purple 0.020) and puts the gray column on the neutral #f3 |
-| corners | column = card corner + 8 × `radius-concentric` (**16** at the default, Card's, Dialog's and Composer's outer corner), card and add row `radius-row` (**8**, 6 compact: a row in its column, as a Menu's rows), actions plate `radius-floor` (4) and its buttons the card's corner less their inset, floored | Area's concentric rule (DESIGN_SYSTEM.md "Size and shape") | Notion draws 10 and 10, not concentric |
+| corners | column = the frame recipe's around corner, the card corner + 8 × `radius-concentric`, never rounder than `radius-container` (**16** at the default; 20 at Pill, was 22), card and add row `radius-row` (**8**, 6 compact: a row in its column, as a Menu's rows), actions plate `radius-floor` (4) and its buttons the card's corner less their inset, floored | Area's concentric rule (DESIGN_SYSTEM.md "Size and shape") | Notion draws 10 and 10, not concentric |
 
 ## States
 
@@ -213,3 +213,38 @@ A column reads the hue role table (`--area-hue-<hue>-<role>`, packages/tokens/sr
 `hue-<hue>-bg-translucent` (the base rule paints `--_ground`, no longer `color-mix(--_surface-tone 50%, transparent)`).
 The values are unchanged. The tints' hover and active steps the colour rules set were never read, and went. The card
 ring keeps its Cards-stroke formula; at the defaults it equals `hue-<hue>-border-translucent` (the words at 10%).
+- 2026-11-11 · system evaluation A8.2 · the add row is a row (`ui-row`: 30 at the default, 28 Compact; was 34 at every density), its text the row's room from the top.
+
+## Review note, 2026-11-11 (focus and targets, plan A6, A11.2)
+
+- **What changed:** The column's add row draws its ring inside, as a row (A6.2).
+- **Why:** the system evaluation's focus, forced colours and hit target items (docs/research/system-evaluation-2026-11-11, section 5), owner-approved 2026-11-11; the rules are in DESIGN_SYSTEM.md ("The focus ring", "Targets") and CONTRAST.md (Focus).
+
+### 2026-11-13 · Frame recipe (system plan, Phase 2, B1.1, B1.2)
+
+- The column's corner is the frame recipe's around corner: unchanged at Corner 10 (16), capped at the container (20
+  at Pill, was 22). A card's title is the shared item name (strong; no visual change).
+
+## Density (plan B8.2), 2026-11-14
+
+Space between pieces reads a density role (DESIGN_SYSTEM.md, Size and shape; `density.test.mjs`). Values at type 13
+Compact / Default / Comfortable; each is whole at type 12 to 16 and every density, and the default is unchanged unless said.
+
+- Columns `gap-row` apart (8 / 12 / 16). The column's inset, the space between cards and the column's mat are a cluster
+  (6 / 8 / 10); a card's and the add row's sides `inset-surface-sm` (8 / 10 / 14), the card's block 2 less (6 / 8 / 12), so
+  the column title starts on the cards' text: 14 / 18 / 24. The header's title-to-count gap is `ui-stack` (4 / 6 / 8).
+  The header's 40 height is measured, the same at every density. The column's around corner follows its mat (14 at Compact).
+
+## Shared bars and corners (plan B4), 2026-11-14
+
+- B4.1: the column header is the region bar (`--_hb-region`, inset.css): 38 / 40 / 44 at type 13 Compact / Default / Comfortable. It was 40 at every density.
+
+### 2026-11-14 · Shared parts, leftovers (system plan, Phase 2, wave 3)
+
+- Decided, not built: the add row's icon-to-label gap and the card heading's icon gap read `gap-md` (4 / 6 / 8, a density role, so the lint passes them); by the row table they are row icon gaps, `ui-cluster` (6 / 8 / 10), which would move the default 6 → 8. Left for the owner.
+- Why: docs/research/system-evaluation-2026-11-11 (plan B6.1, B6.5, B8.2, B2.2; README §5, phase2/leftovers.md); the owner took every recommendation on 2026-11-11. Fix the rule, not the instance.
+- Verdict: awaiting the owner.
+
+## Selection paint (plan B7.4), 2026-11-14
+
+- The neutral add row presses at `bg-pressed-track` (was #00000013 in light).

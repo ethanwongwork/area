@@ -9,21 +9,23 @@ import { Input, InputAction, type InputProps } from "./Input.tsx";
 export interface PasswordFieldProps extends Omit<InputProps, "type" | "trailingAction" | "trailingIcon"> {
   /** Whether the password shows as text (controlled). */
   visible?: boolean;
+  /** Whether the password starts shown as text, uncontrolled. */
   defaultVisible?: boolean;
   /** Every reveal and hide, from the action or from a form submit hiding it again. */
   onVisibleChange?: (visible: boolean) => void;
-  /** Names of the action in each state; it names what pressing it does. */
+  /** The action's name while the password is hidden; it names what pressing it does. */
   showLabel?: string;
+  /** The action's name while the password shows. */
   hideLabel?: string;
 }
 
 /**
  * A field for a password. The reveal action names what it does ("Show password", then "Hide
- * password") and draws the action's eye (Carbon, GOV.UK, Edge's own control); it stays in the Tab
- * order, since nothing else reaches it from the keyboard, and a pointer press keeps the caret in the
- * field (Mantine, Ant). `autoComplete` defaults to "current-password" so password managers fill it;
- * use "new-password" where one is chosen. A submit of the surrounding form hides the value again
- * (GOV.UK), so a revealed password isn't left on screen after sign-in.
+ * password") and draws the action's eye; it stays in the Tab order, since nothing else reaches it
+ * from the keyboard, and a pointer press keeps the caret in the field. `autoComplete` defaults to
+ * "current-password" so password managers fill it; use "new-password" where one is chosen. A submit
+ * of the surrounding form hides the value again, so a revealed password isn't left on screen after
+ * sign-in.
  */
 export const PasswordField = /* @__PURE__ */ forwardRef<HTMLInputElement, PasswordFieldProps>(function PasswordField(
   { visible, defaultVisible = false, onVisibleChange, showLabel = "Show password", hideLabel = "Hide password",

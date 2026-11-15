@@ -1,7 +1,7 @@
 import { forwardRef, useEffect, useLayoutEffect, useRef, useState } from "react";
 import type { HTMLAttributes, KeyboardEvent, MouseEvent, ReactNode } from "react";
 import { contextMenuVariants } from "../variants.ts";
-import { Menu } from "./primitives.tsx";
+import { Menu } from "./Menu.tsx";
 
 export interface ContextMenuProps extends Omit<HTMLAttributes<HTMLDivElement>, "content"> {
   /**
@@ -14,7 +14,7 @@ export interface ContextMenuProps extends Omit<HTMLAttributes<HTMLDivElement>, "
    * `menu`. Elsewhere the browser's own menu shows. The item carries `data-context-target` while the menu is open.
    */
   itemSelector?: string;
-  /** Names the menu for assistive tech ("Page actions"); the menu is a sub-part, as SplitButton's `menuLabel` (audit D-18). */
+  /** Names the menu for assistive tech ("Page actions"), as Split button's `menuLabel`. */
   menuLabel?: string;
   /** @deprecated Use `menuLabel`. */
   label?: string;
@@ -26,8 +26,11 @@ export interface ContextMenuProps extends Omit<HTMLAttributes<HTMLDivElement>, "
    * item). A right-click or Shift+F10 still opens it and reports through `onOpenChange`.
    */
   open?: boolean;
+  /** Opens the menu on mount, uncontrolled, at the area's start. */
   defaultOpen?: boolean;
+  /** Called when the menu opens or closes: a right-click, Shift+F10, a choice, Escape or a click outside. */
   onOpenChange?: (open: boolean) => void;
+  /** The area keeps the browser's own menu instead. */
   disabled?: boolean;
 }
 

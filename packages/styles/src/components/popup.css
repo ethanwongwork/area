@@ -1,0 +1,130 @@
+/* Shared: the one floating surface (plan B6.1–B6.4, 2026-11-14; DESIGN_SYSTEM.md, "Elevation" and "Overlay corners"):
+   the frame and the shadow stack every floating and modal surface draws, the list corner and padding every floating
+   list takes, the corner of a list opened from a field, and the block gap of a surface that stacks blocks. Each family
+   sets only its inputs, as private properties; `:where()`, so a family's own rule always wins over these defaults. */
+@layer area.components {
+  /* --- One floating surface ---------------------------------------------- */
+  /*
+   * The frame: one edge (the Floating stroke group, `edge-floating`; in dark the frame takes the rim's strength, plan
+   * A7.1), the floating ground (`bg-float`, a step above what is under it in dark, plan A7.2) and the default ink.
+   *
+   * The shadow stack (`--_float-shadow`), in this order and nothing else: a material's layers (`--_m-layers`, which
+   * material.css fills for every surface listed here), then the Rest shadow's edge (`shadow-edge`: soft at Borderless,
+   * transparent by default), then the Elevation role (`--_elevation`): `shadow-float` (0 0 2 + 0 8 16 at the step in %,
+   * 8% at the default, dark doubled; axes/elevation.ts), or `shadow-modal` for the surfaces over a scrim. Every term is
+   * a setting's, so Elevation, the shadow controls, the material and the theme move every surface together. A family
+   * changes the role only by `--_elevation` (an inline palette has none). Tooltip is the written exception: an inverse
+   * annotation on its own role (`shadow-tooltip`), its edge an inset line, no material (tooltip.css).
+   *
+   * The surface Calendar and Color picker are listed while they draw their surface (their `plain` form sits inside a
+   * host that draws it); Select's native picker restates the frame below, as a pseudo-element cannot be listed here;
+   * Scroll to latest is a floating Button and takes the stack alone (scroll-to-latest.css).
+   */
+  :where(.area-popover, .area-menu, .area-menu__search-surface, .area-command-palette, .area-dialog, .area-drawer, .area-toast,
+    .area-calendar:not(.area-calendar--plain), .area-color-picker:not(.area-color-picker--plain), .area-scroll-to-latest > .area-button,
+    .area-toolbar--surface, .area-selection-bar--floating, .area-titlebar--floating) {
+    --_elevation: var(--area-shadow-float);
+    --_float-shadow: var(--_m-layers, 0 0 0 0 transparent), var(--area-shadow-edge), var(--_elevation);
+  }
+  /* The floating bars (the floating Toolbar's surface, the floating Selection bar, the floating Titlebar; plan B6.1,
+     2026-11-14) take the same stack on the same ground. Their edge is the same Floating edge drawn inside
+     (`--_float-frame`, an inset ring), so a bar's inset holds no border term and its controls sit the inset from the
+     outer edge at every Stroke width; each bar reads `var(--_float-frame), var(--_float-shadow)` as its box-shadow
+     (toolbar.css, selection-bar.css, titlebar.css). A material replaces a chrome bar's shadow (material.css). */
+  :where(.area-toolbar--surface, .area-selection-bar--floating, .area-titlebar--floating) {
+    --_float-frame: inset 0 0 0 var(--area-border-width) var(--area-edge-floating);
+  }
+  :where(.area-command-palette, .area-dialog, .area-drawer) { --_elevation: var(--area-shadow-modal); }
+  :where(.area-popover, .area-menu, .area-menu__search-surface, .area-command-palette, .area-dialog, .area-drawer, .area-toast,
+    .area-calendar:not(.area-calendar--plain), .area-color-picker:not(.area-color-picker--plain)) {
+    border: var(--area-border-width) solid var(--area-edge-floating);
+    background-color: var(--area-bg-float);
+    color: var(--area-fg-default);
+    box-shadow: var(--_float-shadow);
+  }
+  /* Select's native picker: the same frame and stack (and the field list's corner, below), on the pseudo-element. */
+  @supports (appearance: base-select) {
+    :where(.area-select)::picker(select) {
+      --_elevation: var(--area-shadow-float);
+      --_float-shadow: var(--_m-layers, 0 0 0 0 transparent), var(--area-shadow-edge), var(--_elevation);
+      --_list-pad: var(--area-space-4);
+      --area-radius-list-row: max(0px, min(max(min(var(--_radius, var(--area-radius-control-md)), max(var(--area-radius-min), round(down, calc(var(--_height, var(--area-control-md)) * var(--area-radius-factor)), 2px))), var(--area-pill-field) * var(--area-radius-full)), calc(var(--area-ui-row) / 2 - min(2px, (0.5 - var(--area-radius-factor)) * 1000px))));
+      --_list-corner: calc(var(--area-radius-list-row) + (var(--_list-pad) - max(0px, var(--area-space-4) - var(--area-radius-list-row))) * var(--area-radius-concentric));
+      padding: var(--_list-pad);
+      border: var(--area-border-width) solid var(--area-edge-floating);
+      border-radius: var(--_list-corner);
+      background-color: var(--area-bg-float);
+      color: var(--area-fg-default);
+      box-shadow: var(--_float-shadow);
+    }
+  }
+
+  /* --- Overlay corners (plan B6.3; DESIGN_SYSTEM.md, "Overlay corners") ----- */
+  /*
+   * One equation for every surface that holds rows: its corner is the rows' corner plus the padding they sit in,
+   *
+   *   --_list-corner = row + (pad − max(0, 4 − row)) × radius-concentric
+   *
+   * so a row's plate is concentric with its surface at every Corner, Type and Density (the rows' own corner,
+   * `radius-list-row`, already stops at the container less 4). Below a 4 corner a list adds the rows' own corner rather
+   * than its whole padding (the 4 − row term), so it stays at most twice its rows (Corner 2: 2 / 4) and goes square with
+   * them at Sharp.
+   * What differs by role is which side is given:
+   *   a list (Menu, Context menu, a list opened from a control or a field, Select's picker): the padding is given, 4;
+   *     the corner follows (12 at the default, 0 at Sharp, 19 at Pill).
+   *   a modal that holds a list (Command palette): the corner is the modal's, `radius-container`, so the padding follows,
+   *     the container less the rows' corner, never under 4 (8 at the default: 16 = 8 + 8; 20 = 12 + 8 at Corner 14).
+   * Panels (Popover, the surface Calendar and Color picker, a titled Toast) and modals (Dialog, Confirm dialog, Drawer)
+   * hold free content at their inset and take the container corner as it is.
+   *
+   * The padding is counted inside the frame (plan B6.4, owner 2026-11-13: keep, documented): a list's rows sit `pad`
+   * inside its 1px edge, 5 from the outer edge at the default stroke, and the corner adds the padding alone, so it stays
+   * even at every stroke width (counting the edge made it 7 at Stroke 1; owner, 2026-10-03). Every other floating surface
+   * counts its edge once in its inset (Popover 12, Dialog 16, Toast 10 from the outer edge).
+   */
+  :where(.area-menu, .area-menu__search-surface, .area-command-palette) {
+    --_list-pad: var(--area-space-4);
+    --_list-corner: calc(var(--area-radius-list-row) + (var(--_list-pad) - max(0px, var(--area-space-4) - var(--area-radius-list-row))) * var(--area-radius-concentric));
+  }
+  :where(.area-command-palette) { --_list-pad: max(var(--area-space-4), calc(var(--area-radius-container) - var(--area-radius-list-row))); }
+  .area-menu {
+    --_inset: var(--_list-pad);
+    padding: var(--_inset);
+    border-radius: var(--_list-corner);
+  }
+  /* A list that is itself a Scroll area keeps its bar's ends off its corner (scroll-area.css, plan B6.6). */
+  .area-menu.area-scroll-area { --_bar-corner: var(--_list-corner); }
+  /*
+   * A list opened from a field takes the field's corner (owner, 2026-10-23: "is it supposed to be much rounder than the
+   * actual input? im okay with it being a bit rounder but it seems drastic"): its rows are the field's corner, and the
+   * list's corner follows from them by the equation above. A small field (6) opens a 10 list with 6 rows (field 6, menu
+   * 10, rows 6); a medium field (8) the 12 / 8 every list has; a large one (10) 14 / 10. Rows stop short of a pill before
+   * Pill, as radius-list-row (emit/base.ts), and a pill field opens a rounded list at every setting (rows half the UI row
+   * less 2, the list 4 more: 13 / 17 at the default, 14 / 18 at type 14). Each field's list sits inside the field's
+   * element and reads its `--_radius` and `--_height` (Combobox sets them from its Input's size). Menus and Context menus
+   * open from a button and keep radius-list-row.
+   */
+  :where(.area-custom-select__listbox, .area-combobox__listbox, .area-tag-picker__listbox) {
+    --area-radius-list-row: max(0px, min(max(min(var(--_radius, var(--area-radius-control-md)), max(var(--area-radius-min), round(down, calc(var(--_height, var(--area-control-md)) * var(--area-radius-factor)), 2px))), var(--area-pill-field) * var(--area-radius-full)), calc(var(--area-ui-row) / 2 - min(2px, (0.5 - var(--area-radius-factor)) * 1000px))));
+  }
+
+  /* --- The footer pair (plan B6.5; DESIGN_SYSTEM.md, "Overlay footers") ------- */
+  /* Every overlay footer pairs a soft neutral secondary (Cancel) with a solid primary, or a soft danger for an action that
+     cannot be undone (Confirm dialog's own pair; the demos and docs show it). A footer's text Buttons are at least 2.25 ×
+     their height, rounded up to a whole pixel, so "OK" is never narrower than "Cancel" beside it: 68 on a 30 Button at
+     the default, 59 at Compact (26), 86 on a 38. An icon-only Button keeps its square. Approval's way on (Back, Skip,
+     Continue) is the same pair in a chat card, so it takes the same minimum (plan B6.5). */
+  :where(.area-dialog__footer, .area-drawer__footer, .area-popover__footer, .area-approval__footer) > .area-button:not(.area-button--icon-only) {
+    min-inline-size: round(up, calc(var(--_height) * 2.25), 1px);
+  }
+
+  /* --- Block gap (plan B6.2) ------------------------------------------------ */
+  /* A surface that stacks blocks (a header, a body, a footer) sets them its inset apart at most: the md surface inset, or
+     its own inset where that is smaller, so no two blocks stand further apart than the blocks stand from its edge.
+     Popover 12 (its inset; 14 at the default inset-surface-md, 18 at Comfortable, before), Dialog and Drawer 16 (18 at
+     Comfortable before), 12 at Compact for all three. Each sets `--_block-inset`, its inset from the outer edge. */
+  :where(.area-popover, .area-dialog, .area-drawer) {
+    --_block-gap: min(var(--area-inset-surface-md), var(--_block-inset, var(--area-inset-surface-md)));
+    gap: var(--_block-gap);
+  }
+}

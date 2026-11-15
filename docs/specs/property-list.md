@@ -116,3 +116,13 @@ The handle is not selectable. See [interaction polish](../research/interaction-p
 ### 2026-11-07 · One announcer (components audit D1)
 
 The move's own `aria-live` span is replaced by `announce` (`announce` / `useAnnouncement` (packages/react/src/components/announce.ts; DESIGN_SYSTEM.md, "Announcements")); the instructions stay the list's description. No visible change.
+- 2026-11-11 · system evaluation A1.1 · in a Panel the column gap follows the panel's whole-step gap, 10 at the default (was 8).
+- 2026-11-14 · plan B7.8 → an inactive value reads opacity-disabled (was a literal 0.5; same value). Why: docs/research/system-evaluation-2026-11-11 (README §5, phase2/disabled.md); the owner took every recommendation on 2026-11-11.
+
+## Shared parts (plan B2), 2026-11-13
+
+- **Column grid (B2.7).** In a Panel section its last button ends where a row's action does, on the hung action column (panel.md): the hang less the button's room in the column.
+
+## State paint (plan B7.11), 2026-11-14
+
+- The drag handle hides only inside `@media (hover: hover)`; the `(hover: none)` rule is gone.

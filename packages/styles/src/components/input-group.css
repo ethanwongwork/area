@@ -1,67 +1,26 @@
 /* Shared shell for independently editable controls; the children keep their own refs and names. */
 @layer area.components {
+  /* The group is the one field shell (input.css, "One field shell"): its tiers, edge, corner, fill, soft, focus and
+     status, which it takes from a field inside it. The fields inside take its tier and draw only the seams. */
   .area-input-group {
-    --_group-height: var(--area-control-md);
-    --_group-text: var(--area-control-md-text);
-    --_group-leading: var(--area-control-md-leading);
-    --_group-icon: var(--area-icon-md);
-    --_group-gap: var(--area-gap-md);
     display: inline-flex;
     align-items: center;
     inline-size: var(--area-input-inline-size);
-    block-size: var(--_group-height);
     max-inline-size: 100%;
-    border: var(--area-stroke-width) solid var(--area-input-edge);
-    /* The per-tier control radius, as Button (audit S4, owner 2026-09-30); was radius-control (8) at every size. */
-    border-radius: calc(min(var(--_group-radius, var(--area-radius-control-md)), max(var(--area-radius-min), round(down, calc(var(--_group-height) * var(--area-radius-factor)), 2px))) + var(--area-pill-field) * var(--area-radius-full));
-    background-color: var(--area-input-bg);
-    /* spec (outline pass, docs/specs/number-field.md): controls at rest carry no shadow, as Button (ChatGPT, Notion, Figma fields). */
-    --_field-lift: var(--area-shadow-field); /* Field shadow (axes/depth.ts), transparent by default */
-    box-shadow: var(--_field-lift);
-    color: var(--area-input-text);
-    font-size: var(--_group-text);
-    line-height: var(--_group-leading);
     overflow: clip;
-    /* Motion (docs/MOTION.md, 2026-10-07), as Input: paint and the focus halo appear at once and
-       fade out on fast; the halo keeps its fade into hover. */
-    --_t-paint: var(--area-duration-fast);
-    --_t-halo: var(--area-duration-fast);
-    transition-property: background-color, border-color, color, box-shadow;
-    transition-duration: var(--_t-paint), var(--_t-paint), var(--_t-paint), var(--_t-halo);
-    transition-timing-function: var(--area-ease-out);
   }
-  .area-input-group--outline { background-color: var(--area-input-bg); }
-  .area-input-group--soft { background-color: var(--area-input-bg-soft); border-color: var(--area-input-edge-soft); --_field-lift: 0 0 0 0 transparent; box-shadow: var(--_field-lift); }
-  .area-input-group--sm { --_group-height: var(--area-control-sm); --_group-radius: var(--area-radius-control-sm); --_group-text: var(--area-control-sm-text); --_group-leading: var(--area-control-sm-leading); --_group-icon: var(--area-icon-sm); --_group-gap: var(--area-gap-sm); }
-  .area-input-group--md { --_group-height: var(--area-control-md); --_group-radius: var(--area-radius-control-md); --_group-text: var(--area-control-md-text); --_group-leading: var(--area-control-md-leading); --_group-icon: var(--area-icon-md); --_group-gap: var(--area-gap-md); }
-  .area-input-group--lg { --_group-height: var(--area-control-lg); --_group-radius: var(--area-radius-control-lg); --_group-text: var(--area-control-lg-text); --_group-leading: var(--area-control-lg-leading); --_group-icon: var(--area-icon-lg); --_group-gap: var(--area-gap-lg); }
   .area-input-group--full-width { inline-size: 100%; }
-  @media (hover: hover) { .area-input-group:hover:not(:focus-within, :has(:disabled, [data-disabled])) { --_t-paint: var(--area-hover-in); border-color: var(--area-input-edge-hover); } }
   /* A tone or disabled paint lands at once (motion, 2026-10-07); clearing it fades on fast. */
   .area-input-group:is([aria-disabled="true"], :has([data-success], [data-warning], [aria-invalid="true"], [data-invalid], > :is(.area-input, .area-number-field)[data-disabled], > .area-select:disabled)) { --_t-paint: 0s; }
   /* Disabled uses field paint, like Input: the disabled fill, a faint edge and disabled ink. */
   .area-input-group:is([aria-disabled="true"], :has(> :is(.area-input, .area-number-field)[data-disabled], > .area-select:disabled)) { background-color: var(--area-input-bg-disabled); border-color: var(--area-border-faint); color: var(--area-fg-disabled); cursor: not-allowed; }
-  .area-input-group:has([data-success]) { border-color: var(--area-input-success-color); }
-  .area-input-group:has([data-warning]) { border-color: var(--area-input-warning-color); }
-  .area-input-group:focus-within {
-    --_t-paint: 0s;
-    --_t-halo: 0s;
-    border-color: color-mix(in srgb, var(--area-input-edge), var(--area-field-focus-color) calc(var(--area-field-focus-recolor) * 100%));
-    box-shadow: var(--_field-lift), 0 0 0 var(--area-field-focus-halo-width) var(--area-field-focus-halo-color);
-    outline: var(--area-field-focus-outline-width) solid var(--area-field-focus-color);
-    outline-offset: var(--area-focus-offset);
-  }
-  /* A validation tone holds through focus, as it does on Input and Select. */
-  .area-input-group:has([data-success]):focus-within { border-color: var(--area-input-success-color); outline-color: var(--area-input-success-color); box-shadow: var(--_field-lift), 0 0 0 var(--area-field-focus-halo-width) var(--area-input-success-halo-color); }
-  .area-input-group:has([data-warning]):focus-within { border-color: var(--area-input-warning-color); outline-color: var(--area-input-warning-color); box-shadow: var(--_field-lift), 0 0 0 var(--area-field-focus-halo-width) var(--area-input-warning-halo-color); }
-  .area-input-group:has([aria-invalid="true"], [data-invalid]) { border-color: var(--area-input-invalid-color); }
-  .area-input-group:has([aria-invalid="true"], [data-invalid]):focus-within { outline-color: var(--area-input-invalid-color); box-shadow: var(--_field-lift), 0 0 0 var(--area-field-focus-halo-width) var(--area-input-invalid-halo-color); }
   .area-input-group > :is(.area-input, .area-number-field, .area-select) {
-    --_height: var(--_group-height);
-    --_text: var(--_group-text);
-    --_leading: var(--_group-leading);
-    --_icon: var(--_group-icon);
-    --_gap: var(--_group-gap);
+    --_height: inherit;
+    --_radius: inherit;
+    --_text: inherit;
+    --_leading: inherit;
+    --_icon: inherit;
+    --_gap: inherit;
     flex: 1 1 0;
     inline-size: 0;
     min-inline-size: 0;
@@ -72,22 +31,31 @@
     background-color: transparent;
     box-shadow: none;
   }
+  /* A grouped field keeps its value (system evaluation F3.2, 2026-11-11): its least width is its content, the value (or the
+     placeholder) between its insets, so a group in a content-sized place (a toolbar, an inline row, a width that is a
+     share of an unsized parent) clips nothing rather than falling to 0. A text control's own intrinsic width is 20
+     characters, so the control is sized by its content (field-sizing) and the field still grows to fill the group. Where
+     field-sizing is not supported the field keeps no minimum, as before. */
+  @supports (field-sizing: content) {
+    .area-input-group > :is(.area-input, .area-number-field) { min-inline-size: min-content; }
+    .area-input-group > .area-input > .area-input__control,
+    .area-input-group > .area-number-field > .area-number-field__control { field-sizing: content; }
+  }
   .area-input-group > :is(.area-input, .area-number-field, .area-select):focus,
   .area-input-group > :is(.area-input, .area-number-field, .area-select):focus-within {
-    border-color: var(--area-border-decorative);
     background-color: transparent;
     outline: none;
     box-shadow: none;
   }
   .area-input-group > .area-button {
-    --_height: var(--_group-height);
-    --_text: var(--_group-text);
-    --_leading: var(--_group-leading);
-    --_icon: var(--_group-icon);
-    --_gap: var(--_group-gap);
-    flex: 0 0 var(--_group-height);
+    --_height: inherit;
+    --_text: inherit;
+    --_leading: inherit;
+    --_icon: inherit;
+    --_gap: inherit;
+    flex: 0 0 var(--_height);
     block-size: 100%;
-    inline-size: var(--_group-height);
+    inline-size: var(--_height);
     padding-inline: 0;
     border: 0;
     border-radius: 0;
@@ -102,26 +70,28 @@
     /* The equal-inset rule, as Input's prefix (inset.css): half of height less a cap, less the
        group's border, so "$" sits at the same place either way (audit B-18; was the gutter). */
     /* Rounded to whole pixels, as inset.css rounds every derived inset (crispness, 2026-10-07). */
-    padding-inline: max(0px, round(nearest, calc((var(--_group-height) - 1cap) / 2 - var(--area-stroke-width)), 1px));
+    padding-inline: max(0px, round(nearest, calc((var(--_height) - 1cap) / 2 - var(--area-stroke-width)), 1px));
     color: var(--area-fg-muted);
     white-space: nowrap;
   }
   /* A passive segment takes the disabled ink with its group (audit B-10). */
   .area-input-group:is([aria-disabled="true"], :has(> :is(.area-input, .area-number-field)[data-disabled], > .area-select:disabled)) .area-input-group__text { color: var(--area-fg-disabled); }
   .area-input-group__text[data-visual] {
-    flex: 0 0 var(--_group-height);
-    inline-size: var(--_group-height);
+    flex: 0 0 var(--_height);
+    inline-size: var(--_height);
     padding-inline: 0;
-    font-size: var(--_group-text);
-    line-height: var(--_group-leading);
+    font-size: var(--_text);
+    line-height: var(--_leading);
   }
-  .area-input-group__text[data-visual] > svg { display: block; inline-size: var(--_group-icon); block-size: var(--_group-icon); flex: none; }
-  .area-input-group > .area-select:first-child { flex: 0 0 calc(var(--_group-height) * 3); }
+  .area-input-group__text[data-visual] > svg { display: block; inline-size: var(--_icon); block-size: var(--_icon); flex: none; }
+  .area-input-group > .area-select:first-child { flex: 0 0 calc(var(--_height) * 3); }
   /* spec (batch 9, figma--number-field-menu: the value box ends on the chevron's 16px box): in a
      group the option text runs up to the chevron's box; the glyph's side-bearing leaves ~4.5 of air.
      The chevron's box sits on the Select's own inset (inset.css); a standalone Select adds its gap. */
   .area-input-group > .area-select { padding-inline-end: calc(var(--_chevron-inset) + var(--_icon)); }
-  .area-input-group > :not(:first-child) { border-inline-start: var(--area-stroke-width) solid var(--area-border-decorative); }
+  /* A seam is a joined control's edge (DESIGN_SYSTEM.md, "seams inside joined controls"): the field edge, never lighter than
+     the group's own (plan B3.1; it was border-decorative, a step lighter). Drawn on the part after it, at every state. */
+  .area-input-group > :not(:first-child) { border-inline-start: var(--area-stroke-width) solid var(--area-input-edge); }
   .area-input-group > .area-input-group__text[data-visual] + :is(.area-input, .area-number-field, .area-select) { border-inline-start: 0; }
   .area-input-group > .area-input-group__text[data-visual] + :is(.area-input, .area-number-field, .area-select) { padding-inline-start: 0; }
   .area-input-group > .area-number-field:has(.area-number-field__steppers) { padding-inline-end: 0; }

@@ -92,3 +92,4 @@ the writing direction (flex). Pass a role (`list`, `group`) and name when the ch
   and a Badge) instead of bold text off Area's weights. Gaps, alignment and the cap inside a Surface are unchanged and
   measured correct at every Density and Radius.
 - **Why:** you said to go with the recommendations (one Stack, gaps by role, no divider yet) and make sure it is correct.
+- 2026-11-11 · system evaluation A1.1, A1.4 · group 12 (was 10) at the default; section reads `gap-section`, 24 (was 20), Compact 16 unchanged, Comfortable 32 (was 28).

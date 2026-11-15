@@ -5,42 +5,45 @@ import { forwardRef, useContext } from "react";
 import { InputGroupContext } from "./input-group-context.ts";
 import type { ButtonHTMLAttributes, ChangeEvent, CSSProperties, InputHTMLAttributes, ReactElement, ReactNode } from "react";
 import { cx, inputVariants, tooltipVariants } from "../variants.ts";
-import { Spinner } from "./primitives.tsx";
+import { Spinner } from "./Spinner.tsx";
 import { AnchoredTooltip } from "./Overlays.tsx";
 
 export interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, "size" | "prefix"> {
+  /** The field's treatment: `outline` (default), an edge; `soft`, a fill. */
   variant?: VariantProps<typeof MANIFESTS.input>["variant"];
+  /** The field's height and type: `md` (default), `sm` or `lg`. */
   size?: VariantProps<typeof MANIFESTS.input>["size"];
-  /** Decorative visual at the logical start of the input (glyph slots are `icon` / `trailingIcon`, Governance § 4). */
+  /** Stretch to the available inline size. The default is a contained 16rem measure. */
+  fullWidth?: boolean;
+  /** Use the system monospace stack for code-like values. */
+  monospace?: boolean;
+  /** A decorative glyph at the field's start. */
   icon?: ReactNode;
-  /** @deprecated Use `icon` (2026-11-07, system gaps C4). Kept for one release; `icon` wins. */
-  leadingIcon?: ReactNode;
   /** Decorative visual at the logical end of the input. */
   trailingIcon?: ReactNode;
   /** Static text before the value, such as a currency symbol. */
   prefix?: ReactNode;
   /** Static text after the value, such as a unit. */
   suffix?: ReactNode;
-  /** Stretch to the available inline size. The default is a contained 16rem measure. */
-  fullWidth?: boolean;
-  /** Use the system monospace stack for code-like values. */
-  monospace?: boolean;
+  /** One InputAction at the logical end. It replaces a trailing visual. */
+  trailingAction?: ReactElement<InputActionProps>;
+  /** @deprecated Use `icon`, which wins. Kept for one release. */
+  leadingIcon?: ReactNode;
   /** Show progress without making the field uneditable. */
   loading?: boolean;
   /** Accessible status text for the loading indicator. */
   loadingText?: string;
   /** Which visual slot loading occupies; auto replaces the leading visual when present. */
   loaderPosition?: "auto" | "leading" | "trailing";
-  /** One InputAction at the logical end. It replaces a trailing visual. */
-  trailingAction?: ReactElement<InputActionProps>;
   /** Internal Field-to-Input validation bridge; plain HTML uses the matching data attribute. */
   "data-validation-status"?: "error" | "success" | "warning";
   /** Semantic validation paint. `invalid` remains the compatibility alias for `error`. */
   validationStatus?: "error" | "success" | "warning";
+  /** Paints the field as an error and sets `aria-invalid`; the same as `validationStatus="error"`. */
   invalid?: boolean;
   /**
-   * The typed value and the change event, beside native `onChange` (which runs first; Governance § 4, components audit
-   * 2026-11-07 O3). Search field and Combobox replace it with their own.
+   * Called with the typed value and the change event, after native `onChange`. Search field and Combobox replace it
+   * with their own.
    */
   onValueChange?: (value: string, event: ChangeEvent<HTMLInputElement>) => void;
   /** Class applied to the outer shell rather than the input itself. */
@@ -55,6 +58,7 @@ export interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 
  * inset action.
  */
 export interface InputActionProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, "children" | "type"> {
+  /** The action's glyph, in a square slot at the field's end. */
   icon: ReactNode;
   /** Visible on hover and focus; also becomes the accessible name when aria-label is absent. */
   tooltip: string;

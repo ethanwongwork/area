@@ -68,7 +68,7 @@ const STROKE = {
 } as const;
 
 /** Surfaces that body text is allowed to land on. */
-const TEXT_SURFACES = ["bg-page", "bg-surface", "bg-subtle", "bg-well", "bg-component", "bg-stripe"];
+const TEXT_SURFACES = ["bg-page", "bg-surface", "bg-subtle", "bg-well", "bg-component", "bg-stripe", "bg-float", "bg-component-float"];
 
 function textAssertions(): ContrastAssertion[] {
   const out: ContrastAssertion[] = [];
@@ -77,6 +77,13 @@ function textAssertions(): ContrastAssertion[] {
     out.push({ fg: "fg-muted", bg, wcag: WCAG.TEXT, apca: APCA.CONTENT, note: "secondary copy" });
     // A small placeholder is ordinary text: no exemption from the 4.5:1 requirement.
     out.push({ fg: "fg-placeholder", bg, wcag: WCAG.TEXT, apca: APCA.CONTENT, note: "placeholder" });
+    // The subtle ink is text too (plan A3.2): meta keeps 4.5:1 wherever it sits.
+    out.push({ fg: "fg-subtle", bg, wcag: WCAG.TEXT, apca: APCA.CONTENT, note: "meta (shortcut, timestamp, empty value)" });
+  }
+  // Meta and placeholders under the pointer: a hovered row or field, on the page and in a floating list.
+  for (const bg of ["bg-component-hover", "bg-component-float-hover"]) {
+    out.push({ fg: "fg-subtle", bg, wcag: WCAG.TEXT, apca: APCA.CONTENT, note: "meta on a hovered row" });
+    out.push({ fg: "fg-placeholder", bg, wcag: WCAG.TEXT, apca: APCA.CONTENT, note: "placeholder in a hovered field" });
   }
   return out;
 }

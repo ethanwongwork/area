@@ -55,7 +55,9 @@ function Glyph({ axis }: { axis: string }): ReactNode {
     case "layers-light":
     case "layers-dark": return <span className="cv-layers"><i><b /></i></span>;
     case "contrast": return <span className="cv-lines"><i className="cv-line--card" /><i className="cv-line--divider" /><i className="cv-line--control" /></span>;
-    case "type": return <span className="cv-type">Aa</span>;
+    case "type":
+    // Regular weight: the same letters, drawn at the option's regular (setup.css .cv-type reads the role).
+    case "regular-weight": return <span className="cv-type">Aa</span>;
     case "density": return <span className="cv-rows"><i /><i /><i /></span>;
     case "radius": return <span className="cv-corner" />;
     case "pills": return <span className="cv-bar cv-bar--pill" />;

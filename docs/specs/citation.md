@@ -64,6 +64,8 @@ area     a.area-citation--footnote (inline, 0.704em, line-height 1, super, 0 1px
 
 ## Measurements
 
+**Current (2026-11-13, one mark).** The pill is on the one mark recipe (inset.css, "One mark"). Heights are the mark ladder, the small text line plus 0 / 4 / 8: 14 / 18 / 22 at type 12 and 13, 16 / 20 / 24 at 14, 18 / 22 / 26 at 15, 20 / 24 / 28 at 16, the same at Compact, Default and Comfortable (Compact's md was 14 and its lg 18 until 2026-11-13). The text side is (H − 6) / 2 from the outer edge, edge counted once: 4 / 6 / 8 at type 13. The cap sits on the marks' whole-pixel baseline, edge + round((H − 2 · edge + 1cap) / 2). The tables below are the source evidence they were set from. Text text-xs at 500. Side 6 (was 7); the favicon side (H − 12) / 2, 3 at 18; gap 4. The label sits on the whole-pixel cap baseline (it sat 0.6 high on an optical lift). Fill: the translucent mark fill `bg-mark` (was the opaque bg-component-hover). Always a pill. The footnote is unchanged (max(10, 0.704em)).
+
 `node scripts/capture-compare.mjs --slots shell,icon,label` (trimmed):
 
 | slot · property | chatgpt · multi | area · more |
@@ -182,3 +184,13 @@ Sides from the height, as Badge's: an icon side `(h − 12) / 2` and a text side
 ### 2026-11-07 · Every hue's roles (components audit D5)
 
 The hued inks read the hue role table (`--area-hue-<hue>-<role>`, packages/tokens/src/semantic/hues.ts; DESIGN_SYSTEM.md, "Every hue has the same roles") (`hue-<hue>-text`), as Link's do: no value changed.
+
+## Review note, 2026-11-11 (type rules, plan A9)
+
+- **What changed:** the footnote is floored at the ramp's 10: `max(size-10, 0.704em)`; it was 9.15 at 13 (plan A9.9, finding T22).
+- **Why:** the system evaluation's type rules (docs/research/system-evaluation-2026-11-11, section 5, A9), owner-approved
+  2026-11-11; the rules are in DESIGN_SYSTEM.md ("Ink and weight", "Size and shape", "Text pairs") and the type skill.
+
+## One mark, 2026-11-13
+
+Plan B5.1 (and B5.2, B5.3 where they apply; docs/research/system-evaluation-2026-11-11): the family moved onto the shared mark recipe in inset.css and its own copy of the side, baseline, corner and text was removed. Values above, under Measurements.

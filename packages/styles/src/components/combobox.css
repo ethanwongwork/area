@@ -6,7 +6,7 @@
  * combobox's options look exactly like a menu's. docs/specs/combobox.md.
  * ------------------------------------------------------------------------- */
 @layer area.components {
-  /* The field's size, for its list's corner (surface.css, "A list opened from a field"): the Input's tier. */
+  /* The field's size, for its list's corner (popup.css, "A list opened from a field"): the Input's tier. */
   .area-combobox { display: inline-flex; vertical-align: middle; min-inline-size: 0; --_height: var(--area-control-md); --_radius: var(--area-radius-control-md); }
   .area-combobox:has(> .area-input--sm, > * > .area-input--sm) { --_height: var(--area-control-sm); --_radius: var(--area-radius-control-sm); }
   .area-combobox:has(> .area-input--lg, > * > .area-input--lg) { --_height: var(--area-control-lg); --_radius: var(--area-radius-control-lg); }
@@ -21,30 +21,20 @@
     /* spec: Figma's font list shows 324 of its rows before it scrolls (captures/combobox); never
        taller than the room beside the field. On the [popover] rule so it outranks Menu's. */
     max-block-size: min(324px, var(--area-overlay-available-height, 50vh)); /* spec */
-    /* At least the field's width, and never narrower than a menu (224). */
-    min-inline-size: max(var(--area-overlay-anchor-width, 0px), var(--area-menu-min-inline-size, calc(var(--area-space-96) * 2 + var(--area-space-32))));
+    /* At least the field's width, and never narrower than a menu (160). */
+    min-inline-size: max(var(--area-overlay-anchor-width, 0px), var(--area-menu-min-inline-size, calc(var(--area-space-96) + var(--area-space-64))));
   }
 
   /* Options are Menu rows. A value picker shows its value with the check alone, as Select and
      Custom select; the plate only means highlight (custom-select.md Q3, owner 2026-10-08; was the
      active plate and the check, audit S13 C). */
-  /* Unchosen, the check is Menu's small mark at rest (surface.css): it fades and grows in when chosen, rather than
+  /* Unchosen, the check is Menu's small mark at rest (menu.css): it fades and grows in when chosen, rather than
      popping (2026-10-26, the interaction pass; it was visibility: hidden). */
   .area-combobox__option[aria-selected="false"] > .area-menu__check > svg { opacity: 0; scale: 0.6; /* spec: MOTION.md small mark */ }
-  .area-combobox__description { margin-inline-start: auto; padding-inline-start: var(--area-space-8); color: var(--area-fg-muted); white-space: nowrap; }
-  .area-combobox__description + .area-menu__check { margin-inline-start: var(--area-space-8); }
+  .area-combobox__description { margin-inline-start: auto; padding-inline-start: var(--area-ui-cluster); color: var(--area-fg-muted); white-space: nowrap; }
+  .area-combobox__description + .area-menu__check { margin-inline-start: var(--area-ui-cluster); }
 
-  /* Nothing matches: a quiet row the height of an option, not an option itself. */
-  .area-combobox__empty {
-    display: flex;
-    align-items: center;
-    block-size: var(--area-ui-row);
-    /* The text-only row inset (inset.css): the cap centred in the row's square. */
-    padding-inline: calc((var(--area-ui-row) - 1cap) / 2);
-    color: var(--area-fg-muted);
-    font-size: var(--area-ui-size);
-    line-height: var(--area-ui-leading);
-  }
+  /* Nothing matches: Menu's empty line (.area-menu__empty, the row table in inset.css; plan B2.6), never an option. */
   /* The toggle is the field's chevron: `input-chevron` ink, as Select's and Custom select's (Q5). */
   .area-combobox > .area-input:not([data-disabled]) .area-input__action-button:not(:disabled) { color: var(--area-input-chevron); }
   .area-combobox__group { display: flex; flex-direction: column; gap: var(--area-ui-row-gap); }

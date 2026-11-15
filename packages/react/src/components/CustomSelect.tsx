@@ -35,17 +35,11 @@ export interface CustomSelectOption {
 type Manifest = VariantProps<typeof MANIFESTS.customSelect>;
 
 export interface CustomSelectProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, "value" | "defaultValue" | "onChange" | "type" | "role"> {
-  /** The options. Collections are `items` everywhere (audit H-14). */
-  items?: CustomSelectOption[];
-  /** The selected option's value (controlled). */
-  value?: string | null;
-  defaultValue?: string | null;
-  /** The chosen value and the event that chose it. */
-  onValueChange?: (value: string, event: SyntheticEvent) => void;
-  /** Shown in the trigger while nothing is chosen. */
-  placeholder?: ReactNode;
+  /** The trigger's treatment: `outline` (default), `soft` or `ghost`. */
   variant?: Manifest["variant"];
+  /** The trigger's height and type: `md` (default), `sm` or `lg`. */
   size?: Manifest["size"];
+  /** The trigger fills its container's width. */
   fullWidth?: boolean;
   /**
    * How the open list lays its options out. `list` (default): Menu's rows. `grid`: cells in equal columns, each its
@@ -53,6 +47,33 @@ export interface CustomSelectProps extends Omit<ButtonHTMLAttributes<HTMLButtonE
    * reading order and Up / Down go to the nearest cell in the next row (List box's grid).
    */
   layout?: Manifest["layout"];
+  /** The options. */
+  items?: CustomSelectOption[];
+  /** Shown in the trigger while nothing is chosen. */
+  placeholder?: ReactNode;
+  /**
+   * A region under the options, ruled off (Menu's footer): Save and Cancel for a set that waits to be kept (hold the
+   * set as a draft in `values`, keep it on Save, drop it on Cancel and when the list closes), or a link to manage the
+   * options. Its controls take focus, so the list stays open while they have it.
+   */
+  footer?: ReactNode;
+  /** With `multiple`, what the trigger says once three or more are chosen (default "3 selected"); one or two show their labels. */
+  selectedLabel?: (count: number) => string;
+  /** The selected option's value (controlled). */
+  value?: string | null;
+  /** The option chosen at first, uncontrolled; none by default. */
+  defaultValue?: string | null;
+  /**
+   * Picks any number of options: choosing a row toggles it and the list stays open, the trigger lists the chosen
+   * labels in the list's order, and the value is `values` / `defaultValues` / `onValuesChange` (`value` and
+   * `onValueChange` are ignored).
+   */
+  multiple?: boolean;
+  /** With `multiple`, the chosen options' values, controlled, in the list's order. */
+  values?: readonly string[];
+  /** With `multiple`, the options chosen at first, uncontrolled. */
+  defaultValues?: readonly string[];
+  /** Paints the trigger as an error and sets `aria-invalid`; the same as `validationStatus="error"`. */
   invalid?: boolean;
   /** Semantic validation paint, as Input's: `error` (also `invalid`), `success` or `warning`. A Field passes its own. */
   validationStatus?: ValidationStatus;
@@ -65,31 +86,16 @@ export interface CustomSelectProps extends Omit<ButtonHTMLAttributes<HTMLButtonE
   readOnly?: boolean;
   /** Submits the chosen value with a form under this name. */
   name?: string;
+  /** A form cannot submit without an option chosen. */
   required?: boolean;
   /** The list is open (controlled); `defaultOpen` opens it at first; `onOpenChange` hears it open and close. */
   open?: boolean;
+  /** Whether the list starts open, uncontrolled. */
   defaultOpen?: boolean;
-  onOpenChange?: (open: boolean) => void;
   /**
-   * The option the pointer or the arrow keys are on while the list is open, and `null` when the list closes, so a host
-   * can preview it before it is chosen (shadcn's builder previews a hovered option on its canvas; Base UI's
-   * `onItemHighlighted`). A choice still arrives through `onValueChange` / `onValuesChange`.
-   */
-  onHighlightChange?: (value: string | null) => void;
-  /**
-   * Picks any number of options (Notion's multi-select, Figma's toggled lists): choosing a row
-   * toggles it and the list stays open, the trigger lists the chosen labels in the list's order,
-   * and the value is `values` / `defaultValues` / `onValuesChange` (`value` and `onValueChange`
-   * are ignored).
-   */
-  multiple?: boolean;
-  values?: readonly string[];
-  defaultValues?: readonly string[];
-  onValuesChange?: (values: string[], event: SyntheticEvent) => void;
-  /**
-   * A field at the top of the open list narrows it as you type, the typed text marked in each option (components audit
-   * V7; a long list). Focus moves into the field while the list is open: the arrows move, Enter chooses, Escape closes.
-   * With `multiple`, the options chosen when it opened are listed first and a Select all row toggles every option shown.
+   * A field at the top of the open list narrows it as you type, the typed text marked in each option. Focus moves
+   * into the field while the list is open: the arrows move, Enter chooses, Escape closes. With `multiple`, the
+   * options chosen when it opened are listed first and a Select all row toggles every option shown.
    */
   filterable?: boolean;
   /** Names the filter field and is its placeholder (default "Filter"). */
@@ -98,14 +104,18 @@ export interface CustomSelectProps extends Omit<ButtonHTMLAttributes<HTMLButtonE
   emptyText?: ReactNode;
   /** Names the Select all row (default "Select all"). */
   selectAllLabel?: string;
+  /** The chosen value and the event that chose it. */
+  onValueChange?: (value: string, event: SyntheticEvent) => void;
+  /** With `multiple`, called with every chosen value, in the list's order, and the event that changed them. */
+  onValuesChange?: (values: string[], event: SyntheticEvent) => void;
+  /** Called when the list opens or closes. */
+  onOpenChange?: (open: boolean) => void;
   /**
-   * A region under the options, ruled off (Menu's footer): Save and Cancel for a set that waits to be kept (hold the
-   * set as a draft in `values`, keep it on Save, drop it on Cancel and when the list closes), or a link to manage the
-   * options. Its controls take focus, so the list stays open while they have it.
+   * Called with the option the pointer or the arrow keys are on while the list is open, and `null` when it closes, so
+   * a host can preview an option before it is chosen. A choice still arrives through `onValueChange` /
+   * `onValuesChange`.
    */
-  footer?: ReactNode;
-  /** With `multiple`, what the trigger says once three or more are chosen (default "3 selected"); one or two show their labels. */
-  selectedLabel?: (count: number) => string;
+  onHighlightChange?: (value: string | null) => void;
 }
 
 /** The typed filter matches an option's label or its text description. */
@@ -385,6 +395,9 @@ export const CustomSelect = forwardRef<HTMLButtonElement, CustomSelectProps>(fun
     return <div key={option.value} id={`${id}-option-${index}`} data-index={index} role="option" aria-selected={isSelected}
       aria-disabled={option.disabled || undefined} data-disabled={option.disabled ? "" : undefined}
       className="area-menu__item area-custom-select__option" data-highlighted={index === active ? "" : undefined}
+      /* The chosen row shows the active plate and the check, as every value picker (plan B7.7); a grid's own rules mark
+         its cell (the plate for words, the selected edge for a picture). */
+      data-selected={isSelected && !grid ? "" : undefined}
      
       onPointerDown={event => event.preventDefault()}
       onPointerMove={() => { if (!option.disabled && index !== active) setActive(index); }}

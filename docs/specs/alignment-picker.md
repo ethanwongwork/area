@@ -124,7 +124,7 @@ container 6 − inset 4) = 4 (container 8 until 2026-10-08). *The 80 × 80 table
 | hover | translucent plate and the position's glyph in fg-muted | `figma--auto-layout-alignment--hover--light`, `area--default--hover--light` (before the plate returned) |
 | checked | bars replace the dot | all tiles |
 | focus-visible | 2px focus ring on the cell, raised (`alignment-picker.css:84-88`) | not captured |
-| disabled | cells 50% (`alignment-picker.css:89`) | `area--disabled` |
+| disabled | cells 50% (`alignment-picker.css:89`); the manifest's `disabled` state, painted on the root's `aria-disabled` | `area--disabled` |
 | forced colours | checked cell outlined and bars in Highlight (`alignment-picker.css:90-94`) | not inspected |
 
 ## Behavior and accessibility
@@ -308,3 +308,15 @@ Cells are not selectable. See [interaction polish](../research/interaction-polis
 - **Why:** your pick of option B: one setting colours everything selected, so a selected card's edge and the mark
   inside it always match (docs/research/selection-colour-2026-10-22). With an accent chosen, most of the system was
   blue already; buttons follow Action, which stays neutral.
+
+- 2026-11-11 · System evaluation F5: the manifest lists the `disabled` state (`stateAttributes: aria-disabled`), so the generated API tab and the parity test read it. No visual change.
+
+### 2026-11-11 · Ink, dark and colour (system plan, Phase 1)
+
+- **What changed:** The grid takes the strong control edge in both themes (plan A10.3, finding VA22), reversing 2026-10-08's no edge: its 0.982 well vanished on a 0.98 ground in light and its dots read faint in dark.
+- **Why:** docs/research/system-evaluation-2026-11-11 (README §5); the owner took every recommendation on 2026-11-11.
+- **Verdict:** awaiting the owner.
+
+## Selection paint (plan B7.6), 2026-11-14
+
+- Stated a glyph grid (plan B7.6): the chosen cell shows the mark in `fg-selection`, no edge.

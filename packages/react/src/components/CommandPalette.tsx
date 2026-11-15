@@ -6,7 +6,7 @@ import { scrollOptionIntoList } from "./overlay.ts";
 import { ScrollArea } from "./ScrollArea.tsx";
 import { announce } from "./announce.ts";
 import { highlightMatch } from "./highlight.tsx";
-import { Kbd } from "./primitives.tsx";
+import { Kbd } from "./Kbd.tsx";
 
 export interface CommandItem {
   id: string;
@@ -41,28 +41,40 @@ export interface CommandItem {
 }
 
 export interface CommandPaletteProps extends Omit<HTMLAttributes<HTMLDivElement>, "onSelect"> {
+  /** The rows to search and run, in groups by their `group`. */
   items: CommandItem[];
   /** Controlled open state; omit it with `inline`. */
   open?: boolean;
+  /** Whether the palette starts open, uncontrolled. */
   defaultOpen?: boolean;
+  /** Called when the palette opens or closes: the hotkey, Escape, a chosen row or the backdrop. */
   onOpenChange?: (open: boolean) => void;
-  /** Render the surface in place instead of a modal (a docs specimen, a sidebar search). */
+  /** Draws the surface in place instead of as a modal, for a search in a sidebar or a specimen. */
   inline?: boolean;
-  /** Opens the palette from anywhere: "mod+k" (⌘ on Apple, Ctrl elsewhere). */
+  /** Opens the palette from anywhere: "mod+k" is ⌘K or Ctrl+K, by platform. */
   hotkey?: string;
+  /** The search text, controlled. */
   query?: string;
+  /** The search text at first, uncontrolled. */
   defaultQuery?: string;
+  /** Called with the search text as it is typed. */
   onQueryChange?: (query: string) => void;
+  /** The search field's placeholder. */
   placeholder?: string;
   /** Names the palette and its search field (default "Command palette"). */
   "aria-label"?: string;
-  /** @deprecated Use `aria-label` (audit D-18). */
+  /** @deprecated Use `aria-label`. */
   label?: string;
+  /** Shown when nothing matches the search. */
   emptyText?: ReactNode;
-  /** What the live region says for a result count while searching (audit D-29). */
+  /** What the live region says for a result count while searching. */
   resultsLabel?: (count: number) => string;
   /** Replaces the key hints below the list; `false` removes them. */
   footer?: ReactNode | false;
+  /**
+   * How rows match the search; by default a case-insensitive "contains" on the label, description, path and
+   * `keywords`.
+   */
   filter?: (item: CommandItem, query: string) => boolean;
   /** Names the Back button of a step (default "Back"). */
   backLabel?: string;
@@ -227,7 +239,7 @@ export const CommandPalette = forwardRef<HTMLDivElement, CommandPaletteProps>(fu
   const previews = rows.some(item => item.preview !== undefined && item.preview !== null);
   const preview = current >= 0 ? rows[current]?.preview : undefined;
   const results = <ScrollArea ref={listRef} id={listId} role="listbox" aria-label={label} className="area-command-palette__list" viewportProps={{ tabIndex: undefined }}>
-      {rows.length === 0 ? <div className="area-command-palette__empty" role="presentation">{emptyText}</div> : null}
+      {rows.length === 0 ? <div className="area-menu__empty" role="presentation"><span className="area-menu__text">{emptyText}</span></div> : null}
       {groups.map(([group, list], g) => group
         ? <div key={`${group}-${g}`} role="group" aria-labelledby={`${id}-group-${g}`} className="area-command-palette__group">
             <div id={`${id}-group-${g}`} className="area-menu__label" role="presentation"><span className="area-menu__label-text">{group}</span></div>

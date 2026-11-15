@@ -45,7 +45,7 @@ test("CommandPalette supports named modal, query, empty and custom footer usages
     assert.doesNotMatch(html, /area-command-palette--inline/);
   }
   const empty = renderToString(h(CommandPalette, { items, inline: true, defaultQuery: "missing", emptyText: "No commands", footer: false }));
-  assert.match(empty, /area-command-palette__empty" role="presentation">No commands/);
+  assert.match(empty, /area-menu__empty" role="presentation"><span class="area-menu__text">No commands/);
   assert.doesNotMatch(empty, /role="option"|aria-activedescendant|area-command-palette__footer/);
 });
 

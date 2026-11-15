@@ -24,8 +24,9 @@ export const GalleryEditableTextPlaceholder = () => (
   <h2 style={title}><EditableText label="Label" activation="click" placeholder="Placeholder" /></h2>
 );
 
+/* A long title keeps one line and is cut at its end (editable-text.css); it said it wrapped and never did (F3.3). */
 export const GalleryEditableTextLong = () => (
-  <div style={frame}><EditableText style={ui} label="Label" fill defaultValue="Title that wraps onto a second line" /></div>
+  <div style={frame}><EditableText style={ui} label="Label" fill defaultValue="Title long enough to be cut at the end of its line" /></div>
 );
 
 export const GalleryEditableTextDisabled = () => <EditableText style={ui} label="Label" defaultValue="Title" disabled />;

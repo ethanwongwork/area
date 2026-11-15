@@ -18,7 +18,7 @@ test("a reference list is ChatGPT's sources: publisher, linked title and what it
 test("a table of contents is a marker Nav of links to the headings, the current one marked as the location", () => {
   const items = [{ id: "a", label: "A" }, { id: "b", label: "B", children: [{ id: "b1", label: "B1" }] }];
   const html = render(h(TableOfContents, { items, current: "b1" }));
-  assert.match(html, /^<nav class="area-nav area-nav--marker area-toc" aria-label="On this page">/);
+  assert.match(html, /^<nav class="area-nav area-nav--vertical area-nav--marker area-toc" aria-label="On this page">/);
   assert.match(html, /<div class="area-toc__title" aria-hidden="true">On this page<\/div>/);
   assert.match(html, /aria-current="location" href="#b1"/);
   assert.doesNotMatch(render(h(TableOfContents, { items, levels: 1 })), /href="#b1"/, "levels 1 shows sections only");

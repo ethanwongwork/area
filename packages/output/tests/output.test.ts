@@ -122,6 +122,22 @@ describe("generation", () => {
     assert.ok(theme.length < lib.tokens.axes.length / 1.5);
   });
 
+  it("keeps a state another component draws, and holds that component", () => {
+    const def = readDefinition({
+      system: { id: "states", name: "States" }, release: { version: "1.0", kind: "first" }, themes: [{ id: "default", name: "Default" }],
+      inventory: { components: ["box-field", "confirm-dialog"] },
+    });
+    const { files, held } = generate(def, lib);
+    const manifest = files["design-system/react/manifest.ts"]!;
+    for (const [key, slug] of [["boxField", "number-field"], ["confirmDialog", "dialog"]] as const) {
+      const block = new RegExp(`export const ${key} = \\{[\\s\\S]*?\\} as const`).exec(manifest)![0];
+      const from = lib.manifests[key]!.statesFrom!;
+      assert.ok(block.includes(`statesFrom: ${JSON.stringify(from)}`), `${key} keeps statesFrom`);
+      assert.ok(held.slugs.has(slug), `${key}'s states come from ${slug}, which is held`);
+      for (const other of Object.values(from)) assert.match(manifest, new RegExp(`^  ${other},$`, "m"), `${other} is in MANIFESTS`);
+    }
+  });
+
   it("writes React that names only the held files", () => {
     const { files } = generate(LUMEN(), lib);
     const index = files["design-system/react/index.ts"]!;

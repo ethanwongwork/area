@@ -20,7 +20,7 @@ export const GalleryBoard = () => (
     </BoardColumn>
     <BoardColumn title="In progress" color="purple" count={2} actions={headerActions("In progress")} onAdd={add}>
       <BoardCard href="#board" icon={<DocumentIcon />} title="Title" />
-      <BoardCard href="#board" title="Title that wraps onto a second line" />
+      <BoardCard href="#board" title="Title that wraps onto a second line in its card on the board" />
     </BoardColumn>
     <BoardColumn title="Done" color="green" count={1} actions={headerActions("Done")} onAdd={add}>
       <BoardCard href="#board" icon={<DocumentIcon />} title="Title" />

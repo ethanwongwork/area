@@ -71,7 +71,10 @@
     align-items: flex-start;
     min-block-size: var(--area-space-24);
   }
-  .area-checkbox:has(> input:only-child) { align-items: center; }
+  /* A checkbox without a label (a table's selection column, a row's own check) is its box: no lane to keep, so its 24
+     target is the control's out-of-flow hit area (inset.css, "One hit target") and a row keeps its height (plan B2.5,
+     VC11: the 24 lane made a selectable Table's rows 44 beside 39). */
+  .area-checkbox:has(> input:only-child) { align-items: center; min-block-size: 0; }
 
   .area-checkbox__control {
     margin-block-start: 0;
@@ -100,8 +103,8 @@
      Choice Card put it; DOM order is unchanged, so keyboard order and the accessible name
      are too. A chosen card keeps the 1px edge and darkens it to the checked colour (owner,
      2026-09-28: darker, not thicker; was a 2px edge from the owner references). */
-  .area-checkbox--card,
-  .area-radio--card,
+  .area-checkbox--surface,
+  .area-radio--surface,
   .area-checkbox--soft,
   .area-radio--soft {
     --_card-inset: calc(var(--area-space-12) - var(--area-space-4) * var(--area-ui-dense) - var(--area-stroke-width)); /* spec: 12 to the content, compact 8, border counted once (shadcn 11) */
@@ -123,33 +126,33 @@
     border-radius: var(--_card-corner);
     transition: var(--area-transition);
   }
-  :is(.area-checkbox--card, .area-checkbox--soft, .area-radio--card, .area-radio--soft):is(.area-checkbox--tile, .area-radio--tile, .area-checkbox--preview, .area-radio--preview, .area-checkbox--media, .area-radio--media, .area-checkbox--media-row, .area-radio--media-row) {
+  :is(.area-checkbox--surface, .area-checkbox--soft, .area-radio--surface, .area-radio--soft):is(.area-checkbox--tile, .area-radio--tile, .area-checkbox--preview, .area-radio--preview, .area-checkbox--media, .area-radio--media, .area-checkbox--media-row, .area-radio--media-row) {
     --_card-corner: var(--area-radius-container);
   }
   /* The card's own ground; soft paints a control fill instead (below). */
-  .area-checkbox--card,
-  .area-radio--card { background-color: var(--area-bg-surface); }
+  .area-checkbox--surface,
+  .area-radio--surface { background-color: var(--area-bg-surface); }
   /* Double class: Radio's base rule centres its row, a card aligns to the first line. */
-  .area-checkbox.area-checkbox--card, .area-checkbox.area-checkbox--soft,
-  .area-radio.area-radio--card, .area-radio.area-radio--soft { align-items: flex-start; }
-  :is(.area-checkbox--card, .area-checkbox--soft) > .area-choice-label,
-  :is(.area-radio--card, .area-radio--soft) > .area-choice-label { flex: 1 1 auto; min-inline-size: 0; }
-  :is(.area-checkbox--card, .area-checkbox--soft) > .area-checkbox__control,
-  :is(.area-radio--card, .area-radio--soft) > .area-radio__control { order: 1; }
-  @media (hover: hover) { .area-checkbox--card:hover:not([data-disabled], [data-read-only]),
-  .area-radio--card:hover:not([data-disabled], [data-read-only]) { border-color: var(--_card-edge-hover); } }
+  .area-checkbox.area-checkbox--surface, .area-checkbox.area-checkbox--soft,
+  .area-radio.area-radio--surface, .area-radio.area-radio--soft { align-items: flex-start; }
+  :is(.area-checkbox--surface, .area-checkbox--soft) > .area-choice-label,
+  :is(.area-radio--surface, .area-radio--soft) > .area-choice-label { flex: 1 1 auto; min-inline-size: 0; }
+  :is(.area-checkbox--surface, .area-checkbox--soft) > .area-checkbox__control,
+  :is(.area-radio--surface, .area-radio--soft) > .area-radio__control { order: 1; }
+  @media (hover: hover) { .area-checkbox--surface:hover:not([data-disabled], [data-read-only]),
+  .area-radio--surface:hover:not([data-disabled], [data-read-only]) { border-color: var(--_card-edge-hover); } }
   /* A chosen card takes the selected stroke, as every selected container (axes/states.ts; owner 2026-10-21, ChatGPT's
      2px tile; was the 1px edge darkened to the checked colour, 2026-09-28): the indicator colour at the Selected stroke
      setting's width, inside, and the Selected tint setting's layer. The control keeps the checked colour. */
-  .area-checkbox--card:has(> .area-checkbox__control:checked),
-  .area-radio--card:has(> .area-radio__control:checked) {
+  .area-checkbox--surface:has(> .area-checkbox__control:checked),
+  .area-radio--surface:has(> .area-radio__control:checked) {
     border-color: var(--area-stroke-selected);
     box-shadow: inset 0 0 0 max(0px, calc(var(--area-selected-width) - var(--area-stroke-width))) var(--area-stroke-selected), inset 0 0 0 100vmax var(--area-selected-tint);
   }
   /* The card is the focus target the eye follows: one ring, on the card (audit C-13; the glyph
      drew a second). */
-  :is(.area-checkbox--card, .area-checkbox--soft):has(> .area-checkbox__control:focus-visible),
-  :is(.area-radio--card, .area-radio--soft):has(> .area-radio__control:focus-visible) {
+  :is(.area-checkbox--surface, .area-checkbox--soft):has(> .area-checkbox__control:focus-visible),
+  :is(.area-radio--surface, .area-radio--soft):has(> .area-radio__control:focus-visible) {
     outline: var(--area-focus-width) solid var(--area-focus-color);
     outline-offset: var(--area-focus-gap);
   }
@@ -167,8 +170,11 @@
     --_card-edge-hover: var(--area-edge-options);
     background-color: var(--area-bg-component);
   }
-  @media (hover: hover) { .area-checkbox--soft:hover:not([data-disabled], [data-read-only], :has(> .area-checkbox__control:checked)),
-  .area-radio--soft:hover:not([data-disabled], [data-read-only], :has(> .area-radio__control:checked)) { background-color: var(--area-bg-component-hover); transition-duration: var(--area-hover-in); } }
+  @media (hover: hover) { .area-checkbox--soft:hover:not([data-disabled], [data-read-only], :active, :has(> .area-checkbox__control:checked)),
+  .area-radio--soft:hover:not([data-disabled], [data-read-only], :active, :has(> .area-radio__control:checked)) { background-color: var(--area-bg-component-hover); transition-duration: var(--area-hover-in); } }
+  /* Held, the pressed plate one step past the hover, the chosen option's included (plan B7.2, B7.3). */
+  .area-checkbox--soft:active:not([data-disabled], [data-read-only]),
+  .area-radio--soft:active:not([data-disabled], [data-read-only]) { background-color: var(--area-bg-component-pressed); transition-duration: var(--area-press-in); }
   /* The chosen one: the control fill a step darker (Notion Calendar's darker grey) under the card's Selected tint layer,
      so it follows the Selected fill setting as a chosen card does; the control carries the selection colour. (The
      selection surface was tried: at Accent it painted dark mode's rows a heavy navy band.) */
@@ -188,7 +194,7 @@
   .area-checkbox__meta,
   .area-radio__meta {
     flex: none;
-    padding-inline-start: var(--area-space-12);
+    padding-inline-start: var(--area-gap-row);
     color: var(--area-fg-muted);
     font-size: var(--_text);
     line-height: var(--_leading);
@@ -197,35 +203,31 @@
   }
 
   /* List: the control first, then the text, then meta (a settings list's options; Notion Calendar). */
-  .area-checkbox--card.area-checkbox--list > .area-checkbox__control, .area-checkbox--soft.area-checkbox--list > .area-checkbox__control,
-  .area-radio--card.area-radio--list > .area-radio__control, .area-radio--soft.area-radio--list > .area-radio__control { order: -1; }
-  /* Read-only (RadioGroup readOnly): a value shown, not a choice being made (Setup's past answers; owner 2026-10-26, "plain
-     answers"): the chosen card or soft row keeps its rest edge and fill and the control's dot says which; no selected
-     edge or tint. */
-  /* Checkbox's and Checkbox group's read-only (components audit 2026-11-07, O2) is the same paint, and a read-only
-     option takes no press. `data-read-only` is the shared spelling (2026-11-07); Radio group's `data-readonly` is its
-     deprecated alias, painted for one release. */
-  .area-radio-group:is([data-read-only], [data-readonly]) :is(.area-radio--card, .area-radio--soft):has(> .area-radio__control:checked),
-  :is(.area-checkbox--card, .area-checkbox--soft)[data-read-only]:has(> .area-checkbox__control:checked) { border-color: var(--_card-edge); box-shadow: none; }
+  .area-checkbox--surface.area-checkbox--list > .area-checkbox__control, .area-checkbox--soft.area-checkbox--list > .area-checkbox__control,
+  .area-radio--surface.area-radio--list > .area-radio__control, .area-radio--soft.area-radio--list > .area-radio__control { order: -1; }
+  /* Read-only (Radio group's, Checkbox's and Checkbox group's readOnly; plan B7.10): a value shown, not a choice being
+     made. It keeps every state's paint, the chosen card's selected edge and tint and the checked box included, and drops
+     only the pointer's: no hover edge or fill, no press, no give, a default cursor. It stays focusable and says so
+     (`aria-readonly`). One spelling, `data-read-only`, on the option and its group. */
   .area-checkbox[data-read-only], .area-checkbox[data-read-only] > .area-checkbox__control,
   .area-radio[data-read-only], .area-radio[data-read-only] > .area-radio__control,
-  .area-checkbox-group[data-read-only] .area-checkbox { cursor: default; }
+  :is(.area-checkbox-group, .area-radio-group)[data-read-only] :is(.area-checkbox, .area-radio) { cursor: default; }
   .area-checkbox--list, .area-radio--list { --_layout: list; }
   /* In a card or soft row the control is the row's leading mark, so the text follows it at the row gap (12, compact 8),
      the same as the card's inset before it and Menu's and Plan's icon-to-label gap (owner 2026-10-26: "the gaps
      horizontally between the text and components doesnt look right or balanced"; was the bare label gap, 6). */
-  :is(.area-checkbox--card, .area-checkbox--soft, .area-radio--card, .area-radio--soft):is(.area-checkbox--list, .area-radio--list, .area-checkbox--media, .area-radio--media, .area-checkbox--media-row, .area-radio--media-row) { --_gap: var(--area-gap-row); }
+  :is(.area-checkbox--surface, .area-checkbox--soft, .area-radio--surface, .area-radio--soft):is(.area-checkbox--list, .area-radio--list, .area-checkbox--media, .area-radio--media, .area-checkbox--media-row, .area-radio--media-row) { --_gap: var(--area-gap-row); }
 
   /* Layout: row (default) keeps visual, text and control on one line; tile stacks a larger
      visual above the label with the control in the top-end corner (owner reference 1). */
   /* Explicit for manifest parity: row is the base card layout. */
   .area-checkbox--row, .area-radio--row { --_layout: row; }
-  .area-checkbox--card.area-checkbox--tile, .area-checkbox--soft.area-checkbox--tile,
-  .area-radio--card.area-radio--tile, .area-radio--soft.area-radio--tile {
+  .area-checkbox--surface.area-checkbox--tile, .area-checkbox--soft.area-checkbox--tile,
+  .area-radio--surface.area-radio--tile, .area-radio--soft.area-radio--tile {
     display: grid;
     grid-template-columns: 1fr auto;
     align-items: start;
-    row-gap: calc(var(--area-space-16) - var(--area-space-4) * var(--area-ui-dense)); /* spec: owner reference 1 separates the icon from the label; compact 12 */
+    row-gap: calc(var(--area-space-16) - var(--area-space-4) * var(--area-ui-gap-step)); /* spec: owner reference 1 separates the icon from the label; 16, compact 12 (whole steps, plan A1.1) */
   }
   .area-checkbox--tile > .area-checkbox__visual,
   .area-radio--tile > .area-radio__visual {
@@ -247,8 +249,8 @@
    * (the native input stays, so the keyboard and the accessible name are the control's). A card with no visual is a
    * text choice: its label centred, as tall as a control (a typeface set in itself, a size).
    */
-  .area-checkbox--card.area-checkbox--preview, .area-checkbox--soft.area-checkbox--preview,
-  .area-radio--card.area-radio--preview, .area-radio--soft.area-radio--preview {
+  .area-checkbox--surface.area-checkbox--preview, .area-checkbox--soft.area-checkbox--preview,
+  .area-radio--surface.area-radio--preview, .area-radio--soft.area-radio--preview {
     position: relative;
     display: grid;
     justify-items: center;
@@ -260,8 +262,8 @@
     text-align: center;
   }
   /* A card preview is the reference's soft card: a fill, no edge at rest (a soft preview keeps soft's own fill). */
-  .area-checkbox--card.area-checkbox--preview,
-  .area-radio--card.area-radio--preview {
+  .area-checkbox--surface.area-checkbox--preview,
+  .area-radio--surface.area-radio--preview {
     --_card-edge: transparent; /* spec */
     background-color: var(--area-bg-subtle);
   }
@@ -279,8 +281,8 @@
   /* A card's preview sits in an 8px mat of the card's ground, its corners concentric with the card's (owner 2026-10-26:
      "i want the illustration to sit directly on the card not cropped in a frame, or if there is a frame the corners
      should be rounded"; at the 12 inset a concentric corner came to 2px, a crop's square). As Media's picture. */
-  :is(.area-checkbox--card, .area-checkbox--soft).area-checkbox--preview > .area-checkbox__visual,
-  :is(.area-radio--card, .area-radio--soft).area-radio--preview > .area-radio__visual {
+  :is(.area-checkbox--surface, .area-checkbox--soft).area-checkbox--preview > .area-checkbox__visual,
+  :is(.area-radio--surface, .area-radio--soft).area-radio--preview > .area-radio__visual {
     justify-self: stretch;
     inline-size: auto;
     margin: calc(var(--_media-mat) - var(--_card-inset) - var(--area-stroke-width)) calc(var(--_media-mat) - var(--_card-inset) - var(--area-stroke-width)) 0;
@@ -309,12 +311,12 @@
    */
   /* :is(*, :has(…)) lifts the rule (0,4,0) over soft's hover fill and the chosen card's stroke (0,4,0), whose paint a
      thumbnail moves to its picture. */
-  :is(.area-checkbox--card, .area-checkbox--soft).area-checkbox--thumbnail:is(*, :has(> .area-checkbox__control:checked)),
-  :is(.area-radio--card, .area-radio--soft).area-radio--thumbnail:is(*, :has(> .area-radio__control:checked)) {
+  :is(.area-checkbox--surface, .area-checkbox--soft).area-checkbox--thumbnail:is(*, :has(> .area-checkbox__control:checked)),
+  :is(.area-radio--surface, .area-radio--soft).area-radio--thumbnail:is(*, :has(> .area-radio__control:checked)) {
     position: relative;
     display: grid;
     align-content: start;
-    row-gap: var(--area-space-8); /* spec: the references' picture-to-name gap, 8–10 */
+    row-gap: var(--area-ui-cluster); /* spec: the references' picture-to-name gap, 8–10 */
     padding: 0;
     border: 0;
     background-color: transparent;
@@ -364,7 +366,7 @@
     pointer-events: none;
     transition: var(--area-transition);
   }
-  @media (hover: hover) { .area-checkbox--thumbnail:hover:not([data-disabled]), .area-radio--thumbnail:hover:not([data-disabled]) { --_card-edge: var(--_card-edge-hover); } }
+  @media (hover: hover) { .area-checkbox--thumbnail:hover:not([data-disabled], [data-read-only]), .area-radio--thumbnail:hover:not([data-disabled], [data-read-only]) { --_card-edge: var(--_card-edge-hover); } }
   .area-checkbox--thumbnail:has(> .area-checkbox__control:checked) > .area-checkbox__visual::after,
   .area-radio--thumbnail:has(> .area-radio__control:checked) > .area-radio__visual::after {
     box-shadow: inset 0 0 0 max(var(--area-stroke-width), var(--area-selected-width)) var(--area-stroke-selected);
@@ -392,8 +394,8 @@
    * with no edge. The row keeps a list row's alignment: the control, the label's first line and meta share one centre
    * (inset.css sets the text down to the control); centring the row's items as well dropped the text 1.5px.
    */
-  :is(.area-checkbox--card, .area-checkbox--soft):is(.area-checkbox--media, .area-checkbox--media-row),
-  :is(.area-radio--card, .area-radio--soft):is(.area-radio--media, .area-radio--media-row) {
+  :is(.area-checkbox--surface, .area-checkbox--soft):is(.area-checkbox--media, .area-checkbox--media-row),
+  :is(.area-radio--surface, .area-radio--soft):is(.area-radio--media, .area-radio--media-row) {
     --_media-mat: var(--area-space-8); /* spec: 8 from the card's outer edge: 6 clear inside the 2px selected stroke, which
        is drawn inside (owner, round 73: "the margins between the image and the outside become super small"; was 4) */
     --_media-out: calc(var(--_media-mat) - var(--_card-inset) - var(--area-stroke-width)); /* the content edge back out to the mat */
@@ -450,7 +452,7 @@
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(var(--area-choice-min, 104px), 1fr)); /* public hook */
     align-items: stretch;
-    gap: var(--area-space-8); /* spec: Radix's root gap 4 (16px at Radix's scale halves to Area's 8 for small cards) */
+    gap: var(--area-ui-cluster); /* spec: Radix's root gap 4 (16px at Radix's scale halves to Area's 8 for small cards) */
   }
 
   .area-radio__control {
@@ -483,7 +485,7 @@
     scale: 0.6; /* spec: docs/MOTION.md small-mark recipe */
     transition:
       scale var(--area-duration-fast) var(--area-ease-out),
-      opacity var(--area-fade-fast) var(--area-ease-out);
+      opacity var(--area-fade-fast) var(--area-ease-effects);
   }
 
   .area-checkbox__control::after {
@@ -525,20 +527,20 @@
      Focus rings are outlines, which --area-transition does not animate. */
   .area-checkbox__control:active,
   .area-radio__control:active,
-  .area-checkbox--card:active,
-  .area-radio--card:active { transition-duration: var(--area-press-in); }
+  .area-checkbox--surface:active,
+  .area-radio--surface:active { transition-duration: var(--area-press-in); }
   /* A choice card is a wide surface: it gives the wide amount under a press (Feedback). */
-  .area-checkbox--card:active:not([data-disabled], [data-read-only], :has(> :focus-visible)),
-  .area-radio--card:active:not([data-disabled], [data-read-only], :has(> :focus-visible)) { scale: var(--area-feedback-scale-wide); }
+  .area-checkbox--surface:active:not([data-disabled], [data-read-only], :has(> :focus-visible)),
+  .area-radio--surface:active:not([data-disabled], [data-read-only], :has(> :focus-visible)) { scale: var(--area-feedback-scale-wide); }
   .area-checkbox__control:focus-visible,
   .area-radio__control:focus-visible,
-  .area-checkbox--card:has(> .area-checkbox__control:focus-visible),
-  .area-radio--card:has(> .area-radio__control:focus-visible) { transition-duration: 0s; }
+  .area-checkbox--surface:has(> .area-checkbox__control:focus-visible),
+  .area-radio--surface:has(> .area-radio__control:focus-visible) { transition-duration: 0s; }
   @media (hover: hover) {
     .area-checkbox__control:hover,
     .area-radio__control:hover,
-    .area-checkbox--card:hover,
-    .area-radio--card:hover { transition-duration: var(--area-hover-in); }
+    .area-checkbox--surface:hover,
+    .area-radio--surface:hover { transition-duration: var(--area-hover-in); }
   }
 
   .area-checkbox__control:is([data-invalid], [aria-invalid="true"]) {
@@ -558,26 +560,26 @@
 
   /* Checked controls darken on hover. Lightening washes the fill out. */
   @media (hover: hover) {
-    .area-checkbox__control:checked:hover:not(:disabled),
-  .area-checkbox__control:is(:indeterminate, [data-indeterminate]):hover:not(:disabled),
-  .area-radio__control:checked:hover:not(:disabled) {
+    .area-checkbox__control:checked:hover:not(:disabled, [data-read-only] > *),
+  .area-checkbox__control:is(:indeterminate, [data-indeterminate]):hover:not(:disabled, [data-read-only] > *),
+  .area-radio__control:checked:hover:not(:disabled, [data-read-only] > *) {
     --_fill: var(--_checked-hover, var(--area-selection-solid-hover));
     }
   }
   @media (hover: hover) {
-    .area-checkbox__control:is([data-invalid], [aria-invalid="true"]):is(:checked, :indeterminate, [data-indeterminate]):hover:not(:disabled) {
+    .area-checkbox__control:is([data-invalid], [aria-invalid="true"]):is(:checked, :indeterminate, [data-indeterminate]):hover:not(:disabled, [data-read-only] > *) {
       --_fill: var(--area-danger-solid-hover);
       --_edge: var(--area-danger-solid-hover);
     }
   }
   @media (hover: hover) {
-    .area-checkbox__control:not(:checked):not(:indeterminate):not([data-indeterminate]):hover:not(:disabled),
-  .area-radio__control:not(:checked):hover:not(:disabled) {
+    .area-checkbox__control:not(:checked):not(:indeterminate):not([data-indeterminate]):hover:not(:disabled, [data-read-only] > *),
+  .area-radio__control:not(:checked):hover:not(:disabled, [data-read-only] > *) {
     --_edge: var(--area-edge-control-strong);
     }
   }
   @media (hover: hover) {
-    .area-checkbox__control:is([data-invalid], [aria-invalid="true"]):not(:checked):not(:indeterminate):not([data-indeterminate]):hover:not(:disabled) {
+    .area-checkbox__control:is([data-invalid], [aria-invalid="true"]):not(:checked):not(:indeterminate):not([data-indeterminate]):hover:not(:disabled, [data-read-only] > *) {
       --_fill: var(--area-danger-surface-hover);
       --_edge: var(--area-danger-border-strong);
     }
@@ -588,8 +590,12 @@
     outline: var(--area-focus-width) solid var(--area-focus-color);
     outline-offset: var(--area-focus-offset);
   }
-  .area-checkbox--card > .area-checkbox__control:focus-visible,
-  .area-radio--card > .area-radio__control:focus-visible { outline: none; }
+  /* A filled box is the ring's own colour at the shipped Selection and too small to hold a ring inside: once checked
+     the ring stands off by the gap at every Focus ring option (plan A6.1). */
+  .area-checkbox__control:is(:checked, :indeterminate, [data-indeterminate]):focus-visible,
+  .area-radio__control:checked:focus-visible { outline-offset: var(--area-focus-gap); }
+  .area-checkbox--surface > .area-checkbox__control:focus-visible,
+  .area-radio--surface > .area-radio__control:focus-visible { outline: none; }
 
   /* --- Radio group -------------------------------------------------------- */
 
@@ -614,9 +620,14 @@
   }
 
 
+  /* A group's description joins its legend at the legend's size, muted (plan A9.3: a joined line is the name's size);
+     a validation message is set apart, so it takes text-sm, as Field's. */
   .area-radio-group__description,
+  .area-checkbox-group__description {
+    font-size: var(--area-control-md-text);
+    line-height: var(--area-control-md-leading);
+  }
   .area-radio-group__validation,
-  .area-checkbox-group__description,
   .area-checkbox-group__validation {
     font-size: var(--area-text-sm-size);
     line-height: var(--area-text-sm-leading);
@@ -647,7 +658,7 @@
   .area-radio-group--horizontal .area-radio-group__options {
     flex-direction: row;
     flex-wrap: wrap;
-    column-gap: calc(var(--area-space-16) - var(--area-space-4) * var(--area-ui-dense)); /* 16, compact 12 */
+    column-gap: calc(var(--area-space-16) - var(--area-space-4) * var(--area-ui-gap-step)); /* 16, compact 12: whole steps (plan A1.1) */
   }
 
   /* A disabled group dims once as a whole, legend included (audit C-27 A; the options dimmed alone). */
@@ -661,7 +672,7 @@
     --_mark: var(--area-fg-on-danger);
   }
   @media (hover: hover) {
-    .area-radio-group[data-invalid] .area-radio__control:checked:hover:not(:disabled) {
+    .area-radio-group[data-invalid] .area-radio__control:checked:hover:not(:disabled, [data-read-only] > *) {
       --_fill: var(--area-danger-solid-hover);
       --_edge: var(--area-danger-solid-hover);
     }
@@ -689,7 +700,7 @@
   .area-checkbox-group--horizontal .area-checkbox-group__options {
     flex-direction: row;
     flex-wrap: wrap;
-    column-gap: calc(var(--area-space-16) - var(--area-space-4) * var(--area-ui-dense)); /* 16, compact 12 */
+    column-gap: calc(var(--area-space-16) - var(--area-space-4) * var(--area-ui-gap-step)); /* 16, compact 12: whole steps (plan A1.1) */
   }
 
   .area-checkbox-group:disabled { cursor: not-allowed; opacity: var(--area-opacity-disabled); }
@@ -697,16 +708,16 @@
 
   /* Cards in a group: rows stretch to the group's width; tiles form a grid of equal columns
      at least 144 wide (spec: owner reference 1, three across). One 8px gap between cards. */
-  :is(.area-checkbox-group__options, .area-radio-group__options):has(> :is(.area-checkbox--card, .area-radio--card)) {
+  :is(.area-checkbox-group__options, .area-radio-group__options):has(> :is(.area-checkbox--surface, .area-radio--surface)) {
     align-items: stretch;
-    gap: var(--area-space-8);
+    gap: var(--area-ui-cluster);
   }
   /* Soft options stretch as cards do and sit 4 apart: filled rows read as one list (Notion Calendar's options 4 apart). */
   :is(.area-checkbox-group__options, .area-radio-group__options):has(> :is(.area-checkbox--soft, .area-radio--soft)) {
     align-items: stretch;
     gap: var(--area-space-4);
   }
-  :is(.area-checkbox-group--horizontal, .area-radio-group--horizontal) > * > :is(.area-checkbox--card, .area-radio--card, .area-checkbox--soft, .area-radio--soft) {
+  :is(.area-checkbox-group--horizontal, .area-radio-group--horizontal) > * > :is(.area-checkbox--surface, .area-radio--surface, .area-checkbox--soft, .area-radio--soft) {
     flex: 1 1 0;
     min-inline-size: 0;
   }
@@ -716,7 +727,7 @@
   }
   .area-checkbox-group[data-invalid] .area-checkbox__control:not(:checked):not(:indeterminate):not([data-indeterminate]) { --_edge: var(--area-fg-danger-vivid); }
   @media (hover: hover) {
-    .area-checkbox-group[data-invalid] .area-checkbox__control:not(:checked):not(:indeterminate):not([data-indeterminate]):hover:not(:disabled) {
+    .area-checkbox-group[data-invalid] .area-checkbox__control:not(:checked):not(:indeterminate):not([data-indeterminate]):hover:not(:disabled, [data-read-only] > *) {
       --_fill: var(--area-danger-surface-hover);
       --_edge: var(--area-danger-border-strong);
     }
@@ -729,7 +740,7 @@
     --_mark: var(--area-fg-on-danger);
   }
   @media (hover: hover) {
-    .area-checkbox-group[data-invalid] .area-checkbox__control:is(:checked, :indeterminate, [data-indeterminate]):hover:not(:disabled) {
+    .area-checkbox-group[data-invalid] .area-checkbox__control:is(:checked, :indeterminate, [data-indeterminate]):hover:not(:disabled, [data-read-only] > *) {
       --_fill: var(--area-danger-solid-hover);
       --_edge: var(--area-danger-solid-hover);
     }
@@ -754,9 +765,10 @@
     color: var(--area-fg-default);
   }
 
+  /* The option's line, joined to its title at the title's size in the muted ink (plan A9.3). */
   .area-choice-label__description {
-    font-size: var(--area-text-sm-size);
-    line-height: var(--area-text-sm-leading);
+    font-size: var(--_text);
+    line-height: var(--_leading);
     color: var(--area-fg-muted);
   }
 
@@ -797,4 +809,11 @@
   }
 
   .area-radio { min-block-size: var(--area-space-24); }
+  /* Whole pixels, so stacked cards land on the grid: a card's trimmed title and description sum to a fraction (48.61 at
+     the default), rounded up here (plan A11.1, 2026-11-11; Dialog's calc-size rule). A minimum, so a card in a stretched
+     row still stretches; without calc-size the card is as tall as its content, as before. After the 24 lane above, which
+     it replaces on a card; a preview keeps its own minimum. */
+  :is(.area-checkbox--surface, .area-radio--surface, .area-checkbox--soft, .area-radio--soft):not(.area-checkbox--preview, .area-radio--preview) {
+    min-block-size: calc-size(auto, round(up, size, 1px));
+  }
 }

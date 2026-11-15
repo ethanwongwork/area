@@ -10,8 +10,8 @@ import { cx } from "../variants.ts";
 import { announce } from "./announce.ts";
 
 /**
- * The copy glyphs are the two Fluent cuts the documentation's own toolbar uses, so the
- * React control and the generated HTML chrome draw the same mark.
+ * The copy glyphs are the two cuts the documentation's own toolbar uses, so the React control and the
+ * generated HTML chrome draw the same mark.
  */
 export const CopyGlyph = () => (
   <svg viewBox="0 0 16 16" width="16" height="16" fill="currentColor" focusable="false" aria-hidden="true">
@@ -92,19 +92,21 @@ export interface CopyButtonProps extends Omit<ButtonProps, "value" | "selected" 
   copiedLabel?: string;
   /** Said once when the clipboard refuses. */
   failedLabel?: string;
-  /** The rest glyph; Fluent's copy cut by default. */
+  /** The glyph at rest; the copy glyph by default. */
   icon?: ReactNode;
-  /** The glyph shown while copied; Fluent's check by default. */
+  /** The glyph shown while copied; a check by default. */
   copiedIcon?: ReactNode;
   /** How long the check holds, in ms. */
   timeout?: number;
+  /** Called with the text once it is on the clipboard. */
   onCopied?: (text: string) => void;
+  /** Called with the error when the clipboard refuses. */
   onCopyError?: (error: unknown) => void;
 }
 
 /**
  * Copies `value` and shows a check for two seconds. With no children it is an icon-only Button named by `label`
- * ("Copy"); with children the label stays as written and only the icon changes (Untitled UI). Button's variants,
+ * ("Copy"); with children the label stays as written and only the icon changes. Button's variants,
  * tones and sizes apply; ghost, neutral and sm by default, as Code block's copy.
  */
 export const CopyButton = /* @__PURE__ */ forwardRef<HTMLButtonElement, CopyButtonProps>(function CopyButton(

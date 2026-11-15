@@ -24,6 +24,7 @@ chapters, an onboarding plan). Not a Stepper (markers that take the person to a 
 |---|---|---|---|
 | item status | complete, current, pending, cancelled (`done` a deprecated alias) | cancelled: an item the agent dropped stays, struck, with a cross (round 49) | Cursor `todo-list.js` (in progress, pending, done struck; cancelled todos); Codex ✔ / □; Claude Code todos |
 | open | open, folded | the tray folds | Cursor tray, Claude Code todos |
+| variant | surface (default), plain | its own frame, or none, its words on the text edge around it (a chat's steps) | the Chat kit (owner 2026-11-02) |
 | bar | none (default), single, segmented | a bar under the head that stays folded: the whole plan's share, or a segment per item filled by its share (2026-10-25) | Cursor ProgressBar (4 high, segments 2 apart); Primer segmented ProgressBar (2 apart); GitHub milestone bar |
 | item meta | any short value | an item's own count or date at the row's end | GitHub "9 of 12"; the references' phase counts; Cursor plan phases |
 | rail | off, on | the marks joined by a line, a timeline, for items with detail or steps (owner 2026-10-25: "the whole progress data tracker ... in 1 container", an agent run's timeline) | the agent-run reference (rail, chips, inset findings); Claude's todo rail |
@@ -66,7 +67,7 @@ area-plan                 the agent card: card edge at stroke-width, container c
       area-plan__meta     with meta: muted, tabular, at the row's end, 8 from the text
       area-plan__steps    with items: an ol in a box from the item's text column to the item row's edge, 8 under the
                           words and 4 more than a row's end above the next item; recessed ground (layers.css), padding
-                          4 0, radius-list; its rows keep their 8 inset (marks 8 in, meta on the plan's meta column),
+                          4 0, the block corner (`radius-container`); its rows keep their 8 inset (marks 8 in, meta on the plan's meta column),
                           2 shorter each side (29 apart under items 36), muted unless current
 ```
 
@@ -74,7 +75,7 @@ area-plan                 the agent card: card edge at stroke-width, container c
 
 | Slot · property | Area value | Basis | Reason |
 |---|---|---|---|
-| frame, fill, corner | border-card at stroke-width, bg-surface, radius-container | Code block (the agent card) | round 49: one card for Edit summary, Plan and Queue (was a recessed bg-subtle tray with no edge) |
+| frame, fill, corner | border-card at stroke-width, bg-surface, the chat card's corner (16 at the default; `surface.css`, plan B1.3); rows 4 from the outer edge, the edge counted once, their words and the head's title 12 in; head one row (`ui-row`), its title strong in the default ink | Code block (the agent card) | round 49: one card for Edit summary, Plan and Queue (was a recessed bg-subtle tray with no edge); B1.3 moved the text 1 in (13 → 12) and made the title strong |
 | head | ui-row tall (28 at Compact), padding 0 12; no rule under it | cursor header 28, padding 0 12, no border | owner 2026-10-25 (was a row plus its rule at stroke-width, round 52) |
 | list, items | list padding 4; items are Menu rows (padding-block (ui-row − leading) / 2, row inset), ui-row-gap apart | Menu (peer) | round 49 (were 4 apart on a 22 line); audit 2026-10-19 added Menu's ui-row-gap |
 | mark slot / gap | 16 square, gap-row (12, compact 8) | Menu's row gap; Area's icon slot | the text lands on the list column at every density (audit 2026-10-19; was 8 everywhere, Claude Code's item gap) |
@@ -82,7 +83,7 @@ area-plan                 the agent card: card edge at stroke-width, container c
 | pending | muted ink, a 1px ring on the control hover edge | cursor quaternary; codex □; peer: Checkbox's rest edge | the control edge vanished on the Plan's subtle fill (L 0.913 on 0.976, browser check 2026-10-19) |
 | done | muted ink, struck through; the 12 ring and Checkbox's tick (1.25 line) in the muted ink; with meta (a phase), not struck | cursor done struck, `check-circle`; codex ✔; the references' phases (a check and "Completed") | owner 2026-10-25: a strike on a phase reads as removed; one mark silhouette (was a bare check glyph) |
 | cancelled | muted ink, struck through, the ring and a cross; with meta, not struck | cursor cancelled todos, `x-circle` | round 49; owner 2026-10-25 |
-| steps box | from the item's text column to the item row's edge; recessed (bg-subtle), radius-list, padding 4 0; 8 under the item's line, taking the item's end padding and the last step's 2 below (a negative margin; 2026-11-02, was 4 extra); rows 2 shorter each side, muted unless current | the agent panel reference (box on the label column, results 30 apart under steps 38, ~8 padding) | owner 2026-10-25: containers back "as long as the padding, alignment and visual balance is right" |
+| steps box | from the item's text column to the item row's edge; recessed (bg-subtle), the block corner (`radius-container`, 16 at the default), padding 4 0; 8 under the item's line, taking the item's end padding and the last step's 2 below (a negative margin; 2026-11-02, was 4 extra); rows 2 shorter each side, muted unless current | the agent panel reference (box on the label column, results 30 apart under steps 38, ~8 padding) | owner 2026-10-25: containers back "as long as the padding, alignment and visual balance is right" |
 | tracker room | with a bar or a rail: the agent card column (12 in, 13 from the outer edge, as the plain tray), head 8 taller (title 14 from the top), bar 12 under the title's line and 12 above the bottom, rail rows 4 apart | Claude's Context panel (8 text to bar); the agent chat's card column | owner 2026-10-25: "the padding/margins for the timeline and also the gap between the text and the indicators looks too small" (measured 12 / 7 / 6 / 12, unbalanced); owner 2026-10-28, chat set review: the column back to 12 ("move them to 13 anyway"), so the boxes in a chat start their text on one edge (it was Card's 16) |
 | bar | padding 6 column column folded, 6 column 8 open (the first item 1.1 rows under it); Progress sm (4) segments 2 apart, the selection fill on the track; no rule under it | cursor-bar 4 / 2; primer 2 apart | one bar per plan; Progress is the peer, so the segments are Progress |
 | ring | the pending ring (icon-sm − 4) in the selection fill, a conic pie inside it (icon-sm − 8) to the item's share | linear (ring + inner pie) | the mark and its segment read as one value, in one fill |
@@ -336,3 +337,22 @@ Plain is its own block formatting context (`display: flow-root`, 2026-11-04 kit 
 - **Why:** one set of status words across Plan, Stepper, Step, Queue, Attachment, File upload, Edit summary and Turn
   notice (GOVERNANCE.md, "Status words"; owner picked Build on the system gaps review, 2026-11-07).
 - **Verdict:** awaiting the owner.
+
+- 2026-11-11 · System evaluation F5: the manifest gives `variant` its default, `surface`, so `--surface` is written by default; the bare class and `--surface` draw the same frame. No visual change.
+- 2026-11-11 · system evaluation A2.2 · the steps box takes the block corner, radius-container: 14 → 16 at the default (it was the list corner, which A2.1 moved to 12). plan.css; cohesion.test.mjs.
+- 2026-11-11 · system evaluation B2.3 · the mark-to-text gap is Menu's icon-to-label gap, `ui-cluster` (8, Compact 6; was `gap-row`), so the text stays on the list column.
+
+### 2026-11-13 · One chat card (system plan, Phase 2, B1.3)
+
+- The frame is the chat card (`surface.css`): its corner (16 at the default, 14 at Compact), rows 4 from the outer edge
+  with the edge counted once, so the words and the head's title start 12 in (were 13), a one-row head, a strong title.
+
+## Shared bars and corners (plan B4), 2026-11-14
+
+- B4.4: the head, title, chevron and count are the one collapsible head (inset.css), shared with Queue: no change at the defaults. A single or segmented tracker's head keeps its 8 more above (owner, 2026-10-25).
+
+### 2026-11-14 · Shared parts, leftovers (system plan, Phase 2, wave 3)
+
+- The single and segmented head's top, the open bar's bottom, an item's meta start and the words-to-detail gap are `ui-cluster` (6 / 8 / 10). Values at type 13 Compact / Default / Comfortable; unchanged at the default.
+- Why: docs/research/system-evaluation-2026-11-11 (plan B6.1, B6.5, B8.2, B2.2; README §5, phase2/leftovers.md); the owner took every recommendation on 2026-11-11. Fix the rule, not the instance.
+- Verdict: awaiting the owner.

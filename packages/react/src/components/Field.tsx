@@ -33,13 +33,14 @@ interface FieldControlProps extends AriaAttributes {
 }
 
 export interface FieldProps extends Div {
+  /** The control's visible name. */
   label?: ReactNode;
   /**
    * Beside the label, after it: a Toggletip that explains the setting, or another small action. It sits outside the
-   * `<label>`, so its name never joins the control's (owner 2026-10-27; Fluent's InfoLabel, the Toggletip spec's open
-   * question 1).
+   * `<label>`, so its name never joins the control's.
    */
   labelAction?: ReactNode;
+  /** Help text under the label, read as the control's description. */
   description?: ReactNode;
   /**
    * A validation message, painted by `validationStatus`. Without a status it is an error (sets
@@ -47,16 +48,20 @@ export interface FieldProps extends Div {
    * Help text that isn't validation belongs in `description`. `error` remains the shorthand.
    */
   validation?: ReactNode;
+  /** How `validation` is painted and announced; an error by default. */
   validationStatus?: "error" | "success" | "warning";
+  /** An error message: shorthand for `validation` with the error status. */
   error?: ReactNode;
+  /** Marks the field as required and sets it on the control. */
   required?: boolean;
+  /** Disables the control and dims the label. */
   disabled?: boolean;
   /** Explicitly overrides the generated control id. */
   htmlFor?: string;
   /**
-   * `vertical` (default): the label over the control. `horizontal`: beside it. `auto`: beside it while the control fits
-   * the control column at its natural width, under it when it does not, so a row reflows with the panel's width, the
-   * type size and the control's content, never with its value (owner 2026-10-27).
+   * `vertical` (default): the label over the control. `horizontal`: beside it. `auto`: beside it while the control
+   * fits the control column at its natural width, under it when it does not, so a row reflows with the panel's width,
+   * the type size and the control's content, never with its value.
    */
   orientation?: FieldOrientation;
   /** Visually hides the label while keeping it as the control's accessible name. */

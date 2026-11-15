@@ -104,7 +104,7 @@ Cells were 7px (md) before the second pass.
 | hover | cell `bg-hover`; palette: 1px white 70% + the 15% line inside the swatch | `color.css`, palette hover (round 20) |
 | checked | `fg-selection` ring as above; palette: the white outline, raised | `color.css`, `:has(input:checked)` |
 | focus-visible | focus ring at the focus offset on the cell (palette: inset by its width, raised over the selection) | `color.css`, `:has(input:focus-visible)` |
-| disabled | cell 50% opacity, not-allowed; a disabled picker dims as a whole | `color.css` (audit F-14) |
+| disabled | cell 50% opacity, not-allowed; a disabled picker dims as a whole (the manifest's `disabled` state, on the root's `aria-disabled`) | `color.css` (audit F-14) |
 | forced colours | `Highlight` outline for checked (stroke-width) and focus (focus-width) | `color.css`, `forced-colors` |
 
 ## Behavior and accessibility
@@ -260,3 +260,18 @@ changes instant)? Recommendation: keep the 100ms fade; it is short enough not to
 - **Why:** the outline was drawn under the colour cells, so it never showed; it now sits over them, under the selected
   and focused cells.
 - **Verdict:** approved by the owner on the round 81 review page, 2026-10-28, with no notes.
+
+- 2026-11-11 · System evaluation F5: the manifest lists the `disabled` state (`stateAttributes: aria-disabled`), so the generated API tab and the parity test read it. No visual change.
+
+## Review note, 2026-11-11 (focus and targets, plan A6, A11.2)
+
+- **What changed:** Cells own the shared hit target, 24, on their 24 pitch at sm Compact (A11.2).
+- **Why:** the system evaluation's focus, forced colours and hit target items (docs/research/system-evaluation-2026-11-11, section 5), owner-approved 2026-11-11; the rules are in DESIGN_SYSTEM.md ("The focus ring", "Targets") and CONTRAST.md (Focus).
+
+## Selection paint (plan B7.6), 2026-11-14
+
+- The chosen cell draws the shared selected edge (`selected-width`, `stroke-selected`, inside, `selected-tint` under it) from selection.css; it was a space-2 ring in `fg-selection` on a surface plate, which the Selected edge setting didn't reach. The palette layout keeps its two-tone ring. Forced colours: a Highlight edge at `selected-width`.
+
+## State paint (plan B7.2, B7.3), 2026-11-14
+
+- Cells press to `bg-pressed`, the chosen cell included.

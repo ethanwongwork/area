@@ -28,15 +28,15 @@ export const BadgeToneMatrix = () => (
         <p>{variant}</p>
         <BadgeGroup>
           {(["neutral", "info", "success", "warning", "caution", "danger", "discovery", "inverse"] as const).map(tone => false
-            ? <Badge key={tone} as="a" href="#api" variant={variant} tone={tone}>{tone}</Badge>
-            : <Badge key={tone} variant={variant} tone={tone} dot={variant === "modern" || variant === "plain"}>{tone}</Badge>)}
+            ? <Badge key={tone} as="a" href="#api" variant={variant} tone={tone}>{galleryName(tone)}</Badge>
+            : <Badge key={tone} variant={variant} tone={tone} dot={variant === "modern" || variant === "plain"}>{galleryName(tone)}</Badge>)}
         </BadgeGroup>
       </section>
     ))}
   </div>
 );
 export const BadgeTones = () => (
-  <BadgeGroup>{(["neutral", "info", "success", "warning", "caution", "danger", "discovery", "inverse"] as const).map(tone => <Badge key={tone} tone={tone}>{tone}</Badge>)}</BadgeGroup>
+  <BadgeGroup>{(["neutral", "info", "success", "warning", "caution", "danger", "discovery", "inverse"] as const).map(tone => <Badge key={tone} tone={tone}>{galleryName(tone)}</Badge>)}</BadgeGroup>
 );
 export const BadgeLeadingIcon = () => <Badge icon={<CheckIcon size={12} />}>Badge</Badge>;
 export const BadgeTrailingIcon = () => <Badge trailingIcon={<InfoIcon size={12} />}>Badge</Badge>;
@@ -46,7 +46,7 @@ export const BadgeDotOutline = () => <Badge dot variant="outline" tone="warning"
 export const BadgeDotOnly = () => <Badge dotOnly tone="success" aria-label="Available" />;
 export const BadgeDotMatrix = () => (
   <div style={{ display: "flex", flexDirection: "column", gap: "var(--area-space-24)" }}>
-    {(["soft", "outline"] as const).map(variant => <BadgeGroup key={variant}>{(["neutral", "info", "success", "warning", "caution", "danger", "discovery", "inverse"] as const).map(tone => <Badge key={tone} dot variant={variant} tone={tone}>{tone}</Badge>)}</BadgeGroup>)}
+    {(["soft", "outline"] as const).map(variant => <BadgeGroup key={variant}>{(["neutral", "info", "success", "warning", "caution", "danger", "discovery", "inverse"] as const).map(tone => <Badge key={tone} dot variant={variant} tone={tone}>{galleryName(tone)}</Badge>)}</BadgeGroup>)}
   </div>
 );
 export const BadgeStateLabels = () => (
@@ -77,7 +77,7 @@ export const BadgeAnchorAvatar = () => (
 );
 export const BadgeAnchorTab = () => (
   <div className="area-tabs"><div className="area-tabs__list" role="tablist" aria-label="Label">
-    <IndicatorAnchor indicator={<Indicator count={2} />}><button type="button" className="area-tabs__tab" role="tab" aria-selected="true" aria-label="Label, 2">Item one</button></IndicatorAnchor>
+    <IndicatorAnchor indicator={<Indicator count={2} />}><button type="button" className="area-tabs__tab" role="tab" aria-selected="true" aria-label="Label, 2"><span className="area-tabs__label"><span className="area-tabs__text">Item one</span></span></button></IndicatorAnchor>
   </div></div>
 );
 export const BadgeAnchorPlacements = () => (
@@ -89,8 +89,9 @@ export const BadgeAnchorVisibility = () => {
   const [invisible, setInvisible] = useState(false);
   return <IndicatorAnchor invisible={invisible} indicator={<Indicator count={3} />}><Button onClick={() => setInvisible(value => !value)} aria-label={invisible ? "Button" : "Button, 3"}>Button</Button></IndicatorAnchor>;
 };
+/* In a 160 column, so the group wraps onto a second row as its name says (it sat on one row; F3.3). */
 export const BadgeGroupWrap = () => (
-  <BadgeGroup><Badge>Neutral</Badge><Badge tone="info">Info</Badge><Badge tone="discovery">Discovery</Badge><Badge tone="success">Success</Badge></BadgeGroup>
+  <BadgeGroup style={{ inlineSize: "calc(var(--area-space-80) * 2)" }}><Badge>Neutral</Badge><Badge tone="info">Info</Badge><Badge tone="discovery">Discovery</Badge><Badge tone="success">Success</Badge></BadgeGroup>
 );
 export const BadgeGroupInline = () => (
   <BadgeGroup visibleCount={2} overflow="inline"><Badge>Neutral</Badge><Badge tone="info">Info</Badge><Badge tone="discovery">Discovery</Badge><Badge tone="success">Success</Badge><Badge tone="warning">Warning</Badge></BadgeGroup>
@@ -99,7 +100,7 @@ export const BadgeGroupOverlay = () => (
   <BadgeGroup visibleCount={2} overflow="overlay"><Badge>Neutral</Badge><Badge tone="info">Info</Badge><Badge tone="discovery">Discovery</Badge><Badge tone="success">Success</Badge><Badge tone="warning">Warning</Badge></BadgeGroup>
 );
 export const BadgeGroupAuto = () => (
-  <div style={{ width: "calc(var(--area-space-80) * 3)", maxWidth: "100%", resize: "horizontal", overflow: "auto", padding: "var(--area-space-8)" }}>
+  <div style={{ width: "calc(var(--area-space-80) * 3)", maxWidth: "100%", resize: "horizontal", overflow: "auto", padding: "var(--area-space-8)", border: "var(--area-border-width) dashed var(--area-edge-regions)", borderRadius: "var(--area-radius-container)" }}>
     <BadgeGroup visibleCount="auto" overflow="overlay"><Badge>Neutral</Badge><Badge tone="info">Info</Badge><Badge tone="discovery">Discovery</Badge><Badge tone="success">Success</Badge><Badge tone="warning">Warning</Badge></BadgeGroup>
   </div>
 );
@@ -149,9 +150,9 @@ const galleryName = (value: string) => value[0]!.toUpperCase() + value.slice(1);
 // Modern and plain colour only their add-on (a dot or an icon), so their tone tiles carry the dot; without it all eight
 // read as the same plate (owner, round 76: approved) or the same muted word (plain, 2026-11-01).
 const galleryBadge = (variant: typeof galleryVariants[number], tone: typeof galleryTones[number]) => () => false
-  ? <Badge as="a" href="#api" variant={variant} tone={tone}>{tone}</Badge>
-  : <Badge variant={variant} tone={tone} dot={variant === "modern" || variant === "plain"}>{tone}</Badge>;
-const galleryDotBadge = (variant: "soft" | "outline", tone: typeof galleryTones[number]) => () => <Badge dot variant={variant} tone={tone}>{tone}</Badge>;
+  ? <Badge as="a" href="#api" variant={variant} tone={tone}>{galleryName(tone)}</Badge>
+  : <Badge variant={variant} tone={tone} dot={variant === "modern" || variant === "plain"}>{galleryName(tone)}</Badge>;
+const galleryDotBadge = (variant: "soft" | "outline", tone: typeof galleryTones[number]) => () => <Badge dot variant={variant} tone={tone}>{galleryName(tone)}</Badge>;
 const galleryPlacement = (placement: "top-end" | "top-start" | "bottom-end" | "bottom-start") => () => <IndicatorAnchor placement={placement} indicator={<Indicator count={3} />}><Button aria-label={`${placement}, 3 unread`}>{placement}</Button></IndicatorAnchor>;
 
 export const BADGE_GALLERY_DEMOS: Record<string, () => ReactNode> = Object.fromEntries([
@@ -181,11 +182,11 @@ export const BADGE_GALLERY_DEMOS: Record<string, () => ReactNode> = Object.fromE
   ["GalleryBadgeTableBuilding", () => <Table><thead><tr><th>Name</th><th>Status</th></tr></thead><tbody><tr><td>Item two</td><td><Badge dot tone="warning">Status</Badge></td></tr></tbody></Table>],
 ]);
 
-export const BadgeAvatar = () => <Badge variant="modern" avatar={<Avatar fallback="D" />}>David Tee</Badge>;
-export const BadgeFlag = () => <Badge variant="color" flag={<svg viewBox="0 0 16 16"><rect width="16" height="16" fill="white" /><circle cx="8" cy="8" r="4" fill="#BC002D" /></svg>}>Japan</Badge>;
+export const BadgeAvatar = () => <Badge avatar={<Avatar fallback="D" />}>David Tee</Badge>;
+export const BadgeFlag = () => <Badge flag={<svg viewBox="0 0 16 16"><rect width="16" height="16" fill="white" /><circle cx="8" cy="8" r="4" fill="#BC002D" /></svg>}>Japan</Badge>;
 export const BadgeDismissible = () => {
   const [visible, setVisible] = useState(true);
-  return visible ? <Badge variant="color" tone="discovery" dismissLabel="Remove badge" onDismiss={() => setVisible(false)}>Badge</Badge> : <Button size="sm" variant="ghost" onClick={() => setVisible(true)}>Restore badge</Button>;
+  return visible ? <Badge dismissLabel="Remove badge" onDismiss={() => setVisible(false)}>Badge</Badge> : <Button size="sm" variant="ghost" onClick={() => setVisible(true)}>Restore badge</Button>;
 };
 
 export const BadgeIndicatorZero = () => {

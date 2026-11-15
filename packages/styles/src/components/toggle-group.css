@@ -3,7 +3,7 @@
  *
  * A set of toggle buttons the group keeps the state of: any number pressed (formatting:
  * bold, italic, underline) or at most one (docs/specs/toggle-group.md). soft is Segmented's
- * track with any number of options raised. outline is joined at the shared edges: the root also
+ * track with any number of options raised: one recipe, segmented.css "One track" (plan B8.1). outline is joined at the shared edges: the root also
  * carries ButtonGroup's classes, which paint the join, the seams and the pressed fill (Untitled
  * UI's ButtonGroup is a toggle group drawn this way). ghost sets the toggles apart at the Toolbar
  * group's gap (shadcn's spaced group), and is what a toggle set inside a Toolbar uses.
@@ -29,44 +29,35 @@
    * wash on the track and raise the chosen option as a white plate with a lift; the track keeps Segmented's hairline.
    */
   .area-toggle-group--soft {
-    --_track-inset: var(--area-space-2);
-    --_track-radius: var(--_toggle-radius);
+    /* The track recipe's inputs (segmented.css, "One track"): the tier's height and corner. The recipe draws the
+       track (inset, corner, edge, Pills flag) and the raised option; the group centres its options in it. */
+    --_track-height: var(--_toggle-height);
+    --_track-tier-corner: var(--_toggle-radius);
     align-items: center;
-    gap: var(--area-space-2);
-    block-size: var(--_toggle-height);
-    box-sizing: border-box;
-    padding: var(--_track-inset);
-    border-radius: var(--_track-radius);
-    /* The track is a control, so it takes the control fill, which steps from the ground it sits on: the recessed
-       layer (bg-subtle, the old paint) equals the page at layer contrast 0 and left only the ring (Layers sweep
-       2026-10-16). Light 100 + 4 is the same #f7f7f7; dark is the rest fill, near the #28 groove the spec measured. */
-    background-color: var(--area-bg-component);
-    outline: var(--area-border-width) solid var(--area-edge-buttons);
-    outline-offset: calc(-1 * var(--area-border-width));
   }
   .area-toggle-group--soft > .area-button {
-    --_height: calc(var(--_toggle-height) - var(--_track-inset) * 2);
+    --_height: var(--_thumb);
     --_icon: var(--_toggle-icon);
     --_text: var(--_toggle-text);
     --_leading: var(--_toggle-leading);
-    /* Concentric with the track, never sharper than radius-floor (Segmented's rule). */
-    --_radius: max(var(--area-radius-floor), calc(var(--_track-radius) - var(--_track-inset)));
+    --_radius: var(--_thumb-corner);
     --_bg: transparent;
     --_bg-hover: var(--area-bg-hover);
-    --_bg-active: var(--area-bg-active);
+    /* Segmented's press on the track (plan B7.4): it pressed to the selected wash. */
+    --_bg-active: var(--area-bg-pressed-track);
     --_border: transparent;
     --_border-hover: transparent;
     --_fg: var(--area-fg-muted);
   }
-  /* On: Segmented's raised plate (surface, the selected hairline, the lightest lift; the active fill in dark). */
+  /* On: the track's raised option (the thumb's paint). */
   .area-toggle-group--soft > .area-button[data-selected] {
-    --_bg: light-dark(var(--area-bg-surface), var(--area-bg-component-active)); /* spec: segmented.css */
-    --_bg-hover: light-dark(var(--area-bg-surface), var(--area-bg-component-active)); /* spec */
-    --_bg-active: light-dark(var(--area-bg-surface), var(--area-bg-component-active)); /* spec */
-    --_border: var(--area-edge-selected);
-    --_border-hover: var(--area-edge-selected);
+    --_bg: var(--_thumb-bg);
+    --_bg-hover: var(--_thumb-bg);
+    --_bg-active: var(--_thumb-bg);
+    --_border: var(--_thumb-edge);
+    --_border-hover: var(--_thumb-edge);
     --_fg: var(--area-fg-default);
-    --_shadow: var(--area-shadow-control);
+    --_shadow: var(--_thumb-shadow);
   }
   /* Every toggle disabled: the track dims once, as ButtonGroup's joined control. */
   .area-toggle-group--soft:has(> .area-button:disabled):not(:has(> .area-button:not(:disabled))) { opacity: var(--area-opacity-disabled); }
@@ -85,6 +76,11 @@
     --_leading: var(--_toggle-leading);
     --_radius: var(--_toggle-radius);
   }
+
+  /* An unselected option in any selection control reads one ink, the muted one (plan A3.3, finding VA9, 2026-11-11):
+     outline and ghost toggles had kept a ghost Button's quieter icon ink while soft toggles, Segmented and Tabs read
+     muted. A ghost Button keeps its own ink as a Button. */
+  .area-toggle-group:is(.area-toggle-group--outline, .area-toggle-group--ghost) > .area-button:not([data-selected], [aria-pressed="true"]) { --_fg: var(--area-fg-muted); }
 
   .area-toggle-group--full-width { display: flex; inline-size: 100%; }
   .area-toggle-group--full-width > .area-button { flex: 1 1 0; min-inline-size: 0; }

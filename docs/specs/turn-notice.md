@@ -111,3 +111,15 @@ The live agent's sign-in error runs to three lines in the Inspector at 290; the 
 glyph for a baseline, and a Retry's label shares the baseline, so a one-line error with Retry is laid out as before.
 Measured in Electron at type 13: wrapped, the mark's centre is the first line's centre (24.6 / 24.6); one line with
 Retry, text, mark and button share a centre (95.9). Light and dark checked. Verdict: open for the owner.
+
+### 2026-11-11 · Ink, dark and colour (system plan, Phase 1)
+
+- **What changed:** The error icon reads `fg-danger-mark` (plan A3.4, finding T10), Toast's red.
+- **Why:** docs/research/system-evaluation-2026-11-11 (README §5); the owner took every recommendation on 2026-11-11.
+- **Verdict:** awaiting the owner.
+
+### 2026-11-14 · Shared parts, leftovers (system plan, Phase 2, wave 3)
+
+- The words-to-rule gap is `ui-cluster` (6 / 8 / 10). Values at type 13 Compact / Default / Comfortable; unchanged at the default. Listed, not moved: the icon gap 6 (the row role is 8 at the default).
+- Why: docs/research/system-evaluation-2026-11-11 (plan B6.1, B6.5, B8.2, B2.2; README §5, phase2/leftovers.md); the owner took every recommendation on 2026-11-11. Fix the rule, not the instance.
+- Verdict: awaiting the owner.

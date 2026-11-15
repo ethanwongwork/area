@@ -24,6 +24,7 @@ import { STROKE_GROUP_AXES } from "./stroke-groups.ts";
 import { STATE_AXES } from "./states.ts";
 import { DENSITY_AXIS } from "./density.ts";
 import { TYPE_AXIS } from "./type-size.ts";
+import { REGULAR_WEIGHT_AXIS } from "./regular-weight.ts";
 import { GROUND_DARK_AXIS, GROUND_LIGHT_AXIS, LAYERS_DARK_AXIS, LAYERS_LIGHT_AXIS } from "./layers.ts";
 import { INK_TINT_AXIS, TINT_DARK_AXIS, TINT_HUE_AXIS, TINT_HUE_DARK_AXIS, TINT_LIGHT_AXIS } from "./tint.ts";
 import { CARD_TONE_DARK_AXIS, CARD_TONE_LIGHT_AXIS } from "./card-tone.ts";
@@ -66,6 +67,8 @@ export const AXES: AxisDefinition[] = [
   CARD_TONE_LIGHT_AXIS,
   CARD_TONE_DARK_AXIS,
   TYPE_AXIS,
+  // The weight regular text draws at (plan A9.6, 2026-11-13): 400 to 470 on the variable face.
+  REGULAR_WEIGHT_AXIS,
   DENSITY_AXIS,
   RADIUS_AXIS,
   SURFACE_AXIS,
@@ -98,7 +101,7 @@ export const SETTING_GROUPS: ReadonlyArray<{ heading: string; settings: readonly
   // Emphasis (owner 2026-10-27: "avoid long phrases like where it paints"; was "Where it paints"): how strongly things
   // stand out, the accent on buttons and selection, the status tones, and contrast.
   { heading: "Emphasis", settings: ["action", "selection", "status-colours", "tone-tint", "tone-contrast", "series-lightness", "contrast"] },
-  { heading: "Size", settings: ["type", "density"] },
+  { heading: "Size", settings: ["type", "regular-weight", "density"] },
   { heading: "Shape", settings: ["radius", "pills"] },
   // Width and the master Edge contrast, then each group's amount (owner, 2026-10-30, the stroke review).
   { heading: "Stroke", settings: ["surface", "stroke", "stroke-cards", "stroke-blocks", "stroke-callouts", "stroke-floating", "stroke-regions", "stroke-dividers", "stroke-fields", "stroke-buttons", "stroke-options", "stroke-tracks", "stroke-tags", "stroke-media"] },

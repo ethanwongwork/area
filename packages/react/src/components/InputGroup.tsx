@@ -5,8 +5,11 @@ import type { HTMLAttributes } from "react";
 import { inputGroupVariants, cx, type VariantProps, MANIFESTS } from "../variants.ts";
 
 export interface InputGroupProps extends HTMLAttributes<HTMLDivElement> {
+  /** The shell's treatment, an edge (`outline`, the default) or a soft fill (`soft`), shared by every control inside. */
   variant?: VariantProps<typeof MANIFESTS.inputGroup>["variant"];
+  /** The height and type size of the shell and its controls; `md` by default. */
   size?: VariantProps<typeof MANIFESTS.inputGroup>["size"];
+  /** Stretches the group to the width of its container; off by default. */
   fullWidth?: boolean;
   /** Disables every control in the group (a Field's `disabled` lands here). */
   disabled?: boolean;

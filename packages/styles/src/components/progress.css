@@ -1,0 +1,74 @@
+/* Progress (docs/specs/progress.md). */
+@layer area.components {
+  /* --- Progress ----------------------------------------------------------- */
+  .area-progress {
+    --_progress-size: var(--area-space-6);
+    --_progress-fill: var(--area-selection-solid);
+    inline-size: 100%;
+    block-size: var(--_progress-size);
+    border-radius: var(--area-radius-full);
+    /* The rail is Slider's: a fill on a rail is one role, and the two used different greys. */
+    background-color: var(--_progress-track, var(--area-fill-track)); /* spec (audit S5): the Switch and Slider off track, #e2; a fill, so Contrast leaves it (the fill on it is what reads) */
+    overflow: hidden;
+    /* The Tracks stroke group's edge, inside the trough (axes/stroke-groups.ts, 2026-10-30). */
+    outline: var(--area-stroke-width) solid var(--area-edge-tracks);
+    outline-offset: calc(-1 * var(--area-stroke-width));
+  }
+
+  /*
+   * The value moves the fill with a transform, not its width (docs/MOTION.md, crispness 2: animate
+   * transform only; motion pass 2026-10-07). The bar is the track's full width and slides in from
+   * the inline start by (100 - value)%; the track's own pill clips its start, the bar's pill draws
+   * its end, so the shape is the width-based fill's. The offset is rounded to a whole pixel so the
+   * end rests on the pixel grid. React writes `--_progress-value` (0-100), Progress and Meter alike.
+   * Only the translate moves (plan A5.7, 2026-11-11): the width is never transitioned, so neither a value change nor
+   * the switch to indeterminate lays the bar out on every frame. A translate rather than a scale keeps the bar's pill
+   * end round at every value. Slow ease-out: a value change is a state change (MOTION.md easing table).
+   */
+  .area-progress__bar {
+    --_progress-dir: 1;
+    block-size: 100%;
+    border-radius: inherit;
+    background-color: var(--_progress-fill);
+    translate: round(nearest, calc((var(--_progress-value, 100) - 100) * var(--_progress-dir) * 1%), 1px) 0;
+    transition: translate var(--area-duration-slow) var(--area-ease-out);
+  }
+  .area-progress:dir(rtl) .area-progress__bar { --_progress-dir: -1; }
+
+  .area-progress--sm { --_progress-size: var(--area-space-4); }
+  .area-progress--md { --_progress-size: var(--area-space-6); }
+  .area-progress--lg { --_progress-size: var(--area-space-8); }
+
+  /*
+   * Indeterminate is a travelling segment rather than a full-width pulse, so it cannot
+   * be mistaken for a determinate bar sitting at 100%.
+   */
+  .area-progress[data-indeterminate] .area-progress__bar {
+    /* A 35% segment, which the loop factor (axes/motion.ts) turns into a still stripe across the whole track when
+       motion stops: a stopped 35% segment would read as 35% done (audit E-9). The stripe's gaps are the fill
+       while the loop runs, so the running bar is solid. */
+    --_progress-gap: color-mix(in srgb, var(--_progress-fill) calc(var(--area-duration-loop) * 100%), transparent);
+    inline-size: calc(100% - 65% * var(--area-duration-loop));
+    background-color: var(--_progress-gap);
+    background-image: repeating-linear-gradient(-45deg, var(--_progress-fill) 0 var(--area-space-4), var(--_progress-gap) var(--area-space-4) var(--area-space-8)); /* spec */
+    animation: area-progress-indeterminate calc(1.8s * var(--area-duration-loop)) var(--area-ease-linear) infinite; /* spec: 1.8s (audit H-20), fixed as the Spinner's turn: it was 12 x base, which drifted when the motion default moved (2026-10-14) */
+  }
+
+  @keyframes area-progress-indeterminate {
+    from { translate: -100% 0; }
+    to { translate: 340% 0; }
+  }
+  /* The segment enters from the inline start, so it runs the other way in right-to-left text. */
+  .area-progress[data-indeterminate]:dir(rtl) .area-progress__bar { animation-name: area-progress-indeterminate-rtl; }
+  @keyframes area-progress-indeterminate-rtl {
+    from { translate: 100% 0; }
+    to { translate: -340% 0; }
+  }
+
+  /* The motion axis and the reduced-motion preference stop every loop through the loop factor,
+     `--area-duration-loop` (axes/motion.ts; docs/MOTION.md, "Reduced motion": loops stop; motion pass
+     2026-10-07). Each stops in a drawn rest, never a frame caught mid-loop: the skeleton flat (no band), the
+     spinner's arc at its identity turn (12 to 3 o'clock, the drawing itself), the indeterminate bar a full
+     still stripe. It was a `[data-area-motion="0"]` descendant rule, which a nested non-zero scope could not
+     undo (2026-10-14). */
+}

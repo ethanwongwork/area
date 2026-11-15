@@ -20,10 +20,10 @@
     line-height: var(--area-ui-leading);
   }
   /* The label and the value share the row: the value at its end (Spectrum, React Aria; Figma's card leads with it). */
-  .area-meter__header { display: flex; justify-content: space-between; align-items: baseline; gap: var(--area-space-12); }
-  /* spec: ChatGPT's usage label, 14/20 500 in the default ink: the meter's title, set at body size (the weight rule,
-     DESIGN_SYSTEM.md; owner, 2026-10-12: consistency pass O4). Field's label, a control's name, stays 400. */
-  .area-meter__label { min-inline-size: 0; margin: 0; font-weight: var(--area-weight-strong); }
+  .area-meter__header { display: flex; justify-content: space-between; align-items: baseline; gap: var(--area-gap-row); }
+  /* The bar's name, the UI line at 400 in the default ink, Progress's and Field's label (plan A9.13, 2026-11-11: one label
+     for a bar; it was 500, ChatGPT's usage label, from consistency pass O4); the value muted at its end. */
+  .area-meter__label { min-inline-size: 0; margin: 0; font-weight: var(--area-weight-regular); }
   /* spec: the UI type in the muted ink with tabular numbers, as File upload's percentage takes the UI type. */
   .area-meter__value { flex: none; margin-inline-start: auto; color: var(--area-fg-muted); font-variant-numeric: tabular-nums; }
   /* spec: Field's description, 12/16 muted, under the bar (Figma's caption sits under its bar too). */

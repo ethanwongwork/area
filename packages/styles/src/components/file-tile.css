@@ -25,9 +25,9 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: var(--area-space-8); /* spec: Asset card's caption, 8 under its frame */
+    gap: var(--_fr-name-gap); /* the frame recipe's name gap (surface.css), 8 at the default */
     min-inline-size: 0;
-    padding: var(--area-space-8); /* spec: Fluent Card small 8 */
+    padding: var(--area-ui-cluster); /* spec: 8 at the default, the mat */
     color: var(--area-fg-default);
     font-size: var(--area-ui-size); /* spec: Asset card's name, the app's UI text (Finder 12 at its 13 system text) */
     line-height: var(--area-ui-leading);
@@ -75,18 +75,18 @@
     display: -webkit-box;
     max-inline-size: 100%;
     overflow: hidden;
-    font-weight: var(--area-weight-strong); /* spec: Figma 550, ChatGPT and Notion 500 */
+    /* Strong in the default ink: the item name (surface.css, plan B1.2; Figma 550, ChatGPT and Notion 500). */
     overflow-wrap: anywhere;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2; /* spec: ChatGPT Library card, up to 2 lines */
   }
-  /* The detail line in Asset card's: the xs size, muted, tabular, one line. */
+  /* The detail line: joined to the name at its size, muted, tabular, one line (plan A9.3). */
   .area-file-tile__meta {
     max-inline-size: 100%;
     overflow: hidden;
     color: var(--area-fg-muted);
-    font-size: var(--area-text-sm-size); /* spec: Asset card's detail line */
-    line-height: var(--area-text-sm-leading);
+    font-size: var(--area-ui-size);
+    line-height: var(--area-ui-leading);
     font-variant-numeric: tabular-nums;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -107,6 +107,13 @@
      grid centres its cells; this rule is as specific and comes with the block's own class to win). */
   .area-file-grid.area-list-box--grid .area-file-grid__item { place-items: start stretch; }
   .area-file-grid__item > .area-file-tile { inline-size: 100%; max-inline-size: none; } /* the cell sets the width */
+  /* A chosen tile draws the selected edge (selection.css, plan B7.6): a grid of pictures, as Asset and Design card. The
+     List box grid's selected plate (a 2.7% step on the page in light) read too faint under a picture. Hover and press
+     keep the grid's plates. Focus rings outside the cell (at the control offset), so a focused tile and a chosen one
+     read apart by placement at every Selection colour: the edge inside, the ring outside. */
+  .area-file-grid.area-list-box--grid .area-file-grid__item[aria-selected="true"]:not([data-disabled]) { box-shadow: var(--_selected-edge); }
+  .area-file-grid.area-list-box--grid .area-file-grid__item[aria-selected="true"]:not([data-disabled], :active) { background: transparent; }
+  .area-file-grid .area-file-grid__item.area-list-box__item:focus-visible { outline-offset: var(--area-focus-offset); }
   /* A drag over a folder's tile opens its Folder (folder.css draws the open state). Hover changes only the plate
      (PRODUCT_UI rule 2): nothing in the figure moves. */
   .area-file-grid__item[data-drop-target] {}

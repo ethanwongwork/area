@@ -15,11 +15,11 @@
  * ------------------------------------------------------------------------- */
 @layer area.components {
   .area-stepper {
-    --_marker: var(--area-mark-label-md); /* spec: Kbd's md keycap, 20 (compact 16); was Timeline's 24 circle */
-    --_gap: var(--area-space-12); /* spec: Timeline's content gap, the title 36 from the column's start */
+    --_marker: var(--area-mark-label-md); /* spec: Kbd's md keycap, 18 at type 13 at every density (a mark); was Timeline's 24 circle */
+    --_gap: var(--area-gap-row); /* Timeline's content gap, a row's (plan B8.2): 8 / 12 / 16 at type 13 Compact / Default / Comfortable */
     --_line: var(--area-stroke-width); /* spec: Timeline's 1px line (Ant, MUI, GOV.UK 1px) */
     --_line-gap: var(--area-space-4); /* spec: Timeline's gap around each marker */
-    --_spacing: var(--area-space-16); /* spec: Timeline's 16 between events */
+    --_spacing: calc(var(--area-ui-cluster) * 2); /* Timeline's space between events, two clusters: 12 / 16 / 20 at type 13 */
     --_leading: var(--area-text-base-leading);
     display: flex;
     margin: 0;
@@ -76,7 +76,7 @@
     inset: calc(var(--area-space-4) * -1);
     z-index: -1;
     border-radius: var(--area-radius-control-sm);
-    transition: background-color var(--area-duration-fast) var(--area-ease-out);
+    transition: background-color var(--area-duration-fast) var(--area-ease-effects);
   }
   @media (hover: hover) {
     .area-stepper-step__button:hover::before { background-color: var(--area-bg-component-hover); transition-duration: var(--area-hover-in); }
@@ -92,8 +92,11 @@
     box-sizing: border-box;
     inline-size: var(--_marker);
     block-size: var(--_marker);
-    /* Kbd's keycap corner: 6 at the default radius, following the Radius setting, never quite a pill. */
-    border-radius: max(var(--area-radius-min), min(round(down, calc(24px * var(--area-radius-factor)), 2px), calc(var(--_marker) / 2 - min(2px, (0.5 - var(--area-radius-factor)) * 1000px))));
+    /* Kbd's keycap: the mark recipe's chip corner (inset.css, "One mark") on the marker's height, the small corner, at
+       most half the height: 6 on the 18 marker at Corner 10, square at Corner 0, following the Corner setting. */
+    --_mark-height: var(--_marker);
+    --_mark-chip: 1;
+    border-radius: var(--_mark-corner);
     background: var(--_disc);
     color: var(--_number);
     font-size: var(--area-text-xs-size); /* spec: Kbd's 12 */
@@ -130,6 +133,11 @@
      the same at both ends). */
   /* Steps share the room left over after their own content, and never shrink below it (their longest word and a 16
      line), so the line can't run into a title; a stepper wider than its container overflows rather than overlaps. */
+  /* The line between steps carries progress, so it is never a divider's faint rule (plan A10.3, finding VN14, 2026-11-11:
+     at 7.5% it vanished, most in dark): the control stroke (3:1 on every ground), and the default ink once the step it
+     leaves is complete. */
+  .area-stepper-step { --_connector: var(--area-stroke-control); }
+  .area-stepper-step--complete { --_connector: var(--area-fg-default); }
   .area-stepper--horizontal > .area-stepper-step { min-inline-size: auto; }
   .area-stepper--horizontal > .area-stepper-step:not(:last-child) { flex: 1 1 auto; }
   .area-stepper--horizontal > .area-stepper-step > :first-child { flex: 0 1 auto; }
@@ -141,7 +149,7 @@
     block-size: var(--_line);
     margin-block-start: calc((var(--_marker) - var(--_line)) / 2);
     margin-inline: var(--_gap);
-    background: var(--area-edge-dividers); /* spec: Timeline's line */
+    background: var(--_connector); /* a progress line: the control stroke, a completed segment the default ink (plan A10.3) */
   }
 
   /* An open step's content: under the text, in line with the title (the marker and the text gap in), 8 below it, the
@@ -149,7 +157,7 @@
   .area-stepper-step__content {
     box-sizing: border-box;
     min-inline-size: 0;
-    padding-block-start: var(--area-space-8); /* spec: the gap from a title to what it heads (Card, Section heading) */
+    padding-block-start: var(--area-ui-cluster); /* a title to what it heads, a cluster (plan B8.2): 6 / 8 / 10 at type 13 */
     padding-inline-start: calc(var(--_marker) + var(--_gap));
   }
   /* Horizontal: the content takes a row of its own under the step's marker, text and line. */
@@ -167,7 +175,7 @@
     inset-block: calc(var(--_marker) + var(--_line-gap)) var(--_line-gap);
     inset-inline-start: calc((var(--_marker) - var(--_line)) / 2);
     inline-size: var(--_line);
-    background: var(--area-edge-dividers); /* spec: Timeline's line */
+    background: var(--_connector); /* a progress line: the control stroke, a completed segment the default ink (plan A10.3) */
   }
 
   @media (forced-colors: active) {

@@ -18,8 +18,8 @@ export interface PageHeaderProps extends Omit<HTMLAttributes<HTMLElement>, "titl
    */
   parent?: ReactNode;
   /**
-   * The title's actions, at its end: one primary Button at most, after any secondary ones (WRITING.md, "One primary
-   * action"). They centre on the title's line.
+   * The title's actions, at its end: one primary Button at most, after any secondary ones. They center on the title's
+   * line.
    */
   actions?: ReactNode;
   /** The page's Tabs, or a Segmented of its views, under the title and its description. */

@@ -66,6 +66,8 @@ press on the scrim closes without acting (`onCancel`). `onConfirm` may return a 
 shows Button's loading state and the dialog stays open until it settles. `inline` renders the
 surface in place for documentation.
 
+**State hooks (manifest).** `open` is its Dialog's (`statesFrom: { open: "dialog" }`), the native `[open]`.
+
 ## Verification
 
 Builds, parity, typecheck, Dialog and audit tests pass. Browser: the modal opens as `alertdialog`
@@ -182,6 +184,7 @@ starts at y 328.07. That is Dialog's, reported to the lead rather than changed h
   one is "Tone / danger" (lead, build.mjs); (c) recs taken: no icon; one 500 weight on both
   footer buttons via Button (button.css). No change to confirm-dialog.css or ConfirmDialog.tsx.
 - 2026-10-08 · owner: approved on the component review page (re-review after the requested changes).
+- 2026-11-11 · system evaluation F5 · the manifest declares `open` as its Dialog's (`statesFrom`); no paint changed.
 
 ## Review note, 2026-10-22 (round 68)
 
@@ -228,3 +231,22 @@ starts at y 328.07. That is Dialog's, reported to the lead rather than changed h
   confirm's message in the default ink. The description's line box added 4–5 under its last baseline, so the footer read
   further from the words than the inset round them.
 - **Verdict:** open (owner review).
+- 2026-11-11 · system evaluation A2.3 · Dialog's corner, 20 → 16 at the default (radius-container; dialog.css).
+
+## Review note, 2026-11-11 (motion, plan A5)
+
+- **What changed:** Dialog's motion: in on `base` (210, was 280), out on `fast` (140, was 210) on `ease-exit` (A5.1).
+- **Why:** the system evaluation's motion items (docs/research/system-evaluation-2026-11-11, section 5, A5), owner-approved
+  2026-11-11; the rules are in docs/MOTION.md (Tokens, Roles, Recipes) and kept by cohesion.test.mjs and
+  tests/behaviour/suites/motion.test.mjs. The motion tables above are history; these values are current.
+
+### 2026-11-11 · Ink, dark and colour (system plan, Phase 1)
+
+- **What changed:** In dark it paints the floating ground (`bg-float`, plan A7.2): a step above the layers under it, #0c0c0c on the near-black page at the defaults (was `bg-surface`, the page's own #020202); light is unchanged. Its dark edge is one line (plan A7.1): the frame takes the dark rim's strength (16% at Shadow 8) and the rim is no longer drawn outside it, where it had made a two-tone 2px edge.
+- **Why:** docs/research/system-evaluation-2026-11-11 (README §5); the owner took every recommendation on 2026-11-11.
+- **Verdict:** awaiting the owner.
+- 2026-11-14 · system evaluation B6.3 and B6.5 · `--area-confirm-dialog-inline-size` replaces the 420 width; the closing description's trim is Dialog's rule now (every title group's last line ends on its baseline), so the family's own rule is gone; its default-ink description stays the written exception to the muted title pair; Cancel and the action are at least 2.25 × their height.
+
+## Shared bars and corners (plan B4), 2026-11-14
+
+- B4.2: no close of its own; Dialog's corner control does not apply.

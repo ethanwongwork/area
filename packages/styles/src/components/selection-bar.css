@@ -65,8 +65,8 @@
   .area-selection-bar--floating {
     --_inset: var(--area-ui-cluster); /* spec: 8, compact 6, the floating Toolbar's */
     --_count-inset: var(--area-space-4);
-    --_bg: var(--area-bg-surface);
-    --_shadow: var(--area-shadow-edge), inset 0 0 0 var(--area-border-width) var(--area-edge-floating), var(--area-shadow-float);
+    --_bg: var(--area-bg-float);
+    --_shadow: var(--_float-frame), var(--_float-shadow); /* the one floating stack (popup.css) */
     position: sticky;
     inset-block-end: var(--area-space-16);
     z-index: 1;

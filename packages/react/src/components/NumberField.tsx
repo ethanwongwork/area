@@ -7,16 +7,27 @@ import { calculateNumber, clampNumber, steppedNumber } from "./number-math.ts";
 import { Glyph } from "./Glyph.tsx";
 
 export interface NumberFieldProps extends Omit<InputHTMLAttributes<HTMLInputElement>, "type" | "size" | "value" | "defaultValue" | "onChange" | "step" | "min" | "max"> {
+  /** The number, controlled; `null` for an empty field. */
   value?: number | null;
+  /** The number at first, uncontrolled; empty by default. */
   defaultValue?: number | null;
-  /** The new value, and the event behind it (a held stepper's repeats have none; audit C-7). */
+  /**
+   * Called with the new value and the event behind it (a held stepper's repeats have none), also while a scrub drags.
+   */
   onValueChange?: (value: number | null, event?: SyntheticEvent) => void;
+  /** Called with the value once it is final: a typed value on Enter or blur, a step, or the end of a scrub. */
   onValueCommit?: (value: number | null) => void;
+  /** The least value; a typed or stepped value stops there. */
   min?: number;
+  /** The greatest value; a typed or stepped value stops there. */
   max?: number;
+  /** How far the arrow keys, the steppers and a scrub move the value; its precision sets the digits shown. */
   step?: number;
+  /** The field's height and type: `md` (default), `sm` or `lg`. */
   size?: VariantProps<typeof MANIFESTS.numberField>["size"];
+  /** The field's treatment: `outline` (default), an edge; `soft`, a fill. */
   variant?: VariantProps<typeof MANIFESTS.numberField>["variant"];
+  /** The field fills its container's width. */
   fullWidth?: boolean;
   /** Trailing, non-editable unit text. */
   unit?: string;
@@ -24,29 +35,34 @@ export interface NumberFieldProps extends Omit<InputHTMLAttributes<HTMLInputElem
    * Decrease and increase buttons. `true` puts both after the value; `"split"` puts minus before it and plus after,
    * with the value centred, for a count or a quantity.
    */
-  steppers?: boolean | "split";
+  steppers?: boolean | VariantProps<typeof MANIFESTS.numberField>["steppers"];
   /**
-   * A control after the value, such as a ghost Custom select for a sizing mode (Figma's "360 Fill"). It sits in a
-   * nested square at the field's end; a Custom select in it takes that height.
+   * A control after the value, such as a ghost Custom select for a sizing mode ("360 Fill"). It sits in a nested
+   * square at the field's end; a Custom select in it takes that height.
    */
   trailing?: ReactNode;
   /**
-   * A leading drag handle; pointer movement changes the value by one step per 8px. Pass the
-   * field's letter or icon (Figma's X, W or rotation glyph) to make it the handle; `true`
-   * shows a grip. The whole square around it is the drag target.
+   * A leading drag handle; pointer movement changes the value by one step per 8px. Pass the field's letter or icon
+   * (X, W or a rotation glyph) to make it the handle; `true` shows a grip. The whole square around it is the drag
+   * target.
    */
   scrub?: boolean | ReactNode;
   /** Visible handle caption; aria-label still names the numeric input. */
   scrubLabel?: string;
   /** Empty mixed selection; the next step begins at zero or the nearest bound. */
   mixed?: boolean;
+  /** The language and region the resting value is written in. */
   locale?: string;
-  /** Thousands separators in the resting display (locale-aware). Inspectors turn them off, as Figma shows 1202. */
+  /**
+   * Thousands separators in the resting display, by locale. Turn them off in an inspector, where 1202 reads better
+   * than 1,202.
+   */
   grouping?: boolean;
   /** Number of fraction digits in the resting display. Defaults to the step's precision. */
   fractionDigits?: number;
+  /** Semantic validation paint, as Input's: `error`, `success` or `warning`. A Field passes its own. */
   validationStatus?: "error" | "success" | "warning";
-  /** Error paint and `aria-invalid`, as Input, Select and Textarea take it (audit S17, B-20). */
+  /** Error paint and `aria-invalid`, as Input, Select and Textarea take it. */
   invalid?: boolean;
   "data-validation-status"?: "error" | "success" | "warning";
 }

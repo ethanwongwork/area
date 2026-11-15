@@ -156,14 +156,14 @@ and `…/area--content-uploading--rest--light.json` (row).
 
 | Slot · property | Area value | Basis | Reason when it differs from the basis |
 |---|---|---|---|
-| zone · padding / gap / corner | 16 / 24, 12, `radius-surface` (12) | Untitled UI 16 / 24, 12, 12 | — |
+| zone · padding / gap / corner | 16 / 24, 12, `radius-container` (16 at the default) | Untitled UI 16 / 24, 12, 12 | — |
 | zone · edge | 1px `input-edge`, `input-edge-hover` on hover | Untitled's 1px ring; peer Input (a field that takes a value) | The field's edge rather than Untitled's lighter ring, so a zone beside a field matches it |
 | zone · dragging | `selection-edge` and the row plate `bg-component-hover` | Shared state paint (selection role; row plate) | Untitled's dropping style not read |
 | zone · invalid | `input-invalid-color` edge; the hint in `field-error-color` (round 83) | Peer Input; peer Field (its error message) | — |
 | zone · icon tile | 40 (`control-lg`), corner `radius-control-lg`, field edge, 20 glyph muted | Untitled 40 tile, 20 glyph | Corner 10 (a 40 control's) rather than 8 |
 | action | Link (inline, `action` ink) at weight 500, on a button | Peer Link; Untitled's emphasised link | Untitled's brand purple at 600; Area's Action role, its strong weight |
 | hint | 12/16 muted (Area's caption) | Untitled 12/18 | Area's caption leading |
-| row · padding / gap / corner / edge | 16, 12, 12, the zone's edge | Untitled UI | — |
+| row · padding / gap / corner / edge | 16, 12, `radius-container` (16 at the default), the zone's edge | Untitled UI | — |
 | row · name | 14/20 500 default ink, one line | Untitled | — |
 | row · meta | 14/20 muted, a 1 × 12 `border-subtle` rule 8 apart, tabular numbers | Untitled | — |
 | row · bar | Progress `lg` (8), the selection fill, percentage 12 after, 14/20 500 | Untitled 8 bar, 12 gap; peer Progress | Fill is Area's selection role (neutral by default), not Untitled's brand |
@@ -301,3 +301,17 @@ The item's separator between size and status paints `border-decorative` (#f3). W
 
 Each row's `role="status"` is gone: `useAnnouncement` (`announce` / `useAnnouncement` (packages/react/src/components/announce.ts; DESIGN_SYSTEM.md, "Announcements")) says "<name>: <status>" when the status changes after
 the row appears, so "Complete" says which file and a list of rows is not several live regions. No visible change.
+- 2026-11-11 · system evaluation A2.2 · the zone and the item read radius-container, not the raw radius-surface leaf, so they take the surface inset's cap like every surface: 16 at the default (unchanged), 16 at Compact. The item's buttons stay concentric: 16 − 8 = 8, the small control's own. file-upload.css.
+- 2026-11-11 · system evaluation A11.3 · the 20 glyph is a native size, kept at every type and density (stated in the CSS).
+
+### 2026-11-11 · Ink, dark and colour (system plan, Phase 1)
+
+- **What changed:** An item's status glyph reads `fg-<tone>-mark`, its words keep `fg-<tone>` (plan A3.4, finding T10).
+- **Why:** docs/research/system-evaluation-2026-11-11 (README §5); the owner took every recommendation on 2026-11-11.
+- **Verdict:** awaiting the owner.
+
+### 2026-11-14 · Shared parts, leftovers (system plan, Phase 2, wave 3)
+
+- The zone's stack, the list's rows, an item's icon-to-text gap and the progress bar-to-percent gap are `gap-row` (8 / 12 / 16); the name row's gap is `ui-cluster` (6 / 8 / 10). The actions' pull into the item's fixed 16 padding holds at every density. Values at type 13 Compact / Default / Comfortable; unchanged at the default.
+- Why: docs/research/system-evaluation-2026-11-11 (plan B6.1, B6.5, B8.2, B2.2; README §5, phase2/leftovers.md); the owner took every recommendation on 2026-11-11. Fix the rule, not the instance.
+- Verdict: awaiting the owner.

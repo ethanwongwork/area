@@ -13,12 +13,14 @@
  * ------------------------------------------------------------------------- */
 @layer area.components {
   .area-setting-row {
-    /* spec: 12 above and below (the editor's 12; the app's Settings rows), so one line is 42 and two 60 at type 13
-       (8 in compact). Plain rows start on the page's text edge; a framed group insets them. */
+    /* spec: inset-surface-sm above and below (12 at type 14, as measured on the editor's and the app's Settings rows;
+       10 at the default, 8 compact), so one line is 2 × inset + the UI line, 38 at the default. Plain rows start on
+       the page's text edge; a framed group insets them. */
     --_pad-block: var(--area-inset-surface-sm);
     --_pad-inline: 0px;
-    /* spec: the app's 16 between the text and the control (the editor's 20 is off the ladder). */
-    --_gap: var(--area-space-16);
+    /* Between the text and the control, a surface's inset (plan B8.2): 12 / 14 / 18 at type 13 Compact / Default /
+       Comfortable (was 16 at every density; the measured settings editor's 20 is noted in the spec for the owner). */
+    --_gap: var(--area-inset-surface-md);
     /* The row is its own container, so its control drops under the text when the row is narrow, whatever the page. */
     container: area-setting-row / inline-size;
     position: relative;
@@ -77,7 +79,7 @@
   /* Reset shows while the row is hovered or holds focus, as the editor's toolbar does, landing at once and leaving on
      `fast` (Code block's revealed copy); Tab reaches it, which shows it. A touch screen always shows it. */
   @media (hover: hover) {
-    .area-setting-row__reset { opacity: 0; transition: opacity var(--area-fade-fast) var(--area-ease-out); }
+    .area-setting-row__reset { opacity: 0; transition: opacity var(--area-fade-fast) var(--area-ease-effects); }
     .area-setting-row:not(:hover, :focus-within) .area-setting-row__reset { pointer-events: none; }
     .area-setting-row:is(:hover, :focus-within) .area-setting-row__reset { opacity: 1; transition-duration: 0s; }
   }
@@ -106,8 +108,9 @@
     .area-setting-row__control { inline-size: auto; max-inline-size: none; justify-content: flex-start; }
   }
 
-  /* Disabled: the words take the disabled ink; the control paints its own disabled state. */
-  .area-setting-row[data-disabled] :is(.area-setting-row__label, .area-setting-row__description) { color: var(--area-fg-disabled); }
+  /* Disabled (plan B7.8): the label sits outside the control, so it steps to the muted ink, as Field's; the description
+     is the reason and keeps its ink and 4.5:1 (CONTRAST.md); the control paints its own disabled state. */
+  .area-setting-row[data-disabled] .area-setting-row__label { color: var(--area-fg-muted); }
 
   /* --- Settings group ----------------------------------------------------- */
   .area-settings-group {
@@ -134,13 +137,15 @@
     border-block-start: var(--area-border-width) solid var(--area-edge-dividers);
     pointer-events: none;
   }
-  /* Framed: Description list's and Table's frame (the Blocks group's edge, the container corner, the surface), the
-     rows 16 in, as the app's Settings box and the editor's grouped cells. */
-  .area-settings-group--framed > .area-settings-group__rows {
-    --_rule-inset: var(--area-inset-surface-md);
+  /* Surface, the one frame prop (plan B1.1; was `framed`): Description list's and Table's frame on the frame recipe
+     (surface.css): the Blocks group's edge, the block corner, the surface, the rows at the recipe's small text inset
+     (14 at the default type 13, 12 Compact, 18 Comfortable), as a settings box's grouped cells. */
+  .area-settings-group--plain {}
+  .area-settings-group--surface > .area-settings-group__rows {
+    --_rule-inset: var(--_fr-inset-sm);
     border: var(--area-stroke-width) solid var(--area-edge-blocks);
-    border-radius: var(--area-radius-container);
+    border-radius: var(--_fr-block);
     background-color: var(--area-bg-surface);
   }
-  .area-settings-group--framed > .area-settings-group__rows > .area-setting-row { --_pad-inline: var(--area-inset-surface-md); }
+  .area-settings-group--surface > .area-settings-group__rows > .area-setting-row { --_pad-inline: var(--_fr-inset-sm); }
 }

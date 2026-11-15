@@ -9,7 +9,7 @@ Popover (anchoring)
 - 2026-09-26: "do each of them subsequently" — the product-specific inventory in
   COMPONENTS.md, starting with the recommended foundation, Combobox.
 - owner 2026-10-08: approved, recommendations accepted (custom-select.md open questions 3–7,
-  shared by this family): the chosen option shows the check alone; the toggle's glyph ends at
+  shared by this family): the chosen option shows the check alone (superseded 2026-11-14, plan B7.7: the active plate and the check); the toggle's glyph ends at
   the field chevron inset in `input-chevron` ink; the chevron stays still. Supersedes audit S13
   C's plate here.
 
@@ -175,3 +175,36 @@ commit with a filtered list (rows held while closing).
   asked whether Combobox already highlighted (it didn't) so the three lists share one mark. The owner took every
   recommendation ("Take all recs", 2026-11-07).
 - **Verdict:** awaiting the owner.
+- 2026-11-11 · system evaluation B2.3 and A11.1 · options are Menu rows (icon-to-label `ui-cluster`, 8, Compact 6); the list floor is 160 (was 224); the empty line's side rounds to a whole pixel, 10 (was 10.38).
+
+## Review note, 2026-11-11 (motion, plan A5)
+
+- **What changed:** the list: the surface enters and leaves on `duration-fast` (140 at Speed 210; it entered on `base`, 210), the enter easing out with the fade on `ease-effects`, the exit accelerating away on `ease-exit` (A5.1); opened from a key it appears at its size and only fades on `fade-fast` (`data-opened-by="keyboard"`, written by overlay.ts; A5.2) (a list opened by typing is a keyboard open, so it fades only); options rows land and leave at once, under the pointer and the keys alike: no transition on a row (A5.3; they faded in over `hover-in` and out over `fast`).
+- **Why:** the system evaluation's motion items (docs/research/system-evaluation-2026-11-11, section 5, A5), owner-approved
+  2026-11-11; the rules are in docs/MOTION.md (Tokens, Roles, Recipes) and kept by cohesion.test.mjs and
+  tests/behaviour/suites/motion.test.mjs. The motion tables above are history; these values are current.
+
+## Shared parts (plan B2), 2026-11-13
+
+- **Empty line (B2.6, G5).** Menu's empty line (`.area-menu__empty`); `__empty` is gone from the manifest. Options are Menu rows: text-only options start on the glyph edge (8).
+
+### 2026-11-14 · One field shell (system plan, Phase 2, B3)
+
+- Its field is Input, now drawn by the one field shell. No visible change.
+- Why: docs/research/system-evaluation-2026-11-11 (B3.1, B3.2, B3.3, B2.2 in fields; README §5); the owner took every recommendation on 2026-11-11 and the 24 targets on 2026-11-13. B3.2: field text stays on Button's inset (Keep 10, the pick), so nothing moved.
+- Verdict: awaiting the owner.
+- 2026-11-14 · system evaluation B6.1, B6.3 · the list's frame, stack and corner are the one floating surface's; the field list only re-points its rows' corner and its own corner follows by the overlay corner equation (popup.css). No visible change.
+
+### 2026-11-14 · Shared parts, leftovers (system plan, Phase 2, wave 3)
+
+- An option's description and its check stand `ui-cluster` apart (6 / 8 / 10). Values at type 13 Compact / Default / Comfortable; unchanged at the default.
+- Why: docs/research/system-evaluation-2026-11-11 (plan B6.1, B6.5, B8.2, B2.2; README §5, phase2/leftovers.md); the owner took every recommendation on 2026-11-11. Fix the rule, not the instance.
+- Verdict: awaiting the owner.
+
+## Selection paint (plan B7.7), 2026-11-14
+
+- The chosen option shows the active plate and the check again (`data-selected`, plan B7.7).
+
+## State paint (plan B7.1), 2026-11-14
+
+- The toggle (Input action) holds the pressed plate while the list is open (`bg-pressed` on soft).

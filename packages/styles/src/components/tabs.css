@@ -1,0 +1,288 @@
+/* ---------------------------------------------------------------------------
+ * Tabs (docs/specs/tabs.md)
+ *
+ * Tabs use an underbar rather than a filled pill, so that Tabs and a segmented control
+ * stay visually distinguishable: one navigates between views, the other picks a value.
+ * Giving both a fill is the most common way those two end up looking identical.
+ * ------------------------------------------------------------------------- */
+@layer area.components {
+  /* --- Tabs --------------------------------------------------------------- */
+  .area-tabs {
+    --_tab-height: var(--area-control-md);
+    --_tab-text: var(--area-control-md-text);
+    --_tab-leading: var(--area-control-md-leading);
+    --_tab-gap: calc(var(--area-space-20) - var(--area-space-4) * var(--area-ui-gap-step)); /* 20, compact 16: whole steps (plan A1.1; was 18 at the default) */
+    --_tab-icon: var(--area-icon-md);
+    --_tab-item-gap: var(--area-gap-md);
+    display: flex;
+    flex-direction: column;
+    min-inline-size: 0;
+    font-size: var(--area-ui-size);
+    line-height: var(--area-ui-leading);
+  }
+
+  .area-tabs__list {
+    position: relative;
+    display: flex;
+    gap: var(--_tab-gap);
+    border-block-end: 0;
+    overflow-x: auto;
+  }
+
+  /* Reserve the attachment overhang inside the scrolling viewport. */
+  .area-tabs__list:has(> .area-indicator-anchor) { padding: var(--area-space-8); /* the Indicator's overhang, a mark's, at every density */ }
+
+  .area-tabs__tab {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: var(--_tab-item-gap);
+    flex-shrink: 0;
+    block-size: var(--_tab-height);
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--area-fg-muted);
+    font-family: inherit;
+    font-size: var(--_tab-text);
+    line-height: var(--_tab-leading);
+    font-weight: var(--area-weight-regular);
+    cursor: pointer;
+    transition: var(--area-transition);
+    user-select: none;
+  }
+
+  /* The indicator identifies the whole tab, including its icon and count. */
+  .area-tabs__tab::after {
+    content: "";
+    position: absolute;
+    inset-inline: 0;
+    inset-block-end: 0;
+    block-size: var(--area-space-2);
+    border-radius: var(--area-radius-full);
+    background-color: transparent;
+    transition: var(--area-transition);
+  }
+
+  /* Transparent tabs use a pending indicator instead of a hover backplate. */
+  @media (hover: hover) {
+    .area-tabs__tab:hover:not([data-disabled]):not([data-selected])::after,
+  .area-tabs--vertical .area-tabs__tab:hover:not([data-disabled]):not([data-selected])::after {
+    background-color: var(--area-border-hover);
+    }
+  }
+  .area-tabs__tab:active:not([data-disabled]):not([data-selected])::after,
+  .area-tabs--vertical .area-tabs__tab:active:not([data-disabled]):not([data-selected])::after {
+    background-color: var(--area-fg-muted);
+  }
+  /*
+   * Motion (docs/MOTION.md, "Hover plate", "Press", "Selected"; docs/specs/tabs.md, "Motion and
+   * interaction, 2026-10-07"). The base `--area-transition` on the tab and its indicator is the
+   * leave (fast, ease-out); hover, press and selection land at once, so a click moves the bar
+   * without a cross-fade lag. The focus ring is an outline and never transitions.
+   */
+  @media (hover: hover) {
+    .area-tabs__tab:hover,
+    .area-tabs__tab:hover::after { transition-duration: var(--area-hover-in); }
+  }
+  .area-tabs__tab:is(:active, [data-selected]),
+  .area-tabs__tab:is(:active, [data-selected])::after { transition-duration: var(--area-press-in); }
+  /*
+   * The selected label is strong (owner 2026-10-21, a written exception to "a label's weight never changes with state",
+   * DESIGN_SYSTEM.md): rest 400, selected 500, as Figma (450 → 550) and Radix (400 → 500). Each label reserves its
+   * strong width with a hidden strong copy under it (`__reserve`, aria-hidden), so selecting a tab never moves the row
+   * (Radix's hidden copy; Primer's ::before). The column stacks the copy at no height. The visible words are their own
+   * part, `__text`, the trimmed slot of the one centring model (inset.css), since a column cannot be trimmed: centred
+   * on its line box, a label sat 0.62 high at type 13 (plan B2.2, VN8).
+   */
+  .area-tabs__label { display: inline-flex; flex-direction: column; align-items: stretch; min-inline-size: 0; white-space: nowrap; }
+  .area-tabs__text { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .area-tabs__reserve { block-size: 0; overflow: hidden; visibility: hidden; font-weight: var(--area-weight-strong); }
+  .area-tabs__tab[data-selected] .area-tabs__label { font-weight: var(--area-weight-strong); }
+  /*
+   * The track is painted inside the list, under the tabs, so the indicator lies on it rather than stacking above it as
+   * a second line (owner 2026-10-21; Radix and Primer draw it inset, Material and Ant under the indicator). A border
+   * sat outside the scrolling list's padding box, where the indicator could not reach. The content box keeps it under
+   * the tabs when an attachment pads the list.
+   */
+  .area-tabs--track .area-tabs__list {
+    background: linear-gradient(var(--area-edge-dividers), var(--area-border-divider)) left bottom / 100% var(--area-stroke-width) no-repeat content-box;
+  }
+  /* The vertical track sits on the indicator's side, the start, as horizontal tabs put both at the
+     bottom (audit D-21; was the end, opposite the rail). */
+  .area-tabs--track.area-tabs--vertical .area-tabs__list { background-position: left top; background-size: var(--area-stroke-width) 100%; }
+  .area-tabs--track.area-tabs--vertical .area-tabs__list:dir(rtl) { background-position: right top; }
+  /*
+   * A tab's change (components audit D6, 2026-11-07; Cursor's document tabs take the git colour on the label): the label
+   * in the shared change ink in every state, selected too, so the status reads the same wherever it shows. Unseen is a
+   * state apart: a 6 dot after the label in the accent's indicator rung (Tree view's), the label keeps its ink.
+   */
+  .area-tabs__tab[data-status="added"] .area-tabs__label { color: var(--area-fg-change-added); }
+  .area-tabs__tab[data-status="modified"] .area-tabs__label { color: var(--area-fg-change-modified); }
+  .area-tabs__tab[data-status="deleted"] .area-tabs__label { color: var(--area-fg-change-deleted); }
+  .area-tabs__tab[data-status="untracked"] .area-tabs__label { color: var(--area-fg-change-untracked); }
+  .area-tabs__tab[data-status="renamed"] .area-tabs__label { color: var(--area-fg-change-renamed); }
+  .area-tabs__unseen { flex: none; inline-size: var(--area-space-6); block-size: var(--area-space-6); border-radius: var(--area-radius-full); background-color: var(--area-accent-indicator); } /* spec: 6, Tree view's unseen dot */
+  @media (forced-colors: active) { .area-tabs__unseen { background-color: CanvasText; } }
+  .area-tabs__icon { display: inline-flex; flex-shrink: 0; inline-size: var(--_tab-icon); block-size: var(--_tab-icon); }
+  .area-tabs__icon > svg { inline-size: 100%; block-size: 100%; }
+  .area-tabs--sm { --_tab-height: var(--area-control-sm); --_tab-text: var(--area-control-sm-text); --_tab-leading: var(--area-control-sm-leading); --_tab-gap: calc(var(--area-space-16) - var(--area-space-4) * var(--area-ui-gap-step)); --_tab-icon: var(--area-icon-sm); --_tab-item-gap: var(--area-gap-sm); }
+  .area-tabs--md { --_tab-height: var(--area-control-md); }
+  .area-tabs--lg { --_tab-height: var(--area-control-lg); --_tab-text: var(--area-control-lg-text); --_tab-leading: var(--area-control-lg-leading); --_tab-gap: calc(var(--area-space-24) - var(--area-space-4) * var(--area-ui-gap-step)); --_tab-icon: var(--area-icon-lg); --_tab-item-gap: var(--area-gap-lg); }
+  .area-tabs--horizontal {} /* the default: the row above */
+  .area-tabs--vertical { flex-direction: row; gap: var(--area-inset-surface-md); }
+  .area-tabs--vertical .area-tabs__list { flex-direction: column; gap: var(--area-space-4); flex-shrink: 0; border-block-end: 0; border-inline-end: 0; }
+  .area-tabs--vertical .area-tabs__tab { justify-content: flex-start; padding-inline-start: calc(var(--area-space-2) + var(--area-ui-row-inset)); /* the 2 rail plus the glyph edge, 8 at every density (audit D-21: was an unmarked 10) */ }
+  .area-tabs--vertical .area-tabs__tab::after { inset-block: var(--area-space-4); inset-inline: 0 auto; inline-size: var(--area-space-2); block-size: auto; }
+  .area-tabs--vertical .area-tabs__panel { padding-block-start: var(--area-ui-stack); min-inline-size: 0; }
+
+  /*
+   * The active indicator is the Selection role's ink (DESIGN_SYSTEM.md, "Emphasis roles"):
+   * the foreground colour by default. The label keeps the default ink in every theme, so a
+   * page of tabs never reads as a page of buttons.
+   */
+  .area-tabs__tab[data-selected] {
+    color: var(--area-fg-default);
+  }
+
+  .area-tabs__tab[data-selected]::after,
+  .area-tabs--vertical .area-tabs__tab[data-selected]::after {
+    background-color: var(--area-fg-selection);
+  }
+
+  /*
+   * The sliding indicator (docs/MOTION.md, "Tabs / Segmented indicator"; owner 2026-10-26: the slider's motion on every
+   * component). Once React has measured the chosen tab (`data-indicator`; `--_ind-x`, `-y`, `-w`, `-h`, the tab's box
+   * in the list's own pixels), the list draws the selected bar as one part that moves and resizes to
+   * the next tab on base with ease-in-out, the move of something visible across the screen (Segmented's plate; Radix,
+   * Primer and Material slide theirs). The tab's own bar then paints only the hover and press marks. Physical offsets:
+   * the tab's left edge in either direction. Before measuring, and in static markup, the tab draws it.
+   */
+  .area-tabs__list[data-indicator]::after {
+    content: "";
+    position: absolute;
+    inset: 0 auto auto 0;
+    inline-size: var(--_ind-w);
+    block-size: var(--area-space-2);
+    border-radius: var(--area-radius-full);
+    background-color: var(--area-fg-selection);
+    translate: var(--_ind-x) calc(var(--_ind-y) + var(--_ind-h) - var(--area-space-2));
+    pointer-events: none;
+    transition:
+      translate var(--area-duration-base) var(--area-ease-in-out),
+      inline-size var(--area-duration-base) var(--area-ease-in-out),
+      block-size var(--area-duration-base) var(--area-ease-in-out);
+  }
+  .area-tabs--vertical .area-tabs__list[data-indicator]::after {
+    inline-size: var(--area-space-2);
+    block-size: calc(var(--_ind-h) - var(--area-space-4) * 2);
+    translate: var(--_ind-x) calc(var(--_ind-y) + var(--area-space-4));
+  }
+  .area-tabs--vertical .area-tabs__list[data-indicator]:dir(rtl)::after {
+    translate: calc(var(--_ind-x) + var(--_ind-w) - var(--area-space-2)) calc(var(--_ind-y) + var(--area-space-4));
+  }
+  .area-tabs__list[data-indicator] > .area-tabs__tab[data-selected]::after { background-color: transparent; }
+
+  /* Focus (owner, round 75: "is the focus state correct it looks kinda funny"). The ring was Untitled's inset outline,
+     which assumes a padded tab; Area's tab is its label alone, so the ring cut through the label's first and last letters
+     and the bar's rounded ends showed under its corners. The ring now runs the tab's full height and stands `--_focus-room`
+     clear of the label at each side: the room the tab leaves above and below its line, (height − leading) / 2 (4 at sm,
+     6 at md, 10 at lg at the defaults), so the label sits in even room and the reach grows with the size. A ring and the
+     bar never cross, the bar lying along the ring's bottom edge. The list keeps room for the first tab's ring inside its
+     own scroller (below). */
+  .area-tabs { --_focus-room: max(0px, calc((var(--_tab-height) - var(--_tab-leading)) / 2)); }
+  .area-tabs__tab:focus-visible { outline: none; }
+  .area-tabs__tab:focus-visible::before {
+    content: "";
+    position: absolute;
+    inset-block: 0;
+    inset-inline: calc(-1 * (var(--_focus-room) + var(--area-focus-width)));
+    border: var(--area-focus-width) solid var(--area-focus-color);
+    /* Capped against this tier's own height; see button.css. */
+    border-radius: min(var(--area-radius-control), max(var(--area-radius-min), round(down, calc(var(--_tab-height) * var(--area-radius-factor)), 2px)));
+    pointer-events: none;
+  }
+  /* The list scrolls, so it clips: the first tab's ring needs room at the start. The room is padding drawn back by a
+     negative margin, so the labels stay on the content's edge; it lies before the start, where nothing scrolls to, so it
+     adds no scrolling to a parent. (A list with an attachment already pads all round.) */
+  .area-tabs:not(.area-tabs--vertical) > .area-tabs__list:not(:has(> .area-indicator-anchor)) {
+    padding-inline-start: calc(var(--_focus-room) + var(--area-focus-width));
+    margin-inline-start: calc(-1 * (var(--_focus-room) + var(--area-focus-width)));
+  }
+  /* Vertical: the ring starts a focus gap past the rail, so the bar stays outside it, and ends at the tab's end, which
+     gains the room (the list sits that much closer to the panel, so the panel does not move). */
+  .area-tabs--vertical .area-tabs__tab { padding-inline-end: var(--_focus-room); }
+  .area-tabs--vertical .area-tabs__tab:focus-visible::before { inset-inline: calc(var(--area-space-2) + var(--area-focus-gap)) 0; }
+  .area-tabs--vertical { gap: calc(var(--area-inset-surface-md) - var(--_focus-room)); }
+
+  .area-tabs__tab[data-disabled] {
+    cursor: not-allowed;
+    opacity: var(--area-opacity-disabled);
+  }
+
+  /*
+   * Plate (`selection="plate"`; owner 2026-11-06: "i like the backplate version", docs/specs/tabs.md, "Plate"). The
+   * selected tab sits on a soft plate, the others are plain muted labels, and there is no underline: a panel's views
+   * (Problems, Output, Terminal), an inspector's sections. Measured: an IDE's bottom-panel tabs (22 tall, corner 4, 4
+   * apart, 12/500, the plate its list's inactive selection fill, #141414 at 8% × 90%, rest ink 74%), a design tool's
+   * panel tabs (24, corner 5, 8 sides, #f5 plate) and a notes app's view tabs (32, 12 sides, a 5% wash). The paint is
+   * horizontal Nav's (nav.css): muted at rest, the component hover fill under the pointer with the ink fixed, the
+   * active fill and the default ink when selected, the pressed fill while held. The sides are the shared inset contract,
+   * (height − cap) / 2 (inset.css), which gives the references' own 8 at 24, 6 at 22 and 11 at 32; the corner is the
+   * control radius of the tab's tier; the gap Nav's horizontal 4. The plate replaces the underline, so it is the part
+   * that slides (below); the hover and press marks are plates too.
+   */
+  .area-tabs--marker {} /* the default: the underline above */
+  .area-tabs--plate { --_tab-gap: var(--area-space-4); --_tab-radius: var(--area-radius-control-md); }
+  .area-tabs--plate.area-tabs--sm { --_tab-radius: var(--area-radius-control-sm); }
+  .area-tabs--plate.area-tabs--lg { --_tab-radius: var(--area-radius-control-lg); }
+  .area-tabs--plate .area-tabs__tab { border-radius: var(--_tab-radius); }
+  .area-tabs--plate .area-tabs__tab::after { content: none; }
+  @media (hover: hover) {
+    .area-tabs--plate .area-tabs__tab:hover:not([data-disabled]):not([data-selected]) { background-color: var(--area-bg-component-hover); }
+  }
+  .area-tabs--plate .area-tabs__tab[data-selected] { background-color: var(--area-bg-component-active); }
+  .area-tabs--plate .area-tabs__tab:active:not([data-disabled]) { background-color: var(--area-bg-component-pressed); }
+  /* The sliding plate: the list's indicator takes the selected tab's whole box and corner, behind the labels, as
+     Segmented's plate does (segmented.css). */
+  .area-tabs--plate .area-tabs__list { isolation: isolate; }
+  .area-tabs--plate .area-tabs__list[data-indicator]::after,
+  .area-tabs--plate.area-tabs--vertical .area-tabs__list[data-indicator]::after,
+  .area-tabs--plate.area-tabs--vertical .area-tabs__list[data-indicator]:dir(rtl)::after {
+    z-index: 0;
+    inline-size: var(--_ind-w);
+    block-size: var(--_ind-h);
+    border-radius: var(--_tab-radius);
+    background-color: var(--area-bg-component-active);
+    translate: var(--_ind-x) var(--_ind-y);
+  }
+  .area-tabs--plate .area-tabs__list[data-indicator] > .area-tabs__tab { z-index: 1; }
+  .area-tabs--plate .area-tabs__list[data-indicator] > .area-tabs__tab[data-selected]:not(:active) { background-color: transparent; }
+  /* A plate carries its own room, so the focus ring is the plate's edge, drawn inside it as a Nav row's, and the list
+     needs no room before its first tab: the first plate stands on the content's edge. */
+  .area-tabs--plate .area-tabs__tab:focus-visible::before { inset: 0; border-radius: var(--_tab-radius); }
+  .area-tabs.area-tabs--plate:not(.area-tabs--vertical) > .area-tabs__list:not(:has(> .area-indicator-anchor)) { padding-inline-start: 0; margin-inline-start: 0; }
+  /* Vertical plates fill the list's width, as Nav rows, their text on the shared inset; there is no rail. */
+  .area-tabs--plate.area-tabs--vertical { gap: var(--area-inset-surface-md); }
+  .area-tabs--plate.area-tabs--vertical .area-tabs__tab { padding-inline: var(--_inset-start) var(--_inset-end); }
+
+  .area-tabs__panel {
+    padding-block-start: var(--area-inset-surface-md); /* 16, compact 12 */
+  }
+  /* A panel is in the tab order (WAI-ARIA tabs, so a keyboard reaches content with nothing focusable in it) and showed
+     no ring when focused (2026-10-26, the interaction pass). The ring stands the tab's `--_focus-room` clear of the
+     content on every side, as the tab's ring does round its label (round 75: at the focus gap, 2, it hugged the text,
+     which starts flush at the panel's edge). Its top sits in the panel's own top inset, so it stays clear of the bar. */
+  .area-tabs__panel { position: relative; }
+  .area-tabs__panel:focus-visible { outline: none; }
+  .area-tabs__panel:focus-visible::before {
+    content: "";
+    position: absolute;
+    inset: calc(var(--area-inset-surface-md) - var(--_focus-room) - var(--area-focus-width)) calc(-1 * (var(--_focus-room) + var(--area-focus-width))) calc(-1 * (var(--_focus-room) + var(--area-focus-width)));
+    border: var(--area-focus-width) solid var(--area-focus-color);
+    border-radius: var(--area-radius-control-xs);
+    pointer-events: none;
+  }
+  .area-tabs--vertical .area-tabs__panel:focus-visible::before { inset-block-start: calc(var(--area-space-6) - var(--_focus-room) - var(--area-focus-width)); }
+
+}

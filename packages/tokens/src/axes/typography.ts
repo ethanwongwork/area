@@ -1,6 +1,14 @@
 /**
- * Typography: families, the size ramp, and exactly two weights (regular for text and
- * titles; strong only for labels on fills: buttons, segmented options, badges, counts).
+ * Typography: families, the size ramp, and three weights in one table (plan A9.5, 2026-11-11; DESIGN_SYSTEM.md, "Ink and
+ * weight", where the table lives, and the area-type-usage skill quote it):
+ *
+ *   400 regular   everything read or operated: running text, descriptions, field labels, rows, a setting's, a choice's
+ *                 or a step's name, a label beside its value, a bar's name, a figure. Its own setting, Regular weight
+ *                 (axes/regular-weight.ts, plan A9.6): 400 by default, up to 470
+ *   500 strong    a surface's or a region's title and `title-xs` headings; a label over a run of rows (muted); an item's
+ *                 name on a picture or file card; labels on fills and marks (Buttons on every variant, Segmented, Badge,
+ *                 Kbd, Citation, Indicator, Avatar initials); the selected Tab
+ *   600 heading   titles from `title-sm` up: a page's own title (Page header md and lg), a document's title and headings
  *
  * Three decisions shape this ramp.
  *
@@ -9,9 +17,9 @@
  * paragraph rather than a 20px heading -- which a ramp with weight baked into the role
  * cannot express at all.
  *
- * **Two weights, not three.** Regular and strong. Linear ships exactly two (400 and 510)
- * and never goes above; Material's base scale uses only 400 and 500. A third weight buys
- * a distinction most readers cannot name and every author has to decide about.
+ * **Two weights in interface text, a third for page titles.** Regular and strong carry every row, label and
+ * control. Heading (600) was added on 2026-11-11 for titles from title-sm up, where strong sat too close to body text
+ * for a page to read as a level (plan A9.1).
  *
  * **Strong is deliberately soft.** 500, not 600 and not Geist's own 550. The two-weight
  * rule exists to make the step between regular and strong *small*, and at UI sizes 550
@@ -43,7 +51,7 @@ export const GEIST_TOKENS = {
   "font-sans": `"Geist", ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif`,
   "font-mono": `"Geist Mono", ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace`,
   "font-feature-settings": `"rlig" 1, "calt" 0, "ss11" 1`,
-  "weight-regular": "var(--area-wght-400)",
+  /* Regular is its own setting (axes/regular-weight.ts, plan A9.6): `--area-weight-regular`, 400 by default. */
   /** Geist's own emphasis weight, as shipped by Vercel. Needs the variable font. */
   "weight-strong": "var(--area-wght-500)",
   /**

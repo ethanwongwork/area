@@ -1,0 +1,149 @@
+/* Toast and its Toaster (docs/specs/toast.md). */
+@layer area.components {
+  /* --- Toast -------------------------------------------------------------- */
+  /*
+   * spec (docs/specs/toast.md): the compact floating surface, on Popover's numbers. Text and
+   * icon sit on the sm surface inset with the 16px icon as far from the top as from the side;
+   * one line is 2 × inset-surface-sm + the icon, 36 at the default (40 at type 14, inset 12, as
+   * measured). Controls take their small box back with negative margins (like Popover's close),
+   * so every toast stays one line tall and the last control sits 5 from the top and side at the
+   * default, concentric with the bar's corner (the corner control, inset.css, plan B4.2). Lift shared with
+   * Popover and Menu.
+   */
+  /*
+   * Toaster (audit E-11): the end corner of the viewport, newest toast last. Not captured: the
+   * 16 offset and 8 stack gap are the system's surface inset and row gap; the layer is the
+   * product z-toast scale step (floating menus use the top layer instead).
+   */
+  .area-toaster {
+    position: fixed;
+    z-index: var(--area-z-toast);
+    inset-block-end: var(--area-space-16);
+    inset-inline-end: var(--area-space-16);
+    max-inline-size: calc(100vw - var(--area-space-32));
+    outline: none;
+  }
+  .area-toaster[hidden] { display: none; }
+  .area-toaster:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-gap); border-radius: var(--area-radius-container); }
+  .area-toaster__list { display: flex; flex-direction: column; gap: var(--area-ui-cluster); /* independent surfaces (plan A1.2): 8, compact 6 */ margin: 0; padding: 0; list-style: none; }
+  /*
+   * Motion (docs/MOTION.md, "Toast"; motion pass 2026-10-07). A toast enters from the toaster's
+   * edge, 16 below (the toaster's own offset from the viewport edge), fading in on `slow`
+   * ease-out; it leaves one step faster on `base`, fading 8 towards the edge (`data-leaving`,
+   * written by Toaster.tsx, which removes it when the fade ends). The others reflow on `base`
+   * ease-in-out: Toaster.tsx sets each moved item's previous offset, in whole pixels, as a
+   * translate and lets it ease home. Every toast rests at opacity 1 and no translate.
+   */
+  .area-toaster__list > li { transition: translate var(--area-duration-base) var(--area-ease-in-out); }
+  .area-toaster__list > li > .area-toast {
+    transition:
+      opacity var(--area-fade-slow) var(--area-ease-effects),
+      translate var(--area-duration-slow) var(--area-ease-out);
+  }
+  @starting-style {
+    .area-toaster__list > li > .area-toast { opacity: 0; translate: 0 var(--area-space-16); /* spec: MOTION.md toast travel 8–16 */ }
+  }
+  .area-toaster__list > li[data-leaving] { pointer-events: none; }
+  .area-toaster__list > li[data-leaving] > .area-toast {
+    opacity: 0;
+    translate: 0 var(--area-space-8); /* spec: MOTION.md toast travel 8–16 */
+    transition-duration: var(--area-fade-base), var(--area-duration-base);
+    transition-timing-function: var(--area-ease-exit); /* accelerates away (plan A5.1, 2026-11-11) */
+  }
+
+  .area-toast {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--area-ui-cluster);
+    /* The sm surface inset at the sides (inset-surface-sm: 10 at the default, 8 compact). Above and below,
+     * the 16px icon sits as far from the top as from the side, which also puts the last control as far
+     * from the top as from the end: default 10 (36 tall, control 5 in), compact 8 (32 tall, control 4 in).
+     * Its corner is the corner less that distance (inset.css, plan B4.2). A fixed 6 put compact's control 2
+     * from the top. */
+    padding: calc(var(--area-inset-surface-sm) + (var(--area-icon-md) - var(--area-ui-leading)) / 2 - var(--area-border-width)) calc(var(--area-inset-surface-sm) - var(--area-border-width));
+    /* One line is a bar on the control curve, as Alert (radius audit D2); a titled toast is a surface. */
+    border-radius: var(--area-radius-control-lg);
+    /* The last control is a corner control (inset.css, plan B4.2): its glyph on the sm surface inset, its plate 5 from
+       the top and the end at the defaults, so its corner is the bar's less 5 (5 in a one-line toast's 10, 11 in a titled
+       toast's 16; it kept the small control's 6). */
+    --_cc-corner: var(--area-radius-control-lg);
+    --_cc-inset: var(--area-inset-surface-sm);
+    /* The frame and the shadow stack are the one floating surface's on the float role (popup.css, plan B6.1). */
+    inline-size: var(--area-toast-inline-size, 360px); /* not captured: toast.md records 360 as Area's width (shadcn measured 384) */
+    min-inline-size: 0;
+    max-inline-size: 100%;
+    font-size: var(--area-ui-size);
+    line-height: var(--area-ui-leading);
+  }
+
+  .area-toast:has(.area-toast__title) { border-radius: var(--area-radius-container); --_cc-corner: var(--area-radius-container); }
+  .area-toast__icon {
+    /* Neutral is the default tone, so the bare class paints as it does (muted icon). */
+    color: var(--area-fg-muted);
+    flex-shrink: 0;
+    inline-size: var(--area-icon-md);
+    /* A box one first line tall, the glyph centred in it (plan B2.4, the box technique; inset.css). */
+    block-size: var(--area-ui-leading);
+  }
+  /* Popover's title-to-description rule, one slot (Text pairs). */
+  .area-toast__content { --_title-gap: var(--area-space-4); /* a title stands one step (4) off its copy (DESIGN_SYSTEM.md, "Text pairs"; owner 2026-11-06: joined, "the space between the title and the copy still doesnt look right"): 12.8 baseline to cap beside the copy's 8.8 */ flex: 1; min-inline-size: 0; overflow-wrap: anywhere; display: grid; gap: var(--_title-gap); }
+  .area-toast__title { font-weight: var(--area-weight-strong); } /* spec (type pass): surface title */
+  /* spec: with a title, the body is the description (muted), as in every surface and Sonner. */
+  .area-toast__description { color: var(--area-fg-muted); }
+  /* `__actions` is the part's name, as Alert's (components audit 2026-11-07, O7); `__action` is its deprecated alias,
+     painted for one release so existing markup keeps its place. */
+  /*
+   * Actions wrap only when the text no longer fits beside them (plan B6.7), as Alert's: the row wraps, the text asks for
+   * its whole line (`flex: 1 1 auto`, its basis the text's own width), so Undo moves to a second row, ending on the text
+   * column's end, before the text is squeezed; the second row stands `ui-cluster` under the text, read on the controls.
+   * The close stays in the top corner, out of the row, at the place the row gave it.
+   */
+  .area-toast {
+    --_toast-pad-block: calc(var(--area-inset-surface-sm) + (var(--area-icon-md) - var(--area-ui-leading)) / 2 - var(--area-border-width));
+    --_toast-pad-inline: calc(var(--area-inset-surface-sm) - var(--area-border-width));
+    --_toast-control-block: calc((var(--area-ui-leading) - var(--area-control-sm)) / 2);
+    --_toast-control-end: calc((var(--area-icon-sm) - var(--area-control-sm)) / 2);
+    position: relative;
+    flex-wrap: wrap;
+  }
+  /* The gaps outweigh the shared `.area-alert, .area-toast` gap (it would set the second row 4 too close). */
+  .area-toast:has(> .area-toast__content) {
+    column-gap: var(--area-ui-cluster);
+    row-gap: calc(var(--area-ui-cluster) - var(--_toast-control-block));
+  }
+  .area-toast > .area-toast__icon { flex: none; }
+  .area-toast > .area-toast__content { flex: 1 1 auto; max-inline-size: 100%; }
+  /* The text never leaves the icon's line: it asks for at most the row less the icon and its gap, so only the actions wrap. */
+  .area-toast:has(> .area-toast__icon) > .area-toast__content { max-inline-size: calc(100% - var(--area-icon-md) - var(--area-ui-cluster)); }
+  .area-toast > :is(.area-toast__actions, .area-toast__action) { margin-inline-start: auto; max-inline-size: 100%; flex-wrap: wrap; }
+  .area-toast:has(> .area-toast__dismiss) { padding-inline-end: calc(var(--_toast-pad-inline) + var(--_toast-control-end) + var(--area-control-sm) + var(--area-ui-cluster)); }
+  .area-toast__actions, .area-toast__action, .area-toast__dismiss {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    gap: var(--area-space-4);
+    margin-block: calc((var(--area-ui-leading) - var(--area-control-sm)) / 2);
+  }
+  .area-toast > :is(.area-toast__actions, .area-toast__action, .area-toast__dismiss):last-child {
+    margin-inline-end: calc((var(--area-icon-sm) - var(--area-control-sm)) / 2);
+  }
+  /* The close, out of the row (above): after the last-child rule, which it overrides. */
+  .area-toast > .area-toast__dismiss:is(*, :last-child) {
+    position: absolute;
+    inset-block-start: calc(var(--_toast-pad-block) + var(--_toast-control-block));
+    inset-inline-end: calc(var(--_toast-pad-inline) + var(--_toast-control-end));
+    margin: 0;
+  }
+
+  /* Neutral by default, like every other family: the icon takes the muted ink. */
+  .area-toast--neutral .area-toast__icon { color: var(--area-fg-muted); }
+  /* spec (owner, 2026-09-27: more vivid): Alert's brighter icon rungs, 3.5:1 or more on white. */
+  .area-toast--danger .area-toast__icon  { color: var(--area-fg-danger-mark); /* spec */ }
+  .area-toast--warning .area-toast__icon { color: var(--area-fg-warning-mark); /* spec */ }
+  .area-toast--success .area-toast__icon { color: var(--area-fg-success-mark); /* spec */ }
+  .area-toast--info .area-toast__icon    { color: var(--area-fg-info-mark); /* spec */ }
+  /* Caution and discovery, Button's and Badge's seven tones (components audit 2026-11-07, O4), on the same mark role. */
+  .area-toast--caution .area-toast__icon   { color: var(--area-fg-caution-mark); /* spec */ }
+  .area-toast--discovery .area-toast__icon { color: var(--area-fg-discovery-mark); /* spec */ }
+
+}

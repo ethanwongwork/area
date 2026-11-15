@@ -4,7 +4,9 @@ import type { HTMLAttributes } from "react";
 import { buttonGroupVariants, type VariantProps, MANIFESTS } from "../variants.ts";
 
 export interface ButtonGroupProps extends HTMLAttributes<HTMLDivElement> {
+  /** Every button's fill: `soft` (default) or `outline`. */
   variant?: VariantProps<typeof MANIFESTS.buttonGroup>["variant"];
+  /** Every button's height and type: `md` (default), `sm` or `lg`. */
   size?: VariantProps<typeof MANIFESTS.buttonGroup>["size"];
   /** Fill the container; the buttons share its width equally (an inspector column). */
   fullWidth?: boolean;

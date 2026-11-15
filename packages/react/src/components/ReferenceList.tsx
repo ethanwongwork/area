@@ -9,9 +9,12 @@ import { Link } from "./Link.tsx";
 type ReferenceListVariants = VariantProps<typeof MANIFESTS.referenceList>;
 
 export interface ReferenceListProps extends Omit<HTMLAttributes<HTMLElement>, "title"> {
-  /** The heading over the list, as ChatGPT's "Sources". Without it, give the list an `aria-label`. */
+  /** The heading over the list ("Sources"). Without it, give the list an `aria-label`. */
   title?: ReactNode;
-  /** `number` (default; footnotes, `Citation variant="footnote"`, point at the numbers) or `bullet` (ChatGPT's sources). */
+  /**
+   * `number` (default), for footnotes that `Citation variant="footnote"` points at, or `bullet`.
+   * @default "number"
+   */
   marker?: ReferenceListVariants["marker"];
   /** The first number, for a numbered list that continues. */
   start?: number;
@@ -41,6 +44,7 @@ export interface ReferenceListItemProps extends Omit<LiHTMLAttributes<HTMLLIElem
   source?: ReactNode;
   /** The work's title, linked to `href` as an external Link. */
   title?: ReactNode;
+  /** Where the work lives; its title links there. */
   href?: string;
   /** What it covers, after the title. */
   description?: ReactNode;

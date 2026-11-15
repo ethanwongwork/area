@@ -117,9 +117,9 @@ Inset equations (the designs at 300, edge 1; Area at the default):
 |---|---|---|---|
 | card · size | 300 × 300 | the host's width; as tall as the head plus the frame (a 224 card is 224 × 252) | owner, round 65: the frame decides, not the card |
 | frame · size | 291 × 262 (the card's rest) | 1:1 for a component, group, colour, type, icon or setting; an image's own ratio (`mediaRatio`, or its natural size once loaded; square until then) | owner, round 65: "for components can you make the top layer frame a 1:1 AR always. for images, it can vary based on the image height" |
-| card · corner | 16 (straight edges from 15–16) | Card's: `radius-container` + inset × concentric (16 at the default); `--area-asset-card-corner` overrides |
+| card · corner | 16 (straight edges from 15–16) | `radius-container` (16 at the default Corner 10; plan A2.3, owner 2026-11-11: capped at the floating corner); `--area-asset-card-corner` overrides. The frame is 16 − 1 − 4 = 11 and the corner controls 16 − 1 − 6 = 9, the designs' values |
 | head · name inset | the name's cap centred in the head | `(head − 1cap) / 2` inside the edge by default; `--area-asset-card-name-inset` sets it from the outer edge (the head grows to keep it, never under its controls; controls end that inset less their half-height over the cap). The app sets 16, its colour cards' padding (2026-10-24) | design = Card |
-| card · edge | 1px #f0f0f0 | `border-card` at `border-width` (Card's), `shadow-edge` under Borderless; state edges at least `stroke-width` | design; DESIGN_SYSTEM Strokes |
+| card · edge | 1px #f0f0f0 | the Cards stroke group (`edge-cards`, 10% of the text colour by default) at `border-width` (Card's; `border-card` until 2026-10-30), `shadow-edge` under Borderless; state edges at least `stroke-width` | design; DESIGN_SYSTEM Strokes |
 | card · fill | #fafafa (neutral/25) | `bg-subtle` (neutral/50, #f7f7f7 at the default settings; Table's header fill) | design; round 58 tried a mix to #fafafa, outside the roles; round 59 reverted (no role lands on neutral/25; a new role would be a foundation change) |
 | head · height | 33 inside the edge | `control-sm` + 2 × 4 | design |
 | name | 16 regular, near black, x 12, cap 11–22 | `ui-size`, regular, `fg-default`, cap-centred, (H − 1cap) / 2 in | design (scaled to the app's UI text) |
@@ -514,3 +514,43 @@ chat galleries keep their names outside.
 - **Why:** docs/research/components-audit-2026-11-07/internal.md (choosing several files or assets is the grids' use);
   the owner took every recommendation ("Take all recs", 2026-11-07).
 - **Verdict:** awaiting the owner.
+- 2026-11-11 · system evaluation A2.3 · the card takes radius-container: 20 → 16 at the default (the designs' 16), the frame 15 → 11, the corner controls 13 → 9, each concentric (card − edge − inset). asset-card.css; cohesion.test.mjs.
+- 2026-11-11 · system evaluation A11.1 · the name's inset and the overlay plates' pads round to whole pixels (they were (H − 1cap) / 2 unrounded).
+
+## Review note, 2026-11-11 (type rules, plan A9)
+
+- **What changed:** the name is 500 in the default ink, the one weight for an item's name on a picture card (owner, 2026-11-11, plans B1.2, A9.5); it was 400.
+- **Why:** the system evaluation's type rules (docs/research/system-evaluation-2026-11-11, section 5, A9), owner-approved
+  2026-11-11; the rules are in DESIGN_SYSTEM.md ("Ink and weight", "Size and shape", "Text pairs") and the type skill.
+
+### 2026-11-13 · Frame recipe, item name and kind (system plan, Phase 2, B1.1, B1.2)
+
+- The manifest axis `layout` (asset · image · color · group, set by what the card is given) became `kind`; the classes
+  are unchanged. `container` (framed · basic · containerless) is not yet the one frame prop: it names three structures,
+  and it retires with Asset card into Design card.
+- The corner is the frame recipe's block corner (16 at the default, unchanged).
+- Caption outside: the item name's line 8 under the frame and on its edge (was 4 under and 4 in).
+
+## The frame prop (plan B1.1 hand-over), 2026-11-14
+
+`container` stays its own prop, not the one frame prop (`variant`: surface, soft, plain), because it names a different
+choice. The frame prop says how a block is painted (a frame, a fill with no edge, nothing); `container` says what the
+card is made of: `framed` is a card holding the asset in a frame of its own (two frames), `basic` one surface with the
+asset on the card's fill (the card keeps its edge, so it is not `soft`), `containerless` no card at rest (the asset's
+frame alone, which still shows its edge on hover and selection, so it is not `plain`). Only `framed` maps onto a frame
+value. Renaming would give `variant` a fourth meaning; the owner can decide to fold it later. The card reads the frame
+recipe's corners and inset already (surface.css).
+
+### 2026-11-14 · Shared parts, leftovers (system plan, Phase 2, wave 3)
+
+- The head's name-to-controls gap is `ui-cluster` (6 / 8 / 10); the name under a picture is the frame recipe's name gap, now `ui-cluster` (6 / 8 / 10). Values at type 13 Compact / Default / Comfortable; unchanged at the default. The specimen room (12) holds at every density, a media size.
+- Why: docs/research/system-evaluation-2026-11-11 (plan B6.1, B6.5, B8.2, B2.2; README §5, phase2/leftovers.md); the owner took every recommendation on 2026-11-11. Fix the rule, not the instance.
+- Verdict: awaiting the owner.
+
+## Selection paint (plan B7.6), 2026-11-14
+
+- The selected edge reads the shared recipe (`--_selected-edge`, selection.css); same paint.
+
+## State paint (plan B7.11), 2026-11-14
+
+- The overlay head and the below caption's actions hide only inside `@media (hover: hover)`; the `(hover: none)` rule is gone.

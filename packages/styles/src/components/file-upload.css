@@ -16,14 +16,14 @@
     flex-direction: column;
     align-items: center;
     /* spec: Untitled UI, a 12 gap and 16 / 24 padding inside a 1px edge, corner 12 (the surface corner). */
-    gap: var(--area-space-12);
+    gap: var(--area-gap-row);
     /* The edge is counted once: content 16 / 24 from the outside, as Untitled's inset ring (owner, review round 2,
        2026-10-09: "make sure gaps, padding, margins are all accurate"; it was 17 / 25). */
     /* The field's edge at the field's width (`stroke-width`): the zone is a control with no shadow, so its edge must
        stay under the Borderless surface preset (was Elevated) (consistency pass 2026-10-12; was `border-width`). */
     padding: calc(var(--area-space-16) - var(--area-stroke-width)) calc(var(--area-space-24) - var(--area-stroke-width));
     border: var(--area-stroke-width) solid var(--_edge);
-    border-radius: var(--area-radius-surface);
+    border-radius: var(--area-radius-container); /* the surface corner, capped by the inset as every surface (plan A2.2) */
     background-color: var(--area-bg-surface);
     color: var(--area-fg-muted);
     text-align: center;
@@ -60,7 +60,7 @@
     color: var(--area-fg-muted);
   }
   .area-file-upload__icon > svg,
-  .area-file-upload-item__icon > svg { inline-size: 20px; block-size: 20px; /* spec: Untitled UI's 20 glyph in its 40 tile */ }
+  .area-file-upload-item__icon > svg { inline-size: 20px; block-size: 20px; /* spec: Untitled UI's 20 glyph in its 40 tile; a native size, at every type and density (plan A11.3) */ }
 
   .area-file-upload__text { display: flex; flex-direction: column; gap: var(--area-space-4); }
   .area-file-upload__prompt { margin: 0; }
@@ -85,7 +85,7 @@
     display: flex;
     flex-direction: column;
     /* spec: Untitled UI 12 between rows. */
-    gap: var(--area-space-12);
+    gap: var(--area-gap-row);
     margin: 0;
     padding: 0;
     list-style: none;
@@ -95,11 +95,11 @@
     display: flex;
     align-items: flex-start;
     /* spec: Untitled UI, padding 16, a 12 gap, the zone's edge and corner. */
-    gap: var(--area-space-12);
+    gap: var(--area-gap-row);
     /* 16 from the outside, the edge counted once (was 17). */
     padding: calc(var(--area-space-16) - var(--area-stroke-width));
     border: var(--area-stroke-width) solid var(--area-input-edge);
-    border-radius: var(--area-radius-surface);
+    border-radius: var(--area-radius-container);
     background-color: var(--area-bg-surface);
     font-size: var(--area-ui-size);
     line-height: var(--area-ui-leading);
@@ -125,7 +125,7 @@
     display: flex;
     align-items: center;
     flex-wrap: wrap;
-    gap: var(--area-space-8);
+    gap: var(--area-ui-cluster);
     /* The name's next line (DESIGN_SYSTEM.md, "Text pairs", 2026-11-06 balance pass): joined, 8.8 baseline to cap, the
        line's own gap. Untitled UI's 2 (mt-0.5) set it 10.8: 2 off its line, near it but not on it. */
     margin: 0;
@@ -141,20 +141,23 @@
   .area-file-upload-item__status > svg { inline-size: var(--area-icon-md); block-size: var(--area-icon-md); }
   .area-file-upload-item--complete .area-file-upload-item__status { color: var(--area-fg-success); }
   .area-file-upload-item--error .area-file-upload-item__status { color: var(--area-fg-danger); }
+  /* The status glyph reads the mark ink, its words the tone's text ink (plan A3.4). */
+  .area-file-upload-item--complete .area-file-upload-item__status > svg { color: var(--area-fg-success-mark); }
+  .area-file-upload-item--error .area-file-upload-item__status > svg { color: var(--area-fg-danger-mark); }
   /* Remove and retry are ghost Buttons at sm (28, Untitled's 28) in the row's top corner, pulled 8 up and 8 in so
      they sit 8 from the top and 8 from the side, evenly (Untitled UI: -mt-2 -mr-2 inside its 16 padding; owner,
      review round 2: the inset around the buttons looked unequal, 12 above and 16 beside). */
-  .area-file-upload-item__actions { display: flex; flex: none; gap: var(--area-space-2); margin-block-start: calc(var(--area-space-8) - var(--area-space-16)); margin-inline-end: calc(var(--area-space-8) - var(--area-space-16)); }
+  .area-file-upload-item__actions { display: flex; flex: none; gap: var(--area-space-2); margin-block-start: calc(var(--area-space-8) - var(--area-space-16)); margin-inline-end: calc(var(--area-space-8) - var(--area-space-16)); /* set into the item's fixed 16 padding, at every density */ }
   /* The buttons are set into the item's corner, 8 from its outer edge, so their corner is that corner less the 8,
      concentric (owner, round 72: "is the padding and corner radius pair here correct?"; it kept its own 6 inside a 12
      corner, the gap narrowing round the curve). Retry beside it takes the same corner, as Edit summary's row buttons do;
      under Sharp (no concentric corners) they keep their own.
-     The file icon sits 16 in, past the corner's 12 curve, so it keeps the 40 control's corner, as content does. */
+     The buttons take 16 − 8 = 8 at the default, the small control's own 8. The file icon sits 16 in, at the end of the corner's curve, so it keeps the 40 control's corner, as content does. */
   .area-file-upload-item__actions > .area-button {
-    --_shape: max(var(--area-radius-min), calc(var(--area-radius-control-sm) + (var(--area-radius-surface) - var(--area-space-8) - var(--area-radius-control-sm)) * var(--area-radius-concentric)));
+    --_shape: max(var(--area-radius-min), calc(var(--area-radius-control-sm) + (var(--area-radius-container) - var(--area-space-8) - var(--area-radius-control-sm)) * var(--area-radius-concentric)));
   }
   /* spec: Untitled UI, an 8 bar (Progress lg) and the percentage 12 after it, 14/20 500. */
-  .area-file-upload-item__progress { display: flex; align-items: center; gap: var(--area-space-12); }
+  .area-file-upload-item__progress { display: flex; align-items: center; gap: var(--area-gap-row); }
   .area-file-upload-item__percent { flex: none; min-inline-size: 4ch; color: var(--area-fg-default); font-weight: var(--area-weight-strong); font-variant-numeric: tabular-nums; text-align: end; }
 
   @media (forced-colors: active) {

@@ -14,7 +14,7 @@
     --_attachment-size: var(--area-space-64); /* spec: Cursor's tile 64 × 64 (Claude Code 48 tall, Codex 122) */
     /* Concentric with the Composer that holds it: the composer's corner less its inset is its send button's corner
        (composer.css), Codex's rule (composer radius − inset, less 4 in its own scale). */
-    --_attachment-radius: min(var(--area-radius-control-md), var(--area-radius-control-md));
+    --_attachment-radius: var(--area-radius-control-md);
     --_attachment-edge: var(--area-edge-cards);
     /* The on-media glass, Video player's (round 51): the remove control, a video's play mark and its length wear it. */
     --_glass: 72%; /* spec: Video player's glass, Apple's 72% */
@@ -67,7 +67,7 @@
   }
   .area-attachment--error .area-attachment__overlay { display: flex; justify-content: center; align-items: center; gap: var(--area-space-4); }
   /* The failure's mark in the danger ink; Retry beside it is a ghost Button in its own ink (FileUploadItem's retry). */
-  .area-attachment__mark { display: inline-flex; color: var(--area-fg-danger); }
+  .area-attachment__mark { display: inline-flex; color: var(--area-fg-danger-mark); } /* a tone glyph reads the mark ink (plan A3.4) */
   .area-attachment__mark > svg { inline-size: var(--area-icon-md); block-size: var(--area-icon-md); }
 
   /* A file or a quote: the tile's height and Codex's file card's width, 160 (2.5 × the 64 tile), so a name and its type
@@ -120,7 +120,7 @@
   .area-attachment__quote {
     --_quote-rule: 3px; /* spec: chat-apps.md, w-[3px] rounded-full */
     display: flex;
-    gap: var(--area-space-8); /* spec: gap-xs 8 */
+    gap: var(--area-ui-cluster); /* spec: 8 at the default */
     min-inline-size: 0;
     margin: 0;
     color: var(--area-fg-muted);
@@ -173,7 +173,7 @@
      Video player's glass: Area's dark surface at 72% under blur, a white 12% hairline, the light ink; it brightens on
      hover (white 12%) and press (20%) as the player's buttons do. A button's shape, not a disc (round 52: "follow the
      corner radius of buttons"): 20 square, 4 in, its corner the tile's less that inset, so the two are concentric (at
-     the default 8 − 4 = 4, Button's own corner at 20); a 24 target around it. Hidden until the tile is hovered or holds
+     the default radius-control-md − 4: 8 − 4 = 4); a 24 target around it. Hidden until the tile is hovered or holds
      focus; always shown on touch. */
   .area-attachment__dismiss {
     --_remove-size: var(--area-space-20); /* spec: 20, Area's smallest control at the default type (Codex 20; Cursor and Claude Code 16); fixed, as the 64 tile is (control-xs grows with the type) */
@@ -194,8 +194,7 @@
     color-scheme: dark;
     color: var(--area-fg-default);
     cursor: pointer;
-    opacity: 0;
-    transition: opacity var(--area-fade-fast) var(--area-ease-out);
+    transition: opacity var(--area-fade-fast) var(--area-ease-effects);
   }
   .area-attachment__dismiss::before {
     content: "";
@@ -206,14 +205,17 @@
     -webkit-backdrop-filter: var(--_glass-blur);
     backdrop-filter: var(--_glass-blur);
     box-shadow: inset 0 0 0 var(--area-border-width) var(--_glass-edge);
-    transition: background var(--area-duration-fast) var(--area-ease-out);
+    transition: background var(--area-duration-fast) var(--area-ease-effects);
   }
   @media (hover: hover) { .area-attachment__dismiss:hover { --_remove-tint: var(--_glass-hover); } .area-attachment__dismiss:hover::before { transition-duration: var(--area-hover-in); } }
   .area-attachment__dismiss:active { --_remove-tint: var(--_glass-press); }
   .area-attachment__dismiss > svg { position: relative; inline-size: var(--area-icon-xs); block-size: var(--area-icon-xs); }
-  @media (hover: hover) { .area-attachment:hover > .area-attachment__dismiss { opacity: 1; transition-duration: var(--area-hover-in); } }
+  /* Hidden only where there is hover (plan B7.11): a touch screen always shows the remove. */
+  @media (hover: hover) {
+    .area-attachment__dismiss { opacity: 0; }
+    .area-attachment:hover > .area-attachment__dismiss { opacity: 1; transition-duration: var(--area-hover-in); }
+  }
   .area-attachment:focus-within > .area-attachment__dismiss { opacity: 1; transition-duration: 0s; }
-  @media (hover: none) { .area-attachment__dismiss { opacity: 1; } }
   .area-attachment__dismiss:focus-visible { outline: none; }
   .area-attachment__dismiss:focus-visible::before { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); }
 }

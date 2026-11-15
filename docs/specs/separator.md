@@ -171,3 +171,9 @@ Separator paints `border-decorative` (#f3), the lightest line, at every orientat
 - **What changed:** Separator is the lightest grey, #f3 (was #e2).
 - **Why:** you asked for dividers only where they are needed and intended, and for the ones that stay to be very
   light. You approved each one on the dividers comparison page.
+
+### 2026-11-11 · Ink, dark and colour (system plan, Phase 1)
+
+- **What changed:** The Dividers stroke group's default is 4 (10%, plan A10.3), was 3 (7.5%), which vanished on near black.
+- **Why:** docs/research/system-evaluation-2026-11-11 (README §5); the owner took every recommendation on 2026-11-11.
+- **Verdict:** awaiting the owner.

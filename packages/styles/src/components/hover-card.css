@@ -9,7 +9,7 @@
 @layer area.components {
   /* Without hover (touch), the link is simply followed; the card never shows. */
   @media (hover: none) { .area-hover-card { display: none; } }
-  /* Motion is Popover's anchored-surface recipe (surface.css; docs/MOTION.md): opacity and scale
+  /* Motion is Popover's anchored-surface recipe (overlay.css; docs/MOTION.md): opacity and scale
      from 0.97 at the link, after the 700 open delay; the close waits 300 so the pointer can cross
      the gap. Nothing here overrides it. */
 
@@ -25,8 +25,9 @@
     column-gap: var(--area-gap-row);
     row-gap: var(--area-space-4);
     color: var(--area-fg-muted);
-    font-size: var(--area-text-sm-size);
-    line-height: var(--area-text-sm-leading);
+    /* The card's UI line, muted (plan A9.3: a line joined to what it describes is its size). */
+    font-size: var(--area-ui-size);
+    line-height: var(--area-ui-leading);
   }
   .area-hover-card__meta > * { display: inline-flex; align-items: center; gap: var(--area-space-4); }
 }

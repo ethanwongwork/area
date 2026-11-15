@@ -247,9 +247,9 @@ filtered to the shell, text and icon rows (full tables: run the command on the s
 | focus-visible | 2px ring | ChatGPT 2px blue ring (box-shadow), logged-out 2px outline, offset 2; Untitled 2px outline, offset 2 |
 | selected | the selected plate holds under hover and press: no hover or press wash (audit A-13); soft selected's edge is its fill, not the lighter hover hairline; solid selected is `solid-hover` (button.css:400-418) | not captured |
 | menu open | a menu trigger (`aria-haspopup="menu"`, `aria-expanded="true"`) keeps the pressed plate while its menu is open, as Model picker did alone; a selected toggle keeps its own fill (button.css:145-150, audit G-12) | ChatGPT model picker |
-| disabled | unchanged | not captured |
+| disabled | neutral: the whole button at `opacity-disabled`; toned (a hued tone, or a neutral solid at Action Accent): repainted at full opacity to the variant's neutral fill (soft fill on solid and soft, surface on outline, none on ghost), the neutral edge and `fg-disabled` ink, since a dimmed brand or danger button still reads available | plan B7.9 (the owner's pick, 2026-11-11); ref-design-systems.md RD7 |
 | loading | Spinner replaces the leading icon and fills the tier's icon box (`--_icon`: 12/16/20); full opacity, `cursor: progress`; `loading` + `disabled` is plainly disabled | Visuals not captured. Behaviour: audit S18 (owner pick 2026-09-30) |
-| inactive (`inactive`, `inactiveText`) | drawn as disabled: fill and edge mixed to `opacity-disabled` toward transparent, the parts at `opacity-disabled`, no hover, press or give, `cursor: not-allowed`; the button itself keeps full opacity so its focus ring does; `aria-disabled`, the press dropped; the reason a Tooltip that describes it. `disabled` wins | Primer `inactive` (`src/Button/types.ts:46-50`), Claude's `disabledReason` tooltip (chat-apps.md); components audit V2 |
+| inactive (`inactive`, `inactiveText`) | drawn as disabled (a toned one repainted neutral, plan B7.9): fill and edge mixed to `--_dim` toward transparent, the parts at `--_dim` (`opacity-disabled`, or 1 when toned), no hover, press or give, `cursor: not-allowed`; the button itself keeps full opacity so its focus ring does; `aria-disabled`, the press dropped; the reason a Tooltip that describes it. `disabled` wins | Primer `inactive` (`src/Button/types.ts:46-50`), Claude's `disabledReason` tooltip (chat-apps.md); components audit V2 |
 
 ## Behavior and accessibility
 
@@ -390,6 +390,7 @@ Solid presses one step past hover in the same direction (`--_solid-active`: neut
   Model picker are all 500 with no label overflow and unchanged heights.
 - 2026-10-12 · owner, 2026-10-12: "go with your recommendations" (consistency pass) → neutral outline and ghost ink reads `fg-quiet` (O5: one role for a literal written in several families; same paint). (docs/research/consistency-audit-2026-10-12.md)
 - 2026-10-18 · owner: "go with your recommendations … finalize the material, surface, stroke, elevation axis theming" → Edge and Depth (axes/depth.ts; docs/research/elevation-stroke-2026-10-18): outline and soft Buttons rest on `--_shadow: var(--area-shadow-field)`, Field shadow, 0 by default (a transparent role, so nothing changes until it is raised; Primer's button lip and shadcn's shadow-xs when it is). Under a Material it rides in `--_m-own` beside the material's layers (material.css).
+- 2026-11-14 · plan B7.9 (the repaint pick) → a toned button disabled (a hued tone, or a neutral solid at Action Accent) repaints instead of dimming: the variant's neutral fill (the soft fill on solid and soft, the surface on outline, none on ghost), the neutral edge, fg-disabled ink, full opacity (`--_tone-hue`, `--_toned`, `--_bg-off`, `--_border-off`, `--_dim`). Neutral buttons dim as before; inactive follows the same rule. Forced colours: GrayText. Why: docs/research/system-evaluation-2026-11-11 (README §5, phase2/disabled.md); the owner took every recommendation on 2026-11-11.
 
 ## Review note, 2026-10-19 (round 53, from Kbd)
 
@@ -433,3 +434,35 @@ Solid presses one step past hover in the same direction (`--_solid-active`: neut
   a reason"). The choosing rule is WRITING.md, "Disabled or inactive". The owner took every recommendation ("Take all
   recs", 2026-11-07).
 - **Verdict:** awaiting the owner.
+
+## Review note, 2026-11-11 (type rules, plan A9)
+
+- **What changed:** kept: labels stay 500 on every variant, solid, soft, outline and ghost (owner, 2026-11-11, plan A9.7, "Keep 500"; finding RC7). No change; recorded so the question stays closed.
+- **Why:** the system evaluation's type rules (docs/research/system-evaluation-2026-11-11, section 5, A9), owner-approved
+  2026-11-11; the rules are in DESIGN_SYSTEM.md ("Ink and weight", "Size and shape", "Text pairs") and the type skill.
+
+## Review note, 2026-11-11 (focus and targets, plan A6, A11.2)
+
+- **What changed:** A solid Button's focus ring no longer sits flush on its fill (A6.1): `focus-solid-offset`, off by the gap at Hug, Halo, Gap and Bold, inside one pixel in, in the label's ink, under Inset. Contrast More: every ring 3px, off by the gap (A6.3).
+- **Why:** the system evaluation's focus, forced colours and hit target items (docs/research/system-evaluation-2026-11-11, section 5), owner-approved 2026-11-11; the rules are in DESIGN_SYSTEM.md ("The focus ring", "Targets") and CONTRAST.md (Focus).
+
+## Review note, 2026-11-11 (motion, plan A5)
+
+- **What changed:** a pointer press gives on the plate, not the label (A5.6, owner pick): the button's box scales to the Feedback give and its parts take the inverse scale on the same clocks, so the label and icons keep their size; the release runs on `fast` and the movement curve (a spring under Easing Spring). The colour leave is `duration-quick` (70; A5.5) on `ease-effects` (A5.4). The give amounts are unchanged (0.97 md).
+- **Why:** the system evaluation's motion items (docs/research/system-evaluation-2026-11-11, section 5, A5), owner-approved
+  2026-11-11; the rules are in docs/MOTION.md (Tokens, Roles, Recipes) and kept by cohesion.test.mjs and
+  tests/behaviour/suites/motion.test.mjs. The motion tables above are history; these values are current.
+
+## Shared bars and corners (plan B4), 2026-11-14
+
+- B4.3: `align="start" | "end"` pulls only a ghost Button (an edge ghost button, inset.css): out by its gutter, so its glyph or its words sit on the column; a soft, solid or outline Button keeps its plate on the column. The amounts are published as `--_pull-start` / `--_pull-end`, which Card and Message read.
+
+### 2026-11-14 · Shared parts, leftovers (system plan, Phase 2, wave 3)
+
+- A pill is one value: while the Pills set rounds it, its corner is `radius-full` itself, `max(corner, flag × full)`, never the corner plus full (it computed 10007px). Draws the same; the corners snapshot records 9999px.
+- Why: docs/research/system-evaluation-2026-11-11 (plan B6.1, B6.5, B8.2, B2.2; README §5, phase2/leftovers.md); the owner took every recommendation on 2026-11-11. Fix the rule, not the instance.
+- Verdict: awaiting the owner.
+
+## State paint (plan B7.1, B7.2), 2026-11-14
+
+- Open is pressed for every popup kind: `[aria-expanded="true"]` with any `aria-haspopup` holds `--_bg-active` and `--_wash-active` (was `aria-haspopup="menu"` only, and not on a selected toggle). An on toggle presses: neutral to `bg-component-pressed` (`--_surface-pressed`), a tone back to its hover tint (a wash past the selected tint measured 4.10:1 for danger words in light), a solid to `--_solid-active`. Until now pressing an on toggle showed nothing (A-13 superseded).

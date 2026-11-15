@@ -7,8 +7,9 @@
  * confirm-dialog.md). The buttons are Button: soft neutral Cancel, soft danger or solid action.
  * ------------------------------------------------------------------------- */
 @layer area.components {
-  /* spec: ChatGPT's delete confirm is 420 wide (chatgpt--delete-chat-confirm--open--light). */
-  .area-confirm-dialog { inline-size: min(calc(100vw - var(--area-space-32)), 420px); /* spec */ }
+  /* spec: ChatGPT's delete confirm is 420 wide (chatgpt--delete-chat-confirm--open--light); the public
+     `--area-confirm-dialog-inline-size` replaces it (plan B6.3), apart from Dialog's own hook. */
+  .area-confirm-dialog { inline-size: min(calc(100vw - var(--area-space-32)), var(--area-confirm-dialog-inline-size, 420px)); /* spec */ }
   /* The footer keeps Dialog's section gap (16; 12 compact) above it: shadcn, Radix Themes,
      Base UI and Atlassian all put their buttons 16 below the description (Claude in Chrome
      audit 2026-10-07, docs/specs/confirm-dialog.md). The earlier extra 4 (20) matched none. */
@@ -16,8 +17,8 @@
   /* spec (type pass, 2026-11-06; owner: "the type balance on this dialog looks wrong, the spacing looks off"): the
      description is the dialog's message, its only body, so it is read in the default ink (Radix Themes, Primer, Fluent,
      Atlassian and Spectrum; the type rule "one step between a title and its body": 16/500 over 13/400, size and weight,
-     not the ink as well). Where it closes the text it ends on its baseline, as the title starts on its cap, so the gap to
-     the buttons is read on the glyphs like the inset round them (DESIGN_SYSTEM.md, Q-T2). */
+     not the ink as well): the written exception to the title pair's muted copy (plan B6.5). It ends on its baseline, as
+     every title group's last line does (dialog.css), so the gap to the buttons is read on the glyphs like the inset round
+     them (DESIGN_SYSTEM.md, Q-T2). */
   .area-confirm-dialog .area-dialog__description { color: var(--area-fg-default); }
-  .area-confirm-dialog:not(:has(> .area-dialog__body)) .area-dialog__description { text-box: trim-end cap alphabetic; }
 }

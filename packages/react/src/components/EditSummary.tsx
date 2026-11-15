@@ -23,16 +23,19 @@ export type EditFileState = EditFileStatus;
 export interface EditSummaryFileProps extends Omit<HTMLAttributes<HTMLDivElement>, "children"> {
   /** The file's name as the row shows it. */
   name: string;
-  /** Lines added and deleted (the shared change words, components audit D6). */
+  /** Lines added, shown as +N. */
   added: number;
+  /** Lines deleted, shown as −N. */
   deleted?: number;
-  /** @deprecated Use `deleted` (2026-11-07). Kept for one release; `deleted` wins. */
+  /** @deprecated Use `deleted`, which wins. Kept for one release. */
   removed?: number;
   /** pending: Undo and Keep; kept / undone: settled, the actions leave. */
   status?: EditFileStatus;
-  /** @deprecated Use `status` (an outcome is a status, Governance § 4). Kept for one release; `status` wins. */
+  /** @deprecated Use `status`, which wins. Kept for one release. */
   state?: EditFileStatus;
+  /** Shows Keep while the file is pending; called when it is pressed. */
   onKeep?: () => void;
+  /** Shows Undo while the file is pending; called when it is pressed. */
   onUndo?: () => void;
   /** A 16 glyph before the name: the file's kind (a code, image or document glyph). */
   icon?: ReactNode;
@@ -42,6 +45,7 @@ export interface EditSummaryFileProps extends Omit<HTMLAttributes<HTMLDivElement
   open?: boolean;
   /** Whether the diff shows at first (uncontrolled). */
   defaultOpen?: boolean;
+  /** Called when pressing the file's name shows or hides its diff. */
   onOpenChange?: (open: boolean) => void;
 }
 
@@ -90,6 +94,7 @@ export interface EditSummaryChangeProps extends Omit<HTMLAttributes<HTMLDivEleme
   property?: ReactNode;
   /** Its value before and after: "8" and "12". A change with no `from` reads as the property and its new value. */
   from?: ReactNode;
+  /** Its value after the change: "12". */
   to: ReactNode;
   /** pending (default), kept or undone: settled rows go quiet, an undone one is struck, as a file's. */
   status?: EditFileStatus;
@@ -115,13 +120,17 @@ export const EditSummaryChange = forwardRef<HTMLDivElement, EditSummaryChangePro
 });
 
 export interface EditSummaryProps extends Omit<HTMLAttributes<HTMLElement>, "title"> {
-  /** The head's title, such as "Edited 2 files" (the caller writes the count); "Edited files" when unset. */
+  /**
+   * The head's title, such as "Edited 2 files" (the caller writes the count); "Edited files" when unset.
+   * @default "Edited files"
+   */
   title?: ReactNode;
   /** The turn's totals, lines added and deleted, after the title; leave them out for a summary of design changes, which
    *  has no counts. With `code`, they follow Show code instead, the files' own figure. */
   added?: number;
+  /** The turn's lines deleted, shown as −N after the title. */
   deleted?: number;
-  /** @deprecated Use `deleted` (2026-11-07). Kept for one release; `deleted` wins. */
+  /** @deprecated Use `deleted`, which wins. Kept for one release. */
   removed?: number;
   /** The files behind the changes (EditSummaryFile rows), folded under a Show code row at the list's foot, so a
    *  summary of design changes (EditSummaryChange rows) reads in the design's words and the code is a click away. */
@@ -132,9 +141,11 @@ export interface EditSummaryProps extends Omit<HTMLAttributes<HTMLElement>, "tit
   codeOpen?: boolean;
   /** Whether the files show at first (uncontrolled). */
   defaultCodeOpen?: boolean;
+  /** Called when Show code shows or hides the files. */
   onCodeOpenChange?: (open: boolean) => void;
   /** Keep and Undo for every pending file; leave out when none is pending. */
   onKeepAll?: () => void;
+  /** Shows Undo all while a file is pending; called when it is pressed. */
   onUndoAll?: () => void;
   /** surface (default): its own frame. plain: no frame, its words on the text edge around it, as a turn's steps (a chat);
    *  a file's diff keeps its own. */
@@ -203,11 +214,11 @@ export interface DiffLineAt { hunk: number; line: number }
 export interface DiffNote extends DiffLineAt { content: ReactNode }
 
 export interface DiffProps extends HTMLAttributes<HTMLElement> {
+  /** The diff's hunks, each its lines and the unchanged lines folded before it. */
   hunks: DiffHunk[];
   /** Names the diff ("Changes to button.css"); "Changes" when unset. */
   "aria-label"?: string;
-  /** @deprecated Use `aria-label` (it only names the element, DESIGN_SYSTEM.md "Names and collections"). Kept for one
-   *  release: the file's name, read as "Changes to {label}"; `aria-label` wins. */
+  /** @deprecated Use `aria-label`, which wins. Kept for one release: the file's name, read as "Changes to {label}". */
   label?: string;
   /** Comment on a line: each line gets a + button at its start, shown on hover and focus, and this runs when one is
    *  pressed. The buttons are one Tab stop; Up and Down move along the lines. */

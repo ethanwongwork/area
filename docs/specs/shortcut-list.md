@@ -76,15 +76,15 @@ The list has no side inset: the surface around it owns the content inset, so the
 
 | Slot · property | Area value | Basis | Reason when it differs from the basis |
 |---|---|---|---|
-| row | name at the start, keys at the end, 24 apart, min 36 (UI row + 4; 28 compact) | ChatGPT rows 8 / 20 / 8 without its 36 binding pill; Figma's table; peer Description list justified (24) | — |
+| row | name at the start, keys at the end, `gap-section` apart (16 / 24 / 32), min 36 (UI row + 4; 28 compact) | ChatGPT rows 8 / 20 / 8 without its 36 binding pill; Figma's table; peer Description list justified (24) | — |
 | rule | 1px `border-divider` under each row but the last, the row's width | ChatGPT 1px black 5%; peer Description list, Table | Area's divider role rather than 5% black |
 | side inset | none: the surface's content inset | Peer Dialog, Popover, Panel own their inset | ChatGPT's rows add 12 / 16 inside a 12-padded list that bleeds to its dialog's edge; Area's text lines up with the dialog title instead |
 | title | UI type 500, muted ink, 4 above and below (28), no inset | ChatGPT 14 500 secondary, 28 tall | ChatGPT's 24 line box; Area's UI leading is 20 |
 | label | UI type 400, default ink | ChatGPT | — |
 | keys · default | Kbd md keycaps, muted ink | Figma (a box per key); Kbd's standalone size | ChatGPT shows text, because its keys are an editable button |
 | keys · quiet | Kbd quiet: 12/16 UI font, muted | ChatGPT's text keys; Kbd's quiet (as Menu's shortcuts) | ChatGPT 14/18; Kbd's quiet size is kept so a sheet and a menu set shortcuts alike |
-| alternatives | separate Kbds 8 apart, "or" between them for screen readers | ChatGPT's "Delete chat" (two buttons) | — |
-| groups | stacked lists 32 apart | ChatGPT 32 | — |
+| alternatives | separate Kbds `ui-cluster` apart (6 / 8 / 10), "or" between them for screen readers | ChatGPT's "Delete chat" (two buttons) | — |
+| groups | stacked lists 32 − 8 × `ui-gap-step` apart (24 / 32 / 40; 32 at the default) | ChatGPT 32 | — |
 | semantics | `section` named by its title; `dl` of `dt` name and `dd` keys | HTML description list for name-value pairs | ChatGPT uses `ul` / `li` with labels for its controls |
 
 ## States
@@ -161,3 +161,16 @@ Spacing without rules (2026-10-26): rows take the plain UI row (32, compact 28);
 - **What changed:** Rows have no line by default. `divided` turns a light line back on (new Divided tile).
 - **Why:** you asked for dividers only where they are needed and intended, and for the ones that stay to be very
   light. You approved each one on the dividers comparison page.
+- 2026-11-11 · system evaluation A8.2 · ruled rows are the UI row plus one room step (`ui-stack`): 36 at the default (was 34), 32 at Compact (unchanged), 42 at Comfortable.
+
+## One mark, 2026-11-13
+
+Plan B5.1: the marks it holds (Kbd) are on the shared mark recipe (inset.css, "One mark"); nothing in this family changed. Its keys are 18 at type 13 at every density, 6 at the sides, on a 14 line.
+
+## Density (plan B8.2), 2026-11-14
+
+Space between pieces reads a density role (DESIGN_SYSTEM.md, Size and shape; `density.test.mjs`). Values at type 13
+Compact / Default / Comfortable; each is whole at type 12 to 16 and every density, and the default is unchanged unless said.
+
+- Groups 24 / 32 / 40 apart, name to keys 16 / 24 / 32, alternatives 6 / 8 / 10 (40 / 40 / 48, 32 / 32 / 40 and
+  10 / 10 / 12 at type 16).

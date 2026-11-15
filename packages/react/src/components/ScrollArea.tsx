@@ -10,7 +10,7 @@ type Axis = "vertical" | "horizontal";
 export interface ScrollAreaProps extends HTMLAttributes<HTMLDivElement> {
   /** When the bar shows: `hover` while the pointer is over the region or it scrolls; `scroll` only while it scrolls; `always`. */
   type?: ScrollAreaVariants["type"];
-  /** How long the bar stays after scrolling stops, in milliseconds (Radix's 600). */
+  /** How long the bar stays after scrolling stops, in milliseconds. */
   scrollHideDelay?: number;
   /** The native scroller, for scrolling it from code. */
   viewportRef?: Ref<HTMLDivElement>;
@@ -55,6 +55,8 @@ export const ScrollArea = forwardRef<HTMLDivElement, ScrollAreaProps>(function S
     // A pixel of rounding is not overflow.
     root.toggleAttribute("data-overflow-y", vp.scrollHeight > vp.clientHeight + 1);
     root.toggleAttribute("data-overflow-x", vp.scrollWidth > vp.clientWidth + 1);
+    // More below the fold (plan B6.6): a host draws its end cue while the region can scroll further down.
+    root.toggleAttribute("data-scroll-more", vp.scrollTop + vp.clientHeight < vp.scrollHeight - 1);
     for (const axis of ["vertical", "horizontal"] as const) {
       const bar = bars.current[axis];
       if (!bar || getComputedStyle(bar).display === "none") continue;

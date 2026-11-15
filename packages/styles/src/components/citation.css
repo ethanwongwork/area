@@ -15,21 +15,20 @@
  * ------------------------------------------------------------------------- */
 @layer area.components {
   .area-citation {
-    /* spec: 20 (prompt-kit h-5; AI Elements about 22; ChatGPT 18 at 9px), the 20 mark tier (16 compact);
-       ps-1 / pe-2 (4 / 8, ChatGPT and prompt-kit), gap 4. */
+    /* The mark recipe's inputs (inset.css, "One mark"; plan B5.1): the ladder's md rung (18 at type 13, at every density),
+       always a pill (a status mark, on no Pills flag). The recipe gives its text side, (h - 6) / 2 (6 at 18; it was
+       (h - 4) / 2, 7), its whole-pixel cap baseline (it sat 0.6 high on an optical lift), corner, text and gap. */
     --_height: var(--area-mark-label-md);
-    /* Both from the height, as Badge's (inset.css): an icon side (h - icon) / 2 and a text side (h - 4) / 2, so ChatGPT's
-       4 / 8 at 20 and 1 / 5 in Compact's 14 (spacing audit 2026-10-17: the literal 8 stayed at every height, 8 beside 3
-       of room above the text, where Badge at 14 sets 5). */
-    /* The favicon box: ChatGPT's 12, at most the plate less 4 (10 in Compact's 14, where an Area icon draws its 10px cut;
-       owner, 2026-10-17: "go with 10px icons"). */
+    --_mark-height: var(--_height);
+    /* The favicon box: 12, at most the plate less 4 (10 in a 14 plate, where an Area icon draws its 10px cut;
+       owner, 2026-10-17: "go with 10px icons"). Its side centres it in the pill's end, (h - icon) / 2, as Badge's icon. */
     --_icon: min(var(--area-icon-xs), calc(var(--_height) - var(--area-space-4)));
     --_glyph-cut10: max(0, sign(var(--area-icon-xs) - var(--_icon)));
     --_pad-start: calc((var(--_height) - var(--_icon)) / 2);
-    --_pad-end: calc((var(--_height) - var(--area-space-4)) / 2);
+    --_pad-end: var(--_mark-side);
     display: inline-flex;
     align-items: center;
-    gap: var(--area-space-4);
+    gap: var(--_mark-gap);
     box-sizing: border-box;
     block-size: var(--_height);
     max-inline-size: 100%;
@@ -39,26 +38,32 @@
     /* The label's baseline on the sentence's: the pill's middle then sits on the text's x-height, as
        ChatGPT's does, without its -1.5 / +2 px nudges. */
     vertical-align: baseline;
-    border-radius: var(--area-radius-full);
-    /* spec: ChatGPT bg-secondary-soft rgb(243) = bg-component-hover; text-secondary-solid rgb(93) → fg-muted. */
-    background-color: var(--area-bg-component-hover);
+    border-radius: var(--_mark-corner);
+    /* The marks' translucent fill, a soft Badge's and Count's (plan B5.1, VS25: it was an opaque bg-component-hover, the
+       one mark without an alpha), so it deepens with a hovered or selected row under it; the muted ink. */
+    background-color: var(--area-bg-mark);
     color: var(--area-fg-muted);
-    /* spec: 12 500 (AI Elements text-xs font-medium; prompt-kit text-xs; ChatGPT 9 500), Area's xs type. */
+    /* The mark text at the mark weight, 500 (text-xs: 11 at type 13). */
     font-family: var(--area-font-sans);
-    font-size: var(--area-text-xs-size);
-    line-height: var(--area-text-xs-leading);
+    font-size: var(--_mark-text);
+    line-height: var(--_mark-leading);
     font-weight: var(--area-weight-strong);
     text-decoration: none;
     white-space: nowrap;
     user-select: none;
     cursor: pointer;
-    transition: background-color var(--area-duration-fast) var(--area-ease-out);
+    transition: background-color var(--area-duration-fast) var(--area-ease-effects);
   }
-  /* Without a favicon the text keeps the end's 8 at the start too. */
+  /* Without a favicon the text keeps the text side at the start too. */
   .area-citation:not(:has(> .area-citation__icon)) { --_pad-start: var(--_pad-end); }
   /* The plate darkens on hover and press; the ink stays (DESIGN_SYSTEM.md, fixed foreground). */
   @media (hover: hover) { .area-citation:hover { background-color: var(--area-bg-component-active); transition-duration: var(--area-hover-in); } }
   .area-citation:active { background-color: var(--area-bg-component-pressed); transition-duration: var(--area-press-in); }
+  /* The label carries the pill's baseline, whatever comes first (a favicon has none), as Badge's label: it fills the
+     content box, so placing it at the top keeps the cap where the recipe put it. */
+  @supports (text-box: trim-both cap alphabetic) {
+    .area-citation:not(.area-citation--footnote) > .area-citation__label { align-self: baseline; }
+  }
   .area-citation:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-gap); }
 
   /* spec: ChatGPT's favicon, 12 round. */
@@ -91,7 +96,7 @@
     background-color: transparent;
     color: var(--_ink, inherit);
     font-family: inherit;
-    font-size: 0.704em; /* spec: Wikipedia */
+    font-size: max(var(--area-size-10), 0.704em); /* spec: Wikipedia's 0.704em, floored at the type ramp's 10 (plan A9.9) */
     line-height: 1; /* spec: Wikipedia; the raised number never opens the line */
     font-weight: inherit;
     font-variant-numeric: tabular-nums;

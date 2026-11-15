@@ -18,6 +18,7 @@ export interface TokenRowProps extends Omit<HTMLAttributes<HTMLElement>, "childr
   outline?: boolean;
   /** Makes the row a button that copies `copyText`, else the value, else the name. */
   copyable?: boolean;
+  /** With `copyable`, the text the row copies. */
   copyText?: string;
   /** Said once after copying. */
   copiedLabel?: string;

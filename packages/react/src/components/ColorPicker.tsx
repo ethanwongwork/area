@@ -6,8 +6,8 @@ import { Button } from "./Button.tsx";
 import { Input } from "./Input.tsx";
 import { InputGroup } from "./InputGroup.tsx";
 import { NumberField } from "./NumberField.tsx";
-import { Select } from "./forms.tsx";
-import { Segmented } from "./primitives.tsx";
+import { Select } from "./Select.tsx";
+import { Segmented } from "./Segmented.tsx";
 import { Glyph } from "./Glyph.tsx";
 import { useAnnouncement } from "./announce.ts";
 import { AREA_COLOR_GRID } from "./color-grid.ts";
@@ -28,7 +28,7 @@ export function hsvToHex(h: number, s: number, v: number, a = 100): string {
   return `#${hsvToRgb(h, s, v).map(byte).join("")}${a < 100 ? byte(a / 100 * 255) : ""}`;
 }
 
-/** Figma's color models plus OKLCH. */
+/** The color models the value row and sliders edit in. */
 export type ColorModel = "hex" | "rgb" | "css" | "hsl" | "hsb" | "oklch";
 /** Ways to choose a color: the saturation/brightness area, a palette grid, channel sliders. */
 export type ColorView = "spectrum" | "grid" | "sliders";
@@ -98,25 +98,35 @@ type EyeDropperConstructor = new () => { open: () => Promise<EyeDropperResult> }
 interface Channel { id: string; name: string; short: string; max: number; value: number; set: (n: number) => void }
 
 export interface ColorPickerProps extends Omit<HTMLAttributes<HTMLDivElement>, "defaultValue" | "onChange"> {
-  /** `surface` (a floating plate, default) or `plain` for a picker inside a Popover or Panel (audit F-20). */
+  /** `surface` (default): a floating plate. `plain`: no plate, for a picker inside a Popover or Panel. */
   variant?: VariantProps<typeof MANIFESTS.colorPicker>["variant"];
+  /** Names the picker and its parts for assistive tech; an `aria-label` takes its place. */
   label?: string;
+  /** The color as hex, controlled. */
   value?: string;
+  /** The color at first as hex, uncontrolled. */
   defaultValue?: string;
-  /** The new hex, and the event behind it when there is one (not for the eyedropper or a typed commit; audit C-7). */
+  /** Called with the new hex, and the event behind it when there is one (none for the eyedropper or a typed commit). */
   onValueChange?: (value: string, event?: SyntheticEvent) => void;
+  /** Submits the hex with a form under this name. */
   name?: string;
+  /** Nothing can be changed, and the picker is drawn dimmed. */
   disabled?: boolean;
   /** Edit opacity: an opacity track and a percentage beside the color value. */
   alpha?: boolean;
   /** The color model of the value row and sliders. Controlled with `onModelChange`. */
   model?: ColorModel;
+  /** The color model at first, uncontrolled. */
   defaultModel?: ColorModel;
+  /** Called with the color model chosen in the value row. */
   onModelChange?: (model: ColorModel) => void;
   /** Ways to choose, in tab order. More than one shows a view switcher. */
   views?: readonly ColorView[];
+  /** The way to choose that is shown, controlled. */
   view?: ColorView;
+  /** The way to choose shown at first, uncontrolled; the first of `views` by default. */
   defaultView?: ColorView;
+  /** Called with the view chosen in the view switcher. */
   onViewChange?: (view: ColorView) => void;
   /** Colors of the grid view, row by row. Defaults to the Area palette. */
   grid?: { columns: number; options: readonly ColorSwatchOption[] };
@@ -128,18 +138,24 @@ export interface ColorPickerProps extends Omit<HTMLAttributes<HTMLDivElement>, "
   eyedropper?: boolean;
   /** A row above the editor, divided from it, for a title, tabs or a close action. */
   header?: ReactNode;
+  /** Saved colors in a row under the editor; choosing one sets the value. */
   swatches?: readonly ColorSwatchOption[];
+  /** The saved colors' heading. */
   swatchesLabel?: string;
+  /** Adds a button by the saved colors' heading that saves the current color, called with its hex. */
   onAddSwatch?: (value: string) => void;
   /**
-   * Pick in OKLCH inside a region (2026-10-27, exact colours): the area is lightness (up) by chroma (right) at the hue on
-   * the track, drawn only where `reach` allows, so every point offered is a colour the product will paint. The value is
-   * exact: `oklch` / `defaultOklch` in, `onOklchChange` out (`onValueChange` still gets the nearest hex). Views, models,
-   * opacity, contrast and the eyedropper don't apply.
+   * Picks in OKLCH inside a region: the area is lightness (up) by chroma (right) at the hue on the track, drawn only
+   * where `reach` allows, so every point offered is a color the product will paint. The value is exact: `oklch` /
+   * `defaultOklch` in, `onOklchChange` out (`onValueChange` still gets the nearest hex). Views, models, opacity,
+   * contrast and the eyedropper don't apply.
    */
   gamut?: ColorGamut;
+  /** With `gamut`, the exact color, controlled. */
   oklch?: OklchValue;
+  /** With `gamut`, the exact color at first, uncontrolled. */
   defaultOklch?: OklchValue;
+  /** With `gamut`, called with the exact color and the event behind it. */
   onOklchChange?: (value: OklchValue, event?: SyntheticEvent) => void;
 }
 
@@ -155,9 +171,9 @@ export interface ColorGamut {
   reach?: (l: number, h: number) => number;
 }
 
-/** Figma-style color editor with spectrum, grid and slider views, six color models, a
- * contrast check, a before/after preview and saved swatches; or, with `gamut`, an exact OKLCH
- * picker over the colours a region allows. */
+/** A color editor with spectrum, grid and slider views, six color models, a contrast check, a
+ * before/after preview and saved swatches; or, with `gamut`, an exact OKLCH picker over the colors
+ * a region allows. */
 export const ColorPicker = forwardRef<HTMLDivElement, ColorPickerProps>(function ColorPicker(props, ref) {
   return props.gamut ? <GamutPicker {...props} gamut={props.gamut} ref={ref} /> : <SpectrumPicker {...props} ref={ref} />;
 });

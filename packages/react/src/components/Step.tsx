@@ -10,8 +10,11 @@ export type StepRunStatus = "running" | "complete" | "error" | /** @deprecated u
 const shared = (status: StepRunStatus) => status === "done" ? "complete" : status === "failed" ? "error" : status;
 
 interface DisclosureProps {
+  /** Whether the line's detail shows, controlled. */
   open?: boolean;
+  /** Whether the detail shows at first, uncontrolled; folded by default. */
   defaultOpen?: boolean;
+  /** Called when pressing the line shows or hides its detail. */
   onOpenChange?: (open: boolean) => void;
 }
 
@@ -71,7 +74,7 @@ export interface StepProps extends DisclosureProps, Omit<HTMLAttributes<HTMLDivE
   detail?: ReactNode;
   /** A duration or +N −N at the line's end. */
   meta?: ReactNode;
-  /** A 16 glyph before the verb (Cursor's tool icon); none by default (Codex, Claude Code). */
+  /** A 16 glyph before the verb, for the tool the step used; none by default. */
   icon?: ReactNode;
   /** running: the verb shimmers; error: the verb in the danger ink. */
   status?: StepRunStatus;
@@ -89,8 +92,9 @@ export interface StepGroupProps extends DisclosureProps, Omit<HTMLAttributes<HTM
   verb: ReactNode;
   /** "6 files", "2m 5s". */
   detail?: ReactNode;
-  /** At the line's end, muted: how long the run took ("6m 12s", Claude Code's turn summary), as a Step's own meta. */
+  /** At the line's end, muted: how long the run took ("6m 12s"), as a Step's own meta. */
   meta?: ReactNode;
+  /** The run's state: `running`, `complete` (default) or `error`. `done` and `failed` are deprecated aliases. */
   status?: StepRunStatus;
   /** The Steps it folds. */
   children: ReactNode;

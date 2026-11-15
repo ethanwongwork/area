@@ -27,8 +27,8 @@
     max-inline-size: 100%;
     container-type: inline-size;
     /* A standalone viewer takes the container corner, as Figure's image (DESIGN_SYSTEM, Image corners; Figure moved to it
-       2026-10-18; was radius-small); black behind letterboxing (every source). */
-    border-radius: var(--area-radius-container);
+       2026-10-18; was radius-small): the frame recipe's block corner (surface.css); black behind letterboxing (every source). */
+    border-radius: var(--_fr-block);
     background-color: #000; /* spec */
     user-select: none;
   }
@@ -63,7 +63,7 @@
   .area-video-player__controls .area-button.area-button--ghost[data-selected] {
     --_bg: rgb(255 255 255 / 0.16); /* spec */
     --_bg-hover: rgb(255 255 255 / 0.16);
-    --_bg-active: rgb(255 255 255 / 0.16);
+    --_bg-active: rgb(255 255 255 / 0.2); /* spec: a press on an on control still shows, the glass's press (plan B7.2) */
   }
 
   /* The round play: before the first play in every layout, and minimal's only control. The glass, the large control. */
@@ -80,12 +80,14 @@
     border-radius: var(--area-radius-full);
     cursor: pointer;
     /* Hover in at once, out on fast (MOTION.md, Hover). */
-    transition: opacity var(--area-fade-fast) var(--area-ease-out), box-shadow var(--area-duration-fast) var(--area-ease-out);
+    transition: opacity var(--area-fade-fast) var(--area-ease-effects), box-shadow var(--area-duration-fast) var(--area-ease-effects);
   }
   .area-video-player__start > svg { inline-size: var(--area-icon-md); block-size: var(--area-icon-md); }
   .area-video-player__start:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); }
   /* The glass a step lighter under the pointer, as the buttons' plates. */
   @media (hover: hover) { .area-video-player__start:hover { transition-duration: var(--area-hover-in); box-shadow: var(--_m-layers, 0 0 0 0 transparent), inset 0 0 0 999px rgb(255 255 255 / 0.12), inset 0 0 0 var(--area-border-width) rgb(255 255 255 / 0.12), var(--area-shadow-float); /* spec */ } }
+  /* Held, the glass's press, 20% as the controls' (plan B7.3). */
+  .area-video-player__start:active { transition-duration: var(--area-press-in); box-shadow: var(--_m-layers, 0 0 0 0 transparent), inset 0 0 0 999px rgb(255 255 255 / 0.2), inset 0 0 0 var(--area-border-width) rgb(255 255 255 / 0.12), var(--area-shadow-float); /* spec */ }
 
   /* The time: Area's muted UI text, tabular (Apple's secondary time; the references' 400). */
   .area-video-player__clock {
@@ -159,17 +161,17 @@
     flex: none;
     inline-size: 0;
     opacity: 0;
-    transition: opacity var(--area-fade-fast) var(--area-ease-out);
+    transition: opacity var(--area-fade-fast) var(--area-ease-effects);
   }
   .area-video-player__volume:is(:focus-within, [data-open]) > .area-video-player__range {
     inline-size: var(--_volume);
-    margin-inline: var(--area-space-4) var(--area-space-8);
+    margin-inline: var(--area-space-4) var(--area-ui-cluster);
     opacity: 1;
   }
   .area-video-player__volume[data-muted] > .area-video-player__range { --_fill: var(--area-fg-muted); }
 
   /* Showing and hiding: in on fast, out on moderate, opacity only (MOTION.md; Media Chrome in faster than out). */
-  .area-video-player__controls { opacity: 1; transition: opacity var(--area-fade-fast) var(--area-ease-out); }
+  .area-video-player__controls { opacity: 1; transition: opacity var(--area-fade-fast) var(--area-ease-effects); }
   .area-video-player[data-idle] .area-video-player__controls { opacity: 0; transition-duration: var(--area-duration-moderate); }
   .area-video-player[data-idle] { cursor: none; }
   .area-video-player--auto {}
@@ -195,7 +197,7 @@
        time row 2 further in than the buttons' inset put every glyph 18 from its edge at type 14 (16 at the app's 13).
        Between the rows 8 (round 47, owner: "might need more gaps between the top row and bottom row"): Safari's rows
        stand about 1.8 × its edge apart (22 between the transport and the digits, 12 at the edges). */
-    gap: var(--area-space-8);
+    gap: var(--area-ui-cluster);
     padding: calc(var(--_inset) - var(--area-space-2)) var(--_inset) calc(var(--_inset) + var(--area-space-6));
     border-radius: calc(var(--area-radius-control-md) + var(--_inset) * var(--area-radius-concentric));
   }
@@ -207,7 +209,7 @@
   .area-video-player__timeline {
     display: flex;
     align-items: center;
-    gap: var(--area-space-8); /* spec: WebKit time-control */
+    gap: var(--area-ui-cluster); /* spec: WebKit time-control, 8 at the default */
     block-size: var(--area-space-16);
     padding-inline: calc((var(--area-control-md) - var(--area-icon-md)) / 2 + var(--area-space-2));
   }
@@ -215,7 +217,7 @@
      as the wide panel and every Area surface (round 47, owner: "rounded corner values that match the other components
      in the ds"), not a pill; the inset all round. */
   @container (max-inline-size: 400px) {
-    .area-video-player--floating .area-video-player__controls { flex-direction: row; align-items: center; gap: var(--area-space-8); padding: var(--_inset); }
+    .area-video-player--floating .area-video-player__controls { flex-direction: row; align-items: center; gap: var(--area-ui-cluster); padding: var(--_inset); }
     .area-video-player--floating .area-video-player__transport { display: contents; }
     .area-video-player--floating :is(.area-video-player__group--start, .area-video-player__skip, .area-video-player__optional) { display: none; }
     .area-video-player--floating .area-video-player__group--center { order: 0; }
@@ -237,20 +239,20 @@
     inset: auto var(--_edge) var(--_foot);
     display: flex;
     flex-direction: column;
-    gap: var(--area-space-8); /* spec: YouTube's 9 between the track and the row, on the 4 grid */
+    gap: var(--area-ui-cluster); /* spec: YouTube's 9 between the track and the row, on the 4 grid */
   }
   .area-video-player--bar .area-video-player__controls > .area-video-player__range { inline-size: 100%; }
-  .area-video-player--bar .area-video-player__transport { display: flex; align-items: center; justify-content: space-between; gap: var(--area-space-8); min-inline-size: 0; }
-  .area-video-player--bar .area-video-player__group--start { gap: var(--area-space-8); } /* spec: YouTube's 8–12 between pills */
+  .area-video-player--bar .area-video-player__transport { display: flex; align-items: center; justify-content: space-between; gap: var(--area-ui-cluster); min-inline-size: 0; }
+  .area-video-player--bar .area-video-player__group--start { gap: var(--area-ui-cluster); } /* spec: YouTube's 8–12 between pills */
   .area-video-player--bar .area-video-player__group--end { gap: 0; }
   /* Only the controls' pills: the round play before the first play shares the glass, not the pill (round 56: "fix the
      play button on default", it was squashed to a control's height). */
   /* The groups take a control's corner, as the floating panel and every Button do, and turn to pills with the Pills
      setting (owner, rounds 85–89: "should these be pill shaped or just rounded corners?"; they were always pills). The
      buttons inside are the groups' height, so their own shape is the same corner. */
-  .area-video-player--bar .area-video-player__controls .area-video-player__surface { display: flex; align-items: center; flex: none; block-size: var(--area-control-md); border-radius: calc(var(--area-radius-control-md) + var(--area-pill-button) * var(--area-radius-full)); }
+  .area-video-player--bar .area-video-player__controls .area-video-player__surface { display: flex; align-items: center; flex: none; block-size: var(--area-control-md); border-radius: max(var(--area-radius-control-md), var(--area-pill-button) * var(--area-radius-full)); }
   /* The time: the pill's text, as far in as the pill is round (YouTube 12 on its 40). */
-  .area-video-player--bar .area-video-player__clock.area-video-player__surface { padding-inline: var(--area-space-12); color: var(--area-fg-default); }
+  .area-video-player--bar .area-video-player__clock.area-video-player__surface { padding-inline: calc((var(--area-control-md) - var(--area-space-6)) / 2); /* the pill's text side, (H − 6) / 2: 12 at the default */ color: var(--area-fg-default); }
   /* The duration is a flex item in the time pill, which drops its leading space, so it keeps its spaces (round 89: the
      pill read "0:01/ 0:07"). */
   .area-video-player__duration { white-space: pre; }

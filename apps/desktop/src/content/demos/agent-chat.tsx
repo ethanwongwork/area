@@ -194,7 +194,7 @@ export const GalleryPlanSegmented = () => <div style={frame}><Plan items={phases
 // The whole tracker in one container (owner 2026-10-25, an agent run's timeline): marks on a rail, each item's values
 // as chips after its words, the current item's own steps in an inset box.
 const railItems = [
-  { id: "1", label: "Item one", status: "complete" as const, detail: <><Badge size="sm" variant="outline">Value</Badge><Badge size="sm" variant="outline">Value</Badge></> },
+  { id: "1", label: "Item one", status: "complete" as const, detail: <Badge size="sm" variant="outline">Value</Badge> }, // one detail: two identical "Value" tags read as noise (F3.3)
   { id: "2", label: "Item two", status: "current" as const, progress: 0.5, meta: "1 of 2", items: [
     { id: "2a", label: "Step one", status: "complete" as const, meta: "Value" },
     { id: "2b", label: "Step two", status: "current" as const },
@@ -204,8 +204,13 @@ const railItems = [
 export const GalleryPlanRail = () => <div style={frame}><Plan items={railItems} rail bar="segmented" icon={<AgentIcon />} title="Title" count="3 of 6" /></div>;
 
 // ---- Turn notice ----
-export const GalleryTurnNotice = () => <div style={frame}><TurnNotice status="stopped">Body text</TurnNotice></div>;
+/* Each notice takes its column's width (it shrink-wrapped to 75, its rule 24 and "Body text" on two lines). */
+const full = { inlineSize: "100%" };
+/* The column holds its 280 in a tile: a notice's text may wrap (turn-notice.css), so a column that gave way to its content
+   broke "Body text" in two. */
+const column = { ...frame, flex: "none" };
+export const GalleryTurnNotice = () => <div style={column}><TurnNotice status="stopped" style={full}>Body text</TurnNotice></div>;
 export const GalleryTurnNoticeError = () => (
-  <div style={frame}><TurnNotice status="error" action={<Button variant="ghost" tone="neutral" size="sm">Action</Button>}>Error message</TurnNotice></div>
+  <div style={column}><TurnNotice status="error" style={full} action={<Button variant="ghost" tone="neutral" size="sm">Action</Button>}>Error message</TurnNotice></div>
 );
-export const GalleryTurnNoticeCompacted = () => <div style={frame}><TurnNotice status="compacted">Body text</TurnNotice></div>;
+export const GalleryTurnNoticeCompacted = () => <div style={column}><TurnNotice status="compacted" style={full}>Body text</TurnNotice></div>;

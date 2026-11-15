@@ -11,57 +11,29 @@
  * ------------------------------------------------------------------------- */
 @layer area.components {
   .area-queue {
-    --_card-list: var(--area-space-4); /* spec: Menu's list padding 4 (Cursor's list 4 0 6) */
-    --_card-column: calc(var(--_card-list) + var(--area-ui-row-inset)); /* 12 */
-    /* A button's inset from the row's end: what is left of the row around a small control, never under 4 (Edit summary's). */
-    --_card-end: max(var(--area-space-4), calc((var(--area-ui-row) - var(--area-control-sm)) / 2));
+    /* The chat card (surface.css, plan B1.3): rows 4 from the outer edge (Menu's list padding; Cursor's list 4 0 6),
+       their words and the head's title 12 in. */
+    --_card-list: var(--_chat-list);
+    --_card-column: var(--_chat-column);
+    /* A button's inset from the row's end: what the row leaves round a small control, (row − control-sm) / 2, so a row's
+       actions sit as far from its end as from its top (a corner control, inset.css, plan B4.2; it was never under 4, 2 from
+       the top and 4 from the end). */
+    --_card-end: calc((var(--area-ui-row) - var(--area-control-sm)) / 2);
     --_sending-opacity: 0.6; /* spec: Codex sending opacity-60 */
     min-inline-size: 0;
     overflow: hidden;
-    border: var(--area-stroke-width) solid var(--area-edge-blocks); /* no shadow under it: a required frame */
-    border-radius: var(--area-radius-container);
+    border: var(--_chat-edge) solid var(--area-edge-blocks); /* no shadow under it: a required frame */
+    border-radius: var(--_fr-corner);
     background-color: var(--area-bg-surface);
     color: var(--area-fg-default);
     font-size: var(--area-text-base-size); /* spec: Cursor tray rows 13 under a 14 reply */
     line-height: var(--area-text-base-leading);
   }
-  .area-queue__head {
-    display: flex;
-    align-items: center;
-    gap: var(--area-space-8);
-    inline-size: 100%;
-    min-block-size: var(--area-ui-row);
-    margin: 0;
-    padding: 0 var(--_card-column);
-    border: 0;
-    background: none;
-    color: inherit;
-    font: inherit;
-    text-align: start;
-    cursor: pointer;
-  }
-  /* Open, no seam under the head (owner 2026-10-25: "Drop the line on Edit summary, Queue and Plan too", after Code
-     block's header lost its rule; Cursor's queue and to-do trays have none): the first message sits 1.1 rows under the
-     head's middle. Was a row plus a border-decorative rule (round 55). */
-  .area-queue__head:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: calc(-1 * var(--area-focus-width)); border-radius: inherit; }
-  /* "2 queued", in the muted ink (Cursor's header "N Queued", tone muted). */
-  .area-queue__title { min-inline-size: 0; overflow: hidden; color: var(--area-fg-muted); text-overflow: ellipsis; white-space: nowrap; font-variant-numeric: tabular-nums; }
-  .area-queue__chevron { display: inline-flex; flex: none; margin-inline-start: auto; color: var(--area-fg-muted); transform: rotate(-90deg); transition: transform var(--area-duration-fast) var(--area-ease-out); /* MOTION.md: every chevron turns on fast */ }
-  /* Closed points along the reading direction, so it mirrors in right-to-left text (Accordion, Tree view). */
-  .area-queue__chevron:dir(rtl) { transform: rotate(90deg); }
-  .area-queue[data-open] .area-queue__chevron { transform: none; }
-  .area-queue__chevron > svg { inline-size: var(--area-icon-xs); block-size: var(--area-icon-xs); }
-  /* The head answers the pointer as Accordion's does: a plate behind the chevron on hover and press (a square the
-     text's line tall, the small corner; Notion's 5% / 10%), never on the title (round 51: it had no hover at all). */
-  /* Equal insets (round 52, owner: "slightly more room on the right side than on top"): the plate sits as far from the
-     card's end as from its top, (row − plate) / 2, and its corner is the card's less that inset (concentric). */
-  .area-queue__chevron {
-    --_plate-in: calc((var(--area-ui-row) - var(--area-text-base-leading)) / 2);
-    position: relative; isolation: isolate; place-items: center; justify-content: center; align-items: center;
-    inline-size: var(--area-text-base-leading); block-size: var(--area-text-base-leading);
-    margin-inline-end: calc(var(--_plate-in) - var(--_card-column));
-  }
-  .area-queue__chevron::before { content: ""; position: absolute; inset: 0; z-index: -1; border-radius: max(var(--area-radius-min), calc(var(--area-radius-small) + (var(--area-radius-container) - var(--area-stroke-width) - var(--_plate-in) - var(--area-radius-small)) * var(--area-radius-concentric))); transition: var(--area-transition); }
+  /* The head, its title and chevron are the one collapsible head (inset.css, plan B4.4): a row tall, "2 queued" strong in
+     the default ink on the card column (it was muted, as Cursor's header "N Queued"), the chevron 4 after it as Plan's
+     and Step's (it stood at the card's far end, plan B4.4, VS7). Open, no seam under the head (owner 2026-10-25: "Drop
+     the line on Edit summary, Queue and Plan too"). The head answers the pointer as Accordion's does: a plate behind the
+     chevron on hover and press, never on the title (round 51: it had no hover at all). */
   @media (hover: hover) { .area-queue__head:hover .area-queue__chevron::before { background: var(--area-bg-hover); transition-duration: var(--area-hover-in); } }
   .area-queue__head:active .area-queue__chevron::before { background: var(--area-bg-pressed); transition-duration: var(--area-press-in); }
   /* An ordered list (messages send in order), with Menu's list padding and its break between rows (ui-row-gap: 1)
@@ -73,22 +45,24 @@
     position: relative;
     display: flex;
     align-items: center;
-    gap: var(--area-gap-row); /* Menu's row gap (surface.css --_menu-gap): 12, compact 8 */
+    gap: var(--area-ui-cluster); /* Menu's icon-to-label gap (menu.css --_menu-gap, plan B2.3): 8, compact 6 */
     min-inline-size: 0;
     min-block-size: var(--area-ui-row); /* spec: Cursor row min-height 28 (Compact's row) */
     padding-inline: var(--area-ui-row-inset);
     border-radius: var(--area-radius-row);
     --_row-plate: transparent;
     background-color: var(--_row-plate);
-    transition: background-color var(--area-duration-fast) var(--area-ease-out);
+    transition: background-color var(--area-duration-fast) var(--area-ease-effects);
   }
   @media (hover: hover) { .area-queue__item:hover { --_row-plate: var(--area-bg-component-hover); transition-duration: var(--area-hover-in); } }
   .area-queue__item:focus-within { --_row-plate: var(--area-bg-component-hover); transition-duration: 0s; }
   /* Row actions change ink, not plate (Nav's, Board's and Edit summary's rule): muted ghost buttons, the default ink on
      hover and press (round 51: their own plate was the row's grey, so the hover could not be seen). */
   .area-queue__item .area-button.area-button--ghost { --_fg: var(--area-fg-muted); --_bg-hover: transparent; --_bg-active: transparent; }
-  /* Concentric with the row (round 52): the row's corner less the button's (clamped) inset. */
-  .area-queue__item .area-button { --_shape: max(var(--area-radius-min), calc(var(--area-radius-control-sm) + (var(--area-radius-row) - var(--_card-end) - var(--area-radius-control-sm)) * var(--area-radius-concentric))); }
+  /* A corner control in the row (inset.css, plan B4.2): concentric with the row's corner at its distance, (row − H) / 2
+     (6 in the 8 row at the defaults; it was 4). */
+  .area-queue__item { --_cc-corner: var(--area-radius-row); }
+  .area-queue__item .area-button { --_cc-at: calc((var(--area-ui-row) - var(--_height)) / 2); }
   @media (hover: hover) { .area-queue__item .area-button.area-button--ghost:hover { --_fg: var(--area-fg-default); } }
   .area-queue__item .area-button.area-button--ghost:active { --_fg: var(--area-fg-default); }
   .area-queue__text { flex: 1; min-inline-size: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
@@ -99,9 +73,12 @@
   :is(.area-queue__item--error, .area-queue__item--failed) > .area-queue__status { color: var(--area-fg-danger); }
   /* Send now and Remove: Edit summary's row actions. With a pointer they cover the row's end on its plate until the
      row is hovered or focused; on touch, and on a failed row (Retry is the way on), they stay. */
-  .area-queue__actions { display: inline-flex; flex: none; align-items: center; opacity: 0; transition: opacity var(--area-fade-fast) var(--area-ease-out); }
+  .area-queue__actions { display: inline-flex; flex: none; align-items: center; margin-inline-end: calc(var(--_card-end) - var(--area-ui-row-inset)); transition: opacity var(--area-fade-fast) var(--area-ease-effects); }
+  /* Hidden only where there is hover (plan B7.11): on touch they sit in the row, shown, ending on the card's end. */
   @media (hover: hover) {
     .area-queue__actions {
+      opacity: 0;
+      margin-inline-end: 0;
       position: absolute;
       inset-block: 0;
       inset-inline-end: 0;
@@ -114,5 +91,4 @@
   }
   .area-queue__item:focus-within > .area-queue__actions,
   :is(.area-queue__item--error, .area-queue__item--failed) > .area-queue__actions { opacity: 1; transition-duration: 0s; }
-  @media (hover: none) { .area-queue__actions { opacity: 1; margin-inline-end: calc(var(--_card-end) - var(--area-ui-row-inset)); } }
 }

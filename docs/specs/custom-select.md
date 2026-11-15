@@ -16,7 +16,7 @@ trigger's paint), Popover (anchoring)
   check (audit S13 C, owner 2026-09-30) is superseded by the 2026-10-08 decision below.*
 - owner 2026-10-08: approved, recommendations accepted ("go with your recs for open
   questions"). Q3: the chosen row shows the trailing check alone, in Select, Combobox and Custom
-  select (the plate means highlight only). Q4: a field's chevron ends at the row inset, 8 (inset
+  select (the plate means highlight only; superseded 2026-11-14, plan B7.7: the active plate and the check). Q4: a field's chevron ends at the row inset, 8 (inset
   contract). Q5: field chevrons take `input-chevron` (`stroke-control`). Q6: list stays
   start-aligned. Q7: chevrons stay still. Q1–Q2 carried no recommendation and stay open.
 
@@ -212,7 +212,7 @@ these captures predates the 2026-10-08 decision (check only now; Decisions).
 | highlighted row | `bg-component-hover` (pointer or keyboard) | Menu |
 | selected row | trailing check (`aria-selected="true"`); no plate (owner 2026-10-08, Q3) | Notion, ChatGPT lists |
 | placeholder | `input-placeholder` ink; "Select…" by default; with `multiple`, while none is chosen | Select (audit B-19) |
-| disabled | Select's disabled paint; ghost: no plate, disabled ink | Select |
+| disabled | the field shell's disabled paint (input.css), soft edgeless; ghost: no fill or edge, disabled ink. Read-only: one fill step deeper (ghost: the soft fill) | Select; plan B7.8, B7.10 |
 | disabled option | Menu's 50% row, skipped by arrows and typeahead | Menu, Combobox |
 | invalid | `select-invalid-color` edge and ring | Select |
 | success / warning | `select-success-color` / `select-warning-color` edge and ring, from `validationStatus` or a Field's status (2026-11-07) | Select |
@@ -418,6 +418,7 @@ The trigger's label is not selectable. See [interaction polish](../research/inte
 - 2026-10-23 · owner: "Go with the exaggerated glyphs, the 20 new marks and the grid menu as default … component intake
   for the Custom select grid layout, then build it" → `layout="grid"` and the option `preview` slot (Intake above);
   the desktop Inspector opens its visual settings as grids. Back in review.
+- 2026-11-14 · plan B7.8, B7.10 → the trigger's disabled and read-only are the field shell's disabled and read-only recipe (input.css): disabled soft triggers no longer gain the faint edge; the ghost keeps no fill or edge disabled; read-only rests one fill step deeper (ghost: the soft fill). Why: docs/research/system-evaluation-2026-11-11 (README §5, phase2/disabled.md); the owner took every recommendation on 2026-11-11.
 
 ## Review note, 2026-10-26 (interaction pass)
 
@@ -449,3 +450,41 @@ Save and Cancel in a footer, `message` and `loading`), `docs/research/components
 - **Why:** the components audit's V7; the owner took every recommendation ("Take all recs", 2026-11-07).
 - **Verdict:** awaiting the owner. Verified in a static harness (Chromium): filter, marks, Enter, Tab to Select all,
   Escape from the panel, the Save and Cancel draft; not checked in the app.
+- 2026-11-11 · system evaluation B2.3 (owner) · options are Menu rows: icon-to-label gap `ui-cluster` (8, Compact 6); the list floor is 160 (was 224); the picture grid keeps its own width.
+
+## Review note, 2026-11-11 (type rules, plan A9)
+
+- **What changed:** an option's caption takes the option's size, 13/18, muted (plan A9.3); it was 12/16.
+- **Why:** the system evaluation's type rules (docs/research/system-evaluation-2026-11-11, section 5, A9), owner-approved
+  2026-11-11; the rules are in DESIGN_SYSTEM.md ("Ink and weight", "Size and shape", "Text pairs") and the type skill.
+
+## Review note, 2026-11-11 (focus and targets, plan A6, A11.2)
+
+- **What changed:** Forced colours: the trigger restores Highlight focus; a grid's selected option takes the system selection pair and a preview's selected ring a Highlight edge (A6.4, S18).
+- **Why:** the system evaluation's focus, forced colours and hit target items (docs/research/system-evaluation-2026-11-11, section 5), owner-approved 2026-11-11; the rules are in DESIGN_SYSTEM.md ("The focus ring", "Targets") and CONTRAST.md (Focus).
+
+## Review note, 2026-11-11 (motion, plan A5)
+
+- **What changed:** the list: the surface enters and leaves on `duration-fast` (140 at Speed 210; it entered on `base`, 210), the enter easing out with the fade on `ease-effects`, the exit accelerating away on `ease-exit` (A5.1); opened from a key it appears at its size and only fades on `fade-fast` (`data-opened-by="keyboard"`, written by overlay.ts; A5.2); options rows land and leave at once, under the pointer and the keys alike: no transition on a row (A5.3; they faded in over `hover-in` and out over `fast`).
+- **Why:** the system evaluation's motion items (docs/research/system-evaluation-2026-11-11, section 5, A5), owner-approved
+  2026-11-11; the rules are in docs/MOTION.md (Tokens, Roles, Recipes) and kept by cohesion.test.mjs and
+  tests/behaviour/suites/motion.test.mjs. The motion tables above are history; these values are current.
+
+## Shared parts (plan B2), 2026-11-13
+
+- **Row table (B2.1).** Options are Menu rows: text-only options start on the glyph edge (8, was 10), icons muted. Two-line options put a leading icon on the first line (B2.4).
+
+### 2026-11-14 · One field shell (system plan, Phase 2, B3)
+
+- The trigger is the one field shell (select-* seam); the ghost plate stays its own. The value is a cap slot (it sat 0.62 high at type 13).
+- Why: docs/research/system-evaluation-2026-11-11 (B3.1, B3.2, B3.3, B2.2 in fields; README §5); the owner took every recommendation on 2026-11-11 and the 24 targets on 2026-11-13. B3.2: field text stays on Button's inset (Keep 10, the pick), so nothing moved.
+- Verdict: awaiting the owner.
+- 2026-11-14 · system evaluation B6.1, B6.3 · the list's frame, stack and corner are the one floating surface's; the field list only re-points its rows' corner and its own corner follows by the overlay corner equation (popup.css). No visible change.
+
+## Selection paint (plan B7.7), 2026-11-14
+
+- The chosen row shows the active plate and the check in the list (`data-selected`, plan B7.7); a picture grid's cell takes the shared selected edge's ring.
+
+## State paint (plan B7.1, B7.3), 2026-11-14
+
+- Held and open read one field-shell rule (input.css, "Press and open"): `--_bg-pressed` is the rest fill on outline and soft and `bg-component-pressed` on ghost (open was `bg-component-active`, held had no plate); open keeps the hover edge, never the focus edge.

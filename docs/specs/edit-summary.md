@@ -91,7 +91,7 @@ area-diff                    mono, Code block sm's type; Code block's frame (car
 | counts | +N `fg-change-added`, −N `fg-change-deleted` (the success and danger inks), tabular, 4 apart; read "N added", "N deleted" | cursor git added / removed, codex green / red | — |
 | diff type | text-xs on 18 (compact 16), mono; insets 8 (compact 6), number start 4, gap 4 | Code block sm (peer) | the Inspector's code well |
 | diff frame | border-card, radius-row (concentric with the list: 12 − 4), bg-code | Code block (peer) | round 49 |
-| diff tint, marker | success-surface / danger-surface; marker 8 wide in fg-success-vivid / fg-danger-vivid, strong | Code block's diff (peer) | one diff paint across Area (cleanup pass 2026-10-19; was Cursor's 3px strip) |
+| diff tint, marker | `bg-change-added` / `bg-change-deleted` (shared with Code block, plan B7.4); marker 8 wide in fg-success-vivid / fg-danger-vivid, strong | Code block's diff (peer) | one diff paint across Area (cleanup pass 2026-10-19; was Cursor's 3px strip) |
 | fold | the diff's size, sans, muted on bg-well; from the number start 4 to the diff's end inset | cursor collapsed regions 12px on bg-tertiary | round 49 |
 | kept / undone | counts muted; undone name struck through; the row says "Kept" / "Undone" | cursor Keep / Undo | — |
 
@@ -348,3 +348,29 @@ Not built: a side by side layout. It needs about twice the Inspector's width to 
 
 Tile: Variant / diff, comment (`GalleryDiffComment`). Checks: `npm run typecheck`, `check:docs`, `check:playgrounds`.
 
+- 2026-11-11 · system evaluation B2.3 · a file row's gap is Menu's, `ui-cluster` (8, Compact 6; was `gap-row`).
+
+## Review note, 2026-11-11 (type rules, plan A9)
+
+- **What changed:** Diff's lines take Code block sm's `text-xs-code-leading` (11/16 at type 13 at every density); they were 17 (plan A9.9).
+- **Why:** the system evaluation's type rules (docs/research/system-evaluation-2026-11-11, section 5, A9), owner-approved
+  2026-11-11; the rules are in DESIGN_SYSTEM.md ("Ink and weight", "Size and shape", "Text pairs") and the type skill.
+
+### 2026-11-13 · One chat card (system plan, Phase 2, B1.3)
+
+- The frame is the chat card (`surface.css`): its corner (16 at the default, 14 at Compact), rows 4 from the outer edge
+  with the edge counted once, so the words and the head's title start 12 in (were 13), a one-row head, a strong title.
+- Edit summary's head is one row (30 at the default, was 34); its buttons centre in it.
+- Diff's corner takes the frame recipe's nested floor: 8 at the default (was the floor's 4, 16 − 12; VS1, VC19).
+
+## Shared bars and corners (plan B4), 2026-11-14
+
+- B4.2: the head's buttons and a file row's are corner controls: as far from the end as from the top, (row − control) / 2 (the end was floored at 4, which held only while the head was 34), concentric with the card (16 − 3 = 13 at the defaults, was 11) and with the row (8 − 2 = 6, was 4). B4.4: the head is the same row as the collapsible head, 30 at the defaults (34 before wave 1), without a chevron.
+
+## Selection paint (plan B7.4), 2026-11-14
+
+- Diff's changed lines read `bg-change-added` / `bg-change-deleted`, the pair Code block shares (same paint).
+
+## State paint (plan B7.11), 2026-11-14
+
+- File actions and the Diff's comment + hide only inside `@media (hover: hover)`; on touch the + sits at the line's end, shown.

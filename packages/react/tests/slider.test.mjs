@@ -40,8 +40,10 @@ test("supports label and orientation compositions", () => {
   assert.match(html, /area-slider--vertical/);
   assert.match(html, /area-slider__label">Temperature/);
   assert.match(html, /type="range"/);
-  assert.deepEqual(MANIFESTS.slider.variants.labelPosition, ["top", "inside"]);
-  assert.deepEqual(MANIFESTS.slider.variants.orientation, ["vertical"]);
+  assert.deepEqual(MANIFESTS.slider.variants.labelPosition, ["inline", "top", "inside"]);
+  assert.deepEqual(MANIFESTS.slider.variants.orientation, ["horizontal", "vertical"]);
+  // The defaults are classes of their own, empty: the bare block draws them (F5, 2026-11-11).
+  assert.match(render({ "aria-label": "Volume" }), /class="area-slider area-slider--md area-slider--rail area-slider--inline area-slider--horizontal"/);
   assert.equal(MANIFESTS.slider.variants.tone, undefined);
 });
 
@@ -58,10 +60,13 @@ test("renders a mark at every value of an explicit discrete range", () => {
 });
 
 test("rail is the default; track and bar are variants on Slider and SliderRange", () => {
-  assert.deepEqual(MANIFESTS.slider.variants.variant, ["track", "bar"]);
-  assert.deepEqual(MANIFESTS.sliderRange.variants.variant, ["track", "bar"]);
+  assert.deepEqual(MANIFESTS.slider.variants.variant, ["rail", "track", "bar"]);
+  assert.deepEqual(MANIFESTS.sliderRange.variants.variant, ["rail", "track", "bar"]);
+  assert.equal(MANIFESTS.slider.defaults.variant, "rail");
+  assert.equal(MANIFESTS.sliderRange.defaults.variant, "rail");
   const rail = render({ "aria-label": "Volume", variant: "rail" });
-  assert.doesNotMatch(rail, /area-slider--(rail|track|bar)/);
+  assert.match(rail, /area-slider--rail/);
+  assert.doesNotMatch(rail, /area-slider--(track|bar)/);
   assert.match(render({ "aria-label": "Volume", variant: "track" }), /area-slider--track/);
   assert.match(render({ "aria-label": "Volume", variant: "bar" }), /area-slider--bar/);
   const range = renderToString(h(SliderRange, { variant: "bar", defaultValue: [20, 60], inputs: false }));

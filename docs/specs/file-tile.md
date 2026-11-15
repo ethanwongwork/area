@@ -143,3 +143,23 @@ card's images sit inside a frame).
 - **Why:** docs/research/components-audit-2026-11-07/internal.md (choosing several files or assets is the grids' use);
   the owner took every recommendation ("Take all recs", 2026-11-07).
 - **Verdict:** awaiting the owner.
+
+## Review note, 2026-11-11 (type rules, plan A9)
+
+- **What changed:** the meta line joins the name at its size, 13/18, muted and tabular (plan A9.3); it was 12/16. The name stays 500 (plan A9.5, B1.2).
+- **Why:** the system evaluation's type rules (docs/research/system-evaluation-2026-11-11, section 5, A9), owner-approved
+  2026-11-11; the rules are in DESIGN_SYSTEM.md ("Ink and weight", "Size and shape", "Text pairs") and the type skill.
+
+### 2026-11-13 · Item name (system plan, Phase 2, B1.2)
+
+- The name's weight and ink come from the shared item name part (`surface.css`): no visual change.
+
+### 2026-11-14 · Shared parts, leftovers (system plan, Phase 2, wave 3)
+
+- The name under the frame reads the frame recipe's name gap (`ui-cluster`, 6 / 8 / 10) and the tile's mat is `ui-cluster`. Values at type 13 Compact / Default / Comfortable; unchanged at the default.
+- Why: docs/research/system-evaluation-2026-11-11 (plan B6.1, B6.5, B8.2, B2.2; README §5, phase2/leftovers.md); the owner took every recommendation on 2026-11-11. Fix the rule, not the instance.
+- Verdict: awaiting the owner.
+
+## Selection paint (plan B7.6), 2026-11-14
+
+- A chosen tile in a File grid draws the shared selected edge (was the List box grid's plate, a 2.7% step in light); its focus ring moves outside, at `focus-offset`.

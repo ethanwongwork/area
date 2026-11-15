@@ -115,6 +115,8 @@ shell `t 30 r 0 b 0 l 30` at 40px). Area currently centers the indicator on the 
 
 ## Measurements
 
+**Current (2026-11-13, one mark).** The count is Count on a tone's solid (plan B5.3), on the one mark recipe (inset.css, "One mark"): the ladder's md rung, 18 at type 13 at every density (was a fixed 16), side (H − 6) / 2 (6), text text-xs at 400 (was 500), tabular, the whole-pixel cap baseline; a one-character count is a circle (data-single). The anchors read the count's height: a circular owner's inset less half of it, a tab reserves it plus 2.
+
 Untitled UI avatar status (indicator slot; shell = avatar):
 
 | slot · property | uui · avatar-online-xs · rest · light | uui · avatar-online-sm · rest · light | uui · avatar-online-md · rest · light | uui · avatar-online-lg · rest · light | uui · avatar-online-xl · rest · light | uui · avatar-online-2xl · rest · light | uui · avatar-offline-md · rest · light |
@@ -547,3 +549,11 @@ Pinned commit: `d27922755bebae866d9ffe86b7da44c27ec801ee`.
 - **What changed:** `tone` takes Button's and Badge's seven (caution and discovery on their solids and on-inks); `bordered` replaces `withBorder` and `invisible` replaces `hidden` (Indicator anchor's word), both kept as deprecated aliases; the hook stays `data-border`.
 - **Why:** manifest.ts:485 listed five tones; Governance's booleans are adjectives, and one idea had two words (Indicator.tsx:12, 18, 43). From the components audit's internal peer comparison (`docs/research/components-audit-2026-11-07/internal.md`); the owner took every recommendation ("Take all recs", 2026-11-07).
 - **Verdict:** awaiting the owner.
+
+## One mark, 2026-11-13
+
+Plan B5.1 (and B5.2, B5.3 where they apply; docs/research/system-evaluation-2026-11-11): the family moved onto the shared mark recipe in inset.css and its own copy of the side, baseline, corner and text was removed. Values above, under Measurements.
+
+## Shared bars and corners (plan B4), 2026-11-14
+
+- B2.2 leftover: the anchored-tab demo's label is the Tabs `__label` / `__text` parts, as a real tab's.

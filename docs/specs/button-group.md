@@ -92,3 +92,10 @@ and `color` over 100ms.
 - 2026-10-01 · audit H-26 → a group whose buttons are all disabled dims once as a whole (one disabled part still dims alone) → button-group.css:98-102.
 - 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → no group change; children inherit Button's instant-in, fast-out rule.
 - 2026-10-12 · owner, 2026-10-12: "go with your recommendations" (consistency pass) → the solid neutral group's quiet ink reads `fg-quiet` (O5: one role for a literal written in several families; same paint). (docs/research/consistency-audit-2026-10-12.md)
+
+## Review note, 2026-11-11 (motion, plan A5)
+
+- **What changed:** Button's press: the plate gives, the label keeps its size (A5.6).
+- **Why:** the system evaluation's motion items (docs/research/system-evaluation-2026-11-11, section 5, A5), owner-approved
+  2026-11-11; the rules are in docs/MOTION.md (Tokens, Roles, Recipes) and kept by cohesion.test.mjs and
+  tests/behaviour/suites/motion.test.mjs. The motion tables above are history; these values are current.

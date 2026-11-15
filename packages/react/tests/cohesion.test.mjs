@@ -7,6 +7,15 @@ import { readFileSync, readdirSync } from 'node:fs';
 const css = readFileSync(new URL('../../styles/dist/area.css', import.meta.url), 'utf8').replace(/\/\*[\s\S]*?\*\//g, '');
 const rules = [...css.matchAll(/([^{}@]+)\{([^{}]*)\}/g)].map(([, selector, body]) => ({ selector: selector.trim().replace(/\s+/g, ' '), body }));
 const ruleFor = selector => rules.find(rule => rule.selector === selector);
+// A rule's selector list with its :where() lists expanded: the shared recipes write `:where(a, b, …)` (popup.css, plan B6.1).
+const selectorList = selector => {
+  const parts = []; let depth = 0, from = 0;
+  for (let i = 0; i <= selector.length; i++) { const ch = selector[i]; if (ch === '(') depth++; else if (ch === ')') depth--; else if (i === selector.length || (ch === ',' && depth === 0)) { parts.push(selector.slice(from, i).trim()); from = i + 1; } }
+  const closes = part => { let level = 0; for (let i = 6; i < part.length; i++) { if (part[i] === '(') level++; else if (part[i] === ')' && --level === 0) return i; } return -1; };
+  return parts.flatMap(part => part.startsWith(':where(') && closes(part) === part.length - 1 ? selectorList(part.slice(7, -1)) : [part]);
+};
+// The one floating surface's frame (popup.css, plan B6.1): every floating and modal surface draws it from this rule.
+const FLOATING_FRAME = rules.find(rule => rule.selector.startsWith(':where(.area-popover') && /border:[^;]*var\(--area-edge-floating\)/.test(rule.body));
 
 test('hover changes a plate, edge or underline, never the ink', () => {
   for (const { selector, body } of rules) {
@@ -64,7 +73,10 @@ test('every surface takes its depth from its elevation role', () => {
       assert.equal(layers(value), 9, `--area-shadow-${role} is not the nine slots: ${value}`);
       // The dark rim (2026-10-19): second, transparent in light, white in dark at the role's own step, capped.
       const second = (() => { let depth = 0, start = -1; for (let i = 0; i < value.length; i++) { const ch = value[i]; if (ch === '(') depth++; else if (ch === ')') depth--; else if (ch === ',' && depth === 0) { if (start < 0) start = i + 1; else return value.slice(start, i).trim(); } } return ''; })();
-      assert.match(second, /^0 0 0 1px light-dark\(transparent, rgb\(255 255 255 \/ min\(0\.16, calc\(var\(--area-(elevation|shadow-resting-step|shadow-hover-step|shadow-field-step)\) \/ 100 \* [\d.]+ \* 2\)\)\)\)$/, `--area-shadow-${role} has no dark rim at its step: ${second}`);
+      // One edge per surface (plan A7.1): the floating and modal rims only where no frame is, Tooltip's none (its inset
+      // edge takes the strength); the rest a 1px rim.
+      const spread = role === 'float' || role === 'modal' ? 'max\\(0px, calc\\(1px - var\\(--area-border-width\\)\\)\\)' : role === 'tooltip' ? '0px' : '1px';
+      assert.match(second, new RegExp(`^0 0 0 ${spread} light-dark\\(transparent, rgb\\(255 255 255 \\/ min\\(0\\.16, calc\\(var\\(--area-(elevation|shadow-resting-step|shadow-hover-step|shadow-field-step)\\) \\/ 100 \\* [\\d.]+ \\* 2\\)\\)\\)\\)$`), `--area-shadow-${role} has no dark rim at its step: ${second}`);
       assert.match(value, /^0 1px 0 0 /, `--area-shadow-${role} does not start with the lip`);
       assert.match(value, /, inset 0 1px 0 0 light-dark\(rgb\(255 255 255 \/ var\(--area-shadow-highlight-light\)\), rgb\(255 255 255 \/ var\(--area-shadow-highlight-dark\)\)\)$/, `--area-shadow-${role} does not end with the highlight`);
     }
@@ -99,10 +111,13 @@ test('every surface takes its depth from its elevation role', () => {
   const paints = block => {
     // Rules under a material (styles material.css) paint only inside data-area-material, and keep the role last in
     // --_m-own (checked below).
-    const own = rules.filter(rule => !rule.selector.includes('[data-area-material]') && rule.selector.split(/\s*,\s*/).includes(block) && /(^|[;\s])box-shadow\s*:/.test(rule.body));
+    const own = rules.filter(rule => !rule.selector.includes('[data-area-material]') && selectorList(rule.selector).includes(block) && /(^|[;\s])box-shadow\s*:/.test(rule.body));
     assert.ok(own.length, `${block} has no box-shadow`);
-    const value = [...own.at(-1).body.matchAll(/(?:^|[;\s])box-shadow\s*:\s*([^;]+)/g)].at(-1)[1].trim();
-    const ownElevation = () => rules.filter(rule => rule.selector.split(/\s*,\s*/).includes(block)).map(elevation).filter(Boolean).at(-1);
+    let value = [...own.at(-1).body.matchAll(/(?:^|[;\s])box-shadow\s*:\s*([^;]+)/g)].at(-1)[1].trim();
+    // The shared stack (popup.css, plan B6.1) is one property, written on the block by the recipe.
+    const stack = rules.filter(rule => selectorList(rule.selector).includes(block)).map(rule => rule.body.match(/--_float-shadow\s*:\s*([^;]+)/)?.[1].trim()).filter(Boolean).at(-1);
+    if (value === 'var(--_float-shadow)' && stack) value = stack;
+    const ownElevation = () => rules.filter(rule => selectorList(rule.selector).includes(block)).map(elevation).filter(Boolean).at(-1);
     return value.includes('var(--_elevation)') ? value.replace('var(--_elevation)', ownElevation() ?? 'var(--_elevation)') : value;
   };
   const expect = { float: ['.area-popover', '.area-menu', '.area-toast', '.area-menu__search-surface', '.area-scroll-to-latest > .area-button'], modal: ['.area-dialog', '.area-command-palette', '.area-drawer'], resting: ['.area-panel', '.area-composer'] };
@@ -123,7 +138,8 @@ test('every surface takes its depth from its elevation role', () => {
   assert.ok(!material.some(rule => /--_m-own\s*:[^;]*shadow-(float|modal|resting|edge)/.test(rule.body)), 'a material restates a surface\'s own lift');
   // The same slot on a Button that floats: Scroll to latest lists the layers beside its float lift, and the button
   // painter fills them without writing its box-shadow (it replaced the lift; audit 2026-10-18).
-  assert.match(paints('.area-scroll-to-latest > .area-button'), /^var\(--_m-layers, 0 0 0 0 transparent\), var\(--area-shadow-float\)$/, 'Scroll to latest does not list a material\'s layers beside its lift');
+  // It takes the one floating stack (plan B6.1): the layers, the Rest shadow's edge it lacked, then the float role.
+  assert.match(paints('.area-scroll-to-latest > .area-button'), /^var\(--_m-layers, 0 0 0 0 transparent\), var\(--area-shadow-edge\), var\(--area-shadow-float\)$/, 'Scroll to latest does not list a material\'s layers beside its lift');
   const buttonPainter = material.filter(rule => rule.selector.includes('.area-button:is(.area-button--solid, .area-button--outline, .area-button--soft)') && /(^|[;\s])box-shadow\s*:/.test(rule.body) && !/:disabled/.test(rule.selector));
   assert.ok(buttonPainter.length, 'the button painter writes no box-shadow');
   for (const rule of buttonPainter) {
@@ -145,8 +161,10 @@ test('every surface takes its depth from its elevation role', () => {
   assert.match(disabled?.body ?? '', /box-shadow:\s*var\(--_m-rest, none\)/, 'a disabled part under a material drops its own shadow');
   assert.ok(disabled.selector.includes('.area-nav__item[aria-current]:not([aria-current="false"])'), 'the disabled rule no longer outweighs the plain parts\' painter');
   assert.match(ruleFor('.area-video-player__surface')?.body ?? '', /box-shadow:\s*var\(--_m-layers, 0 0 0 0 transparent\), inset 0 0 0 var\(--area-border-width\) rgb\(255 255 255 \/ 0\.12\), var\(--area-shadow-float\)/, 'the Video player lost its ring or its material slot');
-  for (const block of ['.area-calendar, .area-calendar--surface', '.area-color-picker, .area-color-picker--surface']) {
-    assert.match(ruleFor(block)?.body ?? '', /var\(--area-shadow-float\)/, `${block} does not take the float role`);
+  // The surface Calendar and Color picker take the one floating stack on the float role (popup.css, plan B6.1), their
+  // material's layers included (they had none).
+  for (const block of ['.area-calendar:not(.area-calendar--plain)', '.area-color-picker:not(.area-color-picker--plain)']) {
+    assert.match(paints(block), /^var\(--_m-layers, 0 0 0 0 transparent\), var\(--area-shadow-edge\), var\(--area-shadow-float\)$/, `${block} does not take the float role`);
   }
   assert.match(ruleFor('.area-tooltip')?.body ?? '', /var\(--area-shadow-tooltip\)/, 'Tooltip does not take the tooltip role');
   assert.match(ruleFor('.area-card')?.body ?? '', /--_card-shadow:\s*var\(--area-shadow-resting\)/, 'Card does not take the resting role');
@@ -190,11 +208,13 @@ test('every surface takes its depth from its elevation role', () => {
 });
 
 test('text fields show disabled with field paint, not opacity', () => {
-  for (const selector of ['.area-input[data-disabled]', '.area-textarea:disabled', '.area-select:disabled', '.area-composer[data-disabled]', '.area-number-field[data-disabled]']) {
-    const rule = ruleFor(selector);
-    assert.ok(rule, `${selector} missing`);
-    assert.doesNotMatch(rule.body, /opacity/, `${selector} dims a field twice`);
-  }
+  // Every field shell takes the one recipe (input.css, plan B7.8): its disabled fill, edge and ink; never an opacity.
+  const shell = rules.find(rule => rule.selector.startsWith(':is(.area-input, .area-number-field, .area-otp-field, .area-tag-picker__field)[data-disabled]') && /--_bg:\s*var\(--_bg-disabled\)/.test(rule.body));
+  assert.ok(shell, 'the field shell has no disabled recipe');
+  assert.doesNotMatch(shell.body, /opacity/, 'the shell dims a field twice');
+  const composer = ruleFor('.area-composer[data-disabled]');
+  assert.ok(composer, '.area-composer[data-disabled] missing');
+  assert.doesNotMatch(composer.body, /opacity/, 'Composer dims a field twice');
   // InputGroup's disabled paint is field paint too (audit B-32).
   const group = rules.find(rule => rule.selector.startsWith('.area-input-group:is([aria-disabled="true"]') && /background-color/.test(rule.body));
   assert.ok(group, 'InputGroup disabled paint missing');
@@ -204,21 +224,21 @@ test('text fields show disabled with field paint, not opacity', () => {
 test('fields rest on Field shadow, transparent by default, and the Select picker floats with the shared lift (audit B-32)', () => {
   // Fields carry no shadow by default (ChatGPT, Notion, Figma); Field shadow (axes/depth.ts, 2026-10-18) lifts them when
   // chosen, as shadcn's and Primer's, and it is 0 by default, a transparent role. Soft fields stay flat.
-  for (const selector of ['.area-input', '.area-number-field', '.area-select']) {
-    const rule = rules.find(r => r.selector === selector && /box-shadow/.test(r.body));
-    assert.ok(rule, `${selector} resting shadow rule missing`);
-    assert.match(rule.body, /--_field-lift:\s*var\(--area-shadow-field\)/, `${selector} does not rest on Field shadow`);
-    assert.match(rule.body, /box-shadow:\s*var\(--_field-lift\)/, `${selector} paints something other than its lift`);
-  }
-  for (const selector of ['.area-input--soft', '.area-number-field--soft', '.area-select--soft']) {
-    const rule = rules.find(r => r.selector === selector && /--_field-lift/.test(r.body));
-    assert.match(rule?.body ?? '', /--_field-lift:\s*0 0 0 0 transparent/, `${selector} lifts; soft fields are flat`);
-  }
+  // One field shell (plan B3.1): the roots rest on Field shadow, the shell paints the lift, soft is flat.
+  const roots = rules.find(r => r.selector.startsWith('.area-input, .area-number-field, .area-input-group, .area-select') && /--_field-lift:/.test(r.body));
+  assert.match(roots?.body ?? '', /--_field-lift:\s*var\(--area-shadow-field\)/, 'fields do not rest on Field shadow');
+  const shell = rules.find(r => r.selector.startsWith('.area-input, .area-number-field, .area-input-group, .area-select') && /border-radius:\s*var\(--_field-shape\)/.test(r.body));
+  assert.match(shell?.body ?? '', /box-shadow:\s*var\(--_field-lift\)/, 'the field shell paints something other than its lift');
+  const soft = rules.find(r => r.selector.startsWith('.area-input.area-input--soft'));
+  for (const block of ['area-input', 'area-number-field', 'area-select']) assert.ok(soft?.selector.includes(`.${block}.${block}--soft`), `${block} soft is not the shell's`);
+  assert.match(soft?.body ?? '', /--_field-lift:\s*0 0 0 0 transparent/, 'soft fields lift; they are flat');
   const lift = css.slice(css.indexOf(':where(:root)')).match(/--area-shadow-field-step:\s*([^;]+);/)?.[1].trim();
   assert.equal(lift, '0', 'Field shadow is on by default');
-  const picker = rules.find(r => r.selector === '.area-select::picker(select)' && /box-shadow/.test(r.body));
+  // The picker takes the one floating stack on the float role (popup.css, plan B6.1), restated on the pseudo-element.
+  const picker = rules.find(r => r.selector === ':where(.area-select)::picker(select)' && /box-shadow/.test(r.body));
   assert.ok(picker, 'Select picker rule missing');
-  assert.match(picker.body, /var\(--area-shadow-float\)/);
+  assert.match(picker.body, /--_elevation:\s*var\(--area-shadow-float\)/);
+  assert.match(picker.body, /box-shadow:\s*var\(--_float-shadow\)/);
 });
 
 test('selection markers never paint the accent or focus colour directly', () => {
@@ -255,7 +275,7 @@ test('required lines never ride the Surface axis', () => {
     ['.area-separator--horizontal', 'block-size'],
     ['.area-nav__separator', 'block-size'],
     ['.area-table-wrapper', 'border'],
-    ['.area-description-list--framed', 'border'],
+    ['.area-description-list--surface', 'border'],
     ['.area-code-block', 'border'],
     ['.area-file-upload', 'border'],
     ['.area-asset-card__frame', 'border'],
@@ -274,14 +294,22 @@ test('required lines never ride the Surface axis', () => {
 test('every floating surface draws the floating frame', () => {
   // The Floating stroke group's edge (axes/stroke-groups.ts, 2026-10-30; was border-float, neutral 100 / 650), so every
   // floating surface takes one amount and stays distinct over another surface (DESIGN_SYSTEM.md, "Strokes").
-  for (const selector of ['.area-popover, .area-menu', '.area-dialog', '.area-toast', '.area-menu__search-surface', '.area-calendar, .area-calendar--surface', '.area-command-palette', '.area-select::picker(select)']) {
-    const rule = rules.find(r => r.selector === selector && /var\(--area-edge-floating\)/.test(r.body));
-    assert.ok(rule, `${selector} does not draw the Floating group's edge`);
+  // One rule draws it on every surface (popup.css, plan B6.1); the native picker restates it on its pseudo-element.
+  assert.ok(FLOATING_FRAME, 'the one floating frame is missing');
+  for (const selector of ['.area-popover', '.area-menu', '.area-dialog', '.area-drawer', '.area-toast', '.area-menu__search-surface', '.area-calendar:not(.area-calendar--plain)', '.area-command-palette', '.area-color-picker:not(.area-color-picker--plain)']) {
+    assert.ok(selectorList(FLOATING_FRAME.selector).includes(selector), `${selector} does not draw the Floating group's edge`);
   }
-  assert.match(ruleFor('.area-color-picker, .area-color-picker--surface')?.body ?? '', /--_picker-edge:\s*var\(--area-edge-floating\)/);
-  // The floating Toolbar and the floating Selection bar draw the edge inside their box-shadow, on the float role.
-  for (const selector of ['.area-toolbar--surface', '.area-selection-bar--floating']) {
-    assert.match(ruleFor(selector)?.body ?? '', /inset 0 0 0 var\(--area-border-width\) var\(--area-edge-floating\), var\(--area-shadow-float\)/, `${selector} does not draw the floating frame`);
+  assert.match(ruleFor(':where(.area-select)::picker(select)')?.body ?? '', /border:[^;]*var\(--area-edge-floating\)/, 'the Select picker does not draw the Floating group\'s edge');
+  // The floating bars (Toolbar's surface, the floating Selection bar and Titlebar) draw the same edge inside, an inset
+  // ring (`--_float-frame`, popup.css), before the one floating stack on the float role (plan B6.1, 2026-11-14).
+  const bars = ['.area-toolbar--surface', '.area-selection-bar--floating', '.area-titlebar--floating'];
+  const barFrame = rules.find(rule => bars.every(bar => selectorList(rule.selector).includes(bar)) && /--_float-frame\s*:/.test(rule.body));
+  assert.match(barFrame?.body ?? '', /--_float-frame:\s*inset 0 0 0 var\(--area-border-width\) var\(--area-edge-floating\)/, 'the floating bars lost their inside edge');
+  const barStack = rules.find(rule => bars.every(bar => selectorList(rule.selector).includes(bar)) && /--_float-shadow\s*:/.test(rule.body));
+  assert.ok(barStack && selectorList(barStack.selector).includes('.area-popover'), 'the floating bars do not take the one floating stack');
+  for (const selector of bars) {
+    const own = rules.filter(rule => selectorList(rule.selector).includes(selector) && /(^|[;\s])(box-shadow|--_toolbar-shadow|--_shadow)\s*:/.test(rule.body)).at(-1);
+    assert.match(own?.body ?? '', /(box-shadow|--_toolbar-shadow|--_shadow):\s*var\(--_float-frame\), var\(--_float-shadow\)/, `${selector} writes its own float stack`);
   }
 });
 
@@ -353,7 +381,9 @@ test('a line under its title joins it, and a label column fits its labels (DESIG
     assert.match(body, /font-size:\s*var\(--area-text-base-size\)/, `${title} should be its text's size`);
     assert.match(body, /line-height:\s*var\(--area-text-base-leading\)/, `${title} should take its text's line`);
   }
-  assert.match(ruleFor('.area-card')?.body ?? '', /--_card-title-size:\s*var\(--area-card-title-size,\s*var\(--area-text-base-size\)\)/, "Card's title should be its description's size");
+  // The frame recipe's title pair (surface.css, plan B1.1): the text's size, which Card's title reads.
+  assert.match(ruleFor('.area-card')?.body ?? '', /--_card-title-size:\s*var\(--area-card-title-size,\s*var\(--_fr-title-size\)\)/, "Card's title should be its description's size");
+  assert.ok(rules.some(rule => rule.selector.startsWith(':where(.area-card, .area-surface,') && /--_fr-title-size:\s*var\(--area-text-base-size\)/.test(rule.body)), "the frame's title is not its text's size");
   assert.doesNotMatch(css, /var\(--area-leading-24\)\s*-\s*var\(--_height\)/, 'a close centres on its title\'s own line, not a fixed 24');
   const groups = rules.find(rule => rule.selector.includes('.area-checkbox-group__description') && /margin-block-start/.test(rule.body));
   assert.match(groups?.body ?? '', /margin-block-start:\s*0\s*;/, 'a group description should join its legend as a choice description does');
@@ -409,11 +439,14 @@ test("a host's text rules leave components alone", () => {
 test('soft fields draw a boundary under increased contrast', () => {
   // CONTRAST.md: under increased contrast a required boundary targets 3:1. A soft field's fill alone read 1.07:1,
   // so its resting edge is `input-edge-soft`: the Fields group's amount at standard contrast, the strong control edge at more.
-  const soft = ['.area-input--soft', '.area-number-field--soft', '.area-otp-field--soft', '.area-select--soft', '.area-custom-select--soft',
-    '.area-date-picker--soft', '.area-tag-picker--soft'];
-  for (const block of soft) assert.match(ruleFor(block)?.body ?? '', /--_border:\s*var\(--area-input-edge-soft\)/, `${block} has no edge under increased contrast`);
-  assert.match(ruleFor('.area-textarea--soft')?.body ?? '', /--_border:\s*var\(--area-textarea-edge-soft\)/, 'Textarea soft has no edge under increased contrast');
-  assert.match(ruleFor('.area-input-group--soft')?.body ?? '', /border-color:\s*var\(--area-input-edge-soft\)/, 'Input group soft has no edge under increased contrast');
+  // One field shell (plan B3.1): soft paints --_border-soft, the Fields group's edge by default; Textarea its own seam.
+  const soft = rules.find(r => r.selector.startsWith('.area-input.area-input--soft'));
+  for (const block of ['area-input', 'area-number-field', 'area-input-group', 'area-otp-field', 'area-select', 'area-custom-select', 'area-date-picker', 'area-tag-picker', 'area-textarea'])
+    assert.ok(soft?.selector.includes(`.${block}.${block}--soft`), `${block} soft is not the shell's`);
+  assert.match(soft?.body ?? '', /--_border:\s*var\(--_border-soft\)/, 'soft does not draw its soft edge');
+  const roots = rules.find(r => r.selector.startsWith('.area-input, .area-number-field, .area-input-group') && /--_border-soft:/.test(r.body));
+  assert.match(roots?.body ?? '', /--_border-soft:\s*var\(--area-input-edge-soft\)/, 'a soft field has no edge under increased contrast');
+  assert.match(ruleFor('.area-textarea')?.body ?? '', /--_border-soft:\s*var\(--area-textarea-edge-soft\)/, 'Textarea soft has no edge under increased contrast');
   // Since 2026-10-30 the edge is the Fields stroke group's (axes/stroke-groups.ts), which carries the contrast switch.
   assert.match(css, /--area-input-edge-soft:\s*var\(--area-edge-fields\)/, 'input-edge-soft is not the Fields group\'s edge');
   assert.match(css, /--area-edge-fields:\s*color-mix\(in srgb, color-mix\(in srgb, var\(--area-fg-default\)[^;]*transparent\), var\(--area-stroke-control\) calc\(var\(--area-contrast-more\) \* 100%\)\)/, 'the Fields edge lost its contrast switch');
@@ -431,7 +464,7 @@ test('every painted ground is declared in layers.css', () => {
   const strip = text => text.replace(/\/\*[\s\S]*?\*\//g, '');
   const layers = strip(readFileSync(new URL('layers.css', src), 'utf8'));
   // Each ground's list: the :where(...) before `[data-area-ground="<ground>"]`, its selectors with a trailing :not() dropped.
-  const declared = { raised: new Set(), page: new Set(), recessed: new Set(), well: new Set() };
+  const declared = { raised: new Set(), float: new Set(), page: new Set(), recessed: new Set(), well: new Set() };
   for (const ground of Object.keys(declared)) {
     const at = layers.indexOf(`[data-area-ground="${ground}"] {`);
     assert.ok(at > 0, `layers.css has no ${ground} ground`);
@@ -448,8 +481,8 @@ test('every painted ground is declared in layers.css', () => {
       part += ch;
     }
   }
-  if (/\.area-select::picker\(select\)\s*\{[^}]*--area-bg-component:\s*var\(--area-bg-component-raised\)/.test(layers)) declared.raised.add('.area-select::picker(select)');
-  const GROUND = { 'bg-surface': 'raised', 'bg-code': 'raised', 'bg-subtle': 'recessed', 'bg-well': 'well', 'bg-page': 'page' };
+  if (/\.area-select::picker\(select\)\s*\{[^}]*--area-bg-component:\s*var\(--area-bg-component-float\)/.test(layers)) declared.float.add('.area-select::picker(select)');
+  const GROUND = { 'bg-surface': 'raised', 'bg-code': 'raised', 'bg-float': 'float', 'bg-subtle': 'recessed', 'bg-well': 'well', 'bg-page': 'page' };
   // Painted grounds that hold nothing with a control fill, each with its reason.
   const EXEMPT = {
     '.area-asset-card__cell': 'a group cell: an image or an inert thumbnail',
@@ -461,8 +494,8 @@ test('every painted ground is declared in layers.css', () => {
     '.area-box-model': 'labels and values only',
     '.area-box-model__border': 'labels and values only',
     '.area-box-model__content': 'labels and values only',
-    '.area-radio--card': 'the card is the control: its own paint, not a ground under one',
-    '.area-checkbox--card': 'the card is the control: its own paint, not a ground under one',
+    '.area-radio--surface': 'the card is the control: its own paint, not a ground under one',
+    '.area-checkbox--surface': 'the card is the control: its own paint, not a ground under one',
     '.area-color-picker__preview-new': 'a colour well',
     '.area-file-upload__icon': 'an icon box',
     '.area-color-swatch-picker__cell:has(input:checked)': "a selected cell's own paint",
@@ -480,10 +513,10 @@ test('every painted ground is declared in layers.css', () => {
     if (!file.endsWith('.css')) continue;
     const text = strip(readFileSync(new URL(`components/${file}`, src), 'utf8'));
     for (const [, rawSelector, body] of text.matchAll(/([^{}]+)\{([^{}]*)\}/g)) {
-      const paint = body.match(/background(?:-color)?\s*:\s*var\(--area-(bg-surface|bg-code|bg-subtle|bg-page)\)/);
+      const paint = body.match(/background(?:-color)?\s*:\s*var\(--area-(bg-surface|bg-code|bg-float|bg-subtle|bg-page)\)/);
       if (!paint) continue;
-      for (const selector of rawSelector.split(',').map(part => part.trim().replace(/\s+/g, ' '))) {
-        if (EXEMPT[selector] || declared[GROUND[paint[1]]].has(selector)) continue;
+      for (const selector of selectorList(rawSelector.trim().replace(/\s+/g, ' ')).map(part => part.replace(/^:where\((\.[\w-]+)\)(::.*)$/, '$1$2'))) {
+        if (EXEMPT[selector] || declared[GROUND[paint[1]]].has(selector) || declared[GROUND[paint[1]]].has(selector.replace(/:not\(.*\)$/, ''))) continue;
         missing.push(`${file}: ${selector} paints ${paint[1]} but is not a ${GROUND[paint[1]]} ground in layers.css`);
       }
     }
@@ -511,11 +544,22 @@ test('state indicators follow the state settings: focus offsets and selected str
     if (!/outline:[^;]*--area-(field-)?focus-color/.test(body)) continue;
     const offset = body.match(/outline-offset:\s*([^;]+)/)?.[1].trim();
     if (offset === undefined) continue;
-    assert.ok(/var\(--area-focus-(offset|gap)\)|^calc\(\s*(-1 \* var\(--area-[\w-]+\)|var\(--area-[\w-]+\) \* -1)\s*\)$/.test(offset),
+    // Inside: the negative of the ring's own width (a role, or a private width the rule derives from the roles).
+    const own = body.match(/outline:\s*(var\(--_[\w-]+\)) solid/)?.[1];
+    assert.ok(/var\(--area-focus-(offset|gap|solid-offset)\)|^calc\(\s*(-1 \* var\(--area-[\w-]+\)|var\(--area-[\w-]+\) \* -1)\s*\)$/.test(offset) || (own && offset === `calc(-1 * ${own})`),
       `${selector} sets its focus ring off by ${offset}; use var(--area-focus-offset) on a control, var(--area-focus-gap) off a container or text`);
   }
   for (const { selector, body } of rules) {
-    for (const [, width] of body.matchAll(/0 0 0 ((?:[^,()]|\([^()]*(?:\([^()]*\))*[^()]*\))+?) var\(--area-stroke-selected\)/g)) {
+    if (!body.includes('var(--area-stroke-selected)')) continue;
+    // Each shadow layer, split on the commas outside brackets (a linear walk: a nested pattern here backtracks for
+    // minutes on a long declaration that never reaches the selected stroke).
+    const layers = []; let depth = 0, start = 0;
+    for (let i = 0; i <= body.length; i++) { const c = body[i];
+      if (c === '(') depth++; else if (c === ')') depth--;
+      else if (i === body.length || c === ';' || (c === ',' && depth === 0)) { layers.push(body.slice(start, i)); start = i + 1; } }
+    for (const layer of layers) {
+      const width = layer.match(/0 0 0 (.+) var\(--area-stroke-selected\)\s*$/)?.[1];
+      if (width === undefined) continue;
       assert.match(width, /--area-selected-width/, `${selector} draws its selected edge ${width.trim()} wide; use var(--area-selected-width)`);
     }
   }
@@ -544,7 +588,7 @@ test('the pressed fill is re-derived on every ground and every setting scope', (
     for (let i = 0; i < list.length; i++) { const c = list[i]; if (c === '(') depth++; else if (c === ')') depth--; else if (c === ',' && depth === 0) { out.push(list.slice(start, i)); start = i + 1; } }
     return [...out, list.slice(start)].map(part => part.trim()).filter(Boolean); };
   const parts = selector => split(selector).flatMap(part => /^:where\(.*\)$/.test(part) ? parts(part.slice(7, -1)) : [part]);
-  for (const ground of ['raised', 'page', 'recessed', 'well', 'card', 'tile', 'frame', 'frame-raised']) {
+  for (const ground of ['raised', 'float', 'page', 'recessed', 'well', 'card', 'tile', 'frame', 'frame-raised']) {
     for (const selector of pointer(ground)) for (const part of parts(selector)) {
       if (part.startsWith('[data-area-ground=')) continue;
       // The native Select's picker is a pseudo-element (it cannot join a list) and its options never press
@@ -568,7 +612,7 @@ test('a setting scope inside a ground keeps the ground\'s fills', async () => {
   const { AXIS_PRESETS } = await import('../../tokens/dist/config.js');
   const scopes = [...css.matchAll(/@scope \(([^{]*)\) \{\s*:where\(([^{]*)\) \{([^{}]*)\}/g)].map(([, root, settings, body]) => ({
     root: root.replace(/\s+/g, ' '), settings: settings.replace(/\s+/g, ' '), ground: /--area-bg-component: var\(--area-bg-component-(\w+)\)/.exec(body)?.[1] }));
-  const grounds = ['raised', 'page', 'card', 'tile', 'recessed', 'well'];
+  const grounds = ['raised', 'float', 'page', 'card', 'tile', 'recessed', 'well'];
   assert.deepEqual(scopes.map(scope => scope.ground).sort(), [...grounds].sort());
   const split = list => { const out = []; let depth = 0, start = 0;
     for (let i = 0; i < list.length; i++) { const c = list[i]; if (c === '(') depth++; else if (c === ')') depth--; else if (c === ',' && depth === 0) { out.push(list.slice(start, i)); start = i + 1; } }
@@ -647,7 +691,7 @@ test('every ground moves the edges and restates every edge role and its readers'
   const parts = selector => split(selector).flatMap(part => /^:where\(.*\)$/.test(part) ? parts(part.slice(7, -1)) : [part]);
   const shifting = new Set(rules.filter(rule => /--area-edge-shift-light:\s*(0|max\()/.test(rule.body) && !/:root/.test(rule.selector)).flatMap(rule => parts(rule.selector)));
   const restating = new Set(parts(restate.selector.replace(/ > \*$/, '')));
-  for (const ground of ['raised', 'page', 'recessed', 'well', 'card', 'tile', 'frame', 'frame-raised']) {
+  for (const ground of ['raised', 'float', 'page', 'recessed', 'well', 'card', 'tile', 'frame', 'frame-raised']) {
     for (const rule of rules.filter(rule => rule.body.includes(`--area-bg-component: var(--area-bg-component-${ground})`) && !/^:where\(\s*\[data-area-/.test(rule.selector)))
       for (const part of parts(rule.selector)) {
         if (part === '.area-select::picker(select)') continue;
@@ -751,7 +795,8 @@ test('a revealed control\'s showing rules outrank the rule that hides it (2026-1
       checked++;
     }
   }
-  assert.ok(checked >= 5, `only ${checked} showing rules checked`);
+  // 4 since plan B7.11 (2026-11-14): the touch rules that showed them again are gone; touch never hides them.
+  assert.ok(checked >= 4, `only ${checked} showing rules checked`);
 });
 
 test('an icon size derived from the compact step lands on a native cut (2026-10-26: Empty state 22, Toggletip 14 at type 13)', () => {
@@ -774,7 +819,7 @@ test('a row\'s second text is trimmed like the label beside it', () => {
   const trim = rules.find(rule => rule.selector.split(',').map(s => s.trim()).includes('.area-menu__text') && /text-box:\s*trim-both cap alphabetic/.test(rule.body));
   assert.ok(trim, 'the text-slot trim rule is missing');
   const slots = trim.selector.split(',').map(s => s.trim());
-  for (const second of ['.area-command-palette__description', '.area-popover__step']) {
+  for (const second of ['.area-command-palette__description', '.area-popover__step', '.area-composer-menu__path']) {
     assert.ok(slots.includes(second), `${second} sits beside a trimmed label and is not trimmed`);
   }
 });
@@ -825,18 +870,89 @@ test('Approval keeps the Composer\'s corner', () => {
   assert.match(radius, /^var\(--area-approval-corner, .+\)$/);
   assert.equal(radius.replace(/^var\(--area-approval-corner, (.+)\)$/, '$1'), norm(read('.area-composer', '--_composer-corner')));
   assert.equal(norm(read('.area-approval', '--_approval-height')), norm(read('.area-composer', '--_composer-height')).replace('var(--_x-action)', 'var(--area-control-md)'));
-  assert.equal(norm(read('.area-approval', '--_approval-term')), norm(read('.area-composer', '--_composer-term')));
 });
 
-// composer.css / surface.css: a surface standing alone on the page takes Card's edge (audit S7a) and Card's corner
-// (owner 2026-10-29: the composer's first rounder corner made its buttons rounder than every other Button).
-test('the Composer takes Card\'s corner', () => {
-  const read = (selector, prop) => rules.find(rule => rule.selector === selector && new RegExp(`${prop}\\s*:`).test(rule.body))?.body.match(new RegExp(`${prop}\\s*:\\s*([^;]+)`))?.[1].trim();
-  const norm = value => value?.replace(/--_(composer|card)-(term|inset)/g, '--_x-$2').replace(/--_(composer-corner|card-radius)/g, '--_x-r').replace(/\s+/g, ' ');
-  const card = read('.area-card', '--_card-radius'), composer = read('.area-composer', '--_composer-corner');
-  assert.ok(card && composer, 'the corners are missing');
-  assert.ok(norm(composer).includes(norm(card)), `${composer} does not take ${card}`);
-  assert.equal(norm(read('.area-composer', '--_composer-term')), norm(read('.area-card', '--_card-term')));
+// composer.css: a surface standing alone on the page takes Card's edge (audit S7a). Its corner is the chat card's (plan
+// B1.3, 2026-11-13; surface.css), never past half its one-line height, its actions concentric inside it. It was the
+// container plus its inset's share (19 at the default), held in Phase 1 until the one chat card set it.
+test('the Composer takes the chat card\'s corner, its actions concentric', () => {
+  const read = (selector, prop) => rules.find(rule => rule.selector === selector && new RegExp(`${prop}\\s*:`).test(rule.body))?.body.match(new RegExp(`${prop}\\s*:\\s*([^;]+)`))?.[1].trim().replace(/\s+/g, ' ');
+  assert.equal(read('.area-composer', '--_composer-corner'), 'min(calc(var(--_composer-height) / 2), var(--_fr-corner))');
+  assert.equal(read('.area-composer', '--_composer-action-radius'), 'max(min(var(--area-radius-control-md), var(--_composer-corner)), calc(var(--_composer-corner) - var(--_composer-inset) * var(--area-radius-concentric)))');
+  assert.equal(read('.area-composer', '--_composer-inset'), 'var(--area-ui-cluster)', 'the Composer holds its actions at the chat card\'s mat');
+});
+
+// DESIGN_SYSTEM.md, Size and shape (plan A2.2, A2.3, 2026-11-11): a component's corner reads the public radius roles
+// (radius-control-*, -container, -row, -list(-row), -small, -full, -floor, -min) or the shared corner expression on its
+// own height, round(down, calc(H * var(--area-radius-factor)), 2px), never the raw leaves (radius-surface, the setting's
+// own step), a px literal or a rounding of its own. Blocks share the block corner; resting cards never out-round the
+// floating corner.
+test('corners read the public radius roles: no raw leaf, no literal, no private rounding (plan A2.2)', () => {
+  // Each a selector, its property, and why its rounding is its own. Nothing else may round a corner off the 2px ladder.
+  const OWN = [
+    ['.area-color-swatch', '--_radius', "a swatch's shape factor on its own size, to the nearest even pixel"],
+    [':is(.area-menu__icon, .area-custom-select__icon) .area-color-swatch', '--_radius', "the same, on the menu icon's swatch"],
+    ['.area-color-field .area-input__icon > .area-color-swatch', '--_radius', 'the same, capped concentric with its field'],
+    ['.area-color-swatch-picker__cell', 'border-radius', "the swatch's corner plus the cell's clearance"],
+    ['.area-file-image__figure', 'border-radius', "a file picture's corner, 8% of its size (spec)"],
+    ['.area-asset-card--below > .area-asset-card__head > .area-asset-card__actions', '--_actions-corner', "concentric with the card from the controls' offset, to the nearest pixel"],
+    // Not a corner: the clearance a field keeps beside its curve.
+    ['.area-input, .area-number-field, .area-select, .area-custom-select__trigger', '--_corner-clear', 'the clearance beside a field corner, not a corner'],
+  ];
+  // Not yet on the roles, each pinned outside this test (remove on the fix): inset.css's pill term writes radius-full as
+  // 9999px (the same length).
+  // Chart's keys and marks keep a 2px literal that chart.test.mjs pins; radius-min is the same 2 (square at Sharp).
+  const LITERAL = [['.area-input, .area-number-field, .area-select, .area-custom-select__trigger', '--_field-corner'], ['.area-chart__key', 'border-radius'], ['.area-chart__legend-item', 'border-radius']];
+  const own = (selector, prop, list) => list.some(([s, p]) => selector.startsWith(s) && p === prop);
+  // Strips the balanced call starting at `index` (the name's first letter) and returns [inner, end].
+  const call = (value, index) => {
+    let depth = 0;
+    for (let i = value.indexOf('(', index); i < value.length; i++) {
+      if (value[i] === '(') depth++;
+      else if (value[i] === ')' && --depth === 0) return [value.slice(value.indexOf('(', index) + 1, i), i + 1];
+    }
+    return [value.slice(index), value.length];
+  };
+  const checked = [];
+  for (const { selector, body } of rules) {
+    if (!/\.area-/.test(selector)) continue;
+    for (const [, prop, raw] of body.matchAll(/(?:^|[;\s])([\w-]+)\s*:\s*([^;]+)/g)) {
+      if (!/^border(-[a-z]+)*-radius$/.test(prop) && !/^--_[\w-]*(radius|corner|shape)[\w-]*$/.test(prop)) continue;
+      const value = raw.trim().replace(/\s+/g, ' ');
+      checked.push(selector);
+      assert.doesNotMatch(value, /--area-radius-(surface|step)\b/, `${selector} ${prop} reads a raw radius leaf: ${value}`);
+      if (own(selector, prop, OWN)) continue;
+      // The pill term (a row or keycap 2px short of a pill until Pill) and every rounding, each to the 2px ladder.
+      let rest = value.replace(/min\(2px, \(0\.5 - var\(--area-radius-factor\)\) \* 1000px\)/g, '').replace(/\(0\.5 - var\(--area-radius-factor\)\) \* 1000px/g, '');
+      for (let at = rest.indexOf('round('); at !== -1; at = rest.indexOf('round(')) {
+        const [inner, end] = call(rest, at);
+        assert.match(inner, /^down, .+, 2px$/, `${selector} ${prop} rounds a corner its own way (round(${inner})); a corner rounds down to even pixels`);
+        rest = rest.slice(0, at) + 'R' + rest.slice(end);
+      }
+      assert.doesNotMatch(rest, /--area-radius-factor/, `${selector} ${prop} reads the radius factor outside the shared corner expression: ${value}`);
+      if (own(selector, prop, LITERAL)) continue;
+      assert.doesNotMatch(rest, /(^|[^\w.-])(?!0px\b)\d*\.?\d+px\b/, `${selector} ${prop} writes a corner in px: ${value}`);
+    }
+  }
+  assert.ok(checked.length > 300, `only ${checked.length} corner declarations read`);
+  // Blocks share one block corner, the container's (Table, Description list framed, Queue, Plan, Plan's steps, Edit
+  // summary). Code block's frame is concentric with its copy control instead (code-block.css).
+  const radiusOf = selector => rules.find(rule => rule.selector.split(', ').includes(selector) && /(^|[;\s])border-radius\s*:/.test(rule.body))?.body.match(/(?:^|[;\s])border-radius\s*:\s*([^;]+)/)?.[1].trim();
+  // Since plan B1.1 / B1.3 (2026-11-13) each reads its frame recipe role (surface.css; the frame recipe test below).
+  assert.equal(radiusOf('.area-description-list--surface'), 'var(--_fr-block)', 'Description list framed is a block: the block corner');
+  assert.equal(radiusOf('.area-plan__steps'), 'var(--area-radius-container)', 'a plan item\'s steps box is a block');
+  for (const chat of ['.area-queue', '.area-plan', '.area-edit-summary']) assert.equal(radiusOf(chat), 'var(--_fr-corner)', `${chat} is a chat card: the chat card's corner`);
+  assert.equal(radiusOf('.area-table-wrapper'), 'var(--area-table-corner, var(--_fr-block))', 'Table is a block: the block corner');
+  // Resting cards never out-round the floating corner (plan A2.3): Card is six tenths of its text inset, capped; Asset
+  // card, Design card, Surface and the modal surfaces take the container's.
+  const read = (selector, prop) => rules.find(rule => rule.selector === selector && new RegExp(`(^|[;\\s])${prop}\\s*:`).test(rule.body))?.body.match(new RegExp(`(?:^|[;\\s])${prop}\\s*:\\s*([^;]+)`))?.[1].trim().replace(/\s+/g, ' ');
+  assert.equal(read('.area-card', '--_card-radius'), 'var(--_fr-card)', 'Card takes the resting-card corner');
+  for (const size of ['.area-card--sm', '.area-card--md', '.area-card--lg']) assert.equal(read(size, '--_card-radius'), undefined, `${size} restates the corner instead of reading the recipe`);
+  assert.equal(read('.area-asset-card', '--_corner'), 'var(--area-asset-card-corner, var(--_fr-block))');
+  assert.equal(read('.area-design-card', '--_corner'), 'var(--area-design-card-corner, var(--_fr-block))');
+  assert.equal(read('.area-surface', '--_sf-corner'), 'var(--_fr-card)', 'Surface takes Card\'s corner (plan B1.1)');
+  assert.equal(read('.area-dialog', '--_dialog-radius'), 'var(--area-radius-container)', 'Dialog takes the floating corner, no + 4');
+  assert.equal(read('.area-drawer--bottom', '--_drawer-radius'), 'var(--area-radius-container)', "Drawer takes Dialog's corner");
 });
 
 // panel.css / app-shell.css (owner 2026-10-30: "there shouldnt be so much excess room on the sides of the buttons, it
@@ -847,7 +963,10 @@ test('the Composer takes Card\'s corner', () => {
 test('a bar of controls is inset as far from its sides as from its top', () => {
   const body = selector => rules.find(rule => rule.selector === selector)?.body ?? '';
   assert.match(body('.area-panel__bar:not(:has(> .area-panel__title))'), /padding-inline:\s*var\(--_bar-start\)\s+var\(--_bar-end\)/);
-  assert.match(body('.area-panel--window-bar > .area-panel__bar'), /--_bar-even:\s*calc\(\(var\(--_bar\) - var\(--area-control-sm\)\) \/ 2\)/);
+  // The even room is the bar less the rule it counts and the control (plan B4.1): a window bar counts none, so 7 all round.
+  assert.match(body('.area-panel__bar:not(:has(> .area-panel__title))'), /--_bar-even:\s*calc\(\(var\(--_bar\) - var\(--_bar-rule\) - var\(--area-control-sm\)\) \/ 2\)/);
+  assert.match(body('.area-panel--window-bar'), /--_bar-rule:\s*0px/);
+  assert.match(body('.area-panel--window-bar'), /--_bar:\s*var\(--_hb-region\)/);
   const start = rules.find(rule => rule.selector.startsWith('.area-titlebar:not(.area-titlebar--floating, .area-titlebar--macos)') && /--_titlebar-start:\s*var\(--_titlebar-even\)/.test(rule.body));
   assert.ok(start, 'the Titlebar has no even start');
   assert.match(start.selector, /\.area-nav/);
@@ -861,9 +980,9 @@ test('a panel\'s Fields and facts share its label column', () => {
   const read = (selector, prop) => rules.find(rule => rule.selector === selector && new RegExp(`${prop}\\s*:`).test(rule.body))?.body.match(new RegExp(`${prop}\\s*:\\s*([^;]+)`))?.[1].trim();
   assert.ok(read('.area-panel', '--_panel-label'), 'the panel publishes no label column');
   assert.equal(read('.area-panel .area-field--auto', '--_label-share'), 'var(--_panel-label)');
-  const facts = read('.area-panel .area-description-list--columns:not(.area-description-list--framed)', 'grid-template-columns');
+  const facts = read('.area-panel .area-description-list--columns:not(.area-description-list--surface)', 'grid-template-columns');
   assert.ok(facts?.startsWith('var(--_panel-label)'), `facts in a panel take ${facts}`);
-  assert.equal(read('.area-panel .area-description-list--columns:not(.area-description-list--framed)', 'column-gap'), 'var(--area-ui-cluster)');
+  assert.equal(read('.area-panel .area-description-list--columns:not(.area-description-list--surface)', 'column-gap'), 'var(--area-ui-cluster)');
 });
 
 test('every Card slot sits on the card\'s one space: CardContent adds no padding and media steps back out (owner 2026-10-30)', () => {
@@ -871,7 +990,7 @@ test('every Card slot sits on the card\'s one space: CardContent adds no padding
   assert.match(body('.area-card'), /padding:\s*var\(--_card-padding\)/, 'Card is not padded by its space');
   assert.match(body('.area-card'), /--_card-padding:\s*calc\(var\(--_card-space\) - var\(--_card-border\)\)/, 'Card\'s padding is not its space less the border');
   assert.doesNotMatch(body('.area-card__content'), /padding/, 'CardContent pads its slots, so a slot outside it sits elsewhere');
-  assert.match(body('.area-card__content'), /gap:\s*var\(--_card-gap\)/, 'CardContent spaces its blocks apart from the card\'s section gap');
+  assert.match(body('.area-card__content'), /gap:\s*var\(--_card-gap(, var\(--_fr-gap\))?\)/, 'CardContent spaces its blocks apart from the card\'s section gap (in a Surface, the frame recipe\'s)');
   assert.ok(rules.some(rule => /> \.area-card__media:not\(\.area-card__media--bleed\)$/.test(rule.selector) && /margin-inline:\s*calc\(-1 \* var\(--_card-pull\)\)/.test(rule.body)), 'inset media does not step back out to the media inset');
 });
 
@@ -883,10 +1002,10 @@ test('every stroke group\'s members draw its edge, and the groups are the only e
      ['.area-attachment', /--_attachment-edge:\s*var\(--area-edge-cards\)/]],
     blocks: [['.area-code-block', /border:[^;]*var\(--area-edge-blocks\)/], ['.area-table-wrapper', /border:[^;]*var\(--area-edge-blocks\)/]],
     callouts: [['.area-alert', /--_border:\s*var\(--area-edge-callouts\)/]],
-    floating: [['.area-popover, .area-menu', /border:[^;]*var\(--area-edge-floating\)/], ['.area-dialog', /border:[^;]*var\(--area-edge-floating\)/], ['.area-toast', /border:[^;]*var\(--area-edge-floating\)/]],
+    floating: [[FLOATING_FRAME?.selector, /border:[^;]*var\(--area-edge-floating\)/]], // one rule for every floating surface (popup.css, plan B6.1)
     regions: [['.area-panel', /border:[^;]*var\(--area-edge-regions\)/]],
     dividers: [['.area-separator', /background-color:\s*var\(--area-edge-dividers\)/], ['.area-menu__separator', /background-color:\s*var\(--area-edge-dividers\)/], ['.area-table th, .area-table td, .area-table__cell', /border-block-end:[^;]*var\(--area-edge-dividers\)/]],
-    buttons: [['.area-button--soft', /--_border:\s*var\(--area-edge-buttons\)/], ['.area-segmented', /outline:[^;]*var\(--area-edge-buttons\)/], ['.area-toggle-group--soft', /outline:[^;]*var\(--area-edge-buttons\)/]],
+    buttons: [['.area-button--soft', /--_border:\s*var\(--area-edge-buttons\)/], [':where(.area-segmented, .area-toggle-group--soft)', /outline:[^;]*var\(--area-edge-buttons\)/]], // one track (plan B8.1)
     tracks: [['.area-slider__rail', /outline:[^;]*var\(--area-edge-tracks\)/], ['.area-progress', /outline:[^;]*var\(--area-edge-tracks\)/]],
     tags: [['.area-count--soft', /box-shadow:[^;]*var\(--area-edge-tags\)/], ['.area-kbd', /border:[^;]*var\(--area-edge-tags\)/]],
     media: [['.area-avatar', /outline:[^;]*var\(--area-edge-media\)/]],
@@ -903,7 +1022,7 @@ test('every stroke group\'s members draw its edge, and the groups are the only e
 test('a one-line option row takes the height ladder corner, pictures in a card the surface corner', () => {
   // DESIGN_SYSTEM.md, Radius, "Option rows are bars" (owner 2026-10-30): a row or list card / soft option is a bar, so it
   // reaches a pill only at Pill; on the surface corner a 34 row was a pill at corner 12.
-  const base = rules.find(rule => rule.selector.startsWith('.area-checkbox--card, .area-radio--card, .area-checkbox--soft, .area-radio--soft') && /border-radius/.test(rule.body))?.body ?? '';
+  const base = rules.find(rule => rule.selector.startsWith('.area-checkbox--surface, .area-radio--surface, .area-checkbox--soft, .area-radio--soft') && /border-radius/.test(rule.body))?.body ?? '';
   assert.match(base, /border-radius:\s*var\(--_card-corner\)/, 'card and soft options draw --_card-corner');
   assert.match(base, /--_card-line:\s*calc\(2 \* \(var\(--_card-inset\) \+ var\(--area-stroke-width\)\) \+ var\(--_size\)\)/, 'the one-line height is the inset and edge twice plus the control box');
   assert.match(base, /--_card-corner:\s*min\(var\(--area-radius-container\),.*var\(--_card-line\) \* var\(--area-radius-factor\)/, 'the corner is the ladder on the one-line height, capped at the surface');
@@ -958,28 +1077,123 @@ test('opacity reads the fade clock, so reduced motion keeps the fade and drops t
   assert.match(reduced, /\[data-area-motion="0"\][^{]*\{[^}]*--area-fade-base:\s*0ms/, 'Motion 0 keeps no fade, reduced or not');
 });
 
-test('an exit is never slower than its enter (docs/MOTION.md, Roles; system gaps M3)', () => {
-  const order = ['instant', 'fast', 'base', 'moderate', 'slow'];
+test('an exit is never slower than its enter, and accelerates away (docs/MOTION.md, Roles; system gaps M3; plan A5.1)', () => {
+  // Owner 2026-11-11 (plan A5.1): anchored overlays enter and leave on `fast`, dialogs enter on `base` and leave on
+  // `fast`; every exit reads `ease-exit`, so a surface never eases out into invisibility.
+  const order = ['instant', 'quick', 'fast', 'base', 'moderate', 'slow'];
   const rank = value => order.indexOf(value.match(/--area-(?:duration|fade)-(\w+)/)?.[1] ?? '');
+  const read = (body, name) => body.match(new RegExp(`${name}:\\s*([^;]+)`))?.[1].trim() ?? '';
   const anchored = ruleFor(':is(.area-popover, .area-menu, .area-tooltip)[popover]')?.body ?? '';
-  const enter = anchored.match(/--_overlay-duration:\s*([^;]+)/)?.[1] ?? '';
-  const exit = anchored.match(/--_overlay-exit:\s*([^;]+)/)?.[1] ?? '';
-  assert.ok(rank(exit) >= 0 && rank(exit) < rank(enter), `anchored overlays: exit ${exit} vs enter ${enter}`);
+  const enter = read(anchored, '--_overlay-duration'), exit = read(anchored, '--_overlay-exit');
+  assert.ok(rank(exit) >= 0 && rank(exit) <= rank(enter), `anchored overlays: exit ${exit} vs enter ${enter}`);
+  assert.equal(enter, 'var(--area-duration-fast)', 'anchored overlays enter on fast (plan A5.1)');
+  assert.ok(rank(read(anchored, '--_overlay-fade-exit')) <= rank(read(anchored, '--_overlay-fade')), 'anchored overlays: the exit fade is slower than the enter fade');
+  const anchoredClosed = ruleFor(':is(.area-popover, .area-menu, .area-tooltip)[popover]:not(:popover-open)')?.body ?? '';
+  assert.match(anchoredClosed, /--_overlay-ease:\s*var\(--area-ease-exit\)/, 'anchored overlays: the exit fade does not accelerate');
+  assert.match(anchoredClosed, /--_overlay-move:\s*var\(--area-ease-exit\)/, 'anchored overlays: the exit scale does not accelerate');
   const modal = ':is(.area-dialog__modal, .area-command-palette__modal)';
-  const open = ruleFor(modal)?.body.match(/--_overlay-duration:\s*([^;]+)/)?.[1] ?? '';
-  const closed = ruleFor(`${modal}:not([open])`)?.body.match(/--_overlay-duration:\s*([^;]+)/)?.[1] ?? '';
+  const open = read(ruleFor(modal)?.body ?? '', '--_overlay-duration');
+  const closedBody = ruleFor(`${modal}:not([open])`)?.body ?? '';
+  const closed = read(closedBody, '--_overlay-duration');
   assert.ok(rank(closed) >= 0 && rank(closed) < rank(open), `modals: exit ${closed} vs enter ${open}`);
+  assert.equal(open, 'var(--area-duration-base)', 'dialogs enter on base (plan A5.1)');
+  assert.match(closedBody, /--_overlay-ease:\s*var\(--area-ease-exit\)/, 'modals: the exit does not accelerate');
+  const palette = read(ruleFor('.area-command-palette__modal')?.body ?? '', '--_overlay-duration');
+  assert.ok(rank(palette) <= rank(enter), `the command palette takes the anchored clocks, not ${palette}`);
+  // Every other surface's exit (Drawer, Toast, the native Select picker, the scrims) reads ease-exit too.
+  for (const selector of ['.area-drawer__modal:not([open], :popover-open) > .area-drawer', '.area-toaster__list > li[data-leaving] > .area-toast', `${modal}:not([open])::backdrop`, '.area-drawer__modal:not([open])::backdrop'])
+    assert.match(ruleFor(selector)?.body ?? '', /transition-timing-function:\s*var\(--area-ease-exit\)/, `${selector} does not leave on ease-exit`);
+  assert.ok(rules.some(rule => rule.selector === '.area-select::picker(select)' && /opacity var\(--area-fade-fast\) var\(--area-ease-exit\)/.test(rule.body)), 'the Select picker does not leave on ease-exit');
+});
+
+test('a surface opened from a key appears at its size: no scale, only the fade (plan A5.2)', () => {
+  // overlay.ts writes data-opened-by="keyboard" on every popover and dialog a key opens; one hook, read here.
+  for (const selector of [':is(.area-popover, .area-menu, .area-tooltip)[popover][data-opened-by="keyboard"]', '.area-command-palette__modal[data-opened-by="keyboard"]'])
+    assert.match(ruleFor(selector)?.body ?? '', /--_overlay-scale:\s*none\b/, `${selector} still scales`);
+  // A context menu is the most frequent open: it never scales.
+  assert.match(ruleFor('.area-menu.area-context-menu__menu[popover]')?.body ?? '', /--_overlay-scale:\s*none\b/, 'the context menu still scales');
+  const hooks = [...css.matchAll(/\[data-opened-by(?:="([^"]*)")?\]/g)].map(match => match[1]);
+  assert.ok(hooks.every(value => value === 'keyboard'), `an unknown data-opened-by value: ${hooks}`);
+});
+
+test('a highlight moving through a list lands and leaves at once (docs/MOTION.md, "List highlight"; plan A5.3)', () => {
+  // Rows whose plate follows the pointer and the keys through a list: Menu and every list built on its rows (Context
+  // menu, List box, Custom select, Combobox, Command palette), the native Select's options, List box's grid, Nav and
+  // Tree view. None may carry a transition; their own parts (a check, a chevron, revealed actions) may.
+  const top = (text, at) => { const out = []; let depth = 0, from = 0; for (let i = 0; i < text.length; i++) { const c = text[i]; if (c === '(' || c === '[') depth++; else if (c === ')' || c === ']') depth--; else if (depth === 0 && at.test(c)) { out.push(text.slice(from, i)); from = i + 1; } } out.push(text.slice(from)); return out.map(one => one.trim()).filter(Boolean); };
+  const isRow = part => {
+    if (part.includes('::')) return false;
+    const last = top(part, /[\s>+~]/).at(-1);
+    return /^\.area-(menu__item|list-box__item|nav__row|nav__item)(?![\w-])/.test(last)
+      || (part.includes('.area-tree-view') && last.startsWith('[role="treeitem"]'))
+      || (part.includes('.area-select') && /^option(?![\w-])/.test(last));
+  };
+  let checked = 0;
+  for (const { selector, body } of rules) {
+    if (!top(selector, /,/).some(isRow)) continue;
+    checked++;
+    const transition = body.match(/(?:^|[;\s])transition(?:-duration)?\s*:\s*([^;]+)/)?.[1].trim();
+    if (transition === undefined) continue;
+    assert.match(transition, /^(none|0s(\s*,\s*0s)*)$/, `${selector} transitions its highlight: ${transition}`);
+  }
+  assert.ok(checked > 20, `expected the list rows' rules, found ${checked}`);
+});
+
+test('colour, opacity and shadow never ride an overshooting curve (plan A5.4)', () => {
+  // Under Easing Spring, ease-out and ease-drawer are a spring that passes 1; effects read ease-effects, which never
+  // does (axes/easing.ts; easing.test.ts checks every value). ease-in-out, ease-in and ease-exit never overshoot.
+  const EFFECT = /^(opacity|background|background-color|border(-[a-z-]+)?-color|color|box-shadow|outline-color|fill|stroke|text-decoration-color|filter|backdrop-filter|caret-color)$/;
+  const split = value => { const out = []; let depth = 0, from = 0; for (let i = 0; i < value.length; i++) { const c = value[i]; if (c === '(') depth++; else if (c === ')') depth--; else if (c === ',' && depth === 0) { out.push(value.slice(from, i).trim()); from = i + 1; } } out.push(value.slice(from).trim()); return out; };
+  const overshoot = /var\(--area-ease-(out|drawer|spring)\)/;
+  let seen = 0;
+  for (const { selector, body } of rules) {
+    const shorthand = body.match(/(?:^|[;\s])transition\s*:\s*([^;]+)/)?.[1];
+    if (shorthand) for (const item of split(shorthand)) {
+      const prop = item.split(/\s+/)[0];
+      if (!EFFECT.test(prop)) continue;
+      seen++;
+      assert.doesNotMatch(item, overshoot, `${selector}: ${item}`);
+    }
+    const props = body.match(/(?:^|[;\s])transition-property\s*:\s*([^;]+)/)?.[1];
+    const curves = body.match(/(?:^|[;\s])transition-timing-function\s*:\s*([^;]+)/)?.[1];
+    if (props && curves) {
+      const list = split(curves);
+      split(props).forEach((prop, i) => { if (EFFECT.test(prop)) assert.doesNotMatch(list[i % list.length], overshoot, `${selector}: ${prop} on ${list[i % list.length]}`); });
+    }
+  }
+  assert.ok(seen > 80, `expected the colour and opacity transitions, found ${seen}`);
+  assert.match(css.match(/--area-transition:\s*([^;]+);/)?.[1] ?? '', /^background-color var\(--area-duration-quick\) var\(--area-ease-effects\)/, 'the shared transition leaves colour on quick and ease-effects (plan A5.5)');
+});
+
+test('a press gives on the plate; the label stays at its size (plan A5.6)', () => {
+  // A control that scales to the Feedback give under :active hands its content the inverse scale on the same clocks.
+  const gives = rules.filter(({ selector, body }) => /:active/.test(selector) && /(?:^|[;\s])scale:\s*var\(--(?:_give|area-feedback-scale[\w-]*)\)/.test(body) && !/>\s*\*$/.test(selector));
+  assert.ok(gives.length >= 2, `expected Button and Chip's press, found ${gives.length}`);
+  for (const { selector, body } of gives) {
+    if (!/area-(button|chip)\b/.test(selector)) continue;
+    const give = body.match(/scale:\s*(var\([^)]+\))/)[1];
+    const inverse = ruleFor(`${selector} > *`)?.body ?? '';
+    assert.ok(inverse.includes(`scale: calc(1 / ${give})`), `${selector} scales its label with the plate`);
+    assert.match(inverse, /transition-duration:\s*var\(--area-press-in\)/, `${selector}: the label's inverse scale is not on the press's clock`);
+  }
+});
+
+test('Progress moves its fill by a transform, never by its width (plan A5.7)', () => {
+  const bar = ruleFor('.area-progress__bar')?.body ?? '';
+  const transition = bar.match(/transition:\s*([^;]+)/)?.[1] ?? '';
+  assert.match(transition, /^translate /, transition);
+  assert.doesNotMatch(transition, /inline-size|width/, transition);
 });
 
 test('every field that paints invalid paints success and warning too (components audit O1, 2026-11-07)', () => {
   // A Field hands every control its status; a field that draws the error edge draws the other two the same way.
+  // One field shell (plan B3.1): one rule per tone, every field in it, each setting the edge from the tone's ink.
   const fields = ['.area-input', '.area-number-field', '.area-textarea', '.area-select', '.area-otp-field', '.area-date-picker__trigger', '.area-custom-select__trigger', '.area-tag-picker__field'];
-  for (const field of fields) {
-    const own = rules.filter(rule => rule.selector.split(',').some(part => part.trim().startsWith(field)));
-    for (const state of ['success', 'warning']) {
-      const painted = own.find(rule => new RegExp(`^${field.replace(/[.]/g, '\\.')}\\[data-${state}\\]$`).test(rule.selector.trim()) && /--_border:/.test(rule.body));
-      assert.ok(painted, `${field}[data-${state}] sets the field's edge`);
-    }
+  for (const [state, attr] of [['invalid', '[data-invalid], [aria-invalid="true"]'], ['success', '[data-success]'], ['warning', '[data-warning]']]) {
+    const rule = rules.find(r => r.selector.includes(attr) && new RegExp(`--_border:\\s*var\\(--_tone-${state}\\)`).test(r.body));
+    assert.ok(rule, `no shell rule paints ${state}`);
+    for (const field of fields) assert.ok(rule.selector.includes(field), `${field} does not take ${state}`);
+    assert.match(rule.selector, /\.area-input-group:has\(/, `Input group does not take ${state} from its fields`);
   }
 });
 
@@ -1013,11 +1227,9 @@ test('one announcer: no family writes a live region of its own, except where the
   // (components/announce.ts). The exceptions are elements whose visible content is itself the message, rendered with it.
   const allowed = new Map([
     ['announce.ts', ['aria-live']], // the announcer's own two regions
-    ['primitives.tsx', [
-      'role={tone === "danger" ? "alert" : "status"}', // Alert: the banner is the message
-      'role={label ? "status" : undefined}', // Spinner: a named wait, in place
-      'role={live ? (tone === "danger" ? "alert" : "status") : undefined}', // Toast without a Toaster (a Toaster turns it off)
-    ]],
+    ['Alert.tsx', ['role={tone === "danger" ? "alert" : "status"}']], // Alert: the banner is the message
+    ['Spinner.tsx', ['role={label ? "status" : undefined}']], // Spinner: a named wait, in place
+    ['Toast.tsx', ['role={live ? (tone === "danger" ? "alert" : "status") : undefined}']], // Toast without a Toaster (a Toaster turns it off)
     ['TurnNotice.tsx', ['role={status === "error" ? "alert" : "status"}']], // a conversation's notice line
     ['Pagination.tsx', ['aria-live']], // compact "Page 2 of 10": the visible words, built from the label's nodes
   ]);
@@ -1036,11 +1248,10 @@ test('a send or an upload that fails is said, offers Retry as onRetry and wears 
   const dir = new URL('../src/components/', import.meta.url);
   const source = name => readFileSync(new URL(name, dir), 'utf8');
   const section = (text, from, to) => text.slice(text.indexOf(from), to ? text.indexOf(to) : undefined);
-  const parts = source('ComposerParts.tsx');
   const families = {
     Message: section(source('Message.tsx'), 'export const Message =', 'export interface MessageActionsProps'),
-    Attachment: section(parts, 'export const Attachment =', '// ---- Composer menu ----'),
-    Queue: section(parts, 'export const Queue =', '// ---- Timestamp ----'),
+    Attachment: section(source('Attachment.tsx'), 'export const Attachment ='),
+    Queue: section(source('Queue.tsx'), 'export const Queue ='),
     FileUploadItem: section(source('FileUpload.tsx'), 'export const FileUploadItem ='),
   };
   for (const [family, code] of Object.entries(families)) {
@@ -1049,8 +1260,9 @@ test('a send or an upload that fails is said, offers Retry as onRetry and wears 
   }
   for (const family of ['Message', 'Attachment', 'Queue']) assert.match(families[family], /<Glyph name="dismiss-circle" \/>/, `${family}'s failure mark`);
   const body = selector => rules.filter(rule => rule.selector === selector).map(rule => rule.body).join(';');
-  assert.match(body('.area-message__status > svg'), /color:\s*var\(--area-fg-danger\)/);
-  assert.match(body('.area-attachment__mark'), /color:\s*var\(--area-fg-danger\)/);
+  // A failure glyph reads the tone's mark ink (plan A3.4).
+  assert.match(body('.area-message__status > svg'), /color:\s*var\(--area-fg-danger-mark\)/);
+  assert.match(body('.area-attachment__mark'), /color:\s*var\(--area-fg-danger-mark\)/);
   // V9: the stack's meeting corner is the bubble's own corner, tightened, so it follows the Radius setting.
   assert.match(body('.area-message__bubble'), /--_bubble-meet:\s*calc\(var\(--_bubble-radius\) \/ 4\)/);
   assert.match(body('.area-message__stack'), /--_stack-gap:\s*var\(--area-space-2\)/);
@@ -1115,7 +1327,8 @@ test('a selected row in a list that has lost focus steps back to the hover plate
   const quiet = [
     '.area-list-box:not(:focus-within) .area-list-box__item[aria-selected="true"]:not([data-disabled])',
     '.area-tree-view--navigation:not(:focus-within) [role="treeitem"][aria-selected="true"]:not([aria-current="page"])',
-    '.area-table:not(:focus-within):has(tbody :is(input, button, a[href], [tabindex])) tbody tr:is([data-selected], [aria-selected="true"])',
+    // A press still shows on it (plan B7.2), so the quieter plate stands aside while the row is held.
+    '.area-table:not(:focus-within):has(tbody :is(input, button, a[href], [tabindex])) tbody tr:is([data-selected], [aria-selected="true"]):not(:active)',
   ];
   for (const selector of quiet) assert.match(ruleFor(selector)?.body ?? '', /var\(--area-bg-component-hover\)/, `${selector} does not step back to the hover plate`);
   // The place you are (Nav's current page, a tree's current row) is not a selection, and keeps its plate.
@@ -1131,7 +1344,8 @@ test('inactive looks disabled but keeps a full-strength focus indicator (compone
     const own = ruleFor(`${block}[data-inactive]`);
     assert.ok(own, `${block} has no inactive rule`);
     assert.doesNotMatch(own.body, /(^|[;\s])opacity\s*:/, `${block}[data-inactive] fades the element and its ring`);
-    assert.ok(rules.some(({ selector, body }) => selector.startsWith(`${block}[data-inactive] >`) && /opacity:\s*var\(--area-opacity-disabled\)/.test(body)), `${block} doesn't fade its parts`);
+    // Button's parts take --_dim, the disabled opacity for a neutral button and 1 for a toned one, which repaints (B7.9).
+    assert.ok(rules.some(({ selector, body }) => selector.startsWith(`${block}[data-inactive] >`) && /opacity:\s*var\((--area-opacity-disabled|--_dim)\)/.test(body)), `${block} doesn't fade its parts`);
     // No hover or press paint, as disabled.
     for (const { selector } of rules) {
       if (!selector.startsWith(block + ':hover') && !selector.startsWith(block + ':active')) continue;
@@ -1163,7 +1377,7 @@ test('every resize edge shares one handle paint: Splitter\'s handle and Panel\'s
   assert.match(both(), /--_sash-delay:\s*300ms/, 'the 300 ms rest before an edge shows itself');
   assert.match(both(), /--_sash-line:\s*var\(--area-border-width\)/);
   assert.match(both(':hover'), /--_sash-line:\s*2px;\s*--_sash-ink:\s*var\(--area-border-hover\)/, 'hover: a 2 line in the hover edge ink');
-  assert.match(both('[data-resizing]'), /--_sash-line:\s*2px;\s*--_sash-ink:\s*var\(--area-accent-indicator\)/, 'dragging: the accent');
+  assert.match(both('[data-resizing]'), /--_sash-line:\s*2px;\s*--_sash-ink:\s*var\(--area-focus-color\)/, 'dragging: the Selection ink (plan B7.5)');
   assert.match(both(':focus-visible', '::after'), /background-color:\s*var\(--area-focus-color\)/, 'keyboard focus: the focus pill');
   // A step, never an animation, so reduced motion has nothing to stop (MOTION.md, Resize edge).
   const transition = both('', '::before').match(/transition:\s*([^;]+)/)?.[1] ?? '';
@@ -1188,7 +1402,7 @@ test('hover-revealed actions hide by opacity, land at once and leave on the fade
   for (const [host, [hidden, shown]] of Object.entries(hosts)) {
     const hide = rules.find(rule => hidden.test(rule.selector) && /opacity:\s*0\b/.test(rule.body));
     assert.ok(hide, `${host}: no hiding rule`);
-    assert.match(hide.body, /transition:\s*opacity var\(--area-fade-fast\) var\(--area-ease-out\)/, `${host} leaves on another clock`);
+    assert.match(hide.body, /transition:\s*opacity var\(--area-fade-fast\) var\(--area-ease-effects\)/, `${host} leaves on another clock`); // the effects curve since plan A5.4
     const show = rules.find(rule => shown.test(rule.selector) && /opacity:\s*1\b/.test(rule.body));
     assert.ok(show, `${host}: no rule shows it on hover and focus`);
     assert.match(show.body, /transition-duration:\s*0s/, `${host} does not land at once`);
@@ -1203,30 +1417,726 @@ test('a count and a status badge on one line share one shape and one text side (
   const { DEFAULT_PILLS } = await import('../../tokens/dist/config.js');
   assert.equal(DEFAULT_PILLS.includes('badge'), DEFAULT_PILLS.includes('count'), 'Badge and Count share the default shape');
   const badgeSide = rules.filter(rule => rule.selector === '.area-badge' && /--_box-text/.test(rule.body)).at(-1)?.body ?? '';
-  assert.match(badgeSide, /--_box-text:\s*var\(--area-space-6\)/, "Badge's text side is (h - 6) / 2 (inset.css)");
-  const count = rules.find(rule => rule.selector === '.area-count' && /--_count-gutter/.test(rule.body))?.body ?? '';
-  assert.match(count, /--_count-gutter:\s*calc\(\(var\(--_count-height\) - var\(--area-space-6\)\) \/ 2\)/, "Count's text side is (h - 6) / 2 (no border: its edge is drawn inside)");
+  assert.match(badgeSide, /--_box-text:\s*var\(--area-space-6\)/, "Badge's text side is (h - 6) / 2 by the inset contract (inset.css), the mark side");
   for (const size of ['sm', 'md']) {
     assert.match(ruleFor(`.area-badge--${size}`)?.body ?? '', new RegExp(`--_height:\\s*var\\(--area-mark-label-${size}\\)`), `Badge ${size} is the ${size} mark height`);
     assert.match(ruleFor(`.area-count--${size}`)?.body ?? '', new RegExp(`--_count-height:\\s*var\\(--area-mark-label-${size}\\)`), `Count ${size} is the ${size} mark height`);
   }
-  assert.match(count, /font-size:\s*var\(--_count-text\)/);
-  assert.match(count, /--_count-text:\s*var\(--area-control-xs-text\)/, 'Count sets the marks\' text');
   assert.match(ruleFor('.area-count[data-single]')?.body ?? '', /padding-inline:\s*0/, 'a one-character count drops its sides');
+  assert.match(ruleFor('.area-indicator--count[data-single]')?.body ?? '', /padding-inline:\s*0/, "Indicator's one-character count drops its sides, as Count's (plan B5.3)");
 });
 
-test('marks that share a line share Badge\'s whole-pixel cap centre (DESIGN_SYSTEM.md, "Marks on one line")', () => {
-  // Owner, 2026-11-07 ("the vertical alignment the same/consistent?"): Count centred by its line box sat up to 0.45 off a
-  // badge beside it, and Tag kept the optical lift Badge dropped (0.58 high). Each now rounds its baseline to a whole pixel
-  // from the plate's top by one formula: edge + round((h - 2 * edge + 1cap) / 2).
+// One mark (plan B5.1, B5.2, B5.3; inset.css "One mark"; DESIGN_SYSTEM.md, "One mark"). Every mark family sets the
+// recipe's inputs and reads its outputs; none writes its own side, baseline, corner, text or gap again.
+const MARK_RECIPE = ':where(.area-badge, .area-count, .area-tag, .area-kbd, .area-citation:not(.area-citation--footnote), .area-indicator--count, .area-stepper-step__marker)';
+const MARK_FAMILIES = {
+  badge: { selector: '.area-badge', height: /--_mark-height:\s*var\(--_height\)/, corner: ['--_badge-radius', 'border-radius: var(--_badge-radius)'], text: /--_text:\s*var\(--_mark-text\)/ },
+  count: { selector: '.area-count', height: /--_mark-height:\s*var\(--_count-height\)/, corner: ['border-radius: var(--_mark-corner)'], text: /--_count-text:\s*var\(--_mark-text\)/ },
+  tag: { selector: '.area-tag', height: /--_mark-height:\s*var\(--_height\)/, chip: true, corner: ['--_corner: var(--_mark-corner)'], text: /font-size:\s*var\(--_mark-text\)/ },
+  kbd: { selector: '.area-kbd', height: /--_mark-height:\s*var\(--_height\)/, chip: true, corner: ['border-radius: var(--_mark-corner)'], text: /font-size:\s*var\(--_mark-text\)/ },
+  citation: { selector: '.area-citation', height: /--_mark-height:\s*var\(--_height\)/, corner: ['border-radius: var(--_mark-corner)'], text: /font-size:\s*var\(--_mark-text\)/ },
+  indicator: { selector: '.area-indicator--count', height: /--_mark-height:\s*var\(--area-mark-label-md\)/, corner: ['border-radius: var(--_mark-corner)'], text: /var\(--_mark-text\)\/var\(--_mark-leading\)/ },
+  // Stepper's marker is Kbd's keycap (plan B8.2 hand-over, 2026-11-14): the chip corner on the marker's height.
+  stepper: { selector: '.area-stepper-step__marker', height: /--_mark-height:\s*var\(--_marker\)/, chip: true, corner: ['border-radius: var(--_mark-corner)'], text: /font-size:\s*var\(--area-text-xs-size\)/ },
+};
+
+test('one mark: a mark\'s side, baseline, corner, text and gap come from the one recipe (plan B5.1)', () => {
   const norm = text => text.replace(/\s+/g, ' ');
-  const formula = height => `round(nearest, calc((var(${height}) - 2 * var(--area-stroke-width) + 1cap) / 2), 1px)`;
-  const badge = norm(ruleFor('.area-badge > .area-badge__label')?.body ?? '');
-  assert.ok(badge.includes(`--_baseline: ${formula('--_height')}`), "Badge's label rounds its baseline (badge.css)");
-  const count = norm(rules.find(rule => rule.selector === '.area-count' && /--_count-baseline/.test(rule.body))?.body ?? '');
-  assert.ok(count.includes(`--_count-baseline: calc(var(--area-stroke-width) + ${formula('--_count-height')})`), "Count's digits take Badge's baseline, its edge counted from the plate's top");
-  assert.match(count, /text-box: trim-both cap alphabetic/, "Count's line is trimmed to cap and baseline, so the padding places them");
-  const tag = norm(ruleFor('.area-tag > .area-tag__label')?.body ?? '');
-  assert.ok(tag.includes(`--_baseline: calc(var(--area-stroke-width) + ${formula('--_height')})`), "Tag's label takes Badge's baseline");
-  assert.doesNotMatch(tag, /optical-lift/, 'Tag drops the optical lift (Citation keeps it)');
+  const recipe = norm(ruleFor(MARK_RECIPE)?.body ?? '');
+  assert.ok(recipe, 'the shared mark recipe is in inset.css');
+  const expect = {
+    '--_mark-side': 'calc((var(--_mark-height) - var(--area-space-6)) / 2 - var(--_mark-border))',
+    '--_mark-baseline': 'calc(var(--area-stroke-width) + round(nearest, calc((var(--_mark-height) - 2 * var(--area-stroke-width) + 1cap) / 2), 1px))',
+    '--_mark-cap-above': 'calc(var(--_mark-baseline) - 1cap - var(--_mark-border))',
+    '--_mark-cap-below': 'calc(var(--_mark-height) - var(--_mark-baseline) - var(--_mark-border))',
+    // A pill is one value, radius-full (plan B5.1 hand-over, 2026-11-14: Citation computed 10003px, full plus the corner).
+    '--_mark-corner': 'calc((1 - var(--_mark-chip)) * max(var(--area-radius-min), round(down, calc(var(--_mark-height) * var(--area-radius-factor)), 2px), var(--_mark-pill) * var(--area-radius-full)) + var(--_mark-chip) * min(var(--area-radius-small), calc(var(--_mark-height) / 2)))',
+    '--_mark-text': 'calc(var(--area-control-xs-text) + (var(--area-control-md-text) - var(--area-control-xs-text)) * var(--_mark-lg))',
+    '--_mark-gap': 'calc(var(--area-space-2) * (1 + max(0, sign(var(--_mark-height) - var(--area-mark-label-sm)))))',
+  };
+  for (const [prop, value] of Object.entries(expect)) assert.ok(recipe.includes(`${prop}: ${value}`), `the recipe's ${prop} is ${value}`);
+  // The recipe reads no density, so a mark's text and height follow its size prop only (plan B5.2).
+  assert.doesNotMatch(recipe, /ui-dense|ui-level|density|ui-leading/, 'the recipe never reads density');
+  const parts = norm(rules.find(rule => rule.selector.startsWith('.area-badge > .area-badge__label, .area-tag > .area-tag__label') && /padding-block/.test(rule.body))?.body ?? '');
+  assert.ok(parts.includes('padding-block: var(--_mark-cap-above) var(--_mark-cap-below)') && parts.includes('text-box: trim-both cap alphabetic'), 'every mark\'s text part is trimmed and placed by the recipe');
+  for (const [family, { selector, height, chip, corner, text }] of Object.entries(MARK_FAMILIES)) {
+    const own = rules.filter(rule => rule.selector === selector).map(rule => norm(rule.body)).join(';');
+    assert.match(own, height, `${family} sets the recipe's height`);
+    assert.equal(/--_mark-chip:\s*1/.test(own), !!chip, `${family} is ${chip ? 'an object chip (the small corner)' : 'on the pill role'}`);
+    for (const piece of corner) assert.ok(own.includes(piece), `${family}'s corner is the recipe's (${piece})`);
+    assert.match(own, text, `${family}'s text is the recipe's`);
+  }
+  // Nothing else writes a mark's cap baseline or the old optical lift: one formula, in the recipe.
+  for (const { selector, body } of rules) {
+    if (selector === MARK_RECIPE) continue;
+    if (!/area-(badge|count|tag|kbd|citation|indicator)\b/.test(selector)) continue;
+    assert.doesNotMatch(body, /\+ 1cap\) \/ 2/, `${selector} writes its own cap baseline: read --_mark-baseline`);
+    assert.doesNotMatch(body, /optical-lift/, `${selector} lifts its label off the marks' cap centre`);
+  }
+});
+
+test('the mark ladder is 14 / 18 / 22 at type 13 at every density, whole and distinct at every type (plan B5.1, G12)', () => {
+  const tokensCss = readFileSync(new URL('../../tokens/dist/css/tokens.css', import.meta.url), 'utf8');
+  const axesCss = readFileSync(new URL('../../tokens/dist/css/axes.css', import.meta.url), 'utf8');
+  const ladder = [...(tokensCss + axesCss).matchAll(/--area-mark-label-(sm|md|lg):\s*([^;]+);/g)].map(([, size, value]) => [size, value.trim()]);
+  assert.ok(ladder.length >= 3, 'the ladder is emitted');
+  const want = { sm: 'var(--area-type-small-leading)', md: 'calc(var(--area-type-small-leading) + 4px)', lg: 'calc(var(--area-type-small-leading) + 8px)' };
+  for (const [size, value] of ladder) assert.equal(value, want[size], `mark-label-${size} is the small line plus ${size === 'sm' ? 0 : size === 'md' ? 4 : 8}, the same at every density`);
+  // The small line at every type is even, so H, (H - 6) / 2 and the mark's gaps are whole pixels at every type.
+  const smallLines = [...axesCss.matchAll(/--area-type-small-leading:\s*(\d+)px/g)].map(([, px]) => Number(px));
+  assert.ok(smallLines.length >= 5, 'a small line per type');
+  for (const line of smallLines) {
+    for (const h of [line, line + 4, line + 8]) {
+      assert.equal(h % 2, 0, `a ${h} mark is even`);
+      assert.ok(Number.isInteger((h - 6) / 2), `a ${h} mark's side is whole`);
+    }
+  }
+});
+
+test('an inline chip never exceeds its line (plan B5.1, VC24)', () => {
+  const norm = text => text.replace(/\s+/g, ' ');
+  const chip = norm(ruleFor(':where(.area-code, .area-mention--soft)')?.body ?? '');
+  assert.ok(chip.includes('--_chip-pad-block: max(0px, calc((1lh - var(--_chip-content)) / 2 - var(--_chip-border)))'), 'the chip pads only what its line leaves round the font');
+  assert.match(rules.filter(rule => rule.selector === '.area-code').map(rule => norm(rule.body)).join(';'), /padding: var\(--_chip-pad-block\) var\(--_chip-pad-inline\)/, 'inline Code takes the chip padding');
+  assert.match(norm(ruleFor('.area-mention--soft')?.body ?? ''), /--_mention-pad-block: var\(--_chip-pad-block\)/, 'a soft Mention takes the chip padding');
+});
+
+// --- Type rules (plan A9, docs/research/system-evaluation-2026-11-11; DESIGN_SYSTEM.md, "Ink and weight" and "Size
+// and shape"; area-type-usage). Each guards one rule across every family.
+
+/** Every declaration of a property in a component rule (token scopes and @font-face left out). */
+const declarations = props => rules.flatMap(({ selector, body }) => {
+  if (/^(:root|:where\(:root\)|\[data-area|font-face|from|to|\d)/.test(selector)) return [];
+  return [...body.matchAll(new RegExp(`(?:^|[;\\s])(${props})\\s*:\\s*([^;]+)`, 'g'))].map(([, prop, value]) => ({ selector, prop, value: value.trim() }));
+});
+
+test('text-xs is for marks: words that label, explain, warn or locate are text-sm or larger (plan A9.2)', () => {
+  // The parts allowed the mark size, each a mark, a data label, a status letter or code text (code-block sm, Diff, a
+  // token's name). Anything else that sets text-xs (or control-xs-text, its alias) is a word at the mark size: T1 found
+  // a field's error message, a slider's ends, the calendar's days and a panel's labels there.
+  const MARKS = [
+    /^\.area-avatar--(xs|sm)$/, /^\.area-(badge|chip|timeline-item)__(avatar|media) > \.area-avatar$/, // initials
+    /^\.area-badge$/, /^\.area-count$/, /^\.area-indicator--count$/, /^\.area-tag$/, /^\.area-citation$/, /^:where\(\.area-badge, \.area-count, /, // marks and the one mark recipe
+    /^\.area-kbd(--sm|--md)?$/, /^\.area-menu__item \.area-kbd$/, // keys
+    /^\.area-stepper-step__marker$/, /^\.area-reference-list__count$/, /^\.area-tree-view__status$/, // numbers and status letters on marks
+    /^\.area-chart__(plot|legend-item|note)$/, /^\.area-box-model$/, // data labels
+    /^\.area-code$/, /^\.area-code-block--sm$/, /^\.area-diff$/, /^\.area-token-row\.area-code$/, // code text
+  ];
+  const found = declarations('[\\w-]+').filter(({ value }) => /--area-(text-xs-size|control-xs-text)\b/.test(value));
+  assert.ok(found.length >= 15, `expected the marks' text-xs declarations, found ${found.length}`);
+  for (const { selector, prop } of found) {
+    assert.ok(MARKS.some(mark => mark.test(selector)), `${selector} sets ${prop} at text-xs: words take text-sm or larger (add it to the marks only if it is a mark)`);
+  }
+});
+
+test('no literal font size, line height or tracking: text reads the type axis (plan A9.9)', () => {
+  // A literal ignores the Type setting (Kbd's fixed 11, Code block sm's 18 line less density, inline Code's 1.35). Allowed:
+  // a token or a private property, inherit, a unitless 0 or 1 line for a box that holds one glyph, 1cap, and a ratio of
+  // the host floored at a ramp step (inline Code, Citation's footnote). Folder's and File page's labels are aria-hidden
+  // artwork drawn to the figure's own scale.
+  const ARTWORK = /^\.area-(folder__count|file-page__label|folder__badge > \.area-avatar)$/;
+  for (const { selector, prop, value } of declarations('font-size|line-height|letter-spacing')) {
+    if (ARTWORK.test(selector)) continue;
+    if (/^(inherit|normal|0|1|1cap)$/.test(value)) continue;
+    if (prop === 'letter-spacing' && selector === '.area-otp-field__control' && value === '-0.5em') continue; // the hidden input's caret trick
+    const bare = value.replace(/var\((--[\w-]+)(?:,\s*var\(--[\w-]+\))?\)/g, 'T');
+    if (/^(T|max\(T, 0\.\d+em\))$/.test(bare)) continue;
+    assert.fail(`${selector} sets ${prop}: ${value}, a literal off the type axis`);
+  }
+  assert.doesNotMatch(css, /--_(code|diff)-leading:[^;]*--area-leading-18/, 'code lines are a role on the type axis, never the fixed 18 less density');
+  for (const selector of ['.area-code-block--sm', '.area-diff']) {
+    assert.match(rules.filter(rule => rule.selector === selector).map(rule => rule.body).join(';'), /--_(code|diff)-leading:\s*var\(--area-text-xs-code-leading\)/, `${selector}: code takes the code leading`);
+  }
+  assert.ok(!declarations('--_font').some(({ selector, value }) => selector.includes('area-kbd') && /--area-size-\d+/.test(value)), 'every Kbd reads the mark text, never a fixed step');
+  assert.doesNotMatch(ruleFor('.area-tag')?.body ?? '', /font-size:[^;]*(ui-dense|ui-leading|--_small)/, "Tag's text follows its size, never density (plan B5.2)");
+});
+
+test('weights come from the one weight table (plan A9.5)', () => {
+  // Two weights in UI text and a third for page titles: every weight is a weight token (or a private property that holds
+  // one), never a number.
+  for (const { selector, prop, value } of declarations('font-weight|--_[\\w-]*weight')) {
+    assert.match(value, /^(inherit|var\(--(area-weight-(regular|strong|heading)|_[\w-]+)(, var\(--area-weight-(regular|strong)\))?\))$/, `${selector} sets ${prop}: ${value}`);
+  }
+  // 600 heads a page: titles from title-sm up (Page header md and lg) and nothing in an interface's rows or controls.
+  const heading = declarations('font-weight|--_[\\w-]*weight').filter(({ value }) => value.includes('--area-weight-heading'));
+  assert.deepEqual([...new Set(heading.map(({ selector }) => selector))].sort(), ['.area-page-header', '.area-page-header--lg', '.area-page-header--md'], 'only page titles take weight-heading');
+  // 500: an item's name on a picture or file card (B1.2), a heading over a run of rows (A9.4), labels on fills.
+  const strong = selector => rules.filter(rule => rule.selector.split(',').map(s => s.trim()).includes(selector)).map(rule => rule.body).join(';');
+  for (const name of ['.area-asset-card__name', '.area-design-card__name', '.area-file-tile__name', '.area-asset-row__name', '.area-select optgroup', '.area-color-picker__heading', '.area-table__group-heading > th']) {
+    assert.match(strong(name), /font-weight:\s*var\(--area-weight-strong\)/, `${name} should be 500`);
+  }
+  // 400: a label beside or over a value (A9.13), and a figure.
+  for (const part of ['.area-meter__label', '.area-card__value', '.area-chart__figure', '.area-chart__center']) {
+    assert.match(strong(part), /font-weight:\s*var\(--area-weight-regular\)/, `${part} should be 400`);
+  }
+  assert.doesNotMatch(strong('.area-description-list--justified .area-description-list__term'), /font-weight|color/, 'a justified term keeps the term\'s muted 400');
+});
+
+test('numbers that change, count or sit in a column are tabular (plan A9.8)', () => {
+  const NUMERIC = [
+    '.area-number-field', '.area-timestamp', '.area-nav__trailing', '.area-date-picker__value', '.area-slider__ends',
+    '.area-table', '.area-table .area-table__cell--numeric', '.area-field__count', '.area-calendar__day', '.area-chart__plot',
+    '.area-chart__center', '.area-chart__figure', '.area-card__value', '.area-meter__value', '.area-count',
+    '.area-tree-view__status', '.area-menu__trailing', '.area-reference-list__count', '.area-time-field__segments',
+  ];
+  for (const part of NUMERIC) {
+    const bodies = rules.filter(rule => rule.selector.split(',').map(s => s.trim()).includes(part)).map(rule => rule.body).join(';');
+    assert.match(bodies, /font-variant-numeric:\s*tabular-nums/, `${part} shows numbers that change or align: tabular-nums`);
+  }
+});
+
+test('a joined line is its name\'s size in the muted ink; text-sm is for text set apart (plan A9.3)', () => {
+  const body = selector => rules.filter(rule => rule.selector.split(',').map(s => s.trim()).includes(selector)).map(rule => rule.body).join(';');
+  for (const [part, size] of [
+    ['.area-choice-label__description', 'var\\(--_text\\)'], ['.area-switch__description', 'var\\(--_text\\)'],
+    ['.area-checkbox-group__description', 'var\\(--area-control-md-text\\)'], ['.area-custom-select__caption', 'var\\(--area-ui-size\\)'],
+    ['.area-file-tile__meta', 'var\\(--area-ui-size\\)'], ['.area-hover-card__meta', 'var\\(--area-ui-size\\)'],
+    ['.area-section-heading__lede', 'var\\(--area-ui-size\\)'],
+  ]) {
+    assert.match(body(part), new RegExp(`font-size:\\s*${size}`), `${part} joins its name at the name's size`);
+  }
+  // Set apart: help and messages under a control, a caption, Empty state sm, and Menu's dense descriptions (the written
+  // exception).
+  for (const part of ['.area-field__description', '.area-field__count', '.area-field__validation', '.area-meter__description', '.area-menu__description']) {
+    assert.match(body(part), /font-size:\s*var\(--area-text-sm-size\)/, `${part} stands apart at text-sm`);
+  }
+});
+
+test('every underline sits one offset under its text (plan A9.10)', () => {
+  for (const { selector, value } of declarations('text-underline-offset|--_offset')) {
+    assert.match(value, /^var\(--(area-underline-offset|_offset)\)$/, `${selector} sets its own underline offset: ${value}`);
+  }
+});
+
+// Spacing and geometry (plan A1.1–A1.5, A8.2, A11.1, B2.3; docs/research/system-evaluation-2026-11-11). Own helpers, so
+// these stand apart from the tests above.
+const spacingDeclarations = props => rules.flatMap(({ selector, body }) => {
+  if (/^(:root|:where\(:root\)|\[data-area|font-face|from|to|\d)/.test(selector)) return [];
+  return [...body.matchAll(new RegExp(`(?:^|[;\\s])(${props})\\s*:\\s*([^;]+)`, 'g'))].map(([, prop, value]) => ({ selector, prop, value: value.trim() }));
+});
+const tokenValue = name => css.match(new RegExp(`--area-${name}:\\s*([^;]+);`))?.[1] ?? '';
+
+test('a gap reads whole steps; only an inset keeps the half step (plan A1.1)', () => {
+  // ui-dense is 0.5 at the default type 13, so N − 4 × ui-dense put gaps on 10, 14 and 18, between the ladder's rungs.
+  for (const token of ['gap-row', 'gap-section']) {
+    assert.match(tokenValue(token), /ui-gap-step/, `--area-${token} reads ui-gap-step`);
+    assert.doesNotMatch(tokenValue(token), /ui-dense/, `--area-${token} reads the half step`);
+  }
+  const gaps = spacingDeclarations('gap|row-gap|column-gap|--_[\\w-]*gap[\\w-]*|--_card-section|--_rhythm');
+  assert.ok(gaps.length > 300, `expected the component gaps, found ${gaps.length}`);
+  for (const { selector, prop, value } of gaps) {
+    assert.doesNotMatch(value, /--area-ui-dense/, `${selector} ${prop} reads ui-dense; a gap reads ui-gap-step (${value})`);
+  }
+  // A gap written out that a token holds is read from the token (as "named derivations", above, for the half step).
+  for (const { selector, prop, value } of gaps) {
+    for (const [a, b, token] of [[12, 4, 'gap-row'], [8, 2, 'ui-cluster'], [6, 2, 'ui-stack'], [24, 8, 'gap-section']]) {
+      assert.doesNotMatch(value, new RegExp(`calc\\(var\\(--area-space-${a}\\) - var\\(--area-space-${b}\\) \\* var\\(--area-ui-gap-step\\)\\)`),
+        `${selector} ${prop} writes ${a} − ${b} × ui-gap-step; read --area-${token}`);
+    }
+  }
+});
+
+test('a row\'s icon-to-label gap is ui-cluster in every list, and lists share one floor (plan B2.3)', () => {
+  const body = selector => rules.filter(rule => rule.selector === selector).map(rule => rule.body).join(';');
+  assert.match(body('.area-menu'), /--_menu-gap:\s*var\(--area-ui-cluster\)/, 'Menu');
+  assert.match(body('.area-command-palette'), /--_menu-gap:\s*var\(--area-ui-cluster\)/, 'Command palette');
+  assert.match(body('.area-nav__item'), /(?:^|[;\s])gap:\s*var\(--area-ui-cluster\)/, 'Nav');
+  assert.match(body('.area-tree-view'), /--_tree-gap:\s*var\(--area-ui-cluster\)/, 'Tree view');
+  assert.match(body('.area-select option'), /(?:^|[;\s])gap:\s*var\(--area-ui-cluster\)/, 'native Select options');
+  assert.match(body('.area-nav__group--nested'), /--_nav-indent:\s*calc\(var\(--area-icon-md\) \+ var\(--area-ui-cluster\)\)/, 'Nav nesting steps one label column');
+  // Nothing spaces a row's icon from its label with gap-row any more: gap-row is a group's gap.
+  for (const selector of ['.area-menu', '.area-command-palette', '.area-command-palette__search', '.area-queue__item', '.area-plan__item', '.area-edit-summary__file']) {
+    assert.doesNotMatch(body(selector), /(?:--_menu-gap|(?:^|[;\s])(?:column-)?gap):\s*var\(--area-gap-row\)/, `${selector} spaces its row with gap-row`);
+  }
+  // One floor, 160, wherever a list restates it (Menu, Select's picker, Custom select, Combobox, Tag picker). Custom
+  // select's picture grid reads the hook for its own width, not as a list floor.
+  const floors = spacingDeclarations('min-inline-size').filter(({ value }) => /--area-menu-min-inline-size/.test(value));
+  assert.ok(floors.length >= 6, `expected the list floors, found ${floors.length}`);
+  for (const { selector, value } of floors) {
+    assert.match(value, /var\(--area-menu-min-inline-size, calc\(var\(--area-space-96\) \+ var\(--area-space-64\)\)\)/, `${selector} floors its list at another width: ${value}`);
+  }
+  assert.match(body('.area-menu'), /min-inline-size:\s*var\(--area-menu-min-inline-size, calc\(var\(--area-space-96\) \+ var\(--area-space-64\)\)\)/, 'Menu floor 160');
+});
+
+test('a padding or inline inset that reads 1cap rounds to a whole pixel (plan A11.1)', () => {
+  // A vertical cap placement (Badge's, Tag's and Count's padding-block on a whole-pixel baseline) is exempt: the cap
+  // centres on its row there, within the 0.1 px rendered rule.
+  const strip = value => {
+    let out = value;
+    for (let i = 0; i < 6; i++) out = out.replace(/round\((?:nearest|up|down),(?:[^()]|\((?:[^()]|\((?:[^()]|\([^()]*\))*\))*\))*\)/g, 'ROUNDED');
+    return out;
+  };
+  const insets = spacingDeclarations('padding|padding-inline|padding-inline-start|padding-inline-end|padding-left|padding-right|inset|inset-inline|inset-inline-start|inset-inline-end|--_[\\w-]*(?:inset|pad)[\\w-]*');
+  assert.ok(insets.length > 300, `expected the component insets, found ${insets.length}`);
+  for (const { selector, prop, value } of insets) {
+    if (!/1cap/.test(value)) continue;
+    assert.doesNotMatch(strip(value), /1cap/, `${selector} ${prop} reads 1cap outside round(): ${value}`);
+  }
+});
+
+test('children are spaced by their container\'s gap, never by a margin that undoes it (plan A1.3)', () => {
+  // A margin of `calc(x − the parent's gap)` changes silently when the gap does. The two left need a group in React (a
+  // text group for Card's title and copy; the header and its carousel; Button's label and its trailing keycap; a media
+  // row choice's picture and its text), named here so the list only shrinks.
+  const waiting = new Set([
+    '.area-button > .area-kbd',
+    ':is(.area-checkbox--media-row > .area-checkbox__visual, .area-radio--media-row > .area-radio__visual)',
+    ':is(.area-card, .area-card__content) > :is(.area-card__title, .area-card__description, .area-card__value) + :is(.area-card__title, .area-card__description, .area-card__value)',
+    ':is(.area-card, .area-card__content) > .area-card__header + .area-card__carousel',
+  ]);
+  const found = new Set();
+  for (const { selector, prop, value } of spacingDeclarations('margin|margin-block|margin-block-start|margin-block-end|margin-inline|margin-inline-start|margin-inline-end|margin-top|margin-bottom')) {
+    // A gap read with a fallback (`var(--_card-gap, var(--_fr-gap))`) is still the gap.
+    if (!/-\s*var\(--(?:_[\w-]*gap|area-(?:gap-row|ui-cluster|ui-stack|gap-section))(?:, var\(--[\w-]+\))?\)/.test(value)) continue;
+    found.add(selector);
+    assert.ok(waiting.has(selector), `${selector} ${prop} undoes its container's gap: ${value}`);
+  }
+  for (const selector of waiting) assert.ok(found.has(selector), `${selector} no longer compensates: remove it from the list`);
+});
+
+test('rows and composites read the height ladder (plan A8.2)', () => {
+  const body = selector => rules.filter(rule => rule.selector === selector).map(rule => rule.body).join(';');
+  assert.match(body('.area-calendar'), /--_day:\s*var\(--area-control-md\)/, 'Calendar day is a medium control');
+  assert.match(body('.area-calendar'), /--_cell:\s*calc\(var\(--area-control-md\) \+ var\(--area-space-4\)\)/, 'Calendar cell is the day + 4');
+  assert.match(body('.area-description-list'), /--_row:\s*var\(--area-ui-row\)/, 'Description list rows are the UI row');
+  assert.match(body('.area-shortcut-list'), /--_row:\s*calc\(var\(--area-ui-row\) \+ var\(--area-ui-stack\)\)/, 'Shortcut list rows are the row + one room step');
+  assert.match(body('.area-board-column__add'), /min-block-size:\s*var\(--area-ui-row\)/, 'Board add row is a row');
+  assert.match(body('.area-token-row.area-code'), /--_token-height:\s*var\(--area-control-xs\)/, 'Token row is the xs control');
+  // No row height adds a pixel literal to a ladder token.
+  for (const { selector, prop, value } of spacingDeclarations('block-size|min-block-size|--_row|--_day|--_cell')) {
+    assert.doesNotMatch(value, /var\(--area-(?:ui-row|control-(?:xs|sm|md|lg|xl))\) \+ (?:2|4|6|8)px/, `${selector} ${prop} adds a literal to the ladder: ${value}`);
+  }
+});
+
+test('page and section spaces are named roles (plan A1.4)', () => {
+  assert.match(tokenValue('gap-section'), /24px/, 'gap-section is two groups');
+  assert.match(tokenValue('inset-page'), /32px/, 'inset-page is the feed margin');
+  assert.match(rules.filter(rule => rule.selector === '.area-stack--section').map(rule => rule.body).join(';'), /--_stack-gap:\s*var\(--area-gap-section\)/, 'Stack section reads gap-section');
+});
+
+// Rules with their @media context, for the focus, forced-colours and hit-target tests (plan A6.2, A6.4, A11.2).
+const mediaRules = (() => {
+  const out = []; const stack = []; let buf = '';
+  for (const ch of css) {
+    if (ch === '{') { stack.push(buf.trim()); buf = ''; }
+    else if (ch === '}') { const head = stack.pop(); if (head && !head.startsWith('@')) out.push({ selector: head.replace(/\s+/g, ' '), body: buf, media: stack.filter(h => h.startsWith('@media')).join(' ') }); buf = ''; }
+    else buf += ch;
+  }
+  return out;
+})();
+const splitSelectors = selector => { const parts = []; let depth = 0, cur = ''; for (const c of selector) { if (c === '(') depth++; if (c === ')') depth--; if (c === ',' && !depth) { parts.push(cur.trim()); cur = ''; } else cur += c; } parts.push(cur.trim()); return parts; };
+const withoutNot = s => { let r = s, prev; do { prev = r; r = r.replace(/:not\((?:[^()]|\([^()]*(?:\([^()]*\))*[^()]*\))*\)/g, ''); } while (r !== prev); return r; };
+
+test('every focus ring sits where the focus table puts it: controls at the offset, containers and text at the gap, rows, tabs and cells inside (plan A6.2)', () => {
+  // DESIGN_SYSTEM.md, "The focus ring". A new ring joins one of these rows; a ring that matches none fails.
+  const TABLE = [
+    ['inside', /tree-view \[role="treeitem"\]|accordion-item__trigger|step__row|edit-summary__(file|code-toggle)|diff__comment|approval__(option|tile)|plan__head|queue__head|command-palette__back|prompt-suggestions__item|\.area-table tbody tr|table__group-toggle|nav__toggle|nav__item|scroll-area__viewport|editable-text__input|token-row|list-box--grid|time-field__segment|code-block__toggle|color-picker__preview-original|board-column__add/],
+    ['part', /tabs__(tab|panel):focus-visible::before/],
+    ['gap', /\.area-toolbar|\.area-diff:|(checkbox|radio)--(card|soft|thumbnail)|card:has\(\.area-card__link|card__carousel|alert__link|toaster|table-wrapper|\.area-link|description-list__more|citation|board-card|editable-text__preview|asset-card|asset-grid__item|design-card|mention|code-block__linenumber|code-block:has|reference-list__backlink|abbr|video-player:focus/],
+    ['offset', /./],
+  ];
+  const RING = /(?:^|;)\s*(outline|border):\s*([^;]*?)\s+solid\s+var\(--(?:area-(?:field-|composer-)?focus-color|_focus-outline)/;
+  const placement = body => {
+    const [, prop, width] = body.match(RING);
+    if (prop === 'border') return 'part';
+    const offset = body.match(/outline-offset:\s*([^;]+)/)?.[1].trim();
+    if (offset === undefined) return 'none';
+    if (/^var\(--area-focus-offset\)$/.test(offset)) return 'offset';
+    if (/^var\(--area-focus-gap\)$/.test(offset)) return 'gap';
+    const flat = offset.replace(/\s+/g, ''), w = width.replace(/\s+/g, '');
+    return flat === `calc(-1*${w})` || flat === `calc(${w}*-1)` ? 'inside' : `off by ${offset}`;
+  };
+  let seen = 0;
+  for (const { selector, body, media } of mediaRules) {
+    if (/forced-colors/.test(media) || !RING.test(body)) continue;
+    seen++;
+    const want = TABLE.find(([, pattern]) => pattern.test(selector))[0];
+    assert.equal(placement(body), want, `${selector} draws its ring ${placement(body)}; the focus table puts it ${want}`);
+  }
+  assert.ok(seen > 80, `only ${seen} focus rings found`);
+  // A solid fill's ring takes the solid placement, and only a solid fill does (plan A6.1).
+  const solid = mediaRules.filter(({ body, media }) => !/forced-colors/.test(media) && /outline-offset:\s*var\(--area-focus-solid-offset\)/.test(body));
+  for (const { selector } of solid) assert.match(selector, /--solid/, `${selector} takes the solid fill's ring placement`);
+  for (const fill of ['.area-button--solid:focus-visible', ':is(a, button).area-badge--solid:focus-visible'])
+    assert.ok(solid.some(({ selector }) => selector === fill), `${fill} has no solid placement: its ring would sit flush on a fill of its own colour`);
+  for (const mark of [/area-checkbox__control:is\(:checked/, /area-radio__control:checked:focus-visible/, /switch__control:checked:focus-visible ~ \.area-switch__track/])
+    assert.ok(mediaRules.some(({ selector, body }) => mark.test(selector) && /outline-offset:\s*var\(--area-focus-gap\)/.test(body)), `${mark} keeps its ring flush on its filled mark`);
+});
+
+test('a row shows keyboard focus by one indicator, a ring or a plate, never both (plan A6.2)', () => {
+  const RING = /outline:[^;]*var\(--area-focus-color\)/;
+  const key = s => s.replace(/:focus-visible/g, '').replace(/\s+/g, ' ').trim();
+  const ringed = new Set(), plated = new Set();
+  for (const { selector, body, media } of mediaRules) {
+    if (/forced-colors/.test(media) || !/:focus-visible/.test(selector)) continue;
+    for (const s of splitSelectors(selector)) {
+      if (!/:focus-visible/.test(s) || /:has\(/.test(s)) continue;
+      if (RING.test(body)) ringed.add(key(s));
+      if (/(?:^|;)\s*background(-color)?:\s*(?!transparent|none)[^;]+/.test(body)) plated.add(key(s));
+    }
+  }
+  for (const s of ringed) assert.ok(!plated.has(s), `${s} draws a ring and a plate on focus`);
+});
+
+test('every selected, current, checked or pressed state shown only by a fill or a shadow has a forced-colours rule (plan A6.4)', () => {
+  const STATES = ['[data-selected]', '[aria-selected="true"]', '[aria-current', ':checked', '[aria-pressed="true"]'];
+  const block = s => s.match(/\.area-([a-z0-9]+(?:-[a-z0-9]+)*)/)?.[1];
+  const forced = mediaRules.filter(({ media }) => /forced-colors/.test(media)).flatMap(({ selector }) => splitSelectors(selector).map(withoutNot));
+  let checked = 0;
+  for (const { selector, body, media } of mediaRules) {
+    if (/forced-colors/.test(media)) continue;
+    if (!/(^|;)\s*(background(-color|-image)?|box-shadow)\s*:/.test(body)) continue;
+    if (/(^|;)\s*(border(-[a-z-]+)?|outline(-[a-z]+)?|color|text-decoration[a-z-]*|font-weight|opacity)\s*:/.test(body)) continue;
+    if (/(^|;)\s*background(-color)?\s*:\s*(transparent|none)\s*(;|$)/.test(body)) continue;
+    for (const s of splitSelectors(selector)) {
+      const positive = withoutNot(s);
+      const state = STATES.find(t => positive.includes(t));
+      if (!state || /:(hover|active)/.test(positive)) continue;
+      checked++;
+      assert.ok(forced.some(f => block(f) === block(positive) && f.includes(state)), `${s} shows ${state} by fill alone and has no forced-colours rule`);
+    }
+  }
+  assert.ok(checked > 10, `only ${checked} fill-only states found`);
+  // Every field trigger restores the system focus colour (S18).
+  for (const trigger of ['.area-custom-select__trigger:focus-visible', '.area-date-picker__trigger:focus-visible', '.area-tag-picker__field:focus-within'])
+    assert.ok(mediaRules.some(({ selector, body, media }) => /forced-colors/.test(media) && splitSelectors(selector).includes(trigger) && /Highlight/.test(body)), `${trigger} has no Highlight focus in forced colours`);
+});
+
+test('every interactive part under 24 carries the shared hit target, 44 under a coarse pointer (plan A11.2)', () => {
+  // The parts whose box falls under 24 at Compact (geometry.md G3, interaction.md I22, the behaviour hit suite).
+  const SMALL = ['.area-input__action-button', '.area-number-field__step', '.area-chip__action', '.area-chip__dismiss', '.area-nav__actions > .area-button',
+    '.area-split-button > .area-split-button__trigger', '.area-segmented__item', '.area-toggle-group--soft > .area-button', '.area-breadcrumb__link',
+    'button.area-breadcrumb__ellipsis', '.area-color-swatch-picker__cell', '.area-step__row', '.area-checkbox__control', '.area-radio__control'];
+  // Parts that keep their own target, the recipe the shared one generalises.
+  const OWN = [':is(a, button).area-badge::after', '.area-badge__dismiss::after', '.area-tag__dismiss::after', '.area-toggletip::after'];
+  const shared = mediaRules.find(({ selector, body, media }) => !media && /--_hit:\s*var\(--area-space-24\)/.test(body));
+  assert.ok(shared, 'no shared hit target rule');
+  const parts = splitSelectors(shared.selector);
+  for (const part of SMALL) assert.ok(parts.includes(part), `${part} is under 24 and has no hit target`);
+  assert.match(shared.body, /position:\s*relative/);
+  const coarse = mediaRules.find(({ body, media }) => /pointer:\s*coarse/.test(media) && /--_hit:\s*var\(--_hit-coarse\)/.test(body));
+  assert.ok(coarse, 'no coarse hit size');
+  assert.match(shared.body, /--_hit-coarse:\s*calc\(var\(--area-space-40\) \+ var\(--area-space-4\)\)/, 'the coarse target is 44');
+  const box = mediaRules.find(({ selector, body }) => /::after/.test(selector) && /max\(100%, var\(--_hit-inline, var\(--_hit\)\)\)/.test(body));
+  assert.ok(box, 'no hit box');
+  assert.match(box.body, /position:\s*absolute/); assert.match(box.body, /translate:\s*-50% -50%/);
+  assert.match(box.body, /block-size:\s*max\(100%, var\(--_hit-block, var\(--_hit\)\)\)/);
+  const boxed = splitSelectors(box.selector).join(' ');
+  for (const part of SMALL) assert.ok(boxed.includes(part), `${part} has no hit box`);
+  for (const own of OWN) assert.ok(mediaRules.some(({ selector, body }) => splitSelectors(selector).includes(own) && /--area-space-24/.test(body)), `${own} lost its own target`);
+});
+
+// Ink, dark and colour (plan A3, A7.1, A7.2, A10, 2026-11-11). Each rule with the test that keeps it true.
+// Every rule with this exact selector, joined: a component may state one selector in several rules.
+const bodiesFor = selector => rules.filter(rule => rule.selector === selector).map(rule => rule.body).join(';');
+
+test('a floating surface draws one edge in dark: its rim only where no frame is (A7.1)', () => {
+  // The floating and modal roles draw their rim at 1px less the frame, so a framed menu draws its frame alone; the frame
+  // (edge-floating) takes the rim's strength in dark; Tooltip's role draws none, its inset edge takes the strength.
+  for (const role of ['float', 'modal']) assert.match(tokenValue(`shadow-${role}`), /0 0 0 max\(0px, calc\(1px - var\(--area-border-width\)\)\)/, `shadow-${role} draws its rim outside a frame`);
+  assert.match(tokenValue('shadow-tooltip'), /0 0 0 0px light-dark\(transparent/, 'shadow-tooltip still draws a rim outside Tooltip\'s inset edge');
+  assert.match(tokenValue('edge-floating'), /max\(.*min\(0\.16/, 'the floating frame does not take the rim\'s strength in dark');
+  assert.match(bodiesFor('.area-tooltip'), /var\(--area-shadow-tooltip-rim\)/, 'Tooltip\'s inset edge does not take the rim\'s strength');
+});
+
+test('floating and modal surfaces paint the floating ground (A7.2)', () => {
+  // In dark the floating ground sits a step above the layers under it; every floating surface paints it and declares it.
+  // One rule paints it on every surface (popup.css, plan B6.1).
+  assert.match(FLOATING_FRAME?.body ?? '', /background-color:\s*var\(--area-bg-float\)/, 'the one floating frame does not paint bg-float');
+  const floating = ['.area-popover', '.area-menu', '.area-dialog', '.area-toast', '.area-command-palette', '.area-drawer', '.area-calendar:not(.area-calendar--plain)', '.area-color-picker:not(.area-color-picker--plain)'];
+  for (const selector of floating) assert.ok(selectorList(FLOATING_FRAME?.selector ?? '').includes(selector), `${selector} does not paint bg-float`);
+  assert.doesNotMatch(css, /\.area-menu[^{]*\{[^}]*background-color:\s*var\(--area-bg-surface\)[^}]*--_elevation/, 'a menu paints the raised layer');
+});
+
+test('placeholders read the placeholder role, meta the subtle ink (A3.2, A3.3)', () => {
+  assert.match(bodiesFor('.area-approval__field::placeholder'), /color:\s*var\(--area-input-placeholder\)/);
+  assert.match(bodiesFor('.area-editable-text__preview[data-placeholder]'), /color:\s*var\(--area-input-placeholder\)/);
+  // Every ::placeholder reads a placeholder role, never the muted ink.
+  for (const { selector, body } of rules.filter(rule => /::placeholder/.test(rule.selector) && /(^|[;\s])color\s*:/.test(rule.body)))
+    assert.doesNotMatch(body, /color:\s*var\(--area-fg-muted\)/, `${selector} paints its placeholder muted`);
+  for (const selector of ['.area-menu__shortcut', '.area-timestamp']) assert.match(bodiesFor(selector), /color:\s*var\(--area-fg-subtle\)/, `${selector} is not the subtle ink`);
+});
+
+test('an unselected option reads the muted ink in every selection control (A3.3)', () => {
+  assert.match(bodiesFor('.area-toggle-group:is(.area-toggle-group--outline, .area-toggle-group--ghost) > .area-button:not([data-selected], [aria-pressed="true"])'), /--_fg:\s*var\(--area-fg-muted\)/);
+  assert.match(bodiesFor('.area-pagination .area-pagination__step.area-button'), /--_fg:\s*var\(--area-fg-muted\)/);
+});
+
+test('tone colours the mark, never the words (A3.4)', () => {
+  // Alert's words keep the default ink; status glyphs read the tone's mark ink.
+  assert.match(bodiesFor('.area-alert'), /(^|[;\s])color:\s*var\(--area-fg-default\)/, 'Alert\'s words take the tone ink');
+  assert.match(bodiesFor('.area-alert__link a'), /color:\s*var\(--area-fg-default\)/, 'Alert\'s link takes the tone ink');
+  for (const [selector, tone] of [['.area-attachment__mark', 'danger'], ['.area-turn-notice--error', 'danger'], ['.area-message__status > svg', 'danger'], ['.area-file-upload-item--error .area-file-upload-item__status > svg', 'danger'], ['.area-file-upload-item--complete .area-file-upload-item__status > svg', 'success']])
+    assert.match(bodiesFor(selector), new RegExp(`var\\(--area-fg-${tone}-mark\\)`), `${selector} paints its glyph in the words' ink`);
+});
+
+test('a heading over a run of rows is muted (A9.4)', () => {
+  for (const selector of ['.area-panel__heading', '.area-table__group-heading > th', '.area-link-groups__label', '.area-reference-list__title', '.area-toc__title'])
+    assert.match(bodiesFor(selector), /(^|[;\s])color:\s*var\(--area-fg-muted\)/, `${selector} is not muted`);
+});
+
+test('empty boxes and progress lines keep their edge (A10.3)', () => {
+  assert.match(bodiesFor('.area-otp-field'), /--_border:\s*var\(--area-edge-control-hover\)/, 'an empty OTP slot is not on the strong control edge');
+  assert.match(bodiesFor('.area-alignment-picker'), /--_alignment-edge:\s*var\(--area-edge-control-hover\)/, 'the Alignment picker has no edge');
+  assert.match(bodiesFor('.area-stepper-step'), /--_connector:\s*var\(--area-stroke-control\)/, 'a Stepper connector is a faint rule');
+  // A Card's media placeholder sits a step off the card in both themes (A10.1).
+  assert.match(css, /--_card-media-fill:\s*var\(--area-bg-plate\)/);
+});
+
+test('Layer contrast 0 keeps a soft Surface flat (owner, 2026-10-29)', () => {
+  // It paints the recessed tone, the page at Layer contrast 0 (layers.test.ts holds the tone), and is a recessed ground,
+  // never the well, which shows at 0.
+  assert.match(bodiesFor('.area-surface--soft'), /--_sf-fill:\s*var\(--area-bg-subtle\)/, 'a soft Surface paints a tone that shows at Layer contrast 0');
+  const layers = readFileSync(new URL('../../styles/src/layers.css', import.meta.url), 'utf8').replace(/\/\*[\s\S]*?\*\//g, '');
+  const listBefore = ground => { const at = layers.indexOf(`[data-area-ground="${ground}"] {`); return layers.slice(layers.lastIndexOf(':where(', at), at); };
+  assert.match(listBefore('recessed'), /\.area-surface--soft/, 'a soft Surface is not a recessed ground');
+  assert.doesNotMatch(listBefore('well'), /\.area-surface--soft/, 'a soft Surface is a well ground, which paints at Layer contrast 0');
+});
+
+// surface.css, "The frame recipe" (plan B1.1–B1.4, 2026-11-13; DESIGN_SYSTEM.md, "Frames"): every card-like frame reads
+// one recipe, so a frame added later cannot drift from it. Each role is pinned once here, term for term; each frame
+// draws its corner from a role and never restates the container corner or a concentric sum of its own.
+test('every card-like frame reads the one frame recipe: corner roles, the inset ladder, nested floors (plan B1.1)', () => {
+  const recipe = rules.find(rule => rule.selector.startsWith(':where(.area-card, .area-surface,') && /--_fr-card\s*:/.test(rule.body));
+  assert.ok(recipe, 'the frame recipe is missing');
+  const roots = recipe.selector.slice(':where('.length, -1).split(', ');
+  const FRAMES = ['.area-card', '.area-surface', '.area-panel', '.area-asset-card', '.area-design-card', '.area-figure', '.area-video-player',
+    '.area-table-wrapper', '.area-description-list--surface', '.area-board-column', '.area-calendar', '.area-color-picker',
+    '.area-plan', '.area-queue', '.area-edit-summary', '.area-approval', '.area-composer', '.area-code-block', '.area-message__bubble'];
+  for (const frame of FRAMES) assert.ok(roots.includes(frame), `${frame} is a frame outside the recipe`);
+  const term = prop => recipe.body.match(new RegExp(`(?:^|[;\\s])${prop}\\s*:\\s*([^;]+)`))?.[1].trim().replace(/\s+/g, ' ');
+  assert.equal(term('--_fr-block'), 'var(--area-radius-container)');
+  assert.equal(term('--_fr-card'), 'min(var(--area-radius-container), max(var(--area-radius-min), round(down, calc(var(--_fr-inset) * 0.6 * var(--area-radius-factor) / 0.3125), 2px)))');
+  assert.equal(term('--_fr-around'), 'min(var(--area-radius-container), calc(var(--_fr-held) + var(--_fr-mat) * var(--area-radius-concentric)))');
+  assert.equal(term('--_fr-nested'), 'max(min(var(--area-radius-row), var(--_fr-corner)), round(down, calc(var(--_fr-corner) - var(--_fr-mat) * var(--area-radius-concentric)), 2px))', 'a nested frame stops at a row\'s corner, never the floor\'s 4');
+  assert.equal(term('--_fr-picture'), 'max(var(--area-radius-floor), round(down, calc(var(--_fr-corner) - var(--_fr-mat) * var(--area-radius-concentric)), 2px))');
+  assert.equal(term('--_fr-pad'), 'calc(var(--_fr-inset) - var(--_fr-border))', 'the border is counted once');
+  for (const size of ['sm', 'md', 'lg']) for (const part of ['inset', 'mat', 'gap']) assert.ok(term(`--_fr-${part}-${size}`), `the ladder has no ${part} at ${size}`);
+  // Each frame's corner reads a role (or a public hook wrapping one).
+  const radiusOf = selector => rules.find(rule => rule.selector.split(', ').includes(selector) && /(^|[;\s])border-radius\s*:/.test(rule.body))?.body.match(/(?:^|[;\s])border-radius\s*:\s*([^;]+)/)?.[1].trim().replace(/\s+/g, ' ');
+  const prop = (selector, name) => rules.filter(rule => rule.selector.split(', ').includes(selector)).map(rule => rule.body.match(new RegExp(`(?:^|[;\\s])${name}\\s*:\\s*([^;]+)`))?.[1].trim().replace(/\s+/g, ' ')).filter(Boolean)[0];
+  assert.match(bodiesFor('.area-figure__media > :is(img, video, svg, picture, canvas)'), /border-radius:\s*var\(--_fr-block\)/, 'Figure\'s picture does not draw the block corner');
+  const reads = {
+    '.area-video-player': [radiusOf, 'var(--_fr-block)'],
+    '.area-board-column': [radiusOf, 'var(--_fr-around)'],
+    '.area-calendar--surface': [radiusOf, 'var(--_fr-block)'],
+    '.area-plan': [radiusOf, 'var(--_fr-corner)'],
+    '.area-queue': [radiusOf, 'var(--_fr-corner)'],
+    '.area-edit-summary': [radiusOf, 'var(--_fr-corner)'],
+  };
+  for (const [selector, [read, want]] of Object.entries(reads)) assert.equal(read(selector), want, `${selector} does not draw its frame recipe corner`);
+  assert.equal(prop('.area-panel', '--_panel-corner'), 'var(--_fr-block)');
+  assert.equal(prop('.area-color-picker', 'border-radius'), 'var(--_fr-block)');
+  assert.equal(prop('.area-surface', '--_sf-corner'), 'var(--_fr-card)');
+  assert.equal(prop('.area-card', '--_card-media-radius'), 'var(--_fr-picture)', 'Card\'s picture keeps the recipe\'s picture corner (4 at the default)');
+  assert.equal(prop('.area-code-block', '--_code-radius'), 'var(--area-code-block-corner, var(--_fr-corner))');
+  assert.equal(prop('.area-message__bubble', '--_bubble-radius'), 'var(--_fr-corner)');
+  assert.equal(prop('.area-approval', '--_approval-radius'), 'var(--area-approval-corner, min(calc(var(--_approval-height) / 2), var(--_fr-corner)))');
+  // Card and Surface share the ladder: Surface takes Card's inset, gap and corner (decided once, plan B1.1).
+  for (const size of ['sm', 'md', 'lg']) {
+    assert.equal(prop(`.area-card--${size}`, '--_card-space'), `var(--area-card-inset, var(--_fr-inset-${size}))`);
+    assert.equal(prop(`.area-card--${size}`, '--_card-inset'), `var(--_fr-mat-${size})`);
+    assert.match(prop(`.area-surface--${size}`, '--_sf-text') ?? '', new RegExp(`^var\\(--_fr-inset-${size}\\)$`), `Surface ${size} is not on Card's inset`);
+  }
+  // Nested frames publish the recipe's nested corner (VC19: a Surface in a Card or a Panel landed at the floor's 4).
+  assert.equal(prop('.area-card', '--_sf-a'), 'var(--_fr-nested)');
+  assert.equal(prop('.area-panel', '--_sf-a'), 'var(--_fr-nested)');
+  // No frame root restates the container corner or its own concentric sum in border-radius.
+  for (const frame of FRAMES) {
+    const own = radiusOf(frame);
+    if (own) assert.doesNotMatch(own, /--area-radius-container|--area-radius-row\) \+/, `${frame} draws a corner of its own: ${own}`);
+  }
+});
+
+test('one chat card: the around corner over the medium control, rows 4 from the outer edge, words 12 in, a one-row head (plan B1.3)', () => {
+  const chat = rules.find(rule => rule.selector.startsWith(':where(.area-plan, .area-queue, .area-edit-summary, .area-approval, .area-composer, .area-code-block, .area-message__bubble)'));
+  assert.ok(chat, 'the chat card recipe is missing');
+  const term = prop => chat.body.match(new RegExp(`(?:^|[;\\s])${prop}\\s*:\\s*([^;]+)`))?.[1].trim().replace(/\s+/g, ' ');
+  assert.equal(term('--_fr-held'), 'var(--area-radius-control-md)');
+  assert.equal(term('--_fr-mat'), 'var(--area-ui-cluster)');
+  assert.equal(term('--_fr-corner'), 'var(--_fr-around)');
+  assert.equal(term('--_chat-list'), 'max(0px, calc(var(--area-space-4) - var(--_chat-edge)))', 'rows sit 4 from the outer edge, the edge counted once');
+  assert.equal(term('--_chat-text'), 'calc(var(--area-space-4) + var(--area-ui-row-inset))');
+  assert.equal(term('--_chat-column'), 'calc(var(--_chat-text) - var(--_chat-edge))');
+  assert.equal(term('--_chat-head'), 'var(--area-ui-row)');
+  // A part is its own rule or one of the shared collapsible head's (inset.css, plan B4.4): `:is(.area-plan__head, …)`.
+  const body = selector => rules.filter(rule => rule.selector.split(', ').includes(selector) || new RegExp(`^:is\\([^)]*${selector.replace(/[.]/g, '\\.')}(?![\\w-])[^)]*\\)$`).test(rule.selector)).map(rule => rule.body).join(';');
+  for (const card of ['.area-plan', '.area-queue', '.area-edit-summary']) {
+    assert.match(body(card), /--_card-list:\s*var\(--_chat-list\)/, `${card} holds its rows off the chat card's list`);
+    assert.match(body(card), /--_card-column:\s*var\(--_chat-column\)/, `${card} sets its words off the chat card's column`);
+    assert.match(body(`${card}__head`), /min-block-size:\s*var\(--_chat-head\)/, `${card}'s head is not one row tall`);
+    assert.match(body(`${card}__title`), /font-weight:\s*var\(--area-weight-strong\)/, `${card}'s title is not strong`);
+    assert.doesNotMatch(body(`${card}__title`), /color:\s*var\(--area-fg-muted\)/, `${card}'s title is muted`);
+  }
+});
+
+test('one item name for picture cards: strong in the default ink, 8 under a picture and on its edge (plan B1.2)', () => {
+  const NAMES = ['.area-card__title', '.area-asset-card__name', '.area-design-card__name', '.area-file-tile__name', '.area-board-card__title'];
+  const part = rules.find(rule => rule.selector.startsWith(':where(.area-card__title,') && /font-weight/.test(rule.body));
+  assert.ok(part, 'the item name part is missing');
+  for (const name of NAMES) assert.ok(part.selector.includes(name), `${name} is outside the item name part`);
+  assert.match(part.body, /font-weight:\s*var\(--area-weight-strong\)/);
+  assert.match(part.body, /color:\s*var\(--area-fg-default\)/);
+  for (const name of NAMES) for (const rule of rules.filter(rule => rule.selector === name)) assert.doesNotMatch(rule.body, /font-weight/, `${name} sets its own weight`);
+  const gap = rules.find(rule => rule.selector.startsWith(':where(.area-asset-card, .area-design-card, .area-file-tile, .area-figure)'));
+  // 8 at the default, a density role (ui-cluster: 6 / 8 / 10 at type 13), as every space between two pieces (plan B8.2).
+  assert.match(gap?.body ?? '', /--_fr-name-gap:\s*var\(--area-ui-cluster\)/);
+  assert.match(bodiesFor('.area-file-tile'), /gap:\s*var\(--_fr-name-gap\)/, 'File tile\'s name is not the frame recipe\'s name gap under its frame');
+  const under = 'max(0px, calc(var(--_fr-name-gap) - (var(--area-control-sm) - var(--area-ui-leading)) / 2))';
+  assert.ok(rules.some(rule => rule.selector === '.area-design-card' && rule.body.replace(/\s+/g, ' ').includes(`gap: ${under}`)), 'Design card\'s name is not 8 under its picture');
+  assert.ok(rules.some(rule => rule.selector === '.area-asset-card.area-asset-card--outside' && rule.body.replace(/\s+/g, ' ').includes(`gap: ${under}`)), 'an outside Asset card\'s name is not 8 under its picture');
+  assert.match(bodiesFor('.area-design-card__caption'), /padding-inline-start:\s*0/, 'Design card\'s name is indented');
+  assert.match(bodiesFor('.area-figure__caption'), /padding-block-start:\s*var\(--_fr-name-gap\)/);
+});
+
+test('a Table caption starts on the first column\'s text (the frame recipe\'s inset), a row\'s gap above the grid', () => {
+  assert.match(bodiesFor('.area-table caption'), /padding:\s*var\(--area-gap-row\) var\(--_cell-edge\)/);
+  assert.match(bodiesFor('.area-table--flush caption'), /padding-inline:\s*0/);
+  assert.match(bodiesFor('.area-table :is(th, td):first-child'), /padding-inline-start:\s*var\(--_cell-edge\)/);
+});
+
+test('a text-only Card ends on its baseline less a fixed descender allowance (plan B1.4)', () => {
+  assert.ok(rules.some(rule => rule.selector === '.area-card' && /--_card-descender-allowance:\s*var\(--area-space-2\)/.test(rule.body)), 'the allowance is missing');
+  const end = rules.find(rule => rule.selector.startsWith(':is(.area-card > :last-child,') && /text-box-edge:\s*cap alphabetic/.test(rule.body));
+  assert.ok(end, 'text ending the card does not end on its baseline');
+  assert.match(end.body, /margin-block-end:\s*calc\(-1 \* var\(--_card-descender-allowance\)\)/);
+});
+
+// --- State paint: open, press and reveal (plan B7.1, B7.2, B7.3, B7.11, 2026-11-14; DESIGN_SYSTEM.md, "Shared state
+// paint"). A rule's selector list (its parts read through withoutNot, above, so a state named only inside :not() is not
+// read as the state); and the stylesheet's rules with the at-rules they sit in, for the reveal's media.
+const splitList = list => { const out = []; let depth = 0, start = 0;
+  for (let i = 0; i < list.length; i++) { const c = list[i]; if (c === '(') depth++; else if (c === ')') depth--; else if (c === ',' && depth === 0) { out.push(list.slice(start, i)); start = i + 1; } }
+  return [...out, list.slice(start)].map(part => part.trim()).filter(Boolean); };
+const inMedia = (() => {
+  const out = [], stack = []; let start = 0;
+  for (let i = 0; i < css.length; i++) {
+    const ch = css[i];
+    if (ch === '{') {
+      const prelude = css.slice(start, i).trim();
+      if (prelude.startsWith('@')) { stack.push(prelude); start = i + 1; continue; }
+      const end = css.indexOf('}', i);
+      out.push({ selector: prelude.replace(/\s+/g, ' '), body: css.slice(i + 1, end), at: [...stack] });
+      i = end; start = i + 1;
+    } else if (ch === '}') { stack.pop(); start = i + 1; }
+    else if (ch === ';') start = i + 1;
+  }
+  return out;
+})();
+const PRESSED = /var\(--(area-bg-component-pressed|area-bg-pressed|_bg-pressed|_bg-active|_wash-active)\)/;
+const statePaints = body => [...body.matchAll(/(?:^|[;\s])(background(?:-color|-image)?)\s*:\s*([^;]+)/g)].map(([, prop, value]) => ({ prop, value: value.trim() }));
+
+test('an open trigger holds its pressed paint, never the focus edge (plan B7.1)', () => {
+  // Written once for every Button, whatever its popup (a menu, a popover, a dialog, a list), and once in the field shell.
+  const button = rules.find(rule => rule.selector === '.area-button[aria-expanded="true"]:is([aria-haspopup]:not([aria-haspopup="false"])):not(:disabled, [data-disabled], [data-loading], [data-inactive])');
+  assert.ok(button, 'Button has no open rule for every popup kind');
+  assert.match(button.body, /background-color:\s*var\(--_bg-active\)/);
+  assert.match(button.body, /background-image:\s*var\(--_wash-active\)/);
+  const shell = rules.find(rule => splitList(rule.selector).includes(':is(.area-custom-select, .area-date-picker)[data-open] > :is(.area-custom-select__trigger, .area-date-picker__trigger)'));
+  assert.match(shell?.body ?? '', /background-color:\s*var\(--_bg-pressed\)/, 'the field shell has no open fill');
+  for (const family of ['custom-select', 'date-picker']) {
+    assert.match(bodiesFor(`.area-${family}`), /--_bg-pressed:\s*var\(--_bg\)/, `${family}: a field-shaped trigger does not keep its fill`);
+    assert.match(bodiesFor(`.area-${family}--ghost`), /--_bg-pressed:\s*var\(--area-bg-component-pressed\)/, `${family}: a ghost trigger does not take the pressed plate`);
+  }
+  // A submenu's row is a list's highlight, not a trigger's press (DESIGN_SYSTEM.md, "Open").
+  const HIGHLIGHT = /^\.area-menu__item--sub\[aria-expanded="true"\]/;
+  let open = 0;
+  for (const { selector, body } of rules) for (const part of splitList(selector)) {
+    const state = withoutNot(part);
+    if (!/\[aria-expanded="true"\]|\[data-open\]/.test(state) || HIGHLIGHT.test(part)) continue;
+    assert.doesNotMatch(state, /\[aria-haspopup="menu"\]\[aria-expanded="true"\]/, `${part}: open paint for menus alone`);
+    for (const { prop, value } of statePaints(body)) {
+      open++;
+      assert.match(value, PRESSED, `${part} paints ${prop}: ${value} while open; an open trigger holds its pressed paint`);
+    }
+    // Tag picker's field keeps its caret, and so its focus, while its list shows: its edge there is focus's.
+    if (/\.area-tag-picker\[data-open\]/.test(part)) continue;
+    assert.doesNotMatch(body, /--_field-edge:\s*var\(--_border-focus\)/, `${part} shows the focus edge while open`);
+  }
+  assert.ok(open >= 6, `only ${open} open paints checked`);
+});
+
+test('press shows on a selected or current item (plan B7.2)', () => {
+  // A rule whose press leaves out the selected item must have a sibling that presses it: the selected plate to the
+  // pressed plate, a chosen solid past its hover. Two indicators are not plates: underline Tabs (the selected bar is the
+  // strongest mark already). Segmented's press is a literal until plan B7.4 gives it the pressed role; it joins then.
+  const EXEMPT = /^\.area-tabs(--vertical)? \.area-tabs__tab:active.*::after$|^\.area-tabs__tab:active.*::after$|^\.area-segmented__item:active/;
+  const CHOSEN = /\[data-selected\]|\[aria-selected="true"\]|\[aria-current[^\]]*\]|:checked|\[aria-pressed="true"\]/;
+  const key = part => (withoutNot(part).split(/[\s>+~]+/).at(-1).match(/\.[\w-]+/g) ?? []).at(-1);
+  const pressedChosen = rules.flatMap(({ selector }) => splitList(selector)).filter(part => /:active/.test(withoutNot(part)) && CHOSEN.test(withoutNot(part)));
+  let checked = 0;
+  for (const { selector, body } of rules) for (const part of splitList(selector)) {
+    if (!/:active/.test(withoutNot(part)) || EXEMPT.test(part)) continue;
+    const nots = part.match(/:not\((?:[^()]|\((?:[^()]|\([^()]*\))*\))*\)/g) ?? [];
+    if (!nots.some(group => CHOSEN.test(group)) || !statePaints(body).length) continue;
+    checked++;
+    assert.ok(pressedChosen.some(other => key(other) === key(part)), `${part} leaves the selected or current item without a press`);
+  }
+  assert.ok(checked >= 2, `only ${checked} exclusions checked`);
+  // Button: an on toggle presses one press room past its fill; a solid one a step past its hover.
+  const toggle = bodiesFor('.area-button[data-selected]');
+  assert.match(toggle, /--_bg-active:\s*var\(--_surface-pressed\)/, 'an on toggle shows no press');
+  assert.match(toggle, /--_wash-active:\s*none/);
+  assert.match(bodiesFor('.area-button--danger'), /--_surface-pressed:\s*var\(--_surface-hover\)/, 'a tone\'s on toggle does not press to its hover tint');
+  assert.match(bodiesFor('.area-button--solid[data-selected]'), /--_bg-active:\s*var\(--_solid-active\)/, 'an on solid toggle shows no press');
+  assert.match(bodiesFor('.area-button'), /--_surface-pressed:\s*var\(--area-bg-component-pressed\)/);
+  // No row's press excludes its selected or current state any more.
+  for (const selector of ['.area-menu__item:active:not([data-disabled], [data-inactive])', '.area-tree-view [role="treeitem"]:active:not([data-disabled])', '.area-table--interactive tbody tr:active td', 'button.area-approval__option:active', '.area-pagination__page[aria-current="page"]:active'])
+    assert.match(ruleFor(selector)?.body ?? '', /var\(--area-bg-component-pressed\)/, `${selector} is not the pressed plate`);
+  assert.match(ruleFor('.area-calendar__day[data-selected]:active:not(:disabled, [aria-disabled="true"])')?.body ?? '', /var\(--_selected-pressed\)/, 'the chosen day does not press');
+});
+
+test('every hover plate has a pressed plate one step past it (plan B7.3)', () => {
+  // Each :hover rule that paints a plate (the row plate, the translucent wash, a band, a firmer plate on a plate) has an
+  // :active rule for the same element (its selector with the states and their exclusions removed) that paints it.
+  const PLATE = /var\(--(area-bg-component-hover|area-bg-hover|area-bg-component-active|_bg-hover|_band-hover|area-bg-component-raised-hover)\)/;
+  const base = part => withoutNot(part).replace(/:is\(:active, \[aria-expanded="true"\]\)/g, '').replace(/:hover|:active/g, '').replace(/(^|[\s>+~(])button(?=\.)/g, '$1').replace(/\s+/g, ' ').trim();
+  // Open, for another worker of plan B7 in this wave: Alignment picker's glyph cells (B7.6) join with that change.
+  const OPEN_PRESS = /^\.area-alignment-picker__cell:hover/;
+  const pressed = new Set();
+  for (const { selector, body } of rules) if (statePaints(body).length || /--_bg-active|box-shadow/.test(body))
+    for (const part of splitList(selector)) if (/:active/.test(withoutNot(part))) pressed.add(base(part));
+  let checked = 0;
+  for (const { selector, body } of rules) {
+    if (!statePaints(body).some(({ value }) => PLATE.test(value))) continue;
+    for (const part of splitList(selector)) {
+      if (!/:hover/.test(withoutNot(part))) continue;
+      checked++;
+      if (OPEN_PRESS.test(part)) continue;
+      assert.ok(pressed.has(base(part)), `${part} has a hover plate and no pressed plate`);
+    }
+  }
+  assert.ok(checked >= 25, `only ${checked} hover plates checked`);
+});
+
+test('hover-revealed content hides only where there is hover (plan B7.11)', () => {
+  // A part a :hover rule shows (opacity 1) is hidden (opacity 0) only inside @media (hover: hover), so a touch screen,
+  // which cannot hover, always shows it, and no (hover: none) rule is needed to show it again.
+  const target = part => {
+    const compounds = withoutNot(part).replace(/:(is|has|where)\((?:[^()]|\([^()]*\))*\)/g, '').split(/[\s>+~]+/).filter(Boolean);
+    const name = compound => (compound.match(/\.[\w-]+|::[\w-]+/g) ?? []).join('');
+    const last = name(compounds.at(-1) ?? '');
+    return last || `${name(compounds.at(-2) ?? '')} > *`;
+  };
+  const HOVERED = /:hover/;
+  // Not reveals: Switch's hover layer is its hover plate fading in (its rest is the plate's absence); a Scroll area's
+  // bar shows on hover and while scrolling, and touch scrolls the content itself; a dialog's footer rule shows on scroll.
+  // Board's card actions still hide everywhere (board.css, outside this wave's files): open, to convert as the rest.
+  const NOT_REVEAL = /^\.area-switch__track::before$|^\.area-scroll-area__scrollbar$|footer\)::before$|^\.area-board-card__actions$/;
+  const shown = new Set();
+  for (const { selector, body } of inMedia) {
+    if (/tooltip/.test(selector) || !/(?:^|[;\s])opacity:\s*1\b/.test(body)) continue;
+    for (const part of splitList(selector)) if (HOVERED.test(withoutNot(part))) shown.add(target(part));
+  }
+  assert.ok(shown.size >= 12, `only ${shown.size} revealed parts found`);
+  let hidden = 0;
+  for (const { selector, body, at } of inMedia) {
+    const hover = at.some(rule => /^@media \(hover: hover\)/.test(rule)), touch = at.some(rule => /\(hover: none\)|not \(hover: hover\)|not all and \(hover: hover\)/.test(rule));
+    for (const part of splitList(selector)) {
+      if (!shown.has(target(part)) || HOVERED.test(withoutNot(part))) continue;
+      if (/(?:^|[;\s])opacity:\s*0\b/.test(body)) { hidden++; if (!NOT_REVEAL.test(part)) assert.ok(hover, `${part} hides a hover-revealed part outside @media (hover: hover)`); }
+      if (touch) assert.doesNotMatch(body, /(?:^|[;\s])opacity:\s*1\b/, `${part} shows a revealed part again for touch; hide it only where there is hover`);
+    }
+  }
+  assert.ok(hidden >= 12, `only ${hidden} hiding rules found`);
 });

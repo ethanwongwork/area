@@ -21,6 +21,7 @@ import { createRequire } from "node:module";
 import { basename, dirname, join, relative, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { TYPEFACES } from "../src/content/typefaces/catalogue.mjs";
+import { REGULAR_WEIGHTS } from "../../../packages/tokens/src/axes/regular-weight.ts";
 
 const require = createRequire(import.meta.url);
 const fontkit = require("fontkit");
@@ -122,11 +123,17 @@ async function main() {
     if (!rules) continue;
     const family = `area-face-${face.id}`;
     const seen = new Set();
+    // A static regular file covers the Regular weight setting's range (400 to 470, axes/regular-weight.ts), so a weight
+    // the setting asks for draws the regular file, never the nearest heavier one (CSS font matching takes a 500 file for
+    // 401 to 499 when one exists). A variable file already spans it; a static file inside the range keeps its own weight.
+    const top = Math.max(...REGULAR_WEIGHTS);
+    const staticIn = style => rules.some(other => other.style === style && /^\d+$/.test(String(other.weight)) && Number(other.weight) > 400 && Number(other.weight) <= top);
+    const weightOf = rule => String(rule.weight) === "400" && !staticIn(rule.style) ? `400 ${top}` : rule.weight;
     for (const rule of rules) {
       const to = `fonts/${face.id}/${basename(rule.file)}`;
       if (!seen.has(to)) { files.push({ from: relative(repo, rule.file), to }); seen.add(to); }
       const format = rule.file.endsWith(".woff2") ? "woff2" : rule.file.endsWith(".otf") ? "opentype" : "truetype";
-      css.push(`@font-face { font-family: "${family}"; font-style: ${rule.style}; font-weight: ${rule.weight};${rule.stretch ? ` font-stretch: ${rule.stretch};` : ""} font-display: swap; src: url("../${to}") format("${format}");${rule.unicodeRange ? ` unicode-range: ${rule.unicodeRange};` : ""} }`);
+      css.push(`@font-face { font-family: "${family}"; font-style: ${rule.style}; font-weight: ${weightOf(rule)};${rule.stretch ? ` font-stretch: ${rule.stretch};` : ""} font-display: swap; src: url("../${to}") format("${format}");${rule.unicodeRange ? ` unicode-range: ${rule.unicodeRange};` : ""} }`);
     }
 
     // Characters: every file of the roman style (Fontsource splits a family by script). Metrics and axes: the file with

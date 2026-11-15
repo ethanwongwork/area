@@ -51,6 +51,8 @@ block, so server-rendered HTML no longer matches the React tree and hydration fa
 #418). Server-rendered pages place a hover card in flow content (a `div`), as the gallery
 demos now do (2026-09-27); client-only rendering is unaffected.
 
+**State hooks (manifest).** `open` is its Popover's (`statesFrom`): the card is a Popover, shown on `:popover-open`.
+
 ## Content, 2026-10-17
 
 Owner, round 31: "rethink the content/source". The examples held filler ("Description", "Label / Value", "Body text
@@ -131,8 +133,34 @@ once) for lists of mentions. Recommendation: not yet; no reference product does 
 - 2026-10-15 · PRODUCT_UI.md open gap ("Hover card that opens on pointer only, not on every arrow-key focus in a sheet"), owner: "merge it, then continue working" → `openOnFocus` (default `true`, so the E-18 rule stands): off, keyboard focus no longer opens the card and the pointer still does. The app's icon cells turn it off: the List box's arrows sweep 808 icons, each focus opened a card at once, and the Inspector shows the same name and actions for the focused icon. Radix opens on focus after its 700 ms (`@radix-ui/react-hover-card@1.1.14` index.mjs:44-47, 91); Area keeps at once.
 - 2026-10-17 · owner: "go with your recs" (after round 30), the hover and pressed sweep → the gallery examples' triggers are `Link` (the body ink, underlined) instead of raw `<a>`, which showed the browser's blue and, while pressed, its red (4:1 on white, 2.97:1 at light 90). The component is unchanged.
 - 2026-10-17 · owner, round 31: "rethink the content/source" → the examples' content follows each reference's preview (section Content); the Source tile is a web link (title, snippet, site), not a citation of an Area file. gallery.tsx personCard, GalleryHoverCardPage, GalleryHoverCardSource; specimens.mjs title.
+- 2026-11-11 · system evaluation F5 · the manifest declares `open` as its Popover's (`statesFrom`); no paint changed.
 
 ## Review note, 2026-10-20
 
 - **What changed:** the trigger sentence and its link take the body size of the canvas (16 at Type 14, was 13); the card itself is unchanged.
 - **Why:** a section of the screen with its own Type setting (the canvas, a Theme) now starts its text at Area's body size, so text that inherits its size follows that setting; it kept the app's 13 before.
+- 2026-11-11 · system evaluation A1.1 · the identity's and the meta line's gaps read `gap-row`: 12 at the default (was 10), Compact 8 unchanged.
+
+## Review note, 2026-11-11 (type rules, plan A9)
+
+- **What changed:** the meta line takes the card's UI line, 13/18, muted (plan A9.3); it was 12/16.
+- **Why:** the system evaluation's type rules (docs/research/system-evaluation-2026-11-11, section 5, A9), owner-approved
+  2026-11-11; the rules are in DESIGN_SYSTEM.md ("Ink and weight", "Size and shape", "Text pairs") and the type skill.
+
+## Review note, 2026-11-11 (motion, plan A5)
+
+- **What changed:** the surface enters and leaves on `duration-fast` (140 at Speed 210; it entered on `base`, 210), the enter easing out with the fade on `ease-effects`, the exit accelerating away on `ease-exit` (A5.1); opened from a key it appears at its size and only fades on `fade-fast` (`data-opened-by="keyboard"`, written by overlay.ts; A5.2); the 300 ms close delay is unchanged.
+- **Why:** the system evaluation's motion items (docs/research/system-evaluation-2026-11-11, section 5, A5), owner-approved
+  2026-11-11; the rules are in docs/MOTION.md (Tokens, Roles, Recipes) and kept by cohesion.test.mjs and
+  tests/behaviour/suites/motion.test.mjs. The motion tables above are history; these values are current.
+
+### 2026-11-11 · Ink, dark and colour (system plan, Phase 1)
+
+- **What changed:** In dark it paints the floating ground (`bg-float`, plan A7.2): a step above the layers under it, #0c0c0c on the near-black page at the defaults (was `bg-surface`, the page's own #020202); light is unchanged. Its dark edge is one line (plan A7.1): the frame takes the dark rim's strength (16% at Shadow 8) and the rim is no longer drawn outside it, where it had made a two-tone 2px edge.
+- **Why:** docs/research/system-evaluation-2026-11-11 (README §5); the owner took every recommendation on 2026-11-11.
+- **Verdict:** awaiting the owner.
+- 2026-11-14 · system evaluation B6.1, B6.2 · Popover's surface: the one floating frame and stack (popup.css), and the block gap `min(inset-surface-md, 12)`, 12 at every density (14 at the default before).
+
+## Shared bars and corners (plan B4), 2026-11-14
+
+- B4.2: a close in its header is Popover's corner control (7 in, corner 9 at the defaults).

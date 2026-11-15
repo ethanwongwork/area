@@ -10,9 +10,10 @@
   .area-timestamp {
     display: block;
     margin: 0;
-    color: var(--area-fg-muted); /* spec: Codex text-tertiary */
+    color: var(--area-fg-subtle); /* meta: the subtle ink, a step under a description (plan A3.2) */
     font-size: var(--area-text-sm-size); /* spec: Codex 14/20 under a 13 chat: a step under the reply */
     line-height: var(--area-text-sm-leading);
+    font-variant-numeric: tabular-nums; /* plan A9.8: a time is a number that changes */
     text-align: center;
     user-select: none;
   }

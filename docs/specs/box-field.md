@@ -81,6 +81,8 @@ is Button icon-only at the same size, centred in a square the control's height.
 | disabled | every field and the toggle disabled | NumberField, Button |
 | read-only | `readOnly` forwarded to each NumberField (values can be read and copied); the toggle disabled | NumberField, Button |
 
+**State hooks (manifest).** `disabled` and `read-only` are its Number fields' (`statesFrom: { …: "numberField" }`): Box field passes both on and paints neither itself. **`kind` is not an axis.** Sides or corners chooses which Number fields there are and each one's glyph (four fields either way, the same paint), so no class could draw it; GOVERNANCE § 4's axes are classes. It stays a React prop, recorded in the parity test's known axes.
+
 ## Behavior and accessibility
 
 `role="group"` named by the caption (or a visually hidden caption with `hideLabel`). Each
@@ -153,3 +155,9 @@ translations 0 / 16, whole pixels); every box measured on whole pixels on `box-f
 - 2026-09-30 · audit S17 (API vocabulary, slice 3/4) → new `readOnly`, forwarded to each NumberField, with the link toggle disabled (BoxField.tsx:36, :105, :117); `variant` is typed from NumberField's manifest, a forwarding prop rather than a BoxField axis (BoxField.tsx:29).
 - 2026-10-02 · compact pass round 9 → outside a panel, the label gap reads `ui-stack` (6 / 4) and the field gap `ui-cluster` (8 / 6). docs/research/compact-pass-2026-10-01.md (round 9).
 - 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → Box field draws no plate of its own; its NumberFields take the new focus and hover motion (no change to `box-field.css`). See "Motion and interaction, 2026-10-07".
+- 2026-11-11 · system evaluation F5 · the manifest declares `disabled` and `read-only` as its Number fields' (`statesFrom`); `kind` stays a React-only structural prop, with its reason; no paint changed.
+- 2026-11-11 · system evaluation A1.1 · in a Panel the gap follows the panel's whole-step gap, 10 at the default (was 8).
+
+## Shared parts (plan B2), 2026-11-13
+
+- **Column grid (B2.7).** In a Panel section that reserves the action column, the fields take the section's columns and its square is the section's action column (`--_row`), hung into the end inset as the rows' is (panel.md).

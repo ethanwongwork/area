@@ -22,7 +22,7 @@
     /* Motion (docs/MOTION.md, anchored-surface recipe; docs/specs/scroll-to-latest.md, 2026-10-07):
        opacity only, so the button never rests on a transform. It leaves over duration-fast and
        arrives one step slower, over duration-base, both ease-out (was fast both ways). */
-    transition: opacity var(--area-fade-fast) var(--area-ease-out), visibility 0s linear var(--area-duration-fast);
+    transition: opacity var(--area-fade-fast) var(--area-ease-effects), visibility 0s linear var(--area-duration-fast);
   }
   .area-scroll-to-latest[data-visible] {
     opacity: 1;
@@ -31,11 +31,11 @@
     transition-delay: 0s;
   }
   .area-scroll-to-latest[data-visible] > .area-button { pointer-events: auto; }
-  /* It floats over the conversation, so it takes the Elevation axis's float role, as Menu and Toast do (owner,
-     2026-10-14: elevation applied consistently by role). Near nothing at the default step, as ChatGPT draws
-     none; deeper as the setting rises. Button's own shadow is none, so this is its only layer, after a material's
-     layers (`--_m-layers`, material.css), which used to replace it (audit 2026-10-18). */
-  .area-scroll-to-latest > .area-button { box-shadow: var(--_m-layers, 0 0 0 0 transparent), var(--area-shadow-float); }
+  /* It floats over the conversation, so it takes the one floating shadow stack (popup.css, plan B6.1): a material's
+     layers (`--_m-layers`, material.css, which used to replace it, audit 2026-10-18), the Rest shadow's edge (it had
+     none), then the float role, as Menu and Toast (owner, 2026-10-14: elevation applied consistently by role). Button's
+     own shadow is none, so this is its only lift. */
+  .area-scroll-to-latest > .area-button { box-shadow: var(--_float-shadow); }
   /* The button is Button outline neutral, icon-only, pill: 32 round with the surface fill under its
    * ring, so it covers the prose it floats over (ChatGPT: 252 fill, 10% ring, no shadow). */
 }

@@ -9,40 +9,30 @@
 @layer area.components {
   .area-kbd {
     --_min: var(--area-mark-label-md);
-    /* The keycap is the mark height (20 md, 16 sm): a 10px line box, the padding, and the 1px
-       transparent border twice. Reading the mark role lets compact shorten it (compact pass). */
+    /* The mark recipe's inputs (inset.css, "One mark"; plan B5.1): the keycap is a rung of the mark ladder (18 md, 14 sm
+       at type 13, at every density), the chip role (an object: the small corner, 6 at the default Corner 10, at most half
+       the key; square at Corner 0), and its 1px transparent border, counted once. The recipe gives its sides, (h - 6) / 2
+       from the outer edge (6 at md, 4 at sm; it was 4 and 3), its text, text-xs on a 14 line (it was a 10 line), and the
+       whole-pixel baseline each key's legend sits on, as a Badge's word. The corner was its own height times the factor
+       (owner, round 75), 4 on a 14 key; the one chip corner replaces it (plan B5.1, VS13: 2, 4 or 6 by where it sat). */
     --_height: var(--_min);
-    --_padding: calc((var(--_height) - var(--area-size-10)) / 2 - var(--area-stroke-width));
-    /* The sides take at least 3 beside the glyph's box, counting the 1px border once. Measured at the menu's 14 keycap
-       (11px 500 system-ui): the caps are 7.75 tall, so 3.1 above and below them, and a glyph's ink starts about 1 inside
-       its box, so 3 at the sides puts the ink about 4 from the edge, a pixel more than above, as sides read best. The even
-       padding gave 2 (ink 3, tight: owner, round 75); Notion's 4 gave ink 5 (owner, round 77: "maybe a bit too much extra
-       padding, maybe 1 px less on either side?"). Below the 2px ladder on purpose: its 2 and 4 are those two. md keeps its
-       3 + 1. */
-    --_padding-inline: max(var(--_padding), calc(3px - var(--area-stroke-width))); /* spec */
-    --_font: var(--area-text-xs-size);
-    --_leading: var(--area-size-10);
-    /* It scales with the Radius setting like every corner and stops 2px short of a pill until Pill, as a Menu's rows
-       do (base.ts radius-list-row; radius audit, 2026-10-18: a 16 compact key had taken a capsule's corner). */
-    /* Owner, round 75 ("maybe the corner radius is slightly too round?"): the corner is the keycap's own height times
-       the Radius factor, the rule every control's corner follows (base.ts), to the nearest pixel: 6 on an 18 or a 20 (the
-       owner's 6, kept at md), 5 on a 16, 4 on a 14 at the default Radius, about three tenths of the height at every size. It was 24 ×
-       factor for every keycap, capped 2 short of a pill, so a 14 took 5, a third of it and nearly a capsule. Never 2 at
-       the shipped Radius settings above Sharp (2 read far too sharp, 2026-09-28; that rule allowed a corner by size). */
-    --_radius: max(var(--area-radius-min), min(round(nearest, calc(var(--_height) * var(--area-radius-factor)), 1px), calc(var(--_height) / 2 - min(2px, (0.5 - var(--area-radius-factor)) * 1000px))));
+    --_mark-height: var(--_height);
+    --_mark-chip: 1;
+    --_mark-border: var(--area-stroke-width);
 
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: var(--area-keyboard-gap);
-    min-inline-size: var(--_min);
+    box-sizing: border-box;
+    min-inline-size: var(--_height);
     block-size: var(--_height);
-    padding: var(--_padding) var(--_padding-inline);
+    padding: 0 var(--_mark-side);
 
     /* A filled keycap with no drawn edge, as Notion's shortcut hints are (7% warm fill, 500
        muted ink). The 1px transparent border keeps the box a whole number. */
     border: var(--area-stroke-width) solid var(--area-edge-tags);
-    border-radius: var(--_radius);
+    border-radius: var(--_mark-corner);
     /* The mark fill, translucent as Badge's and Count's (round 51, 2026-10-19): an opaque grey matched the row plate
        it sat on (a pressed row's is the same grey), so the keycap vanished on hover and press; a translucent fill
        deepens with whatever is under it. At rest on the page it is the same 6% (Notion's 7%). */
@@ -50,8 +40,8 @@
     color: var(--area-fg-muted);
 
     font-family: var(--area-font-keyboard);
-    font-size: var(--_font);
-    line-height: var(--_leading);
+    font-size: var(--_mark-text);
+    line-height: var(--_mark-leading);
     /* A label on a fill, so 500 (DESIGN_SYSTEM.md, weight policy). */
     font-weight: var(--area-weight-strong);
     /* Keys never wrap, and never inherit italics from surrounding prose. */
@@ -69,17 +59,10 @@
     line-height: inherit;
   }
 
-  .area-kbd--md {
-    --_min: var(--area-mark-label-md);
-    --_font: var(--area-text-xs-size);
-    --_leading: var(--area-size-10);
-  }
-
-  .area-kbd--sm {
-    --_min: var(--area-mark-label-sm);
-    --_font: var(--area-size-11);
-    --_leading: var(--area-size-10);
-  }
+  /* The ladder's md and sm rungs. Every size reads the mark text, text-xs (plan A9.9): 11 at type 13, growing with Type
+     as Badge's and Count's. */
+  .area-kbd--md { --_min: var(--area-mark-label-md); }
+  .area-kbd--sm { --_min: var(--area-mark-label-sm); }
 
   /* A sequence contains separate chord components; each Kbd is one chord. */
   .area-kbd-group {
@@ -102,10 +85,7 @@
      default keycap, kept so existing markup still renders. In a menu row the keycap is the small one (16), so it
      fits the 28 row at every density. */
   .area-kbd--quiet {}
-  .area-menu__item .area-kbd {
-    --_min: var(--area-mark-label-sm);
-    --_font: var(--area-size-11);
-  }
+  .area-menu__item .area-kbd { --_min: var(--area-mark-label-sm); }
   /* A destructive row's shortcut takes the row's ink on a translucent plate of it, as in a Button. */
   .area-menu__item--danger .area-kbd { background-color: color-mix(in srgb, currentColor 14%, transparent); color: inherit; }
 
@@ -142,8 +122,8 @@
     color: inherit;
   }
 
-  /* Inside a Button or Tooltip the keycap keeps its own 6px corner rather than a concentric one
-     (which came to 2px in Buttons); Notion's keycap likewise keeps its corner inside its field. */
+  /* Inside a Button or Tooltip the keycap keeps the chip corner rather than a concentric one (which came to 2px in
+     Buttons); Notion's keycap likewise keeps its corner inside its field. */
 
   .area-button__label:has(> .area-kbd) {
     display: inline-flex;

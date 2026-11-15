@@ -25,26 +25,31 @@ test('defaults to surface md, maps each axis to its modifier and passes native p
 const P = ':where(.area-surface, .area-card, .area-panel)';
 const depth = (n, subject) => `${Array(n).fill(P).join(' ')} ${subject}`;
 
-test('a nested Surface takes its parent corner less the parent inset (as Card media), floored, through alternating properties', () => {
+test('a nested Surface takes its parent corner less the parent inset, never under a row\'s corner, through alternating properties', () => {
   // Every level reads its parent's published corner with `inherit` and publishes its own under the other name, so no
-  // level declares the property it reads (a custom property cannot read its parent's value of a name it also sets).
+  // level declares the property it reads (a custom property cannot read its parent's value of a name it also sets). What
+  // it publishes is the frame recipe's nested corner (plan B1.1, VC19: max(min(radius-row, own), own − inset)).
   const two = rule(depth(1, '.area-surface'));
   assert.match(two, /--_sf-a: inherit;/);
   assert.match(two, /--_sf-corner: var\(--_sf-a\);/);
-  assert.match(two, /--_sf-b: max\(var\(--area-radius-floor\), calc\(var\(--_sf-corner\) - var\(--_sf-inset\)\)\);/);
+  assert.match(two, /--_sf-b: var\(--_fr-nested\);/);
   const three = rule(depth(2, '.area-surface'));
   assert.match(three, /--_sf-b: inherit;/);
   assert.match(three, /--_sf-corner: var\(--_sf-b\);/);
   assert.match(rule(depth(3, '.area-surface')), /--_sf-a: inherit;/);
+  // A Surface reads the corner it draws and the inset it holds its children at into the recipe.
+  const base = rule('.area-surface');
+  assert.match(base, /--_fr-corner: var\(--_sf-corner\);/);
+  assert.match(base, /--_fr-mat: var\(--_sf-inset\);/);
 });
 
-test('Card and Panel publish the corner a Surface inside them takes: their own corner less their inset', () => {
-  assert.ok(css.includes('  .area-card { --_sf-a: var(--_card-media-radius); }'));
-  assert.match(rule('.area-panel'), /--_sf-a: max\(var\(--area-radius-floor\), calc\(var\(--_panel-corner\) - var\(--_inset\)\)\);/);
+test('Card and Panel publish the corner a Surface inside them takes: the recipe\'s nested corner', () => {
+  assert.ok(css.includes('  .area-card { --_sf-a: var(--_fr-nested); }'));
+  assert.match(rule('.area-panel'), /--_fr-corner: var\(--_panel-corner\); --_fr-mat: var\(--_inset\); --_sf-a: var\(--_fr-nested\);/);
   // Nested, each keeps the parity: it inherits the name its parent published and publishes under the other.
-  assert.match(rule(depth(1, '.area-card')), /--_sf-a: inherit; --_sf-b: var\(--_card-media-radius\);/);
-  assert.match(rule(depth(2, '.area-card')), /--_sf-b: inherit; --_sf-a: var\(--_card-media-radius\);/);
-  assert.match(rule(depth(1, '.area-panel')), /--_sf-a: inherit; --_sf-b: max\(/);
+  assert.match(rule(depth(1, '.area-card')), /--_sf-a: inherit; --_sf-b: var\(--_fr-nested\);/);
+  assert.match(rule(depth(2, '.area-card')), /--_sf-b: inherit; --_sf-a: var\(--_fr-nested\);/);
+  assert.match(rule(depth(1, '.area-panel')), /--_sf-a: inherit; --_sf-b: var\(--_fr-nested\);/);
   const panel = readFileSync(new URL('../../styles/src/components/panel.css', import.meta.url), 'utf8');
   assert.match(panel, /border-radius: var\(--_panel-corner\);/);
   assert.match(panel, /--_panel-corner: 0px;/);
@@ -88,5 +93,5 @@ test('a Card inside a Surface reads the corner its parent publishes, by the same
   assert.ok(css.includes(`${depth(1, '.area-card:where(.area-surface *)')} { --_card-radius: var(--_sf-a); }`));
   assert.ok(css.includes(`${depth(2, '.area-card:where(.area-surface *)')} { --_card-radius: var(--_sf-b); }`));
   // Low weight, so a card in a media well keeps the well's corner.
-  assert.match(css, /\.area-card__media--well > \.area-card \{[^}]*--_card-radius:/);
+  assert.match(readFileSync(new URL('../../styles/src/components/card.css', import.meta.url), 'utf8'), /\.area-card__media--well > \.area-card \{[^}]*--_card-radius:/);
 });

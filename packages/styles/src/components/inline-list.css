@@ -21,7 +21,7 @@
   .area-inline-list__item { display: inline-flex; align-items: baseline; min-inline-size: 0; }
   .area-inline-list__item:not(:last-child)::after {
     /* spec: 8 either side of the mark (Docusaurus 8, Apple 9). */
-    margin-inline: var(--area-space-8);
+    margin-inline: var(--area-ui-cluster);
     color: var(--area-fg-muted);
     font-weight: var(--area-weight-regular);
   }
@@ -37,5 +37,5 @@
     background-color: var(--area-edge-dividers); /* the lightest line, border-decorative (owner 2026-10-25: "id prefer to not use dividers in general unless its very necessary and intentional"; "dividers that are inset to have a very light subtle stroke by default"). Was border-divider */
   }
   /* spec: GitHub's metadata row, 16 between items. */
-  .area-inline-list--none { column-gap: var(--area-space-16); }
+  .area-inline-list--none { column-gap: calc(var(--area-ui-cluster) * 2); }
 }

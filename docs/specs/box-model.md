@@ -219,3 +219,4 @@ None open. (Round 10's two were accepted; square rings replaced the 32 margin ro
   docs/research/dark-soft-tones-2026-10-28).
 - **Verdict:** approved by the owner on the dark soft tones review page, 2026-10-28 (option A, every family approved).
 - 2026-11-01 · owner ("Yes, fix fills", colour system study, docs/research/color-system-2026-11-01): The margin well painted `bg-subtle`, which equals the page at Layer contrast 0 (the default), so it vanished in both modes → `bg-well`, the recessed tone never closer to the page than the page's control fill (#f9f9f9 / #161616 at Layers 0, unchanged from Layers 50 in light).
+- 2026-11-11 · system evaluation A11.1 · a corner value's inset rounds to a whole pixel.

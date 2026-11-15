@@ -17,7 +17,7 @@ export const DEPTH_LEVER_AXES = ["stroke", "shadow-resting", "shadow-field", "sh
 export type DepthLever = (typeof DEPTH_LEVER_AXES)[number];
 
 export interface GalleryControl {
-  axis: "theme" | "neutral" | "tint-hue" | "tint-hue-dark" | "tint-light" | "tint-dark" | "ink-tint" | "accent" | "accent-strength" | "solid-light" | "solid-dark" | "label-tint" | "status-colours" | "tone-tint" | "tone-contrast" | "series-lightness" | "ground-light" | "ground-dark" | "layers-light" | "layers-dark" | "card-tone-light" | "card-tone-dark" | "action" | "selection" | "contrast" | "type" | "density" | "radius" | "pills" | "surface" | "shadow-rest" | "elevation" | "motion" | "easing" | "feedback" | DepthLever;
+  axis: "theme" | "neutral" | "tint-hue" | "tint-hue-dark" | "tint-light" | "tint-dark" | "ink-tint" | "accent" | "accent-strength" | "solid-light" | "solid-dark" | "label-tint" | "status-colours" | "tone-tint" | "tone-contrast" | "series-lightness" | "ground-light" | "ground-dark" | "layers-light" | "layers-dark" | "card-tone-light" | "card-tone-dark" | "action" | "selection" | "contrast" | "type" | "regular-weight" | "density" | "radius" | "pills" | "surface" | "shadow-rest" | "elevation" | "motion" | "easing" | "feedback" | DepthLever;
   /**
    * Named choices are a Segmented (Apple and Primer cap segments at 5-7); an ordered range is a bar, Slider's field
    * variant with its exact value inside it (owner, 2026-10-24), which answers the stepped Slider's old fault of reading as
@@ -147,11 +147,13 @@ export const GALLERY_CONTROLS: readonly GalleryControl[] = ([
   bar("contrast", value => percent(value, 8), { hint: "Stronger edges, focus and state; System follows the OS", named: { system: "System" }, custom: "4", barLabel: "Level" }),
   // Size: whole px for text (half px blurs), density by name.
   { axis: "type", kind: "segmented", label: label("type"), defaultValue: DEFAULT_AXES.type, items: ["12", "13", "14", "15", "16"].map(value => ({ value, label: value })) },
+  // Regular weight (plan A9.6, 2026-11-13): the wght regular text draws at, as a number; strong and headings keep theirs.
+  bar("regular-weight", value => value, { hint: "The weight body text, rows, fields and menus draw at. Strong labels and headings keep theirs; a face without a weight axis draws its regular" }),
   { axis: "density", kind: "segmented", label: label("density"), hint: "28 up to type 14, 36 from type 13", defaultValue: DEFAULT_AXES.density, items: [
     { value: "28", label: "Compact" }, { value: "32", label: "Default" }, { value: "36", label: "Comfy" },
   ] },
-  // Shape: the medium Button's corner in px, Pill past the last.
-  bar("radius", value => value === "pill" ? "Pill" : `${value}px`, { hint: "The medium Button's corner; every corner scales from it" }),
+  // Shape: a 32px control's corner in px, Pill past the last.
+  bar("radius", value => value === "pill" ? "Pill" : `${value}px`, { hint: "A 32px control's corner; every corner scales from it" }),
   { axis: "pills", kind: "chips", label: label("pills"), hint: "On: a pill. Off: follows Corner.", defaultValue: DEFAULT_PILLS.join(" "), items: PILL_SHAPES.map(value => ({ value, label: value === "field" ? "Fields" : title(value) })) },
   // Stroke and Shadow: lengths in px, strengths as a share of the strongest.
   bar("surface", value => `${value}px`, { hint: "The line round cards, panels and floating surfaces; Hairline is one device pixel at any screen density", named: { hairline: "Hairline" }, custom: "1", barLabel: "Pixels" }),
@@ -176,8 +178,8 @@ export const GALLERY_CONTROLS: readonly GalleryControl[] = ([
   bar("fill-pressed", value => `${value}%`, { hint: "How far a press moves past selected", marks: QUARTERS.slice(1) }),
   { axis: "focus-ring", kind: "segmented", label: label("focus-ring"), hint: "Where the keyboard ring sits", defaultValue: DEFAULT_AXES["focus-ring"], items: AXIS_PRESETS["focus-ring"].map(value => ({ value, label: title(value) })) },
   { axis: "danger-hover", kind: "segmented", label: label("danger-hover"), hint: "A destructive row's hover plate", defaultValue: DEFAULT_AXES["danger-hover"], items: [{ value: "tint", label: "Red" }, { value: "neutral", label: "Grey" }] },
-  // Effects: the Menu's open in ms, and the shape of every transition.
-  bar("motion", value => value === "0" ? "Off" : `${value}ms`, { hint: "The Menu's open; every duration scales from it" }),
+  // Effects: a dialog's open in ms (a menu takes two thirds of it), and the shape of every transition.
+  bar("motion", value => value === "0" ? "Off" : `${value}ms`, { hint: "A dialog's open; every duration scales from it" }),
   { axis: "easing", kind: "select", label: label("easing"), hint: "The shape of every transition: how it speeds up and settles", defaultValue: DEFAULT_AXES.easing, items: AXIS_PRESETS.easing.map(value => ({ value, label: title(value) })) },
   // How a control answers the pointer (axes/feedback.ts, 2026-10-24): hover's fade-in, a press's arrival and its give.
   { axis: "feedback", kind: "segmented", label: label("feedback"), hint: "How a control answers the pointer: hover fades in, a press gives a little", defaultValue: DEFAULT_AXES.feedback, items: AXIS_PRESETS.feedback.map(value => ({ value, label: title(value) })) },

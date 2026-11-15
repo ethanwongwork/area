@@ -108,7 +108,7 @@ selected or hovered row.
 
 | Slot · property | Area value | Basis | Reason when it differs from the basis |
 |---|---|---|---|
-| wrapper | 1px **`border-divider`** #e2e2e2 at `stroke-width`, so the frame keeps its edge under the Elevated preset (where `border-width` is 0); radius 12 (`radius-container`), no shadow (`navigation.css:121-130`) | Peer Card edge (third pass); Untitled radius 12 | Was `border-decorative` #f3, lighter than the row rules inside it. Untitled adds `shadow-xs`; Notion is full-bleed. The frame stays darker than Card's #ee edge because it has no shadow to carry it (audit S7b) |
+| wrapper | 1px **`border-divider`** #e2e2e2 at `stroke-width`, so the frame keeps its edge under the Elevated preset (where `border-width` is 0); the block corner, `radius-container` (16 at the default and Compact), no shadow (`table.css`) | Peer Card edge (third pass); Untitled radius 12 | Was `border-decorative` #f3, lighter than the row rules inside it. Untitled adds `shadow-xs`; Notion is full-bleed. The frame stays darker than Card's #ee edge because it has no shadow to carry it (audit S7b) |
 | text | `ui-size` (13 at type 13); line: sm the UI line (18), md and lg the prose line (`text-base-prose-leading`, 20) since 2026-10-31 | Untitled body 14/20; Notion cells 14 | Follows the density axis |
 | cell inset | block: sm 4; md the edge less the prose line's half-leading (9 at type 13 / 32, so the text is 14 from the rules, as from the frame); lg 4 more. 12 inline between columns, 16 at the frame (md, lg; sm 12), less the density step |  Owner (three insets); Primer props 16 at the frame, 12 between columns (2026-10-31) | Notion 7.5 / 8; Untitled 24 sides; the frame step is Primer's and Cursor's settings (14 side, rules 12 in) |
 | label column (`layout="fixed"`) | first column 27%, wraps; outranks a fit cell | Primer props: Name 198 of 728 (27%), Default 15%, Description 58% | Only the first column is fixed; the rest size to content, as the app's API tab needs (Prop, Type, Default, Description) |
@@ -349,3 +349,53 @@ Area: values are the peers' and the tokens', verified in a static harness (Chrom
 - **Verdict:** awaiting the owner.
 - 2026-11-07 · components audit V3 → sticky header and first column, sortable headings, row groups, skeleton rows →
   navigation.css, manifest.ts, primitives.tsx, gallery tiles, Documentation entry, table.test.mjs.
+- 2026-11-11 · system evaluation A2.2 · the frame takes the block corner, radius-container, as Description list framed, Queue, Plan and Edit summary: 14 → 16 at the default, 12 → 16 Compact. It was capped at 1.5 × the cells' side inset (owner 2026-10-12); the container's own cap at 1.5 × the surface inset stands for it. table.css; cohesion.test.mjs.
+
+## Review note, 2026-11-11 (type rules, plan A9)
+
+- **What changed:** every cell takes tabular figures, not only `--numeric` ones (plan A9.8), and a group heading is 500 with or without its toggle (plan A9.4). The heading's ink stays default for now; the rule (muted) waits for the ink pass.
+- **Why:** the system evaluation's type rules (docs/research/system-evaluation-2026-11-11, section 5, A9), owner-approved
+  2026-11-11; the rules are in DESIGN_SYSTEM.md ("Ink and weight", "Size and shape", "Text pairs") and the type skill.
+
+### 2026-11-11 · Ink, dark and colour (system plan, Phase 1)
+
+- **What changed:** A group heading is muted (plan A9.4, finding T3).
+- **Why:** docs/research/system-evaluation-2026-11-11 (README §5); the owner took every recommendation on 2026-11-11.
+- **Verdict:** awaiting the owner.
+
+## Shared parts (plan B2), 2026-11-13
+
+- **Selection column (B2.5, VC11).** A label-less Checkbox is its box; its 24 target is the control's out-of-flow hit area, so a selectable table's rows keep the 39 rhythm (they were 44, the header 43.5).
+
+### 2026-11-13 · Frame recipe (system plan, Phase 2, B1.1)
+
+- The corner reads the frame recipe's block corner (`surface.css`), `radius-container`: no visual change.
+
+## Density (plan B8.2), 2026-11-14
+
+Space between pieces reads a density role (DESIGN_SYSTEM.md, Size and shape; `density.test.mjs`). Values at type 13
+Compact / Default / Comfortable; each is whole at type 12 to 16 and every density, and the default is unchanged unless said.
+
+- The caption pads by `gap-row` (8 / 12 / 16; 12 at the default). Its start (12) is 2 short of the first column's text at
+  md (14): left for the owner, since aligning it moves the caption at the default. The group toggle's end side is
+  `ui-stack` (4 / 6 / 8).
+
+### 2026-11-14 · One field shell (system plan, Phase 2, B3)
+
+- A selectable row (holding a selection Checkbox) is a ladder height with the rule inside it: sm `control-sm`, md `control-lg`, lg `control-xl` (md 34 / 38 / 42 at type 13 Compact / Default / Comfortable; it was the text row, 35 / 39 / 47). Plain rows unchanged.
+- Why: docs/research/system-evaluation-2026-11-11 (B3.1, B3.2, B3.3, B2.2 in fields; README §5); the owner took every recommendation on 2026-11-11 and the 24 targets on 2026-11-13. B3.2: field text stays on Button's inset (Keep 10, the pick), so nothing moved.
+- Verdict: awaiting the owner.
+
+### 2026-11-14 · Shared parts, leftovers (system plan, Phase 2, wave 3)
+
+- The caption's text starts on the first column's text, the frame recipe's inset `--_cell-edge` (14 at md, 10 at sm, 0 flush; it was the row gap, 12, so 2 short at md and 2 past at sm), a row's gap above the grid as before.
+- Why: docs/research/system-evaluation-2026-11-11 (plan B6.1, B6.5, B8.2, B2.2; README §5, phase2/leftovers.md); the owner took every recommendation on 2026-11-11. Fix the rule, not the instance.
+- Verdict: awaiting the owner.
+
+## Selection paint (plan B7.13), 2026-11-14
+
+- A selected row is a selection scope (selection.css): ghost actions in its cells read the row ink at full strength.
+
+## State paint (plan B7.2, B7.11), 2026-11-14
+
+- A selected row presses (cells, flush overhang, sticky column); the unfocused quiet plate stands aside while held (`:not(:active)`). The unsorted sort mark hides only inside `@media (hover: hover)`.

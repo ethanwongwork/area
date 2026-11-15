@@ -109,6 +109,8 @@ centred by construction ((28 − 20) / 2 = 4).
 
 With a trigger: closed, delayed open (500ms), open, closing. See [overlay behavior](overlay.md).
 
+**State hooks (manifest).** `open` is the native popover's `:popover-open` (`stateAttributes`), the entry in `surface.css`.
+
 ## Behavior and accessibility
 
 `role="tooltip"`; the trigger points to it with `aria-describedby`. Not focusable. Forced
@@ -209,3 +211,22 @@ Open questions:
 - 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → open fades and grows from 0.97 on `fast`; skip-window follow-ons and the close are instant (`data-instant`); the skip window starts only from a shown tooltip; arrow centre rounded (`surface.css`, `Overlays.tsx`).
 - 2026-10-12 · product UI rule 4 (docs/PRODUCT_UI.md) → `describes` prop (default true): false when the tooltip repeats the trigger's accessible name, so it shows without being announced twice → `primitives.tsx` (AnchoredTooltip already had it).
 - 2026-10-31 · owner: "the tooltips start to glitch and get stuck" (desktop app headers) → closes on a pointer move off the trigger and tooltip, the pointer leaving the window, window blur and a hidden page; a returning window focus and an expanded trigger show nothing; a name-only tooltip (`describes={false}`) lets the pointer through (`data-passthrough`) so it never covers and catches the next control → Overlays.tsx (AnchoredTooltip), surface.css, tooltip.test.mjs.
+- 2026-11-11 · system evaluation F5 · the manifest declares `open` on `:popover-open` (`stateAttributes`); no paint changed.
+
+## Review note, 2026-11-11 (motion, plan A5)
+
+- **What changed:** a tooltip opened by focus appears at its size and only fades (`data-opened-by`, A5.2); its clocks are unchanged (in `fast`, out at once).
+- **Why:** the system evaluation's motion items (docs/research/system-evaluation-2026-11-11, section 5, A5), owner-approved
+  2026-11-11; the rules are in docs/MOTION.md (Tokens, Roles, Recipes) and kept by cohesion.test.mjs and
+  tests/behaviour/suites/motion.test.mjs. The motion tables above are history; these values are current.
+
+### 2026-11-11 · Ink, dark and colour (system plan, Phase 1)
+
+- **What changed:** Dark draws one edge (plan A7.1): its inset line takes the tooltip role's rim strength (5% or more, 8% at Shadow 8) and the role draws no rim outside it.
+- **Why:** docs/research/system-evaluation-2026-11-11 (README §5); the owner took every recommendation on 2026-11-11.
+- **Verdict:** awaiting the owner.
+
+## Shared parts (plan B2), 2026-11-13
+
+- **Centring (B2.2, VN8).** React wraps the words in `.area-tooltip__text`, a line slot (inset.css): trimmed and given its line back, `(1lh − 1cap) / 2` each side, so the bubble keeps 26 (type 13) and the cap sits on its centre beside a Kbd; it sat 0.62 high. A framework-free tooltip of words alone is its own text box. The `text-box` that sat on the tooltip itself never applied (a flex container is not trimmed) and is gone.
+- 2026-11-14 · system evaluation B6.1 · written as the one exception to the floating shadow stack (popup.css, DESIGN_SYSTEM.md "Overlays"): an inverse annotation on its own role, `shadow-tooltip`, its edge an inset line, no material. No change.

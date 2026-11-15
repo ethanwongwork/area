@@ -28,24 +28,27 @@ const DIAGONAL = "M246 6L354 114";
 type FilePageVariants = VariantProps<typeof MANIFESTS.filePage>;
 
 export interface FilePageProps extends Omit<HTMLAttributes<HTMLSpanElement>, "children"> {
-  /** sm 48, md 64 (Finder's icon view), lg 96, as Folder. Unset, it follows `--area-folder-size` (a File tile's figure). */
+  /**
+   * The figure's square: `sm` 48, `md` 64, `lg` 96, as Folder's. Unset, it follows `--area-folder-size` (a File
+   * tile's figure).
+   */
   size?: FilePageVariants["size"];
   /** The file's content mark, drawn thin in the page's middle: one `@area/icons` glyph per type (TextAlignLeftIcon for
    *  text documents and PDF, TableIcon, PresentationIcon, ImageIcon, PlayIcon, CodeIcon, ArchiveIcon); never a `file-*`
    *  page icon, which would draw a page inside the page. None for an unknown type: the blank page. */
   icon?: ReactNode;
-  /** @deprecated The figure is glyph-only (owner, round 55: "no need for text and icons, preferably just icons"; every
-   *  surveyed product but Finder uses one mark per type, docs/research/file-figures-2026-10-19.md). The tile's name shows
-   *  the extension. Still drawn under the glyph when passed. */
+  /**
+   * @deprecated The figure is glyph-only and the tile's name shows the extension. Still drawn under the glyph when
+   * passed.
+   */
   label?: string;
   /** An image of the file (a thumbnail) to fill the page instead of the glyph. */
   preview?: string;
   /** The figure's accessible name. Without one the figure is decorative (a tile's name says what it is). */
   "aria-label"?: string;
-  /** @deprecated Use `aria-label` (DESIGN_SYSTEM.md, Names: `aria-label` names the component's own element; File
-   *  tile's `name` is visible text). */
+  /** @deprecated Use `aria-label`. */
   name?: string;
-  /** @deprecated The lit solid page is archived (owner, round 57); every page is the outline one. Ignored. */
+  /** @deprecated Ignored: every page is the outline one. */
   variant?: "outline" | "solid";
 }
 

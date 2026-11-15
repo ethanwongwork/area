@@ -63,6 +63,8 @@ Swatch composition: height 1em + 10 = 24; swatch start (24 − 14) / 2 − 1 = 4
 
 ## Measurements
 
+**Current (2026-11-13, one mark).** Inline Code is an inline chip on the one mark recipe (inset.css, "One mark"; plan B5.1): its block padding is (1lh − 1.3em) / 2 less the border, so its plate is its line box (18 on a 13/18 line; was 21.38); side (1lh − 6) / 2 from the outer edge, 6 on an 18 line; corner the chip role, radius-small, at most half its line (6 at the default Corner 10, square at Corner 0).
+
 `node scripts/capture-compare.mjs` (trimmed):
 
 | slot · property | area · default | area · treatments | area · on-color | area · swatch | area · prose |
@@ -217,3 +219,13 @@ owner's pick, so it waits for a yes.
   and Token, one role, `token-edge`) steps from the decorative seam (#f3f3f3) to `border-subtle` (#e8e8e8), the edge step
   nearest Untitled's measured #e5e5e5; on a Table's white rows the #fafafa fill and #f3f3f3 seam all but vanished. Dark
   unchanged (`border-faint`). code.css reads `token-edge` instead of its own copy of the old pair.
+
+## Review note, 2026-11-11 (type rules, plan A9)
+
+- **What changed:** inline code sits on its host's line (`line-height: inherit`; it was 1.35, a box taller than a 13/18 line), its size still `max(text-xs, 0.875em)` (plan A9.9, finding T7).
+- **Why:** the system evaluation's type rules (docs/research/system-evaluation-2026-11-11, section 5, A9), owner-approved
+  2026-11-11; the rules are in DESIGN_SYSTEM.md ("Ink and weight", "Size and shape", "Text pairs") and the type skill.
+
+## One mark, 2026-11-13
+
+Plan B5.1 (and B5.2, B5.3 where they apply; docs/research/system-evaluation-2026-11-11): the family moved onto the shared mark recipe in inset.css and its own copy of the side, baseline, corner and text was removed. Values above, under Measurements.

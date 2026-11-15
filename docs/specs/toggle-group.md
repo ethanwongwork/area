@@ -77,7 +77,7 @@ seams and corner per tier.
 
 | Slot · property | Area value | Basis | Reason when it differs from the basis |
 |---|---|---|---|
-| soft look | Segmented's track: `bg-subtle`, a `border-decorative` hairline, 2 inset and gap, items the track's corner less 2; hover the `bg-hover` wash; pressed raised (surface, `edge-selected` hairline, `shadow-1`; the active fill in dark); unpressed `fg-muted`, pressed default ink | Figma's filled controls (track #f5, hover #e6, the chosen option a white plate with a shadow); peer Segmented | Was ButtonGroup soft (owner, review round 5): its hover was one rung from rest (247 → 243) and pressed one more (238) |
+| soft look | Segmented's track, one recipe (`segmented.css` "One track", plan B8.1): `bg-component`, the Buttons group's edge at `border-width`, 2 inset and gap, the tier's corner on the track (a pill, `radius-full`, at Pills `segmented`), items the track's corner less 2, never under `radius-floor`; hover the `bg-hover` wash; pressed raised (surface, `edge-selected` hairline, `shadow-1`; the active fill in dark); unpressed `fg-muted`, pressed default ink | Figma's filled controls (track #f5, hover #e6, the chosen option a white plate with a shadow); peer Segmented | Was ButtonGroup soft (owner, review round 5): its hover was one rung from rest (247 → 243) and pressed one more (238) |
 | outline look | ButtonGroup outline, its edges and corners; hover `bg-component-hover`, pressed `bg-component-active` and body ink | Untitled UI (stroked toggle group); peer ButtonGroup | Untitled's pressed equals its hover; Area keeps them one step apart |
 | apart look | ghost toggles 8 apart (`ui-cluster`, 6 compact) | Peer Toolbar group gap | shadcn's spacing is a free number |
 | pressed (outline, ghost) | Button's selected fill (`bg-component-active`) and body ink; unpressed the quiet ink | Peer Button, Toolbar | Untitled's selected = its hover fill; Area keeps hover and selected one step apart (shared state paint) |
@@ -93,6 +93,8 @@ seams and corner per tier.
 | pressed | Button's selected fill and body ink, `aria-pressed="true"` | `area--*`; gallery, real clicks |
 | hover / focus | Button's | button spec |
 | disabled (group or item) | native `disabled`; a fully disabled joined group dims once (ButtonGroup); the group leaves the Tab order | `area--state-disabled` |
+
+**State hooks (manifest).** `disabled` is its Buttons' own (`statesFrom: { disabled: "button" }`): each item takes the group's, and the dimmed group is the `:has()` rule in `toggle-group.css`.
 
 ## Behavior and accessibility
 
@@ -173,3 +175,36 @@ Resolved 2026-10-10 (owner: "go with your recommendations"):
 - **What changed:** `onValueChange(values, event)` passes the press.
 - **Why:** ToggleGroup.tsx:26. From the components audit's internal peer comparison (`docs/research/components-audit-2026-11-07/internal.md`); the owner took every recommendation ("Take all recs", 2026-11-07).
 - **Verdict:** awaiting the owner.
+- 2026-11-11 · system evaluation F5 · the manifest declares `disabled` as its Buttons' (`statesFrom`), so the parity check reads it; no paint changed.
+
+## Review note, 2026-11-11 (focus and targets, plan A6, A11.2)
+
+- **What changed:** Soft items own the shared hit target on their height, as Segmented (A11.2).
+- **Why:** the system evaluation's focus, forced colours and hit target items (docs/research/system-evaluation-2026-11-11, section 5), owner-approved 2026-11-11; the rules are in DESIGN_SYSTEM.md ("The focus ring", "Targets") and CONTRAST.md (Focus).
+
+## Review note, 2026-11-11 (motion, plan A5)
+
+- **What changed:** Button's press: the plate gives, the label keeps its size (A5.6).
+- **Why:** the system evaluation's motion items (docs/research/system-evaluation-2026-11-11, section 5, A5), owner-approved
+  2026-11-11; the rules are in docs/MOTION.md (Tokens, Roles, Recipes) and kept by cohesion.test.mjs and
+  tests/behaviour/suites/motion.test.mjs. The motion tables above are history; these values are current.
+
+### 2026-11-11 · Ink, dark and colour (system plan, Phase 1)
+
+- **What changed:** An unselected outline or ghost toggle reads the muted ink, as Segmented, soft toggles and Tabs do (plan A3.3, finding VA9); it had kept a ghost Button's quieter ink (0.452 against 0.510).
+- **Why:** docs/research/system-evaluation-2026-11-11 (README §5); the owner took every recommendation on 2026-11-11.
+- **Verdict:** awaiting the owner.
+
+## One track (plan B8.1), 2026-11-14
+
+- **What changed:** soft's track is Segmented's recipe, not a copy (`segmented.css`, "One track"): the group sets its
+  tier's height and corner, the recipe draws inset, corner, edge and the raised option's paint. The copy in
+  `toggle-group.css` is gone.
+- **Visible:** `data-area-pills="segmented"` now rounds soft's track too (it had no Pills hook); its edge already read
+  `border-width`. The material setting paints the soft track as Segmented's. Nothing moves at the defaults.
+- **Not changed:** pressed paint (since plan B7.4, 2026-11-14, both press at `bg-pressed-track`); a soft
+  toggle's raised option is a Button, so the material's thumb painter does not reach it yet.
+
+## Selection paint (plan B7.4), 2026-11-14
+
+- A soft option presses at `bg-pressed-track`, Segmented's press (it pressed to the selected wash).

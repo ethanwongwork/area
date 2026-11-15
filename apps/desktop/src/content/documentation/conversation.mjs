@@ -26,7 +26,7 @@ export default {
       root: "An article for one turn, named \"<name> said\"; it lays out the bubble or the prose, then the actions.",
       bubble: "The person's words: at most 70% of a wide column and nearly the whole of a narrow one (48 short of it), at its end, on the Composer's corner and the neutral component fill.",
       content: "The assistant's prose across the column, at the body size; paragraphs, lists, code and citations sit inside it.",
-      actions: "MessageActions: a named group of ghost icon Buttons with no gap. On the person's turn it shows on hover and focus (always on touch).",
+      actions: "MessageActions: a named group of ghost icon Buttons with no gap, pulled out so the first glyph (the person's: the last) sits on the text's or the bubble's edge. On the person's turn it shows on hover and focus (always on touch).",
       cursor: "The dot after the last word while streaming; it breathes, and rests at full ink with Motion 0 or reduced motion.",
       stack: "MessageGroup's turns, or a split message's bubbles: 2 apart, the end corners a quarter of the bubble's corner where two bubbles meet.",
       status: "The line under a message on its way, in the notice line's type: Sending… in the muted ink, or the danger mark, Not sent in the default ink and Retry.",
@@ -133,7 +133,6 @@ export default {
     parts: {
       root: "A listbox above the composer at its width, on Menu's surface and rows; it scrolls past its maximum height.",
       path: "A file's folder at the row's end in the shortcut ink, cut from its start; it gives way before the name does.",
-      empty: "One muted row a row tall at the text inset, as every list's empty row, shown when no group has items.",
     },
     aria: [
       ["role=\"listbox\", aria-label", "On the root, from aria-label (\"Files\", \"Commands\"); the deprecated label is the fallback."],
@@ -210,13 +209,13 @@ export default {
     parts: {
       root: "The agent card: a section with Code block's frame, at the card's text size, named by its head.",
       head: "A button a row tall that folds the list; the messages follow it with no rule between.",
-      title: "\"N queued\" by default, in the muted ink; cut short on one line.",
-      chevron: "Points down while open, turns when folded; Accordion's hover plate behind it.",
+      title: "\"N queued\" by default, strong in the default ink; cut short on one line.",
+      chevron: "Right after the title, as Plan's: points down while open, turns when folded; Accordion's hover plate behind it.",
       items: "The ordered list (ol) of waiting messages, in the order they will send; hidden while folded.",
       item: "One message as a Menu row. Sending: dimmed, with a spinner. Failed: a mark, and Retry in place of Send now.",
       text: "The message on one line, cut short with an ellipsis.",
       status: "The spinner on a sending row, or the failed mark.",
-      actions: "Send now (or Retry) and Remove over the row's end on hover and focus; always shown on a failed row and on touch.",
+      actions: "Send now (or Retry) and Remove over the row's end on hover and focus, as far from the end as from the top, their corner the row's less that; always shown on a failed row and on touch.",
     },
     // Manifest state; source: data-open.
     states: {

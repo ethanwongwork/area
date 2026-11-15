@@ -1,0 +1,134 @@
+/* Popover (docs/specs/popover.md). Its frame, shadow stack and block gap are popup.css; its anchored state overlay.css. */
+@layer area.components {
+  .area-popover {
+    /* spec: 12, border included, at both densities (owner 2026-10-02, cursor-desktop.md): dense
+     * popovers inset 16 (Cursor's upsell popover, Figma's Edit text style and color picker); none
+     * shows 8. Holds the default rather than exceed it. */
+    --_inset: calc(var(--area-popover-inset, var(--area-space-12)) - var(--area-border-width));
+    --_block-inset: var(--area-popover-inset, var(--area-space-12)); /* the block gap's bound (popup.css, plan B6.2): Popover 12 at every density */
+    padding: var(--_inset);
+    /* spec: the surface corner at both densities, radius-container (16 at the default Corner 10, 12 at Corner 8 as
+     * measured), stepping by 4 with the radius setting (owner, 2026-10-03). The header close is not concentric with
+     * it at the default (plan B4.2: corner − distance); the old min() against the close only differed away from it. */
+    /* Public hooks (2026-10-24, the app's icon card matching its gallery cards): `--area-popover-corner` and
+       `--area-popover-inset`, the inset from the outer edge with the edge counted once. */
+    --_popover-radius: var(--area-popover-corner, var(--area-radius-container));
+    /* The header's close is a corner control (inset.css, plan B4.2): its glyph on the inset, its plate 7 from both outer
+       edges at the defaults and its corner 16 − 7 = 9 (it kept the small control's 6). Hover card's too. */
+    --_cc-corner: var(--_popover-radius);
+    --_cc-inset: calc(var(--_inset) + var(--area-border-width));
+    border-radius: var(--_popover-radius);
+    position: relative;
+    isolation: isolate;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    /* Header, body and footer stand the block gap apart (popup.css, plan B6.2): the md surface inset, never more than the
+       popover's own 12 inset, so 12 at every density (14 at the default and 18 at Comfortable before). */
+    /* spec: 320 preferred (shadcn 320; ChatGPT's panel 254, Notion's share 456). */
+    inline-size: min(var(--area-popover-inline-size, calc(var(--area-space-96) * 3 + var(--area-space-32))), 100%);
+    min-inline-size: 0;
+    max-inline-size: 100%;
+    box-sizing: border-box;
+    text-align: start;
+    font-size: var(--area-ui-size);
+    line-height: var(--area-ui-leading);
+    overflow-wrap: anywhere;
+    /* The frame and the shadow stack are the one floating surface's (popup.css, plan B6.1). */
+  }
+  /* Author display/position must preserve the native popover closed state and top layer. */
+  .area-popover[popover] { position: fixed; }
+  .area-popover[popover]:not(:popover-open) { display: none; }
+
+  .area-popover > *, .area-popover__body > * { min-inline-size: 0; max-inline-size: 100%; }
+  /* A popover that holds only a Calendar (a date field's picker) hugs the month grid rather than
+     taking the reading width, as Notion's date picker does (owner 2026-09-28: "extends too big"). */
+  .area-popover:has(> .area-calendar:only-child) { inline-size: max-content; }
+  /* Custom SVG geometry: a 32×14 shoulder that curves smoothly out of the edge. Its centre is
+   * rounded down to a whole pixel (round(), after a 50% fallback), so on an odd-width popover
+   * the arrow and its 1px edge do not land between pixels (docs/MOTION.md, Crispness 1).
+   * Its open stroke omits the base; the fill overlaps the shell border by one stroke. */
+  .area-popover__arrow {
+    position: absolute;
+    z-index: 1;
+    width: var(--area-space-32);
+    height: calc(var(--area-space-12) + var(--area-space-2));
+    max-inline-size: none;
+    overflow: visible;
+    fill: var(--area-bg-float);
+    pointer-events: none;
+    /* At Surface 0 the frame's stroke is gone and the arrow takes the surface's soft edge as a drop-shadow
+       (axes/surface.ts). The clip keeps the shell overlap (the 1px above the base) and cuts what a shadow of
+       that overlap would draw inside the shell: above the base and, beside the shoulders, down to 1px below
+       it, where the shell's own edge runs. The sides and point keep 2px for the blur. */
+    filter: var(--area-shadow-edge-filter);
+    clip-path: polygon(0 -1px, 100% -1px, 100% 1px, calc(100% + 2px) 1px, calc(100% + 2px) calc(100% + 2px), -2px calc(100% + 2px), -2px 1px, 0 1px);
+  }
+  .area-popover__arrow-edge { fill: none; stroke: var(--area-edge-floating); stroke-width: var(--area-border-width); vector-effect: non-scaling-stroke; }
+  :is(.area-popover--top:not([data-side]), .area-popover[data-side="top"]) > .area-popover__arrow { left: 50%; left: round(down, 50%, 1px); top: 100%; transform: translate(-50%, 0); }
+  :is(.area-popover--bottom:not([data-side]), .area-popover[data-side="bottom"]) > .area-popover__arrow { left: 50%; left: round(down, 50%, 1px); top: 0; transform: translate(-50%, 0) rotate(180deg); transform-origin: center top; }
+  :is(.area-popover--left:not([data-side]), .area-popover[data-side="left"]) > .area-popover__arrow { left: 100%; top: 50%; top: round(down, 50%, 1px); transform: translate(-50%, -50%) rotate(-90deg) translateY(50%); }
+  :is(.area-popover--right:not([data-side]), .area-popover[data-side="right"]) > .area-popover__arrow { right: 100%; top: 50%; top: round(down, 50%, 1px); transform: translate(50%, -50%) rotate(90deg) translateY(50%); }
+  .area-popover--arrow { overflow: visible; }
+  .area-popover__footer { display: flex; align-items: center; gap: var(--area-ui-cluster); }
+  /*
+   * spec (pass 2, docs/specs/popover.md): the header is the title group. Title and description
+   * share the first column, 6px apart (title baseline to description cap 15, shadcn 15); any
+   * control (the close button) takes the second column on the title's line. The close keeps
+   * its 28px target but gives back its padding with negative margins, so the header is only as
+   * tall as its text and the icon's edge lands on the 12px inset, like the text opposite it.
+   */
+  .area-popover__header {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: start;
+    column-gap: var(--area-ui-cluster);
+    /* spec: title baseline to description cap 15 with the 20px description line; one slot that
+       Alert and Toast share (audit E-13, E-28). */
+    --_title-gap: var(--area-space-4); /* a title stands one step (4) off its copy (DESIGN_SYSTEM.md, "Text pairs"; owner 2026-11-06: joined, "the space between the title and the copy still doesnt look right"): 12.8 baseline to cap beside the copy's 8.8 */
+    row-gap: var(--_title-gap);
+  }
+  .area-popover__header > :is(.area-popover__title, .area-popover__description) { grid-column: 1; }
+  .area-popover__header > :not(.area-popover__title, .area-popover__description) { grid-column: 2; grid-row: 1; }
+  .area-popover__header > .area-button {
+    margin-block: calc((var(--area-ui-leading) - var(--_height)) / 2);
+    margin-inline-end: calc(-1 * var(--_cc-pull)); /* the corner control's pull (inset.css): its glyph on the inset */
+  }
+  /* spec: the title's cap sits on the 12px inset like the sides, not 5px below it: the header
+   * gives back the leading above the cap (the cap-height reference inset.css uses). */
+  @supports (text-box: trim-both cap alphabetic) {
+    /* Rounded to a whole pixel (MOTION.md, Crispness 1): the cap gives -5.03 at 14/20, which left
+       every popover a fraction of a pixel short of whole and its trigger gap at 7.98. */
+    .area-popover > .area-popover__header:first-child:not(:has(> .area-popover__title)) { margin-block-start: round(nearest, calc((1cap - 1lh) / 2), 1px); }
+    /* A title is trimmed to its cap, so its cap sits on the inset exactly, with or without a close (plan B6.5): one text
+       grid on every surface (the rounded pull above left it 0.84 low at type 13). */
+    .area-popover__header > .area-popover__title { text-box: trim-start cap alphabetic; }
+  }
+  /*
+   * spec (pass 3): a close with no title beside it sets the header. The close box sits the same distance from the top
+   * as from the side, so its icon is on the 12px inset both ways and its corner is concentric with the popover's (the
+   * corner control, inset.css): header top = (icon - line) / 2. Beside a title, the title sets it (below).
+   */
+  .area-popover > .area-popover__header:first-child:has(> .area-button):not(:has(> .area-popover__title)) {
+    margin-block-start: calc((var(--area-icon-sm) - var(--area-ui-leading)) / 2);
+  }
+  /* A close beside a title (plan B6.5; DESIGN_SYSTEM.md, "Bars and corner controls", the one named exception): the title
+     keeps its cap on the 12 inset as without a close, and the close centres on the title's cap, (1cap − H) / 2 above and
+     below in whole pixels, its glyph on the side column; its corner comes from the nearer distance, its top
+     (`--_cc-near`, inset.css). */
+  .area-popover__header:has(> .area-popover__title) > .area-button {
+    --_cc-top: round(nearest, calc((1cap - var(--_height)) / 2), 1px);
+    --_cc-near: min(var(--_cc-distance), calc(var(--_cc-inset) + var(--_cc-top)));
+    margin-block: var(--_cc-top);
+  }
+  /* spec (pass 3): strong, because the title is the description's size (shadcn 500, Primer 600). */
+  .area-popover__title { margin: 0; font-size: inherit; line-height: var(--area-ui-leading); font-weight: var(--area-weight-strong); }
+  /* spec (type pass): 14/20 like every surface description (was 14/18). */
+  .area-popover__description { color: var(--area-fg-muted); font-size: var(--area-ui-size); line-height: var(--area-ui-leading); }
+  .area-popover__body { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--area-ui-cluster); }
+  .area-popover__footer { justify-content: flex-end; flex-wrap: wrap; }
+  .area-popover__footer > :first-child { margin-inline-end: auto; }
+  /* A tour's progress, "1 of 3": UI text in the muted ink, figures of one width so the footer doesn't shift per step. */
+  .area-popover__step { color: var(--area-fg-muted); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .area-popover__media { inline-size: 100%; aspect-ratio: 5 / 2; overflow: hidden; border-radius: max(var(--area-radius-floor), calc(var(--_popover-radius) - var(--_inset) - var(--area-border-width))); background: var(--area-bg-component); }
+  .area-popover__media > :is(img, video) { display: block; inline-size: 100%; block-size: 100%; object-fit: cover; }
+}

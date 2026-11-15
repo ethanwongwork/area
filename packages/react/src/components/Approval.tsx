@@ -2,15 +2,16 @@
 import { forwardRef, useEffect, useId, useRef, useState } from "react";
 import type { HTMLAttributes, KeyboardEvent, ReactNode } from "react";
 import { approvalVariants } from "../variants.ts";
+import type { MANIFESTS, VariantProps } from "../variants.ts";
 import { Glyph } from "./Glyph.tsx";
 import { Button } from "./Button.tsx";
-import { Kbd } from "./primitives.tsx";
+import { Kbd } from "./Kbd.tsx";
 
 export interface ApprovalOption {
   value: string;
   /** "Yes", "Yes, for this session", "No". */
   label: ReactNode;
-  /** What the choice comes to, a line under its label (Claude Code's question options). */
+  /** What the choice comes to, a line under its label. */
   description?: ReactNode;
   /**
    * The choice drawn: a picture of what it comes to (a screen in that setting, a corner, a typeface's "Aa"), shown, not
@@ -29,17 +30,19 @@ interface ApprovalBaseProps extends Omit<HTMLAttributes<HTMLElement>, "title"> {
    * `--area-approval-columns` (2 for words, 4 for pictured choices), for short answers and pictures; the arrows move in
    * two dimensions. The field to say what to do instead always takes a whole row.
    */
-  layout?: "list" | "grid";
+  layout?: VariantProps<typeof MANIFESTS.approval>["layout"];
   /** surface (the default): its own card, the Composer's shell. plain: no card (edge, fill, mat, corner), for several
    *  questions listed in one card of the host's; its words keep their 6 inset, so the host's mat sets the column. */
-  variant?: "surface" | "plain";
+  variant?: VariantProps<typeof MANIFESTS.approval>["variant"];
   /** What it wants to do: "Run this command?", "Edit button.css?". */
   title: ReactNode;
   /** Why, in a sentence. */
   description?: ReactNode;
+  /** Called with the chosen option's value: a click, Enter, or the option's number key. */
   onChoose: (value: string) => void;
   /** Adds the field to say what to do instead; Enter sends it. */
   onInstead?: (text: string) => void;
+  /** The placeholder of the field to say what to do instead. */
   insteadPlaceholder?: string;
   /** Escape: the same as the last option, by default. */
   onDismiss?: () => void;
@@ -62,13 +65,13 @@ interface ApprovalBaseProps extends Omit<HTMLAttributes<HTMLElement>, "title"> {
 
 export type ApprovalProps = ApprovalBaseProps & (
   | {
-    /** Numbered choices, most permissive yes last before no (Claude Code, Codex). */
+    /** The numbered choices, the most permissive yes last before no. */
     items: ApprovalOption[];
     options?: undefined;
   }
   | {
     items?: undefined;
-    /** @deprecated Use `items` (a collection is `items`, Governance § 4). Kept for one release. */
+    /** @deprecated Use `items`. Kept for one release. */
     options: ApprovalOption[];
   }
 );
@@ -175,7 +178,7 @@ export const Approval = forwardRef<HTMLElement, ApprovalProps>(function Approval
               aria-describedby={option.description ? `${optionId}-${index}` : undefined}
               onPointerEnter={() => { pointed.current = option.value; report(); }}
               onFocus={() => { focused.current = option.value; report(); }}>
-              <span className="area-approval__key" aria-hidden="true">{index < 9 ? <Kbd keys={[String(index + 1)]} size="sm" /> : null}</span>
+              <span className="area-approval__key" aria-hidden="true">{index < 9 ? <Kbd keys={[String(index + 1)]} size="md" /> : null}</span>
               {option.description ? (
                 <span className="area-approval__lines">
                   <span className="area-approval__label">{option.label}</span>
@@ -197,7 +200,7 @@ export const Approval = forwardRef<HTMLElement, ApprovalProps>(function Approval
         })}
         {onInstead ? (
           <label className="area-approval__option area-approval__instead">
-            <span className="area-approval__key" aria-hidden="true">{insteadKey ? <Kbd keys={[insteadKey]} size="sm" /> : null}</span>
+            <span className="area-approval__key" aria-hidden="true">{insteadKey ? <Kbd keys={[insteadKey]} size="md" /> : null}</span>
             <input className="area-approval__field" type="text" aria-label={insteadPlaceholder} placeholder={insteadPlaceholder} value={instead}
               aria-keyshortcuts={insteadKey}
               onChange={event => setInstead(event.currentTarget.value)}

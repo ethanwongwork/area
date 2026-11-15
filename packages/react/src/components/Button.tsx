@@ -18,6 +18,7 @@ export interface ButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement
   variant?: VariantProps<typeof MANIFESTS.button>["variant"];
   /** Which semantic scale the button draws from. */
   tone?: ButtonTone;
+  /** The height and type size; md by default. */
   size?: VariantProps<typeof MANIFESTS.button>["size"];
   /** Stretch to the width of the container. */
   fullWidth?: boolean;
@@ -26,37 +27,10 @@ export interface ButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement
   /** Unset: a pill only while the theme's `pills` list names `button`. `true` forces a pill, `false` the radius corner. */
   pill?: boolean;
   /**
-   * Pulls the button back by its own padding so the *label* lines up with the text
-   * above it rather than the button's box. Only correct on unfilled variants.
+   * Pulls a ghost button out by its own padding so its label, or an icon-only button's glyph, lines up with the text
+   * above it rather than the button's box. Other variants keep their plate on the column.
    */
-  align?: "start" | "end";
-  /** A toggle that is currently on. Persists, unlike hover. */
-  selected?: boolean;
-  /**
-   * Makes the button an uncontrolled toggle that starts on or off, as Chip's `defaultSelected`
-   * (audit A-17; the toggle used to be controlled only). Each press flips it.
-   */
-  defaultSelected?: boolean;
-  /** Called with the next state when a toggle is pressed, controlled or not. */
-  /** The new state and the press that made it (Governance § 4: the event is the second argument). */
-  onSelectedChange?: (selected: boolean, event: MouseEvent<HTMLButtonElement>) => void;
-  /**
-   * Pending: a spinner replaces any leading icon and clicks are ignored, but the button stays
-   * focusable at full ink (`aria-disabled`, not native `disabled`), so focus isn't lost on submit.
-   */
-  loading?: boolean;
-  /**
-   * Can't act now, for a reason that will pass or that the person can change (components audit V2, 2026-11-07; Primer's
-   * `inactive`): drawn as disabled, but it keeps focus, its place in the Tab order and the pointer, so it can say why in
-   * `inactiveText`. A press does nothing (`aria-disabled`, not native `disabled`). Use `disabled` only for a control that
-   * truly can't act here (WRITING.md, "Disabled or inactive").
-   */
-  inactive?: boolean;
-  /**
-   * Why an inactive button can't act ("Upgrade to export", "Saving…"): a Tooltip on hover and focus, and the button's
-   * accessible description. It takes the place of a Tooltip that would name the button.
-   */
-  inactiveText?: ReactNode;
+  align?: VariantProps<typeof MANIFESTS.button>["align"];
   /**
    * On a painted colour (a colour card, a swatch): the colour's own ink and no fill, its hover and press plates that ink
    * at 12% and 20%, as Badge's `onColor`. Overrides the variant's and tone's paint.
@@ -66,7 +40,30 @@ export interface ButtonProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement
   icon?: ReactNode;
   /** Rendered after the label. */
   trailingIcon?: ReactNode;
+  /** The native button type; `button` by default, so it never submits a form unasked. */
   type?: "button" | "submit" | "reset";
+  /** A toggle that is currently on. Persists, unlike hover. */
+  selected?: boolean;
+  /** Makes the button an uncontrolled toggle that starts on or off, as Chip's `defaultSelected`. Each press flips it. */
+  defaultSelected?: boolean;
+  /**
+   * Pending: a spinner replaces any leading icon and clicks are ignored, but the button stays
+   * focusable at full ink (`aria-disabled`, not native `disabled`), so focus isn't lost on submit.
+   */
+  loading?: boolean;
+  /**
+   * Can't act now, for a reason that will pass or that the person can change: drawn as disabled, but it keeps focus,
+   * its place in the Tab order and the pointer, so it can say why in `inactiveText`. A press does nothing
+   * (`aria-disabled`, not native `disabled`). Use `disabled` only for a control that truly can't act here.
+   */
+  inactive?: boolean;
+  /**
+   * Why an inactive button can't act ("Upgrade to export", "Saving…"): a Tooltip on hover and focus, and the button's
+   * accessible description. It takes the place of a Tooltip that would name the button.
+   */
+  inactiveText?: ReactNode;
+  /** Called with the new state and the press that made it, when a toggle is pressed, controlled or not. */
+  onSelectedChange?: (selected: boolean, event: MouseEvent<HTMLButtonElement>) => void;
 }
 
 /**

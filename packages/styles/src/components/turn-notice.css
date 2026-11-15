@@ -22,7 +22,7 @@
 
   .area-turn-notice--stopped,
   .area-turn-notice--compacted { --_notice-icon: var(--area-fg-muted); }
-  .area-turn-notice--error { --_notice-icon: var(--area-fg-danger); }
+  .area-turn-notice--error { --_notice-icon: var(--area-fg-danger-mark); } /* a tone glyph reads the mark ink (plan A3.4) */
   .area-turn-notice__icon {
     display: inline-flex;
     flex: none;
@@ -36,7 +36,7 @@
   .area-turn-notice__text { min-inline-size: 0; overflow-wrap: anywhere; }
   /* The divider: a 1px rule on the line's middle from 8 after the words to the column's end (spec: Codex's turn divider,
      gap 8, a full-width 1px rule), in the Dividers stroke group. An action, when there is one, follows the rule. */
-  .area-turn-notice:is(.area-turn-notice--stopped, .area-turn-notice--compacted) { gap: var(--area-space-8); }
+  .area-turn-notice:is(.area-turn-notice--stopped, .area-turn-notice--compacted) { gap: var(--area-ui-cluster); }
   .area-turn-notice:is(.area-turn-notice--stopped, .area-turn-notice--compacted)::after {
     content: "";
     flex: 1 1 0;

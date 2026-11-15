@@ -46,6 +46,8 @@ Every Notion tag colour is mapped.
 
 ## Measurements
 
+**Current (2026-11-13, one mark).** Tag is on the one mark recipe (inset.css, "One mark"). Heights are the mark ladder, the small text line plus 0 / 4 / 8: 14 / 18 / 22 at type 12 and 13, 16 / 20 / 24 at 14, 18 / 22 / 26 at 15, 20 / 24 / 28 at 16, the same at Compact, Default and Comfortable (Compact's md was 14 and its lg 18 until 2026-11-13). The text side is (H − 6) / 2 from the outer edge, edge counted once: 4 / 6 / 8 at type 13. The cap sits on the marks' whole-pixel baseline, edge + round((H − 2 · edge + 1cap) / 2). The tables below are the source evidence they were set from. Text text-xs on md (11/14 at type 13, like Badge, at every density: plan B5.2, owner 2026-11-11), the UI text on lg (13). Side 6 at md and 8 at lg (were 5 and 6). Corner: the chip role, radius-small, at most H / 2: 6 at the default Corner 10 (was 4, the corner of its height), square at Corner 0. Icon side (H − icon) / 2, icon to label 4; the remove box H − 4, 2 in.
+
 | slot · property | notion · rest | notion · × hover | area · rest | area · × hover |
 |---|---|---|---|---|
 | **shell** size | 85.56 × 20 | same | 80.98 × 20 (Geist vs Notion's system font) | same |
@@ -64,7 +66,7 @@ Every Notion tag colour is mapped.
 |---|---|---|---|
 | height | 20 (`mark-label-md`) | Notion | — |
 | corner | the radius setting for 20 (4 at default) | Notion 4 | — |
-| text | 14/20 regular, the tone's ink | Notion 14 regular | Line box 20 fills the tag |
+| text | the mark text, `control-xs-text` (11 at type 13) regular, the tone's ink, at every density; the plate's height is its line | Badge and Count on the same plate (owner, 2026-11-11, plan B5.2) | Notion 14 regular: Tag reads as a mark beside Badge and Count |
 | fill and ink | Each colour reads its hue's roles, `hue-<hue>-bg` under `hue-<hue>-text` (components audit D5), which are its tone's soft tint under its tone's words, the pair a soft Badge paints: `<tone>-surface` and `fg-<tone>` (gray: `gray-surface`, `fg-gray`), so Tone tint and Tone contrast reach Tag and a Tag matches its Badge, Callout and Board column in both modes. Neutral keeps its translucent default. At the defaults, light: caution #905e00 on #fcf7e5, danger #c8023a on #ffe8e9, info #015cd2 on #e4efff; dark: caution #fbc13b on #302806 | Owner, 2026-11-03: Tag and Board onto the tone tokens | Until 2026-11-03: light literals, one tint at OKLCH L 0.955 / C 0.035 under inks at L ≤ 0.49; dark, the vivid ink on a 16% wash of itself with a label lift. The shared tint is lighter at the default (C 0.025 at rest); Tone tint 130–160 carries more. Contrast is the tones' gate (contrast/tone-floor.test.ts) |
 | start side | 6 | Notion | — |
 | × | 16 box 2 in from the end and top, 12 glyph drawn at its 12 line (`Glyph size={12}`, as Badge's), ink 7.5 ≈ Notion's 7.4, in the tag's ink (as Badge's dismiss) | Notion (geometry); peer Badge (colour) | Notion's × is muted grey; beside the vivid inks a grey × read as a separate object (owner, 2026-10-06). Was the 16 drawing shrunk to 12, a 0.84px line (0.67 in the gallery's 0.8 view) that looked pixelated; now ~1px |
@@ -310,3 +312,23 @@ hue for later variants; none is drawn yet.
   "Yes, fix both": Tag is now within −0.33 to +0.45, and wherever a Tag and a Badge share a height and a text size
   their words land on the same pixel row. A Tag in 13px text beside an 11px badge of the same height centres a
   larger cap, so its baseline sits a pixel lower; both are centred.
+
+## Review note, 2026-11-11 (type rules, plan A9)
+
+- **What changed:** the label takes the mark text, `control-xs-text` (11 at type 13), at every density, as Badge and Count on the same plate (owner, 2026-11-11, plan B5.2: "Tag md 11/14 like Badge at every density"; plan A9.9). It was the UI size (13) while the plate held the UI line and 11 at Compact, so density changed its text.
+- **Why:** the system evaluation's type rules (docs/research/system-evaluation-2026-11-11, section 5, A9), owner-approved
+  2026-11-11; the rules are in DESIGN_SYSTEM.md ("Ink and weight", "Size and shape", "Text pairs") and the type skill.
+
+### 2026-11-11 · Ink, dark and colour (system plan, Phase 1)
+
+- **What changed:** The Tags stroke group's default is 4 (10%, plan A10.3), was 3 (7.5%).
+- **Why:** docs/research/system-evaluation-2026-11-11 (README §5); the owner took every recommendation on 2026-11-11.
+- **Verdict:** awaiting the owner.
+
+## One mark, 2026-11-13
+
+Plan B5.1 (and B5.2, B5.3 where they apply; docs/research/system-evaluation-2026-11-11): the family moved onto the shared mark recipe in inset.css and its own copy of the side, baseline, corner and text was removed. Values above, under Measurements.
+
+## Selection paint (plan B7.4), 2026-11-14
+
+- The default plate reads `hue-neutral-bg` (the same values, no longer a literal).

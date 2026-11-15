@@ -20,7 +20,7 @@
     overflow-y: auto;
     overscroll-behavior: contain;
   }
-  /* A file's folder: Menu's trailing ink and size (its shortcut), at the row's end, cut from its start so the nearest
+  /* A file's folder: Menu's trailing ink at the row's own size, at the row's end, cut from its start so the nearest
      folder stays (Claude Code's right-aligned, RTL-ellipsis directory; Cursor's trailing text at most 180). */
   /* The name takes the row, so the path ends it (a margin on the path would follow the path's own RTL direction). */
   .area-composer-menu .area-menu__item > .area-menu__text { flex: 1 1 auto; min-inline-size: 0; }
@@ -30,25 +30,15 @@
     max-inline-size: var(--_path-max);
     overflow: hidden;
     color: var(--area-fg-muted);
-    font-size: var(--area-text-xs-size);
-    line-height: var(--area-text-xs-leading);
+    /* The row's size (plan A9.2, as Command palette's path): a path locates, so it is never the mark size. */
+    font-size: var(--area-ui-size);
+    line-height: var(--area-ui-leading);
     text-overflow: ellipsis;
     white-space: nowrap;
     direction: rtl;
     text-align: end;
   }
   .area-composer-menu__path > bdi { unicode-bidi: plaintext; }
-  /* Nothing matches: one muted row at the text inset, as every list's empty row (Combobox, Command palette;
-     DESIGN_SYSTEM.md, List rows): the cap centred in the row's square (inset.css), in the rows' type, as Combobox's,
-     so the menu keeps its size when the last match goes (chat set review 2026-10-28: it took the composer's text-lg). */
-  .area-composer-menu__empty {
-    display: flex;
-    align-items: center;
-    min-block-size: var(--area-ui-row);
-    margin: 0;
-    padding-inline: calc((var(--area-ui-row) - 1cap) / 2);
-    color: var(--area-fg-muted);
-    font-size: var(--area-ui-size);
-    line-height: var(--area-ui-leading);
-  }
+  /* Nothing matches: Menu's empty line (.area-menu__empty, the row table in inset.css; plan B2.6), in the rows' type, so
+     the menu keeps its size when the last match goes (chat set review 2026-10-28: it took the composer's text-lg). */
 }

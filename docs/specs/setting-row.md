@@ -39,7 +39,7 @@ Intake gates:
 |---|---|---|---|
 | orientation | horizontal (default) | The control at the row's end; under the text when the row is under 456 wide | The editor's cell, Primer's ControlGroup, the app's Settings |
 | orientation | vertical | Always under the text, for a control that needs the line (pictures, a list, a text area) | The editor's `-extra-below` cell; the app's `data-wide` rows (Mode, Density, Corner) |
-| SettingsGroup framed | false (default) / true | On the page, or the rows in a frame | The chat app's plain rows; the editor's and the app's boxed groups |
+| SettingsGroup variant | plain (default) / surface | On the page, or the rows in a frame: the one frame prop (`framed` is its deprecated alias) | The chat app's plain rows; the editor's and the app's boxed groups |
 
 Excluded: a search highlight and a link pulse (a settings search is the page's), the editor's left-edge modified bar (a
 dot after the name, as the task asks and as Tabs' change marks read), the chat app's "dividers that step aside" (the
@@ -48,8 +48,8 @@ rows have no hover plate to step aside for).
 ## Anatomy
 
 ```
-root          <div>     owns: padding (12 block, 0 inline; 16 inline in a framed group), the inline-size container
-  body        <div>     owns: flex row, 16 gap; a column (6 gap) when vertical or under 456
+root          <div>     owns: padding (10 block, 0 inline; the frame's text inset, 14, in a surface group), the inline-size container
+  body        <div>     owns: flex row, the surface inset gap (14); a column (6 gap) when vertical or under 456
     text      <div>     owns: the name's line over the description
       heading <div>     owns: the text's line height, 4 gap: label, modified, help, reset
         label <label>   owns: UI type, default ink, 400; for the control
@@ -60,7 +60,7 @@ root          <div>     owns: padding (12 block, 0 inline; 16 inline in a framed
     control   <div>     owns: the control at the end, its width or --area-setting-row-control, at most 50%
 SettingsGroup <section> owns: 16 gap (12 compact) between heading and rows
   Section heading       the heading and its lede
-  rows        <div>     owns: the rules between rows; framed: edge, corner, surface, rule inset 16
+  rows        <div>     owns: the rules between rows; surface: edge, the block corner, surface, rule inset 14 (the frame recipe)
 ```
 
 Row height: 12 + the text + 12, 42 at one line and 60 at two at type 13 (8 compact), as the app's Settings rows.
@@ -70,8 +70,8 @@ Row height: 12 + the text + 12, 42 at one line and 60 at two at type 13 (8 compa
 | Slot · property | Area value | Basis | Reason when it differs from the basis |
 |---|---|---|---|
 | row · padding block | `inset-surface-sm` (12, 8 compact) | The editor's 12; the app's 42 / 60 rows | — |
-| row · padding inline | 0 plain; `inset-surface-md` (16) framed | The app's Settings box 16; the editor's 14 | 16 is Area's surface inset |
-| body · gap | 16 | The app's Settings | The editor's 20 is off the ladder |
+| row · padding inline | 0 plain; the frame recipe's small text inset (`--_fr-inset-sm` = `inset-surface-md`: 12 / 14 / 18 at type 13 Compact / Default / Comfortable) in a surface group | The app's Settings box 16; the editor's 14 | Area's surface inset, on the frame recipe |
+| body · gap | `inset-surface-md`: 12 / 14 / 18 at type 13 Compact / Default / Comfortable (12 / 14 / 14 at type 12, 18 / 18 / 22 at 16) | The app's Settings 16; the editor's 20 | Space follows density (plan B8.2, 2026-11-14): it was 16 at every density beside a row whose block inset moved. For the owner: the measured settings editor's 20 is more open than either; at type 13 Comfortable the gap is 18 |
 | narrow break | under 456 wide | Derived: the 280 control column (the app's Inspector floor at 13) + 16 + a 160 text column (Description list's term) | Not measured; container query lengths take no tokens |
 | stacked · gap | `ui-stack` (6) | Field's label over its control | The editor's 8 |
 | name · description | joined, same size, default over muted, 400 | Text pairs: an item's name and its line | — |
@@ -79,7 +79,7 @@ Row height: 12 + the text + 12, 42 at one line and 60 at two at type 13 (8 compa
 | Reset | ghost icon-only sm Button, reset glyph, after the name, opacity 0 → 1 on hover or focus, at once in, `fade-fast` out | The editor's toolbar (opacity .3s); the app's ResetButton; Code block's revealed copy | Always shown where nothing hovers |
 | Reset · name | "Reset “Label” to default" | WRITING.md, icon-only buttons; quotes name what it acts on | The app's "Reset Label to default" |
 | group · rule | Dividers group's line between rows, between the text edges | PRODUCT_UI.md: settings groups rule rows only between the text edges | — |
-| group · framed | Blocks edge, container corner, `bg-surface` (a raised ground, `layers.css`) | Description list `framed` | — |
+| group · surface | Blocks edge, the frame recipe's block corner (`--_fr-block`, the container corner), `bg-surface` (a raised ground, `layers.css`) | Description list `variant="surface"` | — |
 | group · heading gap | `inset-surface-md` (16, 12 compact) | A heading and its block; the app's `--_canvas-heading` | — |
 | control · width | its own, or `--area-setting-row-control` for a group's column; at most 50% | The app's one control column | — |
 
@@ -88,7 +88,7 @@ Row height: 12 + the text + 12, 42 at one line and 60 at two at type 13 (8 compa
 | State | Slot · property changes | Evidence |
 |---|---|---|
 | modified (`data-modified`) | The dot after the name; Reset while `onReset` is given; "Modified" joins the control's description | The editor's `is-configured` |
-| disabled (`data-disabled`) | Name and description in `fg-disabled`; the control gets `disabled`; Reset disabled | Field's disabled |
+| disabled (`data-disabled`) | Name in `fg-muted`, as Field's label; the description keeps its ink (it is the reason, 4.5:1); the control gets `disabled`; Reset disabled | Field's disabled; plan B7.8 |
 
 ## Behavior and accessibility
 
@@ -121,7 +121,7 @@ None captured; the editor's values are declared CSS.
 | Field | labels one control | clones the child with id, aria-labelledby, aria-describedby; `labelAction` | same; `labelAction` | Match |
 | Tabs, Tree view | a dot mark | 6, accent (unseen) | 6, change ink (modified) | Same size; different meaning, different ink |
 | Filter bar | the unsaved dot | 6, change ink | 6, change ink | Match (cohesion test) |
-| Description list framed | the framed box | Blocks edge, container corner, surface | same | Match |
+| Description list surface | the framed box | Blocks edge, the block corner, surface | same, on the frame recipe | Match |
 
 ## Visual pass
 
@@ -153,3 +153,16 @@ always-visible Reset and the editor's hover reveal.
 
 - 2026-11-07 · built from the components audit (N4). The help slot is named `labelAction`, Field's word for the same
   thing, rather than `help`.
+- 2026-11-14 · plan B7.8 (T17) → disabled: the label steps to fg-muted, as Field's; the description is the reason and keeps its ink and 4.5:1 (was both fg-disabled). Why: docs/research/system-evaluation-2026-11-11 (README §5, phase2/disabled.md); the owner took every recommendation on 2026-11-11.
+
+## Shared parts (plan B2), 2026-11-13
+
+- **Centring (B2.2).** A row of one line (no description) sets its name as a line slot (inset.css): trimmed and given its line back, so the row keeps its height and the cap sits on the control's centre.
+- **Control (B2.5, VA3).** A Switch beside the text no longer draws 3 high: its box is its track's (switch.md).
+
+## Density and the frame prop (plan B8.2, B1.1 hand-over), 2026-11-14
+
+- **Gap.** Text to control is `inset-surface-md`, 12 / 14 / 18 at type 13 Compact / Default / Comfortable (16 at every
+  density before); it moves 2 at the default, as the plan states. The measured settings editor's 20 is noted for the owner.
+- **Frame prop.** Settings group's `framed` is now `variant="surface"` (`framed` stays a deprecated alias); the frame reads
+  the frame recipe's block corner and small text inset (surface.css), the same values as before.

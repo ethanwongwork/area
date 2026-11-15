@@ -10,23 +10,35 @@ import { Glyph } from "./Glyph.tsx";
 
 type LinkVariants = VariantProps<typeof MANIFESTS.link>;
 
-interface LinkOptions {
+export type LinkProps = {
   /** `inline` is always underlined, for links in running text; `standalone` is underlined on hover and focus. */
   variant?: LinkVariants["variant"];
-  /** `inherit` takes the surrounding text's ink; `muted` the muted ink; `action` the Action role (neutral until a theme makes actions the accent); `blue` the link blue of product UI (ChatGPT, Figma, Wikipedia); `purple`, `pink`, `green`, `red`, `orange`, `brown` the readable ink of that hue (a colour, not a status). Gray is `muted`. */
-  ink?: LinkVariants["ink"];
   /**
-   * Leaves the site: opens in a new tab (`target="_blank"`, `rel="noopener noreferrer"` unless set),
-   * shows the external mark and tells assistive tech it opens a new tab.
+   * `inherit` takes the surrounding text's ink; `muted` the muted ink; `action` the Action role (neutral until a
+   * theme makes actions the accent); `blue` the link blue of product UI; `purple`, `pink`, `green`, `red`, `orange`,
+   * `brown` the readable ink of that hue (a color, not a status). Gray is `muted`.
    */
-  external?: boolean;
-  /** The announcement for `external`. Default "(opens in a new tab)". */
-  newTabLabel?: string;
-}
-export type LinkAnchorProps = LinkOptions & AnchorHTMLAttributes<HTMLAnchorElement> & { as?: "a" };
-/** A place with no address: a native button drawn as the link. `external` needs an address, so it is the anchor's alone. */
-export type LinkButtonProps = Pick<LinkOptions, "variant" | "ink"> & Omit<ButtonHTMLAttributes<HTMLButtonElement>, "type"> & { as: "button" };
-export type LinkProps = LinkAnchorProps | LinkButtonProps;
+  ink?: LinkVariants["ink"];
+} & (
+  | (AnchorHTMLAttributes<HTMLAnchorElement> & {
+    /**
+     * The element: `a`, a link with an address; `button`, a place with no address, a native button drawn as the link.
+     * @default "a"
+     */
+    as?: "a";
+    /**
+     * Leaves the site: opens in a new tab (`target="_blank"`, `rel="noopener noreferrer"` unless set),
+     * shows the external mark and tells assistive tech it opens a new tab.
+     */
+    external?: boolean;
+    /** The announcement for `external`. Default "(opens in a new tab)". */
+    newTabLabel?: string;
+  })
+  // `external` needs an address, so it is the anchor's alone. A button form is always `type="button"`.
+  | (Omit<ButtonHTMLAttributes<HTMLButtonElement>, "type"> & { as: "button" })
+);
+type ButtonForm = Extract<LinkProps, { as: "button" }>;
+type AnchorForm = Exclude<LinkProps, { as: "button" }>;
 
 export const Link = forwardRef<HTMLAnchorElement | HTMLButtonElement, LinkProps>(function Link(props, ref) {
   let { variant, ink } = props;
@@ -54,8 +66,8 @@ export const Link = forwardRef<HTMLAnchorElement | HTMLButtonElement, LinkProps>
     </a>
   );
 }) as {
-  (props: LinkButtonProps & RefAttributes<HTMLButtonElement>): ReactNode;
-  (props: LinkAnchorProps & RefAttributes<HTMLAnchorElement>): ReactNode;
+  (props: ButtonForm & RefAttributes<HTMLButtonElement>): ReactNode;
+  (props: AnchorForm & RefAttributes<HTMLAnchorElement>): ReactNode;
 };
 
 export { linkVariants };

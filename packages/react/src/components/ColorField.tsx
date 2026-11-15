@@ -17,13 +17,15 @@ export function normalizeHexColor(input: string): string | null {
 export interface ColorFieldProps extends Omit<InputProps, "value" | "defaultValue" | "type" | "icon" | "leadingIcon" | "trailingIcon" | "prefix" | "suffix" | "maxLength"> {
   /** Edit opacity separately while keeping one canonical hex value. */
   alpha?: boolean;
+  /** The accessible name of the opacity field, with `alpha`. */
   opacityLabel?: string;
   /** With `alpha`, names the group that holds the colour and its opacity. */
   groupLabel?: string;
+  /** The color as hex, controlled. */
   value?: string;
+  /** The color at first as hex, uncontrolled. */
   defaultValue?: string;
-  /** Called only when a valid hex value is committed by blur or Enter. */
-  /** The committed hex, and the event that committed it (audit C-7). */
+  /** Called with the hex when a valid value is committed by blur or Enter, and the event that committed it. */
   onValueChange?: (value: string, event?: SyntheticEvent) => void;
   /** Public sizing/treatment reuse Input's matching control tiers. */
   size?: VariantProps<typeof MANIFESTS.colorField>["size"];
