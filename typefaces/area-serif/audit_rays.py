@@ -100,8 +100,10 @@ def winding(pts, polys):
     return w
 
 
-def rays(polys):
-    """Across-the-stroke length at every vertex of every polyline (nan where no ray is kept)."""
+def rays(polys, close=True):
+    """Across-the-stroke length at every vertex of every polyline (nan where no ray is kept). close (0.81, close
+    round): the end zones, soft crotches and the return ray; False reads as the integration round did (the build's
+    taper rule, white.taper_readings, reads that way: the masters' handles were tuned on it)."""
     if not polys:
         return np.array([]), np.array([], dtype=int)
     allp = np.vstack(polys)
@@ -117,9 +119,10 @@ def rays(polys):
         cav.append(P[(np.sign(turn) == -np.sign(area)) & (np.abs(turn) > 25)])
     cav = np.vstack(cav) if cav else np.zeros((0, 2))
     del inside
-    ends = end_corners(polys)
+    ends = end_corners(polys) if close else np.zeros((0, 2))
     cav = np.vstack([cav, crossings_of(polys)])               # round 3: where two contours' inks overlap
-    cav = np.vstack([cav, end_corners(polys, -1, SOFT_TURN)])   # 0.81 (close): a crotch drawn soft
+    if close:
+        cav = np.vstack([cav, end_corners(polys, -1, SOFT_TURN)])   # 0.81 (close): a crotch drawn soft
     A = np.vstack([P for P in polys])
     Bv = np.vstack([np.roll(P, -1, axis=0) for P in polys])
     E = Bv - A
@@ -176,7 +179,7 @@ def rays(polys):
             # that edge's own normal into the ink comes back to where this one started (within RECIPROCAL of its
             # length); a ray that crossed a junction (a hook sweeping into a stem's shoulder, a bar into a bowl, both
             # edges smooth, so no crotch marks it) lands its return somewhere else
-            if RECIPROCAL is not None:
+            if close and RECIPROCAL is not None:
                 q_ = P[i] + sx * nrm[i]
                 back = -en if float(en @ nrm[i]) > 0 else en
                 r_ = _first_exit(q_ - 0.6 * back * 0 + 0.0, back, A, E, polys)

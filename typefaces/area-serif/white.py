@@ -766,10 +766,13 @@ def taper_law(th_r, laws):
 
 def taper_readings(contours, n_seg=6):
     """Across-the-stroke length at every station (audit_rays' ray, its junction and facing filters, and its rule that
-    a ray longer than twice the glyph's mean stroke runs along a stroke): (lengths, far edge ids, where)."""
+    a ray longer than twice the glyph's mean stroke runs along a stroke): (lengths, far edge ids, where). 0.81 (close):
+    read as the integration round read (audit_rays.rays(close=False)): the audit's new end zones and return ray
+    changed which places this rule held, and the Bold's handles moved on 43 glyphs (the comma's 67 units; the quotes
+    then dipped between their mid master and the Bold, 37 > 35 at 675)."""
     import audit_rays as AR
     polys, where = _stations(contours, n_seg)
-    th, eid = AR.rays(polys)
+    th, eid = AR.rays(polys, close=False)              # 0.81 (close): the integration round's reading
     ms = AR.mean_stroke(polys)
     th = np.where(th <= 2 * ms, th, np.nan)
     return th, eid, where

@@ -35,6 +35,11 @@ TITLES = [
     ("12-marks.png", "Every composite with two or more marks at 300, 400, 700"),
     ("12-necks-light.png", "The neck rule in the Light: S, z, superiors, barred z"),
     ("12-ae-bold.png", "ae at 400, 550, 700 (the arm-crotch rule)"),
+    ("13-at.png", "@ at 400, 550, 700: before over after the slanted-stem rule (red: the thinnest cut across the stroke)"),
+    ("13-asterisk.png", "The asterisk at 400 and 700: before over after its longer reach"),
+    ("13-word-space-j.png", "A word space before j at 400 and 700: before over after"),
+    ("13-comma-cut.png", "The comma accent below a capital: the old upright cut and the cut across the stroke"),
+    ("13-hook-above.png", "Not fixed: the capital hook above (its slot closes from 552)"),
 ]
 
 
