@@ -103,16 +103,70 @@ def area_len(polys):
     return abs(a), length
 
 
-def thinnest(polys, step=4, points=()):
+ACROSS = True             # 0.81 (close): a cut is read across its stroke, not along the scan line
+ACROSS_DEG = 60           # the cut through a span's middle may turn this far from the scan line, either way
+
+
+def _edges(polys):
+    A = np.vstack([np.asarray(p, float) for p in polys])
+    Bn = np.vstack([np.roll(np.asarray(p, float), -1, axis=0) for p in polys])
+    return A, Bn
+
+
+FACE_DEG = 40             # a cut ends on two edges that face each other within this (audit_rays' FACE_DEG)
+
+
+def chord(E, m, d):
+    """The ink's length along the line through m in direction d (unit), on the span that holds m (non-zero
+    winding), when it is a cut across one stroke: its two ends lie on edges that run within FACE_DEG of each other
+    (a cut that leaves through a stroke's end or across a corner is no stroke's thickness). None otherwise."""
+    A, Bn = E
+    e = Bn - A
+    den = d[0] * e[:, 1] - d[1] * e[:, 0]
+    q = A - m
+    with np.errstate(divide="ignore", invalid="ignore"):
+        s = (q[:, 0] * e[:, 1] - q[:, 1] * e[:, 0]) / den
+        u = (q[:, 0] * d[1] - q[:, 1] * d[0]) / den
+    ok = np.where((np.abs(den) > 1e-12) & (u >= 0) & (u < 1))[0]
+    if not len(ok):
+        return None
+    order = ok[np.argsort(s[ok])]
+    w, start, k0 = 0, None, None
+    for k in order:
+        x = s[k]
+        if w == 0:
+            start, k0 = x, k
+        w += np.sign(den[k])
+        if w == 0 and start is not None and start <= 0 <= x:
+            ea, eb = e[k0], e[k]
+            c = abs(float(ea @ eb)) / (float(np.hypot(*ea)) * float(np.hypot(*eb)) + 1e-12)
+            if c < math.cos(math.radians(FACE_DEG)):
+                return None
+            return float(x - start)
+    return None
+
+
+def thinnest(polys, step=4, points=(), across=None):
     """The thinnest cut that is a stroke: bold.thinnest's reading (an ink span whose neighbours two scan lines
     before and two after are spans of about the same width over the same place). 0.81: a cut that lies within one
     mean stroke of a pointed end (`points`: ink corners under 60 degrees, a wedge accent's tip, an arrow's point)
     is not a stroke's thickness: there the reading is how sharp the point is, which falls as a wedge flattens
-    while every stroke of it gains weight (build/figures/axis-081/thin-at-points.png)."""
-    if not points:
-        return B.thinnest(polys, step)
-    a, length = area_len(polys)
-    reach = 2 * a / length if length else 0
+    while every stroke of it gains weight (build/figures/axis-081/thin-at-points.png).
+
+    0.81 (close): read across the stroke. A level or upright scan line cuts a slanted stroke obliquely and reads
+    w / cos of the stroke's slant; when the slant changes between weights (the comma accent's tail turns upright
+    as it thickens: an upright cut read 43.0 > 39.9 while every ray across the tail kept 0.99 of the Regular) the
+    reading changes with no change of thickness. A span that is a stroke (the same test as before) is read as the
+    shortest cut through its middle, turned up to ACROSS_DEG either way from the scan line: across a straight
+    stroke exactly the distance between its edges, across a taper or a curve the cut square to it there. Every
+    glyph is read this way, the Regular and every instance alike."""
+    across = ACROSS if across is None else across
+    reach = 0
+    if points:
+        a, length = area_len(polys)
+        reach = 2 * a / length if length else 0
+    E = _edges(polys) if across else None
+    angs = np.radians(np.arange(-ACROSS_DEG, ACROSS_DEG + 0.1, 3.0))
     best = None
     pts = [q for p in polys for q in p]
     for ax in (0, 1):
@@ -126,13 +180,21 @@ def thinnest(polys, step=4, points=()):
         for k in range(2, len(rows) - 2):
             for a_, b_ in rows[k]:
                 w = b_ - a_
-                if best is not None and w >= best:
+                if best is not None and w * (math.cos(math.radians(ACROSS_DEG)) if across else 1.0) >= best:
                     continue
                 mid = ((a_ + b_) / 2, vs[k]) if ax == 1 else (vs[k], (a_ + b_) / 2)
-                if any(math.dist(mid, p) < reach for p in points):
+                if points and any(math.dist(mid, p) < reach for p in points):
                     continue
-                if all(any(min(b_, d) - max(a_, c) > 0.5 * w and abs((d - c) - w) <= 0.2 * w + 2 for c, d in rows[j])
-                       for j in (k - 2, k - 1, k + 1, k + 2)):
+                if not all(any(min(b_, d) - max(a_, c) > 0.5 * w and abs((d - c) - w) <= 0.2 * w + 2 for c, d in rows[j])
+                           for j in (k - 2, k - 1, k + 1, k + 2)):
+                    continue
+                if across:
+                    base = 0.0 if ax == 1 else math.pi / 2                  # the scan line's own direction
+                    m = np.array(mid, float)
+                    got = [chord(E, m, (math.cos(base + t), math.sin(base + t))) for t in angs]
+                    got = [g_ for g_ in got if g_ is not None]
+                    w = min(got + [w])
+                if best is None or w < best:
                     best = w
     return best
 

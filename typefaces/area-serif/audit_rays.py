@@ -117,7 +117,9 @@ def rays(polys):
         cav.append(P[(np.sign(turn) == -np.sign(area)) & (np.abs(turn) > 25)])
     cav = np.vstack(cav) if cav else np.zeros((0, 2))
     del inside
+    ends = end_corners(polys)
     cav = np.vstack([cav, crossings_of(polys)])               # round 3: where two contours' inks overlap
+    cav = np.vstack([cav, end_corners(polys, -1)])            # 0.81 (close): a crotch drawn soft (Q's tail into its bowl)
     A = np.vstack([P for P in polys])
     Bv = np.vstack([np.roll(P, -1, axis=0) for P in polys])
     E = Bv - A
@@ -164,12 +166,82 @@ def rays(polys):
             # branch node (a concave corner) or of a place where two contours' edges cross (overlapping ink)
             if len(cav) and float(np.hypot(*(cav - P[i]).T).min()) < JUNCTION * sx:
                 continue
+            # 0.81 (close): an end zone likewise. A ray that starts within its own length of a stroke's end (a corner
+            # of its cut, soft or sharp) reads how the end is cut, from its side, not the stroke across itself: c's
+            # and C's barbs read 30.9 > 28.6 there while their strokes thicken (audit_axis already leaves the
+            # places by a pointed end out; this is the same reading at a cut end)
+            if len(ends) and float(np.hypot(*(ends - P[i]).T).min()) < JUNCTION * sx:
+                continue
+            # 0.81 (close): across one stroke the cut is the same both ways. From where the ray leaves, a ray along
+            # that edge's own normal into the ink comes back to where this one started (within RECIPROCAL of its
+            # length); a ray that crossed a junction (a hook sweeping into a stem's shoulder, a bar into a bowl, both
+            # edges smooth, so no crotch marks it) lands its return somewhere else
+            if RECIPROCAL is not None:
+                q_ = P[i] + sx * nrm[i]
+                back = -en if float(en @ nrm[i]) > 0 else en
+                r_ = _first_exit(q_ - 0.6 * back * 0 + 0.0, back, A, E, polys)
+                if r_ is None or float(np.hypot(*(q_ + r_ * back - P[i]))) > RECIPROCAL * sx + 2.0:
+                    continue
             res[i] = sx
             eid[i] = j[0]
             del mids
         out.append((res, eid))
     del allp
     return np.concatenate([r for r, _ in out]), np.concatenate([e for _, e in out])
+
+
+RECIPROCAL = 0.35           # a return ray may land this share of the ray's length from its start
+
+
+def _first_exit(p, d, A, E, polys):
+    """Distance from p along d (unit, into the ink) to where the ink ends (non-zero winding), or None."""
+    q = A - p
+    den = d[0] * E[:, 1] - d[1] * E[:, 0]
+    with np.errstate(divide="ignore", invalid="ignore"):
+        s = (q[:, 0] * E[:, 1] - q[:, 1] * E[:, 0]) / den
+        u = (q[:, 0] * d[1] - q[:, 1] * d[0]) / den
+    ok = (np.abs(den) > 1e-9) & (s > 0.5) & (u >= 0) & (u <= 1)
+    ss = np.sort(s[ok])
+    if not len(ss):
+        return None
+    probe = p + ss[:, None] * d + 0.6 * d
+    out_ = np.where(winding(probe, polys) == 0)[0]
+    return float(ss[out_[0]]) if len(out_) else None
+
+
+END_TURN = 60.0             # degrees of outward turn ...
+END_ARC = 12.0              # ... within this much outline: a corner (a cut end's soft corners are 7 units round)
+
+
+def end_corners(polys, sign=1):
+    """Convex corners (sign -1: concave ones, a crotch whose corner is soft or drawn as a tight curve): places where the outline turns outward by END_TURN or more within END_ARC of outline (a
+    stroke's cut end, its corners soft or sharp, a serif's tip, a pointed end). A smooth curve turns far less in so
+    little outline (the tightest round in the face, a ball 88 across, turns 16 degrees in 12 units)."""
+    out = []
+    for P in polys:
+        n = len(P)
+        if n < 3:
+            continue
+        a_, b_ = np.roll(P, 1, axis=0), np.roll(P, -1, axis=0)
+        u, w = P - a_, b_ - P
+        turn = np.degrees(np.arctan2(u[:, 0] * w[:, 1] - u[:, 1] * w[:, 0], (u * w).sum(axis=1)))
+        area = float(np.sum(P[:, 0] * b_[:, 1] - b_[:, 0] * P[:, 1]))
+        convex = sign * turn * np.sign(area)                   # > 0 where the outline turns round the ink
+        seg = np.hypot(*w.T)
+        for i in range(n):
+            tot, arc, k = convex[i], 0.0, i
+            while arc < END_ARC / 2 and k - i < n:              # forward half
+                arc += seg[k % n]
+                k += 1
+                tot += convex[k % n]
+            arc, k = 0.0, i
+            while arc < END_ARC / 2 and i - k < n:              # backward half
+                k -= 1
+                arc += seg[k % n]
+                tot += convex[k % n]
+            if tot >= END_TURN:
+                out.append(P[i])
+    return np.array(out) if out else np.zeros((0, 2))
 
 
 def crossings_of(polys):
