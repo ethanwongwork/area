@@ -1232,6 +1232,14 @@ def normalize(font):
     CHARSET.cap_strokes(font)                         # 0.75: and the signs' strokes, read at the nodes just added
     soft = CHARSET.soft_ends(font)                    # 0.79: plain strokes end on the letters' radius
     print(f"charset: plain stroke ends rounded on {len(soft)} glyphs, {sum(soft.values())} ends")
+    import arms as ARMS                               # 0.81 round 3: a sign of arms has each arm drawn once
+    signs = ARMS.regular(font)
+    stars = [n for n in signs if len(font[n].contours) == 1 and len(ARMS.crotches(
+        [(q.x, q.y, q.type, q.smooth) for q in font[n].contours[0].points])) >= 5]
+    if stars:                                         # a turned arm takes a node at each of its own extremes
+        CLEAN.add_nodes(font, stars)
+        CLEAN.true_curves(font, stars, max_deg=9)
+    print(f"arms: {len(signs)} signs drawn from one half or one arm", sorted(signs))
     CHARSET.turned_pairs(font)                        # 0.74: after the node rules, the turned glyphs once more
     CHARSET.mirrors(font)
     joined, promoted, copied, opened_all = SPACING.finish(font, CHARSET.COVERAGE)   # 0.73: beyond the core

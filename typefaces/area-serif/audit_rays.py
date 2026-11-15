@@ -37,6 +37,7 @@ N_SEG = 6                    # places per curve piece
 FACE_DEG = 40
 TOL = 1.0
 JND = 0.03                   # the just-noticeable difference in weight (Bigelow and Holmes, in the weight research)
+JUNCTION = 1.0               # round 3: a junction zone reaches one local stroke width from its branch or crossing
 
 
 def instance(path, w):
@@ -114,6 +115,7 @@ def rays(polys):
         cav.append(P[(np.sign(turn) == -np.sign(area)) & (np.abs(turn) > 25)])
     cav = np.vstack(cav) if cav else np.zeros((0, 2))
     del inside
+    cav = np.vstack([cav, crossings_of(polys)])               # round 3: where two contours' inks overlap
     A = np.vstack([P for P in polys])
     Bv = np.vstack([np.roll(P, -1, axis=0) for P in polys])
     E = Bv - A
@@ -156,7 +158,9 @@ def rays(polys):
             en = np.array([-e[1], e[0]])
             if abs(float(en @ nrm[i])) < math.cos(math.radians(FACE_DEG)):
                 continue
-            if len(cav) and float(np.hypot(*(cav - P[i]).T).min()) < 0.6 * sx:
+            # round 3: a junction zone is everything within one local stroke width (this ray's own length) of a
+            # branch node (a concave corner) or of a place where two contours' edges cross (overlapping ink)
+            if len(cav) and float(np.hypot(*(cav - P[i]).T).min()) < JUNCTION * sx:
                 continue
             res[i] = sx
             eid[i] = j[0]
@@ -164,6 +168,29 @@ def rays(polys):
         out.append((res, eid))
     del allp
     return np.concatenate([r for r, _ in out]), np.concatenate([e for _, e in out])
+
+
+def crossings_of(polys):
+    """Points where an edge of one contour crosses an edge of another (two inks overlapping: a struck stroke over
+    its letter, an asterisk's arms)."""
+    out = []
+    for a in range(len(polys)):
+        for b in range(a + 1, len(polys)):
+            P, Q = polys[a], polys[b]
+            p0, p1 = P, np.roll(P, -1, axis=0)
+            q0, q1 = Q, np.roll(Q, -1, axis=0)
+            r = p1 - p0
+            s = q1 - q0
+            den = r[:, None, 0] * s[None, :, 1] - r[:, None, 1] * s[None, :, 0]
+            qp = q0[None, :, :] - p0[:, None, :]
+            with np.errstate(divide="ignore", invalid="ignore"):
+                t_ = (qp[..., 0] * s[None, :, 1] - qp[..., 1] * s[None, :, 0]) / den
+                u_ = (qp[..., 0] * r[:, None, 1] - qp[..., 1] * r[:, None, 0]) / den
+            ok = (np.abs(den) > 1e-9) & (t_ >= 0) & (t_ <= 1) & (u_ >= 0) & (u_ <= 1)
+            ii, jj = np.where(ok)
+            if len(ii):
+                out.append(p0[ii] + t_[ii, jj][:, None] * r[ii])
+    return np.vstack(out) if out else np.zeros((0, 2))
 
 
 def mean_stroke(polys):

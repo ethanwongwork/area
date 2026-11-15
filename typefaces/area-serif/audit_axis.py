@@ -214,7 +214,11 @@ def sweep(reg, master, mids, ts, tm, tip_at, fails, lighter=False, w_of=None):
                 paired = np.all([j_ >= 0 for _, _, j_, _ in B.symmetries(rc)], axis=0)
                 mv -= mv[paired].mean(axis=0) if paired.any() else mv.mean(axis=0)
                 diff = np.abs(mv[jj[ok]] @ M - mv[ok]).max() if ok.any() else 0.0
-                if diff > 1.5:                                 # a unit, and half a unit: a mean of whole-unit moves, rounded
+                # round 3: as tight as whole units allow. A mirror or a quarter or half turn maps whole units onto
+                # whole units, so the moves must agree exactly; any other turn rounds each image on its own, half a
+                # unit each way: 0.5 (|cos| + |sin|) + 0.5 on a coordinate
+                tol = 1e-6 if np.allclose(M, np.round(M), atol=1e-9) else 0.5 * (abs(M[0, 0]) + abs(M[0, 1])) + 0.5 + 1e-6
+                if diff > tol:
                     fails["symmetry"].append(f"{name} at {w_of(1.0)} ({sname}: a point's move differs from its image's by {diff:.1f})")
         rp = flat(rc)
         base_topo = X.topology([np.array(p) for p in rp]) if len(rc) > 1 else None

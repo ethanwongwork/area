@@ -1195,8 +1195,12 @@ def maths(font, m, adv):
     H = gp(font, "H")
     hs = scan_h(H, 200)
     keep = op(H, rect(hs[0][1], 150, hs[1][0], 600), pathops.PathOp.DIFFERENCE)     # no crossbar
-    keep = op(keep, rect(-100, CAP_HEIGHT - 60, 2000, 1000), pathops.PathOp.DIFFERENCE)   # no head serifs
-    top_bar = rect(hs[0][0] - 0.7 * m.cap_stem, CAP_HEIGHT - m.cap_bar * 1.15, hs[1][1] + 0.7 * m.cap_stem, CAP_HEIGHT)
+    # 0.81 round 3: the stems run 2 units into the bar, so the two are one outline (they were cut at 60 under the
+    # cap height, 4 short of the bar's underside: a 4-unit sliver of white that closed at 675). Georgia Pro draws
+    # its product as one contour, Source Serif 4 as stems overlapping the bar: the parts touch.
+    bar_lo = CAP_HEIGHT - m.cap_bar * 1.15
+    keep = op(keep, rect(-100, bar_lo + 2, 2000, 1000), pathops.PathOp.DIFFERENCE)   # no head serifs
+    top_bar = rect(hs[0][0] - 0.7 * m.cap_stem, bar_lo, hs[1][1] + 0.7 * m.cap_stem, CAP_HEIGHT)
     Pi = union(keep, top_bar)
     pb = bounds(Pi)                                    # 0.74: narrowed between its stems (it was scaled: stems 74)
     put(font, "product", narrow(Pi, hs[0][1] + 90, round(0.14 * (pb[2] - pb[0]))), 0, [0x220F], lsb=30, rsb=30)

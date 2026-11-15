@@ -1783,7 +1783,8 @@ def keep_apart(R, N, ratio, least):
         # 0.81: two inks side by side whose boxes lap (the two wedges of the capital double acute, each leaning
         # over the other's foot) are side by side as much as two whose boxes do not (0.80 skipped them: the
         # wedges ran into each other from 550)
-        want = min(least, gap(R[a], R[c]))
+        g0 = gap(R[a], R[c])
+        want = least(g0) if callable(least) else min(least, g0)   # round 3: the white law, towards the Bold
         dx = 0
         while (crosses(N[a], N[c], dx) or gap(N[a], N[c], dx) < want - 0.5) and dx < 200:
             dx += 1
@@ -2457,7 +2458,40 @@ def symmetries(contours, tol=6.0):
         jj = np.where(jj >= 0, np.where(jj[np.maximum(jj, 0)] >= 0, jj, -1), -1)
         if (jj >= 0).mean() >= 0.8:                            # a part's symmetry (the dagger's arms) is enough
             out.append((np.array([[a, b], [c_, d]]), cc, jj, name))
-    return out
+    # round 3: a symmetry counts only when the drawing's points pair as a group: two products of the symmetries
+    # that are the same turn or mirror must send each point to the same point. The multiply sign's quarter turn
+    # sends a soft corner's two handles to the far corner's in the other order than its two mirrors do (its corners
+    # are not drawn quarter-turn alike), so its moves cannot be both; the mirrors are kept, then turns in order.
+    kept = []
+    for s_ in out:
+        trial = kept + [s_]
+        if _consistent(trial, len(arr)):
+            kept.append(s_)
+    return kept
+
+
+def _consistent(syms, n):
+    elems = [(np.eye(2), np.arange(n))]
+    frontier = list(elems)
+    while frontier:
+        nxt = []
+        for M1, j1 in frontier:
+            for M, c, j, name in syms:
+                M2 = M @ M1
+                j2 = np.where(j1 >= 0, j[np.maximum(j1, 0)], -1)
+                for Mg, jg in elems:
+                    if np.allclose(Mg, M2, atol=1e-6):
+                        both = (jg >= 0) & (j2 >= 0)
+                        if np.any(jg[both] != j2[both]):
+                            return False
+                        break
+                else:
+                    if len(elems) >= 24:
+                        return True
+                    elems.append((M2, j2))
+                    nxt.append((M2, j2))
+        frontier = nxt
+    return True
 
 
 def symmetric(g, out, rep):
@@ -2480,28 +2514,116 @@ def symmetric(g, out, rep):
     paired = np.all([j >= 0 for _, _, j, _ in syms], axis=0)  # the glyph's shift, read on the points every symmetry
     shift = mv[paired].mean(axis=0) if paired.any() else mv.mean(axis=0)   # pairs (an unpaired part would skew it)
     mv = mv - shift
-    group = [(np.eye(2), np.arange(len(A)))]                   # the group the symmetries make: their powers too
-    for M, c, j, name in syms:
-        Mk, jk = M, j.copy()
-        for _ in range(8):
-            if np.allclose(Mk, np.eye(2), atol=1e-6):
-                break
-            group.append((Mk, jk.copy()))
-            nxt = np.where(jk >= 0, j[np.maximum(jk, 0)], -1)
-            Mk, jk = M @ Mk, np.where(jk >= 0, nxt, -1)
+    group = sym_group(syms, len(A))
     acc = np.zeros_like(mv)
     cnt = np.zeros(len(mv))
     for M, j in group:
         ok = j >= 0
         acc[ok] += mv[j[ok]] @ M                               # M is orthogonal: its inverse is its transpose
         cnt[ok] += 1
-    mv = acc / cnt[:, None] + shift
-    flat = [(math.floor(x + 0.5), math.floor(y + 0.5)) for x, y in (A + mv)]
+    mv = acc / cnt[:, None]
+    return _round_orbits(g, R, out, rep, syms, group, A, mv, shift)
+
+
+def sym_group(syms, n):
+    """Every product of the symmetries [(M, index of each point's image or -1)], the identity first."""
+    group = [(np.eye(2), np.arange(n))]
+    grow = True
+    while grow:
+        grow = False
+        for M1, j1 in list(group):
+            for M, c, j, name in syms:
+                M2 = M @ M1
+                j2 = np.where(j1 >= 0, j[np.maximum(j1, 0)], -1)
+                j2 = np.where(j1 >= 0, j2, -1)
+                for k_, (Mg, jg) in enumerate(group):
+                    if np.allclose(Mg, M2, atol=1e-6):
+                        if (j2 >= 0).sum() > (jg >= 0).sum():
+                            group[k_] = (Mg, j2)
+                        break
+                else:
+                    if len(group) < 24:
+                        group.append((M2, j2))
+                        grow = True
+    return group
+
+
+def _round_orbits(g, R, out, rep, syms, group, A, mv, shift):
+    # round 3: whole-unit moves, the same for every image: an orbit's first point is rounded and its images take its
+    # move turned exactly where the turn keeps whole units (mirrors, quarter and half turns); elsewhere each rounds
+    integral = [np.allclose(M, np.round(M), atol=1e-9) for M, _ in group]
+    done = np.full(len(mv), False)
+    out_mv = np.zeros_like(mv)
+    for i in range(len(mv)):
+        if done[i]:
+            continue
+        r = np.sign(mv[i]) * np.floor(np.abs(mv[i]) + 0.5)    # half away from zero: commutes with every mirror,
+        out_mv[i], done[i] = r, True                           # so a point a mirror keeps in place stays on it
+        for (M, j), whole in zip(group, integral):
+            k_ = j[i]
+            if k_ < 0 or done[k_]:
+                continue
+            out_mv[k_] = M @ r if whole else np.sign(mv[k_]) * np.floor(np.abs(mv[k_]) + 0.5)
+            done[k_] = True
+    sh = np.floor(shift + 0.5)
+    flat = [(int(x), int(y)) for x, y in (A + out_mv + sh)]
     new, k = [], 0
     for P in out:
         new.append([flat[k + i] + q[2:] for i, q in enumerate(P)])
         k += len(P)
+    new = settle_turns(R, new, group, integral)
     return new, dict(rep, symmetric=[s_[3] for s_ in syms])
+
+
+def settle_turns(R, N, group, integral):
+    """Round 3: whole units can bend a shallow curve the other way (the daggers' necks, 4 units of rise over 60, took
+    an inflection from rounding alone). A curve that gains an extreme or an inflection between the Regular and N
+    (axis_exact.turns, over every weight between) has its two handles moved by at most a unit each way, the least
+    move that clears it, and every image of those handles takes the same move turned (so the symmetry stays exact)."""
+    import itertools
+    import audit_axis as AA
+    import axis_exact as X
+    flat_i = []
+    for ci, P in enumerate(R):
+        for i in range(len(P)):
+            flat_i.append((ci, i))
+    where = {ci_i: k for k, ci_i in enumerate(flat_i)}
+    N = [list(P) for P in N]
+    idx = X.cubic_index(R)
+    for _ in range(3):
+        bad = X.turns(R, R, N, AA.FILLET_SMALL, AA.FILLET_MAX)
+        if not bad:
+            break
+        for kc, _s, _why in bad:
+            ci, i0, a, b, j0 = idx[kc]
+            best = None
+            for da in itertools.product((-1, 0, 1), repeat=4):
+                cost = sum(abs(d) for d in da)
+                if best is not None and cost >= best[0]:
+                    continue
+                trial = [list(P) for P in N]
+                for (hk, (dx, dy)) in ((a, da[:2]), (b, da[2:])):
+                    q = trial[ci][hk]
+                    trial[ci][hk] = (q[0] + dx, q[1] + dy) + tuple(q[2:])
+                if not [1 for k_, _, _ in X.turns(R, R, trial, AA.FILLET_SMALL, AA.FILLET_MAX) if k_ == kc]:
+                    best = (cost, da)
+            if best is None or best[0] == 0:
+                continue
+            da = best[1]
+            for hk, d in ((a, np.array(da[:2], float)), (b, np.array(da[2:], float))):
+                k0 = where[(ci, hk)]
+                for (M, j), whole in zip(group, integral):
+                    kk = j[k0]
+                    if kk < 0 or not whole:
+                        continue
+                    cj, ij = flat_i[kk]
+                    dd = M @ d
+                    q = N[cj][ij]
+                    if M is group[0][0] or np.allclose(M, np.eye(2)):
+                        N[cj][ij] = (q[0] + int(d[0]), q[1] + int(d[1])) + tuple(q[2:])
+                    else:
+                        N[cj][ij] = (q[0] + int(round(dd[0])), q[1] + int(round(dd[1]))) + tuple(q[2:])
+    return N
 
 
 def overlap_masters(reg, font, maps, v, reports, notes):
@@ -2559,11 +2681,27 @@ def bold_font(reg, stem=STEM, **over):
     v = vector(stem, **over)
     font = copy.deepcopy(reg)
     reports, notes, maps = {}, [], {}
-    for g in reg:
+    import arms as ARMS
+    import white as WHITE
+    signs = [g.name for g in reg if ARMS.is_sign(g)]          # 0.81 round 3: signs of arms, after the letters
+    law = None
+    for g in [g for g in reg if g.name not in signs] + [reg[n] for n in signs]:
         if not g.contours:
             continue
         out, w, rep = glyph_bold(g, v)
         out, rep = kin_parts(reg, g, out, rep, v)              # 0.81: a comma wherever it recurs
+        if g.name in signs:                                    # each arm its centreline and width profile times f
+            if law is None:
+                law = WHITE.Law(reg, font)
+                notes.append(repr(law))
+            R_ = glyph_contours(g)
+            f_ = ARMS.capped(R_, sign_ratio(v), law.least)
+            mapped = ARMS.master(R_, f_, engine=out)
+            out = [[(x, y) + q[2:] for (x, y), q in zip(M_, P_)] for M_, P_ in zip(mapped, R_)]
+            rep = {"x": [], "y": [], "necks": [], "where": {}, "arms": f"f {f_:.3f} (law {sign_ratio(v):.3f})",
+                   "X": {min(q[0] for P_ in R_ for q in P_): min(q[0] for P_ in out for q in P_),
+                         max(q[0] for P_ in R_ for q in P_): max(q[0] for P_ in out for q in P_)}, "Y": {}}
+            notes.append(f"{g.name}: arms at f {f_:.3f} (the sign law {sign_ratio(v):.3f})")
         out, rep = symmetric(g, out, rep)                      # 0.81: a symmetric sign stays symmetric
         if g.width:                                            # side bearings: the Regular's plus the measured change
             rc = glyph_contours(g)
@@ -2669,6 +2807,39 @@ def bold_font(reg, stem=STEM, **over):
     for g in reg:                                              # spaces: by the references' word space
         if not g.contours and not g.components and g.width:
             font[g.name].width = round(g.width * (1 + (SPACE - 1) * v["f"]))
+    # round 3: a crotch where a thin straight-edged arm leaves a thick stroke lies on the thick stroke's edge at the
+    # arm's own width (hairline rule) from the arm's far edge (white.arm_crotches; the ampersand's tail arm, 25 > 13)
+    armed = []
+    ratio_ = 1 + (HAIR_RATIO - 1) * v["ft"]
+    for g in reg:
+        if not g.contours or g.components or g.name in struck or g.name in signs or g.name not in font:
+            continue
+        cs = glyph_contours(font[g.name])
+        if [len(P) for P in cs] != [len(c.points) for c in g.contours]:
+            continue
+        new_, log_ = WHITE.arm_crotches(glyph_contours(g), cs, ratio_)
+        if log_:
+            for c, P in zip(font[g.name].contours, new_):
+                c.points = [Point(x, y, t, smooth=s_) for x, y, t, s_ in P]
+            armed.append(f"{g.name} {log_}")
+    notes.append(f"arm crotches: {len(armed)} glyphs ({'; '.join(armed)})")
+    # round 3: towards the Light, a neck where one curved stroke branches from another never runs under the
+    # hairline's share of the Regular's (white.keep_necks; g's loop out of its link thinned 39 > 13 at 300)
+    if v["f"] < 0:
+        share = 1 + (HAIR_RATIO - 1) * v["ft"]
+        necked = []
+        for g in reg:
+            if not g.contours or g.components or g.name in struck or g.name in signs or g.name not in font:
+                continue
+            cs = glyph_contours(font[g.name])
+            if [len(P) for P in cs] != [len(c.points) for c in g.contours]:
+                continue
+            new_, log_ = WHITE.keep_necks(glyph_contours(g), cs, share, 30 * v["tip"])
+            if log_:
+                for c, P in zip(font[g.name].contours, new_):
+                    c.points = [Point(x, y, t, smooth=s_) for x, y, t, s_ in P]
+                necked.append(f"{g.name} {log_}")
+        notes.append(f"necks between curves: {len(necked)} glyphs ({'; '.join(necked)})")
     from ufoLib2.objects import Contour
     layer = font.layers.newLayer("mid")                        # the sparse master: only the glyphs that need one
     for g in reg:
@@ -2711,7 +2882,8 @@ def bold_font(reg, stem=STEM, **over):
     n_fixed = n_left = 0
     tm0 = (dict(axis_map(stem))[MID_WEIGHT] - REG_STEM) / (stem - REG_STEM)
     for g in reg:
-        if not g.contours or reports.get(g.name, {}).get("fallback", "").startswith("left as the Regular") or g.name in struck:
+        if not g.contours or reports.get(g.name, {}).get("fallback", "").startswith("left as the Regular") or g.name in struck \
+                or g.name in signs:                            # round 3: an arm's handles keep their directions
             continue
         for f_, blends in ((layer, ((0.0, 1.0), (0.5, 0.5))), (font, ((0.0, 1.0), (0.5, 0.5), (0.75, 0.25), (0.25, 0.75)))):
             if g.name not in f_:
@@ -2740,10 +2912,21 @@ def bold_font(reg, stem=STEM, **over):
     # other (the double acute and double grave over capitals) are not this rule's.
     import spacing as SPACING
     apart = []
+    # round 3: side by side, the white law too (white.py): a narrow white between two inks keeps the letters'
+    # counter share of itself towards the Bold, wider ones at least MIN_GAP; towards the Light whites open by
+    # themselves (every part thins) and the old floor stays
+    if law is None:
+        law = WHITE.Law(reg, font)
+    if v["f"] > 0:
+        def apart_least(g0, _law=law):                       # parts drawn touching are keep_touching's
+            return min(SPACING.MIN_GAP, g0) if g0 < 0.5 or not _law.narrow(g0) else _law.least(g0)
+    else:
+        apart_least = SPACING.MIN_GAP
     for g in reg:
         if len(g.contours) < 2 or g.components or g.name not in font or g.name in struck:
             continue
-        moved = keep_apart(glyph_contours(g), glyph_contours(font[g.name]), v["bearing"], SPACING.MIN_GAP)
+        moved = keep_apart(glyph_contours(g), glyph_contours(font[g.name]), v["bearing"],
+                           SPACING.MIN_GAP if is_mark(g) or mark_kind(g.name) else apart_least)   # marks: their box
         if not moved:
             continue
         shifts, total = moved
@@ -2757,6 +2940,38 @@ def bold_font(reg, stem=STEM, **over):
             del layer[g.name]
         apart.append(f"{g.name} {total}")
     notes.append(f"side by side: {len(apart)} glyphs opened ({', '.join(apart)})")
+    # round 3: a part drawn to touch another (an arrow's bar against its point) stays touching: the edge it touches
+    # takes the node's move across itself (white.keep_touching). Signs only: no letter is drawn so.
+    import unicodedata as _ud
+    touch = []
+    for g in reg:
+        if not g.contours or g.components or g.name not in font or g.name in struck or not g.unicodes \
+                or _ud.category(chr(g.unicodes[0]))[:1] not in ("P", "S"):
+            continue
+        cs = glyph_contours(font[g.name])
+        if [len(P) for P in cs] != [len(c.points) for c in g.contours]:
+            continue
+        new_, moved_ = WHITE.keep_touching(glyph_contours(g), cs)
+        if moved_:
+            for c, P in zip(font[g.name].contours, new_):
+                c.points = [Point(x, y, t, smooth=s_) for x, y, t, s_ in P]
+            touch.append(g.name)
+    notes.append(f"touching: {len(touch)} glyphs keep their parts touching ({', '.join(touch)})")
+    # round 3: white between two parts of a sign is a counter (white.keep_white): never under the white law's least
+    law_ = law
+    kept = []
+    for g in reg:
+        if len(g.contours) < 2 or g.components or g.name not in font or g.name in struck or not g.unicodes \
+                or _ud.category(chr(g.unicodes[0]))[:1] not in ("P", "S") or g.name in signs or is_mark(g) \
+                or v["f"] <= 0:
+            continue
+        cs = glyph_contours(font[g.name])
+        new_, log_ = WHITE.keep_white(glyph_contours(g), cs, law_)
+        if new_ != cs:
+            for c, P in zip(font[g.name].contours, new_):
+                c.points = [Point(x, y, t, smooth=s_) for x, y, t, s_ in P]
+            kept.append(f"{g.name} {log_}")
+    notes.append(f"white between parts: {len(kept)} glyphs ({'; '.join(kept)})")
     for g in reg:                                              # 0.81: last, a symmetric sign made so again
         if g.contours and not g.components and g.name in font and g.name not in struck:
             cs = glyph_contours(font[g.name])
