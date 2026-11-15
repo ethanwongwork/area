@@ -184,3 +184,9 @@ rules 1–3 and 11, MOTION.md and the tokens; in both themes; in a 2× capture.
   folder is the outline one, with its sheet tucked inside until it opens. The old props are accepted and ignored.
 - **Why:** you asked to remove the solid variant from every file figure and archive it
   (docs/archive/solid-file-figures-2026-10-19.md).
+
+## Review note, 2026-11-11 (type rules, plan A9)
+
+- **What changed:** the count is documented as artwork: drawn to the folder's scale (6 to 12 px), it may sit under the 10 px text floor because the Folder is an image (role img, named by its own label) or aria-hidden, so the count is never read as text (plan A9.9, finding T22).
+- **Why:** the system evaluation's type rules (docs/research/system-evaluation-2026-11-11, section 5, A9), owner-approved
+  2026-11-11; the rules are in DESIGN_SYSTEM.md ("Ink and weight", "Size and shape", "Text pairs") and the type skill.

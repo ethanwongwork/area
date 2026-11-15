@@ -8,6 +8,7 @@
 import { createContext, forwardRef, useContext, useLayoutEffect, useRef, isValidElement } from "react";
 import type { CSSProperties, HTMLAttributes, KeyboardEvent, ReactNode } from "react";
 import { assetCardVariants, assetGridVariants } from "../variants.ts";
+import type { MANIFESTS, VariantProps } from "../variants.ts";
 import { ListBox, ListBoxItem, type ListBoxProps, type ListBoxItemProps } from "./ListBox.tsx";
 
 /** Attributes for a part: HTML attributes and `data-*` hooks (a host's own class, a scope, a ground). */
@@ -19,8 +20,8 @@ export interface AssetCardProps extends Omit<HTMLAttributes<HTMLDivElement>, "ch
    *  `role="img"` when what it shows has no name of its own). */
   name?: ReactNode;
   /**
-   * @deprecated The head's end holds controls only (owner, round 58). Put a detail in the asset itself (a type sample's
-   * line) or behind a control (a Copy button that copies the value). Ignored.
+   * @deprecated Ignored: the head's end holds controls only. Put a detail in the asset itself, or behind a control
+   * such as a Copy button.
    */
   meta?: ReactNode;
   /** Controls at the head's end: a Copy button for what can be used (a component, a colour, a type style, an icon), a
@@ -40,7 +41,7 @@ export interface AssetCardProps extends Omit<HTMLAttributes<HTMLDivElement>, "ch
   group?: Array<ReactNode | string>;
   /** A group's layout. grid (the default): the first four 2 × 2. strip: a row of up to eight at their own ratios, the
    *  frame's height, running on past the card's end. Both as far apart as from the card's edge. */
-  mosaic?: "grid" | "strip";
+  mosaic?: VariantProps<typeof MANIFESTS.assetCard>["mosaic"];
   /** Selected: the card's edge in the selection colour. In an AssetGrid the grid sets it. */
   selected?: boolean;
   /**
@@ -54,25 +55,25 @@ export interface AssetCardProps extends Omit<HTMLAttributes<HTMLDivElement>, "ch
    * same places. A component's frame shows its edge on hover and selection; an image or a group is its own surface and
    * the states paint it.
    */
-  container?: "framed" | "basic" | "containerless";
+  container?: VariantProps<typeof MANIFESTS.assetCard>["container"];
   /** above (the default): the head, its name and controls, over the frame. below: under it. outside: the card is the frame
    *  alone, the asset `--area-asset-card-inset` in all round (8 by default), and the head sits under the card, 4 below it. */
-  caption?: "above" | "below" | "overlay" | "outside";
+  caption?: VariantProps<typeof MANIFESTS.assetCard>["caption"];
   /** recessed (the default): the card in bg-subtle. raised: the surface, white in light. checker: the card recessed and
    *  the frame on a transparency checker, a colour painted over it so its alpha shows. */
-  fill?: "recessed" | "raised" | "checker";
+  fill?: VariantProps<typeof MANIFESTS.assetCard>["fill"];
   /** No edge at rest; hover and selection still draw theirs. */
   borderless?: boolean;
   /** square (the default): the frame is 1:1, or an image's own ratio, and the card adds its head. landscape: the same at
    * 5:4. wide: 2:1, for a colour or a banner. screen: 16:9, a product screen's 1920 × 1080. hug: a component's frame takes
    * its own height. */
-  aspect?: "square" | "landscape" | "hug" | "wide" | "screen";
+  aspect?: VariantProps<typeof MANIFESTS.assetCard>["aspect"];
   /**
-   * How an image fills its frame. natural (the default): the frame takes the image's own ratio. cover: the frame takes
-   * `aspect` and the image is cropped to it. contain: the frame takes `aspect` and the whole image sits centred in it at
-   * its own ratio (give `mediaRatio`), so every card in a grid keeps one footprint (Are.na's grid).
+   * How an image fills its frame. `natural` (default): the frame takes the image's own ratio. `cover`: the frame
+   * takes `aspect` and the image is cropped to it. `contain`: the frame takes `aspect` and the whole image sits
+   * centered in it (give `mediaRatio`), so every card in a grid keeps one footprint.
    */
-  fit?: "natural" | "cover" | "contain";
+  fit?: VariantProps<typeof MANIFESTS.assetCard>["fit"];
   /** An image's width over its height, so it holds its shape before it loads (a waterfall's cards, a contained image). */
   mediaRatio?: number;
   /**
@@ -109,7 +110,7 @@ export const AssetCard = /* @__PURE__ */ forwardRef<HTMLDivElement, AssetCardPro
   const { className: frameClass, ...frameRest } = frameProps ?? {};
   const { className: headClass, ...headRest } = headProps ?? captionProps ?? {};
   return (
-    <div ref={ref} className={assetCardVariants({ layout, container, caption, fill, aspect, fit, mosaic, interactive, borderless }, className)} data-selected={selected ? "" : undefined}
+    <div ref={ref} className={assetCardVariants({ kind: layout, container, caption, fill, aspect, fit, mosaic, interactive, borderless }, className)} data-selected={selected ? "" : undefined}
       style={layout === "color" ? { ...style, "--_asset-color": color } as CSSProperties : ratio ? { ...style, ...ratio } as CSSProperties : style} {...rest}>
       {name != null || actions ? (
         <div className={join(assetCardVariants.element("head"), headClass)} {...headRest}>
@@ -150,7 +151,7 @@ export interface AssetGridProps extends Omit<ListBoxProps, "layout"> {
    * grid (the default): square cards in rows. waterfall: cards hug their assets in columns of the grid's least width,
    * each dropped into the shortest column in reading order.
    */
-  layout?: "grid" | "waterfall";
+  layout?: VariantProps<typeof MANIFESTS.assetGrid>["layout"];
   /** Every card's container: framed (the default) or containerless. A card's own `container` wins. */
   container?: AssetCardProps["container"];
 }

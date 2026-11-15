@@ -9,8 +9,15 @@
     font-size: var(--area-text-lg-size);
     line-height: var(--area-text-lg-leading);
     letter-spacing: var(--area-text-lg-tracking);
+    font-weight: var(--area-weight-regular);
     font-feature-settings: var(--area-font-feature-settings);
     font-synthesis: none;
+  }
+
+  /* A scope with its own Regular weight (plan A9.6) starts its text again at it: font-weight inherits as a number, so
+     the body's 400 would otherwise stay. Zero specificity, so every component's own weight wins. */
+  :where([data-area-regular-weight]:not(:root)) {
+    font-weight: var(--area-weight-regular);
   }
 
   /* A scope with its own Type starts its text again at the body role (owner, 2026-10-20). The tokens a Type setting
@@ -23,9 +30,12 @@
     letter-spacing: var(--area-text-lg-tracking);
   }
 
+  /* Selected text takes the default ink, or the ink a ground with its own words names: an inverse surface (a Tooltip
+     in light) sets `--area-selection-ink` to its words' ink, so its selected words never go dark on dark (plan B7.4). A
+     hook with a fallback, unset at the root, so every other ground keeps the default ink it restates. */
   ::selection {
     background-color: var(--area-selection-highlight);
-    color: var(--area-fg-default);
+    color: var(--area-selection-ink, var(--area-fg-default));
   }
 
   ::placeholder {

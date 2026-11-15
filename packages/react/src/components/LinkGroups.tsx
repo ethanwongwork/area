@@ -7,7 +7,10 @@ import { cx, linkGroupsVariants } from "../variants.ts";
 export interface LinkGroupsProps extends Omit<HTMLAttributes<HTMLElement>, "title"> {
   /** The topic the links share, in the surface title role. Without it, give the nav an `aria-label`. */
   title?: ReactNode;
-  /** The title's heading level, 2 by default. */
+  /**
+   * The title's heading level, 2 by default.
+   * @default 2
+   */
   level?: 2 | 3 | 4 | 5 | 6;
   /** A rule above, where the block closes an article. */
   divided?: boolean;

@@ -58,6 +58,8 @@ to cap and baseline (`text-box`), its padding placing them.
 
 ## Measurements
 
+**Current (2026-11-13, one mark).** Count is on the one mark recipe (inset.css, "One mark"). Heights are the mark ladder, the small text line plus 0 / 4 / 8: 14 / 18 / 22 at type 12 and 13, 16 / 20 / 24 at 14, 18 / 22 / 26 at 15, 20 / 24 / 28 at 16, the same at Compact, Default and Comfortable (Compact's md was 14 and its lg 18 until 2026-11-13). The text side is (H − 6) / 2 from the outer edge, edge counted once: 4 / 6 / 8 at type 13. The cap sits on the marks' whole-pixel baseline, edge + round((H − 2 · edge + 1cap) / 2). The tables below are the source evidence they were set from. Text text-xs, 400, tabular. Corner: the pill role (Pills flag `count`). A one-character count drops its sides (a circle as a pill). Indicator's count is the same mark on a tone's solid (plan B5.3).
+
 `node scripts/capture-compare.mjs --slots shell` (Area recaptured after the build):
 
 | slot · property | area · default | area · variant-soft | area · size-sm | primer · counter-label-secondary | notion · board-group-count |
@@ -209,3 +211,13 @@ Linear and GitHub swap the digits in place.
   Count was centred by its line box, exact but fractional, so beside a badge its digits could land a pixel row apart
   (0.45 at type 12, 0.38 at 15, 0.10 at 13). "Yes, fix both": Count takes Badge's whole-pixel baseline; swept at type
   12–16 × density 28 / 32 / 36, every Count matches the Badge of its height to 0.01 (57 pairs). Widths unchanged.
+
+### 2026-11-11 · Ink, dark and colour (system plan, Phase 1)
+
+- **What changed:** The Tags stroke group's default is 4 (10%, plan A10.3), was 3 (7.5%).
+- **Why:** docs/research/system-evaluation-2026-11-11 (README §5); the owner took every recommendation on 2026-11-11.
+- **Verdict:** awaiting the owner.
+
+## One mark, 2026-11-13
+
+Plan B5.1 (and B5.2, B5.3 where they apply; docs/research/system-evaluation-2026-11-11): the family moved onto the shared mark recipe in inset.css and its own copy of the side, baseline, corner and text was removed. Values above, under Measurements.

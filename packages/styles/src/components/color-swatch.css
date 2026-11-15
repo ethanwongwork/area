@@ -1,0 +1,104 @@
+/* Color swatch (docs/specs/color-swatch.md), and the transparency checker Color picker reads too. */
+@layer area.components {
+  /*
+   * The transparency checker (owner, 2026-09-28: "make the pixel image … meet the edges exactly and
+   * make it scale … your own pixel version that can be overlayed and scaled"). One 2 x 2 pixel tile,
+   * drawn with crisp edges and used as a mask, so its ink follows the theme and it scales like an
+   * image: sized in whole cells of the box, it always meets the edges. `--_checker-cells` is the
+   * number of cells across (5 on a swatch at every size).
+   */
+  :where(.area-color-swatch, .area-color-picker) {
+    --_checker-tile: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 2 2' shape-rendering='crispEdges'%3E%3Cpath d='M0 0h1v1H0zM1 1h1v1H1z'/%3E%3C/svg%3E");
+    --_checker-ink: color-mix(in srgb, var(--area-fg-default) 16%, var(--area-bg-surface));
+    /* Odd, so all four corners are ink cells: with an even count two corners were light cells lost
+       against the surface and the edge, and a clear swatch read rounder than a filled one (owner: 5). */
+    --_checker-cells: 5;
+  }
+
+  /* The swatch is its edge: filled with the edge colour at the outer shape, it holds two layers 1px
+     inside at the inner shape: the checker's ink through the pixel mask (its light cells are the edge
+     colour), then the colour. Nothing but the edge colour can show between the shapes. The colour
+     layer carries the swatch's own inset rings (palette hover and selection). */
+  .area-color-swatch {
+    --_size: var(--area-mark-md);
+    position: relative;
+    isolation: isolate;
+    display: inline-block;
+    flex: none;
+    inline-size: var(--_size);
+    block-size: var(--_size);
+    /* spec (owner, 2026-09-28: "make it more consistent"): one shape at every size, the corner 20% of
+       the side (Figma's document swatches and edge layer, `figma--swatches`). Was min(radius-small,
+       size / 4): 25% up to 24px, then capped at 6, so larger swatches read squarer. */
+    --_shape: 0.2; /* at the default; scales with the setting, square at Sharp */
+    /* The edge is the palette's transparent hairline, drawn over the colour (below), not a solid ring
+       outside it (owner, 2026-10-12: one swatch outline everywhere, the palette's and the colour
+       cards'). Required: it keeps a white swatch visible, so it ignores the Surface axis (audit F-5). */
+    --_edge: 0px;
+    /* Rounded to even pixels (radius audit D6; all even, owner 2026-10-03): 12 -> 2, 16, 20 and
+       24 -> 4 at the default; times setting / 8 elsewhere (4 x factor). */
+    --_radius: max(var(--area-radius-min), round(nearest, calc(var(--_size) * var(--_shape) * 4 * var(--area-radius-factor)), 2px));
+    /* The layers inside the edge are concentric with it (outer - edge), so the edge is an even 1px all
+       round. A 20% inner shape of its own (tried 2026-09-28) made the fill rounder than the edge. */
+    --_inner-radius: max(0px, calc(var(--_radius) - var(--_edge)));
+    /* The checker's light cells, under a translucent colour (was also the solid edge, 2026-09-28). */
+    --_edge-color: var(--area-bg-component);
+    overflow: hidden;
+    border-radius: var(--_radius);
+    background: var(--_edge-color);
+  }
+  .area-color-swatch::before,
+  .area-color-swatch::after,
+  :is(.area-color-picker__preview-new, .area-color-picker__preview-original)::before,
+  :is(.area-color-picker__preview-new, .area-color-picker__preview-original)::after {
+    content: "";
+    position: absolute;
+    inset: var(--_edge, 0px);
+    /* The layers sit inside the edge on its inner curve (--_inner-radius); inheriting the outer radius
+       left slivers of checker at the corners. */
+    border-radius: var(--_inner-radius);
+    pointer-events: none;
+  }
+  /* The swatch's two layers sit under its own paint, inside its isolated stack: positioned children paint after their
+     parent's outline, so as plain absolute layers the colour covered the ring (owner, round 55: "i thought even solid
+     swatches got the transparent outline overlay?"; a white swatch on white showed no edge at all). At z-index −1 they
+     paint over the swatch's ground and under its outline. The picker's previews keep their own order. */
+  .area-color-swatch::before,
+  .area-color-swatch::after { z-index: -1; }
+  .area-color-swatch::before,
+  :is(.area-color-picker__preview-new, .area-color-picker__preview-original)::before {
+    background: var(--_checker-ink);
+    mask: var(--_checker-tile) 0 0 / calc(200% / var(--_checker-cells)) auto repeat;
+  }
+  .area-color-swatch::after,
+  :is(.area-color-picker__preview-new, .area-color-picker__preview-original)::after {
+    background: var(--_swatch-color);
+    box-shadow: inherit;
+  }
+  /* The swatch ring (`token-swatch-ring`, black 10% / white 10% in dark), inside the shape, so a swatch is
+     outlined on any ground and the colour shows through its rim. A required edge: `stroke-width`, so it stays
+     under the Borderless surface preset (was Elevated) (audit F-5; consistency pass 2026-10-12, it had regressed to `border-width`). */
+  .area-color-swatch {
+    outline: var(--area-stroke-width) solid var(--area-token-swatch-ring);
+    outline-offset: calc(var(--area-stroke-width) * -1);
+  }
+  .area-color-swatch--sm { --_size: var(--area-mark-sm); }
+  .area-color-swatch--md { --_size: var(--area-mark-md); }
+  .area-color-swatch--lg { --_size: var(--area-mark-lg); }
+  /* spec (owner, 2026-10-19: "the swatch seems very large" beside the icons in the setting pickers): in a menu row's
+     or a Custom select's icon slot the swatch stands in for a glyph, so it takes the glyphs' square keyline, the box
+     less 4 (12 in a 16, 16 in a 20; icon-construction: square ink 12.1–13, a solid counts heavier than a line), not
+     the whole box a 16 swatch filled. Its corner follows (12 → 2). A swatch that is the value itself (Color field's
+     preview, the picker's cells) keeps its size. */
+  /* Its corner stays the sm swatch's, 4 at the default (owner, round 55: "the swatch corner seems a bit too sharp … can it
+     be 2px rounder?"; 20% of 12 rounded to even was 2), and moves with the Radius setting as every swatch does: square
+     at Sharp. */
+  :is(.area-menu__icon, .area-custom-select__icon) .area-color-swatch {
+    /* 14 in a 16 (round 56: "if the swatch needs to be increased in size very slightly, id be open to it"): Figma's
+       colour-row chit, so it reads 1 inside the box and its text starts one tier gap + 1 away (5 at the app's Compact,
+       Figma's 5); was the glyph keyline's 12. */
+    --_size: calc(var(--area-icon-md) - var(--area-space-2));
+    --_radius: max(var(--area-radius-min), round(nearest, calc(var(--area-mark-sm) * var(--_shape) * 4 * var(--area-radius-factor)), 2px));
+  }
+
+}

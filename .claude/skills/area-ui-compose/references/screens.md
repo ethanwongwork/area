@@ -18,6 +18,7 @@ Ref: ChatGPT (`chatgpt-desktop.md`).
 | Empty | greeting (page title), `PromptSuggestions` | greeting about 32 above the composer, centred |
 | Footer | `Composer` floating over the thread, `ScrollToLatest` | 16 above the bottom, the thread's width |
 | Side panel | document or code beside the thread | 320 minimum, ~600 default, thread keeps 352 |
+| Cards in the thread | `Plan`, `Queue`, `EditSummary`, `Approval`, `CodeBlock`, the `Composer`, the person's bubble | one chat card (DESIGN_SYSTEM.md, Frames): one corner (16 at the default), words 12 in, heads one row; never mix in Card's 10 |
 
 ## Document
 

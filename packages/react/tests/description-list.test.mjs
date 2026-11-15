@@ -11,11 +11,18 @@ test("a dl of div rows, each a dt term (with its icon hidden) and a dd value", (
     + '<dd class="area-description-list__value">David Tee</dd></div></dl>');
 });
 
-test("layout, divided, framed and native props reach the list and its rows", () => {
-  const html = render(h(DescriptionList, { layout: "justified", divided: true, framed: true, "aria-label": "Account" },
+test("layout, divided, the surface frame and native props reach the list and its rows", () => {
+  const html = render(h(DescriptionList, { layout: "justified", divided: true, variant: "surface", "aria-label": "Account" },
     h(DescriptionListItem, { term: "Plan", id: "plan", className: "extra" }, "Plus")));
-  assert.match(html, /^<dl class="area-description-list area-description-list--justified area-description-list--divided area-description-list--framed" aria-label="Account">/);
+  const classes = html.match(/^<dl class="([^"]+)" aria-label="Account">/)?.[1].split(" ");
+  assert.deepEqual(classes?.sort(), ["area-description-list", "area-description-list--divided", "area-description-list--justified", "area-description-list--surface"]);
   assert.match(html, /<div class="area-description-list__item extra" id="plan">/);
+});
+
+test("the deprecated framed is the surface frame (plan B1.1: one frame prop)", () => {
+  const html = render(h(DescriptionList, { framed: true }, h(DescriptionListItem, { term: "Plan" }, "Plus")));
+  assert.match(html, /^<dl class="[^"]*area-description-list--surface[^"]*">/);
+  assert.doesNotMatch(html, /--framed/);
 });
 
 test("visibleCount hides the rest behind a Show N more button after the list; expanded flips the label", async () => {

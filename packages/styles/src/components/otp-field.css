@@ -9,36 +9,27 @@
  * Chakra; shadcn's groups), groups 8 either side of a dash.
  * ------------------------------------------------------------------------- */
 @layer area.components {
+  /* The slot is the one field shell (input.css, "One field shell"): its tiers, edge, corner, fill, soft, focus and
+     status. The root holds the tier, the type and the ink the slots draw. */
   .area-otp-field {
-    --_field-lift: var(--area-shadow-field); /* Field shadow (axes/depth.ts), transparent by default; each slot is a field */
-    --_height: var(--area-control-md);
-    --_radius: var(--area-radius-control-md);
-    --_text: var(--area-control-md-text);
-    --_leading: var(--area-control-md-leading);
-    --_slot-gap: var(--area-space-8); /* spec: 8 between slots (Mantine, Ant, Untitled UI xxs+, shadcn gap-2) */
-    --_border: var(--area-input-edge);
-    --_border-hover: var(--area-input-edge-hover);
-    --_border-focus: color-mix(in srgb, var(--_border), var(--area-field-focus-color) calc(var(--area-field-focus-recolor) * 100%)); /* the ring's colour only under Focus ring Halo (axes/states.ts) */
-    --_focus-outline: var(--area-field-focus-color);
-    --_focus-halo: var(--area-field-focus-halo-color);
-    --_bg: var(--area-input-bg);
+    --_slot-gap: var(--area-ui-cluster); /* independent fields, a cluster apart (plan B8.2): 6 / 8 / 10 at type 13 Compact / Default / Comfortable; 8 measured */
+    /* An empty slot is the whole affordance, so it takes the stronger control edge, as an unchecked box does (plan A10.3,
+       2026-11-11: a field's edge left six barely-there squares on near black, 1.6:1). */
+    --_border: var(--area-edge-control-hover);
+    --_border-hover: var(--area-edge-control-strong);
     position: relative;
     display: inline-flex;
     align-items: center;
     gap: var(--_slot-gap);
     max-inline-size: 100%;
-    color: var(--area-input-text);
-    font-size: var(--_text);
-    line-height: var(--_leading);
     /* Digits keep one width, so a code doesn't shift as it fills. */
     font-variant-numeric: tabular-nums;
   }
 
   .area-otp-field__group { display: inline-flex; gap: var(--_slot-gap); }
 
-  /* Input's shell, square at the tier's height; its corner is Input's for the same height. */
+  /* Square at the tier's height; the character is a cap slot (inset.css), centred on its cap. */
   .area-otp-field__slot {
-    box-shadow: var(--_field-lift);
     position: relative;
     display: inline-grid;
     place-items: center;
@@ -46,30 +37,21 @@
     box-sizing: border-box;
     inline-size: var(--_height);
     block-size: var(--_height);
-    border: var(--area-stroke-width) solid var(--_border);
-    border-radius: calc(min(var(--_radius), max(var(--area-radius-min), round(down, calc(var(--_height) * var(--area-radius-factor)), 2px))) + var(--area-pill-field) * var(--area-radius-full));
-    background-color: var(--_bg);
     /* Input's motion: paint fades out on fast; focus lands at once. */
     transition-property: background-color, border-color, box-shadow;
     transition-duration: var(--area-duration-fast);
-    transition-timing-function: var(--area-ease-out);
+    transition-timing-function: var(--area-ease-effects);
   }
-
-  .area-otp-field--outline { --_bg: var(--area-input-bg); }
-  .area-otp-field--soft { --_field-lift: 0 0 0 0 transparent; --_bg: var(--area-input-bg-soft); --_border: var(--area-input-edge-soft); --_border-hover: var(--area-input-edge); }
+  .area-otp-field__char {}
 
   @media (hover: hover) {
-    .area-otp-field:hover:not([data-disabled], [data-read-only]) .area-otp-field__slot:not([data-active]) { border-color: var(--_border-hover); transition-duration: var(--area-hover-in); }
+    .area-otp-field:hover:not([data-disabled], [data-read-only]) .area-otp-field__slot:not([data-active]) { transition-duration: var(--area-hover-in); }
   }
 
-  /* The slot the code continues in (or the selected slots): Input's focus edge, halo and outline, raised so the halo
-     reads over its neighbours. */
+  /* The slot the code continues in (or the selected slots) takes the shell's focus paint, raised so the halo reads over
+     its neighbours. */
   .area-otp-field__slot[data-active] {
     z-index: 1;
-    border-color: var(--_border-focus);
-    box-shadow: var(--_field-lift), 0 0 0 var(--area-field-focus-halo-width) var(--_focus-halo);
-    outline: var(--area-field-focus-outline-width) solid var(--_focus-outline);
-    outline-offset: var(--area-focus-offset);
     transition-duration: 0s;
   }
 
@@ -115,36 +97,9 @@
   /* Autofill paints the field it fills; here that is the transparent input, so keep it clear. */
   .area-otp-field__control:autofill { -webkit-text-fill-color: transparent; transition: background-color 9999s; }
 
-  .area-otp-field:is([data-invalid]) {
-    --_border: var(--area-input-invalid-color);
-    --_border-hover: var(--area-input-invalid-color);
-    --_border-focus: var(--area-input-invalid-color);
-    --_focus-outline: var(--area-input-invalid-color);
-    --_focus-halo: var(--area-input-invalid-halo-color);
-  }
-  /* Success and warning, as Input's (components audit 2026-11-07, O1): a Field's status reaches every field. */
-  .area-otp-field[data-success] {
-    --_border: var(--area-input-success-color);
-    --_border-hover: var(--area-input-success-color);
-    --_border-focus: var(--area-input-success-color);
-    --_focus-outline: var(--area-input-success-color);
-    --_focus-halo: var(--area-input-success-halo-color);
-  }
-  .area-otp-field[data-warning] {
-    --_border: var(--area-input-warning-color);
-    --_border-hover: var(--area-input-warning-color);
-    --_border-focus: var(--area-input-warning-color);
-    --_focus-outline: var(--area-input-warning-color);
-    --_focus-halo: var(--area-input-warning-halo-color);
-  }
-  .area-otp-field[data-disabled] { --_bg: var(--area-input-bg-disabled); --_border: var(--area-border-faint); color: var(--area-fg-disabled); }
-  .area-otp-field--soft[data-disabled] { --_border: transparent; }
+  /* Disabled and read-only paint are the field shell's (input.css), set on the root the slots draw from. */
   .area-otp-field[data-disabled] .area-otp-field__control { cursor: not-allowed; }
   .area-otp-field[data-read-only] .area-otp-field__control { cursor: default; }
-
-  .area-otp-field--sm { --_height: var(--area-control-sm); --_radius: var(--area-radius-control-sm); --_text: var(--area-control-sm-text); --_leading: var(--area-control-sm-leading); }
-  .area-otp-field--md { --_height: var(--area-control-md); --_radius: var(--area-radius-control-md); --_text: var(--area-control-md-text); --_leading: var(--area-control-md-leading); }
-  .area-otp-field--lg { --_height: var(--area-control-lg); --_radius: var(--area-radius-control-lg); --_text: var(--area-control-lg-text); --_leading: var(--area-control-lg-leading); }
 
   @media (forced-colors: active) {
     .area-otp-field__slot { border-color: CanvasText; }

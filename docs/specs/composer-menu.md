@@ -58,3 +58,14 @@ stay as deprecated aliases for one release; `aria-label` and `items` win.
 - **Why:** Found measuring the chat set together; Combobox's empty row already takes the rows' size.
 - 2026-11-07 · components audit N3 → the @ list for mentions (people, files, pages) as a tile, Content / mentions
   (`GalleryComposerMenuMentions`); the menu itself is unchanged.
+- 2026-11-11 · system evaluation B2.3 and A11.1 · Menu's rows (icon-to-label `ui-cluster`, 8, Compact 6); the empty line's side rounds to a whole pixel, 10 at the default (was 10.38).
+
+## Review note, 2026-11-11 (type rules, plan A9)
+
+- **What changed:** a file's path takes the row's size, 13/18, as Command palette's; it was 11/14 (plan A9.2, findings T1, T13).
+- **Why:** the system evaluation's type rules (docs/research/system-evaluation-2026-11-11, section 5, A9), owner-approved
+  2026-11-11; the rules are in DESIGN_SYSTEM.md ("Ink and weight", "Size and shape", "Text pairs") and the type skill.
+
+## Shared parts (plan B2), 2026-11-13
+
+- **Empty line (B2.6, G5).** Nothing matches is Menu's empty line (`.area-menu__empty` with its `.area-menu__text`); `__empty` is gone from the manifest.

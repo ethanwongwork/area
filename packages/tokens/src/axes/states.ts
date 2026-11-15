@@ -23,13 +23,18 @@ import { FILL_STEPS, fillPosition, fillStepAt } from "../color/layers.ts";
  *
  * Fields read three switches: whether their ring is drawn (`field-focus-ring`), whether their edge takes the ring's
  * colour (`field-focus-recolor`) and whether the soft halo shows (`field-focus-halo`); base.ts derives their widths.
+ *
+ * The setting writes leaves (`focus-ring-width`, `focus-ring-offset`, `focus-ring-inside-solid`); base.ts derives the
+ * public `focus-width`, `focus-offset` and the solid-fill placement from them and from Contrast (plan A6.1, A6.3): a ring
+ * never sits flush on a solid fill (off it by `focus-gap`, or under Inset an on-colour ring inside it), and under
+ * Contrast More every ring is 3px and off by the gap.
  */
 const FOCUS_RING = {
-  hug: { label: "Hug", description: "Hugs controls and sits 2px off cards and text, as ChatGPT.", width: "2px", offset: "0px", gap: "2px", ring: 1, recolor: 0, halo: 0 },
-  gap: { label: "Gap", description: "Sits 2px off everything, controls included (Atlassian, Polaris).", width: "2px", offset: "2px", gap: "2px", ring: 1, recolor: 0, halo: 0 },
-  halo: { label: "Halo", description: "Fields take the ring's color on their edge and a soft halo; other controls as Hug.", width: "2px", offset: "0px", gap: "2px", ring: 0, recolor: 1, halo: 1 },
-  inset: { label: "Inset", description: "Drawn inside each control's edge, so nothing outside it changes (Primer, Radix).", width: "2px", offset: "-2px", gap: "2px", ring: 1, recolor: 0, halo: 0 },
-  bold: { label: "Bold", description: "A 3px ring, 2px off everything, for keyboard-first products (Material).", width: "3px", offset: "2px", gap: "2px", ring: 1, recolor: 0, halo: 0 },
+  hug: { label: "Hug", description: "Hugs controls and sits 2px off cards and text, as ChatGPT.", width: "2px", offset: "0px", gap: "2px", ring: 1, recolor: 0, halo: 0, insideSolid: 0 },
+  gap: { label: "Gap", description: "Sits 2px off everything, controls included (Atlassian, Polaris).", width: "2px", offset: "2px", gap: "2px", ring: 1, recolor: 0, halo: 0, insideSolid: 0 },
+  halo: { label: "Halo", description: "Fields take the ring's color on their edge and a soft halo; other controls as Hug.", width: "2px", offset: "0px", gap: "2px", ring: 0, recolor: 1, halo: 1, insideSolid: 0 },
+  inset: { label: "Inset", description: "Drawn inside each control's edge, so nothing outside it changes (Primer, Radix).", width: "2px", offset: "-2px", gap: "2px", ring: 1, recolor: 0, halo: 0, insideSolid: 1 },
+  bold: { label: "Bold", description: "A 3px ring, 2px off everything, for keyboard-first products (Material).", width: "3px", offset: "2px", gap: "2px", ring: 1, recolor: 0, halo: 0, insideSolid: 0 },
 } as const;
 export type FocusRingId = keyof typeof FOCUS_RING;
 
@@ -38,12 +43,12 @@ export const FOCUS_RING_AXIS: AxisDefinition = {
   label: "Focus ring",
   description: "Where the keyboard focus ring sits: hugging controls, off them, inside them, as a field halo, or bold.",
   defaultPreset: "hug",
-  namespaces: [`${PREFIX}focus-width:`, `${PREFIX}focus-offset:`, `${PREFIX}focus-gap:`, `${PREFIX}field-focus-ring:`, `${PREFIX}field-focus-recolor:`, `${PREFIX}field-focus-halo:`],
+  namespaces: [`${PREFIX}focus-ring-width:`, `${PREFIX}focus-ring-offset:`, `${PREFIX}focus-ring-inside-solid:`, `${PREFIX}focus-gap:`, `${PREFIX}field-focus-ring:`, `${PREFIX}field-focus-recolor:`, `${PREFIX}field-focus-halo:`],
   presets: (Object.keys(FOCUS_RING) as FocusRingId[]).map(id => {
     const r = FOCUS_RING[id];
     return {
       id, label: r.label, description: r.description,
-      tokens: tokens({ "focus-width": r.width, "focus-offset": r.offset, "focus-gap": r.gap, "field-focus-ring": r.ring, "field-focus-recolor": r.recolor, "field-focus-halo": r.halo }),
+      tokens: tokens({ "focus-ring-width": r.width, "focus-ring-offset": r.offset, "focus-ring-inside-solid": r.insideSolid, "focus-gap": r.gap, "field-focus-ring": r.ring, "field-focus-recolor": r.recolor, "field-focus-halo": r.halo }),
     };
   }),
 };

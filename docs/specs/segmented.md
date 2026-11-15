@@ -62,10 +62,10 @@ area     div.area-segmented[role=radiogroup]  owns: tier height, 2px inset, trac
 
 Inset equation: item 28 = 32 − 2 × 2 inset; item padding (28 − 9.94 cap) / 2 − 1 border =
 8.03 (`inset.css:43`); label starts 2 + 1 + 8.03 = 11.03 from the track edge (captured
-11.02). Track radius `--_track-radius` = min(the tier's control radius, height × radius
-factor), 8 at md; per tier 6 sm, 8 md, 10 lg (`segmented.css:50`, `:160-162`); a pill when
-`data-area-pills` lists `segmented` (`--area-pill-segmented`). Item radius = track radius − 2
-inset, never under `radius-floor` 4: 6 at md (4 sm, 8 lg; `segmented.css:71`). Figma's mode
+11.02). Track corner `--_track-corner` (the one track recipe, `segmented.css` "One track", shared with soft
+Toggle group) = min(the tier's control radius, height × radius factor), 8 at md; per tier 6 sm, 8 md, 10 lg; a pill
+(`radius-full`, one value) when `data-area-pills` lists `segmented` (`--area-pill-segmented`). Thumb corner = track
+corner − 2 inset, never under `radius-floor` 4: 6 at md (4 sm, 8 lg). Figma's mode
 switch is the same construction at radius 5 / 3.
 
 ## Measurements
@@ -100,12 +100,12 @@ tab keeps its 50% ink and gains an rgb(245) plate (`tabs/figma--panel-tab--hover
 | item · selected ink | `fg-default` rgb(40) (`segmented.css:115`) | Two-ink rule: selected default, unselected muted (DESIGN_SYSTEM.md, Shared state paint) | — |
 | item · hover ink | fixed | Area rule: foreground fixed on hover; Figma panel tab keeps its ink | ChatGPT darkens 93 → 13 (decision 16) |
 | item · hover fill | `bg-hover` light-dark(#1414140d, #fcfcfc24) (`segmented.css:93-98`) | Audit rule: translucent hover on a track | Dark value was 20% white; now 14%, solved against the dark page rung (decision 1) |
-| item · pressed fill | `light-dark(#00000013, #fcfcfc2a)`: 7.5% black, 16.5% white (`segmented.css:99-102`) | Interaction polish 2026-10-16: a step past hover, as far as the muted label holds 4.5:1 | Pressed with the hover paint before |
+| item · pressed fill | `bg-pressed-track` (layers.css): the pressed wash capped where the muted label keeps 4.6:1 on the track; 8.5% black on the page's track and 15.7% white in dark at the defaults | Interaction polish 2026-10-16; plan B7.4 2026-11-14 | 7.5% / 16.5% literals until 2026-11-14 (the Pressed fill, Layers and tint didn't move them) |
 | track · height | tier 28 / 32 / 40 | Control tier; decision 18 | ChatGPT 36; Figma 32 / 24 |
-| track · inset / gap | 2 / 2 (`segmented.css:32, 42`) | Figma toolbar mode switch 2 / 2 | ChatGPT's thumb fills the track; Figma's view toggle has no inset |
+| track · inset / gap | 2 / 2, at every density (the track recipe's `--_track-inset`) | Figma toolbar mode switch 2 / 2 | ChatGPT's thumb fills the track; Figma's view toggle has no inset |
 | track · radius | per-tier control radius as Button: 6 sm, 8 md, 10 lg (`segmented.css:50`, `:160-162`); a pill when `data-area-pills` lists `segmented` (owner 2026-10-04) | Audit S4 (owner): the track is the control | Was item radius + inset (10 at md). ChatGPT is a pill; Area keeps the pill for Chip by default |
 | item · radius | concentric inside the track: track radius − 2 inset, floored at `radius-floor` 4: 4 sm, 6 md, 8 lg (`segmented.css:71`; owner 2026-10-03) | Radius rule; Figma 5 / 3 is concentric too | Was `radius-control` 8 at md |
-| track · paint | `bg-component` #f7f7f7 (the control fill, stepping from its ground; was `bg-subtle` until 2026-10-16), **no edge**: a trough, as the soft fields, Slider's bar and Switch's track; under More contrast the soft fields' edge (`input-edge-soft`, a 1px inset outline) | ChatGPT 3% ink (about rgb 248); Figma rgb(245); neither rings its track | Was a 1px `border-decorative` ring ("adds definition on white"), the only edge in the Inspector's rows beside soft fields of the same fill and corner (owner 2026-10-27, removed) |
+| track · paint | `bg-component` #f7f7f7 (the control fill, stepping from its ground; was `bg-subtle` until 2026-10-16) and the Buttons stroke group's edge, an inset outline at `border-width` (an edge of a filled shape, DESIGN_SYSTEM.md Strokes; it follows Stroke width, 0 to 2, since plan B8.1, 2026-11-14: it read `stroke-width` and held while soft Toggle group's moved) | ChatGPT 3% ink (about rgb 248); Figma rgb(245); neither rings its track | Was a 1px `border-decorative` ring ("adds definition on white"), the only edge in the Inspector's rows beside soft fields of the same fill and corner (owner 2026-10-27, removed) |
 | selected · paint | `light-dark(bg-surface, bg-component-active)` + 1px `edge-selected` (#e2 standard) + `shadow-control` (`segmented.css:111-118`): white in light; in dark a #3f thumb on the #28 groove (measured live) | Figma view toggle: white + 1px rgb(230) ring; ChatGPT and Figma mode switch: white + soft shadow | Area carries both the hairline and a light shadow. In dark the surface rung (#1d) sat below the groove and read sunken, so the thumb takes the active fill (audit S15a) |
 | icon → label gap | 6 at sm, md and lg, the density tokens (`segmented.css:36, :64, :160-162`); compact sm 4 | Peer: Button (audit S14) | Was 4 / 8 / 8 |
 | icon-only item | square, item height (`segmented.css:30, 144-147`) | Owner (prior decision); Figma square cells (24 and 28) | — |
@@ -115,7 +115,7 @@ tab keeps its 50% ink and gains an rgb(245) plate (`tabs/figma--panel-tab--hover
 | State | Slot · property changes | Evidence |
 |---|---|---|
 | hover (unselected) | `bg-hover` plate; ink fixed | not captured for Area; `tabs/figma--panel-tab--hover` |
-| pressed (unselected) | 7.5% black / 16.5% white plate (`segmented.css:102`) | not captured |
+| pressed (unselected) | `bg-pressed-track` | not captured |
 | selected | surface (active fill in dark), edge, `shadow-control`, default ink; weight unchanged | all `area--*` (light); dark measured live 2026-09-30 |
 | focus-visible | 2px focus ring, 2px offset (`segmented.css:120-123`); forced colours Highlight | not captured |
 | disabled option | `opacity-disabled` (50%) (`segmented.css:125-128`) | `area--disabled` item opacity 0.5, muted ink |
@@ -213,7 +213,7 @@ in; the selected option's `transition-duration` is `0s`, an unselected one keeps
 
 ## Interaction polish, 2026-10-16
 
-Unselected items press at 7.5% black in light (as firm as the muted label allows on the track: 4.53:1; the shared 10% gave 4.26:1) and 16.5% white in dark, past the 14% hover and as far as the label holds 4.5:1 at dark 24 + 8 (they pressed with the 5% hover). Labels are not selectable. See [interaction polish](../research/interaction-polish-2026-10-16.md).
+Unselected items press at `bg-pressed-track`, as firm as the muted label allows on the track at every ground, Layers step and fill (`color/track-press.test.ts`). Labels are not selectable. See [interaction polish](../research/interaction-polish-2026-10-16.md).
 
 ## Feedback log
 
@@ -244,3 +244,27 @@ Unselected items press at 7.5% black in light (as firm as the muted label allows
 - 2026-10-16 · owner: "go with your recs, fix them in that order" (after the Layers sweep, docs/research/layers-2026-10-16/sweep/README.md) → the track paints `bg-component`, the control fill, which steps from the ground it sits on (layers.css), instead of `bg-subtle`, the recessed layer, which equals the page at layer contrast 0: at 95 + 0 the track and the white thumb were both the page and only the 1.3:1 ring showed (`captures/layers-sweep-2026-10-16/segmented-light-95-0.png`). Light 100 + 4 is the same #f7f7f7; dark is the rest fill (L 0.20 floor, about #2c on a #12 card), back near the #28 groove this spec measured, where Layers had left #0b.
 - 2026-10-18 · Elevation and Stroke audit (docs/research/elevation-stroke-2026-10-18, "Audit: Area today") → under a Material a disabled selected item kept the material (the disabled rule in material.css lost on specificity to the plain parts' painter); it now drops the material and keeps its own `shadow-control` lift (`--_m-rest`). Checked in the app, light and dark, Glass and Tactile.
 - 2026-10-31 · owner: "fix the open items" (interaction pass; Selected tint read "None / Acc… / Grey" in the Inspector) → `fullWidth` is a grid of equal `minmax(0, 1fr)` columns (was flex items at `flex: 1`). A flex row's natural width is the sum of its labels, so an auto Field that fitted that sum beside its label split it equally and cut the longest; a grid's is the longest label times the count, so the Field puts the control under its label first. Squeezed further, labels still end in an ellipsis. In the Inspector only Selected tint moved under its label (Density, Focus ring and Feedback already were); checked in the app.
+
+## Review note, 2026-11-11 (focus and targets, plan A6, A11.2)
+
+- **What changed:** Items own the shared hit target on their height, 24 (44 under a coarse pointer); their width stays theirs (A11.2).
+- **Why:** the system evaluation's focus, forced colours and hit target items (docs/research/system-evaluation-2026-11-11, section 5), owner-approved 2026-11-11; the rules are in DESIGN_SYSTEM.md ("The focus ring", "Targets") and CONTRAST.md (Focus).
+
+## One track (plan B8.1), 2026-11-14
+
+- **What changed:** Segmented and soft Toggle group draw one track from one recipe (`segmented.css`, "One track": inset,
+  corner, edge, Pills flag, the thumb's height, corner and paint). Each family sets only its tier's height and corner.
+- **Visible:** the track's edge follows Stroke width (it held at Stroke 0 and 2); at Pills `segmented` the corner is one
+  value, `radius-full`. Nothing moves at the defaults. Pressed paint still differs from Toggle group's (`bg-active`):
+  state paint, a later wave.
+- **Test:** `packages/react/tests/twins.test.mjs`.
+
+### 2026-11-14 · Shared parts, leftovers (system plan, Phase 2, wave 3)
+
+- At a pill the thumb's corner lists the Pills flag, so it is `radius-full` too (it computed 9997px, the track less its inset).
+- Why: docs/research/system-evaluation-2026-11-11 (plan B6.1, B6.5, B8.2, B2.2; README §5, phase2/leftovers.md); the owner took every recommendation on 2026-11-11. Fix the rule, not the instance.
+- Verdict: awaiting the owner.
+
+## Selection paint (plan B7.4), 2026-11-14
+
+- Unselected press reads `bg-pressed-track` (was 7.5% / 16.5% literals).

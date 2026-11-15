@@ -22,6 +22,7 @@ import { createServer } from "node:http";
 import { homedir } from "node:os";
 import { extname, join, normalize } from "node:path";
 import { copyStatic, dist, options, packagesBuilt, repo, root } from "./renderer.mjs";
+import { apiRowsPlugin } from "./api-rows.mjs";
 
 const browser = process.argv.includes("--browser");
 const withElectron = !process.argv.includes("--no-electron");
@@ -31,7 +32,9 @@ const run = (command, args, cwd) => new Promise((resolveRun, reject) => {
 });
 
 if (!packagesBuilt()) await run("npm", ["run", "build"], repo);
-const renderer = await context(options({ production: false }));
+// The API tab's rows, generated from the manifest and the React props (scripts/api-rows.mjs).
+const config = options({ production: false });
+const renderer = await context({ ...config, plugins: [...config.plugins, apiRowsPlugin(repo)] });
 await renderer.rebuild().catch(() => {});
 await renderer.watch();
 

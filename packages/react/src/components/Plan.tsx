@@ -3,7 +3,8 @@ import { forwardRef, useId, useState } from "react";
 import type { CSSProperties, HTMLAttributes, ReactNode } from "react";
 import { planVariants, type VariantProps, MANIFESTS } from "../variants.ts";
 import { Glyph } from "./Glyph.tsx";
-import { Progress, Spinner } from "./primitives.tsx";
+import { Progress } from "./Progress.tsx";
+import { Spinner } from "./Spinner.tsx";
 
 export type PlanItemStatus = "complete" | "current" | "pending" | "cancelled" | /** @deprecated use "complete" */ "done";
 /** The shared word for a deprecated alias (system gaps C1). */
@@ -12,10 +13,10 @@ const statusOf = (item: PlanItem) => item.status === "done" ? "complete" : item.
 export interface PlanItem {
   id: string;
   label: ReactNode;
-  /** The shared status words (Governance § 4, 2026-11-07): complete, current, pending; cancelled is Plan's own, dropped
-   * from the plan (Cursor's todos), struck, with a cross. `done` is a deprecated alias of complete, kept for one release. */
+  /** The shared status words: complete, current, pending; cancelled is Plan's own, dropped from the plan, struck, with
+   * a cross. `done` is a deprecated alias of complete, kept for one release. */
   status: PlanItemStatus;
-  /** How far a current item is, 0 to 1: its mark becomes a ring that fills (Linear's in-progress ring), and its
+  /** How far a current item is, 0 to 1: its mark becomes a ring that fills, and its
    * segment of a segmented bar fills that far. Without it a current item shows a Spinner. */
   progress?: number;
   /** A short trailing value: the item's own count ("2 of 3"), a date. */
@@ -29,24 +30,29 @@ export interface PlanItem {
 }
 
 export interface PlanProps extends Omit<HTMLAttributes<HTMLElement>, "title"> {
+  /** surface (default): its own frame. plain: no frame, its words on the text edge around it, as a turn's steps (a chat). */
+  variant?: VariantProps<typeof MANIFESTS.plan>["variant"];
+  /**
+   * A bar under the head that stays when folded: `single`, one bar for the complete share of all items; `segmented`,
+   * one segment per item, each filled by its own share. None by default.
+   */
+  bar?: Exclude<VariantProps<typeof MANIFESTS.plan>["bar"], "none">;
+  /** The items' marks joined by a line, a timeline, for plans whose items carry detail or steps of their own. */
+  rail?: boolean;
+  /** The steps, each with an id, a label and a status (pending, current, complete or cancelled). */
   items: PlanItem[];
   /** "Plan" by default. */
   title?: ReactNode;
   /** The head's count. Default "N of M", the done items of all items; give it when the items are phases of a larger
    * count ("9 of 14" questions across 8 chapters). */
   count?: ReactNode;
-  /** A bar under the head that stays when folded: `single`, one bar for the done share of all items; `segmented`, one
-   * segment per item, each filled by its own share (GitHub's segmented ProgressBar, Cursor's segmented bar). */
-  bar?: Exclude<VariantProps<typeof MANIFESTS.plan>["bar"], "none">;
-  /** The items' marks joined by a line, a timeline (owner 2026-10-25, an agent run's progress): for plans whose items
-   * carry detail or steps of their own. */
-  rail?: boolean;
-  /** surface (default): its own frame. plain: no frame, its words on the text edge around it, as a turn's steps (a chat). */
-  variant?: VariantProps<typeof MANIFESTS.plan>["variant"];
   /** A 16 glyph before the title: what the plan is about, or its state. */
   icon?: ReactNode;
+  /** Whether the steps show under the head, controlled. */
   open?: boolean;
+  /** Whether the steps show at first, uncontrolled; open by default. */
   defaultOpen?: boolean;
+  /** Called when the plan folds or opens. */
   onOpenChange?: (open: boolean) => void;
 }
 

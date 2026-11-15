@@ -272,7 +272,7 @@ export const CheckboxLeadingVisual = () => (
 
 export const CheckboxCard = () => (
   <Checkbox
-    variant="card"
+    variant="surface"
     label="Label"
     caption="Description"
     leadingVisual={<CheckIcon />}
@@ -422,7 +422,7 @@ export const SliderStepMarks = () => <Slider aria-label="Label" min={0} max={5} 
 
 export const SliderRangeWithInputs = () => <SliderRange defaultValue={[42, 75]} />;
 
-export const SliderVertical = () => <Slider aria-label="Label" orientation="vertical" defaultValue={50} style={{ ["--_vertical-length" as string]: "100%" }} />;
+export const SliderVertical = () => <Slider aria-label="Label" orientation="vertical" defaultValue={50} style={{ ["--area-slider-block-size" as string]: "100%" }} />;
 
 export const SliderDisabled = () => <Slider aria-label="Label" defaultValue={60} readout={value => `${value}%`} disabled />;
 

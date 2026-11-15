@@ -133,3 +133,19 @@ The app has no multi-select list today (Components, Icons and Imagery select one
 ## Feedback log
 
 - 2026-11-07 · built from the components audit (N2); focus on appearing follows Primer, not the proposal.
+
+### 2026-11-11 · Ink, dark and colour (system plan, Phase 1)
+
+- **What changed:** In dark it paints the floating ground (`bg-float`, plan A7.2): a step above the layers under it, #0c0c0c on the near-black page at the defaults (was `bg-surface`, the page's own #020202); light is unchanged. Its dark edge is one line (plan A7.1): the frame takes the dark rim's strength (16% at Shadow 8) and the rim is no longer drawn outside it, where it had made a two-tone 2px edge. (floating)
+- **Why:** docs/research/system-evaluation-2026-11-11 (README §5); the owner took every recommendation on 2026-11-11.
+- **Verdict:** awaiting the owner.
+
+## Shared parts (plan B2), 2026-11-13
+
+- **Centring (B2.2, VA1).** The count is a cap slot (inset.css): its cap sits on the bar's centre beside the buttons (it sat 0.62 high).
+
+### 2026-11-14 · Shared parts, leftovers (system plan, Phase 2, wave 3)
+
+- The floating bar takes the one floating stack (popup.css): the Floating edge inside (`--_float-frame`) before `--_float-shadow`, the same values as before. The dark edge check samples only the floating form (the inline bar draws no surface).
+- Why: docs/research/system-evaluation-2026-11-11 (plan B6.1, B6.5, B8.2, B2.2; README §5, phase2/leftovers.md); the owner took every recommendation on 2026-11-11. Fix the rule, not the instance.
+- Verdict: awaiting the owner.

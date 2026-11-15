@@ -2,7 +2,7 @@ import { forwardRef } from "react";
 import type { AnchorHTMLAttributes, HTMLAttributes, ReactNode, Ref } from "react";
 import { cx } from "../variants.ts";
 import { Glyph } from "./Glyph.tsx";
-import { Menu } from "./primitives.tsx";
+import { Menu } from "./Menu.tsx";
 
 export interface BreadcrumbProps extends HTMLAttributes<HTMLElement> {
   /** Keeps the trail on one line, as in a bar of one fixed height: the ancestors keep their width and the current page is cut with an ellipsis first. */
@@ -38,7 +38,10 @@ export const BreadcrumbPage = forwardRef<HTMLSpanElement, HTMLAttributes<HTMLSpa
   return <span ref={ref} className={cx("area-breadcrumb__page", className)} {...rest} aria-current="page" />;
 });
 
-export interface BreadcrumbSeparatorProps extends HTMLAttributes<HTMLLIElement> { children?: ReactNode }
+export interface BreadcrumbSeparatorProps extends HTMLAttributes<HTMLLIElement> {
+  /** The mark between two pages; a chevron by default. */
+  children?: ReactNode;
+}
 export const BreadcrumbSeparator = forwardRef<HTMLLIElement, BreadcrumbSeparatorProps>(function BreadcrumbSeparator(
   { className, children, ...rest }, ref,
 ) {
@@ -48,7 +51,7 @@ export const BreadcrumbSeparator = forwardRef<HTMLLIElement, BreadcrumbSeparator
 export interface BreadcrumbEllipsisProps extends HTMLAttributes<HTMLElement> {
   /**
    * The ancestors the trail hides. With them, the marker is a button that opens a Menu of those
-   * pages, as Notion's collapsed path (audit D-19); without them it stays a decorative mark.
+   * pages; without them it stays a decorative mark.
    */
   items?: { label: ReactNode; href: string }[];
 }

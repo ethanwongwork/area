@@ -26,7 +26,7 @@ export const GalleryCitationLong = () => <Answer><Citation href="#citation" icon
 export const GalleryCitationHoverCard = () => (
   <Answer flow>
     <HoverCard trigger={<Citation href="#citation" icon={<BookIcon size={12} />} label="Label" title="Title" />}>
-      <div><PopoverTitle level={false}>Title</PopoverTitle><PopoverDescription>Description that wraps onto a second line.</PopoverDescription></div>
+      <div><PopoverTitle level={false}>Title</PopoverTitle><PopoverDescription>Description that wraps onto a second line when the source says more about it.</PopoverDescription></div>
       <div className="area-hover-card__meta"><span><LinkIcon />example.com</span></div>
     </HoverCard>
   </Answer>
@@ -49,7 +49,7 @@ export const GalleryCitationFootnoteInherit = () => (
 export const GalleryCitationFootnoteHoverCard = () => (
   <div style={article}>Body text.
     <HoverCard trigger={<Citation variant="footnote" href="#cite-note-13" label="13" title="Title" />}>
-      <div><PopoverTitle level={false}>Title</PopoverTitle><PopoverDescription>Description that wraps onto a second line.</PopoverDescription></div>
+      <div><PopoverTitle level={false}>Title</PopoverTitle><PopoverDescription>Description that wraps onto a second line when the source says more about it.</PopoverDescription></div>
       <div className="area-hover-card__meta"><span><LinkIcon />example.com</span></div>
     </HoverCard>
   </div>

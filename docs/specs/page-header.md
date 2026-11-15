@@ -37,8 +37,8 @@ Intake (Governance § 1, the `area-component-intake` gates):
 | Axis | Value | Justification | Where it appears (source / product) |
 |---|---|---|---|
 | size | sm | A sub-page, or a page inside a panel: `title-xs` (16/22 at type 13), the region heading step | Primer's `variant="subtitle"`; Section heading's step |
-| size | md (default) | A page: `title-sm` (18/24) | Area's Settings title (`studio-settings__title`: title-sm); Primer `medium` |
-| size | lg | A top-level page (home, a library): `title-md` (20/28) | Primer `large`; the chat app's 24/32 title (`--cds-page-header-title-size:1.5rem`, `-title-leading:2rem`) is past Area's words ramp: `title-lg` is a figure's step (area-type-usage) |
+| size | md (default) | A page: `title-lg` (26/30) at `weight-heading` (600) | Area's Settings title (`studio-settings__title`: title-sm); Primer `medium` |
+| size | lg | A top-level page (home, a library, a document): `title-xl` (32/40) at 600 | Primer `large`; the chat app's 24/32 title (`--cds-page-header-title-size:1.5rem`, `-title-leading:2rem`): Area's nearest step is `title-lg` (26/30), which `md` takes (plan A9.1) |
 | slots | parent, actions, description, navigation | Each part is optional and drawn only when given (no `show*` flags) | Primer's slots; the chat app's props |
 | titleAs | h1 (default) … h6 | The page's own header is its h1; a header for a part of a page takes the next level | Primer's `as` on Title |
 
@@ -66,12 +66,12 @@ keeps its 4.
 
 | Slot · property | Area value | Basis | Reason when it differs from the basis |
 |---|---|---|---|
-| title · type | sm title-xs, md title-sm, lg title-md, weight strong, tracking the token's | Area's type ramp (area-type-usage § 1–2) | The chat app's 24/32 is title-lg's size, which Area keeps for figures |
+| title · type | sm title-xs at 500; md title-lg and lg title-xl at `weight-heading` (600); tracking the token's | Area's type ramp (area-type-usage § 1–2; plan A9.1: page > section > item, 26 / 16 / 13) | The chat app's and live products' 24/32 600: Area's ramp step is 26/30 |
 | description · type | UI line (13/18), `fg-muted`, 400 | Text pairs: a description explains at the same size, muted | Section heading's lede is the 12 secondary; a page's description is read beside its title, not a caption |
 | title → description | 4 between line boxes | DESIGN_SYSTEM.md, Text pairs, "a heading over its text" (owner: "4 is right") | — |
-| parent → title | 8 | Derived on the ladder: further than the title's own copy (4), closer than a block (12); not measured | Primer's context area sets no gap in its docs |
-| actions · gap | 8 | Toolbar's command spacing at default density | — |
-| actions · inset | 16 from the title column | Area's text-to-control gap in rows (Setting row, the app's Settings 16) | — |
+| parent → title | `ui-cluster` (6 / 8 / 10; 8 at the default) | Derived on the ladder: further than the title's own copy (4), closer than a block (12); not measured | Primer's context area sets no gap in its docs |
+| actions · gap | `ui-cluster` (6 / 8 / 10) | Toolbar's command spacing at default density | — |
+| actions · inset | 2 × `ui-cluster` from the title column (12 / 16 / 20; 16 at the default) | Area's text-to-control gap in rows (Setting row, the app's Settings 16) | — |
 | text → navigation | `inset-surface-md` (16, 12 compact) | A heading and its block: 16 (the feed's heading gap) | — |
 | description · measure | 64ch | Section heading's lede (`app-shell.css`) | — |
 
@@ -137,3 +137,17 @@ starts on the page's edge, so the swap would move the title. Left for the owner'
 ## Feedback log
 
 - 2026-11-07 · built from the components audit (N1).
+- 2026-11-11 · system evaluation A1.2 · the actions are independent controls, `ui-cluster` apart (8, Compact 6; was a fixed 8).
+
+## Review note, 2026-11-11 (type rules, plan A9)
+
+- **What changed:** the title takes the heading weight, 600, from `title-sm` up, and a page title step: `md` (the default) `title-lg` 26/30 (was `title-sm` 18/24 at 500), `lg` `title-xl` 32/40 (was `title-md` 20/28 at 500); `sm` keeps `title-xs` 16/22 at 500, Section heading's. Page > section > item is 26 / 16 / 13 at type 13 (plan A9.1, findings T16, VC13, RL4). The plan named 24/32; the ramp has no 24, and its 26/30 step is two pixels from it, so no new size was added (to confirm on the review page).
+- **Why:** the system evaluation's type rules (docs/research/system-evaluation-2026-11-11, section 5, A9), owner-approved
+  2026-11-11; the rules are in DESIGN_SYSTEM.md ("Ink and weight", "Size and shape", "Text pairs") and the type skill.
+
+## Density (plan B8.2), 2026-11-14
+
+Space between pieces reads a density role (DESIGN_SYSTEM.md, Size and shape; `density.test.mjs`). Values at type 13
+Compact / Default / Comfortable; each is whole at type 12 to 16 and every density, and the default is unchanged unless said.
+
+- Parent to title `ui-cluster` (6 / 8 / 10), actions two clusters from the title (12 / 16 / 20; 20 / 20 / 24 at type 16).

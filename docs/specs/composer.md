@@ -66,7 +66,7 @@ area     shell, padding 8 (7 + 1 border), radius 16, Card's edge (#ee), no resti
 | actions · size | 32 | Peer: Button md | ChatGPT 36; Area's control scale is 28 / 32 / 40 |
 | shell · width | `min(100%, var(--area-composer-inline-size, 480))`, 480 = `space-96` × 5 (composer.css:13); the public hook also sets Prompt suggestions' width | Audit S17: one measure for the composer column | — |
 | shell · height (inline) | 48 | 32px actions + 8px insets | ChatGPT 52 (36px actions) |
-| shell · radius | **Card's corner**, term for term: the container corner + the inset's share (18 in the app's scale, 20 at type 16), never past half the one-line height; the actions concentric inside (shell less the inset: 11 on a 30 send) | owner 2026-10-29 (see Expansion) | Was 20 (the surface corner + 4, actions 13: rounder than every other Button of their height), and before that 15/16, the send's corner + the inset (owner 2026-09-26, option B). ChatGPT is a pill (26 on 52); `submitPill` reproduces it |
+| shell · radius | **the chat card's corner (`surface.css`, plan B1.3): the medium control's corner plus the bar inset (`radius-control-md` + `ui-cluster` × `radius-concentric`), never rounder than `radius-container`: 16 at the default, 14 at Compact and type 12, 18 at Corner 12, 20 at Corner 14 and Pill, 0 at Sharp**, never past half the one-line height (a pill at Pill with a pill send); the actions concentric inside (shell less the inset: every Button's 8 on a 30 send at the default) | owner 2026-11-13: one chat card sets the corner once; plan B1.3 | Was the container corner + the inset's share (19 at the default, 20 at type 16; owner 2026-10-29), held in Phase 1 until the one chat card; before that 20 and 15/16. ChatGPT is a pill (26 on 52); `submitPill` reproduces it |
 | placeholder | `input-placeholder` (fg-muted 102) | Peer: Input (Complete) | ChatGPT rgb(143) |
 | textarea · auto-grow | refits on text and on width changes | Bug fix | The height was only fitted on text changes. A composer that first laid out narrow (or sat in a resized panel) kept an inflated height: the gallery inline tile measured 176px empty |
 
@@ -198,7 +198,7 @@ Intake and evidence: [docs/research/composer-expansion-2026-10-29/](../research/
 | `footer` | a row under the shell, outside it: `space-2` apart, `ui-cluster` below the shell (8, 6 compact), from the shell's inset | the Claude app's chin: 8 under the shell, 6 compact, 12px secondary text (evidence.md, 7) |
 | `ComposerNote` | the footer's quiet line: `text-xs`, `fg-muted`, centred in the space left, one line with an ellipsis | the Claude app's "Claude is AI and can make mistakes." |
 | group | with either row, the root is `area-composer-group` (className and the rest land on it); it takes the width hook and the shell fills it. Without them the shell is the root, as before | — |
-| shell · corner | Card's corner, term for term (`--_card-radius`: the container corner plus the inset's share; 18 in the app's scale), never past half the one-line height (a pill at Pill), square at Sharp; every action in the shell (send included) and the context row's Attachments take the shell less the inset (11 on a 30 send), plus the Pills setting; a round send (`submitPill`) still makes a pill composer. Approval takes the same corner. Cohesion tests keep the Composer on Card's and Approval on the Composer's. First built as the surface corner + 4 (20, actions 13), approved, then changed on the owner's question "are they slightly too round?": its buttons were rounder than every other Button of their height (8) | owner, 2026-10-29: "i prefer cursors but want it to still be rounded not pill/circular, but pretty round"; Cursor's prompt input 20 (`--prompt-input-border-radius:20px`, the glass bundle) around a round 24 send. Was option B (2026-09-26): the send's own corner + the inset, 16 (15 at type 13) |
+| shell · corner | The container corner plus the inset's share (Card's corner, term for term, until plan A2.3, 2026-11-11; 19 at the default), never past half the one-line height (a pill at Pill), square at Sharp; every action in the shell (send included) and the context row's Attachments take the shell less the inset (11 on a 30 send), plus the Pills setting; a round send (`submitPill`) still makes a pill composer. Approval takes the same corner. Cohesion tests keep the Composer on this formula and Approval on the Composer's. First built as the surface corner + 4 (20, actions 13), approved, then changed on the owner's question "are they slightly too round?": its buttons were rounder than every other Button of their height (8) | owner, 2026-10-29: "i prefer cursors but want it to still be rounded not pill/circular, but pretty round"; Cursor's prompt input 20 (`--prompt-input-border-radius:20px`, the glass bundle) around a round 24 send. Was option B (2026-09-26): the send's own corner + the inset, 16 (15 at type 13) |
 | `ComposerMic` | ghost neutral icon-only toggle Button (md, or sm in a footer): `mic` at rest, `waveform` on the selected plate while on; one name ("Dictate") with `aria-pressed` | Cursor, Claude and Codex all set a mic before send or in the footer |
 | `ComposerAttach` | ghost neutral icon-only Button with `add`, opening a hidden file input (`accept`, `multiple`) | every reference's + |
 | `onFiles` | files dropped on the shell or pasted into the field; while files are over it the shell takes File upload's drop paint (`selection-edge` on `bg-component-hover`), counted across child enters and leaves; pasted text stays the field's | every reference takes dropped and pasted files |
@@ -261,3 +261,21 @@ the control's width and a line's gap. Expanded is a state (`data-expanded`): the
 chat measures the panel). Escape collapses, the draft kept. Not a size: it is the same composer with more room.
 
 Tile: Expanded (`GalleryComposerExpanded`). Not yet looked at in dark or under Compact in the app.
+- 2026-11-11 · system evaluation A2.3 · Card took the resting-card corner (min(container, 0.6 × inset), 10 at md); the Composer keeps its own corner, unchanged (19 at the default), so it no longer equals Card's. Open for the owner: whether a resting Composer follows Card. cohesion.test.mjs.
+
+## Review note, 2026-11-11 (focus and targets, plan A6, A11.2)
+
+- **What changed:** The focus halo is the Composer's own focus colour at the field halo's 14%, not the shadow colour, and the ring takes `focus-offset` as every field (A6.2, S12). Its send is a solid Button (A6.1).
+- **Why:** the system evaluation's focus, forced colours and hit target items (docs/research/system-evaluation-2026-11-11, section 5), owner-approved 2026-11-11; the rules are in DESIGN_SYSTEM.md ("The focus ring", "Targets") and CONTRAST.md (Focus).
+
+### 2026-11-13 · One chat card (system plan, Phase 2, B1.3)
+
+- The corner is the chat card's (`surface.css`): 16 at the default (was 19), so the Composer, Approval, Plan, Queue,
+  Edit summary, Code block and the person's bubble share one corner in a transcript (VS1). Its actions stay concentric
+  (8, every Button's, was 11). Insets unchanged.
+
+### 2026-11-14 · Shared parts, leftovers (system plan, Phase 2, wave 3)
+
+- A pill is one value: while the Pills set rounds it, its corner is `radius-full` itself, `max(corner, flag × full)`, never the corner plus full (it computed the action corner plus 9999px). Draws the same; the corners snapshot records 9999px.
+- Why: docs/research/system-evaluation-2026-11-11 (plan B6.1, B6.5, B8.2, B2.2; README §5, phase2/leftovers.md); the owner took every recommendation on 2026-11-11. Fix the rule, not the instance.
+- Verdict: awaiting the owner.

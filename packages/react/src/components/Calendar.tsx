@@ -29,7 +29,19 @@ export interface CalendarRange { start: string; end: string }
 export type CalendarMarkerTone = "neutral" | "info" | "success" | "warning" | "danger";
 const weekOf = (d: Date, firstDay: number) => addDays(d, -((d.getDay() - firstDay + 7) % 7));
 type Selection =
-  | { selectionMode?: "single"; value?: string | null; defaultValue?: string | null; onValueChange?: (value: string | null, event: MouseEvent<HTMLButtonElement>) => void }
+  | {
+    /**
+     * What a press chooses: `single` (default) one date, `range` a start and an end, `multiple` any number of dates. The value's type follows it.
+     * @default "single"
+     */
+    selectionMode?: "single";
+    /** The chosen date as "YYYY-MM-DD", controlled; `{ start, end }` with `range`, an array with `multiple`; `null` for none. */
+    value?: string | null;
+    /** The value at first, uncontrolled; nothing chosen by default. */
+    defaultValue?: string | null;
+    /** Called with the new value and the press that chose it. */
+    onValueChange?: (value: string | null, event: MouseEvent<HTMLButtonElement>) => void;
+  }
   | { selectionMode: "range"; value?: CalendarRange | null; defaultValue?: CalendarRange | null; onValueChange?: (value: CalendarRange | null, event: MouseEvent<HTMLButtonElement>) => void }
   | { selectionMode: "multiple"; value?: readonly string[]; defaultValue?: readonly string[]; onValueChange?: (value: string[], event: MouseEvent<HTMLButtonElement>) => void };
 
@@ -43,39 +55,67 @@ export type CalendarProps = Omit<HTMLAttributes<HTMLDivElement>, "defaultValue" 
   /** A month grid, or a one-week strip. */
   layout?: VariantProps<typeof MANIFESTS.calendar>["layout"];
   /**
-   * The month title: `label` (default) between the previous and next arrows, or `menus`, the month and the year as two
-   * quiet menus that jump straight to any month (for dates far from today, such as a birthday; shadcn's dropdown
-   * caption). The arrows stay either way.
+   * The month title: `label` (default) between the previous and next arrows, or `menus`, the month and the year as
+   * two quiet menus that jump straight to any month, for dates far from today such as a birthday. The arrows stay
+   * either way.
    */
   caption?: VariantProps<typeof MANIFESTS.calendar>["caption"];
-  /** Weekday names: one letter, two letters or the abbreviation. */
+  /**
+   * Weekday names: one letter, two letters or the abbreviation.
+   * @default "short"
+   */
   weekdayStyle?: "narrow" | "short" | "abbreviated";
   /** Dots under days that carry something, such as events, by date. */
   markers?: Readonly<Record<string, CalendarMarkerTone>>;
   /** Visible month as "YYYY-MM". Controlled with `onMonthChange`. */
   month?: string;
+  /** The month shown at first as "YYYY-MM", uncontrolled; the chosen date's month, else today's, by default. */
   defaultMonth?: string;
+  /** Called with the new month as "YYYY-MM" when the arrows, the keys or the caption menus change it. */
   onMonthChange?: (month: string) => void;
-  /** Months shown side by side. */
+  /**
+   * Months shown side by side.
+   * @default 1
+   */
   visibleMonths?: 1 | 2;
+  /** The earliest date that can be chosen, as "YYYY-MM-DD". */
   min?: string;
+  /** The latest date that can be chosen, as "YYYY-MM-DD". */
   max?: string;
   /** Dates that cannot be chosen, such as booked days. */
   isDateUnavailable?: (date: string) => boolean;
-  /** 0 is Sunday. */
+  /**
+   * 0 is Sunday.
+   * @default 0
+   */
   firstDayOfWeek?: 0 | 1 | 2 | 3 | 4 | 5 | 6;
-  /** Names for the navigation buttons and the caption menus, to localise them (audit H-27). */
+  /** Names for the navigation buttons and the caption menus, to translate them. */
   labels?: { previousMonth?: string; nextMonth?: string; previousWeek?: string; nextWeek?: string; month?: string; year?: string };
-  /** The month titles' heading level (audit F-22). */
+  /**
+   * The month titles' heading level.
+   * @default 2
+   */
   headingLevel?: 2 | 3 | 4 | 5 | 6;
+  /**
+   * The language and region the month, weekday and day names are written in.
+   * @default "en-US"
+   */
   locale?: string;
-  /** Show the leading and trailing days of neighbouring months. */
+  /**
+   * Show the leading and trailing days of neighbouring months.
+   * @default true
+   */
   showOutsideDays?: boolean;
   /** Always draw six weeks, so the height never changes between months. */
   fixedWeeks?: boolean;
   /** Today's date; defaults to the user's local date. */
   today?: string;
+  /**
+   * Submits the value with a form under this name: one hidden field, `name-start` and `name-end` for a range, or one
+   * per date.
+   */
   name?: string;
+  /** No day can be chosen, and the calendar is drawn dimmed. */
   disabled?: boolean;
 };
 

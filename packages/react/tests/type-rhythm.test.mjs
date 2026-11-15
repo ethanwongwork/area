@@ -30,8 +30,12 @@ test('row components that open with a line of text give back its half-leading at
 });
 
 // 2026-11-06 balance pass (DESIGN_SYSTEM.md, "Text pairs"): a component's title is its text's size; it was title-xs.
+// Since plan B1.1 (2026-11-13) the pair is the frame recipe's (surface.css), which Card and Surface share.
 test("Card's title is one role, its description's size, unless a page's hook sets another ramp step", () => {
-  assert.ok(css.includes('--_card-title-size: var(--area-card-title-size, var(--area-text-base-size))'));
-  assert.ok(css.includes('--_card-title-leading: var(--area-card-title-leading, var(--area-text-base-leading))'));
-  assert.ok(css.includes('--_card-title-tracking: var(--area-card-title-tracking, var(--area-text-base-tracking))'));
+  assert.ok(css.includes('--_card-title-size: var(--area-card-title-size, var(--_fr-title-size))'));
+  assert.ok(css.includes('--_card-title-leading: var(--area-card-title-leading, var(--_fr-title-leading))'));
+  assert.ok(css.includes('--_card-title-tracking: var(--area-card-title-tracking, var(--_fr-title-tracking))'));
+  assert.ok(css.includes('--_fr-title-size: var(--area-text-base-size)'));
+  assert.ok(css.includes('--_fr-title-leading: var(--area-text-base-leading)'));
+  assert.ok(css.includes('--_fr-title-tracking: var(--area-text-base-tracking)'));
 });

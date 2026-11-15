@@ -1,0 +1,3258 @@
+{
+ "title": "Area foundations review",
+ "phase": "Phase 1, foundations",
+ "date": "2026-11-11",
+ "sections": [
+  {
+   "id": "spacing",
+   "title": "Spacing",
+   "cards": [
+    {
+     "id": "sp-gaps",
+     "title": "Gaps land on whole steps",
+     "plan": "A1.1, A1.2, A1.4",
+     "what": "Gaps between parts now move in whole 4 px steps with density. At Default the gaps that sat on a half step move up to the next whole step. Compact keeps its values except the sibling groups listed.",
+     "why": "A gap of 10, 14 or 18 sat between steps, so families placed side by side disagreed by 2 px. On whole steps, sibling gaps match across families, and section and page spaces now have names that Stack, Page header and the feed read.",
+     "values": [
+      [
+       "Row gap, the base step",
+       "10",
+       "12"
+      ],
+      [
+       "Card section, sm / md / lg",
+       "10 / 14 / 18",
+       "12 / 16 / 20"
+      ],
+      [
+       "Card well and carousel, md",
+       "7",
+       "8"
+      ],
+      [
+       "Tabs, sm / md",
+       "14 / 18",
+       "16 / 20"
+      ],
+      [
+       "Stack, default and group",
+       "10",
+       "12"
+      ],
+      [
+       "Stack, section",
+       "20",
+       "24"
+      ],
+      [
+       "Command palette footer",
+       "14",
+       "16"
+      ],
+      [
+       "Choice tile rows; control to text",
+       "14; 10",
+       "16; 12"
+      ],
+      [
+       "Description list row gap; column gap",
+       "2; 10",
+       "4; 12"
+      ],
+      [
+       "Message gap; Surface block gap",
+       "10",
+       "12"
+      ],
+      [
+       "Panel field gap",
+       "8",
+       "10"
+      ],
+      [
+       "Page header actions, Drawer stacked footer, Toaster list (Compact / Default / Comfortable)",
+       "8 / 8 / 8",
+       "6 / 8 / 10"
+      ],
+      [
+       "Section space, new (Compact / Default / Comfortable)",
+       "16 / 20 / 28 (Stack only)",
+       "16 / 24 / 32"
+      ],
+      [
+       "Page inset, new",
+       "24 / 32 / 40 (feed only)",
+       "24 / 32 / 40"
+      ],
+      [
+       "Compact, every gap above except the sibling groups",
+       "8 / 12 / 16",
+       "unchanged"
+      ]
+     ],
+     "look": "Card's Default tile is 4 px taller; Tabs' items sit 2 px farther apart; Stack's section gap is the clearest.",
+     "kind": "fix",
+     "pictures": [
+      {
+       "key": "sp-gaps-1",
+       "slug": "card",
+       "id": "card-default",
+       "themes": {
+        "light": {
+         "before": {
+          "src": "img/sp-gaps-1-light-before.png",
+          "w": 336,
+          "h": 448
+         },
+         "after": {
+          "src": "img/sp-gaps-1-light-after.png",
+          "w": 336,
+          "h": 448
+         }
+        },
+        "dark": {
+         "before": {
+          "src": "img/sp-gaps-1-dark-before.png",
+          "w": 336,
+          "h": 448
+         },
+         "after": {
+          "src": "img/sp-gaps-1-dark-after.png",
+          "w": 336,
+          "h": 448
+         }
+        }
+       },
+       "set": "default",
+       "label": "Default",
+       "family": "Card"
+      },
+      {
+       "key": "sp-gaps-2",
+       "slug": "tabs",
+       "id": "tabs-default",
+       "themes": {
+        "light": {
+         "before": {
+          "src": "img/sp-gaps-2-light-before.png",
+          "w": 480,
+          "h": 174
+         },
+         "after": {
+          "src": "img/sp-gaps-2-light-after.png",
+          "w": 480,
+          "h": 174
+         },
+         "zoomBefore": {
+          "src": "img/sp-gaps-2-light-zoom-before.png",
+          "w": 220,
+          "h": 68
+         },
+         "zoomAfter": {
+          "src": "img/sp-gaps-2-light-zoom-after.png",
+          "w": 220,
+          "h": 68
+         }
+        },
+        "dark": {
+         "before": {
+          "src": "img/sp-gaps-2-dark-before.png",
+          "w": 480,
+          "h": 174
+         },
+         "after": {
+          "src": "img/sp-gaps-2-dark-after.png",
+          "w": 480,
+          "h": 174
+         }
+        }
+       },
+       "set": "default",
+       "label": "Default",
+       "family": "Tabs"
+      },
+      {
+       "key": "sp-gaps-3",
+       "slug": "stack",
+       "id": "stack-gap-section",
+       "themes": {
+        "light": {
+         "before": {
+          "src": "img/sp-gaps-3-light-before.png",
+          "w": 464,
+          "h": 340
+         },
+         "after": {
+          "src": "img/sp-gaps-3-light-after.png",
+          "w": 464,
+          "h": 340
+         }
+        },
+        "dark": {
+         "before": {
+          "src": "img/sp-gaps-3-dark-before.png",
+          "w": 464,
+          "h": 340
+         },
+         "after": {
+          "src": "img/sp-gaps-3-dark-after.png",
+          "w": 464,
+          "h": 340
+         }
+        }
+       },
+       "set": "default",
+       "label": "Gap, section",
+       "family": "Stack"
+      },
+      {
+       "key": "sp-gaps-4",
+       "slug": "description-list",
+       "id": "description-list-default",
+       "themes": {
+        "light": {
+         "before": {
+          "src": "img/sp-gaps-4-light-before.png",
+          "w": 402,
+          "h": 254
+         },
+         "after": {
+          "src": "img/sp-gaps-4-light-after.png",
+          "w": 402,
+          "h": 254
+         }
+        },
+        "dark": {
+         "before": {
+          "src": "img/sp-gaps-4-dark-before.png",
+          "w": 402,
+          "h": 254
+         },
+         "after": {
+          "src": "img/sp-gaps-4-dark-after.png",
+          "w": 402,
+          "h": 254
+         }
+        }
+       },
+       "set": "default",
+       "label": "Default",
+       "family": "Description list"
+      }
+     ]
+    },
+    {
+     "id": "sp-menu",
+     "title": "Menu rows: icon to label 8, labels at 32",
+     "plan": "B2.3",
+     "what": "Rows with a leading icon in Menu, Context menu, Nav, Command palette (rows and search), native Select options, Queue, Plan and Edit summary put 8 between icon and label, so labels start at 32. Tree view's gap follows the same step. Menus and lists may now be as narrow as 160.",
+     "why": "The icon-to-label gap was the row gap, so labels sat at 34; moving gaps to whole steps alone would have pushed them to 36. The sibling step keeps icon and label one unit at 8, the middle of the shipped products measured, and the 224 minimum made short menus wider than their words.",
+     "values": [
+      [
+       "Icon to label (Compact / Default / Comfortable)",
+       "8 / 10 / 14",
+       "6 / 8 / 10"
+      ],
+      [
+       "Label column",
+       "32 / 34 / 38",
+       "30 / 32 / 34"
+      ],
+      [
+       "Tree view gap; level step",
+       "6; 22",
+       "8; 24 (Default)"
+      ],
+      [
+       "Nav nested indent",
+       "26",
+       "24"
+      ],
+      [
+       "Menu check column after a shortcut",
+       "26",
+       "24"
+      ],
+      [
+       "Menu and list minimum width",
+       "224",
+       "160"
+      ]
+     ],
+     "look": "In the enlarged Menu row the label moves 2 px toward the icon.",
+     "kind": "fix",
+     "pictures": [
+      {
+       "key": "sp-menu-1",
+       "slug": "menu",
+       "id": "menu-icons",
+       "themes": {
+        "light": {
+         "before": {
+          "src": "img/sp-menu-1-light-before.png",
+          "w": 366,
+          "h": 354
+         },
+         "after": {
+          "src": "img/sp-menu-1-light-after.png",
+          "w": 366,
+          "h": 354
+         },
+         "zoomBefore": {
+          "src": "img/sp-menu-1-light-zoom-before.png",
+          "w": 160,
+          "h": 72
+         },
+         "zoomAfter": {
+          "src": "img/sp-menu-1-light-zoom-after.png",
+          "w": 160,
+          "h": 72
+         }
+        },
+        "dark": {
+         "before": {
+          "src": "img/sp-menu-1-dark-before.png",
+          "w": 366,
+          "h": 354
+         },
+         "after": {
+          "src": "img/sp-menu-1-dark-after.png",
+          "w": 366,
+          "h": 354
+         }
+        }
+       },
+       "set": "default",
+       "label": "Icons, separator and danger",
+       "family": "Menu"
+      },
+      {
+       "key": "sp-menu-2",
+       "slug": "menu",
+       "id": "menu-icons",
+       "themes": {
+        "light": {
+         "before": {
+          "src": "img/sp-menu-2-light-before.png",
+          "w": 360,
+          "h": 334
+         },
+         "after": {
+          "src": "img/sp-menu-2-light-after.png",
+          "w": 360,
+          "h": 334
+         },
+         "zoomBefore": {
+          "src": "img/sp-menu-2-light-zoom-before.png",
+          "w": 160,
+          "h": 68
+         },
+         "zoomAfter": {
+          "src": "img/sp-menu-2-light-zoom-after.png",
+          "w": 160,
+          "h": 68
+         }
+        },
+        "dark": {
+         "before": {
+          "src": "img/sp-menu-2-dark-before.png",
+          "w": 360,
+          "h": 334
+         },
+         "after": {
+          "src": "img/sp-menu-2-dark-after.png",
+          "w": 360,
+          "h": 334
+         }
+        }
+       },
+       "set": "compact",
+       "label": "Icons, separator and danger",
+       "family": "Menu",
+       "density": "Compact"
+      },
+      {
+       "key": "sp-menu-3",
+       "slug": "nav",
+       "id": "nav-default",
+       "themes": {
+        "light": {
+         "before": {
+          "src": "img/sp-menu-3-light-before.png",
+          "w": 260,
+          "h": 234
+         },
+         "after": {
+          "src": "img/sp-menu-3-light-after.png",
+          "w": 260,
+          "h": 234
+         }
+        },
+        "dark": {
+         "before": {
+          "src": "img/sp-menu-3-dark-before.png",
+          "w": 260,
+          "h": 234
+         },
+         "after": {
+          "src": "img/sp-menu-3-dark-after.png",
+          "w": 260,
+          "h": 234
+         }
+        }
+       },
+       "set": "default",
+       "label": "Default",
+       "family": "Nav"
+      }
+     ]
+    },
+    {
+     "id": "sp-rows",
+     "title": "Rows on the height ladder",
+     "plan": "A8.2",
+     "what": "Five rows that sat off the control heights now take a ladder height: Description list property rows, Calendar days at Compact, Board's add row, Token row and Shortcut list's divided rows.",
+     "why": "Each was a one-off sum (the UI row + 2, 18 + 16, 11 + 10), so they did not line up with the rows beside them and did not follow density.",
+     "values": [
+      [
+       "Description list property row; gap (pitch holds at 34)",
+       "32; 2",
+       "30; 4"
+      ],
+      [
+       "Calendar day and cell, Compact",
+       "28 and 32",
+       "26 and 30"
+      ],
+      [
+       "Calendar, Default",
+       "30 and 34",
+       "unchanged"
+      ],
+      [
+       "Shortcut list divided row (Compact / Default / Comfortable)",
+       "32 / 34 / 38",
+       "32 / 36 / 42"
+      ],
+      [
+       "Board add row",
+       "34 at every density",
+       "28 / 30 / 34"
+      ],
+      [
+       "Token row",
+       "21 at every density",
+       "20 / 22 / 26"
+      ]
+     ],
+     "noPicture": "The Description list property row is not in the gallery, so it has no picture; the after measures and the CSS give 30 with a 4 gap.",
+     "kind": "fix",
+     "pictures": [
+      {
+       "key": "sp-rows-1",
+       "slug": "calendar",
+       "id": "calendar-default",
+       "themes": {
+        "light": {
+         "before": {
+          "src": "img/sp-rows-1-light-before.png",
+          "w": 536,
+          "h": 512
+         },
+         "after": {
+          "src": "img/sp-rows-1-light-after.png",
+          "w": 536,
+          "h": 512
+         }
+        },
+        "dark": {
+         "before": {
+          "src": "img/sp-rows-1-dark-before.png",
+          "w": 536,
+          "h": 512
+         },
+         "after": {
+          "src": "img/sp-rows-1-dark-after.png",
+          "w": 536,
+          "h": 512
+         }
+        }
+       },
+       "set": "compact",
+       "label": "Default",
+       "family": "Calendar",
+       "density": "Compact"
+      },
+      {
+       "key": "sp-rows-2",
+       "slug": "board",
+       "id": "board-tone-neutral",
+       "themes": {
+        "light": {
+         "before": {
+          "src": "img/sp-rows-2-light-before.png",
+          "w": 616,
+          "h": 396
+         },
+         "after": {
+          "src": "img/sp-rows-2-light-after.png",
+          "w": 616,
+          "h": 396
+         }
+        },
+        "dark": {
+         "before": {
+          "src": "img/sp-rows-2-dark-before.png",
+          "w": 616,
+          "h": 396
+         },
+         "after": {
+          "src": "img/sp-rows-2-dark-after.png",
+          "w": 616,
+          "h": 396
+         }
+        }
+       },
+       "set": "default",
+       "label": "Neutral",
+       "family": "Board"
+      },
+      {
+       "key": "sp-rows-3",
+       "slug": "token-row",
+       "id": "token-row-default",
+       "themes": {
+        "light": {
+         "before": {
+          "src": "img/sp-rows-3-light-before.png",
+          "w": 476,
+          "h": 108
+         },
+         "after": {
+          "src": "img/sp-rows-3-light-after.png",
+          "w": 476,
+          "h": 108
+         },
+         "zoomBefore": {
+          "src": "img/sp-rows-3-light-zoom-before.png",
+          "w": 180,
+          "h": 60
+         },
+         "zoomAfter": {
+          "src": "img/sp-rows-3-light-zoom-after.png",
+          "w": 180,
+          "h": 60
+         }
+        },
+        "dark": {
+         "before": {
+          "src": "img/sp-rows-3-dark-before.png",
+          "w": 476,
+          "h": 108
+         },
+         "after": {
+          "src": "img/sp-rows-3-dark-after.png",
+          "w": 476,
+          "h": 108
+         }
+        }
+       },
+       "set": "default",
+       "label": "Default",
+       "family": "Token row"
+      },
+      {
+       "key": "sp-rows-4",
+       "slug": "shortcut-list",
+       "id": "shortcut-list-divided",
+       "themes": {
+        "light": {
+         "before": {
+          "src": "img/sp-rows-4-light-before.png",
+          "w": 832,
+          "h": 306
+         },
+         "after": {
+          "src": "img/sp-rows-4-light-after.png",
+          "w": 832,
+          "h": 306
+         },
+         "zoomBefore": {
+          "src": "img/sp-rows-4-light-zoom-before.png",
+          "w": 180,
+          "h": 88
+         },
+         "zoomAfter": {
+          "src": "img/sp-rows-4-light-zoom-after.png",
+          "w": 180,
+          "h": 88
+         }
+        },
+        "dark": {
+         "before": {
+          "src": "img/sp-rows-4-dark-before.png",
+          "w": 832,
+          "h": 306
+         },
+         "after": {
+          "src": "img/sp-rows-4-dark-after.png",
+          "w": 832,
+          "h": 306
+         }
+        }
+       },
+       "set": "default",
+       "label": "Divided",
+       "family": "Shortcut list"
+      }
+     ]
+    },
+    {
+     "id": "sp-reference",
+     "title": "Reference list: a looser rhythm",
+     "plan": "A1.5",
+     "what": "Reference list items are 4 apart, so lines step by 22 instead of 18. Accordion's plain items gain the same 4.",
+     "why": "Sources read as separate entries, not as one wrapped paragraph; at 18 two short sources looked like one.",
+     "values": [
+      [
+       "Reference list item gap; line pitch",
+       "0; 18",
+       "4; 22"
+      ],
+      [
+       "Three items, measured",
+       "54",
+       "62"
+      ],
+      [
+       "Accordion plain items gap; pitch at md",
+       "0; 26",
+       "4; 30"
+      ]
+     ],
+     "noPicture": null,
+     "question": "q-reference-rhythm",
+     "kind": "fix",
+     "pictures": [
+      {
+       "key": "sp-reference-1",
+       "slug": "reference-list",
+       "id": "reference-list-default",
+       "themes": {
+        "light": {
+         "before": {
+          "src": "img/sp-reference-1-light-before.png",
+          "w": 522,
+          "h": 238
+         },
+         "after": {
+          "src": "img/sp-reference-1-light-after.png",
+          "w": 522,
+          "h": 238
+         }
+        },
+        "dark": {
+         "before": {
+          "src": "img/sp-reference-1-dark-before.png",
+          "w": 522,
+          "h": 238
+         },
+         "after": {
+          "src": "img/sp-reference-1-dark-after.png",
+          "w": 522,
+          "h": 238
+         }
+        }
+       },
+       "set": "default",
+       "label": "Default",
+       "family": "Reference list"
+      }
+     ]
+    },
+    {
+     "id": "sp-insets",
+     "title": "Insets on whole pixels",
+     "plan": "A11.1, A11.3",
+     "what": "Insets that were derived from the cap height now round to a whole pixel, so text and edges land on the pixel grid. The large File page icon is drawn at a native icon size.",
+     "why": "A 10.38 inset puts every glyph on a fraction of a pixel, which blurs it on a 1x screen and shifts it by a hair between neighbours.",
+     "values": [
+      [
+       "Empty list text side: Combobox, Tag picker, Composer menu, native Select option",
+       "9.38 / 10.38 / 12.38",
+       "9 / 10 / 12"
+      ],
+      [
+       "Command palette empty side",
+       "8.38 / 10.38 / 12.38",
+       "8 / 10 / 12"
+      ],
+      [
+       "Card heading beside a control",
+       "8.38 / 10.38 / 12.38",
+       "8 / 10 / 12"
+      ],
+      [
+       "Asset card name inset",
+       "8.385",
+       "8"
+      ],
+      [
+       "File page icon at 96",
+       "30",
+       "32"
+      ]
+     ],
+     "look": "Half-pixel moves: compare the enlarged crops.",
+     "kind": "fix",
+     "pictures": [
+      {
+       "key": "sp-insets-1",
+       "slug": "command-palette",
+       "id": "command-palette-empty",
+       "themes": {
+        "light": {
+         "before": {
+          "src": "img/sp-insets-1-light-before.png",
+          "w": 1264,
+          "h": 304
+         },
+         "after": {
+          "src": "img/sp-insets-1-light-after.png",
+          "w": 1264,
+          "h": 304
+         },
+         "zoomBefore": {
+          "src": "img/sp-insets-1-light-zoom-before.png",
+          "w": 200,
+          "h": 68
+         },
+         "zoomAfter": {
+          "src": "img/sp-insets-1-light-zoom-after.png",
+          "w": 200,
+          "h": 68
+         }
+        },
+        "dark": {
+         "before": {
+          "src": "img/sp-insets-1-dark-before.png",
+          "w": 1264,
+          "h": 304
+         },
+         "after": {
+          "src": "img/sp-insets-1-dark-after.png",
+          "w": 1264,
+          "h": 304
+         }
+        }
+       },
+       "set": "default",
+       "label": "No results",
+       "family": "Command palette"
+      },
+      {
+       "key": "sp-insets-2",
+       "slug": "asset-card",
+       "id": "asset-card-default",
+       "themes": {
+        "light": {
+         "before": {
+          "src": "img/sp-insets-2-light-before.png",
+          "w": 512,
+          "h": 572
+         },
+         "after": {
+          "src": "img/sp-insets-2-light-after.png",
+          "w": 512,
+          "h": 572
+         },
+         "zoomBefore": {
+          "src": "img/sp-insets-2-light-zoom-before.png",
+          "w": 180,
+          "h": 80
+         },
+         "zoomAfter": {
+          "src": "img/sp-insets-2-light-zoom-after.png",
+          "w": 180,
+          "h": 80
+         }
+        },
+        "dark": {
+         "before": {
+          "src": "img/sp-insets-2-dark-before.png",
+          "w": 512,
+          "h": 572
+         },
+         "after": {
+          "src": "img/sp-insets-2-dark-after.png",
+          "w": 512,
+          "h": 572
+         }
+        }
+       },
+       "set": "default",
+       "label": "Kind, image",
+       "family": "Asset card"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "corners",
+   "title": "Corners",
+   "cards": [
+    {
+     "id": "co-card",
+     "title": "Card: 10 at md, a 4 picture corner",
+     "plan": "A2.3 (your pick: resting cards capped at the floating corner)",
+     "what": "A resting Card takes the corner of a floating list, no larger. Its picture keeps a small corner of its own inside the card.",
+     "why": "Card md at 18 over an 18 inset, and Dialog's extra 4, were the two corners farthest outside the shipped products measured. Capping resting cards at the floating corner keeps the order: controls, then lists and cards, then dialogs.",
+     "values": [
+      [
+       "Card sm / md / lg",
+       "16 / 18 / 21",
+       "8 / 10 / 12"
+      ],
+      [
+       "Card picture corner",
+       "11",
+       "4"
+      ],
+      [
+       "Bleed picture, top corners",
+       "17",
+       "9"
+      ]
+     ],
+     "question": "q-card-media",
+     "kind": "fix",
+     "pictures": [
+      {
+       "key": "co-card-2",
+       "slug": "card",
+       "id": "card-default",
+       "themes": {
+        "light": {
+         "before": {
+          "src": "img/co-card-2-light-before.png",
+          "w": 336,
+          "h": 448
+         },
+         "after": {
+          "src": "img/co-card-2-light-after.png",
+          "w": 336,
+          "h": 448
+         },
+         "zoomBefore": {
+          "src": "img/co-card-2-light-zoom-before.png",
+          "w": 96,
+          "h": 68
+         },
+         "zoomAfter": {
+          "src": "img/co-card-2-light-zoom-after.png",
+          "w": 96,
+          "h": 68
+         }
+        },
+        "dark": {
+         "before": {
+          "src": "img/co-card-2-dark-before.png",
+          "w": 336,
+          "h": 448
+         },
+         "after": {
+          "src": "img/co-card-2-dark-after.png",
+          "w": 336,
+          "h": 448
+         }
+        }
+       },
+       "set": "default",
+       "label": "Default",
+       "family": "Card"
+      },
+      {
+       "key": "co-card-3",
+       "slug": "card",
+       "id": "card-size-lg",
+       "themes": {
+        "light": {
+         "before": {
+          "src": "img/co-card-3-light-before.png",
+          "w": 356,
+          "h": 482
+         },
+         "after": {
+          "src": "img/co-card-3-light-after.png",
+          "w": 356,
+          "h": 482
+         }
+        },
+        "dark": {
+         "before": {
+          "src": "img/co-card-3-dark-before.png",
+          "w": 356,
+          "h": 482
+         },
+         "after": {
+          "src": "img/co-card-3-dark-after.png",
+          "w": 356,
+          "h": 482
+         }
+        }
+       },
+       "set": "default",
+       "label": "Large",
+       "family": "Card"
+      }
+     ]
+    },
+    {
+     "id": "co-surfaces",
+     "title": "Dialog, Drawer, Design card, Asset card and Surface at 16",
+     "plan": "A2.3",
+     "what": "Dialog and Drawer (bottom) drop from 20 to 16. Design card's ground drops from 24 to 16, Asset card from 20 to 16 and Surface from 18 to 16. Surface's soft and default variants paint nothing at Layer contrast 0, as before, so its pair shows the default.",
+     "why": "Dialog took an extra 4 over the other floating surfaces; one step over lists (12) is enough. The two design containers matched no other surface.",
+     "values": [
+      [
+       "Dialog",
+       "20",
+       "16"
+      ],
+      [
+       "Drawer, bottom edge",
+       "20",
+       "16"
+      ],
+      [
+       "Design card ground",
+       "24",
+       "16"
+      ],
+      [
+       "Asset card",
+       "20",
+       "16"
+      ],
+      [
+       "Surface",
+       "18",
+       "16"
+      ]
+     ],
+     "noPicture": null,
+     "kind": "fix",
+     "pictures": [
+      {
+       "key": "co-surfaces-1",
+       "slug": "dialog",
+       "id": "dialog-size-md",
+       "themes": {
+        "light": {
+         "before": {
+          "src": "img/co-surfaces-1-light-before.png",
+          "w": 1024,
+          "h": 294
+         },
+         "after": {
+          "src": "img/co-surfaces-1-light-after.png",
+          "w": 1024,
+          "h": 294
+         },
+         "zoomBefore": {
+          "src": "img/co-surfaces-1-light-zoom-before.png",
+          "w": 96,
+          "h": 68
+         },
+         "zoomAfter": {
+          "src": "img/co-surfaces-1-light-zoom-after.png",
+          "w": 96,
+          "h": 68
+         }
+        },
+        "dark": {
+         "before": {
+          "src": "img/co-surfaces-1-dark-before.png",
+          "w": 1024,
+          "h": 294
+         },
+         "after": {
+          "src": "img/co-surfaces-1-dark-after.png",
+          "w": 1024,
+          "h": 294
+         }
+        }
+       },
+       "set": "default",
+       "label": "Medium",
+       "family": "Dialog"
+      },
+      {
+       "key": "co-surfaces-2",
+       "slug": "drawer",
+       "id": "drawer-side-bottom",
+       "themes": {
+        "light": {
+         "before": {
+          "src": "img/co-surfaces-2-light-before.png",
+          "w": 1120,
+          "h": 294
+         },
+         "after": {
+          "src": "img/co-surfaces-2-light-after.png",
+          "w": 1120,
+          "h": 294
+         }
+        },
+        "dark": {
+         "before": {
+          "src": "img/co-surfaces-2-dark-before.png",
+          "w": 1120,
+          "h": 294
+         },
+         "after": {
+          "src": "img/co-surfaces-2-dark-after.png",
+          "w": 1120,
+          "h": 294
+         }
+        }
+       },
+       "set": "default",
+       "label": "Bottom",
+       "family": "Drawer"
+      },
+      {
+       "key": "co-surfaces-5",
+       "slug": "surface",
+       "id": "surface-default",
+       "themes": {
+        "light": {
+         "before": {
+          "src": "img/co-surfaces-5-light-before.png",
+          "w": 624,
+          "h": 262
+         },
+         "after": {
+          "src": "img/co-surfaces-5-light-after.png",
+          "w": 624,
+          "h": 262
+         },
+         "zoomBefore": {
+          "src": "img/co-surfaces-5-light-zoom-before.png",
+          "w": 96,
+          "h": 68
+         },
+         "zoomAfter": {
+          "src": "img/co-surfaces-5-light-zoom-after.png",
+          "w": 96,
+          "h": 68
+         }
+        },
+        "dark": {
+         "before": {
+          "src": "img/co-surfaces-5-dark-before.png",
+          "w": 624,
+          "h": 262
+         },
+         "after": {
+          "src": "img/co-surfaces-5-dark-after.png",
+          "w": 624,
+          "h": 262
+         }
+        }
+       },
+       "set": "default",
+       "label": "Default",
+       "family": "Surface"
+      }
+     ]
+    },
+    {
+     "id": "co-lists",
+     "title": "Floating lists 12, their rows 8",
+     "plan": "A2.1",
+     "what": "Menus, Command palette, Context menu and the other floating lists take 12, their rows 8. Fields' lists were already 8 and 12.",
+     "why": "A row takes the corner of its own height, and the list one step above it. At 14 and 10 they were a step rounder than a field's list showing the same rows.",
+     "values": [
+      [
+       "Floating list",
+       "14",
+       "12"
+      ],
+      [
+       "Its rows",
+       "10",
+       "8"
+      ]
+     ],
+     "kind": "fix",
+     "pictures": [
+      {
+       "key": "co-lists-1",
+       "slug": "menu",
+       "id": "menu-default",
+       "themes": {
+        "light": {
+         "before": {
+          "src": "img/co-lists-1-light-before.png",
+          "w": 320,
+          "h": 268
+         },
+         "after": {
+          "src": "img/co-lists-1-light-after.png",
+          "w": 320,
+          "h": 268
+         },
+         "zoomBefore": {
+          "src": "img/co-lists-1-light-zoom-before.png",
+          "w": 96,
+          "h": 80
+         },
+         "zoomAfter": {
+          "src": "img/co-lists-1-light-zoom-after.png",
+          "w": 96,
+          "h": 80
+         }
+        },
+        "dark": {
+         "before": {
+          "src": "img/co-lists-1-dark-before.png",
+          "w": 320,
+          "h": 268
+         },
+         "after": {
+          "src": "img/co-lists-1-dark-after.png",
+          "w": 320,
+          "h": 268
+         }
+        }
+       },
+       "set": "default",
+       "label": "Default",
+       "family": "Menu"
+      }
+     ]
+    },
+    {
+     "id": "co-blocks",
+     "title": "Table frame and Plan steps at 16",
+     "plan": "A2.2",
+     "what": "The Table frame and Plan's step box read the block corner, 16.",
+     "why": "Both used 14, a private value no role names. A Compact Table now goes from 12 to 16, which reverses the 2026-10-12 cap: q-compact-table.",
+     "values": [
+      [
+       "Table frame",
+       "14",
+       "16"
+      ],
+      [
+       "Table frame, Compact",
+       "12",
+       "16"
+      ],
+      [
+       "Plan steps",
+       "14",
+       "16"
+      ]
+     ],
+     "question": "q-compact-table",
+     "kind": "fix",
+     "pictures": [
+      {
+       "key": "co-blocks-1",
+       "slug": "table",
+       "id": "table-default",
+       "themes": {
+        "light": {
+         "before": {
+          "src": "img/co-blocks-1-light-before.png",
+          "w": 632,
+          "h": 300
+         },
+         "after": {
+          "src": "img/co-blocks-1-light-after.png",
+          "w": 632,
+          "h": 300
+         },
+         "zoomBefore": {
+          "src": "img/co-blocks-1-light-zoom-before.png",
+          "w": 96,
+          "h": 68
+         },
+         "zoomAfter": {
+          "src": "img/co-blocks-1-light-zoom-after.png",
+          "w": 96,
+          "h": 68
+         }
+        },
+        "dark": {
+         "before": {
+          "src": "img/co-blocks-1-dark-before.png",
+          "w": 632,
+          "h": 300
+         },
+         "after": {
+          "src": "img/co-blocks-1-dark-after.png",
+          "w": 632,
+          "h": 300
+         }
+        }
+       },
+       "set": "default",
+       "label": "Default",
+       "family": "Table"
+      },
+      {
+       "key": "co-blocks-2",
+       "slug": "plan",
+       "id": "plan-rail",
+       "themes": {
+        "light": {
+         "before": {
+          "src": "img/co-blocks-2-light-before.png",
+          "w": 624,
+          "h": 514
+         },
+         "after": {
+          "src": "img/co-blocks-2-light-after.png",
+          "w": 624,
+          "h": 514
+         }
+        },
+        "dark": {
+         "before": {
+          "src": "img/co-blocks-2-dark-before.png",
+          "w": 624,
+          "h": 514
+         },
+         "after": {
+          "src": "img/co-blocks-2-dark-after.png",
+          "w": 624,
+          "h": 514
+         }
+        }
+       },
+       "set": "default",
+       "label": "Rail",
+       "family": "Plan",
+       "note": "Phase 0 also changed this tile's demo: two parts differ beside the corner."
+      }
+     ]
+    },
+    {
+     "id": "co-code",
+     "title": "Full-width rows 8; Code block sm 11",
+     "plan": "A2.2",
+     "what": "Full-width rows (Accordion trigger, Step row, Description list's more row) take the row corner, 8. Code block sm drops its half pixel.",
+     "why": "Rows read their height's corner like every other row. 11.5 was the only half-pixel corner in the system.",
+     "values": [
+      [
+       "Accordion trigger, Step row, Description list more row",
+       "6",
+       "8"
+      ],
+      [
+       "Code block sm",
+       "11.5",
+       "11"
+      ]
+     ],
+     "noPicture": "A row's corner shows only on hover, so the first two pairs hold the pointer on the row.",
+     "kind": "fix",
+     "pictures": [
+      {
+       "key": "co-code-1",
+       "id": "hover-accordion-default",
+       "themes": {
+        "light": {
+         "before": {
+          "src": "img/co-code-1-light-before.png",
+          "w": 576,
+          "h": 148
+         },
+         "after": {
+          "src": "img/co-code-1-light-after.png",
+          "w": 576,
+          "h": 148
+         },
+         "zoomBefore": {
+          "src": "img/co-code-1-light-zoom-before.png",
+          "w": 96,
+          "h": 80
+         },
+         "zoomAfter": {
+          "src": "img/co-code-1-light-zoom-after.png",
+          "w": 96,
+          "h": 80
+         }
+        },
+        "dark": {
+         "before": {
+          "src": "img/co-code-1-dark-before.png",
+          "w": 576,
+          "h": 148
+         },
+         "after": {
+          "src": "img/co-code-1-dark-after.png",
+          "w": 576,
+          "h": 148
+         }
+        }
+       },
+       "set": "states",
+       "family": "Accordion",
+       "label": "Default, hovered"
+      },
+      {
+       "key": "co-code-2",
+       "id": "hover-description-list-behavior-show-more",
+       "themes": {
+        "light": {
+         "before": {
+          "src": "img/co-code-2-light-before.png",
+          "w": 296,
+          "h": 132
+         },
+         "after": {
+          "src": "img/co-code-2-light-after.png",
+          "w": 296,
+          "h": 132
+         },
+         "zoomBefore": {
+          "src": "img/co-code-2-light-zoom-before.png",
+          "w": 96,
+          "h": 80
+         },
+         "zoomAfter": {
+          "src": "img/co-code-2-light-zoom-after.png",
+          "w": 96,
+          "h": 80
+         }
+        },
+        "dark": {
+         "before": {
+          "src": "img/co-code-2-dark-before.png",
+          "w": 296,
+          "h": 132
+         },
+         "after": {
+          "src": "img/co-code-2-dark-after.png",
+          "w": 296,
+          "h": 132
+         }
+        }
+       },
+       "set": "states",
+       "family": "Description list",
+       "label": "Show more, hovered"
+      },
+      {
+       "key": "co-code-3",
+       "slug": "code-block",
+       "id": "code-block-size-sm",
+       "themes": {
+        "light": {
+         "before": {
+          "src": "img/co-code-3-light-before.png",
+          "w": 544,
+          "h": 266
+         },
+         "after": {
+          "src": "img/co-code-3-light-after.png",
+          "w": 544,
+          "h": 266
+         },
+         "zoomBefore": {
+          "src": "img/co-code-3-light-zoom-before.png",
+          "w": 80,
+          "h": 60
+         },
+         "zoomAfter": {
+          "src": "img/co-code-3-light-zoom-after.png",
+          "w": 80,
+          "h": 60
+         }
+        },
+        "dark": {
+         "before": {
+          "src": "img/co-code-3-dark-before.png",
+          "w": 544,
+          "h": 266
+         },
+         "after": {
+          "src": "img/co-code-3-dark-after.png",
+          "w": 544,
+          "h": 266
+         }
+        }
+       },
+       "set": "default",
+       "label": "Small",
+       "family": "Code block"
+      }
+     ]
+    },
+    {
+     "id": "co-setting",
+     "title": "The Corner setting means the medium control",
+     "plan": "A2.1",
+     "what": "The Corner number is now the corner of a medium control; its description reads that way. At the defaults that is 10 px on a 32 px control, 8 px on a medium Button at the default type.",
+     "why": "The number used to set a step that no control showed, so a pick of 10 drew corners of 8 and 14. The number now says what you see.",
+     "values": [
+      [
+       "Distinct corner values at the defaults",
+       "35",
+       "32"
+      ]
+     ],
+     "noPicture": "Wording and a count; nothing to picture.",
+     "kind": "fix",
+     "pictures": []
+    }
+   ]
+  },
+  {
+   "id": "type",
+   "title": "Type",
+   "cards": [
+    {
+     "id": "ty-marks",
+     "title": "The smallest size is for marks only",
+     "plan": "A9.2",
+     "what": "Text at the smallest size (11/14 at type 13) is kept for marks: counts in badges, keys, tags. Words that label, explain, warn or locate move up one step, or to the body size where they name something.",
+     "why": "Labels and validation at 11 were the hardest text to read in the system, and sat beside 13 px words of the same role.",
+     "values": [
+      [
+       "Field count and validation",
+       "11/14",
+       "12/16"
+      ],
+      [
+       "Slider ends",
+       "11/14",
+       "12/16, tabular"
+      ],
+      [
+       "Calendar weekday and days",
+       "11/14",
+       "12/16"
+      ],
+      [
+       "Panel sm labels; Palette footer hints; Menu shortcut; Code block sm header",
+       "11/14",
+       "12/16"
+      ],
+      [
+       "Asset row name; meta",
+       "11/14",
+       "13/18; 12/16"
+      ],
+      [
+       "Select group label; Color picker heading",
+       "11/14 400",
+       "13/18 500 muted"
+      ],
+      [
+       "Composer menu path",
+       "11/14",
+       "13/18"
+      ],
+      [
+       "Palette step",
+       "15/22",
+       "13/18"
+      ]
+     ],
+     "kind": "fix",
+     "pictures": [
+      {
+       "key": "ty-marks-1",
+       "slug": "field",
+       "id": "field-count",
+       "themes": {
+        "light": {
+         "before": {
+          "src": "img/ty-marks-1-light-before.png",
+          "w": 434,
+          "h": 216
+         },
+         "after": {
+          "src": "img/ty-marks-1-light-after.png",
+          "w": 434,
+          "h": 216
+         },
+         "zoomBefore": {
+          "src": "img/ty-marks-1-light-zoom-before.png",
+          "w": 140,
+          "h": 56
+         },
+         "zoomAfter": {
+          "src": "img/ty-marks-1-light-zoom-after.png",
+          "w": 140,
+          "h": 56
+         }
+        },
+        "dark": {
+         "before": {
+          "src": "img/ty-marks-1-dark-before.png",
+          "w": 434,
+          "h": 216
+         },
+         "after": {
+          "src": "img/ty-marks-1-dark-after.png",
+          "w": 434,
+          "h": 216
+         }
+        }
+       },
+       "set": "default",
+       "label": "Character count",
+       "family": "Field"
+      },
+      {
+       "key": "ty-marks-2",
+       "slug": "slider",
+       "id": "slider-end-labels",
+       "themes": {
+        "light": {
+         "before": {
+          "src": "img/ty-marks-2-light-before.png",
+          "w": 760,
+          "h": 160
+         },
+         "after": {
+          "src": "img/ty-marks-2-light-after.png",
+          "w": 760,
+          "h": 160
+         }
+        },
+        "dark": {
+         "before": {
+          "src": "img/ty-marks-2-dark-before.png",
+          "w": 760,
+          "h": 160
+         },
+         "after": {
+          "src": "img/ty-marks-2-dark-after.png",
+          "w": 760,
+          "h": 160
+         }
+        }
+       },
+       "set": "default",
+       "label": "End labels",
+       "family": "Slider"
+      }
+     ]
+    },
+    {
+     "id": "ty-joined",
+     "title": "Joined lines at the name's size, muted",
+     "plan": "A9.3 (your pick)",
+     "what": "A line joined to a name (a description under a Switch label, a group's description, a caption, a meta line) is set at the name's size in muted ink. A smaller size is only for text set apart.",
+     "why": "Two sizes in one pair made the second line read as a footnote; one size with a quieter ink keeps the pair together.",
+     "values": [
+      [
+       "Choice and Switch description (md)",
+       "12/16",
+       "13/18"
+      ],
+      [
+       "Group description; Custom select caption; File tile meta; Hover card meta",
+       "12/16",
+       "13/18"
+      ],
+      [
+       "Section heading lede",
+       "12/18",
+       "13/20"
+      ]
+     ],
+     "kind": "fix",
+     "pictures": [
+      {
+       "key": "ty-joined-1",
+       "slug": "switch",
+       "id": "switch-description",
+       "themes": {
+        "light": {
+         "before": {
+          "src": "img/ty-joined-1-light-before.png",
+          "w": 272,
+          "h": 134
+         },
+         "after": {
+          "src": "img/ty-joined-1-light-after.png",
+          "w": 272,
+          "h": 134
+         }
+        },
+        "dark": {
+         "before": {
+          "src": "img/ty-joined-1-dark-before.png",
+          "w": 272,
+          "h": 134
+         },
+         "after": {
+          "src": "img/ty-joined-1-dark-after.png",
+          "w": 272,
+          "h": 134
+         }
+        }
+       },
+       "set": "default",
+       "label": "Description",
+       "family": "Switch"
+      },
+      {
+       "key": "ty-joined-2",
+       "slug": "section-heading",
+       "id": "section-heading-content-lede",
+       "themes": {
+        "light": {
+         "before": {
+          "src": "img/ty-joined-2-light-before.png",
+          "w": 518,
+          "h": 188
+         },
+         "after": {
+          "src": "img/ty-joined-2-light-after.png",
+          "w": 518,
+          "h": 188
+         }
+        },
+        "dark": {
+         "before": {
+          "src": "img/ty-joined-2-dark-before.png",
+          "w": 518,
+          "h": 188
+         },
+         "after": {
+          "src": "img/ty-joined-2-dark-after.png",
+          "w": 518,
+          "h": 188
+         }
+        }
+       },
+       "set": "default",
+       "label": "Lede",
+       "family": "Section heading",
+       "note": "Phase 0 also changed this tile's demo: the lede wraps differently in the before picture."
+      }
+     ]
+    },
+    {
+     "id": "ty-names",
+     "title": "Item names at 500; headings over rows muted",
+     "plan": "A9.4, A9.5",
+     "what": "Names of items in a grid (Asset card, Design card) and Table group headings are 500. A heading over a run of rows (Panel heading, Link groups, Table of contents, Reference list title) is muted.",
+     "why": "One weight table: a name that you pick by is 500, its meta 400. A heading that only groups rows should not compete with the rows.",
+     "values": [
+      [
+       "Asset card and Design card name",
+       "400",
+       "500"
+      ],
+      [
+       "Table group heading",
+       "400",
+       "500"
+      ],
+      [
+       "Panel heading, Link groups label, Table of contents title, Reference list title",
+       "default ink",
+       "muted"
+      ]
+     ],
+     "kind": "fix",
+     "pictures": [
+      {
+       "key": "ty-names-1",
+       "slug": "design-card",
+       "id": "design-card-layout-screen",
+       "themes": {
+        "light": {
+         "before": {
+          "src": "img/ty-names-1-light-before.png",
+          "w": 704,
+          "h": 474
+         },
+         "after": {
+          "src": "img/ty-names-1-light-after.png",
+          "w": 704,
+          "h": 474
+         },
+         "zoomBefore": {
+          "src": "img/ty-names-1-light-zoom-before.png",
+          "w": 220,
+          "h": 60
+         },
+         "zoomAfter": {
+          "src": "img/ty-names-1-light-zoom-after.png",
+          "w": 220,
+          "h": 60
+         }
+        },
+        "dark": {
+         "before": {
+          "src": "img/ty-names-1-dark-before.png",
+          "w": 704,
+          "h": 474
+         },
+         "after": {
+          "src": "img/ty-names-1-dark-after.png",
+          "w": 704,
+          "h": 474
+         }
+        }
+       },
+       "set": "default",
+       "label": "Screen",
+       "family": "Design card"
+      },
+      {
+       "key": "ty-names-2",
+       "slug": "asset-card",
+       "id": "asset-card-content-type",
+       "themes": {
+        "light": {
+         "before": {
+          "src": "img/ty-names-2-light-before.png",
+          "w": 512,
+          "h": 572
+         },
+         "after": {
+          "src": "img/ty-names-2-light-after.png",
+          "w": 512,
+          "h": 572
+         }
+        },
+        "dark": {
+         "before": {
+          "src": "img/ty-names-2-dark-before.png",
+          "w": 512,
+          "h": 572
+         },
+         "after": {
+          "src": "img/ty-names-2-dark-after.png",
+          "w": 512,
+          "h": 572
+         }
+        }
+       },
+       "set": "default",
+       "label": "Type style",
+       "family": "Asset card"
+      }
+     ]
+    },
+    {
+     "id": "ty-titles",
+     "title": "Page header titles and Message headings",
+     "plan": "A9.1",
+     "what": "Page header titles take the title steps at the heading weight. Message gains its own headings.",
+     "why": "Page header sm equalled Section heading and md was 18/500, so page, section and card did not read as three levels. Every shipped product measured sets page titles at 590 to 700.",
+     "values": [
+      [
+       "Page header md",
+       "18/24 500",
+       "26/30 600"
+      ],
+      [
+       "Page header lg",
+       "20/28 500",
+       "32/40 600"
+      ],
+      [
+       "Message h1 to h3",
+       "browser defaults",
+       "16/22 500"
+      ]
+     ],
+     "noPicture": "Message headings are not in the gallery, so they have no picture.",
+     "question": "q-page-title",
+     "kind": "fix",
+     "pictures": [
+      {
+       "key": "ty-titles-1",
+       "slug": "page-header",
+       "id": "page-header-size-md",
+       "themes": {
+        "light": {
+         "before": {
+          "src": "img/ty-titles-1-light-before.png",
+          "w": 200,
+          "h": 170
+         },
+         "after": {
+          "src": "img/ty-titles-1-light-after.png",
+          "w": 200,
+          "h": 170
+         }
+        },
+        "dark": {
+         "before": {
+          "src": "img/ty-titles-1-dark-before.png",
+          "w": 200,
+          "h": 170
+         },
+         "after": {
+          "src": "img/ty-titles-1-dark-after.png",
+          "w": 200,
+          "h": 170
+         }
+        }
+       },
+       "set": "default",
+       "label": "Medium",
+       "family": "Page header"
+      },
+      {
+       "key": "ty-titles-2",
+       "slug": "page-header",
+       "id": "page-header-size-lg",
+       "themes": {
+        "light": {
+         "before": {
+          "src": "img/ty-titles-2-light-before.png",
+          "w": 200,
+          "h": 188
+         },
+         "after": {
+          "src": "img/ty-titles-2-light-after.png",
+          "w": 200,
+          "h": 188
+         }
+        },
+        "dark": {
+         "before": {
+          "src": "img/ty-titles-2-dark-before.png",
+          "w": 200,
+          "h": 188
+         },
+         "after": {
+          "src": "img/ty-titles-2-dark-after.png",
+          "w": 200,
+          "h": 188
+         }
+        }
+       },
+       "set": "default",
+       "label": "Large",
+       "family": "Page header"
+      }
+     ]
+    },
+    {
+     "id": "ty-tracking",
+     "title": "No tracking below 14 px",
+     "plan": "A9.10",
+     "what": "Text under 14 px is set with no added letter spacing; it was 0.25% (0.0325 px at 13). Card, Dialog and Drawer titles, Plan counts and every 13 px label in the system move together.",
+     "why": "The small positive tracking spaced out text that is already open at small sizes, and it came from one shared rule, so removing it there fixes every family at once.",
+     "values": [
+      [
+       "Letter spacing at 13 px",
+       "0.0325 px",
+       "0"
+      ],
+      [
+       "Letter spacing at 12 px",
+       "0.06 px",
+       "0"
+      ]
+     ],
+     "look": "Sub-pixel: compare the enlarged titles; a 13 px word is about a quarter pixel shorter per four letters.",
+     "kind": "fix",
+     "pictures": [
+      {
+       "key": "ty-tracking-1",
+       "slug": "card",
+       "id": "card-content-header-action",
+       "themes": {
+        "light": {
+         "before": {
+          "src": "img/ty-tracking-1-light-before.png",
+          "w": 664,
+          "h": 206
+         },
+         "after": {
+          "src": "img/ty-tracking-1-light-after.png",
+          "w": 664,
+          "h": 206
+         },
+         "zoomBefore": {
+          "src": "img/ty-tracking-1-light-zoom-before.png",
+          "w": 140,
+          "h": 52
+         },
+         "zoomAfter": {
+          "src": "img/ty-tracking-1-light-zoom-after.png",
+          "w": 140,
+          "h": 52
+         }
+        },
+        "dark": {
+         "before": {
+          "src": "img/ty-tracking-1-dark-before.png",
+          "w": 664,
+          "h": 206
+         },
+         "after": {
+          "src": "img/ty-tracking-1-dark-after.png",
+          "w": 664,
+          "h": 206
+         }
+        }
+       },
+       "set": "default",
+       "label": "Header action",
+       "family": "Card"
+      }
+     ]
+    },
+    {
+     "id": "ty-figures",
+     "title": "Figures: tabular, and sans in charts",
+     "plan": "A9.8, A9.11",
+     "what": "Numbers that change or line up use tabular figures. Chart ticks, legend, notes and the donut's centre are set in the sans face; the centre at 400.",
+     "why": "Changing numbers shifted their neighbours as digits changed width. The mono face in charts was a second voice for the same figures the table beside them shows in sans.",
+     "values": [
+      [
+       "Chart ticks, legend, note",
+       "mono 11/14",
+       "sans 11/14"
+      ],
+      [
+       "Donut centre",
+       "mono 18/24 500",
+       "sans 18/24 400, tabular"
+      ],
+      [
+       "Slider ends, Calendar days, Asset row and File tile meta",
+       "proportional",
+       "tabular"
+      ]
+     ],
+     "kind": "fix",
+     "pictures": [
+      {
+       "key": "ty-figures-1",
+       "slug": "chart",
+       "id": "chart-kind-donut",
+       "themes": {
+        "light": {
+         "before": {
+          "src": "img/ty-figures-1-light-before.png",
+          "w": 746,
+          "h": 438
+         },
+         "after": {
+          "src": "img/ty-figures-1-light-after.png",
+          "w": 746,
+          "h": 438
+         }
+        },
+        "dark": {
+         "before": {
+          "src": "img/ty-figures-1-dark-before.png",
+          "w": 746,
+          "h": 438
+         },
+         "after": {
+          "src": "img/ty-figures-1-dark-after.png",
+          "w": 746,
+          "h": 438
+         }
+        }
+       },
+       "set": "default",
+       "label": "Donut",
+       "family": "Chart"
+      }
+     ]
+    },
+    {
+     "id": "ty-marks-text",
+     "title": "Tag 11; Kbd and code lines on tokens",
+     "plan": "A9.9",
+     "what": "Tag text is 11 at every density. Kbd in small and menu sizes reads the smallest text token instead of a fixed 11/10. Code block sm and Diff lines are 11/16.",
+     "why": "Tag was 13 at Default but 11 at Compact. Fixed literals did not grow with the type setting.",
+     "values": [
+      [
+       "Tag text, Default",
+       "13/18",
+       "11/14"
+      ],
+      [
+       "Kbd sm and in menus",
+       "11/10 fixed",
+       "11/14 at type 13, grows with type"
+      ],
+      [
+       "Code block sm and Diff line",
+       "11/17",
+       "11/16"
+      ]
+     ],
+     "noPicture": null,
+     "kind": "fix",
+     "pictures": [
+      {
+       "key": "ty-marks-text-1",
+       "slug": "tag",
+       "id": "tag-default",
+       "themes": {
+        "light": {
+         "before": {
+          "src": "img/ty-marks-text-1-light-before.png",
+          "w": 126,
+          "h": 100
+         },
+         "after": {
+          "src": "img/ty-marks-text-1-light-after.png",
+          "w": 126,
+          "h": 100
+         },
+         "zoomBefore": {
+          "src": "img/ty-marks-text-1-light-zoom-before.png",
+          "w": 120,
+          "h": 56
+         },
+         "zoomAfter": {
+          "src": "img/ty-marks-text-1-light-zoom-after.png",
+          "w": 120,
+          "h": 56
+         }
+        },
+        "dark": {
+         "before": {
+          "src": "img/ty-marks-text-1-dark-before.png",
+          "w": 126,
+          "h": 100
+         },
+         "after": {
+          "src": "img/ty-marks-text-1-dark-after.png",
+          "w": 126,
+          "h": 100
+         }
+        }
+       },
+       "set": "default",
+       "label": "Default",
+       "family": "Tag"
+      },
+      {
+       "key": "ty-marks-text-2",
+       "slug": "kbd",
+       "id": "kbd-sm",
+       "themes": {
+        "light": {
+         "before": {
+          "src": "img/ty-marks-text-2-light-before.png",
+          "w": 116,
+          "h": 92
+         },
+         "after": {
+          "src": "img/ty-marks-text-2-light-after.png",
+          "w": 116,
+          "h": 92
+         },
+         "zoomBefore": {
+          "src": "img/ty-marks-text-2-light-zoom-before.png",
+          "w": 100,
+          "h": 52
+         },
+         "zoomAfter": {
+          "src": "img/ty-marks-text-2-light-zoom-after.png",
+          "w": 100,
+          "h": 52
+         }
+        },
+        "dark": {
+         "before": {
+          "src": "img/ty-marks-text-2-dark-before.png",
+          "w": 116,
+          "h": 92
+         },
+         "after": {
+          "src": "img/ty-marks-text-2-dark-after.png",
+          "w": 116,
+          "h": 92
+         }
+        }
+       },
+       "set": "default",
+       "label": "Small",
+       "family": "Kbd"
+      }
+     ]
+    },
+    {
+     "id": "ty-label-value",
+     "title": "A label beside a value is muted 400",
+     "plan": "A9.13",
+     "what": "In every Description list layout the term is muted 400 and the value leads in the default ink. Meter's label is 400.",
+     "why": "In the framed and justified layouts the term was 500 in the default ink, so the label outweighed the value it names.",
+     "values": [
+      [
+       "Description list term (framed, justified)",
+       "500 default ink",
+       "400 muted"
+      ],
+      [
+       "Meter label",
+       "500",
+       "400"
+      ]
+     ],
+     "kind": "fix",
+     "pictures": [
+      {
+       "key": "ty-label-value-1",
+       "slug": "description-list",
+       "id": "description-list-layout-justified",
+       "themes": {
+        "light": {
+         "before": {
+          "src": "img/ty-label-value-1-light-before.png",
+          "w": 768,
+          "h": 266
+         },
+         "after": {
+          "src": "img/ty-label-value-1-light-after.png",
+          "w": 768,
+          "h": 266
+         }
+        },
+        "dark": {
+         "before": {
+          "src": "img/ty-label-value-1-dark-before.png",
+          "w": 768,
+          "h": 266
+         },
+         "after": {
+          "src": "img/ty-label-value-1-dark-after.png",
+          "w": 768,
+          "h": 266
+         }
+        }
+       },
+       "set": "default",
+       "label": "Justified",
+       "family": "Description list"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "ink",
+   "title": "Ink and dark",
+   "cards": [
+    {
+     "id": "in-washes",
+     "title": "Dark washes lighter",
+     "plan": "A4 (your pick: 8% / 14%)",
+     "what": "In dark, the hover wash is 8% and the selected wash 14%.",
+     "why": "At 14% and 19% the dark washes were about twice the range of shipped products measured (5 to 8% and 10 to 15%); on #020202 a hovered row landed near #262626.",
+     "values": [
+      [
+       "Dark hover wash",
+       "14%",
+       "8%"
+      ],
+      [
+       "Dark selected wash",
+       "19%",
+       "14%"
+      ]
+     ],
+     "noPicture": null,
+     "kind": "fix",
+     "pictures": [
+      {
+       "key": "in-washes-1",
+       "id": "hover-menu-default",
+       "themes": {
+        "dark": {
+         "before": {
+          "src": "img/in-washes-1-dark-before.png",
+          "w": 332,
+          "h": 156
+         },
+         "after": {
+          "src": "img/in-washes-1-dark-after.png",
+          "w": 332,
+          "h": 156
+         }
+        }
+       },
+       "set": "states",
+       "family": "Menu",
+       "label": "Default, hovered"
+      },
+      {
+       "key": "in-washes-2",
+       "id": "hover-nav-default",
+       "themes": {
+        "dark": {
+         "before": {
+          "src": "img/in-washes-2-dark-before.png",
+          "w": 292,
+          "h": 156
+         },
+         "after": {
+          "src": "img/in-washes-2-dark-after.png",
+          "w": 292,
+          "h": 156
+         }
+        }
+       },
+       "set": "states",
+       "family": "Nav",
+       "label": "Default, hovered"
+      },
+      {
+       "key": "in-washes-3",
+       "id": "hover-list-box-default",
+       "themes": {
+        "dark": {
+         "before": {
+          "src": "img/in-washes-3-dark-before.png",
+          "w": 576,
+          "h": 156
+         },
+         "after": {
+          "src": "img/in-washes-3-dark-after.png",
+          "w": 576,
+          "h": 156
+         }
+        }
+       },
+       "set": "states",
+       "family": "List box",
+       "label": "Default, hovered"
+      }
+     ]
+    },
+    {
+     "id": "in-float",
+     "title": "Dark floating surfaces one step up, one edge",
+     "plan": "A7.1, A7.2 (your pick)",
+     "what": "In dark, menus, popovers, toasts, dialogs and drawers sit one layer step above the page, with one 16% edge. The page stays near black.",
+     "why": "They painted the page color, separated only by the edge and a shadow that does not show on near black.",
+     "values": [
+      [
+       "Dark floating ground",
+       "#020202",
+       "#0c0c0c"
+      ],
+      [
+       "Dark floating edge",
+       "12.5%",
+       "16%"
+      ]
+     ],
+     "kind": "fix",
+     "pictures": [
+      {
+       "key": "in-float-1",
+       "slug": "menu",
+       "id": "menu-default",
+       "themes": {
+        "dark": {
+         "before": {
+          "src": "img/in-float-1-dark-before.png",
+          "w": 320,
+          "h": 268
+         },
+         "after": {
+          "src": "img/in-float-1-dark-after.png",
+          "w": 320,
+          "h": 268
+         },
+         "zoomBefore": {
+          "src": "img/in-float-1-dark-zoom-before.png",
+          "w": 96,
+          "h": 80
+         },
+         "zoomAfter": {
+          "src": "img/in-float-1-dark-zoom-after.png",
+          "w": 96,
+          "h": 80
+         }
+        }
+       },
+       "set": "default",
+       "label": "Default",
+       "family": "Menu"
+      },
+      {
+       "key": "in-float-2",
+       "slug": "popover",
+       "id": "popover-field",
+       "themes": {
+        "dark": {
+         "before": {
+          "src": "img/in-float-2-dark-before.png",
+          "w": 704,
+          "h": 314
+         },
+         "after": {
+          "src": "img/in-float-2-dark-after.png",
+          "w": 704,
+          "h": 314
+         }
+        }
+       },
+       "set": "default",
+       "label": "With field",
+       "family": "Popover"
+      },
+      {
+       "key": "in-float-3",
+       "slug": "toast",
+       "id": "toast-neutral",
+       "themes": {
+        "dark": {
+         "before": {
+          "src": "img/in-float-3-dark-before.png",
+          "w": 328,
+          "h": 136
+         },
+         "after": {
+          "src": "img/in-float-3-dark-after.png",
+          "w": 328,
+          "h": 136
+         }
+        }
+       },
+       "set": "default",
+       "label": "Default",
+       "family": "Toast"
+      }
+     ]
+    },
+    {
+     "id": "in-muted",
+     "title": "Dark muted text one step back",
+     "plan": "A3.1, A3.2",
+     "what": "Dark muted text is #b9b9b9. Placeholders, shortcuts and other meta read the new subtle ink: in light #696969, in dark the same as muted.",
+     "why": "#c5c5c5 was only 1.49:1 from the default ink, so muted text barely differed from body text in dark. It stops at #b9b9b9 because darker greys fail the dark contrast floor for content text (Lc 60): q-floor.",
+     "values": [
+      [
+       "Dark muted",
+       "#c5c5c5 (12.0:1)",
+       "#b9b9b9 (10.6:1)"
+      ],
+      [
+       "Muted to default, dark",
+       "1.49",
+       "1.70"
+      ],
+      [
+       "Placeholder, light",
+       "#646464",
+       "#696969"
+      ],
+      [
+       "Placeholder, dark",
+       "#c5c5c5",
+       "#b9b9b9"
+      ]
+     ],
+     "question": "q-floor",
+     "kind": "fix",
+     "pictures": [
+      {
+       "key": "in-muted-1",
+       "slug": "empty-state",
+       "id": "empty-state-default",
+       "themes": {
+        "dark": {
+         "before": {
+          "src": "img/in-muted-1-dark-before.png",
+          "w": 200,
+          "h": 274
+         },
+         "after": {
+          "src": "img/in-muted-1-dark-after.png",
+          "w": 200,
+          "h": 274
+         }
+        }
+       },
+       "set": "default",
+       "label": "Default",
+       "family": "Empty state"
+      },
+      {
+       "key": "in-muted-3",
+       "slug": "input",
+       "id": "input-default",
+       "themes": {
+        "light": {
+         "before": {
+          "src": "img/in-muted-3-light-before.png",
+          "w": 760,
+          "h": 124
+         },
+         "after": {
+          "src": "img/in-muted-3-light-after.png",
+          "w": 760,
+          "h": 124
+         }
+        },
+        "dark": {
+         "before": {
+          "src": "img/in-muted-3-dark-before.png",
+          "w": 760,
+          "h": 124
+         },
+         "after": {
+          "src": "img/in-muted-3-dark-after.png",
+          "w": 760,
+          "h": 124
+         }
+        }
+       },
+       "set": "default",
+       "label": "Default",
+       "family": "Input"
+      }
+     ]
+    },
+    {
+     "id": "in-fields",
+     "title": "Dark danger and warning on fields",
+     "plan": "A10.2",
+     "what": "In dark, an invalid or warning field's edge and the vivid danger and warning inks are stronger.",
+     "why": "The pale pink and peach edges read as a soft tint, not as a problem to fix.",
+     "values": [
+      [
+       "Invalid field edge, dark (lightness)",
+       "0.832",
+       "0.788"
+      ],
+      [
+       "Warning field edge, dark (lightness)",
+       "0.827",
+       "0.785"
+      ],
+      [
+       "Vivid danger, dark",
+       "#feb0b3",
+       "#fe999e"
+      ],
+      [
+       "Vivid warning, dark",
+       "#fdb47e",
+       "#fe9f53"
+      ]
+     ],
+     "noPicture": null,
+     "kind": "fix",
+     "pictures": [
+      {
+       "key": "in-fields-1",
+       "slug": "input",
+       "id": "input-invalid",
+       "themes": {
+        "dark": {
+         "before": {
+          "src": "img/in-fields-1-dark-before.png",
+          "w": 760,
+          "h": 124
+         },
+         "after": {
+          "src": "img/in-fields-1-dark-after.png",
+          "w": 760,
+          "h": 124
+         }
+        }
+       },
+       "set": "default",
+       "label": "Invalid",
+       "family": "Input"
+      },
+      {
+       "key": "in-fields-2",
+       "slug": "input",
+       "id": "input-warning",
+       "themes": {
+        "dark": {
+         "before": {
+          "src": "img/in-fields-2-dark-before.png",
+          "w": 760,
+          "h": 124
+         },
+         "after": {
+          "src": "img/in-fields-2-dark-after.png",
+          "w": 760,
+          "h": 124
+         }
+        }
+       },
+       "set": "default",
+       "label": "Validation, warning",
+       "family": "Input"
+      }
+     ]
+    },
+    {
+     "id": "in-plate",
+     "title": "A plate for a card's picture",
+     "plan": "A10.1",
+     "what": "A picture placeholder sits on its own plate, one step off the card in both themes.",
+     "why": "In light #fafafa on white measured 1.04:1 and vanished. In dark #282828 read as a solid block.",
+     "values": [
+      [
+       "Picture plate, light",
+       "#fafafa",
+       "#f3f3f3"
+      ],
+      [
+       "Picture plate, dark",
+       "#282828",
+       "#161616"
+      ]
+     ],
+     "kind": "fix",
+     "pictures": [
+      {
+       "key": "in-plate-1",
+       "slug": "card",
+       "id": "card-layout-thumbnail",
+       "themes": {
+        "light": {
+         "before": {
+          "src": "img/in-plate-1-light-before.png",
+          "w": 664,
+          "h": 260
+         },
+         "after": {
+          "src": "img/in-plate-1-light-after.png",
+          "w": 664,
+          "h": 260
+         }
+        },
+        "dark": {
+         "before": {
+          "src": "img/in-plate-1-dark-before.png",
+          "w": 664,
+          "h": 260
+         },
+         "after": {
+          "src": "img/in-plate-1-dark-after.png",
+          "w": 664,
+          "h": 260
+         }
+        }
+       },
+       "set": "default",
+       "label": "Thumbnail",
+       "family": "Card"
+      }
+     ]
+    },
+    {
+     "id": "in-alert",
+     "title": "Alert titles in the default ink",
+     "plan": "A3.4",
+     "what": "A toned Alert keeps its tone on the icon and the edge. Its title and body are in the default ink. Four status icons are a step brighter in light.",
+     "why": "Alert's title was in the tone ink while Toast's was in the default ink. One rule now: tone colors the mark, never the words.",
+     "values": [
+      [
+       "Success, danger, warning, info Alert title",
+       "tone ink",
+       "default ink"
+      ]
+     ],
+     "noPicture": null,
+     "kind": "fix",
+     "pictures": [
+      {
+       "key": "in-alert-1",
+       "slug": "alert",
+       "id": "alert-success",
+       "themes": {
+        "light": {
+         "before": {
+          "src": "img/in-alert-1-light-before.png",
+          "w": 406,
+          "h": 136
+         },
+         "after": {
+          "src": "img/in-alert-1-light-after.png",
+          "w": 406,
+          "h": 136
+         }
+        },
+        "dark": {
+         "before": {
+          "src": "img/in-alert-1-dark-before.png",
+          "w": 406,
+          "h": 136
+         },
+         "after": {
+          "src": "img/in-alert-1-dark-after.png",
+          "w": 406,
+          "h": 136
+         }
+        }
+       },
+       "set": "default",
+       "label": "Success",
+       "family": "Alert"
+      }
+     ]
+    },
+    {
+     "id": "in-edges",
+     "title": "Empty boxes keep their edge in dark",
+     "plan": "A10.3",
+     "what": "Empty slots and grids take the strong control edge. The Tags and Dividers strokes are 10%. Stepper's connector uses the control stroke.",
+     "why": "On near black, empty OTP slots measured 1.6:1 and dividers at 7.5% disappeared.",
+     "values": [
+      [
+       "OTP empty slot edge, dark",
+       "#333333",
+       "#4b4b4b"
+      ],
+      [
+       "Tags and Dividers stroke",
+       "7.5%",
+       "10%"
+      ],
+      [
+       "Stepper connector",
+       "Dividers rule",
+       "control stroke"
+      ]
+     ],
+     "noPicture": null,
+     "kind": "fix",
+     "pictures": [
+      {
+       "key": "in-edges-1",
+       "slug": "otp-field",
+       "id": "otp-field-default",
+       "themes": {
+        "dark": {
+         "before": {
+          "src": "img/in-edges-1-dark-before.png",
+          "w": 504,
+          "h": 124
+         },
+         "after": {
+          "src": "img/in-edges-1-dark-after.png",
+          "w": 504,
+          "h": 124
+         }
+        }
+       },
+       "set": "default",
+       "label": "Default",
+       "family": "OTP field"
+      },
+      {
+       "key": "in-edges-2",
+       "slug": "separator",
+       "id": "separator-full-width",
+       "themes": {
+        "dark": {
+         "before": {
+          "src": "img/in-edges-2-dark-before.png",
+          "w": 298,
+          "h": 276
+         },
+         "after": {
+          "src": "img/in-edges-2-dark-after.png",
+          "w": 298,
+          "h": 276
+         }
+        }
+       },
+       "set": "default",
+       "label": "Horizontal, full width",
+       "family": "Separator"
+      },
+      {
+       "key": "in-edges-3",
+       "slug": "stepper",
+       "id": "stepper-default",
+       "themes": {
+        "dark": {
+         "before": {
+          "src": "img/in-edges-3-dark-before.png",
+          "w": 832,
+          "h": 102
+         },
+         "after": {
+          "src": "img/in-edges-3-dark-after.png",
+          "w": 832,
+          "h": 102
+         }
+        }
+       },
+       "set": "default",
+       "label": "Default",
+       "family": "Stepper"
+      },
+      {
+       "key": "in-edges-4",
+       "slug": "alignment-picker",
+       "id": "alignment-picker-default",
+       "themes": {
+        "dark": {
+         "before": {
+          "src": "img/in-edges-4-dark-before.png",
+          "w": 240,
+          "h": 176
+         },
+         "after": {
+          "src": "img/in-edges-4-dark-after.png",
+          "w": 240,
+          "h": 176
+         }
+        }
+       },
+       "set": "default",
+       "label": "Default",
+       "family": "Alignment picker"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "motion",
+   "title": "Motion",
+   "cards": [
+    {
+     "id": "mo-overlays",
+     "title": "Overlays: shorter enter, a real exit curve",
+     "plan": "A5.1 (your pick), A5.4",
+     "what": "Anchored surfaces (Menu, Popover, Hover card, the select and combobox lists, Date panel) enter in 140, Dialog in 210, and every exit uses the exit curve. Fades never overshoot; Spring is a measured spring.",
+     "why": "Menus entered in 210 and left on the same ease-out curve; shipped products measured open menus in 100 to 150 or not at all, and an exit should speed up as it leaves, not linger.",
+     "motion": true,
+     "kind": "fix",
+     "pictures": []
+    },
+    {
+     "id": "mo-lists",
+     "title": "A list highlight lands at once",
+     "plan": "A5.3",
+     "what": "The highlight moving through Menu, Context menu, List box, the select lists, Command palette, Nav and Tree view appears and leaves with no fade.",
+     "why": "A fading highlight trailed behind the pointer and the keys.",
+     "values": [
+      [
+       "Row highlight, in / out",
+       "91 / 140",
+       "0 / 0"
+      ],
+      [
+       "Every control's color leave",
+       "140",
+       "70"
+      ]
+     ],
+     "kind": "fix",
+     "pictures": []
+    },
+    {
+     "id": "mo-keyboard",
+     "title": "Opened by a key: no scale",
+     "plan": "A5.2",
+     "what": "A surface opened from the keyboard fades in without growing: Menu, Popover, the select lists, Context menu, a Tooltip opened by focus, and Command palette opened with ⌘K.",
+     "why": "From a key the eye is already on the spot; the scale only delayed reading. Dialog and Drawer still scale when opened by a key (see Not done).",
+     "values": [
+      [
+       "Menu opened by a key",
+       "210 scale and fade",
+       "140 fade, no scale"
+      ],
+      [
+       "Command palette by ⌘K",
+       "280 scale and fade",
+       "140 fade"
+      ]
+     ],
+     "kind": "fix",
+     "pictures": []
+    },
+    {
+     "id": "mo-press",
+     "title": "Press on the plate, the label still",
+     "plan": "A5.6 (your pick), A5.7",
+     "what": "A pressed Button or Chip shrinks its plate; the label stays the same size. The give stays 0.97.",
+     "why": "Shrinking the label made the words wobble on every click.",
+     "values": [
+      [
+       "Pressed solid Button, plate width (measured)",
+       "105.66",
+       "102.49"
+      ],
+      [
+       "Label width while pressed",
+       "shrank with the plate",
+       "85.66, unchanged"
+      ],
+      [
+       "Give",
+       "0.97",
+       "0.97"
+      ]
+     ],
+     "question": "q-press-give",
+     "kind": "fix",
+     "pictures": []
+    }
+   ]
+  },
+  {
+   "id": "focus",
+   "title": "Focus and targets",
+   "cards": [
+    {
+     "id": "fo-ring",
+     "title": "A ring never sits flush on a fill of its own color",
+     "plan": "A6.1, A6.2",
+     "what": "On a solid Button, a checked Checkbox or Radio, an on Switch and Composer's send, the ring stands off by the gap under Hug, Halo and Inset. Under Inset the ring is in the on-fill color, inside, with 1 px of fill outside it.",
+     "why": "With Selection Neutral the ring and a dark solid fill are the same color, so at Hug the ring added nothing you could see (1:1).",
+     "noPicture": "The pair shows the default ring (Hug) in light only: the capture timed out opening the gallery for Inset and for dark on both builds, so those pairs are not shown.",
+     "values": [
+      [
+       "Solid fills, Hug and Halo",
+       "2 px at 0, flush",
+       "2 px, off by the gap"
+      ],
+      [
+       "Solid fills, Inset",
+       "inside at −2 in the fill's own color",
+       "on-fill color inside at −3"
+      ],
+      [
+       "Gap and Bold",
+       "2 px off",
+       "unchanged"
+      ],
+      [
+       "Accordion trigger, Step row, Token row, Board add row",
+       "drawn outside",
+       "inside, by its own width"
+      ],
+      [
+       "Approval option, Prompt suggestions",
+       "plate and ring",
+       "ring alone"
+      ],
+      [
+       "Tag picker field",
+       "ring hugged",
+       "at the field offset"
+      ],
+      [
+       "Time field segment",
+       "fill only",
+       "fill and inset ring"
+      ],
+      [
+       "Editable text, editing",
+       "1 px literal",
+       "the field ring"
+      ]
+     ],
+     "kind": "fix",
+     "pictures": [
+      {
+       "key": "fo-hug",
+       "id": "fo-hug",
+       "themes": {
+        "light": {
+         "before": {
+          "src": "img/fo-hug-light-before.png",
+          "w": 1504,
+          "h": 124
+         },
+         "zoomBefore": {
+          "src": "img/fo-hug-light-zoom-before.png",
+          "w": 72,
+          "h": 10
+         },
+         "after": {
+          "src": "img/fo-hug-light-after.png",
+          "w": 1504,
+          "h": 124
+         },
+         "zoomAfter": {
+          "src": "img/fo-hug-light-zoom-after.png",
+          "w": 72,
+          "h": 10
+         }
+        }
+       },
+       "set": "states",
+       "family": "Button, Input, Checkbox",
+       "label": "Solid, soft, outline and ghost Button, Input, Checkbox, checked Checkbox, focused, Focus ring Hug (default)"
+      }
+     ]
+    },
+    {
+     "id": "fo-contrast",
+     "title": "Focus answers Contrast More",
+     "plan": "A6.3",
+     "what": "Under Contrast More (and the system's increased contrast) every ring is 3 px and off by the gap; field rings are 3 px and the halo widens by 3.",
+     "why": "Contrast More raised edges and text but left the ring, the one mark keyboard users rely on, as it was.",
+     "values": [
+      [
+       "Every ring under Contrast More",
+       "the option's width and offset",
+       "3 px, off by the gap"
+      ],
+      [
+       "Field rings",
+       "2 px",
+       "3 px"
+      ]
+     ],
+     "noPicture": "No pair: the capture could not open the gallery with Contrast set (it timed out on both builds).",
+     "kind": "fix",
+     "pictures": []
+    },
+    {
+     "id": "fo-forced",
+     "title": "Forced colors cover every fill-only state",
+     "plan": "A6.4",
+     "what": "Custom select and Date picker triggers and the Tag picker field show a Highlight focus; List box grid, Custom select grid, Approval and Design card selected states draw a Highlight edge.",
+     "why": "These states were drawn with fills alone, which forced colors removes, so focus and selection vanished.",
+     "values": [
+      [
+       "Focus in forced colors: Custom select and Date picker triggers, Tag picker field",
+       "none",
+       "Highlight"
+      ],
+      [
+       "Selected in forced colors: List box grid, Custom select grid and preview ring, Approval, Design card",
+       "none",
+       "Highlight edge"
+      ]
+     ],
+     "noPicture": "No pair: the capture could not open the gallery a second time with forced colors (it timed out on both builds).",
+     "kind": "fix",
+     "pictures": []
+    },
+    {
+     "id": "fo-targets",
+     "title": "One shared hit target: 24 pointer, 44 touch",
+     "plan": "A11.2",
+     "what": "Small parts gained an invisible 24 px target (44 on a touch screen). Nothing you see moves.",
+     "why": "Twelve parts were under 24 px, the smallest target a pointer can hit reliably.",
+     "values": [
+      [
+       "Parts that gained the target",
+       "",
+       "Input action, Chip label and remove, Nav row actions, Segmented items, soft Toggle group items, Breadcrumb links and ellipsis, Color swatch picker cells, Step row, Checkbox and Radio controls, Slider on touch"
+      ],
+      [
+       "Gaps closed",
+       "12 open",
+       "10 of 12 closed"
+      ],
+      [
+       "Still under 24",
+       "",
+       "Number field steppers (16 each), Split button's 12-wide trigger"
+      ]
+     ],
+     "noPicture": "Invisible by design: nothing to picture.",
+     "question": "q-steppers",
+     "kind": "fix",
+     "pictures": []
+    }
+   ]
+  }
+ ],
+ "motionRows": [
+  [
+   "Menu, Popover, Hover card, select and combobox lists, Date panel",
+   "210 scale and fade",
+   "140 scale and fade",
+   "140",
+   "140 on the exit curve"
+  ],
+  [
+   "The same, opened by a key",
+   "210 scale and fade",
+   "140 fade, no scale",
+   "140",
+   "140 fade, exit curve"
+  ],
+  [
+   "Context menu",
+   "140 scale and fade",
+   "140 fade",
+   "140",
+   "140, exit curve"
+  ],
+  [
+   "Native Select picker",
+   "210",
+   "140",
+   "140",
+   "140, exit curve"
+  ],
+  [
+   "Tooltip, hover",
+   "140",
+   "140",
+   "0",
+   "0"
+  ],
+  [
+   "Dialog, Confirm dialog (and scrim)",
+   "280",
+   "210",
+   "210",
+   "140, exit curve"
+  ],
+  [
+   "Command palette, click",
+   "280",
+   "140",
+   "210",
+   "140, exit curve"
+  ],
+  [
+   "Command palette, ⌘K",
+   "280 scale and fade",
+   "140 fade",
+   "210",
+   "140, exit curve"
+  ],
+  [
+   "Drawer",
+   "350",
+   "350",
+   "280",
+   "280, exit curve"
+  ],
+  [
+   "Toast",
+   "350",
+   "350",
+   "210",
+   "210, exit curve"
+  ],
+  [
+   "Row highlight in lists, Nav, Tree view",
+   "91",
+   "0",
+   "140",
+   "0"
+  ],
+  [
+   "Every control's color leave",
+   "",
+   "",
+   "140",
+   "70"
+  ],
+  [
+   "Button and Chip press",
+   "whole control, 91",
+   "plate only, 91",
+   "140",
+   "140 (spring under Spring)"
+  ],
+  [
+   "Progress and Meter fill",
+   "translate and width, 350",
+   "translate, 350",
+   "",
+   ""
+  ]
+ ],
+ "motionMeasured": "Measured in the app at Speed 210, Easing Subtle: Menu settles in 232 ms (pointer) and 166 ms (key), first frame scale 0.984 by pointer and none by key; Dialog 299 ms; Command palette by ⌘K 199 ms with no scale; Drawer 433 ms in, 317 ms out; Toast 417 ms in, 233 ms out.",
+ "tryList": [
+  "Open a Menu with the pointer, then with Enter from its trigger: the second should not grow.",
+  "Run the arrow keys through a long Menu or Nav: the highlight should jump with no trail.",
+  "Press and hold a solid Button: the plate gives, the label stays put.",
+  "Open Command palette with ⌘K, then by clicking its trigger.",
+  "Close a Dialog: it should leave faster than it came."
+ ],
+ "questions": [
+  {
+   "id": "q-floor",
+   "title": "Dark: keep the contrast floor for content text?",
+   "body": "The third text ink you picked, the dark muted step back and dark danger's strength all stop at the dark contrast floor for content text (APCA Lc 60). Below it no grey reads as content on near black, so dark has two inks for text where light has three.",
+   "options": [
+    {
+     "label": "Keep the floor; two inks in dark",
+     "detail": "Muted and subtle are the same #b9b9b9 in dark; nothing goes under the floor."
+    },
+    {
+     "label": "Allow meta text below the floor in dark",
+     "detail": "A dark subtle ink about #909090 for placeholders, shortcuts and timestamps; it fails the floor."
+    }
+   ],
+   "rec": 0
+  },
+  {
+   "id": "q-page-title",
+   "title": "Page header md title: 26/30 or a new 24 step?",
+   "body": "The plan said 24/32; the type ramp has no 24, so the md title uses the existing 26/30 step at 600.",
+   "options": [
+    {
+     "label": "Keep 26/30",
+     "detail": "No new step in the ramp."
+    },
+    {
+     "label": "Add a 24 step",
+     "detail": "A new title size between 20 and 26, used by Page header md."
+    }
+   ],
+   "rec": 0
+  },
+  {
+   "id": "q-card-media",
+   "title": "Card's picture: a 4 corner, or bleed to the card's edge?",
+   "body": "Card's picture corner is now 4 (the floor) inside a 10 card.",
+   "options": [
+    {
+     "label": "Keep the 4 corner, inset",
+     "detail": "As built: the picture sits inside the card's padding with a small corner."
+    },
+    {
+     "label": "Bleed to the card's corner",
+     "detail": "The picture meets the card's edge with no inset and takes the card's corner."
+    }
+   ]
+  },
+  {
+   "id": "q-compact-table",
+   "title": "Compact Table frame: 16 or back to 12?",
+   "body": "A Compact Table's frame goes 12 → 16, which reverses the 2026-10-12 cap.",
+   "options": [
+    {
+     "label": "Keep 16",
+     "detail": "Every Table frame reads the block corner."
+    },
+    {
+     "label": "Restore the Compact cap",
+     "detail": "12 at Compact, 16 elsewhere."
+    }
+   ]
+  },
+  {
+   "id": "q-composer-corner",
+   "title": "Composer and Approval at 19 while Card is 10",
+   "body": "Composer and Approval keep their 19 corner.",
+   "options": [
+    {
+     "label": "Leave for Phase 2's one chat card",
+     "detail": "Phase 2 builds one shared chat card and sets its corner once."
+    },
+    {
+     "label": "Follow Card now",
+     "detail": "Both drop to 10 in this phase."
+    }
+   ],
+   "rec": 0
+  },
+  {
+   "id": "q-reference-rhythm",
+   "title": "Reference list pitch: 22 or 18?",
+   "body": "Reference list's line pitch went 18 → 22.",
+   "options": [
+    {
+     "label": "Keep 22",
+     "detail": "Each source reads as its own entry."
+    },
+    {
+     "label": "Return to 18",
+     "detail": "Denser; sources run together as before."
+    }
+   ]
+  },
+  {
+   "id": "q-press-give",
+   "title": "Press give: 0.97 or 0.98?",
+   "body": "Press give stays 0.97; the plan's text mentioned 0.98.",
+   "options": [
+    {
+     "label": "Keep 0.97",
+     "detail": "As before, now on the plate only."
+    },
+    {
+     "label": "0.98",
+     "detail": "A smaller give."
+    }
+   ],
+   "rec": 0
+  },
+  {
+   "id": "q-steppers",
+   "title": "Number field steppers and Split button trigger",
+   "body": "Number field's two steppers (16 each) and Split button's 12-wide trigger cannot each have a 24 target without a visible change.",
+   "options": [
+    {
+     "label": "Leave for Phase 2 with their families",
+     "detail": "Their rebuilds change the parts anyway."
+    },
+    {
+     "label": "Widen now",
+     "detail": "The steppers and the trigger grow so each reaches 24."
+    }
+   ],
+   "rec": 0
+  },
+  {
+   "id": "q-soft-surface-pad",
+   "title": "Soft Surface with nothing painted: keep its padding?",
+   "body": "A soft Surface paints nothing at Layer contrast 0, by your decision, yet still pads 14.",
+   "options": [
+    {
+     "label": "Keep the padding",
+     "detail": "Content keeps its place when Layer contrast rises."
+    },
+    {
+     "label": "Drop it when nothing is painted",
+     "detail": "No inset around an invisible box at Layer contrast 0."
+    }
+   ]
+  },
+  {
+   "id": "q-regular-weight",
+   "title": "Try a regular weight of 430 to 450?",
+   "body": "Trying it needs a new Regular weight setting.",
+   "options": [
+    {
+     "label": "Build the setting as a trial in Phase 2",
+     "detail": "A Regular weight setting, 400 by default, to compare 430 to 450 on screens."
+    },
+    {
+     "label": "Leave regular at 400",
+     "detail": "No new setting."
+    }
+   ]
+  }
+ ],
+ "notDone": [
+  "Secondary and tertiary still name the accent; the rename away from it is not done.",
+  "Tabs has no status mark yet; a toned Tab still colors its label.",
+  "Dark soft Surface stays flat, by decision.",
+  "Hover, pressed and touch targets of 44 where neighbours are too close (Number field steppers, Split button trigger): q-steppers.",
+  "Progress keeps its rounded translate instead of scale (A5.7).",
+  "Dialog and Drawer still scale when opened by a key (A5.2).",
+  "Ten of twelve small-target gaps closed; two remain (above).",
+  "The style count measured on 53 families rose from 46 to 50 instead of falling: the reduction needs Phase 2's shared parts.",
+  "Calendar day, Description list property row and Message headings were confirmed in source and tests, not in pictures (no gallery tile or capture shows them)."
+ ],
+ "corrections": [
+  "During the phase a soft Surface briefly painted at Layer contrast 0; it was restored the same day, so the Surface pictures from that window are not used here."
+ ],
+ "checks": "Pictures: every pair is the same tile, theme, density and crop, before on main (655907af, so it also predates Phase 0) and after on the final Phase 1 build, both captured on 2026-11-12 at true scale. Every check passed on the final tree: build, typecheck, 43,733 token tests, contract tests, 816 React tests, 146 app tests, behaviour 351. Rendered: 48 known text-centring failures left for Phase 2, 1 known dark-edge sample, all snapshots as intended."
+}

@@ -95,7 +95,7 @@ area  div.area-card grid (flex + container when horizontal): border + padding (=
                corners = card radius − border
     overlay    absolute corner at the card inset (inside media); on the card, two insets in
   content      padding = (control-md − 1cap) / 2 on every side ("content pad")
-    title      trimmed to its cap on top; the last text line trimmed to its descent
+    title      trimmed to its cap on top; the line that ends the card on its baseline, 2 in (B1.4); a group's last line to its descent
       link     a.area-card__link; ::after absolute, inset −border, card radius, z 1
     header     heading + action slot: one control tall, overhanging the content pad; a control
                in it reaches the inset at the end
@@ -143,7 +143,7 @@ no change in any of 30 nodes (hidden window).
 |---|---|---|---|
 | paint | `bg-surface`; edge neutral 100 (#ee; dark 750); shadow `--area-shadow-resting`, the Elevation axis's resting role: `0 0 2` + `0 2 4` at half the Elevation step in % (1.5% at the default 3; 0 at step 0) (axes/elevation.ts, surface.css:72) | Owner (lighter edge, faint shadow); Notion's 8% ring composites to #eb; Figma reference 0 0 8 0 at 2% | The halo drops 2px so it pools under the card, and a contact line gives the lighter edge a bottom. A Surface axis role since audit S10: the Flat preset sets it to `none`, the other presets keep the recipe. The edge stays lighter than Table's #e2 frame because the halo carries it (audit S7b, surface.css:58); Composer and Code block share this edge (audit S7a) |
 | media fill | neutral 25 (#fa; dark 800), media and well alike | Owner | The same rung as the stripe and code slots, but those roles mean something else, so a private property |
-| radius / inset | 22·24·28 / 6·8·12: Button md radius (capped) + (inset + 8) × `radius-concentric` | Owner rule 2026-09-28; audit S3 (2026-09-30): square at Sharp, finite at Pill | Was 12·16·24 from the container role |
+| radius / inset | the frame recipe's card corner (`surface.css`, plan B1.1): 0.6 × the text inset at Corner 10, moving with the setting (× factor ÷ 10/32), at least the setting's least corner, never rounder than `radius-container`, to even pixels: 8 · 10 · 12 at the default (14 · 18 · 22 insets), 6 · 8 · 12 Compact (12 · 16 · 20); md 0 at Sharp, 4 at Corner 4, 14 at Corner 14, 16 at Pill. Media inset 5 · 7 · 10, media corner the recipe's picture corner, the card's less it, floored at 4 and to even pixels (4 at the default) | Plan A2.3, owner 2026-11-11: a resting card never out-rounds the floating corner (Popover, Menu 16); square at Sharp | Was the container plus the media inset less 4 less 2 × ui-dense: 16 · 18 · 21 at the default, media 11 |
 | space (text inset) | **one space on the card, every side, every slot**: sm 16, md 20, lg 24 (compact 12 / 16 / 20), the card's padding; header, title, content, list, footer and controls sit there in CardContent or straight in the Card; media steps back out to the media inset (6 / 8 / 12) by the pull (space − inset); first line trimmed to its cap, last to its descent | Owner 2026-10-30: "the padding is always wrong and incorrect for any generated visual … consistent, generic, simple, and modular layouts", five references padding 20–24 at a 36 control (0.6 of a control; Area's 30 control gives 20); shadcn's Card puts every slot straight in the card | Was inset + 8 (16 at md) inside CardContent only, so a CardHeader or footer placed in the Card sat at the 8 inset |
 | header action | a visible control (soft, solid, outline) sits on the text column's corner, concentric with the card (8 + 16 = 24 at md), with the title centred on it; ghost controls (no plate at rest) centre on the title's cap instead, so the title keeps the 16 cap line, their plate ending on the text column; a small card's action is a small control | Popover, Toast, Dialog corner controls; owner 2026-09-28 (the carousel title sat 26 from the top) | Ghost controls used the corner rule too |
 | footer | last slot, on the space; a section gap above, and it drops to the bottom of a taller card; plain text in it is body size; `spread` pushes its first and last children to the ends (Stack's word) | References: a person and a value, a label and a mark at the foot (owner, 2026-10-30) | Was on the text frame, 12 above |
@@ -422,3 +422,36 @@ headers stand one step over their rows.
   line, the title read as the paragraph's first line. Every surface title now stands one step (4) off its copy: 12.8
   baseline to cap beside the copy's 8.8. Compared at 0, 4 and 6 on the review page; the owner picked 4 ("4 is right",
   2026-11-06; Cursor's confirm sets its message 4 under its title).
+- 2026-11-11 · system evaluation A2.3 (owner: keep Corner 10, cap resting cards at the floating corner) · the corner is min(radius-container, 0.6 × the text inset): md 18 → 10, sm 16 → 8, lg 21 → 12 at the default; the media corner follows, 11 → 4 (the floor) at md. Concentric nested media at the floor is plan B1.1. card.css; cohesion.test.mjs.
+- 2026-11-11 · system evaluation A1.1, A11.1 · gaps read whole steps: md section 16 (was 14), lg 20 (was 18), sm 12 (was 10); the well's and carousel's items 8 apart at md (was 7; sm 6, lg 12), the media inset itself unchanged; Compact unchanged. The heading's drop beside a header control rounds to a whole pixel (10, was 10.38). The title join and the carousel's offset under a header are still margins against the card's gap: they need a text group in React (plan A1.3).
+
+### 2026-11-11 · Ink, dark and colour (system plan, Phase 1)
+
+- **What changed:** The media placeholder paints `bg-plate` (plan A10.1, finding VC7): one perceived step off the card in both themes, #f2f2f2 on white (was neutral 25, #fafafa, 1.04:1) and #161616 on the near-black card (was the 800 rung, #282828).
+- **Why:** docs/research/system-evaluation-2026-11-11 (README §5); the owner took every recommendation on 2026-11-11.
+- **Verdict:** awaiting the owner.
+
+## Shared parts (plan B2), 2026-11-13
+
+- **List glyphs (B2.4, G10).** A list item's glyph is a box one body line tall, centred in it (the box technique), instead of margin arithmetic: the same pixels.
+
+## 2026-11-13 · The frame recipe and the text-only bottom (system plan, Phase 2, B1.1, B1.2, B1.4)
+
+- Card reads its ladder (space, media inset, section gap), its corner, its picture corner and its title pair from the
+  frame recipe in `surface.css`, which Surface and every card-like frame share. The size classes no longer restate the
+  corner. At Corner 10 every value is unchanged; above it the corner now follows the setting (md 14 at Corner 14 and 16
+  at Pill; Phase 1 held 10 there), and the picture corner rounds to even pixels.
+- A Card's frame publishes the recipe's nested corner to a Surface inside it: 8 (a row's), where it published its media
+  corner, 4 (VC19). The picture keeps its inset 4 (owner, 2026-11-13).
+- Its title is the item name (plan B1.2): strong in the default ink, from the shared part.
+- The line that ends a text-only card ends on its baseline less a fixed 2 allowance (owner pick, "Baseline plus
+  allowance"): baseline 16 from the bottom at md, where the descent trim set it 22.6 (VC18). A group's last line keeps
+  its descent, so the gap to a footer or list after it is unchanged.
+
+## Shared bars and corners (plan B4), 2026-11-14
+
+- B4.3: a ghost action ending the header pulls out by its gutter, so its glyph ends on the text column: 7 out with a md icon action (5 / 7 / 9 at Compact / Default / Comfortable; a small card's sm action 4 / 5 / 7). A soft or outline action keeps its plate on the column. Its vertical place (the cap's centre, 2026-09-28) is unchanged.
+
+## State paint (plan B7.11), 2026-11-14
+
+- The reveal overlay hides only inside `@media (hover: hover)`; focus inside shows it at once (0s; it faded in on fast).

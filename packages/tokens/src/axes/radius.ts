@@ -2,8 +2,10 @@
  * Radius: the system's one corner setting (owner, 2026-10-03: "i just want 1 corner radius setting
  * that controls everything").
  *
- * A preset is one number, the corner it gives the default 32px Button: 0 (Sharp), 2, 4, 6, 8
- * (default), 10, 12, 14, and Pill (owner, 2026-10-04: one number, everything scales off it).
+ * A preset is one number, the corner it gives a 32px control (the medium Button at type 14): 0 (Sharp), 2, 4, 6, 8,
+ * 10 (default since 2026-10-25), 12, 14, and Pill (owner, 2026-10-04: one number, everything scales off it). At the
+ * default type 13 the medium control is 30 and draws 8 at Corner 10; that real medium corner is radius-step (plan A2.1,
+ * 2026-11-11), and every full-width row, in a menu or not, takes its own height's corner, as a Button of that height.
  * Every other corner follows from it, so each preset is one coherent theme:
  *
  * - Shapes on the height ladder scale with their height: corner = setting x height / 32, rounded
@@ -36,15 +38,18 @@ const STEPS: ReadonlyArray<readonly [string, number, number]> = [
   ["pill", 16, 24],
 ];
 
+/** The corner the medium control draws at the default type 13, where it is 30 tall (emit/base.ts, the ladder corner). */
+const mediumAtDefault = (button: number) => button === 0 ? 0 : Math.max(2, Math.floor((30 * button) / 32 / 2) * 2);
+
 const describe = (id: string, button: number, surface: number) =>
   id === "0" ? "Sharp: square corners everywhere."
-    : id === "pill" ? "Every control is a pill; surfaces stay finite at 24, as round as their pill rows allow."
-      : `${button}px on a medium Button, ${surface}px on surfaces${id === "10" ? " (default)" : ""}.`;
+    : id === "pill" ? "Half of every height in even pixels: a 32px control is a pill (14px on a medium Button at the default type); surfaces stay finite at 24."
+      : `${button}px on a 32px control (${mediumAtDefault(button)}px on a medium Button at the default type), ${surface}px on surfaces${id === "10" ? " (default)" : ""}.`;
 
 export const RADIUS_AXIS: AxisDefinition = {
   id: "radius",
   label: "Corner",
-  description: "One corner setting, from Sharp to Pill: controls scale with their height, surfaces and nested shapes follow.",
+  description: "One corner setting, from Sharp to Pill: the corner of a 32px control; every control scales with its height, and rows, surfaces and nested shapes follow.",
   defaultPreset: "10",
   namespaces: [
     "--area-radius-factor",

@@ -72,6 +72,8 @@ width, height from its 16px line (`kbd.css:89-102`).
 
 ## Measurements
 
+**Current (2026-11-13, one mark).** Kbd is on the one mark recipe (inset.css, "One mark"). Heights are the mark ladder, the small text line plus 0 / 4 / 8: 14 / 18 / 22 at type 12 and 13, 16 / 20 / 24 at 14, 18 / 22 / 26 at 15, 20 / 24 / 28 at 16, the same at Compact, Default and Comfortable (Compact's md was 14 and its lg 18 until 2026-11-13). The text side is (H − 6) / 2 from the outer edge, edge counted once: 4 / 6 / 8 at type 13. The cap sits on the marks' whole-pixel baseline, edge + round((H − 2 · edge + 1cap) / 2). The tables below are the source evidence they were set from. Each key's legend is text-xs on a 14 line (11/14 at type 13; was a 10 line), trimmed and placed on the baseline. Side 6 at md and 4 at sm, from the outer edge with the 1px transparent border counted once (were 4 and 3). Corner: the chip role, radius-small, at most H / 2: 6 at md and at sm at the default Corner 10 (sm was 4), square at Corner 0. Approval's option keys are Kbd md (18 square) in their 22 slot (were a 22 key at the plate's concentric 2).
+
 `node scripts/capture-compare.mjs --slots shell kbd/*.json` (trimmed):
 
 | slot · property | default | small | quiet | chord | on-color (in accent solid Button) | on-emphasis (in Tooltip) | notion · shortcut-hint |
@@ -307,3 +309,13 @@ the keycap read as touching its words.
   do it in 2px increments." Measured at the 14 keycap (11px 500 system-ui): caps 7.75 tall, so 3.1 above and below; a
   glyph's ink starts about 1 inside its box. 2px steps give only 2 (ink 3, tight) or 4 (ink 5); 3 puts the ink about 4
   from the side, one more than above. A literal `/* spec */` value, below the layout scale's 2px steps on purpose.
+
+## Review note, 2026-11-11 (type rules, plan A9)
+
+- **What changed:** `sm` and every Kbd in a menu row read the mark text (`text-xs`) instead of a fixed 11: no change at type 13, keys grow with Type 14 to 16 as Badge and Count do (plan A9.9, findings T8, VA16). The 10 line stays the keycap's geometry.
+- **Why:** the system evaluation's type rules (docs/research/system-evaluation-2026-11-11, section 5, A9), owner-approved
+  2026-11-11; the rules are in DESIGN_SYSTEM.md ("Ink and weight", "Size and shape", "Text pairs") and the type skill.
+
+## One mark, 2026-11-13
+
+Plan B5.1 (and B5.2, B5.3 where they apply; docs/research/system-evaluation-2026-11-11): the family moved onto the shared mark recipe in inset.css and its own copy of the side, baseline, corner and text was removed. Values above, under Measurements.

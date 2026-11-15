@@ -71,7 +71,7 @@ Spacing: header, 6, bar, 6, description (Field's stack; 4 in compact). Area adds
 | Slot · property | Area value | Basis | Reason when it differs from the basis |
 |---|---|---|---|
 | layout | label and value on one row; the bar; the description; each Field's stack apart (`ui-stack`, 6; 4 in compact) | Peer Field (label, control, description); Figma's card (caption under the bar) | ChatGPT puts the description and value on a line above the bar, 4 and 5 apart; Area keeps its Field spacing (owner, review round 6) |
-| label | 14/20 500 default ink (the UI type, strong): the meter's title at body size, named in the weight rule (O4, 2026-10-12) | ChatGPT | Field's label, a control's name, stays 400 |
+| label | the UI line at 400 in the default ink, Progress's and Field's label (plan A9.13, 2026-11-11; it was 500, the meter's title at body size, O4 2026-10-12) | Field, Progress | ChatGPT's usage label is 500 |
 | value | the UI type (14/20) in the muted ink, tabular numbers, at the end of the label's row | Peer File upload's percentage (UI type); Spectrum, React Aria (value beside the label) | ChatGPT's 12/16 value read too small (owner, review round 6) |
 | description | Field's description, 12/16 muted, under the bar | Peer Field; Figma's caption | — |
 | bar | Progress's: rail `edge-control`, sm 4 / md 6 / lg 8, pill, `selection-solid` fill | ChatGPT 6 pill; peer Progress | Progress's rail rather than ChatGPT's 10% ink, so a meter and a progress bar match |
@@ -211,3 +211,22 @@ the value now ends the label's row.
 - **What changed:** `size` (sm / md / lg, the track's Progress tier) is in the manifest and on the root (`area-meter--md`).
 - **Why:** manifest.ts:252 lacked the size Meter.tsx:47 takes. From the components audit's internal peer comparison (`docs/research/components-audit-2026-11-07/internal.md`); the owner took every recommendation ("Take all recs", 2026-11-07).
 - **Verdict:** awaiting the owner.
+
+## Review note, 2026-11-11 (type rules, plan A9)
+
+- **What changed:** the label is the UI line at 400 in the default ink, Progress's and Field's label; it was 500 (plan A9.13, finding VS14). The value stays muted and tabular.
+- **Why:** the system evaluation's type rules (docs/research/system-evaluation-2026-11-11, section 5, A9), owner-approved
+  2026-11-11; the rules are in DESIGN_SYSTEM.md ("Ink and weight", "Size and shape", "Text pairs") and the type skill.
+
+## Review note, 2026-11-11 (motion, plan A5)
+
+- **What changed:** Progress's fill: `translate` only, never the width (A5.7).
+- **Why:** the system evaluation's motion items (docs/research/system-evaluation-2026-11-11, section 5, A5), owner-approved
+  2026-11-11; the rules are in docs/MOTION.md (Tokens, Roles, Recipes) and kept by cohesion.test.mjs and
+  tests/behaviour/suites/motion.test.mjs. The motion tables above are history; these values are current.
+
+### 2026-11-14 · Shared parts, leftovers (system plan, Phase 2, wave 3)
+
+- The label-to-value gap is `gap-row` (8 / 12 / 16). Values at type 13 Compact / Default / Comfortable; unchanged at the default.
+- Why: docs/research/system-evaluation-2026-11-11 (plan B6.1, B6.5, B8.2, B2.2; README §5, phase2/leftovers.md); the owner took every recommendation on 2026-11-11. Fix the rule, not the instance.
+- Verdict: awaiting the owner.

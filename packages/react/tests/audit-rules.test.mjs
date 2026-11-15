@@ -118,11 +118,12 @@ test('a Field reaches the controls inside an InputGroup (audit B-14)', async () 
   assert.match(html, /class="area-number-field[^"]*"[^>]*data-invalid=""/);
 });
 
-test('field paint: read-only keeps rest paint, soft disabled gains no edge, actions are concentric (audit B-7, B-9, B-10)', () => {
-  assert.match(css, /\.area-input\[data-read-only\] \{ cursor: default; \}/);
-  assert.match(css, /\.area-input--soft\[data-disabled\] \{ --_border: transparent; \}/);
+test('field paint: read-only takes the shell\'s one cue, soft disabled gains no edge, actions are concentric (audit B-7, B-9, B-10; plan B7.8, B7.10)', () => {
+  // The field shell's disabled and read-only recipe (input.css; cohesion "one disabled and read-only field recipe").
+  assert.match(css, /:is\(\.area-input, \.area-number-field, \.area-otp-field, \.area-tag-picker__field, \.area-textarea, \.area-custom-select__trigger, \.area-date-picker__trigger\)\[data-read-only\]:not\(\[data-disabled\], :disabled\) \{[^}]*cursor: default;/);
+  assert.match(css, /\.area-input\.area-input--soft[^{]*\{[^}]*--_border-disabled: transparent;/);
   assert.match(css, /--_action: calc\(var\(--_height\) - var\(--area-space-8\)\)/);
-  assert.match(css, /\.area-input\[data-disabled\] :is\(\.area-input__icon, \.area-input__action-button\) \{ color: var\(--area-fg-disabled\); \}/);
+  assert.match(css, /:is\(\.area-input, \.area-number-field, \.area-otp-field, \.area-tag-picker__field\)\[data-disabled\] :is\(\.area-input__icon, \.area-input__affix, \.area-input__action-button,[^{]*\{\s*color: var\(--area-fg-disabled\);/);
 });
 
 test('a removable chip keeps ref and props on one control, style on the chip; ChipGroup is a labelled group (audit C-23, C-24)', async () => {
@@ -136,7 +137,7 @@ test('a removable chip keeps ref and props on one control, style on the chip; Ch
 test('SliderRange is a component: two named native ranges, distinct field names, size and form name (audit C-12)', async () => {
   const { SliderRange } = await import('../dist/modules/index.js');
   const html = renderToString(h(SliderRange, { defaultValue: [20, 60], size: 'sm', name: 'price' }));
-  assert.match(html, /^<div class="area-slider-range area-slider-range--sm" style="--_slider-range-start:0.2;--_slider-range-end:0.6"/);
+  assert.match(html, /^<div class="area-slider-range area-slider-range--sm area-slider-range--rail" style="--_slider-range-start:0.2;--_slider-range-end:0.6"/);
   assert.equal((html.match(/type="range"/g) ?? []).length, 2);
   assert.equal((html.match(/name="price"/g) ?? []).length, 2);
   assert.match(html, /aria-label="Minimum value"/);

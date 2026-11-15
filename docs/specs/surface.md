@@ -57,19 +57,21 @@ root   <div>  owns: corner, inset (padding less the border), fill, edge, shadow,
 
 One element; children are the content. Inset equations (border counted once):
 
-- text inset = Card's media inset + Card's step: sm 6 + 8 = 14, md 8 + 8 = 16, lg 12 + 8 = 20 (Compact 10 / 12 / 14).
+- The frame recipe's ladder (`surface.css`, plan B1.1), Card's: text inset sm 14, md 18, lg 22 at the default type 13
+  (16 / 20 / 24 at type 14, 12 / 16 / 20 at Compact); gap between blocks 12 / 16 / 20 (8 / 12 / 16 Compact).
 - padding = text inset − border.
-- A Surface whose direct children (or a Stack's) include a Surface uses its size's media inset instead (6 / 8 / 12),
-  as Card holds its media: the nested Surface carries its own inset for its text.
+- A Surface whose direct children (or a Stack's) include a Surface uses its size's media inset instead (5 / 7 / 10 at the
+  default), as Card holds its media: the nested Surface carries its own inset for its text.
+- Its title pair is Card's: CardTitle and CardDescription in a CardContent (13/18 strong over 13/18 muted, 4 apart).
 
 ## Decisions
 
 | Slot · property | Area value | Basis | Reason when it differs from the basis |
 |---|---|---|---|
-| corner, outermost | Card's corner per size: 14 / 16 / 20 (Compact 10 / 12 / 14), capped at 1.5 × the text inset | peer: Card (`surface.css` `--_card-radius`, `--_card-corner`) | |
-| corner, nested | max(radius-floor, parent corner − parent inset): 16 → 8 → 4 at the default | DESIGN_SYSTEM.md Size and shape: "Nested radius is concentric with a floor"; peer: Card media (16 − 8 = 8) | measured 2026-10-19: subtracting the padding instead gave an odd 9 |
-| corner, in a Card | the Card's media corner (Card corner − Card inset): 16 − 8 = 8 | peer: Card media | a Surface at the Card's media inset is placed as its media is |
-| corner, in a Panel | max(radius-floor, Panel corner − Panel inset): 12 − 14 → 4; a flush Panel 0 → 4 | peer: Panel (`--_panel-corner`, `--_inset`) | |
+| corner, outermost | the frame recipe's card corner, Card's: 0.6 × the text inset at Corner 10, moving with the setting, never rounder than `radius-container`: sm 8, md 10, lg 12 at the default; md 0 at Sharp, 14 at Corner 14, 16 at Pill | plan B1.1 (2026-11-13): Surface takes Card's inset, gap, corner and title pair, decided once; plan A2.3 | Was `radius-container` (16) over a 14 inset, beside Card's 10 over 18 (VC5) |
+| corner, nested | the recipe's nested corner: max(min(radius-row, own corner), own corner − the inset it holds the Surface at), to even pixels: 10 → 8 → 8 at the default | plan B1.1, VC19: a nested frame never lands at the floor's 4 | Was max(radius-floor, parent − inset): 16 → 8 → 4 |
+| corner, in a Card | the same nested corner from the Card: 8 in its 10 | peer: Card | Was the Card's media corner, 4 |
+| corner, in a Panel | the same from the Panel: 8 in its 16 (16 − 14 is under a row's corner); a flush Panel 0 → 0 | peer: Panel (`--_panel-corner`, `--_inset`) | Was the floor, 4 |
 | inset | text inset per size; media inset when holding Surfaces | peer: Card | |
 | `surface` fill · edge | `bg-surface`; `border-card` at `border-width` (Stroke width) | peer: Card | |
 | `surface` shadow | `shadow-edge` + `shadow-resting` when outermost; `shadow-edge` only when nested | peer: Card at the top; one edge per boundary when nested | a nested raised plane sits on the same fill, so its line is its edge |
@@ -88,8 +90,8 @@ A `div` with no role. Pass `role`, `aria-label` or `aria-labelledby` when the re
 `group`). Forced colours: the edge follows Card's repair (`border-width` at least 1px under raised contrast).
 
 A Card inside a Surface reads the corner its parent publishes, so it nests concentrically; its size, insets and
-parts are unchanged, and a Surface holding a Card sets it at the media inset. Card and Panel publish a corner too (Card
-its media corner, Panel its corner less its inset), so a Surface inside either nests from it. A Card reads the chain
+parts are unchanged, and a Surface holding a Card sets it at the media inset. Card and Panel publish a corner too (the
+recipe's nested corner from their own corner and inset), so a Surface inside either nests from it. A Card reads the chain
 only with a Surface around it: a Card in a Card or a Panel with no Surface keeps its own corner, and a card in a media
 well keeps the well's.
 
@@ -142,3 +144,26 @@ their screens are the evidence for the rules, not for an API.
 - **Answer:** keep Flat flat (owner, 2026-10-29). A soft well shows once Layers is above 0. No change.
 - **2026-11-01:** confirmed when fills moved to the `well` ground (color-system study): a soft Surface is a region and stays
   recessed, flat at Layers 0.
+- 2026-11-11 · system evaluation A2.3 · the outermost corner caps at radius-container: md 18 → 16, lg 21 → 16 at the default; nested Surfaces follow (16 − inset, floored). surface.css.
+- 2026-11-11 · system evaluation A1.1 · the block gap reads `gap-row` (12 at the default, was 10), never more than the inset.
+
+### 2026-11-11 · Ink, dark and colour (system plan, Phase 1)
+
+- **What changed:** nothing in the end. Plan A10.1 moved a soft Surface onto the well ground so it painted in dark at Layer contrast 0; that reversed the owner's 2026-10-29 decision (Flat keeps soft Surfaces flat) and was restored the same day. A soft Surface paints the recessed tone, the page at Layer contrast 0 in both themes, and steps off above 0; `layers.test.ts` and `cohesion.test.mjs` ("Layer contrast 0 keeps a soft Surface flat") hold it.
+- **Open for the owner:** a soft Surface that paints nothing still pads 14, so its text edges sit 14 in from its neighbours' (finding VC6).
+- **Verdict:** awaiting the owner.
+
+### 2026-11-13 · One frame recipe (system plan, Phase 2, B1.1)
+
+- Surface reads the frame recipe in `surface.css` with Card and every card-like frame: Card's inset ladder (md 18, was
+  14), section gap (md 16, was 12), corner (md 10, was 16) and title pair (Card's parts; the demos had Section heading's
+  16/22 over 12).
+- Nested Surfaces, and a Surface in a Card or a Panel, take the recipe's nested corner, a row's 8 at the default, where
+  the floor's 4 read as a rectangle in a round well (VC19).
+- Unchanged by the owner's pick (2026-11-13): a soft Surface paints nothing at Layer contrast 0 and keeps its padding.
+
+### 2026-11-14 · Shared parts, leftovers (system plan, Phase 2, wave 3)
+
+- The frame recipe's name gap (`--_fr-name-gap`) is `ui-cluster` (6 / 8 / 10; 10 / 10 / 12 at type 16), so a name under a picture moves with its peers. Values at type 13 Compact / Default / Comfortable; unchanged at the default.
+- Why: docs/research/system-evaluation-2026-11-11 (plan B6.1, B6.5, B8.2, B2.2; README §5, phase2/leftovers.md); the owner took every recommendation on 2026-11-11. Fix the rule, not the instance.
+- Verdict: awaiting the owner.

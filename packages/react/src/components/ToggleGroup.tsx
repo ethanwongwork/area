@@ -23,13 +23,13 @@ export interface ToggleGroupProps extends Omit<HTMLAttributes<HTMLDivElement>, "
   value?: string[];
   /** The toggles pressed at first (uncontrolled). */
   defaultValue?: string[];
-  /** Called with the next set of pressed values. */
-  /** The pressed values after a press, and the press (Governance § 4). */
+  /** Called with the pressed values after a press, and the press. */
   onValueChange?: (value: string[], event: SyntheticEvent) => void;
   /** `multiple`: any number pressed (bold, italic, underline). `single`: at most one, and pressing it again releases it. A choice that always has one answer is a Segmented. */
   selectionMode?: "multiple" | "single";
   /** `soft`: Segmented's track, pressed toggles raised. `outline`: joined at their edges (ButtonGroup's look). `ghost`: apart, as a Toolbar group. */
   variant?: ToggleGroupVariants["variant"];
+  /** Every toggle's height and type: `md` (default), `sm` or `lg`. */
   size?: ToggleGroupVariants["size"];
   /** Fill the container; the toggles share its width. */
   fullWidth?: boolean;

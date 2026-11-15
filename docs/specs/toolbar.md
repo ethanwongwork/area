@@ -304,3 +304,22 @@ them.
   corner, shown while it is hovered or holds focus. Hidden, Tab still reaches it.
 - **Why:** you took the audit's recommendation; it's a toolbar placed over its host, so it is an option, not a new
   family. Code block keeps its own copy, since swapping would move and frame it.
+
+### 2026-11-11 · Ink, dark and colour (system plan, Phase 1)
+
+- **What changed:** In dark it paints the floating ground (`bg-float`, plan A7.2): a step above the layers under it, #0c0c0c on the near-black page at the defaults (was `bg-surface`, the page's own #020202); light is unchanged. Its dark edge is one line (plan A7.1): the frame takes the dark rim's strength (16% at Shadow 8) and the rim is no longer drawn outside it, where it had made a two-tone 2px edge. (the floating surface)
+- **Why:** docs/research/system-evaluation-2026-11-11 (README §5); the owner took every recommendation on 2026-11-11.
+- **Verdict:** awaiting the owner.
+
+## Corner and the frame recipe (plan B1.1 hand-over), 2026-11-14
+
+Toolbar keeps its own corner, min(commands' corner + inset × concentric, height / 2 + inset): the frame recipe's
+*around* role (held + mat × concentric) except for its cap. The around role stops at the container corner (16 at the
+default); a toolbar is a bar of controls and becomes a pill when its controls are (Pill: 19 at md), which the container
+cap would stop at 16, leaving pill buttons in a rounded bar. At every Corner below Pill the two give the same value.
+
+### 2026-11-14 · Shared parts, leftovers (system plan, Phase 2, wave 3)
+
+- The floating surface takes the one floating stack (popup.css): the same Floating edge drawn inside (`--_float-frame`) before `--_float-shadow`. The same values as before; Elevation, the shadow controls and a material's layers now reach it as they reach every floating surface.
+- Why: docs/research/system-evaluation-2026-11-11 (plan B6.1, B6.5, B8.2, B2.2; README §5, phase2/leftovers.md); the owner took every recommendation on 2026-11-11. Fix the rule, not the instance.
+- Verdict: awaiting the owner.

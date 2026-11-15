@@ -2,15 +2,19 @@
 @layer area.components {
   .area-indicator { --_bg: var(--area-danger-solid); --_fg: var(--area-fg-on-danger); position: relative; isolation: isolate; display: inline-flex; align-items: center; justify-content: center; flex: none; box-sizing: border-box; border-radius: var(--area-radius-full); vertical-align: middle; background: var(--_bg); color: var(--_fg); white-space: nowrap; }
   .area-indicator--dot { --_dot: 6px; /* spec: indicator.md dot size */ inline-size: var(--_dot); block-size: var(--_dot); }
+  /* The count is Count on a tone's solid (plan B5.3): the ladder's md rung (18 at type 13, at every density; it was a
+     fixed 16), always a pill, Count's text side and regular weight (it was 500, a second weight for one number), the
+     marks' whole-pixel cap baseline (inset.css, "One mark"), tabular digits. One character drops its sides, a circle,
+     as Count's (React sets data-single). */
   .area-indicator--count {
-    --_height: var(--area-mark-sm); /* spec: indicator.md count height (Fluent small), the 16 mark rung */
-    --_gutter: 4px; /* spec: Fluent small padding-inline */
-    /* Count sm's type, 12/16 at weight 500 (audit S20 B, owner 2026-09-30): the 12px floor Chip
-       initials already keep; was Fluent small's 10/14. */
-    --_text: var(--area-control-xs-text);
-    --_leading: var(--area-control-xs-leading);
-    min-inline-size: var(--_height); block-size: var(--_height); padding-inline: var(--_gutter);
-    font: var(--area-weight-strong) var(--_text)/var(--_leading) var(--area-font-sans); font-variant-numeric: tabular-nums;
+    --_mark-height: var(--area-mark-label-md);
+    min-inline-size: var(--_mark-height); block-size: var(--_mark-height); padding-inline: var(--_mark-side);
+    border-radius: var(--_mark-corner);
+    font: var(--area-weight-regular) var(--_mark-text)/var(--_mark-leading) var(--area-font-sans); font-variant-numeric: tabular-nums;
+  }
+  .area-indicator--count[data-single] { padding-inline: 0; }
+  @supports (text-box: trim-both cap alphabetic) {
+    .area-indicator--count { display: inline-block; text-align: center; }
   }
   .area-indicator[data-border] { box-shadow: 0 0 0 var(--area-space-2) var(--area-bg-surface); }
   /* Processing: a copy of the mark grows out from behind it and fades (docs/MOTION.md, "pulse":
@@ -38,10 +42,10 @@
      minus half the 6px dot). */
   .area-indicator-anchor--circular { --_shift: 0; --_inset: calc(var(--area-indicator-anchor-offset, var(--area-space-0)) - 2px); /* spec */ }
   /* Owner feedback 2026-09-27: a count on a circle read as too far in. Its centre now sits on the
-     circle's edge at 45°: r(1 − 1/√2) from the corner, less half the 16px count (32px avatar: 1.3
+     circle's edge at 45°: r(1 − 1/√2) from the corner, less half the count (32px avatar: 1.3
      further out than the 2px rule). Insets in % resolve against the owner's box. */
   .area-indicator-anchor--circular:has(> .area-indicator-anchor__indicator > .area-indicator--count) {
-    --_inset: calc(var(--area-indicator-anchor-offset, var(--area-space-0)) + 50% * (1 - 0.7071) - 8px); /* spec */
+    --_inset: calc(var(--area-indicator-anchor-offset, var(--area-space-0)) + 50% * (1 - 0.7071) - var(--area-mark-label-md) / 2); /* spec: half the count */
   }
   .area-indicator-anchor--rectangular:has(> .area-indicator-anchor__indicator > .area-indicator--dot) {
     --_shift: 0; --_inset: calc(var(--area-indicator-anchor-offset, var(--area-space-0)) + 5px); /* spec */
@@ -62,7 +66,7 @@
     position: absolute; display: inline-flex; pointer-events: none; border-radius: var(--area-radius-full);
     translate: round(nearest, calc(var(--_x) * var(--_shift)), 1px) round(nearest, calc(var(--_y) * var(--_shift)), 1px);
     scale: 1; opacity: 1;
-    transition: scale var(--area-duration-fast) var(--area-ease-out), opacity var(--area-fade-fast) var(--area-ease-out);
+    transition: scale var(--area-duration-fast) var(--area-ease-out), opacity var(--area-fade-fast) var(--area-ease-effects);
   }
   .area-indicator-anchor__indicator > :is(.area-indicator, .area-presence) { box-shadow: 0 0 0 var(--area-stroke-width) var(--area-bg-surface); /* owner: cutout matches the 1px icon stroke; required, so `stroke-width` */ }
   .area-indicator-anchor--top-end > .area-indicator-anchor__indicator { inset-block-start: var(--_edge); inset-inline-end: var(--_edge); }
@@ -77,7 +81,7 @@
   /* Tabs align their label to the tab's end edge, so a corner-centred count covers the text.
      The anchor reserves the count's width plus a 2px gap after the tab and holds the count
      there, top-aligned (owner feedback 2026-09-25). */
-  .area-indicator-anchor:has(> .area-tabs__tab) { --_shift: 0; --_inset: 0px; padding-inline-end: calc(16px + 2px); /* spec: count height + gap */ }
+  .area-indicator-anchor:has(> .area-tabs__tab) { --_shift: 0; --_inset: 0px; padding-inline-end: calc(var(--area-mark-label-md) + var(--area-space-2)); /* the count's height and a 2 gap */ }
   .area-indicator-anchor[data-invisible] > .area-indicator-anchor__indicator { scale: 0.6; opacity: 0; }
   @media (prefers-reduced-motion: reduce) { .area-indicator-anchor__indicator { transition: none; } }
   @media (forced-colors: active) { .area-indicator { background: Highlight; color: HighlightText; } .area-indicator-anchor__indicator { outline: var(--area-space-2) solid Canvas; } }

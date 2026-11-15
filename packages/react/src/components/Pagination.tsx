@@ -51,6 +51,7 @@ export interface PaginationProps extends Omit<HTMLAttributes<HTMLElement>, "onCh
   page?: number;
   /** The first page shown when uncontrolled. */
   defaultPage?: number;
+  /** Called with the page a press goes to and the press. */
   onPageChange?: (page: number, event: MouseEvent<HTMLElement>) => void;
   /** Pages each side of the current one in the `pages` layout. */
   siblingCount?: number;
@@ -60,9 +61,14 @@ export interface PaginationProps extends Omit<HTMLAttributes<HTMLElement>, "onCh
   getHref?: (page: number) => string;
   /** `pages` lists page numbers; `compact` shows "Page 2 of 10" between the steps. */
   layout?: PaginationVariants["layout"];
+  /** The steps' height and type: `md` (default), `sm` or `lg`. */
   size?: PaginationVariants["size"];
   /** Show "Previous" and "Next" beside their chevrons. The compact layout always shows chevrons only. */
   stepLabels?: boolean;
+  /**
+   * The words, to translate them: the landmark's name (`nav`), `previous`, `next`, a page's name (`page`) and the
+   * compact layout's `status`.
+   */
   labels?: PaginationLabels;
 }
 

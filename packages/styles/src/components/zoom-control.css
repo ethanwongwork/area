@@ -12,7 +12,7 @@
   .area-zoom-control { font-variant-numeric: tabular-nums; }
   .area-zoom-control__value { white-space: nowrap; }
 
-  /* Menu keeps the check column on plain rows when any row is checkable (surface.css), so Zoom in, out and fit
+  /* Menu keeps the check column on plain rows when any row is checkable (menu.css), so Zoom in, out and fit
      end their shortcuts on the presets' line. */
   .area-zoom-control__menu {}
   /* spec: Figma's typed zoom field is the menu's first row, above a rule. Here it is a soft Input sm on the rows'

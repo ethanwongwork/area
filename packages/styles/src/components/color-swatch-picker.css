@@ -1,0 +1,118 @@
+/* Color swatch picker (docs/specs/color-swatch-picker.md). */
+@layer area.components {
+  .area-color-swatch-picker {
+    --_cell: var(--area-control-sm);
+    --_swatch-size: calc(var(--_cell) - var(--area-space-8));
+    display: inline-grid;
+    grid-template-columns: repeat(var(--_columns), var(--_cell));
+    gap: var(--area-space-4);
+    padding: 0;
+    border-radius: var(--area-radius-container);
+    max-inline-size: 100%;
+  }
+  .area-color-swatch-picker--sm { --_cell: var(--area-control-xs); }
+  .area-color-swatch-picker--md { --_cell: var(--area-control-sm); }
+  .area-color-swatch-picker--lg { --_cell: var(--area-control-md); }
+  .area-color-swatch-picker--grid { display: inline-grid; }
+  .area-color-swatch-picker--row { display: inline-flex; flex-wrap: wrap; }
+  .area-color-swatch-picker__cell {
+    position: relative;
+    display: grid;
+    place-items: center;
+    flex: none;
+    inline-size: var(--_cell);
+    block-size: var(--_cell);
+    /* Concentric with the swatch it frames: the swatch's 20% corner plus the 4px inset (Color swatch,
+       2026-09-28). */
+    border-radius: calc(max(var(--area-radius-min), round(nearest, calc(var(--_swatch-size) * 0.8 * var(--area-radius-factor)), 2px)) + (var(--_cell) - var(--_swatch-size)) / 2 * var(--area-radius-concentric));
+    cursor: pointer;
+    /* Motion (docs/MOTION.md, 2026-10-07): the hover plate and the selection ring appear at once
+       and fade out on fast (was instant both ways); the focus ring (outline) never animates. */
+    transition: background-color var(--area-duration-fast) var(--area-ease-effects), box-shadow var(--area-duration-fast) var(--area-ease-effects);
+  }
+  @media (hover: hover) { .area-color-swatch-picker__cell:hover { transition-duration: var(--area-hover-in); } }
+  .area-color-swatch-picker__cell:has(input:checked) { transition-duration: var(--area-hover-in); }
+  .area-color-swatch-picker__cell > input {
+    position: absolute;
+    inset: 0;
+    inline-size: 100%;
+    block-size: 100%;
+    margin: 0;
+    opacity: 0;
+    cursor: inherit;
+  }
+  .area-color-swatch-picker__cell > .area-color-swatch { --_size: var(--_swatch-size); pointer-events: none; }
+  @media (hover: hover) { .area-color-swatch-picker__cell:hover:not(:has(input:checked, input:disabled)) { background: var(--area-bg-hover); } }
+  /* Held, the translucent pressed plate one step past the hover (plan B7.3), the chosen cell's included (plan B7.2). */
+  .area-color-swatch-picker__cell:active:not(:has(input:disabled)) { background: var(--area-bg-pressed); transition-duration: var(--area-press-in); }
+  /* Chosen: the selected edge (selection.css, plan B7.6), the Selected edge setting's width in the Selection ink inside
+     the cell, concentric with the swatch, and the Selected tint under it; the swatch keeps its own ring. It was a
+     space-2 ring in fg-selection on a surface plate, which the Selected edge setting didn't reach. */
+  .area-color-swatch-picker__cell:has(input:checked) { box-shadow: var(--_selected-edge); }
+  .area-color-swatch-picker__cell:has(input:focus-visible) {
+    outline: var(--area-focus-width) solid var(--area-focus-color);
+    outline-offset: var(--area-focus-offset);
+    z-index: 1;
+  }
+  /* A disabled option dims alone; a disabled picker dims once as a whole (audit F-14). */
+  .area-color-swatch-picker:not([aria-disabled="true"]) .area-color-swatch-picker__cell:has(input:disabled) { opacity: var(--area-opacity-disabled); cursor: not-allowed; }
+  .area-color-swatch-picker[aria-disabled="true"] { opacity: var(--area-opacity-disabled); cursor: not-allowed; }
+  .area-color-picker[aria-disabled="true"] .area-color-swatch-picker { opacity: 1; }
+  @media (forced-colors: active) {
+    .area-color-swatch-picker__cell:has(input:checked) { outline: var(--area-selected-width) solid Highlight; outline-offset: calc(-1 * var(--area-selected-width)); box-shadow: none; }
+    .area-color-swatch-picker__cell:has(input:focus-visible) { outline: var(--area-focus-width) solid Highlight; }
+  }
+
+  /* Palette: contiguous cells filling the width, like the iOS color grid. The outer edge is
+     rounded like a color area; selection is the swatch rows' ring, drawn inside the cell. */
+  .area-color-swatch-picker--palette {
+    display: grid;
+    grid-template-columns: repeat(var(--_columns), minmax(0, 1fr));
+    gap: 0;
+    inline-size: 100%;
+    position: relative;
+    border-radius: var(--area-radius-control-sm);
+    overflow: clip;
+  }
+  /* The swatch ring, round the whole grid, on a layer over the cells: as the grid's own outline it was painted under
+     them (each swatch is positioned), so a white cell lost its corner on a white page (round 81). The selected and
+     focused cells stay above it. */
+  .area-color-swatch-picker--palette::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    border-radius: inherit;
+    box-shadow: inset 0 0 0 var(--area-stroke-width) var(--area-token-swatch-ring);
+    pointer-events: none;
+  }
+  .area-color-swatch-picker--palette > .area-color-swatch-picker__cell { inline-size: auto; block-size: auto; aspect-ratio: 1; border-radius: 0; }
+  .area-color-swatch-picker--palette > .area-color-swatch-picker__cell > .area-color-swatch {
+    inline-size: 100%; block-size: 100%; --_radius: 0px; --_inner-radius: 0px; --_edge: 0px; box-shadow: none; outline: none;
+    /* The rings are the swatch's (its colour layer inherits them): in at once, out on fast (motion, 2026-10-07). */
+    transition: box-shadow var(--area-duration-fast) var(--area-ease-effects);
+  }
+  /* States (owner, review round 18, with the iOS colour grid: "maybe just an outline that goes around the swatch"):
+     selected is a white outline straddling the cell's edge, lightly rounded, the colour left
+     as it is, as iOS draws it; a black 15% line inside the white keeps it visible on white and pale cells in both themes
+     (the palette's colours don't change with the theme, so the line doesn't either; the thumb's pairing). Hover is the same outline, lighter and inside only. Round 17's survey:
+     docs/research/swatch-palette-survey.md. Thickness (owner, round 19: "is the stroke thickness correct?"): measured on
+     the owner's iOS screenshot, the ring is 3.5 of a 35 cell (10%), about 2.5 outside and 1 inside; at Area's ~20 cells
+     that is 2: 1 outside, 1 inside (was 3). */
+  @media (hover: hover) {
+    .area-color-swatch-picker--palette > .area-color-swatch-picker__cell:hover:not(:has(input:checked, input:disabled)) > .area-color-swatch {
+      box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.7), inset 0 0 0 2px rgb(0 0 0 / 0.15); /* spec */
+      transition-duration: var(--area-hover-in);
+    }
+  }
+  .area-color-swatch-picker--palette > .area-color-swatch-picker__cell:has(input:checked) { z-index: 2; background: none; box-shadow: none; }
+  .area-color-swatch-picker--palette > .area-color-swatch-picker__cell:has(input:checked) > .area-color-swatch {
+    --_radius: var(--area-radius-min); /* spec: iOS's lightly rounded outline; 2, so the colour's corners barely move */
+    --_inner-radius: var(--_radius);
+    overflow: visible;
+    box-shadow: 0 0 0 1px #fff, inset 0 0 0 1px #fff, inset 0 0 0 2px rgb(0 0 0 / 0.15); /* spec: iOS white, 10% of the cell */
+    transition-duration: var(--area-hover-in);
+  }
+  .area-color-swatch-picker--palette > .area-color-swatch-picker__cell:has(input:focus-visible) { outline-offset: calc(var(--area-focus-width) * -1); z-index: 3; }
+
+}

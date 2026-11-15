@@ -2,8 +2,9 @@
 import { useState } from "react";
 import { Checkbox, FilterBar, FilterBarAdd, FilterBarItem, Menu, MenuItem, Popover } from "@area/react";
 
-/* A view's width: the bar sits under the view's tabs, over its rows. */
-const view = { inlineSize: "calc(var(--area-space-96) * 6)", maxInlineSize: "100%" };
+/* A view's width: the bar sits under the view's tabs, over its rows. It holds it (a tile scales it whole): with a 100%
+   cap it gave way to its content and the default tile scrolled inside itself (system evaluation F3.2). */
+const view = { inlineSize: "calc(var(--area-space-96) * 6)" };
 const add = <Menu trigger={<FilterBarAdd />}><MenuItem>Option one</MenuItem><MenuItem>Option two</MenuItem><MenuItem>Option three</MenuItem></Menu>;
 const editor = <div style={{ display: "grid", gap: "var(--area-space-8)" }}><Checkbox label="Option one" defaultChecked /><Checkbox label="Option two" /></div>;
 

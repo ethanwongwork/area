@@ -38,23 +38,25 @@
   .area-drawer__modal::backdrop {
     background: var(--area-scrim);
     opacity: 1;
-    transition: opacity var(--area-fade-moderate) var(--area-ease-out), overlay var(--_drawer-in) allow-discrete, display var(--_drawer-in) allow-discrete;
+    transition: opacity var(--area-fade-moderate) var(--area-ease-effects), overlay var(--_drawer-in) allow-discrete, display var(--_drawer-in) allow-discrete;
   }
-  .area-drawer__modal:not([open])::backdrop { opacity: 0; transition-duration: var(--_drawer-out); }
+  .area-drawer__modal:not([open])::backdrop { opacity: 0; transition-duration: var(--_drawer-out); transition-timing-function: var(--area-ease-exit); }
   html:has(.area-drawer__modal:modal) { overflow: hidden; }
 
   .area-drawer {
     /* Dialog's 16 inset, border included (shadcn's Sheet: 16 header, body sides and footer). */
     --_drawer-outer: var(--area-space-16);
     --_drawer-inset: calc(var(--_drawer-outer) - var(--area-border-width));
-    /* spec: shadcn's Sheet is 384 wide (max-w-sm, shadcn--sheet-right); md is Dialog's 480. */
-    --_drawer-size: 384px; /* spec */
+    /* spec: shadcn's Sheet is 384 wide (max-w-sm, shadcn--sheet-right); md is Dialog's 480. The public
+       `--area-drawer-inline-size` replaces the default width (plan B6.3); a size class still overrides it. */
+    --_drawer-size: var(--area-drawer-inline-size, 384px); /* spec */
+    /* Header, body and footer stand the block gap apart (popup.css, plan B6.2): 16 at most, 12 at Compact. */
+    --_block-inset: var(--_drawer-outer);
     --_drawer-from: 100% 0;
     position: absolute;
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
-    gap: var(--area-inset-surface-md);
     inset-block: 0;
     inset-inline-end: 0;
     inline-size: min(var(--_drawer-size), calc(100% - var(--area-space-48)));
@@ -62,13 +64,10 @@
        a uniform 15 left the three flush sides at 15). */
     padding: var(--_drawer-outer);
     padding-inline-start: var(--_drawer-inset);
-    border: 0 solid var(--area-edge-floating);
+    /* The frame and the shadow stack are the one floating surface's on the modal role (popup.css, plan B6.1); the
+       drawer draws the edge on its inner side only. */
+    border-width: 0;
     border-inline-start-width: var(--area-border-width);
-    background-color: var(--area-bg-surface);
-    color: var(--area-fg-default);
-    /* A material's layers (material.css), the Surface axis's edge, then the Elevation axis's modal role, as Dialog. */
-    --_elevation: var(--area-shadow-modal);
-    box-shadow: var(--_m-layers, 0 0 0 0 transparent), var(--area-shadow-edge), var(--_elevation);
     font-size: var(--area-ui-size);
     line-height: var(--area-ui-leading);
     text-align: start;
@@ -98,16 +97,19 @@
     padding-block-start: var(--_drawer-inset);
     border-inline-start-width: 0;
     border-block-start-width: var(--area-border-width);
-    /* Dialog's corner (surface.css, --_dialog-radius: the container plus 4, 16 at the default), as the comment above
-       says: Dialog's close sits 8 / 8 from it, so its 8 corner is concentric (16 − 8). The container's 12 left the close
-       rounder than the corner it sits in (corner audit 2026-10-23). */
-    --_drawer-radius: calc(var(--area-radius-container) + min(var(--area-space-4) * var(--area-radius-concentric), var(--area-radius-container)));
+    /* Dialog's corner (dialog.css, --_dialog-radius: radius-container, 16 at the default), as the comment above says.
+       Its close is a corner control (inset.css, plan B4.2): 9 from the edge, so 16 − 9 = 7. A side drawer's top corners
+       meet the window and are square, so its close keeps its own corner. */
+    --_drawer-radius: var(--area-radius-container);
+    --_cc-corner: var(--_drawer-radius);
+    --_cc-inset: var(--_drawer-outer);
     border-start-start-radius: var(--_drawer-radius);
     border-start-end-radius: var(--_drawer-radius);
   }
   /* Enter and exit: the surface slides from its edge (a whole panel's length, so it rests at
      translate none on whole pixels) while the scrim fades. */
-  .area-drawer__modal:not([open], :popover-open) > .area-drawer { translate: var(--_drawer-from); transition-duration: var(--_drawer-out); }
+  /* The exit accelerates away on `ease-exit` (plan A5.1, 2026-11-11; it eased out on the edge curve until then). */
+  .area-drawer__modal:not([open], :popover-open) > .area-drawer { translate: var(--_drawer-from); transition-duration: var(--_drawer-out); transition-timing-function: var(--area-ease-exit); }
   @starting-style {
     .area-drawer__modal:is([open], :popover-open) > .area-drawer { translate: var(--_drawer-from); }
     .area-drawer__modal[open]::backdrop { opacity: 0; }
@@ -116,7 +118,7 @@
     .area-drawer__modal, .area-drawer { --_drawer-in: 0s; --_drawer-out: 0s; }
   }
 
-  /* Header, title, description and close: Dialog's title group, one rule for both (surface.css). */
+  /* Header, title, description and close: Dialog's title group, one rule for both (dialog.css). */
   /* The body scrolls between a fixed header and footer, with Dialog's bleed for focus rings. */
   .area-drawer__body {
     --_drawer-bleed: calc(var(--area-focus-width) + var(--area-focus-gap));
@@ -133,7 +135,7 @@
   .area-drawer__footer { display: flex; justify-content: flex-end; flex-wrap: wrap; gap: var(--area-ui-cluster); flex-shrink: 0; }
   /* spec: shadcn's Sheet stacks its actions full width, 8 apart (owner 2026-10-06: a variant). The
      first action in source order is the primary one, on top. */
-  .area-drawer--stacked > .area-drawer__footer { flex-direction: column; flex-wrap: nowrap; gap: var(--area-space-8); }
+  .area-drawer--stacked > .area-drawer__footer { flex-direction: column; flex-wrap: nowrap; gap: var(--area-ui-cluster); /* every footer's gap (plan A1.2) */ }
   .area-drawer--stacked > .area-drawer__footer > * { inline-size: 100%; }
   .area-drawer--row > .area-drawer__footer { flex-direction: row; }
 

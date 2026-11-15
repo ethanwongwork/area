@@ -3,7 +3,7 @@ import type { ButtonHTMLAttributes, KeyboardEvent, ReactNode, SyntheticEvent } f
 import { datePickerVariants, type VariantProps, MANIFESTS } from "../variants.ts";
 import { Calendar } from "./Calendar.tsx";
 import { Input } from "./Input.tsx";
-import { Popover } from "./primitives.tsx";
+import { Popover } from "./Popover.tsx";
 import { assignRef, useOpenState } from "./overlay.ts";
 import { resolveValidation, validationAttributes, type ValidationStatus } from "./validation.ts";
 
@@ -12,15 +12,21 @@ type Manifest = VariantProps<typeof MANIFESTS.datePicker>;
 export interface DatePickerProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, "value" | "defaultValue" | "onChange" | "type"> {
   /** The date as "YYYY-MM-DD" (controlled); null for none. */
   value?: string | null;
+  /** The date it starts with (YYYY-MM-DD), uncontrolled; none by default. */
   defaultValue?: string | null;
+  /** Called with the chosen date (YYYY-MM-DD), or null when it is cleared. */
   onValueChange?: (value: string | null, event?: SyntheticEvent) => void;
   /** Shown while no date is set. */
   placeholder?: ReactNode;
   /** A leading glyph in the field (a calendar). */
   icon?: ReactNode;
+  /** The trigger's treatment; outline by default. */
   variant?: Manifest["variant"];
+  /** The trigger's height, as Select's; md by default. */
   size?: Manifest["size"];
+  /** Stretch to the width of the container. */
   fullWidth?: boolean;
+  /** Marks the date as wrong: the danger edge and `aria-invalid`. */
   invalid?: boolean;
   /** Semantic validation paint, as Input's: `error` (also `invalid`), `success` or `warning`. A Field passes its own. */
   validationStatus?: ValidationStatus;
@@ -35,19 +41,25 @@ export interface DatePickerProps extends Omit<ButtonHTMLAttributes<HTMLButtonEle
   name?: string;
   /** Earliest and latest choosable dates, "YYYY-MM-DD". */
   min?: string;
+  /** The latest date that can be chosen (YYYY-MM-DD). */
   max?: string;
+  /** Returns true for a date (YYYY-MM-DD) that cannot be chosen. */
   isDateUnavailable?: (date: string) => boolean;
   /** Today's date for the calendar's mark, "YYYY-MM-DD" (defaults to the clock). */
   today?: string;
+  /** The language the date and the calendar are written in (BCP 47); the browser's by default. */
   locale?: string;
+  /** The day each calendar week starts on, 0 for Sunday; as Calendar's by default. */
   firstDayOfWeek?: 0 | 1 | 2 | 3 | 4 | 5 | 6;
-  /** How the field shows the date. Defaults to "October 5, 2026" (Notion's full date). */
+  /** How the field shows the date; the full date by default ("October 5, 2026"). */
   formatOptions?: Intl.DateTimeFormatOptions;
   /** Offer a Clear row under the calendar. */
   clearable?: boolean;
   /** The calendar is open (controlled); `defaultOpen` opens it at first. */
   open?: boolean;
+  /** Whether the calendar starts open, uncontrolled; closed by default. */
   defaultOpen?: boolean;
+  /** Called when the calendar opens or closes. */
   onOpenChange?: (open: boolean) => void;
 }
 
@@ -64,8 +76,7 @@ const FULL_DATE: Intl.DateTimeFormatOptions = { month: "long", day: "numeric", y
 /**
  * A field showing a date that opens a Popover: the date as text (type one and press Enter) above a
  * Calendar (pick one), and a Clear row. Picking a day sets it and closes; focus returns to the field.
- * Notion's date property; the calendar keeps its own keyboard (arrows by day and week, Page keys by
- * month).
+ * The calendar keeps its own keyboard (arrows by day and week, Page keys by month).
  */
 export const DatePicker = forwardRef<HTMLButtonElement, DatePickerProps>(function DatePicker(
   { value, defaultValue = null, onValueChange, placeholder = "Pick a date", icon, variant, size, fullWidth, invalid, validationStatus, readOnly,

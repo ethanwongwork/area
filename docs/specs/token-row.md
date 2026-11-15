@@ -183,3 +183,15 @@ The copyable row presses at `bg-component-pressed`, one step past selected (Noti
 ### 2026-11-07 · One announcer (components audit D1)
 
 The copy result is said through the shared announcer (`announce` / `useAnnouncement` (packages/react/src/components/announce.ts; DESIGN_SYSTEM.md, "Announcements")) instead of a live region inside the button. No visible change.
+- 2026-11-11 · system evaluation A8.2 · the row is the ladder's xs control (`control-xs`: 22 at the default, 20 Compact; was round(1em + 10), 21).
+
+## Review note, 2026-11-11 (focus and targets, plan A6, A11.2)
+
+- **What changed:** The copyable row's ring draws inside by its own width (A6.2, S12).
+- **Why:** the system evaluation's focus, forced colours and hit target items (docs/research/system-evaluation-2026-11-11, section 5), owner-approved 2026-11-11; the rules are in DESIGN_SYSTEM.md ("The focus ring", "Targets") and CONTRAST.md (Focus).
+
+### 2026-11-14 · Shared parts, leftovers (system plan, Phase 2, wave 3)
+
+- The value's start is `ui-cluster` (6 / 8 / 10). Values at type 13 Compact / Default / Comfortable; unchanged at the default.
+- Why: docs/research/system-evaluation-2026-11-11 (plan B6.1, B6.5, B8.2, B2.2; README §5, phase2/leftovers.md); the owner took every recommendation on 2026-11-11. Fix the rule, not the instance.
+- Verdict: awaiting the owner.

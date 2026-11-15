@@ -69,7 +69,7 @@ test("a ComposerMenu is a listbox of Menu rows the field points at, grouped, wit
   assert.match(html, /<div id="m-a" role="option" aria-selected="false" class="area-menu__item">/);
   assert.match(html, /<div id="m-b" role="option" aria-selected="true" class="area-menu__item" data-highlighted="">/);
   assert.match(html, /<span class="area-composer-menu__path"><bdi>src\/styles<\/bdi><\/span>/);
-  assert.match(renderToString(h(ComposerMenu, { "aria-label": "Files", items: [{ items: [] }], onPick: () => {} })), /area-composer-menu__empty[^>]*>No matches</);
+  assert.match(renderToString(h(ComposerMenu, { "aria-label": "Files", items: [{ items: [] }], onPick: () => {} })), /area-menu__empty[^>]*><span class="area-menu__text">No matches</);
   // The deprecated `label` and `groups` still work for a release; `aria-label` wins.
   const old = renderToString(h(ComposerMenu, { label: "Files", groups: [{ items: [{ id: "a", label: "a.css" }] }], onPick: () => {} }));
   assert.match(old, /role="listbox" aria-label="Files"/);

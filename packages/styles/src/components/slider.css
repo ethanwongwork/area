@@ -57,7 +57,10 @@
        Pronounced and 1 at Off (MOTION.md, Feedback). The give shrinks a button under the finger; a thumb is picked up. */
     --_lift: calc(1 + (1 - var(--area-feedback-scale)) * 4);
     --_pct: 0%;
-    --_vertical-length: var(--area-input-inline-size);
+    /* A vertical slider's length is its own public hook, `--area-slider-block-size` (2026-11-11, system evaluation F3.2):
+       a width setting never sets a length. Until a page sets it, the fields' width hook (16rem) stands in, so markup that
+       sized a vertical slider by it is unchanged. */
+    --_vertical-length: var(--area-slider-block-size, var(--area-input-inline-size));
 
     position: relative;
     display: flex;
@@ -146,7 +149,7 @@
     z-index: 2;
     inline-size: calc(var(--_thumb) * var(--_reach) + var(--_travel) * var(--_slider-ratio));
     background-color: var(--_fill);
-    transition: background-color var(--_fade, var(--area-duration-fast)) var(--area-ease-out);
+    transition: background-color var(--_fade, var(--area-duration-fast)) var(--area-ease-effects);
   }
   .area-slider__buffer {
     z-index: 1;
@@ -185,8 +188,8 @@
     translate: round(nearest, calc(var(--_dir) * var(--_travel) * var(--_slider-ratio)), 1px) 0;
     pointer-events: none;
     transition:
-      background-color var(--_fade, var(--area-duration-fast)) var(--area-ease-out),
-      box-shadow var(--area-duration-fast) var(--area-ease-out),
+      background-color var(--_fade, var(--area-duration-fast)) var(--area-ease-effects),
+      box-shadow var(--area-duration-fast) var(--area-ease-effects),
       scale var(--area-duration-fast) var(--area-ease-out);
   }
   .area-slider[data-pressed]:not([data-disabled]) .area-slider__thumb {
@@ -226,13 +229,17 @@
 
   /* --- Layouts ---------------------------------------------------------------------------------------------- */
 
+  .area-slider--inline {} /* the default: the label and readout either side of the track, the bare block above */
+  .area-slider--horizontal {} /* the default: the bare block above */
   /* The label and readout above take the row's full width, so a top-labelled slider lines up with the sliders
      around it (owner 2026-10-21, "B"; was capped at the input width plus a readout, which left it narrower). */
   .area-slider--top {
     display: grid;
     grid-template: auto var(--_height) / 1fr auto;
     column-gap: var(--area-space-4);
-    row-gap: var(--area-space-2);
+    /* A label above its control sits the Field's label gap over it, ui-stack (6, compact 4); in a Panel, the panel's
+       caption gap (plan B3.1: it was 2, the one field label closer than every other). */
+    row-gap: var(--_panel-label-gap, var(--area-ui-stack));
     block-size: auto;
   }
   .area-slider--top .area-slider__label { grid-area: 1 / 1; }
@@ -244,6 +251,9 @@
     flex-direction: column;
     inline-size: var(--_height);
     block-size: var(--_vertical-length);
+    /* Never shorter than the thumb and a tier square of travel either side of it, so a length that resolves to auto (a
+       percentage in a parent with no height) leaves a usable control, not a 0-tall track. */
+    min-block-size: calc(var(--_thumb) + 2 * var(--_height));
   }
   .area-slider--vertical .area-slider__track {
     flex: 1;
@@ -299,15 +309,17 @@
 
   /*
    * End labels (owner 2026-10-21, the Intensity reference): the track's two ends named under it, "Low" … "High", as
-   * macOS and iOS settings sliders. In the description's text and ink (Field), each under its end of the track, so a
+   * macOS and iOS settings sliders. In the description's text and ink (Field: text-sm, muted; tabular, since an end is
+   * often a number), each under its end of the track, so a
    * slider with them is a grid: the control row, then the ends under the track's column. Hidden when vertical.
    */
   .area-slider__ends {
     display: flex;
     justify-content: space-between;
-    gap: var(--area-space-8);
-    font-size: var(--area-text-xs-size);
-    line-height: var(--area-text-xs-leading);
+    gap: var(--area-ui-cluster);
+    font-size: var(--area-text-sm-size);
+    line-height: var(--area-text-sm-leading);
+    font-variant-numeric: tabular-nums;
     color: var(--area-fg-muted);
     white-space: nowrap;
     user-select: none;
@@ -351,6 +363,7 @@
    * thumb, the fill running under the knob to its centre. The trough is Segmented's (`bg-component`), Figma's
    * #f5 on white. After the sizes, so the track follows the thumb ladder: 16 / 16 / 20.
    */
+  .area-slider--rail {} /* the default: the thin rail and round knob, the bare block above */
   .area-slider.area-slider--track {
     --_track: var(--_thumb);
     --_track-fill: var(--area-bg-component);
@@ -398,7 +411,7 @@
   .area-slider--bar.area-slider--vertical .area-slider__thumb::before { inline-size: var(--_grip-block); block-size: var(--_grip-inline); }
   /* The knob is the fill's end, so it lifts its grip, not itself: a scaled end would stand off the bar's edges. */
   .area-slider--bar[data-pressed]:not([data-disabled]) .area-slider__thumb { scale: none; }
-  .area-slider--bar .area-slider__thumb::before { transition: scale var(--area-duration-fast) var(--area-ease-out), background-color var(--_fade, var(--area-duration-fast)) var(--area-ease-out); }
+  .area-slider--bar .area-slider__thumb::before { transition: scale var(--area-duration-fast) var(--area-ease-out), background-color var(--_fade, var(--area-duration-fast)) var(--area-ease-effects); }
   .area-slider--bar[data-pressed]:not([data-disabled]) .area-slider__thumb::before { scale: var(--_lift); transition-duration: var(--area-press-in); }
   /* The whole bar takes the focus ring, as a field does; a ring round the grip alone read as a stray circle. */
   .area-slider--bar .area-slider__control:focus-visible ~ .area-slider__thumb { outline: none; }
@@ -626,6 +639,7 @@
   .area-slider-range[data-overlap] .area-slider-range__end .area-slider__control:focus-visible ~ .area-slider__thumb { opacity: 1; }
 
   /* SliderRange's variants: the same troughs; the fill's ends are square, under the thumbs. */
+  .area-slider-range--rail {} /* the default: Slider's rail, the bare block above */
   .area-slider-range.area-slider-range--track { --_range-rail: var(--_range-thumb); --_range-track-fill: var(--area-bg-component); --_range-fill-radius: 0; }
   .area-slider-range.area-slider-range--bar {
     --_range-rail: var(--_range-height);

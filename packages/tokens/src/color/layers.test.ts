@@ -104,7 +104,8 @@ describe("layers: the shipped CSS computes what the model does", () => {
         ["card", m.card], ["tile", m.tile], ["card-fill-0", m.fill.card[0]], ["card-fill-2", m.fill.card[2]], ["tile-fill-1", m.fill.tile[1]],
         ["frame", m.frame], ["frame-raised", m.frameRaised], ["frame-fill-0", m.fill.frame[0]], ["frame-fill-2", m.fill.frame[2]], ["frame-raised-fill-1", m.fill.frameRaised[1]],
         ["well", m.well], ["well-fill-0", m.fill.well[0]], ["well-fill-1", m.fill.well[1]], ["well-fill-2", m.fill.well[2]],
-        ["body", m.ink.body], ["muted", m.ink.muted], ["edge", m.ink.edge],
+        ["float", m.float], ["float-fill-0", m.fill.float[0]], ["float-fill-1", m.fill.float[1]], ["float-fill-2", m.fill.float[2]],
+        ["body", m.ink.body], ["muted", m.ink.muted], ["subtle", m.ink.subtle], ["disabled", m.ink.disabled], ["edge", m.ink.edge],
         ...(theme === "light" ? [["vivid-darken", m.vividDarken], ["tonal-darken", m.tonalDarken]] as Array<[string, number]> : [["tint-lift", m.tintLift], ["tint-lift-fill", m.tintLiftFill]] as Array<[string, number]>),
       ];
       for (const [k, x] of pairs) expect(c[p + k], `${theme} ${g}/${n} fill ${f.hover}/${f.selected} card ${tone} ${k}`).toBeCloseTo(x, 6);
@@ -193,6 +194,56 @@ describe("layers: inks with a hue follow the ground", () => {
   });
 });
 
+// The text hierarchy (plan A3.1, finding RL1, 2026-11-11): in light the default ink and the muted one sit 2.0 to 3.2 apart
+// in luminance contrast at the shipped defaults. In dark muted steps back from #c5c5c5 (1.49 from the default) as far as the
+// APCA content floor allows (Lc 60 on the fills it sits on, asserted in contrast/assertions.ts): at least 1.6 from the
+// default, never 1.49 again. The subtle ink sits between muted and the ground, never past muted; disabled past subtle.
+describe("layers: the ink ladder", () => {
+  const ratio = (a: number, b: number) => { const x = a ** 3, y = b ** 3; return (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05); };
+  for (const theme of THEMES) it(`${theme}: default to muted 2.0 to 3.2, subtle and disabled in order`, () => {
+    const m = layerLightness(theme, theme === "light" ? 100 : 8, theme === "light" ? 4 : 0);
+    const gap = ratio(m.ink.body, m.ink.muted);
+    expect(gap).toBeGreaterThanOrEqual(theme === "light" ? 2 : 1.6);
+    expect(gap).toBeLessThanOrEqual(3.2);
+    const sign = theme === "light" ? 1 : -1;
+    expect(sign * (m.ink.subtle - m.ink.muted)).toBeGreaterThanOrEqual(0);
+    expect(sign * (m.ink.disabled - m.ink.subtle)).toBeGreaterThan(0);
+  });
+  // Every ground at every step: subtle never passes muted, disabled stays quieter than subtle.
+  for (const theme of THEMES) it(`${theme}: the order holds on every ground and Layers step`, () => {
+    const sign = theme === "light" ? 1 : -1, bad: string[] = [];
+    for (const g of groundsOf(theme)) for (const n of LAYER_STEPS) {
+      const m = layerLightness(theme, g, n);
+      if (sign * (m.ink.subtle - m.ink.muted) < -1e-9 || sign * (m.ink.disabled - m.ink.subtle) <= 0) bad.push(`${g}/${n}`);
+    }
+    expect(bad).toEqual([]);
+  });
+});
+
+// Flat keeps a soft Surface flat (owner, 2026-10-29): it paints the recessed tone, which is the page at Layer contrast 0
+// on every ground in both modes, so at 0 it paints nothing; above 0 it steps off.
+describe("layers: Layer contrast 0 keeps soft Surface flat", () => {
+  for (const theme of THEMES) it(theme, () => {
+    for (const g of groundsOf(theme)) {
+      expect(layerLightness(theme, g, 0).recessed).toBe(layerLightness(theme, g, 0).page);
+      expect(Math.abs(layerLightness(theme, g, 4).recessed - layerLightness(theme, g, 4).page)).toBeGreaterThan(0.01);
+    }
+  });
+});
+
+// The floating ground (plan A7.2, 2026-11-11): in dark a menu or dialog sits a step above the lightest layer under it, and
+// the page never moves; in light it is the raised layer.
+describe("layers: the floating ground", () => {
+  it("dark lifts it, light keeps the raised layer", () => {
+    for (const g of groundsOf("dark")) for (const n of LAYER_STEPS) {
+      const m = layerLightness("dark", g, n);
+      expect(m.float).toBeGreaterThan(Math.max(m.raised, m.card) + 0.03);
+      expect(m.page).toBe(groundLightness("dark", g));
+    }
+    for (const g of groundsOf("light")) for (const n of LAYER_STEPS) { const m = layerLightness("light", g, n); expect(m.float).toBe(m.raised); }
+  });
+});
+
 // Layers 4 was the default until the defaults review (2026-10-25), which made Flat (0) the default; 4 still draws Area as it was.
 describe("layers: Layers 4 is Area as it was", () => {
   // Muted text is #646464, not #666666, since 2026-10-23: it is solved on the recessed selected fill pressed by PRESS_ROOM,
@@ -202,14 +253,16 @@ describe("layers: Layers 4 is Area as it was", () => {
     expect(t).toMatchObject({
       "bg-page": "#ffffff", "bg-surface": "#ffffff", "bg-subtle": "#f7f7f7", "bg-stripe": "#fafafa", "bg-code": "#ffffff",
       "bg-component": "#f7f7f7", "bg-component-hover": "#f3f3f3", "bg-component-active": "#eeeeee",
-      "fg-default": "#282828", "fg-muted": "#646464", "fg-placeholder": "#646464",
+      // The placeholder is the subtle ink since plan A3.2 (2026-11-11): a hair lighter than muted at Layers 4.
+      "fg-default": "#282828", "fg-muted": "#646464", "fg-placeholder": "#696969", "fg-subtle": "#696969", "fg-disabled": "#a5a5a5",
       "border-decorative": "#f3f3f3", "border-card": "#eeeeee", "border-float": "#eeeeee", "border-faint": "#e2e2e2", "border-divider": "#e2e2e2",
       "border-subtle": "#d4d4d4", "border": "#c5c5c5", "border-hover": "#b4b4b4", "stroke-control": "#838383", "stroke-control-hover": "#747474",
     });
   });
+  // Dark muted steps back (plan A3.1, 2026-11-11): floored at #b9b9b9, the APCA content floor, no longer #c5c5c5.
   it("dark 8 + 4 keeps the near-black page and today's inks", () => {
     const t = layerTokens("dark", { groundLight: 100, groundDark: 8, layersLight: 4, layersDark: 4 }, { chroma: 0, hue: 0 });
-    expect(t).toMatchObject({ "bg-page": "#020202", "fg-default": "#eeeeee", "fg-muted": "#c5c5c5", "stroke-control": "#939393", "stroke-control-hover": "#a4a4a4", "border-decorative": "#282828", "border-card": "#333333", "border-float": "#4b4b4b" });
+    expect(t).toMatchObject({ "bg-page": "#020202", "fg-default": "#eeeeee", "fg-muted": "#b9b9b9", "stroke-control": "#939393", "stroke-control-hover": "#a4a4a4", "border-decorative": "#282828", "border-card": "#333333", "border-float": "#4b4b4b" });
   });
 });
 
@@ -245,7 +298,7 @@ describe("layers: the dark washes keep their order at every setting", () => {
       if (p > 1 && w.pressed - darkWashAlphas(h, sel, p - 1).pressed < 0.002) problems.push(`${id}: pressed step ${p} reads as ${p - 1}`);
     }
     const d = darkWashAlphas(2, 1, 4);
-    expect([d.hover, d.selected, d.pressed].map(x => Number(x.toFixed(4)))).toEqual([0.14, 0.19, 0.207]);
+    expect([d.hover, d.selected, d.pressed].map(x => Number(x.toFixed(4)))).toEqual([0.08, 0.14, 0.157]); // plan A4 (2026-11-11): 8% / 14%; 14% / 19% / 20.7% before
     expect(problems).toEqual([]);
   });
 });

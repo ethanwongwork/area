@@ -92,3 +92,4 @@ and pressed; with no Material the slot adds only a transparent layer, so the loo
 - **Verdict:** approved (owner, 2026-10-29, review page rounds 85–89); Complete.
 
 - 2026-11-05 · owner: "go with your recs" on the shadow depth page (docs/research/shadow-depth-2026-11-04.md) → the Elevation default is 8, so this surface's float role is an 8% key (was 3%).
+- 2026-11-14 · system evaluation B6.1 · the button takes the one floating shadow stack (popup.css): a material's layers, the Rest shadow's edge it lacked (transparent by default; a soft edge at Borderless), then the float role.

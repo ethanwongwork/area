@@ -9,12 +9,15 @@
  * translucent, a stroke keeps its distance from any ground it sits on, light or dark. Edge contrast (`stroke`, depth.ts)
  * is the master over the groups: its 4 leaves each group's amount as set, 0 removes every group stroke and 8 doubles them.
  * Contrast More takes each one the rest of the way to the 3:1 control stroke, as it does every edge. One amount serves
- * light and dark; one width (Stroke width, surface.ts) serves the frames. Defaults are the owner's picks (Defined).
+ * light and dark; one width (Stroke width, surface.ts) serves the frames. Defaults are the owner's picks (Defined), but
+ * Dividers and Tags moved 3 → 4 (7.5% → 10%, plan A10.3, 2026-11-11): at 7.5% a rule or a mark's ring was about a 7%
+ * luminance step on near black and vanished there.
  *
  * Fixed, in no group: outline Buttons, Badges and Chip (the edge is the shape), solid fills, ghost and toolbar buttons,
  * list and menu rows, unchecked Checkbox and Radio boxes, outline fields, focus rings, selected edges, field state edges.
  */
 import { type AxisDefinition, PREFIX, tokens } from "./schema.ts";
+import { floatRimAlpha } from "./depth.ts";
 
 const v = (name: string) => `var(${PREFIX}${name})`;
 
@@ -34,12 +37,12 @@ export const STROKE_GROUPS: readonly StrokeGroup[] = [
   { id: "callouts", label: "Callouts", hint: "The frame round an alert or notice in the flow", amount: 4 },
   { id: "floating", label: "Floating", hint: "The rim of menus, popovers, hover cards, toasts, dialogs, drawers and pickers", amount: 5 },
   { id: "regions", label: "Regions", hint: "The seams between panels and the app's regions", amount: 3 },
-  { id: "dividers", label: "Dividers", hint: "The rules between rows and sections: separators, table, list and accordion rows", amount: 3 },
+  { id: "dividers", label: "Dividers", hint: "The rules between rows and sections: separators, table, list and accordion rows", amount: 4 },
   { id: "fields", label: "Fields", hint: "The edge of soft fields: inputs, selects, number fields, text areas, pickers", amount: 5 },
   { id: "buttons", label: "Buttons", hint: "The edge of soft buttons, button groups, toggle groups and the Segmented track", amount: 3 },
   { id: "options", label: "Options", hint: "The edge of soft choice rows and choice cards", amount: 4 },
   { id: "tracks", label: "Tracks", hint: "The edge of slider, switch, progress and meter troughs", amount: 3 },
-  { id: "tags", label: "Tags", hint: "The edge of soft badges, counts, tags and keys", amount: 3 },
+  { id: "tags", label: "Tags", hint: "The edge of soft badges, counts, tags and keys", amount: 4 },
   { id: "media", label: "Media", hint: "A hairline round avatars, swatches and pictures", amount: 2 },
 ];
 
@@ -70,7 +73,11 @@ export const STROKE_GROUP_AXES: readonly AxisDefinition[] = STROKE_GROUPS.map(gr
 export function strokeGroupDerived(): Record<string, string> {
   return Object.fromEntries(STROKE_GROUPS.map(group => {
     const share = `calc(${v(`stroke-${group.id}-step`)} * ${STROKE_GROUP_STEP}% * ${v("stroke-strength")})`;
-    const edge = `color-mix(in srgb, ${v("fg-default")} ${share}, transparent)`;
+    // The floating frame in dark is the one edge a floating surface draws (plan A7.1): the group's amount or the Shadow
+    // rim's (depth.ts floatRimAlpha), whichever is brighter, since the rim is no longer drawn outside a frame.
+    const edge = group.id === "floating"
+      ? `light-dark(color-mix(in srgb, ${v("fg-default")} ${share}, transparent), color-mix(in srgb, ${v("fg-default")} max(${share}, calc(${floatRimAlpha()} * 100%)), transparent))`
+      : `color-mix(in srgb, ${v("fg-default")} ${share}, transparent)`;
     return [`${PREFIX}edge-${group.id}`, `color-mix(in srgb, ${edge}, ${v("stroke-control")} calc(${v("contrast-more")} * 100%))`];
   }));
 }

@@ -2,12 +2,14 @@ import { forwardRef, useRef, useState } from "react";
 import type { CSSProperties, HTMLAttributes, PointerEvent, SyntheticEvent } from "react";
 import { sliderRangeVariants, type VariantProps, MANIFESTS } from "../variants.ts";
 import { Input } from "./Input.tsx";
-import { Slider } from "./primitives.tsx";
+import { Slider } from "./Slider.tsx";
 
 export type SliderRangeValue = [number, number];
 
 export interface SliderRangeProps extends Omit<HTMLAttributes<HTMLDivElement>, "defaultValue" | "onChange"> {
+  /** The chosen pair, start then end, controlled with `onValueChange`. */
   value?: SliderRangeValue;
+  /** The pair at first, uncontrolled; the whole range, `min` to `max`, by default. */
   defaultValue?: SliderRangeValue;
   /** Called with the new pair (start never above end) and the input, key or pointer event that moved it. */
   onValueChange?: (value: SliderRangeValue, event: SyntheticEvent) => void;
@@ -16,20 +18,27 @@ export interface SliderRangeProps extends Omit<HTMLAttributes<HTMLDivElement>, "
    * keyboard step, and on each typed end. A costly change applies here and keeps the rail responsive while it drags.
    */
   onValueCommit?: (value: SliderRangeValue) => void;
+  /** The lowest value either end can take; 0 by default. */
   min?: number;
+  /** The highest value either end can take; 100 by default. */
   max?: number;
+  /** The amount each end moves by, by key or by drag; 1 by default. */
   step?: number;
+  /** The height, knobs and type size, as Slider's; `md` by default. */
   size?: VariantProps<typeof MANIFESTS.sliderRange>["size"];
   /** The rail's treatment, as Slider's: `rail` (default), `track` (a pill under round knobs) or `bar` (full height, grips). */
-  variant?: "rail" | "track" | "bar";
-  /** Number fields either side of the rail (Figma's and Notion's range filters). On by default. */
+  variant?: VariantProps<typeof MANIFESTS.sliderRange>["variant"] | "rail";
+  /** Number fields either side of the rail, to type each end; on by default. */
   inputs?: boolean;
-  /** Names the two ends: the sliders take these, the number fields add "value" (audit C-12). */
+  /** Names the start: its slider takes it, and its number field adds “value” (“Minimum value”); “Minimum” by default. */
   minLabel?: string;
+  /** Names the end: its slider takes it, and its number field adds “value” (“Maximum value”); “Maximum” by default. */
   maxLabel?: string;
   /** Both range inputs submit under this name, start then end. */
   name?: string;
+  /** The id of a form elsewhere on the page that both range inputs submit with. */
   form?: string;
+  /** Neither end can be changed, and the range is drawn dimmed; off by default. */
   disabled?: boolean;
 }
 
@@ -124,7 +133,7 @@ export const SliderRange = forwardRef<HTMLDivElement, SliderRangeProps>(function
       value={current} disabled={disabled} onChange={event => { set(event.currentTarget.valueAsNumber, event); final(latest.current); }} />
     : null;
 
-  return <div ref={ref} {...rest} className={sliderRangeVariants({ size, variant: variant === "rail" ? undefined : variant }, className)}
+  return <div ref={ref} {...rest} className={sliderRangeVariants({ size, variant }, className)}
     data-overlap={range[0] === range[1] ? "" : undefined} data-disabled={disabled ? "" : undefined}
     data-pressed={pressed ?? undefined} data-dragging={dragging ? "" : undefined}
     // The two ends as ratios, registered in slider.css so the fill eases between them as the thumbs do.

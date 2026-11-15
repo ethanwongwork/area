@@ -19,22 +19,15 @@
     overflow-y: auto;
   }
   /*
-   * Motion (docs/MOTION.md, "Context menu"; motion 2026-10-07): Menu's fade and scale from 0.97,
-   * on the fast clock both ways (a right-click answers as quickly as a key), grown from the
-   * pointer. ContextMenu.tsx writes the pointer's place inside the menu (whole pixels, after any
-   * flip); it defaults to the top-left corner. The shared rule in surface.css keeps the from-state,
-   * @starting-style and reduced motion; this only changes the clock and the origin. The
-   * selector outranks the shared :is(.area-menu)[popover] rule.
+   * Motion (docs/MOTION.md, "Context menu"; plan A5.2, 2026-11-11): a right-click is the most frequent open, so the menu
+   * appears at its place and size and only fades, on Menu's `fast` clocks in and out (overlay.css; the exit on
+   * `ease-exit`). Until 2026-11-11 it also grew from 0.97 at the pointer. ContextMenu.tsx still writes the pointer's
+   * place inside the menu (whole pixels, after any flip) as the origin. The selector outranks the shared
+   * :is(.area-menu)[popover] rule.
    */
   .area-menu.area-context-menu__menu[popover] {
-    --_overlay-duration: var(--area-duration-fast);
-    --_overlay-fade: var(--area-fade-fast);
+    --_overlay-scale: none; /* the resting value itself, so no identity transition starts */
     transform-origin: var(--_context-origin-x, 0px) var(--_context-origin-y, 0px);
-    transition:
-      opacity var(--area-fade-fast) var(--area-ease-out),
-      scale var(--area-duration-fast) var(--area-ease-out),
-      overlay var(--area-fade-fast) allow-discrete,
-      display var(--area-fade-fast) allow-discrete;
   }
   .area-context-menu__menu[popover]:not(:popover-open) { display: none; }
 }

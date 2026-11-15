@@ -32,7 +32,9 @@
    * chevron centred. Its border overlaps the action's, so outline and soft strokes count once.
    */
   .area-split-button > .area-split-button__trigger {
-    inline-size: calc(var(--_height) - 4px); /* spec */
+    /* Never under the target floor (owner, 2026-11-13; WCAG 2.5.8): the trigger abuts its action, so its 24 is its own
+       box, not borrowed room. 24 at sm (22 at the default, 20 Compact), its own H − 4 from a 28 control up. */
+    inline-size: max(calc(var(--_height) - 4px), var(--area-space-24)); /* spec: H − 4 */
     padding-inline: 0;
     margin-inline-start: calc(-1 * var(--area-stroke-width));
     border-start-start-radius: 0;
@@ -64,6 +66,9 @@
   .area-split-button--solid > .area-split-button__trigger { --_split-divider: color-mix(in srgb, var(--_on-solid) 24%, transparent); /* spec */ }
   .area-split-button--soft > .area-split-button__trigger,
   .area-split-button--outline > .area-split-button__trigger { --_split-divider: var(--_line); }
+  /* A toned trigger disabled is a neutral one (button.css, plan B7.9), so its divider is the neutral line. */
+  .area-split-button > .area-split-button__trigger:disabled { --_split-divider: color-mix(in srgb, color-mix(in srgb, var(--_on-solid) 24%, transparent), var(--area-edge-control) calc(var(--_toned) * 100%)); }
+  :is(.area-split-button--soft, .area-split-button--outline) > .area-split-button__trigger:disabled { --_split-divider: color-mix(in srgb, var(--_line), var(--area-edge-control) calc(var(--_toned) * 100%)); }
 
   /*
    * One soft joined recipe (audit S15b, owner 2026-09-30): a neutral soft Split button paints as
@@ -74,7 +79,7 @@
     --_fg: var(--area-fg-quiet);
     --_bg: var(--area-bg-component);
     --_bg-hover: var(--area-bg-component-hover);
-    --_bg-active: var(--area-bg-component-active);
+    --_bg-active: var(--area-bg-component-pressed); /* the row press plate, past the selected plate (plan B7.3; was the selected plate) */
     --_border: var(--area-edge-buttons);
     --_border-hover: transparent;
   }
@@ -91,13 +96,13 @@
   .area-split-button--ghost > .area-split-button__trigger { margin-inline-start: 0; }
   .area-split-button--ghost > .area-split-button__trigger::before { content: none; }
   .area-split-button--icon-only > .area-split-button__trigger {
-    inline-size: calc(var(--_height) / 2); /* spec: Figma 16 at 32 */
+    inline-size: max(calc(var(--_height) / 2), var(--area-space-24)); /* spec: half the height, never under the target floor */
     --_icon: var(--area-icon-xs);
   }
   /* A plate half as wide keeps corners instead of turning into a pill at the default (Figma 5 on its
-     16px chevron plate): the corner of a box three quarters the Button's height, 6 (compact 4). */
+     16px chevron plate): the corner of a box three quarters the Button's height, 6 at the default and compact (4 at Corner 8). */
   .area-split-button--ghost.area-split-button--icon-only > .area-split-button__trigger {
-    border-radius: min(var(--_radius), max(var(--area-radius-min), round(down, calc(var(--_height) * 0.75 * var(--area-radius-factor)), 2px))); /* even pixels: 6, compact 4 (radius audit D6; all even) */
+    border-radius: min(var(--_radius), max(var(--area-radius-min), round(down, calc(var(--_height) * 0.75 * var(--area-radius-factor)), 2px))); /* even pixels: 6 at the default and compact (radius audit D6; all even) */
   }
 
   /* Chevron (docs/MOTION.md, "Chevron rotation": one rule for every chevron, Accordion's): the
@@ -108,7 +113,7 @@
   .area-split-button__trigger[aria-expanded="true"] > .area-button__icon > svg { rotate: 180deg; }
 
   /* Native popover in the top layer, placed by the React layer like every anchored menu
-     (left / top, flip and shift; surface.css "Anchored overlays"); Menu paints the surface. */
+     (left / top, flip and shift; overlay.css "Anchored overlays"); Menu paints the surface. */
   .area-split-button__menu {
     position: fixed;
     inset: auto;
@@ -121,7 +126,10 @@
   .area-split-button__menu:not(:popover-open) { display: none; }
 
   /* Every part disabled: the joined control dims once as a whole, so the seam and edges where the
-     parts overlap aren't dimmed twice (audit H-26). One disabled part still dims alone. */
-  .area-split-button:has(> .area-button:disabled):not(:has(> .area-button:not(:disabled))) { opacity: var(--area-opacity-disabled); }
+     parts overlap aren't dimmed twice (audit H-26). One disabled part still dims alone. A toned pair repaints as
+     Button's does and never dims (plan B7.9): a hued tone, or a neutral solid when Action is Accent. */
+  .area-split-button { --_split-dim: var(--area-opacity-disabled); }
+  .area-split-button--solid { --_split-dim: calc(1 - (1 - var(--area-opacity-disabled)) * (1 - var(--area-action-accent))); }
+  .area-split-button:has(> .area-button--neutral:disabled):not(:has(> .area-button:not(:disabled))) { opacity: var(--_split-dim); }
   .area-split-button:has(> .area-button:disabled):not(:has(> .area-button:not(:disabled))) > .area-button:disabled { opacity: 1; }
 }

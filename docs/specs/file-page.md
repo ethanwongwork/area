@@ -131,3 +131,10 @@ Finder's does in dark. Corners are part of the drawing (in proportion to the box
 - **What changed:** the lit solid page is archived; every page is the outline one. The old props are accepted and ignored.
 - **Why:** you asked to remove the solid variant from every file figure and archive it
   (docs/archive/solid-file-figures-2026-10-19.md).
+- 2026-11-11 · system evaluation A11.3 · the glyph snaps to a native size: 32 at 96 (was 30); 16 at 48 and 20 at 64 unchanged.
+
+## Review note, 2026-11-11 (type rules, plan A9)
+
+- **What changed:** the extension label is documented as artwork, as Folder's count: drawn to the page's scale, under the 10 px floor, inside the page's image (role img) or an aria-hidden page (plan A9.9, finding T22).
+- **Why:** the system evaluation's type rules (docs/research/system-evaluation-2026-11-11, section 5, A9), owner-approved
+  2026-11-11; the rules are in DESIGN_SYSTEM.md ("Ink and weight", "Size and shape", "Text pairs") and the type skill.

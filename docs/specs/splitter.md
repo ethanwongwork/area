@@ -55,7 +55,7 @@ root     div.area-splitter               owns: flex row (horizontal) or column (
   handle div.area-splitter__handle       owns: role separator; 4 hit area (12 after 300 ms, 20 on touch) laid over the
          [role=separator]                1 line it occupies in the layout (negative margins 1 before, 2 after at 4)
     ::before                             the line: 1 at rest in edge-regions; 2 on hover in border-hover; 2 dragging in
-                                         accent-indicator
+                                         focus-color
     ::after                              the focus pill, 4 × half the edge, focus colour
   pane   div.area-splitter__pane
 ```
@@ -73,7 +73,7 @@ moving them (its negative margins equal its extra width), so growing it from 4 t
 | hit area on touch | 20 (`pointer: coarse`) | `workbench.sash.size` 20 on touch | — |
 | rest ink | `edge-regions`, the app's seams | the editor's 1 line in its region border | — |
 | hover line | 2, `border-hover`, after the wait | `[:is(:hover,[data-resizing='true'])::before] width:2px; background-color:var(--cursor-stroke-secondary)` | Area's hover edge role for the secondary stroke |
-| dragging line | 2, `accent-indicator`, at once | `[data-resizing='true']::before background-color:var(--cursor-bg-accent)` | The accent's indicator rung, as Area's other indicators |
+| dragging line | 2, `focus-color`, at once | `[data-resizing='true']::before background-color:var(--cursor-bg-accent)` | The Selection ink (plan B7.5): the indicator rung at Selection Accent, the neutral solid at Neutral; it read the raw accent |
 | focus | 4 pill, half the edge, `focus-color` | Panel's (Figma's 4, 50%) | The editor draws none |
 | motion | none: the growth and the paint are steps after the wait, never animated (`transition` 0s, delay 300 ms) | the editor's sashes step | Reduced motion has nothing to stop (MOTION.md, Resize edge) |
 | cursor | `ew-resize` / `ns-resize`; at a limit the one way left to go (mirrored in RTL); held on the root while dragging | Panel (Figma) | — |
@@ -160,3 +160,7 @@ swapped.
 
 - 2026-11-07 · built from the components audit (N6); Panel's edge takes the shared paint; Splitter's row removed from
   COMPONENTS.md Candidates.
+
+## Selection paint (plan B7.5), 2026-11-14
+
+- The dragged sash reads `focus-color`, the Selection ink (was `accent-indicator`, blue at Selection Neutral).

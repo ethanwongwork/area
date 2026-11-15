@@ -7,16 +7,18 @@
  * navigation) and a chat app's PageHeader (title, subtitle, tabs, view toggle, actions) do the same job.
  *
  * The title is a page's heading, so it takes a title step (DESIGN_SYSTEM.md, Text pairs, "a heading over its text"):
- * sm title-xs, md title-sm (the default, the app's Settings title), lg title-md. Its description is the UI line in the
+ * sm title-xs at 500, md title-lg (the default, the app's Settings title) and lg title-xl at the heading weight, 600
+ * (plan A9.1). Its description is the UI line in the
  * muted ink, one step (4) off it. Slots, never show* flags: a part that isn't given isn't drawn.
  * ------------------------------------------------------------------------- */
 @layer area.components {
   .area-page-header {
-    /* The md tier, the manifest default: a page's own title (area-type-usage: title-sm, "a page or a panel's own
-       title, once"; the app's Settings title). */
-    --_title-size: var(--area-title-sm-size);
-    --_title-leading: var(--area-title-sm-leading);
-    --_title-tracking: var(--area-title-sm-tracking);
+    /* The md tier, the manifest default: a page's own title, the screen's first level (plan A9.1: page > section > item
+       = title-lg / title-xs / text-base, 26 / 16 / 13 at type 13), at the heading weight from title-sm up. */
+    --_title-size: var(--area-title-lg-size);
+    --_title-leading: var(--area-title-lg-leading);
+    --_title-tracking: var(--area-title-lg-tracking);
+    --_title-weight: var(--area-weight-heading);
     display: grid;
     /* The text column and the actions beside the title; the parent, the description and the navigation take the
        rows above and under it. Rows with nothing in them collapse, so each part brings its own space (margins). */
@@ -30,22 +32,25 @@
     color: var(--area-fg-default);
     text-align: start;
   }
-  /* A sub-page or a panel's page: the region heading step (Section heading's 16/22). */
+  /* A sub-page or a panel's page: the region heading step (Section heading's 16/22), strong: title-xs keeps 500. */
   .area-page-header--sm {
     --_title-size: var(--area-title-xs-size);
     --_title-leading: var(--area-title-xs-leading);
     --_title-tracking: var(--area-title-xs-tracking);
+    --_title-weight: var(--area-weight-strong);
   }
   .area-page-header--md {
-    --_title-size: var(--area-title-sm-size);
-    --_title-leading: var(--area-title-sm-leading);
-    --_title-tracking: var(--area-title-sm-tracking);
+    --_title-size: var(--area-title-lg-size);
+    --_title-leading: var(--area-title-lg-leading);
+    --_title-tracking: var(--area-title-lg-tracking);
+    --_title-weight: var(--area-weight-heading);
   }
-  /* A top-level page (Home, a library): the largest words step; title-lg is a figure's, never words. */
+  /* A top-level page (Home, a library, a document): the page title step, title-xl (32/40 at type 13). */
   .area-page-header--lg {
-    --_title-size: var(--area-title-md-size);
-    --_title-leading: var(--area-title-md-leading);
-    --_title-tracking: var(--area-title-md-tracking);
+    --_title-size: var(--area-title-xl-size);
+    --_title-leading: var(--area-title-xl-leading);
+    --_title-tracking: var(--area-title-xl-tracking);
+    --_title-weight: var(--area-weight-heading);
   }
 
   /* The way back: a Breadcrumb, or a back Link. One step (8) over the title: a label line above the heading it
@@ -56,7 +61,7 @@
     display: flex;
     align-items: center;
     min-inline-size: 0;
-    margin-block-end: var(--area-space-8);
+    margin-block-end: var(--area-ui-cluster); /* a cluster (plan B8.2): 6 / 8 / 10 at type 13 Compact / Default / Comfortable */
     font-size: var(--area-ui-size);
     line-height: var(--area-ui-leading);
   }
@@ -69,7 +74,7 @@
     font-size: var(--_title-size);
     line-height: var(--_title-leading);
     letter-spacing: var(--_title-tracking);
-    font-weight: var(--area-weight-strong);
+    font-weight: var(--_title-weight);
     text-wrap: balance;
   }
 
@@ -81,9 +86,9 @@
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    gap: var(--area-space-8);
+    gap: var(--area-ui-cluster); /* independent controls (DESIGN_SYSTEM.md, Size and shape; plan A1.2): 8, compact 6 */
     block-size: var(--_title-leading);
-    margin-inline-start: var(--area-space-16);
+    margin-inline-start: calc(var(--area-ui-cluster) * 2); /* two clusters from the title (plan B8.2): 12 / 16 / 20 at type 13 */
   }
 
   /* A heading over its text stands one step (4) off it (DESIGN_SYSTEM.md, Text pairs; the owner's "4 is right"): the

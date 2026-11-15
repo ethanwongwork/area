@@ -58,15 +58,15 @@ highlight  5% warm black (rgba 33,27,23 / 0.05)
 
 | Slot · property | Area value | Basis | Reason when it differs |
 |---|---|---|---|
-| width | 600 | Notion's list column | Notion's preview pane (406) is left out |
+| width | 600, or `--area-command-palette-inline-size` (plan B6.3) | Notion's list column | Notion's preview pane (406) is left out |
 | position | 77 from the top, centred; max 700 tall | Notion | results grow downward from a fixed field |
 | surface | Dialog's: border, opaque surface, the Elevation axis's modal role `--area-shadow-modal`, as Dialog, scrim 13% | dialog.md | Notion's translucent blur is not in Area's surfaces |
-| corner | row radius + list inset = 8 + 4 = 12 (Menu's and the Combobox list's) | list pass: one list model; kept by owner (audit D-23 A, 2026-09-30) | Notion 20 with 12 rows in a 10 inset; ChatGPT and Notion draw their palettes larger than their menus (corner 16–20, rows 36–48, audit D-23); Area keeps the list model (12 / 32) |
-| search row | 48 tall, 16/24 text; the glyph on the rows' icon column (13 from the edge), the typed text on their text column (41), `--area-gap-row` after the glyph (command-palette.css:56), rule under it | list pass | Notion puts its field 12 in |
-| rows | Menu rows (32, 8 radius, 5% wash), icon 16, 12 gap (`--area-gap-row`, command-palette.css:28; labels at 36) | menu.md | Notion's 36 rows and 20 icons belong to its larger scale |
+| corner | the modal corner, `radius-container` (16 at the default), with the rows concentric inside it: the list's padding is the corner less the rows' (8 + 8), never under 4 (popup.css, "Overlay corners"; plan B6.3, 2026-11-14) | One corner per role: a modal beside Dialog's 16; the rows keep a row's corner | It was Menu's 12 with a 4 padding, a list beside the 16 of every other modal (S14, VN22) | Notion 20 with 12 rows in a 10 inset; ChatGPT and Notion draw their palettes larger than their menus (corner 16–20, rows 36–48, audit D-23); Area keeps the list model (12 / 32) |
+| search row | the tool bar and its rule (inset.css, plan B4.1): 39 / 47 / 55 at type 13 Compact / Default / Comfortable (it was 48 less 8 a density step, 40 / 44 / 52), 16/24 text; the glyph on the rows' icon column (13 from the edge), the typed text on their text column (41), the rows' icon-to-label gap `--area-ui-cluster` after the glyph (`--_menu-gap`; plan B2.3), rule under it | list pass | Notion puts its field 12 in |
+| rows | Menu rows (`ui-row`, 5% wash), icon 16, the cluster gap (`--area-ui-cluster`, 8, Compact 6; labels at 32 / 30; plan B2.3) | menu.md | Notion's 36 rows and 20 icons belong to its larger scale |
 | group headings | Menu's label rows: a row tall, the rows' size at 500, muted (Nav's label, 2026-10-22), on the icon column; groups 2 apart like rows | list pass: one list model; Menu labels 12/16 (2026-09-27) | Notion 12/14.4 medium; ChatGPT 14/20 regular |
 | description | muted, after the label, trimmed to its cap like the label so the two share a baseline (inset.css) | Notion (a page's parent) | Round 81: centred on its own line box it sat 0.6px above the label's baseline |
-| empty state | one quiet row, 32 tall, muted, at the text-only inset (32 − 1cap) / 2 — the Combobox row (command-palette.css:97-105) | audit D-24 A (owner 2026-09-30): one empty-state row everywhere | Was a centred 96 block |
+| empty state | Menu's empty line (`.area-menu__empty`): a row tall, muted, on the glyph edge (plan B2.6, 2026-11-13) | audit D-24 A (owner 2026-09-30): one empty-state row everywhere | Was a centred 96 block |
 | shortcut | Kbd small, quiet, at the end; renders like Menu's string shortcut (UI font 12/16 400, muted, unboxed; kbd.css:89-102) | Kbd; Menu | Was the keyboard face at 500 until audit S12a |
 | footer | key hints (↑ ↓ Move, ⏎ Open, Esc Close) as static text: small keycaps one ui-cluster from their words, ↑ and ↓ 2 apart, 16 between hints (compact 12), the keycaps on the rows' icon column, the footer padded by that column (12) all round | Raycast, Linear, VS Code quick open, Spotlight | owner round 68: static, not buttons (they were buttons from 2026-09-28) |
 
@@ -106,6 +106,8 @@ the item's, the trail of steps sits muted before the typed text (`aria-described
 search icon's place, and Escape or Backspace in an empty field goes back; the step's name is announced. A closed
 palette opens at its first list.
 `hotkey="mod+k"` toggles it (⌘ on Apple platforms, Ctrl elsewhere).
+
+**State hooks (manifest).** `open` is the modal dialog's own `[open]` (`stateAttributes: { open: "open" }`): the entry and exit read it (`surface.css`, the dialog and palette rules).
 
 ## Verification
 
@@ -221,6 +223,7 @@ Spacing without the footer rule (2026-10-26): the hints sit 12 under the last ro
   hint buttons now centre their content → command-palette.css.
 - 2026-10-14 · owner: "continue working on the next axis" → Surface is one number, the frame's width: `1` (Default) or `0` (Borderless) (was `outlined` / `borderless`; axes/surface.ts). At 0 the palette (the inline one too, which has no lift) lists the Surface axis's `shadow-edge` first in its box-shadow, ChatGPT's frameless-menu edge (`0 0 1px` black 62%, and in dark an inset `0 0 1px` white 20%; captured 2026-10-13), so it keeps an edge at Elevation 0 and in dark, where it had none. Owner approved ("go with your recs"), review https://claude.ai/artifact/L4TCF2W5zcjvBK7xZmaDBN (docs/research/surface-2026-10-14.md).
 - 2026-10-18 · Elevation and Stroke audit (docs/research/elevation-stroke-2026-10-18, "Audit: Area today") → under any Material the palette fell back to the float shadow; it now names `--_elevation: var(--area-shadow-modal)` (the inline palette `0 0 0 0 transparent`, no lift) and lists the material's layers first (`--_m-layers`), so a material never changes its lift (command-palette.css). Unchanged with no material. Checked in the app, light and dark.
+- 2026-11-11 · system evaluation F5 · the manifest declares `open` on the native `[open]` (`stateAttributes`); no paint changed.
 
 ## Review note, 2026-10-22 (round 67)
 
@@ -296,3 +299,35 @@ Backspace and Escape, the preview's container query and the marks; not checked i
 - 2026-11-07 · components audit V4 → preview pane, path, matches, steps → command-palette.css, surface.css (`__match`),
   manifest.ts, CommandPalette.tsx, highlight.tsx, Combobox.tsx (shares the marks), gallery tiles, Documentation entry,
   command-palette.test.mjs, cohesion.test.mjs.
+- 2026-11-11 · system evaluation A2.1 · rows 10 → 8 and the frame 14 → 12 at the default: rows take their height's corner (radius-list-row capped by radius-row). emit/base.ts.
+- 2026-11-11 · system evaluation A1.1, A11.1, B2.3 · rows and the search row's icon-to-label gap is `ui-cluster` (8, Compact 6: labels and typed text at 32 / 30 from the list's column); the footer hints are 16 apart (was 14 at the default; Compact 12 unchanged); the empty line's side rounds to a whole pixel (10, was 10.38).
+
+## Review note, 2026-11-11 (type rules, plan A9)
+
+- **What changed:** the footer's key hints move from `text-xs` (11/14) to `text-sm` (12/16) (plan A9.2), and the step beside the search takes the UI line, 13/18; it was the reading size 15/22, which only the search field keeps (plan A9.12).
+- **Why:** the system evaluation's type rules (docs/research/system-evaluation-2026-11-11, section 5, A9), owner-approved
+  2026-11-11; the rules are in DESIGN_SYSTEM.md ("Ink and weight", "Size and shape", "Text pairs") and the type skill.
+
+## Review note, 2026-11-11 (motion, plan A5)
+
+- **What changed:** the modal takes the anchored clocks, `fast` in and out (140; it was Dialog's 280 / 210), the exit on `ease-exit`; opened by its shortcut it appears at its size and only fades (`data-opened-by`; A5.1, A5.2); its scrim on `fade-fast`; items land and leave at once (A5.3).
+- **Why:** the system evaluation's motion items (docs/research/system-evaluation-2026-11-11, section 5, A5), owner-approved
+  2026-11-11; the rules are in docs/MOTION.md (Tokens, Roles, Recipes) and kept by cohesion.test.mjs and
+  tests/behaviour/suites/motion.test.mjs. The motion tables above are history; these values are current.
+
+### 2026-11-11 · Ink, dark and colour (system plan, Phase 1)
+
+- **What changed:** In dark it paints the floating ground (`bg-float`, plan A7.2): a step above the layers under it, #0c0c0c on the near-black page at the defaults (was `bg-surface`, the page's own #020202); light is unchanged. Its dark edge is one line (plan A7.1): the frame takes the dark rim's strength (16% at Shadow 8) and the rim is no longer drawn outside it, where it had made a two-tone 2px edge.
+- **Why:** docs/research/system-evaluation-2026-11-11 (README §5); the owner took every recommendation on 2026-11-11.
+- **Verdict:** awaiting the owner.
+
+## Shared parts (plan B2), 2026-11-13
+
+- **Empty line (B2.6, G5).** Menu's empty line, a row tall (it was the md control's height, 26 beside 28 rows at Compact); `__empty` is gone from the manifest.
+- **Centring (B2.2, VN8).** The path is a cap slot beside the label (it sat 0.62 high).
+- **Row table (B2.1).** Muted row icons; separators on the plates' edges.
+- 2026-11-14 · system evaluation B6.1, B6.3, B6.4, B6.6 · the palette is a modal holding a list: its corner is `radius-container` (12 → 16 at the default; 20 at Corner 14 and Pill, 0 at Sharp) and its list pads the corner less the rows' corner (4 → 8 at the default, 5 at Pill, 4 at Sharp), so the search glyph and the rows' icons share a column 16 in (was 12) and the footer's keycaps follow; the frame and shadow stack are the one floating surface's (the modal role); `--area-command-palette-inline-size` replaces the 600; the 1px edge stays outside the padding (B6.4, kept); the preview pane's bar is the thin shared thumb.
+
+## Shared bars and corners (plan B4), 2026-11-14
+
+- B4.1: the search row is the tool bar and its rule (`--_hb-tool`, inset.css): 39 / 47 / 55 at type 13 Compact / Default / Comfortable. It was 48 less 8 a density step (40 / 44 / 52), on no ladder beside Panel's bar.

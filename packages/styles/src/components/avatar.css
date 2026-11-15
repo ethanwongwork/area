@@ -1,0 +1,107 @@
+/* Avatar and Avatar group (docs/specs/avatar.md). */
+@layer area.components {
+  /* --- Avatar ------------------------------------------------------------- */
+  .area-avatar {
+    --_size: var(--area-control-md);
+    --_bg: var(--area-bg-component-active);
+    --_fg: var(--area-fg-muted);
+    --_group-ring: 0 0 0 0 transparent;
+    --_active-ring: 0 0 0 0 transparent;
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: var(--_size);
+    block-size: var(--_size);
+    flex-shrink: 0;
+    /* A circle while data-area-pills lists `avatar` (the default); otherwise its own corner, capped at
+       7/16 of the side so it stays a rounded square at Pill. shape="circle" / "square" override. */
+    --_avatar-pill: var(--area-pill-avatar);
+    border-radius: max(min(max(var(--area-radius-min), round(down, calc(var(--_size) * var(--area-radius-factor)), 2px)), round(down, calc(var(--_size) * 7 / 16), 2px)), var(--_avatar-pill) * var(--area-radius-full)); /* a pill is radius-full, one value */
+    background-color: var(--_bg);
+    color: var(--_fg);
+    box-shadow: var(--_group-ring), var(--_active-ring);
+    /* The Media stroke group's hairline, inside the circle so a white photo keeps an edge (axes/stroke-groups.ts, 2026-10-30). */
+    outline: var(--area-stroke-width) solid var(--area-edge-media);
+    outline-offset: calc(-1 * var(--area-stroke-width));
+    /* Initials step with the disc: 12 / 14 / 16 at 28 / 32 / 40 (Notion 14 at 32, docs/specs/avatar.md). */
+    font-size: var(--_text, var(--area-text-base-size));
+    /* The initials' line box is the glyph, not the surrounding text's leading (as Folder's avatar badge). */
+    line-height: 1;
+    font-weight: var(--area-weight-strong);
+    overflow: hidden;
+    user-select: none;
+  }
+
+  .area-avatar__image {
+    inline-size: 100%;
+    block-size: 100%;
+    object-fit: cover;
+  }
+
+  .area-avatar__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    inline-size: var(--_icon, var(--area-icon-md));
+    block-size: var(--_icon, var(--area-icon-md));
+  }
+
+  .area-avatar__icon > svg { inline-size: 100%; block-size: 100%; }
+
+  .area-avatar--circle { --_avatar-pill: 1; }
+  .area-avatar--square { --_avatar-pill: 0; }
+
+  .area-avatar--neutral {
+    --_bg: var(--area-bg-component-active);
+    --_fg: var(--area-fg-muted);
+  }
+
+
+  .area-avatar--inverse {
+    --_bg: var(--area-bg-inverse);
+    --_fg: var(--area-fg-on-inverse);
+  }
+
+  /* The active ring is the Selection role (DESIGN_SYSTEM.md, "Emphasis roles"). */
+  .area-avatar--active {
+    --_active-ring:
+      0 0 0 var(--area-space-2) var(--area-bg-surface),
+      0 0 0 var(--area-space-4) var(--_ring, var(--area-selection-solid));
+  }
+
+  /* xs (2026-11-02): an avatar set in a line of UI text, as tall as the line (18 at type 13), so a name with its picture
+     keeps the line's height (an activity log's "David Tee commented"); sm's 26 grew the line. */
+  .area-avatar--xs { --_size: var(--area-text-base-leading); --_icon: var(--area-icon-xs); --_text: var(--area-text-xs-size); }
+  .area-avatar--sm { --_size: var(--area-control-sm); --_icon: var(--area-space-16); --_text: var(--area-text-xs-size); }
+  .area-avatar--md { --_size: var(--area-control-md); --_icon: var(--area-space-20); --_text: var(--area-text-base-size); }
+  .area-avatar--lg {
+    --_size: var(--area-control-lg);
+    --_icon: var(--area-space-24);
+    --_text: var(--area-text-lg-size);
+  }
+
+  .area-avatar-group {
+    display: inline-flex;
+    align-items: center;
+    isolation: isolate;
+  }
+
+  .area-avatar-group__item,
+  .area-avatar-group__overflow {
+    position: relative;
+    display: inline-flex;
+  }
+
+  .area-avatar-group__item + .area-avatar-group__item,
+  .area-avatar-group__item + .area-avatar-group__overflow {
+    margin-inline-start: calc(var(--area-space-8) * -1); /* the stack's overlap, sized with the avatars, at every density */
+  }
+
+  .area-avatar-group__item > .area-avatar,
+  .area-avatar-group__overflow {
+    /* A cutout between overlapping avatars: required geometry, so `stroke-width` (it vanished under Elevated). */
+    --_group-ring: 0 0 0 var(--area-stroke-width) var(--area-bg-surface);
+  }
+
+}

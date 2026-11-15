@@ -30,7 +30,7 @@ test("defaultEditing renders the field over the hidden preview, named by the lab
 test("a hint tooltip says how to edit and describes the text; disabled text has none", () => {
   const dbl = render(h(EditableText, { label: "Layer name", defaultValue: "Header" }));
   const id = dbl.match(/aria-describedby="([^"]+)"/)[1];
-  assert.match(dbl, new RegExp(`<div role="tooltip" class="area-tooltip area-tooltip--top" id="${id}" popover="manual">Double-click to rename</div>`));
+  assert.match(dbl, new RegExp(`<div role="tooltip" class="area-tooltip area-tooltip--top" id="${id}" popover="manual"><span class="area-tooltip__text">Double-click to rename</span></div>`));
   assert.match(render(h(EditableText, { label: "Page title", activation: "click", defaultValue: "Plan" })), />Click to rename</);
   assert.match(render(h(EditableText, { label: "Page title", defaultValue: "Plan", hint: "Double-click to edit the title" })), />Double-click to edit the title</);
   assert.doesNotMatch(render(h(EditableText, { label: "Layer name", defaultValue: "Header", disabled: true })), /role="tooltip"/);

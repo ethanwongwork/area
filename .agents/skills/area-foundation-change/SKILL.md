@@ -17,7 +17,7 @@ didn't. Read `docs/ARCHITECTURE.md` (Tokens) and `docs/THEMING.md` first.
   variant (`area-component-intake`).
 - **One number or name, one effect** (owner, 2026-10-18).
   - Name it after what it measures: Radius is the medium Button's corner, Elevation the
-    Menu's shadow in percent, Motion the Menu's open in ms, Density the medium Button's
+    Menu's shadow in percent, Motion a dialog's open in ms, Density the medium Button's
     height.
   - Never bundle several settings into a named look. Never cut existing options to simplify;
     make each option's effect visible instead.
@@ -54,6 +54,11 @@ Then carry it through:
    - The rule in `docs/DESIGN_SYSTEM.md`, replacing what it supersedes.
    - `docs/CONTRAST.md` or `docs/MOTION.md` if the change touches them.
    - Each affected spec's current-state sections, if one family's documented value changes.
+   - **A change of a ramp or a default sweeps the comments and docs that quote px** (system evaluation F6,
+     2026-11-11): grep the CSS, token and React comments, DESIGN_SYSTEM, THEMING and the specs for the old numbers
+     and rewrite each as the formula, or the value at the shipped default (type 13, density 32, Corner 10) naming
+     the setting when it quotes another. `check:docs` flags a token quoted beside the wrong default number, but not a
+     rendered sum or a component's own `--_*` value; those need the sweep.
 
 ## Rules that break silently
 

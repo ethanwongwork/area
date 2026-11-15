@@ -176,3 +176,18 @@ text does not move between states. Not compared side by side with Figma in one s
 - **What changed:** `onValueChange(value, event)` passes the Enter key or the blur that committed.
 - **Why:** EditableText.tsx:18. From the components audit's internal peer comparison (`docs/research/components-audit-2026-11-07/internal.md`); the owner took every recommendation ("Take all recs", 2026-11-07).
 - **Verdict:** awaiting the owner.
+
+## Review note, 2026-11-11 (focus and targets, plan A6, A11.2)
+
+- **What changed:** The editing field draws the field focus ring (its width, at least the 1px edge), inside, instead of a literal 1px outline (A6.2, S12).
+- **Why:** the system evaluation's focus, forced colours and hit target items (docs/research/system-evaluation-2026-11-11, section 5), owner-approved 2026-11-11; the rules are in DESIGN_SYSTEM.md ("The focus ring", "Targets") and CONTRAST.md (Focus).
+
+### 2026-11-11 · Ink, dark and colour (system plan, Phase 1)
+
+- **What changed:** The placeholder preview reads `input-placeholder` (plan A3.3, finding T19).
+- **Why:** docs/research/system-evaluation-2026-11-11 (README §5); the owner took every recommendation on 2026-11-11.
+- **Verdict:** awaiting the owner.
+
+## State paint (plan B7.3), 2026-11-14
+
+- The preview presses to `bg-pressed`, a step past its `bg-hover`.

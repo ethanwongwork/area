@@ -42,15 +42,19 @@
        ColorPicker's own --_inset can't leak into them (audit F-27). */
     --_panel-inset: var(--_side);
     /* The drawn corner, published so a Surface inside the panel nests concentrically with it (surface.css). */
-    --_panel-corner: var(--area-radius-container);
+    --_panel-corner: var(--_fr-block); /* the frame recipe's block corner (surface.css) */
     /* spec (owner, 2026-09-28: "shouldn't there be differences in text size and gaps between medium and
-       small?"): the panel's own text and gaps step with the tier; controls keep their tier's text (14/20
-       at sm and md, the control scale). Published as --_panel-* so BoxField and PropertyList rows inside
-       a panel follow them. md: section titles and labels 14/20, fields 12 apart (and from their row's action),
-       rows 12 apart, labels 6 over their controls. The bar title is the size of the rows it names (owner,
+       small?"): the panel's own text and gaps step with the tier; controls keep their tier's text (13/18
+       at sm and md at the default type 13, the control scale). Published as --_panel-* so BoxField and PropertyList
+       rows inside a panel follow them. md: section titles and labels text-base (13/18 at the default), fields (and
+       their row's action) and rows 10 − 4 × ui-gap-step apart (10, compact 6: whole steps, plan A1.1; 8 at the default type 13
+       before 2026-11-11), labels 4 over their controls (below). The bar keeps the half step: its room is an inset (`--_panel-room`). The bar title is the size of the rows it names (owner,
        2026-11-07, system gaps L1: a title is its text's size; was text-lg 15/22, the reading step). */
-    --_panel-gap: calc(var(--area-space-10) - var(--area-space-4) * var(--area-ui-dense)); /* spec: 10, compact 6 */
-    --_panel-row-gap: calc(var(--area-space-10) - var(--area-space-4) * var(--area-ui-dense)); /* spec: 10, compact 6 */
+    --_panel-gap: calc(var(--area-space-10) - var(--area-space-4) * var(--area-ui-gap-step)); /* spec: 10, compact 6 */
+    --_panel-row-gap: calc(var(--area-space-10) - var(--area-space-4) * var(--area-ui-gap-step)); /* spec: 10, compact 6 */
+    /* The bar's room above and below its row: an inset, so it keeps the half step (8 at the default type 13, 10 at type 14,
+       compact 6). */
+    --_panel-room: calc(var(--area-space-10) - var(--area-space-4) * var(--area-ui-dense)); /* spec */
     --_panel-label-gap: calc(var(--area-ui-stack) - var(--area-space-2)); /* Field's label gap less 2: 4 / compact 2 */
     --_panel-label-text: var(--area-text-base-size);
     --_panel-label-leading: var(--area-text-base-leading);
@@ -68,9 +72,15 @@
      * agree without either restating the formula: a control, a compact header inset above and below it,
      * and the hairline under it.
      */
-    /* The bar's button has one field gap above and below, the title centred: sm 6 + 28 + 6 + 1 = 41,
-       md 10 + 32 + 10 + 1 = 53. */
-    --_bar: calc(var(--_row) + var(--_panel-gap) * 2 + var(--area-border-width));
+    /* md is the tool bar (inset.css, "Two header bars", plan B4.1): the medium control with the cluster space above and
+       below, 38 / 46 / 54 at type 13 Compact / Default / Comfortable. It draws no rule (2026-10-25), so it counts none
+       (`--_bar-rule`): it was the row, the bar's room and a rule's 1, 39 / 47 / 59. sm keeps its own bar (below). */
+    --_bar-rule: var(--_hb-rule);
+    --_bar: var(--_hb-tool);
+    /* The bar's corner action is a corner control (inset.css, plan B4.2): it sits as far from the end as from the top,
+       (bar − its height) / 2 inside the edge, and its corner is the panel's less that distance (16 − 11 = 5 for the small
+       action at the defaults). It stood on the text column, 14 from the side and 10 from the top. */
+    --_cc-corner: var(--_panel-corner);
 
     display: flex;
     flex-direction: column;
@@ -102,6 +112,7 @@
   .area-panel--flush {
     --_edge: 0px;
     --_panel-corner: 0px;
+    --_cc-corner: initial; /* square: a corner action keeps its own corner */
     border: 0;
     border-radius: var(--_panel-corner);
     background-color: var(--area-bg-page);
@@ -182,6 +193,10 @@
      too; it was 2 further in. */
   .area-panel__body .area-nav__group { --_panel-row-pad: calc(var(--area-ui-row-inset) - var(--area-space-2)); /* spec: Cursor's 6 */ }
   .area-panel__body > .area-scroll-area__viewport > .area-scroll-area__content { display: flex; flex-direction: column; gap: 0; }
+  /* The first heading under the bar takes no air above it (plan B4.1, VN17): the bar's own room already sits round its
+     title, so the first section's name was ~36 below the title's cap against 22–30 between later names. */
+  .area-panel__bar + .area-panel__body > .area-panel__section:first-child > .area-panel__heading:first-child,
+  .area-panel__bar + .area-panel__body > .area-scroll-area__viewport > .area-scroll-area__content > .area-panel__section:first-child > .area-panel__heading:first-child { --_air-start: 0px; }
   /* A section without a heading starts one inset below the bar or rule. */
   .area-panel__section:not(:has(> .area-panel__heading:first-child)) { padding-block-start: var(--_inset); }
 
@@ -229,13 +244,14 @@
     min-block-size: var(--_row);
     box-sizing: content-box;
     margin: 0;
-    padding-block: var(--_air) calc(var(--_air) - var(--_panel-row-gap));
+    padding-block: var(--_air-start, var(--_air)) calc(var(--_air) - var(--_panel-row-gap));
     margin-inline: calc(var(--_side-start) * -1) calc(var(--_side-end) * -1);
     padding-inline: var(--_side-start) var(--_side-end);
     font-size: var(--_panel-label-text);
     line-height: var(--_panel-label-leading);
     /* spec (docs/specs/inspector.md): a section title is strong, as every title (Figma 550). */
     font-weight: var(--area-weight-strong);
+    color: var(--area-fg-muted); /* a heading over a run of rows: muted (plan A9.4, owner 2026-11-11) */
   }
   /* With actions the heading is a row: the title, then icon buttons ending on the content edge,
    * in the same column as every row's action (Figma: 180 and 208 in its 240 panel, 4 apart). */
@@ -272,14 +288,13 @@
     inset-inline-start: 0;
     /* On the title's row, not the heading box: an open section's heading has less air below than a closed
        one's, so a box-centred chevron moved up when the section opened (owner, review round 2, 2026-10-09). */
-    inset-block-start: var(--_air);
+    inset-block-start: var(--_air-start, var(--_air));
     block-size: var(--_row);
     display: flex;
     align-items: center;
     justify-content: center;
     inline-size: var(--_side-start);
     color: var(--area-fg-muted);
-    opacity: 0;
     pointer-events: none;
   }
   /* A native cut, 16 at md and 12 at sm, centred in the side inset (13 / 9): its ink (9 / 7 wide) fits inside it
@@ -290,8 +305,11 @@
   .area-panel--sm .area-panel__chevron svg { --_chevron: var(--area-icon-xs); --_glyph-cut: var(--area-type-icon-xs-cut); }
   /* Revealed at once on hover or focus, faded out on fast (MOTION.md, "Hover plate"). */
   .area-panel__toggle:focus-visible .area-panel__chevron { opacity: 1; transition-duration: 0s; }
-  @media (hover: hover) { .area-panel__heading:hover .area-panel__chevron { opacity: 1; transition-duration: var(--area-hover-in); } }
-  @media (hover: none) { .area-panel__chevron { opacity: 1; } }
+  /* Hidden only where there is hover (plan B7.11): a touch screen always shows the chevron. */
+  @media (hover: hover) {
+    .area-panel__chevron { opacity: 0; }
+    .area-panel__heading:hover .area-panel__chevron { opacity: 1; transition-duration: var(--area-hover-in); }
+  }
   /*
    * A section's count (owner, 2026-10-30, docs/research/inspector-panel-2026-10-30, "Section headings carry more"):
    * muted tabular text a space after the heading, as a Canvas section's (docs/PRODUCT_UI.md rule 9), so a heading says
@@ -307,7 +325,7 @@
    * touch screen always shows them. They keep their place, so the heading never reflows.
    */
   @media (hover: hover) {
-    .area-panel__section--reveal > .area-panel__heading > .area-panel__actions > * { opacity: 0; transition: opacity var(--area-fade-fast) var(--area-ease-out); }
+    .area-panel__section--reveal > .area-panel__heading > .area-panel__actions > * { opacity: 0; transition: opacity var(--area-fade-fast) var(--area-ease-effects); }
     .area-panel__section--reveal:not(:hover, :focus-within) > .area-panel__heading > .area-panel__actions > :not([aria-pressed="true"], [aria-expanded="true"], :has([aria-pressed="true"], [aria-expanded="true"])) { pointer-events: none; }
     .area-panel__section--reveal:is(:hover, :focus-within) > .area-panel__heading > .area-panel__actions > *,
     .area-panel__section--reveal > .area-panel__heading > .area-panel__actions > :is([aria-pressed="true"], [aria-expanded="true"], :has([aria-pressed="true"], [aria-expanded="true"])) { opacity: 1; transition-duration: 0s; }
@@ -328,7 +346,8 @@
    * filling the row; a row with an action adds a trailing square the height of a row. With
    * `action-column` every row keeps that square, so fields, groups and icon buttons line up down
    * the panel even where a row has no action (Figma: 88 + 8 + 88 + 8 + 24; owner 2026-09-27:
-   * only the Figma recipe reserves it). Captions sit above their columns, 6 over the controls.
+   * only the Figma recipe reserves it). Captions sit above their columns, the label gap over the controls
+   * (ui-stack − 2: 4 at the default, 2 compact).
    */
   .area-panel__row {
     display: grid;
@@ -359,6 +378,27 @@
   .area-panel__row-controls > * { min-inline-size: 0; }
   .area-panel__row:has(> .area-panel__row-action),
   .area-panel--action-column .area-panel__row { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) var(--_row); }
+  /*
+   * One column grid per section (plan B2.7, 2026-11-13; VN16, RF13). A section with any row action (a row's action, a
+   * Box field's toggle, a Property list's buttons) reserves the action column on every row, so W and H start under X and
+   * Y: a row without an action spanned the width and its second column started 18 right of its neighbour's. The column
+   * hangs into the end inset so its sm icon button ends on the row inset (8 from the panel's outside) while text keeps
+   * the panel's inset at the start, the inspector's asymmetric row: `--_action-hang`, the side inset plus the edge plus
+   * the button's room in the column, less ui-row-inset (8 at type 13 md: 14 + 2 − 8; 7 at Compact; whole at every
+   * type and density, since the column and the button are both on the ladder). Box field's square reads the same column.
+   */
+  .area-panel {
+    --_action-hang: max(0px, calc(var(--_side-end) + var(--_edge) + (var(--_row) - var(--area-control-sm)) / 2 - var(--area-ui-row-inset)));
+  }
+  /* A one-line Checkbox in a row is a settings row, as a Panel's Switch is (switch.css): a small control's height, its box
+     and its label's cap on the row's centre (plan B2.2, B2.5; it sat at the top of its 24 lane, its cap 5 above the
+     row's centre). */
+  .area-panel__row-controls > .area-checkbox:not(:has(.area-choice-label__description)) { min-block-size: var(--area-control-sm); align-items: center; }
+  .area-panel__row-controls > .area-checkbox:not(:has(.area-choice-label__description)) > .area-choice-label { margin-block-start: 0; }
+  .area-panel__section:has(:is(.area-panel__row-action, .area-box-field__toggle, .area-property-list__actions)) .area-panel__row {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) var(--_row);
+    margin-inline-end: calc(-1 * var(--_action-hang));
+  }
   .area-panel__row-action { grid-column: 3; display: flex; align-items: center; justify-content: center; }
   /* Actions end on the inset like the fields, one field gap after them (owner, 2026-09-28: "use the same
      gaps between the inputs … and the button"; Figma: 8 between H and its action). */
@@ -417,13 +457,19 @@
    * its seam counted once: the inset is measured from the seam's outside, as the body's is.
    */
   .area-panel__bar:not(:has(> .area-panel__title)) {
-    --_bar-even: calc((var(--_bar) - var(--area-border-width) - var(--area-control-sm)) / 2);
+    --_bar-even: calc((var(--_bar) - var(--_bar-rule) - var(--area-control-sm)) / 2);
     --_bar-start: calc(var(--_bar-even) - var(--_inset) + var(--_side-start));
     --_bar-end: calc(var(--_bar-even) - var(--_inset) + var(--_side-end));
     /* Applied here, not through the shared inset (inset.css), whose text inset otherwise wins at a side with no seam rule
        (owner, 2026-10-30: "there shouldnt be so much excess room on the sides of the buttons, it should be equal"; the
        Inspector's toggle sat 19 from its end, its views 6). */
     padding-inline: var(--_bar-start) var(--_bar-end);
+  }
+  /* A titled bar's end action sits evenly in the corner (plan B4.2): the bar's padding puts its plate on the inset, so it
+     moves out to the distance it sits from the top, the edge counted once (11 at the defaults with the small action). */
+  .area-panel__bar:has(> .area-panel__title) > .area-button:last-child {
+    --_cc-at: calc(var(--_edge) + (var(--_bar) + var(--_bar-rule) - var(--_height)) / 2);
+    margin-inline-end: calc(var(--_cc-at) - var(--_inset));
   }
   /* A Nav in the bar is a row of controls: the small control's height and corner, as the Titlebar's tabs. */
   .area-panel__bar .area-nav--horizontal .area-nav__item {
@@ -479,22 +525,25 @@
   /* spec (inspector): the row (heading height, action column) follows the panel's tier. Two
    * tiers (owner, 2026-09-27): sm, Figma's inspector density, and md, the default. 24px rows
    * belong to compact density, not to a smaller panel; 40px rows were too loose for an inspector. */
-  /* sm: section titles and labels 12/16, bar title 14/20, fields 8 apart, rows 8 apart, labels 4 over. */
+  /* sm: labels and headings text-sm (12/16 at type 13; plan A9.2: words are never the mark size), bar title the UI text (13/18), fields
+     and rows ui-stack apart (6, compact 4), labels 4 over. */
   .area-panel--sm {
-    --_inset: calc(var(--area-inset-surface-sm) - var(--area-space-2)); --_row: var(--area-control-sm); /* 10, compact 6 */
-    --_panel-gap: var(--area-ui-stack); --_panel-row-gap: var(--area-ui-stack); --_panel-label-gap: var(--area-space-4); /* spec: 6, compact 4; labels stay 4 over */
-    --_panel-label-text: var(--area-text-xs-size); --_panel-label-leading: var(--area-text-xs-leading);
+    --_inset: calc(var(--area-inset-surface-sm) - var(--area-space-2)); --_row: var(--area-control-sm); /* inset-surface-sm − 2: 8 at the default, 6 compact */
+    --_panel-gap: var(--area-ui-stack); --_panel-row-gap: var(--area-ui-stack); --_panel-room: var(--area-ui-stack); --_panel-label-gap: var(--area-space-4); /* spec: 6, compact 4; labels stay 4 over */
+    --_panel-label-text: var(--area-text-sm-size); --_panel-label-leading: var(--area-text-sm-leading);
     --_panel-title-text: var(--area-ui-size); --_panel-title-leading: var(--area-ui-leading);
+    /* sm's bar: the small row with ui-stack above and below and a rule's room, 33 / 39 / 47 (plan B4.1 kept it as it
+       stands, the item's open choice). Its title is balanced on the rule's room (inset.css). */
+    --_bar-rule: var(--area-border-width);
+    --_bar: calc(var(--_row) + var(--_panel-room) * 2 + var(--_bar-rule));
   }
   .area-panel--md { --_inset: max(calc(var(--area-space-16) - var(--area-space-2)), var(--area-inset-surface-md)); --_row: var(--area-control-md); }
   /* window-bar: the bar is on a window's top line, one of an app's region headers (owner, 2026-10-30: "the header should
      be shorter in height, matching cursor"): the small control 7 from its top and bottom, as a bar's controls sit 7 from
      its side, and no hairline. 40 at type 13 / 32, Cursor's agents window (its bars 40); 38 at 13 / 28. The body keeps
      the panel's size. Titlebar size sm is the same height, so the headers on one line agree. */
-  .area-panel--window-bar { --_bar: calc(var(--area-control-sm) + var(--area-space-16) - var(--area-space-2)); }
-  /* It draws no rule, so its controls' even room is the bar less the control alone: 7 at every side (it was 6.5 beside
-     7 above and below). */
-  .area-panel--window-bar > .area-panel__bar { --_bar-even: calc((var(--_bar) - var(--area-control-sm)) / 2); }
+  .area-panel--window-bar { --_bar-rule: 0px; --_bar: var(--_hb-region); } /* the region bar (inset.css, plan B4.1) */
+  /* It draws no rule, so its controls' even room is the bar less the control alone: 7 at every side. */
 }
 
 @layer area.components {
@@ -505,5 +554,5 @@
   .area-panel__toggle[aria-expanded="false"] .area-panel__chevron svg { rotate: -90deg; }
   .area-panel__toggle[aria-expanded="false"] .area-panel__chevron:dir(rtl) svg { rotate: 90deg; }
   /* Reveal-on-hover fades on the one shared timing (audit F-38). */
-  .area-panel__chevron { transition: opacity var(--area-fade-fast) var(--area-ease-out); }
+  .area-panel__chevron { transition: opacity var(--area-fade-fast) var(--area-ease-effects); }
 }

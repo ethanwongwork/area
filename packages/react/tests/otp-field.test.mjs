@@ -13,7 +13,8 @@ test("six empty slots over one real input: numeric, one-time-code autofill, six 
 
 test("a value fills the slots in order; letters are dropped from a digit code", () => {
   const html = render(h(OTPField, { "aria-label": "Code", defaultValue: "4a8 2" }));
-  assert.match(html, /data-filled="">4<\/span><span class="area-otp-field__slot" data-filled="">8<\/span><span class="area-otp-field__slot" data-filled="">2<\/span><span class="area-otp-field__slot"><\/span>/);
+  // Each character is its own cap slot (plan B2.2), so it centres on its cap, not its line.
+  assert.match(html, /data-filled=""><span class="area-otp-field__char">4<\/span><\/span><span class="area-otp-field__slot" data-filled=""><span class="area-otp-field__char">8<\/span><\/span><span class="area-otp-field__slot" data-filled=""><span class="area-otp-field__char">2<\/span><\/span><span class="area-otp-field__slot"><\/span>/);
   assert.match(html, /value="482"/);
 });
 
@@ -22,7 +23,7 @@ test("groups draw a hidden dash between them; mask draws dots and makes the inpu
   assert.equal(html.match(/class="area-otp-field__group"/g)?.length, 2);
   assert.match(html, /<span class="area-otp-field__separator" aria-hidden="true">/);
   const masked = render(h(OTPField, { "aria-label": "PIN", length: 4, mask: true, defaultValue: "27" }));
-  assert.match(masked, /data-filled="">•<\/span>/);
+  assert.match(masked, /data-filled=""><span class="area-otp-field__char">•<\/span><\/span>/);
   assert.match(masked, /type="password"/);
 });
 

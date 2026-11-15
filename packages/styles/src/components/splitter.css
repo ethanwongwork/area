@@ -87,7 +87,7 @@
    * The handle paint, one rule for every resize edge (Splitter's handle and Panel's resizable edge). At rest the line is
    * the host's (Splitter's 1 region edge; Panel's own seam, so nothing of the handle's). After the pointer rests 300 ms
    * it becomes a 2 line in the hover edge's ink (the editor's `:hover::before{width:2px}` in its secondary stroke); while
-   * dragging it is 2 in the accent's indicator ink at once (`[data-resizing]::before`, the editor's accent). Keyboard focus
+   * dragging it is 2 in the Selection ink (`focus-color`) at once (`[data-resizing]::before`). Keyboard focus
    * draws the 4 pill, half the edge, in the focus colour (Panel's, from Figma). Every change is a step, never animated.
    */
   .area-splitter__handle, .area-panel__resize {
@@ -111,7 +111,9 @@
   }
   .area-splitter__handle[data-resizing], .area-panel__resize[data-resizing] {
     --_sash-line: 2px; /* spec: 2 while dragging */
-    --_sash-ink: var(--area-accent-indicator);
+    /* The Selection setting's ink, the same as the keyboard pill below: the accent's indicator rung at Selection Accent,
+       the neutral solid at Neutral (plan B7.5; it read the raw accent, blue at Neutral). */
+    --_sash-ink: var(--area-focus-color);
   }
   .area-splitter__handle[data-resizing]::before, .area-panel__resize[data-resizing]::before { transition-delay: 0s; }
   .area-splitter__handle:focus-visible::after, .area-panel__resize:focus-visible::after {

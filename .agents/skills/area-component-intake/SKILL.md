@@ -74,7 +74,8 @@ captures or uses are missing.
 **For a variant, prop or option:**
 
 - Name its axis from the vocabulary table in `docs/GOVERNANCE.md` § 4, and check that
-  every combination with the other axes is valid.
+  every combination with the other axes is valid. A part, slot or state takes its job's name from
+  `packages/styles/scripts/vocabulary.mjs` (header, footer, title, actions, trailing, media, open …).
 - Give a real use, in a sentence.
 - Confirm it is not a setting in disguise.
 - Name the gallery tile it adds.

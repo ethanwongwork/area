@@ -108,3 +108,15 @@ the default ink.
 - **What changed:** `onValueChange(id, event)` passes the click (absent when scrolling moved the section).
 - **Why:** TableOfContents.tsx:31. From the components audit's internal peer comparison (`docs/research/components-audit-2026-11-07/internal.md`); the owner took every recommendation ("Take all recs", 2026-11-07).
 - **Verdict:** awaiting the owner.
+
+### 2026-11-11 · Ink, dark and colour (system plan, Phase 1)
+
+- **What changed:** The title is muted (plan A9.4, finding T3), reversing round 34's default ink by the owner's 2026-11-11 pick.
+- **Why:** docs/research/system-evaluation-2026-11-11 (README §5); the owner took every recommendation on 2026-11-11.
+- **Verdict:** awaiting the owner.
+
+### 2026-11-14 · Shared parts, leftovers (system plan, Phase 2, wave 3)
+
+- The title's sides read the row role, `2 × ui-row-inset` and `ui-row-inset` (16 and 8 at every density, the marker rows' start): the same values.
+- Why: docs/research/system-evaluation-2026-11-11 (plan B6.1, B6.5, B8.2, B2.2; README §5, phase2/leftovers.md); the owner took every recommendation on 2026-11-11. Fix the rule, not the instance.
+- Verdict: awaiting the owner.

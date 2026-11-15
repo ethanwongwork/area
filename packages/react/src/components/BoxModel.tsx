@@ -13,12 +13,17 @@ export type BoxSides = Value | readonly [Value, Value, Value, Value] | { top?: V
 export type BoxCorners = Value | readonly [Value, Value, Value, Value];
 
 export interface BoxModelProps extends HTMLAttributes<HTMLDivElement> {
+  /** The margin ring's values: one for every side, four in CSS order, or named sides. */
   margin?: BoxSides;
+  /** The border ring's widths: one for every side, four in CSS order, or named sides. */
   border?: BoxSides;
+  /** The padding ring's values: one for every side, four in CSS order, or named sides. */
   padding?: BoxSides;
   /** Corner radii, shown in the border box's corners. */
   radius?: BoxCorners;
+  /** The content box's width, shown in its center as width × height. */
   width?: Value;
+  /** The content box's height, shown in its center as width × height. */
   height?: Value;
   /** A note at the bottom end of the margin zone, such as "border-box". */
   caption?: ReactNode;

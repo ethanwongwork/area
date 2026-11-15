@@ -21,7 +21,7 @@ test("Tooltip inline usage retains text and caller surface attributes", () => {
   assert.match(html, /^<div role="tooltip"/);
   for (const attr of ['id="hint"', 'aria-label="Save hint"', 'aria-describedby="help"']) assert.ok(html.includes(attr));
   assert.match(html, /class="[^"]* custom"/);
-  assert.match(html, />Save changes<\/div>$/);
+  assert.match(html, /><span class="area-tooltip__text">Save changes<\/span><\/div>$/);
   assert.doesNotMatch(html, /tabindex|area-tooltip--arrow/);
 });
 
@@ -56,7 +56,7 @@ test("Tooltip that repeats its trigger's name lets the pointer through; one that
 
 test("Tooltip's passthrough is styled: no pointer events on a name-only surface", async () => {
   const { readFile } = await import("node:fs/promises");
-  const css = await readFile(new URL("../../styles/src/components/surface.css", import.meta.url), "utf8");
+  const css = await readFile(new URL("../../styles/src/components/overlay.css", import.meta.url), "utf8");
   assert.match(css, /\.area-tooltip\[popover\]\[data-passthrough\]\s*\{\s*pointer-events:\s*none;/);
 });
 

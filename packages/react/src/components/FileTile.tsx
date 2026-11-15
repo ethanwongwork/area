@@ -18,7 +18,7 @@ export interface FileTileProps extends Omit<HTMLAttributes<HTMLDivElement>, "chi
   figure?: ReactNode | string;
   /** The image figure's text alternative. Empty by default: the name says what it is. */
   figureAlt?: string;
-  /** The figure's square: sm 48, md 64 (Finder's icon view), lg 96. Unset, it follows the grid (or 64). */
+  /** The figure's square: `sm` 48, `md` 64, `lg` 96. Unset, it follows the grid (or 64). */
   size?: TileSize;
 }
 
@@ -42,7 +42,7 @@ interface FileGridContext { open?: (value: string) => void }
 const GridContext = createContext<FileGridContext>({});
 
 export interface FileGridProps extends Omit<ListBoxProps, "layout"> {
-  /** Every tile's figure: sm 48, md 64 (Finder's icon view, the default), lg 96; or set `--area-file-tile-figure`. */
+  /** Every tile's figure: `sm` 48, `md` 64 (default), `lg` 96; or set `--area-file-tile-figure`. */
   size?: TileSize;
   /** Opens an item: Enter on the focused tile, or a double click. */
   onOpen?: (value: string) => void;

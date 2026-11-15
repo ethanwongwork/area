@@ -9,10 +9,11 @@ export type TurnNoticeStatus = NonNullable<VariantProps<typeof MANIFESTS.turnNot
 export interface TurnNoticeProps extends HTMLAttributes<HTMLDivElement> {
   /** How the turn ended: stopped (you stopped it), error (it failed), compacted (earlier context was summarised). */
   status?: TurnNoticeStatus;
-  /** @deprecated Use `status` (an outcome is a status, Governance § 4). Kept for one release; `status` wins. */
+  /** @deprecated Use `status`, which wins. Kept for one release. */
   kind?: TurnNoticeStatus;
   /** A Button after the text: Retry. */
   action?: ReactNode;
+  /** What happened, in a sentence ("You stopped the reply"). */
   children: ReactNode;
 }
 

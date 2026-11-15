@@ -21,12 +21,15 @@
     align-items: center;
     column-gap: var(--_panel-gap, var(--area-ui-cluster)); /* 8, compact 6 */
   }
+  /* In a Panel section its last button ends where a row's action does, on the hung action column (panel.css, plan B2.7):
+     the hang less the button's room in that column, since its buttons end flush where a row's action is centred. */
+  .area-panel__section .area-property-list__item { margin-inline-end: calc(-1 * max(0px, var(--_action-hang, 0px) - (var(--_row, 0px) - var(--area-control-sm)) / 2)); }
   /* A flex row, so the inline-flex control inside sets the row height (28, not 29 with a line box). */
   .area-property-list__value { display: flex; align-items: center; min-inline-size: 0; }
   .area-property-list__value > * { flex: 1; min-inline-size: 0; }
   .area-property-list__actions { display: flex; align-items: center; gap: var(--area-space-4); }
   /* spec: an off property (a hidden fill) dims its value; its buttons stay readable. */
-  .area-property-list__item[data-inactive] > .area-property-list__value { opacity: 0.5; /* spec */ }
+  .area-property-list__item[data-inactive] > .area-property-list__value { opacity: var(--area-opacity-disabled); }
 
   /*
    * spec: the handle fills the panel's side inset, its glyph centred there, and shows on hover or
@@ -47,7 +50,6 @@
     background: transparent;
     color: var(--area-input-icon);
     cursor: grab;
-    opacity: 0;
     touch-action: none;
     overflow: visible;
     user-select: none;
@@ -57,8 +59,11 @@
   .area-property-list__handle svg { flex-shrink: 0; inline-size: var(--area-icon-sm); min-inline-size: var(--area-icon-sm); max-inline-size: none; block-size: var(--area-icon-sm); overflow: visible; }
   /* Revealed at once on hover, focus or drag, faded out on fast (MOTION.md, "Hover plate"). */
   .area-property-list__handle:focus-visible, .area-property-list__item[data-dragging] > .area-property-list__handle { opacity: 1; transition-duration: 0s; }
-  @media (hover: hover) { .area-property-list__item:hover > .area-property-list__handle { opacity: 1; transition-duration: var(--area-hover-in); } }
-  @media (hover: none) { .area-property-list__handle { opacity: 1; } }
+  /* Hidden only where there is hover (plan B7.11): a touch screen always shows the handle. */
+  @media (hover: hover) {
+    .area-property-list__handle { opacity: 0; }
+    .area-property-list__item:hover > .area-property-list__handle { opacity: 1; transition-duration: var(--area-hover-in); }
+  }
   .area-property-list__handle:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); }
   .area-property-list[data-dragging] { cursor: grabbing; }
   .area-property-list[data-dragging] .area-property-list__handle { cursor: grabbing; }
@@ -76,10 +81,10 @@
     pointer-events: none;
   }
   /* Reveal-on-hover fades on the one shared timing (audit F-38). */
-  .area-property-list__handle { transition: opacity var(--area-fade-fast) var(--area-ease-out); }
+  .area-property-list__handle { transition: opacity var(--area-fade-fast) var(--area-ease-effects); }
   /* An inactive value and a lifted row dim at once and come back on fast (MOTION.md, "Selected"):
      the change answers a click or a pick-up, the return is the leave. */
-  .area-property-list__item > :is(.area-property-list__value, .area-property-list__actions) { transition: opacity var(--area-fade-fast) var(--area-ease-out); }
+  .area-property-list__item > :is(.area-property-list__value, .area-property-list__actions) { transition: opacity var(--area-fade-fast) var(--area-ease-effects); }
   .area-property-list__item[data-inactive] > .area-property-list__value,
   .area-property-list__item[data-dragging] > :not(.area-property-list__handle) { transition-duration: 0s; }
 }

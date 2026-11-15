@@ -36,7 +36,7 @@
     margin: 0;
     padding: 0;
     border: 0;
-    border-radius: var(--area-radius-small);
+    border-radius: var(--area-radius-row); /* a full-width row: its height's corner (plan A2.2) */
     background: none;
     color: inherit;
     font: inherit;
@@ -46,7 +46,7 @@
   button.area-step__row { cursor: pointer; }
   .area-step__row:focus-visible {
     outline: var(--area-focus-width) solid var(--area-focus-color);
-    outline-offset: var(--area-focus-offset);
+    outline-offset: calc(-1 * var(--area-focus-width)); /* a row: inside, by its own width (plan A6.2) */
   }
   .area-step__icon {
     display: inline-flex;
@@ -86,19 +86,21 @@
     display: inline-flex;
     flex: none;
     color: var(--area-fg-muted);
-    opacity: 0;
     transform: rotate(-90deg);
     /* MOTION.md: every chevron turns on fast ease-out. */
-    transition: opacity var(--area-fade-fast) var(--area-ease-out), transform var(--area-duration-fast) var(--area-ease-out);
+    transition: opacity var(--area-fade-fast) var(--area-ease-effects), transform var(--area-duration-fast) var(--area-ease-out);
   }
   .area-step__row:focus-visible > .area-step__chevron,
   .area-step[data-open] > .area-step__row > .area-step__chevron { opacity: 1; transition-duration: 0s, var(--area-duration-fast); } /* opacity in at once; the turn keeps fast */
   /* Closed points along the reading direction, so it mirrors in right-to-left text (Accordion, Tree view). */
   .area-step__chevron:dir(rtl) { transform: rotate(90deg); }
   .area-step[data-open] > .area-step__row > .area-step__chevron { transform: none; }
-  /* Hover-to-reveal: in at once, out on fast (MOTION.md, Hover). */
-  @media (hover: hover) { .area-step__row:hover > .area-step__chevron { opacity: 1; transition-duration: var(--area-hover-in), var(--area-duration-fast); } }
-  @media (hover: none) { .area-step__chevron { opacity: 1; } }
+  /* Hover-to-reveal: in at once, out on fast (MOTION.md, Hover). Hidden only where there is hover (plan B7.11): a touch
+     screen always shows the chevron. */
+  @media (hover: hover) {
+    .area-step__chevron { opacity: 0; }
+    .area-step__row:hover > .area-step__chevron { opacity: 1; transition-duration: var(--area-hover-in), var(--area-duration-fast); }
+  }
 
   /* The body: what went in and came out, 4 under the line (Cursor's content gap 4), on a rail: a 1px rule with the
      content 12 in, the rule counted in the 12 (Claude Code's rail at 12). One rule for all three: a step's input and

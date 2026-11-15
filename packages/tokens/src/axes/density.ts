@@ -15,8 +15,15 @@
  *   room            xs 4, sm 4, md 6, lg 10, xl 12, rows 6 at Default; 2 less a level down, 2 more
  *                   a level up (Fluent and WinUI size controls the same way: line + padding)
  *   spacing         insets and gaps keep each level's ratio of space to type (compact 12 at 12,
- *                   default 16 at 14, comfortable 20 at 14), as a step in halves that components
- *                   read as `--area-ui-dense`: 1 at Compact 12, 0 at Default 14
+ *                   default 16 at 14, comfortable 20 at 14), as a step in halves that insets read
+ *                   as `--area-ui-dense` (1 at Compact 12, 0.5 at the default type 13, 0 at Default
+ *                   14); gaps read the same curve in whole steps, `--area-ui-gap-step`, so a gap is
+ *                   always on the 2px ladder (plan A1.1, 2026-11-11)
+ *
+ * The ladder stays derived (owner, 2026-11-11, plan A8.1): at the default type 13 it is 22 / 26 / 30 / 38 / 46
+ * with rows 30, and the app's Compact 20 / 24 / 26 / 34 / 42 with rows 28. It is not snapped to a 4px ladder
+ * (that would move the app's 26 to 28) and the default density stays 32. A height is a ladder token, or a ladder
+ * token plus whole room steps (`+ 2 × ui-stack`), never a `+ 2px` literal (plan A8.2).
  *
  * The type size bounds the level (type-level-min / -max): 28 at 15 and 16 and 36 at 12 resolve
  * to 32. docs/research/ui-size-scale-2026-10-12.md has the evidence and the

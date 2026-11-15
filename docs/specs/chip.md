@@ -302,3 +302,32 @@ Since 2026-10-17 the underline offset is Link's 0.08em, close under the text (li
 - **What changed:** the remove control's part is `area-chip__dismiss` (was `__remove`), as every family's close.
 - **Why:** one dismiss API and one part name across the families that close or remove (Governance § 4; owner picked Build on the system gaps review, 2026-11-07).
 - **Verdict:** awaiting the owner.
+
+## Review note, 2026-11-11 (type rules, plan A9)
+
+- **What changed:** the link underline reads `underline-offset` (0.08em) (plan A9.10); no visible change.
+- **Why:** the system evaluation's type rules (docs/research/system-evaluation-2026-11-11, section 5, A9), owner-approved
+  2026-11-11; the rules are in DESIGN_SYSTEM.md ("Ink and weight", "Size and shape", "Text pairs") and the type skill.
+
+## Review note, 2026-11-11 (focus and targets, plan A6, A11.2)
+
+- **What changed:** The label and the remove own the shared hit target: the label 24 tall, the remove 24 (44 tall under a coarse pointer) (A11.2).
+- **Why:** the system evaluation's focus, forced colours and hit target items (docs/research/system-evaluation-2026-11-11, section 5), owner-approved 2026-11-11; the rules are in DESIGN_SYSTEM.md ("The focus ring", "Targets") and CONTRAST.md (Focus).
+
+## Review note, 2026-11-11 (motion, plan A5)
+
+- **What changed:** a pointer press gives on the plate: the chip's box scales to the small give and its parts take the inverse scale on the same clocks, the remove button included (A5.6); the colour leave is `duration-quick` (A5.5).
+- **Why:** the system evaluation's motion items (docs/research/system-evaluation-2026-11-11, section 5, A5), owner-approved
+  2026-11-11; the rules are in docs/MOTION.md (Tokens, Roles, Recipes) and kept by cohesion.test.mjs and
+  tests/behaviour/suites/motion.test.mjs. The motion tables above are history; these values are current.
+
+### 2026-11-14 · Shared parts, leftovers (system plan, Phase 2, wave 3)
+
+- A pill is one value: while the Pills set rounds it, its corner is `radius-full` itself, `max(corner, flag × full)`, never the corner plus full (it computed 10007px and 10009px; the swatch inside 10003px). Draws the same; the corners snapshot records 9999px.
+- The swatch's inner corner lists the flag too, so it is `radius-full` at a pill.
+- Why: docs/research/system-evaluation-2026-11-11 (plan B6.1, B6.5, B8.2, B2.2; README §5, phase2/leftovers.md); the owner took every recommendation on 2026-11-11. Fix the rule, not the instance.
+- Verdict: awaiting the owner.
+
+## Selection paint (plan B7.4), 2026-11-14
+
+- Input chip presses at `bg-mark-pressed` (15.4% / 24% at the default Pressed fill, now moving with it).

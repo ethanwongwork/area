@@ -24,6 +24,8 @@ export interface Manifest {
   booleans?: readonly string[];
   states?: readonly string[];
   stateAttributes?: Record<string, string>;
+  /** States another component draws for this one, by its manifest key (Box field's `disabled` is its Number fields'). */
+  statesFrom?: Record<string, string>;
   elements?: readonly string[];
   elementModifiers?: Record<string, readonly string[]>;
   aliases?: Record<string, string>;

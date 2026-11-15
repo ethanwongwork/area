@@ -14,6 +14,7 @@
  *   contrast     the edges a stronger contrast draws: a field, a box, an outline button (a close-up, 1.25x)
  *   type         the type ramp, each role at the preset's size, so what follows the base (body, captions, the small
  *                heading) and what holds (titles, the display jump at 14) is plain
+ *   regular weight  a field's text and a box's label at the weight, beside a button whose strong label holds
  *   density      a list's rows (a close-up, 1.25x)
  *   radius       a field's and a button's corners (a close-up, 1.25x)
  *   Stroke and Shadow (owner, 2026-10-19: "fix the visuals for stroke and shadow to be more custom tailored to each
@@ -452,6 +453,14 @@ function drawing(axis: string, preset?: string): [number, ReactNode] {
       )];
     case "type":
       return [FILL.wide, <Ramp size={preset ?? DEFAULT_TYPE} />];
+    // Regular weight (plan A9.6): the field's text and the box's label move; the button's strong label holds.
+    case "regular-weight":
+      return [FILL.wide, (
+        <div className="lang-col">
+          <Input aria-label="Label" defaultValue="Body text" />
+          <div className="lang-row"><Checkbox label="Option" /><Button variant="outline" tone="neutral">Button</Button></div>
+        </div>
+      )];
     case "density":
       return [FILL.wide, <Rows />];
     case "radius":

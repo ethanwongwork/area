@@ -38,7 +38,9 @@ test("Settings group: a section named by its heading, the rows in a box, framed 
   const html = render(h(SettingsGroup, { heading: "Title", description: "Description", framed: true }, h(SettingRow, { label: "Label" }, h(Switch, null)), h(SettingRow, { label: "Label" }, h(Switch, null))));
   const id = html.match(/aria-labelledby="([^"]+)"/)?.[1];
   assert.ok(id, "the section is not named");
-  assert.match(html, /^<section class="area-settings-group area-settings-group--framed"/);
+  // `framed` is the deprecated alias of the one frame prop, variant="surface" (plan B1.1).
+  assert.match(html, /^<section class="area-settings-group area-settings-group--surface"/);
+  assert.match(render(h(SettingsGroup, { variant: "surface" }, h(SettingRow, { label: "Label" }))), /^<section class="area-settings-group area-settings-group--surface"/);
   assert.match(html, new RegExp(`<h2 class="area-section-heading__title" id="${id}">Title</h2><p class="area-section-heading__lede">Description</p>`));
   assert.equal((html.match(/class="area-setting-row /g) ?? []).length, 2);
   assert.doesNotMatch(render(h(SettingsGroup, null, h(SettingRow, { label: "Label" }))), /aria-labelledby|area-section-heading/, "no heading: no heading and no name");

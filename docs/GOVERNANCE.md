@@ -83,13 +83,13 @@ for the word.
 
 | Axis | Means | Values in use |
 |---|---|---|
-| `variant` | Visual treatment (emphasis) | `solid`, `soft`, `outline`, `ghost`, `plain`, `surface`; `underline` (Mention, a reference drawn as Link's line, 2026-11-07) |
+| `variant` | Visual treatment (emphasis) | `solid`, `soft`, `outline`, `ghost`, `plain`, `surface`; `underline` (Mention, a reference drawn as Link's line, 2026-11-07). On a frame it is the one frame prop: `surface` (the frame), `soft` (a fill, no edge), `plain` (no paint) (plan B1.1, 2026-11-13; DESIGN_SYSTEM.md, Frames) |
 | `tone` | Semantic meaning | `neutral`, `info`, `success`, `warning`, `caution`, `danger`, `discovery`, `inverse` |
 | `size` | Scale tier | `sm`, `md`, `lg` (default `md`) |
 | `orientation` | Direction | `horizontal`, `vertical` |
 | `layout` | Arrangement of the parts | per component |
-| `kind` | Interaction role | per component; Chart's is what it draws, `bar`, `line`, `area`, `donut`, `number` (N7, 2026-11-07) |
-| `side` | Which edge it attaches to | `top`, `right`, `bottom`, `left` (logical `start` / `end` for drawers) |
+| `kind` | Interaction role, or what a card holds | per component; Chart's is what it draws, `bar`, `line`, `area`, `donut`, `number` (N7, 2026-11-07); Asset card's and Design card's what they show (plan B1.1, structure B-S8, 2026-11-13; it was `layout`) |
+| `side` | Which edge it attaches to | logical words: `top`, `bottom`, `start`, `end` (and `top-start` … for `placement`); Popover's and Tooltip's `right` / `left` are deviations (below) |
 | `status` | A process outcome shown by an item | the shared words `pending`, `current`, `complete`, `error`, plus a family's own (`running`, `sending`, `uploading`, `queued`, `cancelled`, `kept`, `undone`, `stopped`, `compacted`) |
 
 **Status words** (owner, 2026-11-07, system gaps C1): not started is `pending`, the place someone is at is `current`,
@@ -110,6 +110,50 @@ line modifiers with them). A change word is not a status word: a file can be `mo
 and Tabs items, drawn as a dot in the accent's indicator rung and read as "Unseen". It never recolours the status beside
 it, so the two axes stay apart.
 
+**Parts, slots, states and props** (system evaluation 2026-11-11, F8): one name per job. The data is
+`packages/styles/scripts/vocabulary.mjs`, which `lint:manifest` and `test:contracts` read: a manifest part, state, axis
+or flag, a `*Props` prop, an axis value or a `data-area-*` attribute that does one of these jobs under another word fails
+unless the file lists it as a deviation, and a listed deviation that is gone fails too, so the list only shrinks. A
+family's own part with no shared job (Calendar's `day-number`) takes its own name.
+
+| Job | Name | When | Example |
+|---|---|---|---|
+| Top band | `header` | A component's top band: its title group, its actions. Never `head` | Dialog |
+| Bottom band | `footer` | A component's bottom band: its buttons, a note. Never `foot` | Dialog |
+| Title | `title` | A component's or an item's own title, a shown file or card name included | Card |
+| Control name | `label` | A control's visible name | Field |
+| Second line | `description` | The line that explains a title or a label. Never `lede` or `subtitle` | Page header |
+| Tabular facts | `meta` | Facts in a column of their own: a size, a time, +N −N; never the second line | Asset row |
+| End cluster | `actions` | The slot for the buttons at the end of a band or an item, however many it holds | Alert |
+| Single action | `action` | Only a single built-in action the component draws itself (Split button's main half, Input's built-in button, Chip's body, File upload's browse, Card action) | Split button |
+| Item end | `trailing` | An item's end slot: a row's shortcut, count or control. Never `end` or `header-action` | Menu item |
+| Picture | `media` | A picture of the item: an image, a video, a frame. Never `picture` or `thumbnail` | Card |
+| Glyph | `icon` / `trailingIcon` | A glyph slot, and one after the label. Never `leadingIcon` | Button |
+| Close | `dismiss` | The close part, `onDismiss` / `dismissLabel` | Alert |
+| Show / hide | `open` | Anything that shows or hides its own content: an overlay, a fold, a growing field (`open` / `defaultOpen` / `onOpenChange`). `collapsed` only where open is the default and closed the exception (Code block's long code). Never `expanded` | Accordion |
+| Pending | `loading` | Waiting for work, painted with `aria-busy` (a hook, not a name). Never `busy` | Button |
+| Outcome | `status` | A process outcome only (Status words) | Stepper |
+| Availability | `presence` | Someone's availability: `available`, `away`, `busy` … | (none yet) |
+| Change | `change` | What happened since it was kept (Change words) | Code block |
+| Words about a state | `statusText` | A sentence about the state, as Message's ("Page 2 of 9") | Message |
+| Edge | `side`, `placement`, `align` | Logical words only: `top`, `bottom`, `start`, `end`, `top-start` …; never `left` / `right` | Drawer |
+| Form name | `name` | A field's form name, a string, and nothing else; shown text is `title` or `label` | Custom select |
+
+- **`action` or `actions`.** A slot the author fills is `actions`, even when it usually holds one button; `action` names
+  only a single action the component draws itself, and the families that have one are listed in the data file
+  (`SINGLE_ACTION`). A React `action` that takes a ReactNode is a slot, so it is `actions`.
+- **`status`, `presence` or `change`.** `status` says how a process ended or where it is (`pending`, `current`,
+  `complete`, `error` and a family's activity words). Someone's availability is `presence`; what happened to a file or a
+  line is `change`, with the change words; a sentence about the state is `statusText`. The lint fails a `status` whose
+  values are availability or change words, or one that is a function.
+- **Spelling.** US spelling in every name and attribute (`color`, `gray`, `center`).
+- **Migration is on reopen, with aliases.** Existing deviations are not renamed now: each is listed in the data file
+  (`ALLOWED_DEVIATIONS`) with the name it becomes, why, and the plan item whose phase reopens its family
+  (docs/research/system-evaluation-2026-11-11/plan.json; `F8-later` where none does). When that item reopens the family,
+  the new name lands and the old one stays a deprecated alias for one release. Misuses a name alone can't show (a
+  `preview` that is a picture, a `status` inside an item type, a string `name` that is shown text) are listed beside them
+  (`MIGRATIONS`), with the same fields.
+
 **Booleans** are adjectives for the non-default state (`fullWidth`, `iconOnly`, `flush`,
 `pill`). CSS modifiers are kebab-case, React props camelCase.
 
@@ -122,8 +166,8 @@ it, so the two axes stay apart.
   `value` never changes type with a mode. Checkbox group and Toggle group, whose every choice is a control of its own,
   keep `value` as an array;
 - a column's order is `sort` (`ascending`, `descending`, `none`, `aria-sort`'s words) / `onSortChange(sort, event)`
-  (Table's headings, V3); a fold is `expanded` / `defaultExpanded` / `onExpandedChange(expanded, event)` (Table's row
-  groups);
+  (Table's headings, V3); a fold is `open` / `defaultOpen` / `onOpenChange(open, event)`, as an overlay (Table's row
+  groups' and Description list's `expanded` are deviations, renamed when they reopen);
 - on/off is `checked` or `selected`;
 - an overlay is `open` / `defaultOpen` / `onOpenChange`, and so is any list or menu a field or button opens (Combobox,
   Custom select, Tag picker, the Date pickers, Time field, Split button, Zoom control, Context menu; Nav group's fold);
@@ -160,11 +204,10 @@ every tone but neutral (caution and discovery added with Alert's, Toast's and In
 marks keep their own rungs, chosen per ground (the page and the tint) for 3:1 (docs/specs/badge.md).
 
 **Known deviations** (2026-10-19 inventory; fix only when the family is next reopened, with
-the owner's agreement):
+the owner's agreement). The names off the vocabulary above (parts, states, props, edge and outcome values, spelling) are
+listed in `packages/styles/scripts/vocabulary.mjs`, the source the lint reads, not here; these are the rest:
 
-- `ink` on Link and Citation;
 - `type` on Scroll area;
-- camelCase axis names `labelPosition` and `selectionMode`;
 - non-treatment `variant` values: Citation `pill | footnote`, Link `inline | standalone`, Titlebar, Kbd `default`;
 - `kind` used for form (Indicator `count | dot`);
 - `size` without a default (Folder, File page, File tile);
@@ -246,13 +289,17 @@ docs never restate it.
 - change words (2026-11-07, components audit D6; see Change words): `removed`, replaced by `deleted`, on Tree view nodes'
   `status`, Diff lines' `kind`, Code block's `marks` and Edit summary's count prop, with the `__removed` part and the
   `--removed` line modifiers;
+- frame spellings (plan B1.1, 2026-11-13), each kept for one release: Description list's `framed`, replaced by
+  `variant="surface"`; Checkbox's and Radio's `variant="card"`, replaced by `surface`; Design card's `layout`, replaced by
+  `kind`. Not yet on the frame prop: Asset card's `container` (it retires into Design card) and Settings group's `framed`;
+- Chart's `busy` state, replaced by `loading` (both hook `aria-busy`; the pending word is `loading`, see One vocabulary);
 - `CopyStatus`, replaced by `useCopy`'s `copiedLabel` / `failedLabel`: the result is said through the shared announcer
   (`announce`, DESIGN_SYSTEM.md "Announcements"; components audit D1, 2026-11-07). It renders nothing;
 - the `@area/tokens/colours` export, replaced by `@area/tokens/color` (2026-11-07, system gaps T4: the public API says
   `color`, as the app's copy does). Still British: the Colors and Status colors settings' attributes
   (`data-area-colours`, `data-area-status-colours`) and internal names. Renaming an attribute is a setting change that
   saved systems hold, so it needs the foundation-change pass with a migration of saved themes; until then, nothing new
-  spells it `colour`.
+  spells it `colour` (the lint fails a new British name; those left are listed in `vocabulary.mjs`).
 
 Renamed props keep a deprecated alias for one release, for example `options` → `items`,
 `onRemove` / `onClose` → `onDismiss`, and a `label` that named a group → `aria-label`.
@@ -275,6 +322,12 @@ docs drift.
 | System-wide rules | `docs/DESIGN_SYSTEM.md`, `THEMING.md`, `CONTRAST.md`, `MOTION.md` |
 | Why the system looks this way | `docs/PRINCIPLES.md` |
 | How the app's own UI behaves | `docs/PRODUCT_UI.md` |
+
+**A family's API tab is generated from the manifest and the React source** (`apps/desktop/scripts/api-rows.mjs`): each visual
+prop's values and default from the manifest, every other prop's type, default and description from its `*Props`
+JSDoc. A React visual prop is typed from its manifest axis, never a literal union. `pages.mjs` `api` rows hold only
+what neither source says (a sub-part's shape, a note on native props); a hand row that restates a generated prop fails
+`test:desktop`, and a value or state one side lacks fails `test:contracts`.
 
 **Specs keep their current state current.** Variants, Anatomy, Decisions, States and
 Behavior describe the component as it is now. Edit them in place in the same change as the

@@ -19,7 +19,12 @@ export interface CountProps extends Omit<HTMLAttributes<HTMLSpanElement>, "child
    * number is read as part of its owner's name, so give it the words the owner lacks.
    */
   label?: ReactNode;
+  /**
+   * `plain` (default): the number in ink only. `soft`: on a translucent plate, so it stays visible on a hovered or
+   * selected row.
+   */
   variant?: CountVariants["variant"];
+  /** The height and type: `md` (default) or `sm`. */
   size?: CountVariants["size"];
   /** Unset: a pill while the theme's `pills` list names this component (the default). `true` forces a pill, `false` the radius setting's corner. */
   pill?: boolean;

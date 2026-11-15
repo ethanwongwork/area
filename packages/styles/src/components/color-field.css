@@ -1,0 +1,45 @@
+/* Color field (docs/specs/color-field.md). */
+@layer area.components {
+  .area-color-field {
+    --_color-field-width: calc(var(--area-space-96) + var(--area-space-48));
+  }
+  .area-input.area-color-field {
+    inline-size: var(--_color-field-width);
+  }
+  /* Its own corner, but never rounder than concentric with the field, floored (quality pass, 2026-10-04:
+     a 16 swatch read 6 inside a 16 field 12 in at radius 14). */
+  .area-color-field .area-input__icon > .area-color-swatch {
+    --_size: var(--_icon);
+    --_radius: min(max(var(--area-radius-min), round(nearest, calc(var(--_size) * var(--_shape) * 4 * var(--area-radius-factor)), 2px)), max(var(--area-radius-floor), calc(var(--_field-shape) - (var(--_height) - var(--_size)) / 2)));
+  }
+  /* Digits are tabular; a letter-heavy hex wider than a narrow row ends in an ellipsis at rest. */
+  .area-color-field input { font-variant-numeric: tabular-nums; text-overflow: ellipsis; }
+  .area-color-field--sm { --_color-field-width: calc(var(--area-space-96) + var(--area-space-32)); }
+  .area-color-field--md { --_color-field-width: calc(var(--area-space-96) + var(--area-space-48)); }
+  .area-color-field--lg { --_color-field-width: calc(var(--area-space-96) + var(--area-space-64)); }
+  /* The treatment is Input's, on the same shell (`area-input--outline` / `--soft`, InputGroup's with alpha); these name it
+     for the manifest and the gallery (2026-11-07, O7). */
+  .area-color-field--outline, .area-color-field--soft {}
+  .area-input-group.area-color-field--alpha { inline-size: calc(var(--_color-field-width) + var(--area-space-48)); }
+  /* spec (batch 9, owner: "the percentage fields … seem too large … Figma anchors % to the right"):
+     the opacity part is as wide as its content, three tabular digits and "%", so the hex keeps the
+     room (Figma: hex 105, opacity 54, "%" in a box at the end). The number starts at the inset and
+     "%" ends on it; a plain NumberField keeps its unit right after the number. Was a fixed 72. */
+  .area-input-group.area-color-field > .area-color-field__opacity {
+    flex: 0 0 auto;
+    inline-size: max-content;
+    /* The surface gap ColorPicker's value row draws, Figma's colour row (audit F-7 A; was the
+       decorative rule, nearly invisible on the soft fill). A joined control's seam, so `stroke-width`, as every
+       Input group seam (consistency pass 2026-10-12). */
+    border-inline-start: var(--area-stroke-width) solid var(--area-bg-surface);
+  }
+  .area-input-group.area-color-field > .area-color-field__opacity > .area-number-field__control {
+    flex: 0 0 auto;
+    field-sizing: content;
+    min-inline-size: 3.1ch; /* three tabular digits: they run ~3% wider than ch, so every row is the same width */
+    font-variant-numeric: tabular-nums;
+  }
+  .area-input-group.area-color-field > .area-color-field__opacity > .area-number-field__unit { margin-inline: 0; }
+  .area-input-group.area-color-field--full-width { inline-size: 100%; }
+  .area-input.area-color-field--full-width { inline-size: 100%; }
+}

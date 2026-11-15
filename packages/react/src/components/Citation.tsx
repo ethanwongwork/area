@@ -7,7 +7,7 @@ import { citationVariants, type VariantProps, MANIFESTS } from "../variants.ts";
 type CitationVariants = VariantProps<typeof MANIFESTS.citation>;
 
 export interface CitationProps extends Omit<AnchorHTMLAttributes<HTMLAnchorElement>, "children"> {
-  /** `pill`: the source's name in a small pill (ChatGPT). `footnote`: a raised number in brackets (Wikipedia's [13]). */
+  /** `pill` (default): the source's name in a small pill. `footnote`: a raised number in brackets. */
   variant?: CitationVariants["variant"];
   /** The pill's source name ("Engadget"), cut at 15 characters; the footnote's number or mark ("13", "a"). */
   label: string;
@@ -17,7 +17,10 @@ export interface CitationProps extends Omit<AnchorHTMLAttributes<HTMLAnchorEleme
   icon?: string | ReactNode;
   /** More sources behind this one, shown as "+N" (pill only). */
   more?: number;
-  /** A footnote's ink, as Link's: `blue` by default (Wikipedia), or the surrounding text's, muted, or a hue. */
+  /**
+   * A footnote's ink, as Link's: `blue` by default, or the surrounding text's, muted, or a hue.
+   * @default "blue"
+   */
   ink?: CitationVariants["ink"];
 }
 

@@ -18,8 +18,8 @@
 @layer area.components {
   .area-chip {
     --_chip-pill: var(--area-pill-chip);
-    --_chip-radius: calc(max(var(--area-radius-min), round(down, calc(var(--_height) * var(--area-radius-factor)), 2px)) + var(--_chip-pill) * var(--area-radius-full));
-    --_chip-inner-radius: max(var(--area-radius-floor), calc(var(--_chip-radius) - var(--area-space-4)));
+    --_chip-radius: max(var(--area-radius-min), round(down, calc(var(--_height) * var(--area-radius-factor)), 2px), var(--_chip-pill) * var(--area-radius-full)); /* a pill is radius-full, one value */
+    --_chip-inner-radius: max(var(--area-radius-floor), calc(var(--_chip-radius) - var(--area-space-4)), var(--_chip-pill) * var(--area-radius-full));
     /* The md tier, the manifest default, so framework-free markup matches the React default. */
     --_height: var(--area-control-md);
     --_gap: var(--area-gap-md);
@@ -84,6 +84,9 @@
   }
   /* A pointer press gives as a small Button's does (Feedback); a key press does not. */
   .area-chip:active:not([data-disabled], :focus-visible, :has(> .area-chip__dismiss:active, > .area-chip__action:focus-visible)) { scale: var(--area-feedback-scale-sm); }
+  /* The plate gives, the content does not (plan A5.6; button.css): each part takes the inverse scale on the same clocks. */
+  :where(.area-chip) > * { transition: scale var(--area-duration-fast) var(--area-ease-out); }
+  .area-chip:active:not([data-disabled], :focus-visible, :has(> .area-chip__dismiss:active, > .area-chip__action:focus-visible)) > * { scale: calc(1 / var(--area-feedback-scale-sm)); transition-duration: var(--area-press-in); }
 
   /* Focus is the ring alone, as Button, Segmented, Checkbox and Switch (audit C-13). */
   .area-chip:focus-visible {
@@ -102,9 +105,8 @@
     /* spec (audit S6a): the translucent soft plate of Count and Badge; was bg-component #f7. */
     --_bg: var(--area-bg-mark);
     --_bg-hover: var(--area-bg-mark-hover);
-    /* spec: the mark's equal steps on: 6%, 10.7%, 15.4% black. Dark 10%, 22.6%, then 24% white, as far as the label
-       holds 4.5:1 at dark 24 + 8 (the equal step, 35%, left it at 3.37:1). */
-    --_bg-active: light-dark(rgb(0 0 0 / 0.154), rgb(255 255 255 / 0.24));
+    /* The mark's pressed step (plan B7.4): 15.4% black and 24% white at the default Pressed fill, moving with it. */
+    --_bg-active: var(--area-bg-mark-pressed);
     --_border: transparent;
     --_border-hover: var(--area-edge-control-hover);
   }
@@ -200,9 +202,9 @@
 
   .area-chip__avatar > .area-avatar {
     --_size: 100%;
-    /* spec: the caption step (12 at default, 11 compact), as Badge's avatar: two initials fit the
-       20px plate with room at the sides (Figma 12 and Notion 11 on 24). control-sm-text is 14
-       at default and overflowed the plate. */
+    /* spec: the caption step (control-xs-text: 11 at the default and compact, 12 at type 14), as Badge's avatar: two
+       initials fit the plate with room at the sides (the references' 11 to 12 on 24). control-sm-text (13 at the
+       default, 14 at type 14) overflowed the plate. */
     font-size: var(--area-control-xs-text);
     line-height: 1;
   }
@@ -215,16 +217,16 @@
     text-decoration: underline;
     text-decoration-color: currentColor; /* spec: Link's line, the link's own ink (link.md, review round 2) */
     text-decoration-thickness: var(--area-stroke-width);
-    text-underline-offset: 0.08em; /* spec: Link's offset, close under the text (link.md, 2026-10-17) */
+    text-underline-offset: var(--area-underline-offset); /* Link's offset, close under the text (link.md, 2026-10-17; a token since plan A9.10) */
   }
   @media (hover: hover) { .area-chip--link:hover .area-chip__label { text-decoration-color: currentColor; } }
   .area-chip--link:focus-visible .area-chip__label { text-decoration-color: currentColor; }
 
-  @media (hover: hover) { .area-chip--link-icon:hover .area-chip__label { text-decoration: underline; text-decoration-thickness: var(--area-stroke-width); text-underline-offset: 0.08em; /* spec: Link's offset, close under the text (link.md, 2026-10-17) */ } }
+  @media (hover: hover) { .area-chip--link-icon:hover .area-chip__label { text-decoration: underline; text-decoration-thickness: var(--area-stroke-width); text-underline-offset: var(--area-underline-offset); /* Link's offset, close under the text (link.md, 2026-10-17; a token since plan A9.10) */ } }
   .area-chip--link-icon:focus-visible .area-chip__label {
     text-decoration: underline;
     text-decoration-thickness: var(--area-stroke-width);
-    text-underline-offset: 0.08em; /* spec: Link's offset, close under the text (link.md, 2026-10-17) */
+    text-underline-offset: var(--area-underline-offset); /* Link's offset, close under the text (link.md, 2026-10-17; a token since plan A9.10) */
   }
 
   /* A removable chip is a composition: its primary action and removal action stay peers. */
@@ -258,7 +260,7 @@
     color: var(--area-fg-muted);
     cursor: pointer;
     /* The plate lands at once and fades out over fast, as every hover plate (was untimed). */
-    transition: background-color var(--area-duration-fast) var(--area-ease-out);
+    transition: background-color var(--area-duration-fast) var(--area-ease-effects), scale var(--area-duration-fast) var(--area-ease-out);
   }
   .area-chip__dismiss:active { transition-duration: var(--area-press-in); }
 

@@ -147,6 +147,33 @@ export function useHoverIntent(open: boolean, setOpen: (open: boolean) => void, 
 const useIsoLayoutEffect = typeof window === "undefined" ? useEffect : useLayoutEffect;
 
 /**
+ * How a surface was opened, for the motion (docs/MOTION.md, "Opened from the keyboard"; plan A5.2, 2026-11-11): every
+ * popover and dialog that opens while the last input was a key carries `data-opened-by="keyboard"`, and the overlay
+ * rules then show it at its place and size, fading only, so a keyboard open is never slower than the key. One listener
+ * for the whole document, so every family that opens a popover or a dialog (Menu, Popover, Custom select, Combobox,
+ * Context menu, Command palette…) gets it without code of its own: the last input is recorded on `keydown` and
+ * `pointerdown` / `pointermove` in the capture phase, and written on the surface as it opens (`beforetoggle`, which
+ * popovers and dialogs both fire). A pointer open removes it.
+ */
+let lastInput: "keyboard" | "pointer" = "pointer";
+let watching = false;
+export function watchOpenSource() {
+  if (watching || typeof document === "undefined") return;
+  watching = true;
+  const opts = { capture: true, passive: true } as const;
+  document.addEventListener("keydown", () => { lastInput = "keyboard"; }, opts);
+  document.addEventListener("pointerdown", () => { lastInput = "pointer"; }, opts);
+  document.addEventListener("pointermove", () => { lastInput = "pointer"; }, opts);
+  document.addEventListener("beforetoggle", event => {
+    const node = event.target;
+    if (!(node instanceof HTMLElement) || (event as ToggleEvent).newState !== "open") return;
+    if (lastInput === "keyboard") node.dataset.openedBy = "keyboard";
+    else delete node.dataset.openedBy;
+  }, { capture: true });
+}
+watchOpenSource();
+
+/**
  * Keeps a native popover in step with `open`, and reports light dismiss (outside press,
  * Escape) back through `onOpenChange`. Returns focus to the trigger when the surface closes
  * with focus inside it, or with nothing focused.

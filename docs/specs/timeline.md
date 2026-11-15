@@ -118,12 +118,12 @@ review round 8 and the 2026-10-12 `current` change; Decisions holds the current 
 | Slot · property | References | Area | Basis | Reason when it differs |
 |---|---|---|---|---|
 | marker box | Figma 24, Notion 24 | 24 (`control-xs`; compact 20) | target-product agreement | — |
-| content start | Figma 36, Notion 36 from the column start | 36 (24 + 12) | agreement | — |
+| content start | Figma 36, Notion 36 from the column start | the marker + `gap-row` (8 / 12 / 16 at type 13 Compact / Default / Comfortable; 34 at the default) | agreement | — |
 | line | Figma 1px rgb(230) at 11.5, through its marks | 1px `border-divider` at 11.5, stopping 4 short of every mark | owner (round 8 references) | Linear and the activity feed break the line at each mark |
 | title | Figma 11/16 550; Notion 14/19.6 400; Linear, feed, run log 400 | 14/20 400 | Notion's size; the owner's references' weight | — |
 | meta and time | Figma and Notion under the title, 11–12; Linear and the feed on the event's line, the same size, muted | on the title's line, 14/20 `fg-muted`, who then when | owner ("the dates seem quite small") | — |
 | separator | Notion and Linear "·" | "·" aria-hidden, 4 either side | Notion, Linear | — |
-| spacing | Figma 16 between rows' text; Notion 32 | 16 | Figma (dense UI panel) | Notion's is its document feed |
+| spacing | Figma 16 between rows' text; Notion 32 | two clusters, 12 / 16 / 20 (16 at the default) | Figma (dense UI panel) | Notion's is its document feed |
 | dot | Figma none; Ant 10 ring; Mantine 20 | 6 dot, fg-muted | Indicator's dot (peer) | no product dot; the quietest mark that still reads on the line |
 | icon | Figma 24 circle; Linear and the feed a bare icon | a bare 16 icon, `fg-muted` | owner ("no backplate around icons") | — |
 | current | Figma a filled blue circle; the run log a green check | the mark in `selection-solid`, `aria-current` | DESIGN_SYSTEM "Emphasis roles" (no component offers an accent tone) | neutral in the default theme, the accent in an accent theme |
@@ -216,3 +216,11 @@ step (12) with tabular figures, as every figure in a tracker. A long title wraps
 ## 2026-11-04: read on its glyphs (Q-T2)
 
 Owner, "Apply both" on Kit Type Decisions (artifact KeEDPx5sUTQXE6iKtu6sw1; docs/research/kit-type-2026-11-04). The list gives back its first line's half-leading at its top, and its last line's at its foot where the last event ends in text (not media, a card, code or a table): a timeline that opens a block sits 16 under a title (it was 19). Marks stay centred on their lines. Test: `packages/react/tests/type-rhythm.test.mjs`.
+
+## Density (plan B8.2), 2026-11-14
+
+Space between pieces reads a density role (DESIGN_SYSTEM.md, Size and shape; `density.test.mjs`). Values at type 13
+Compact / Default / Comfortable; each is whole at type 12 to 16 and every density, and the default is unchanged unless said.
+
+- Content gap `gap-row` (8 / 12 / 16), events two clusters apart (12 / 16 / 20), the line's parts, the time's room and the
+  body under the line a cluster (6 / 8 / 10). The dot (6) is a mark.

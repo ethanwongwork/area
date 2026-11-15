@@ -15,7 +15,7 @@ test("an empty search field: Input's shell with the search glyph, a search input
 test("a query shows the clear action, named and out of the Tab order, in place of the shortcut", () => {
   const html = render(h(SearchField, { "aria-label": "Search", defaultValue: "plan", shortcut: ["cmd", "K"] }));
   assert.match(html, /<button type="button" class="area-input__action-button area-search-field__clear" aria-label="Clear search" tabindex="-1"/);
-  assert.match(html, /data-area-glyph="dismiss-circle"/);
+  assert.match(html, /data-area-glyph="dismiss"/); // the one clear glyph (plan B3.3); dismiss-circle is a status mark
   assert.doesNotMatch(html, /area-kbd/);
   assert.match(html, /aria-keyshortcuts="Meta\+K"/);
 });

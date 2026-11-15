@@ -186,3 +186,7 @@ overflow (they are measured and re-rendered; a reflow animation would lag the re
 - **What changed:** an Auto badge group no longer flickers: the badges it hides stay hidden until you open "+2".
 - **Why:** measuring the hidden badges set off the overflow popover's close fade each time, and the fade itself made the
   group measure again, so the hidden badges kept flashing over the visible ones.
+
+## One mark, 2026-11-13
+
+Plan B5.1: the marks it holds (Badge) are on the shared mark recipe (inset.css, "One mark"); nothing in this family changed. Badges keep their heights at Compact now that the ladder no longer shrinks md (18 at type 13).

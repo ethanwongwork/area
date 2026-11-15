@@ -22,7 +22,7 @@
  */
 import { type Level, type Position, type Slot, INVERSION, LEVELS } from "../color/curves.ts";
 import { apcaMagnitude, wcagContrastHex } from "../color/contrast.ts";
-import type { Theme } from "../color/scale.ts";
+import { type Theme, luminousDarkVivid } from "../color/scale.ts";
 import { tonalStroke } from "./stroke.ts";
 import { ACCENT_STRENGTHS, withStrength } from "../color/generate.ts";
 import { DEFAULT_TONE_FLOOR, toneFloorId } from "../color/layers.ts";
@@ -335,8 +335,12 @@ export function resolveAlias(aliasValue: Alias, scales: ScaleLookup, theme: Them
       return tonalStroke(scales[aliasValue.role].byLevel[INVERSION.textTonal[theme]]!, theme, false);
     case "strokeHover":
       return tonalStroke(scales[aliasValue.role].byLevel[INVERSION.textTonal[theme]]!, theme, true);
-    case "vivid":
-      return scales[aliasValue.role].byLevel[scales[aliasValue.role].vivid[theme]]!;
+    case "vivid": {
+      // The status and label tones' dark vivid inks take their hue's most colourful readable point (scale.ts
+      // luminousDarkVivid, plan A10.2); the accent's stays its rung (the accent gate solves the accent's paint).
+      const rung = scales[aliasValue.role].byLevel[scales[aliasValue.role].vivid[theme]]!;
+      return theme === "dark" && aliasValue.role !== "accent" ? luminousDarkVivid(rung) : rung;
+    }
     case "indicator":
       return scales[aliasValue.role].byLevel[indicatorLevel(aliasValue.role, scales, theme)]!;
     case "contrast":

@@ -115,7 +115,7 @@
   /* A corner radius sits on the corner's diagonal: its cap box the same distance from the top (or bottom)
      edge as from the side (owner, review round 10: "sit inset equally in the corners"). */
   .area-box-model__corner {
-    --_inset: calc((var(--_ring) - 1cap) / 2);
+    --_inset: round(nearest, calc((var(--_ring) - 1cap) / 2), 1px); /* whole pixels (plan A11.1) */
     position: absolute;
     line-height: 1cap;
     text-box: trim-both cap alphabetic;

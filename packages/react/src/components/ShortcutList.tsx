@@ -3,16 +3,16 @@
 import { Fragment, forwardRef, useId } from "react";
 import type { HTMLAttributes, ReactNode } from "react";
 import { cx } from "../variants.ts";
-import { Kbd } from "./primitives.tsx";
+import { Kbd } from "./Kbd.tsx";
 
 export interface ShortcutListProps extends Omit<HTMLAttributes<HTMLElement>, "title"> {
   /** The group's name ("Composer", "Navigation"). Names the list. */
   title?: ReactNode;
   /** The heading level of the title. */
   titleAs?: "h2" | "h3" | "h4" | "h5" | "h6" | "p";
-  /** @deprecated Ignored: every key is a keycap (owner, 2026-10-22). It set the keys as muted text, as ChatGPT. */
+  /** @deprecated Ignored: every key is a keycap. */
   quiet?: boolean;
-  /** A rule under each row but the last (ChatGPT's sheet). Off by default: the rows' own height separates them. */
+  /** A rule under each row but the last. Off by default: the rows' own height separates them. */
   divided?: boolean;
 }
 

@@ -192,6 +192,8 @@ Area:
   menu's trigger keeps the pressed plate (audit G-12, `button.css:145-150`). Reduced motion
   stops the chevron's turn.
 
+**State hooks (manifest).** `open` is the trigger's `aria-expanded` (`stateAttributes`, `split-button.css` turns the chevron); `selected`, `disabled` and `loading` are its two Buttons' own (`statesFrom`), the dimmed pair a `:has()` rule.
+
 ## Visual pass
 
 2026-09-27, Claude in Chrome, side by side with Figma's toolbelt at 100% (the owner's draft of
@@ -273,3 +275,30 @@ Open question: the 12px chevron is still the 16-grid drawing scaled. A native 12
 - **What changed:** `open` / `defaultOpen` / `onOpenChange` drive the native popover; `loading` busies the action (Button's spinner) and disables the trigger; `size` (sm / md / lg) is in the manifest and on the root (`area-split-button--md`).
 - **Why:** SplitButton.tsx:11-34 (no open state, loading only through `actionProps`); manifest.ts:77 lacked the size React and this spec have. From the components audit's internal peer comparison (`docs/research/components-audit-2026-11-07/internal.md`); the owner took every recommendation ("Take all recs", 2026-11-07).
 - **Verdict:** awaiting the owner.
+- 2026-11-11 · system evaluation F5 · the manifest declares `open` (the trigger's `aria-expanded`) and `selected`, `disabled`, `loading` as its Buttons'; no paint changed.
+- 2026-11-11 · system evaluation A2.1 · rows in a floating list take their height's corner (radius-list-row capped by radius-row, and radius-step is the real medium control's corner) (its menu): rows 10 → 8 and the list 14 → 12 at the default Corner 10, the corner of a Nav row and a medium Button of the same 30. emit/base.ts; radius.test.ts.
+- 2026-11-14 · plan B7.9 → a toned pair repaints as Button does and the group dims only when neutral (`--_split-dim`, following Action Accent on solid); a disabled toned trigger's divider is the neutral line. Why: docs/research/system-evaluation-2026-11-11 (README §5, phase2/disabled.md); the owner took every recommendation on 2026-11-11.
+
+## Review note, 2026-11-11 (focus and targets, plan A6, A11.2)
+
+- **What changed:** Its parts are solid Buttons, so a focused solid part's ring stands off the fill (A6.1). The icon-only trigger has the shared hit target on its height only (A11.2): beside its 24 action at sm Compact (12 wide) no target can give each 24 without taking the other's; it needs a wider trigger, an owner decision.
+- **Why:** the system evaluation's focus, forced colours and hit target items (docs/research/system-evaluation-2026-11-11, section 5), owner-approved 2026-11-11; the rules are in DESIGN_SYSTEM.md ("The focus ring", "Targets") and CONTRAST.md (Focus).
+
+## Review note, 2026-11-11 (motion, plan A5)
+
+- **What changed:** Button's press: the plate gives, the label keeps its size (A5.6); the menu takes the anchored clocks (A5.1, A5.2).
+- **Why:** the system evaluation's motion items (docs/research/system-evaluation-2026-11-11, section 5, A5), owner-approved
+  2026-11-11; the rules are in docs/MOTION.md (Tokens, Roles, Recipes) and kept by cohesion.test.mjs and
+  tests/behaviour/suites/motion.test.mjs. The motion tables above are history; these values are current.
+
+### 2026-11-14 · One field shell (system plan, Phase 2, B3)
+
+- The trigger is never narrower than the 24 target floor (owner, 2026-11-13): `max(H − 4, 24)`, icon-only `max(H / 2, 24)`. Visible: sm 22 → 24 at the default, 20 → 24 Compact; icon-only 13 / 15 / 19 → 24 at sm / md / lg at type 13.
+- Why: docs/research/system-evaluation-2026-11-11 (B3.1, B3.2, B3.3, B2.2 in fields; README §5); the owner took every recommendation on 2026-11-11 and the 24 targets on 2026-11-13. B3.2: field text stays on Button's inset (Keep 10, the pick), so nothing moved.
+- Verdict: awaiting the owner.
+
+- 2026-11-14 · Targets never overlap: the joined trigger shares its start border with the action, so its own box took the action's last pixel (the behaviour hit suite's "Add" miss). The trigger's target is now its ::after alone (`pointer-events: none` on the box, `auto` on the pseudo), from its padding edge through its end border: the action owns its whole 24, the trigger its own width (at least 24), no overlap. Ghost keeps its 1px gap. inset.css; tests/behaviour/suites/hit.test.mjs ("no target overlaps its neighbour", Split button and Number field). No visible change.
+
+## State paint (plan B7.1, B7.3), 2026-11-14
+
+- Soft neutral parts press to `bg-component-pressed` (was the selected plate); the trigger holds it while its menu is open (Button's rule).

@@ -2,13 +2,19 @@
 import { Children, forwardRef, isValidElement, useEffect, useId, useImperativeHandle, useRef, useState } from "react";
 import type { HTMLAttributes } from "react";
 import { badgeGroupVariants, badgeVariants, cx } from "../variants.ts";
-import { Popover } from "./primitives.tsx";
+import type { MANIFESTS, VariantProps } from "../variants.ts";
+import { Popover } from "./Popover.tsx";
 import { OVERLAY_PADDING, POPOVER_OFFSET } from "./Overlays.tsx";
 import { useAnchoredPosition } from "./overlay.ts";
 export interface BadgeGroupProps extends HTMLAttributes<HTMLDivElement> {
-  overflow?: "inline" | "overlay";
+  /**
+   * `inline` (default): the badges wrap onto more lines, the "+N" after the visible ones. `overlay`: one line kept,
+   * the "+N" opening the rest.
+   */
+  overflow?: VariantProps<typeof MANIFESTS.badgeGroup>["overflow"];
   /** Omit to wrap every badge. Auto fits one line and reserves the overflow trigger. */
   visibleCount?: "auto" | number;
+  /** The accessible name of the "+N" trigger that shows the hidden badges. */
   overflowLabel?: string;
 }
 /** Native auto-popover supplies Escape, light dismissal and focus restoration. */

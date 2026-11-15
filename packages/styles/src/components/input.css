@@ -10,127 +10,253 @@
  * carrying its value, so they take the muted foreground and do not change on hover.
  * ------------------------------------------------------------------------- */
 @layer area.components {
-  .area-input {
+  /*
+   * One field shell (plan B3.1, 2026-11-14; DESIGN_SYSTEM.md, "One field shell"). Every field draws one shell, as every
+   * list draws one row (inset.css, "One row table"): Input, Number field, Input group, Select, Textarea, Custom select's
+   * and Date picker's triggers (Date range picker's too), Tag picker's field and each OTP slot. Combobox, Search field,
+   * Password field, Time field and Color field are Inputs. A family never restates the recipe; it sets inputs on its
+   * root, where its size and variant classes sit, and the element that draws (the trigger, the field, the slot) reads
+   * them by inheritance:
+   *   tier    --_height --_radius --_icon --_gap --_text --_leading: control-sm / md / lg, md by default
+   *   paint   --_bg --_border --_border-hover --_ink, read from the family's own public seam (input-*, select-*,
+   *           textarea-*); --_bg-soft --_border-soft --_border-soft-hover, what soft paints: the soft fill, the Fields
+   *           group's edge, and the control edge under the pointer (a soft field shows its edge on hover)
+   *   status  --_tone-invalid / -success / -warning and their halos
+   *   shape   --_field-pill: 1 where the Pills setting rounds the field (Textarea 0)
+   * and the shell computes and paints:
+   *   edge    stroke-width in --_field-edge: the rest edge, the hover edge or the focus edge (the ring's colour only under
+   *           Focus ring Halo). A state sets --_field-edge, never border-color, so a seam inside a group or a field
+   *           nested in another keeps its own edge
+   *   corner  --_field-shape: the Corner setting's corner for --_height, capped at the tier's, plus the Pills flag; the
+   *           shapes nested inside (an action, a stepper, a tag) are concentric with it
+   *   fill    --_bg, and --_field-lift: Field shadow at rest (transparent by default), flat on soft
+   *   type    the tier's control text and the field's ink
+   *   focus   the field ring at once (focus lands; it never fades in): the focus edge, the halo over the lift, the outline
+   *   status  a tone sets the edge, the hover and focus edges, the outline and the halo to its ink, through focus
+   * Sides come from the inset contract (inset.css). Disabled and read-only paint stay with each family.
+   * `fields.test.mjs` holds the lists and the terms.
+   */
+  .area-input, .area-number-field, .area-input-group, .area-select, .area-textarea, .area-custom-select, .area-date-picker,
+  .area-tag-picker, .area-otp-field {
     --_height: var(--area-control-md);
+    --_radius: var(--area-radius-control-md);
     --_icon: var(--area-icon-md);
-    /* The action is the field less a 4px ring at every tier: 20 / 24 / 32 (audit B-7 B,
-       owner 2026-09-30; was icon + 8, a fixed 24), its corner concentric inside the field's. */
-    --_action: calc(var(--_height) - var(--area-space-8));
     --_gap: var(--area-gap-md);
     --_text: var(--area-control-md-text);
     --_leading: var(--area-control-md-leading);
+    --_bg: var(--area-input-bg);
     --_border: var(--area-input-edge);
     --_border-hover: var(--area-input-edge-hover);
+    --_ink: var(--area-input-text);
+    --_bg-soft: var(--area-input-bg-soft);
+    --_border-soft: var(--area-input-edge-soft); /* the Fields group's edge: none, or the strong edge under increased contrast */
+    --_border-soft-hover: var(--area-input-edge);
     --_border-focus: color-mix(in srgb, var(--_border), var(--area-field-focus-color) calc(var(--area-field-focus-recolor) * 100%)); /* the ring's colour only under Focus ring Halo (axes/states.ts) */
     --_focus-outline: var(--area-field-focus-color);
     --_focus-halo: var(--area-field-focus-halo-color);
-    --_bg: var(--area-input-bg);
-
-    display: inline-flex;
-    align-items: center;
-    gap: var(--_gap);
-
-    block-size: var(--_height);
-    inline-size: var(--area-input-inline-size);
-    max-inline-size: 100%;
-    border: var(--area-stroke-width) solid var(--_border);
-    /* Capped against this tier's own height; see button.css. */
-    /* The per-tier control radius, as Button (audit S4, owner 2026-09-30); was radius-control (8) at every size.
-       Published as --_field-shape (resolved here, inherited) for the shapes nested inside the field. */
-    --_field-shape: calc(min(var(--_radius, var(--area-radius-control-md)), max(var(--area-radius-min), round(down, calc(var(--_height) * var(--area-radius-factor)), 2px))) + var(--area-pill-field) * var(--area-radius-full));
+    --_tone-invalid: var(--area-input-invalid-color);
+    --_tone-invalid-halo: var(--area-input-invalid-halo-color);
+    --_tone-success: var(--area-input-success-color);
+    --_tone-success-halo: var(--area-input-success-halo-color);
+    --_tone-warning: var(--area-input-warning-color);
+    --_tone-warning-halo: var(--area-input-warning-halo-color);
+    /* spec (outline pass, docs/specs/number-field.md): controls at rest carry no shadow, as Button, by default: Field
+       shadow (axes/depth.ts, 0 by default, a transparent role) lifts them when chosen. The focus halo lists after it,
+       so the two crossfade. */
+    --_field-lift: var(--area-shadow-field);
+    --_field-pill: var(--area-pill-field);
+    /* Disabled and read-only (below, plan B7.8, B7.10): the disabled fill from the family's seam and the faint edge; the
+       read-only fill one step deeper than the rest fill (an outline field rests on the surface, so the soft fill). */
+    --_bg-disabled: var(--area-input-bg-disabled);
+    --_border-disabled: var(--area-border-faint);
+    --_bg-read-only: var(--_bg-soft);
+  }
+  /* The tiers. A field inside a group takes the group's (input-group.css). */
+  .area-input--sm, .area-number-field--sm, .area-input-group--sm, .area-select--sm, .area-textarea--sm, .area-custom-select--sm,
+  .area-date-picker--sm, .area-tag-picker--sm, .area-otp-field--sm {
+    --_height: var(--area-control-sm); --_radius: var(--area-radius-control-sm); --_icon: var(--area-icon-sm); --_gap: var(--area-gap-sm);
+    --_text: var(--area-control-sm-text); --_leading: var(--area-control-sm-leading);
+  }
+  .area-input--md, .area-number-field--md, .area-input-group--md, .area-select--md, .area-textarea--md, .area-custom-select--md,
+  .area-date-picker--md, .area-tag-picker--md, .area-otp-field--md {
+    --_height: var(--area-control-md); --_radius: var(--area-radius-control-md); --_icon: var(--area-icon-md); --_gap: var(--area-gap-md);
+    --_text: var(--area-control-md-text); --_leading: var(--area-control-md-leading);
+  }
+  .area-input--lg, .area-number-field--lg, .area-input-group--lg, .area-select--lg, .area-custom-select--lg,
+  .area-date-picker--lg, .area-tag-picker--lg, .area-otp-field--lg {
+    --_height: var(--area-control-lg); --_radius: var(--area-radius-control-lg); --_icon: var(--area-icon-lg); --_gap: var(--area-gap-lg);
+    --_text: var(--area-control-lg-text); --_leading: var(--area-control-lg-leading);
+  }
+  /* Outline is the rest paint above; the classes name it for the manifest and the gallery. */
+  .area-input--outline, .area-number-field--outline, .area-input-group--outline, .area-select--outline, .area-textarea--outline,
+  .area-custom-select--outline, .area-date-picker--outline, .area-tag-picker--outline, .area-otp-field--outline {}
+  /* Soft fields are flat, as the fill is the edge; under the pointer they take the control edge. Doubled so it outranks
+     a family's own rest inputs. */
+  .area-input.area-input--soft, .area-number-field.area-number-field--soft, .area-input-group.area-input-group--soft,
+  .area-select.area-select--soft, .area-textarea.area-textarea--soft, .area-custom-select.area-custom-select--soft,
+  .area-date-picker.area-date-picker--soft, .area-tag-picker.area-tag-picker--soft, .area-otp-field.area-otp-field--soft {
+    --_field-lift: 0 0 0 0 transparent;
+    --_bg: var(--_bg-soft);
+    --_border: var(--_border-soft);
+    --_border-hover: var(--_border-soft-hover);
+    --_border-disabled: transparent; /* a soft field never gains an edge when disabled */
+    --_bg-read-only: var(--area-bg-component-hover); /* the soft fill's next step, which Hover fill keeps apart from it */
+  }
+  /* The shell: the element that draws. Its shape is computed on the root as well, so a part outside the shell (a tag in
+     Tag picker's list) can nest in it. */
+  .area-input, .area-number-field, .area-input-group, .area-select, .area-textarea, .area-custom-select, .area-date-picker,
+  .area-tag-picker, .area-custom-select__trigger, .area-date-picker__trigger, .area-tag-picker__field, .area-otp-field__slot {
+    --_field-shape: max(min(var(--_radius), max(var(--area-radius-min), round(down, calc(var(--_height) * var(--area-radius-factor)), 2px))), var(--_field-pill) * var(--area-radius-full)); /* a pill is radius-full, one value */
+  }
+  .area-input, .area-number-field, .area-input-group, .area-select, .area-textarea, .area-custom-select__trigger,
+  .area-date-picker__trigger, .area-tag-picker__field, .area-otp-field__slot {
+    --_field-edge: var(--_border);
+    border: var(--area-stroke-width) solid var(--_field-edge);
     border-radius: var(--_field-shape);
-
     background-color: var(--_bg);
-    color: var(--area-input-text);
+    box-shadow: var(--_field-lift);
+  }
+  /* One line tall: every shell but Textarea, Tag picker's wrapping field and the square slot. */
+  .area-input, .area-number-field, .area-input-group, .area-select, .area-custom-select__trigger, .area-date-picker__trigger {
+    block-size: var(--_height);
+  }
+  /* The tier's control text in the field's ink. An OTP slot draws its root's. */
+  .area-input, .area-number-field, .area-input-group, .area-select, .area-textarea, .area-custom-select__trigger,
+  .area-date-picker__trigger, .area-tag-picker__field, .area-otp-field {
+    color: var(--_ink);
     font-size: var(--_text);
     line-height: var(--_leading);
-    /* spec (outline pass, docs/specs/number-field.md): controls at rest carry no shadow, as Button (ChatGPT, Notion, Figma
-       fields), by default: Field shadow (axes/depth.ts, 0 by default, a transparent role) lifts them when
-       chosen (shadcn's shadow-xs, Primer's). Soft fields stay flat. The focus halo lists after it, so the two crossfade. */
-    --_field-lift: var(--area-shadow-field);
-    box-shadow: var(--_field-lift);
-    /* Motion (docs/MOTION.md, 2026-10-07): the edge, fill and ink (--_t-paint) and the focus halo
-       (--_t-halo) fade out on fast; focus and a validation tone set 0s and appear at once (a focus halo that fades
-       in lags the keyboard). Hover arrives on Feedback's hover-in, as every other field's edge (Custom select, Date
-       picker, Tag picker, OTP, Composer; 2026-10-26: Input, Textarea, Number field, Select and Input group landed it
-       at once). The halo keeps its fade into hover, so a field left while hovered still lets go of its focus softly. */
-    --_t-paint: var(--area-duration-fast);
+  }
+  /* Motion (docs/MOTION.md, 2026-10-07): the edge, fill and ink (--_t-paint) and the focus halo (--_t-halo) fade out on
+     a third of Speed and fast; hover arrives on Feedback's hover-in, and focus, a tone and disabled land at once (a halo
+     that fades in lags the keyboard). The halo keeps its fade into hover, so a field left while hovered lets go of its
+     focus softly. The pickers' triggers, Tag picker's field and OTP's slots keep the shared transition (their files). */
+  .area-input, .area-number-field, .area-input-group, .area-select, .area-textarea {
+    --_t-paint: var(--area-duration-quick); /* colour leaves on a third of Speed (plan A5.5) */
     --_t-halo: var(--area-duration-fast);
     transition-property: background-color, border-color, color, box-shadow;
     transition-duration: var(--_t-paint), var(--_t-paint), var(--_t-paint), var(--_t-halo);
-    transition-timing-function: var(--area-ease-out);
+    transition-timing-function: var(--area-ease-effects);
+  }
+  @media (hover: hover) {
+    :is(.area-input, .area-number-field, .area-tag-picker__field):hover:not([data-disabled], [data-read-only], :focus-within),
+    .area-input-group:hover:not(:focus-within, :has(:disabled, [data-disabled])),
+    .area-select:hover:not(:disabled, :focus-visible),
+    .area-textarea:hover:not(:disabled, :read-only, :focus),
+    .area-custom-select:not([data-open]) > .area-custom-select__trigger:hover:not(:disabled, [data-read-only]),
+    .area-date-picker__trigger:hover:not(:disabled, [aria-expanded="true"], [data-read-only]),
+    .area-otp-field:hover:not([data-disabled], [data-read-only]) .area-otp-field__slot:not([data-active]) {
+      --_t-paint: var(--area-hover-in);
+      --_field-edge: var(--_border-hover);
+    }
+  }
+  /* Focus: a field with a caret shows it whenever it has focus (Input, Number field, Input group, Tag picker, Textarea);
+     a field that opens a picker shows it for keyboard focus only, as a Button (Select, Custom select, Date picker); OTP
+     shows it on the slot the code continues in. */
+  :is(.area-input, .area-number-field, .area-input-group, .area-tag-picker__field):focus-within,
+  .area-textarea:focus,
+  :is(.area-select, .area-custom-select__trigger, .area-date-picker__trigger):focus-visible,
+  .area-otp-field__slot[data-active] {
+    --_t-paint: 0s;
+    --_t-halo: 0s;
+    --_field-edge: var(--_border-focus);
+    box-shadow: var(--_field-lift), 0 0 0 var(--area-field-focus-halo-width) var(--_focus-halo);
+    outline: var(--area-field-focus-outline-width) solid var(--_focus-outline);
+    outline-offset: var(--area-focus-offset); /* every field's (plan A6.2) */
+  }
+  /* Press and open (plan B7.1, B7.3; DESIGN_SYSTEM.md, "Shared state paint", "Open"). A picker's trigger reads one more
+     input, --_bg-pressed: its rest fill when it is field-shaped, the pressed plate when it is plate-shaped (a ghost
+     trigger, whose hover is the row plate). Held, it takes that fill; open, it keeps it with the hover edge until the list
+     or panel closes, and never the focus edge, which stays a keyboard signal (above). The press lands at once. */
+  .area-custom-select > .area-custom-select__trigger:active:not(:disabled, [data-read-only]),
+  .area-date-picker__trigger:active:not(:disabled, [data-read-only]),
+  :is(.area-custom-select, .area-date-picker)[data-open] > :is(.area-custom-select__trigger, .area-date-picker__trigger) {
+    transition-duration: 0s;
+    background-color: var(--_bg-pressed);
+  }
+  :is(.area-custom-select, .area-date-picker)[data-open] > :is(.area-custom-select__trigger, .area-date-picker__trigger):not(:focus-visible) {
+    --_field-edge: var(--_border-hover);
+  }
+  /* Status: the tone holds through hover and focus. A group takes the tone of a field inside it. */
+  :is(.area-input, .area-number-field, .area-select, .area-textarea, .area-otp-field, .area-custom-select__trigger, .area-date-picker__trigger, .area-tag-picker__field):is([data-invalid], [aria-invalid="true"]),
+  .area-input-group:has([data-invalid], [aria-invalid="true"]) {
+    --_border: var(--_tone-invalid);
+    --_border-hover: var(--_tone-invalid);
+    --_border-focus: var(--_tone-invalid);
+    --_focus-outline: var(--_tone-invalid);
+    --_focus-halo: var(--_tone-invalid-halo);
+  }
+  :is(.area-input, .area-number-field, .area-select, .area-textarea, .area-otp-field, .area-custom-select__trigger, .area-date-picker__trigger, .area-tag-picker__field)[data-success],
+  .area-input-group:has([data-success]) {
+    --_border: var(--_tone-success);
+    --_border-hover: var(--_tone-success);
+    --_border-focus: var(--_tone-success);
+    --_focus-outline: var(--_tone-success);
+    --_focus-halo: var(--_tone-success-halo);
+  }
+  :is(.area-input, .area-number-field, .area-select, .area-textarea, .area-otp-field, .area-custom-select__trigger, .area-date-picker__trigger, .area-tag-picker__field)[data-warning],
+  .area-input-group:has([data-warning]) {
+    --_border: var(--_tone-warning);
+    --_border-hover: var(--_tone-warning);
+    --_border-focus: var(--_tone-warning);
+    --_focus-outline: var(--_tone-warning);
+    --_focus-halo: var(--_tone-warning-halo);
+  }
+  /* A tone or disabled paint lands at once (motion, 2026-10-07); clearing it fades on fast. */
+  :is(.area-input, .area-number-field, .area-textarea, .area-select):is([data-invalid], [aria-invalid="true"], [data-success], [data-warning], [data-disabled], :disabled) { --_t-paint: 0s; }
+
+  /*
+   * Disabled and read-only, one recipe for every shell (plan B7.8, B7.10; DESIGN_SYSTEM.md, "Disabled and read-only").
+   * The state sits where the family puts it (the root's data-disabled / data-read-only, a native :disabled on Select,
+   * Textarea and the two triggers) and sets the paint inputs there, after the tones, so a disabled field drops its tone.
+   *   disabled   the family's disabled fill (input-, select-, textarea-bg-disabled: the soft fill), the faint edge (none
+   *              on soft, ghost none at all), fg-disabled for the value and every part; never an opacity, and no hover.
+   *              At Edge contrast 0 the fill alone carries the field.
+   *   read-only  one cue, the fill one step deeper than the editable rest: an outline field on the soft fill, a soft field
+   *              on the step after it, a ghost trigger on the soft fill. The value keeps the field's ink, the edge stays,
+   *              focus shows as on an editable field, and the pointer moves nothing (no hover edge, a default cursor).
+   * Families set only --_bg-disabled, --_border-disabled and --_bg-read-only where their seam or variant differs.
+   */
+  :is(.area-input, .area-number-field, .area-otp-field, .area-tag-picker__field)[data-disabled],
+  :is(.area-select, .area-textarea, .area-custom-select__trigger, .area-date-picker__trigger):disabled {
+    --_bg: var(--_bg-disabled);
+    --_border: var(--_border-disabled);
+    --_border-hover: var(--_border-disabled);
+    --_ink: var(--area-fg-disabled);
+    cursor: not-allowed;
+  }
+  /* Every part takes the disabled ink: icons, affixes, the action, a unit, the scrub, steppers, the chevron and the
+     placeholder (audit B-10). A tag in Tag picker is a mark, not a part, and dims by opacity as marks do (B7.8). */
+  :is(.area-input, .area-number-field, .area-otp-field, .area-tag-picker__field)[data-disabled] :is(.area-input__icon, .area-input__affix, .area-input__action-button, .area-number-field__unit, .area-number-field__scrub, .area-number-field__step, [data-placeholder]),
+  :is(.area-custom-select__trigger, .area-date-picker__trigger):disabled :is(.area-custom-select__icon, .area-custom-select__chevron, .area-date-picker__icon, [data-placeholder]) {
+    color: var(--area-fg-disabled);
+  }
+  :is(.area-input, .area-number-field, .area-tag-picker__field)[data-disabled] *::placeholder,
+  .area-textarea:disabled::placeholder { color: var(--area-fg-disabled); }
+  :is(.area-number-field[data-disabled] .area-number-field__scrub, .area-tag-picker__field[data-disabled] .area-tag-picker__input) { cursor: not-allowed; }
+  .area-tag-picker__field[data-disabled] > .area-tag { opacity: var(--area-opacity-disabled); }
+  :is(.area-input, .area-number-field, .area-otp-field, .area-tag-picker__field, .area-textarea, .area-custom-select__trigger, .area-date-picker__trigger)[data-read-only]:not([data-disabled], :disabled) {
+    --_bg: var(--_bg-read-only);
+    --_border-hover: var(--_border);
+    cursor: default;
   }
 
-  /* Explicit for manifest parity; the base class remains the framework-free default. */
-  .area-input--outline { --_bg: var(--area-input-bg); }
-
-  /* Soft fields are flat, as Figma's are: the fill is the edge, so no shadow. */
-  .area-input--soft {
-    --_field-lift: 0 0 0 0 transparent;
-    box-shadow: var(--_field-lift);
-    --_bg: var(--area-input-bg-soft);
-    --_border: var(--area-input-edge-soft); /* none, or the strong edge under increased contrast */
-    --_border-hover: var(--area-input-edge);
+  /* --- Input ---------------------------------------------------------------- */
+  .area-input {
+    /* The action is the field less a 4px ring at every tier: 20 / 24 / 32 (audit B-7 B,
+       owner 2026-09-30; was icon + 8, a fixed 24), its corner concentric inside the field's. */
+    --_action: calc(var(--_height) - var(--area-space-8));
+    display: inline-flex;
+    align-items: center;
+    gap: var(--_gap);
+    inline-size: var(--area-input-inline-size);
+    max-inline-size: 100%;
   }
 
   .area-input--full-width { inline-size: 100%; }
   .area-input--monospace { font-family: var(--area-font-mono); }
-  @media (hover: hover) {
-    .area-input:hover:not([data-disabled], [data-read-only]):not(:focus-within) {
-      --_t-paint: var(--area-hover-in);
-      border-color: var(--_border-hover);
-    }
-  }
 
-  .area-input:focus-within {
-    --_t-paint: 0s;
-    --_t-halo: 0s;
-    border-color: var(--_border-focus);
-    box-shadow: var(--_field-lift), 0 0 0 var(--area-field-focus-halo-width) var(--_focus-halo);
-    outline: var(--area-field-focus-outline-width) solid var(--_focus-outline);
-    outline-offset: var(--area-focus-offset);
-  }
-
-  /* A tone or disabled paint lands at once (motion, 2026-10-07); clearing it fades on fast. */
-  .area-input:is([data-invalid], [aria-invalid="true"], [data-success], [data-warning], [data-disabled]) { --_t-paint: 0s; }
-
-  .area-input:is([data-invalid], [aria-invalid="true"]) {
-    --_border: var(--area-input-invalid-color);
-    --_border-hover: var(--area-input-invalid-color);
-    --_border-focus: var(--area-input-invalid-color);
-    --_focus-outline: var(--area-input-invalid-color);
-    --_focus-halo: var(--area-input-invalid-halo-color);
-  }
-
-  .area-input[data-success] {
-    --_border: var(--area-input-success-color);
-    --_border-hover: var(--area-input-success-color);
-    --_border-focus: var(--area-input-success-color);
-    --_focus-outline: var(--area-input-success-color);
-    --_focus-halo: var(--area-input-success-halo-color);
-  }
-
-  .area-input[data-warning] {
-    --_border: var(--area-input-warning-color);
-    --_border-hover: var(--area-input-warning-color);
-    --_border-focus: var(--area-input-warning-color);
-    --_focus-outline: var(--area-input-warning-color);
-    --_focus-halo: var(--area-input-warning-halo-color);
-  }
-
-  .area-input[data-disabled] {
-    --_bg: var(--area-input-bg-disabled);
-    --_border: var(--area-border-faint);
-    color: var(--area-fg-disabled);
-    cursor: not-allowed;
-  }
-
-  /* Read-only keeps its variant's rest paint, with no hover edge and a default cursor, as a
-     read-only Switch does; only disabled changes paint (audit B-9, owner 2026-09-30). */
-  .area-input[data-read-only] { cursor: default; }
-  /* A soft field never gains an edge when disabled. */
-  .area-input--soft[data-disabled] { --_border: transparent; }
-
+  /* Disabled and read-only are the shell's (above). */
   .area-input[data-loading] { cursor: progress; }
 
   /* A leading glyph stays muted in every validation state, as NumberField's scrub, Select's
@@ -168,11 +294,6 @@
     color: var(--area-input-placeholder);
   }
 
-  .area-input[data-disabled] .area-input__control::placeholder,
-  .area-input[data-disabled] .area-input__affix,
-  /* Every slot takes the disabled ink, icons and the action included (audit B-10). */
-  .area-input[data-disabled] :is(.area-input__icon, .area-input__action-button) { color: var(--area-fg-disabled); }
-
   /*
    * The file button is the field's action plate at rest (visual pass 2026-10-26): the action's box (the field less a
    * 4px ring, `--_action`), its concentric corner, the soft Button's fill, a Button's label inset for that height and,
@@ -193,7 +314,7 @@
     font: inherit;
     font-weight: var(--area-weight-strong);
     cursor: pointer;
-    transition: background-color var(--area-duration-fast) var(--area-ease-out);
+    transition: background-color var(--area-duration-fast) var(--area-ease-effects);
   }
   @media (hover: hover) {
     .area-input:not([data-disabled]) .area-input__control::file-selector-button:hover { background-color: var(--area-bg-component-hover); transition-duration: var(--area-hover-in); }
@@ -256,19 +377,22 @@
     cursor: pointer;
     /* The plate appears at once on hover and press and fades on fast (docs/MOTION.md, 2026-10-07;
        was instant both ways). The glyph's ink never moves. */
-    transition: background-color var(--area-duration-fast) var(--area-ease-out);
+    transition: background-color var(--area-duration-fast) var(--area-ease-effects);
     user-select: none;
   }
   @media (hover: hover) { .area-input__action-button:hover { transition-duration: var(--area-hover-in); } }
-  .area-input__action-button:active { transition-duration: var(--area-press-in); }
+  .area-input__action-button:is(:active, [aria-expanded="true"]) { transition-duration: var(--area-press-in); }
 
   /* The row pair: hover #f3, pressed #ee, as the NumberField steppers beside it (audit B-8). */
   @media (hover: hover) { .area-input__action-button:hover:not(:disabled) { background-color: var(--area-bg-component-hover); } }
-  .area-input__action-button:active:not(:disabled) { background-color: var(--area-bg-component-pressed); }
+  /* An action whose list is open (Combobox's toggle) holds the pressed plate until it closes (plan B7.1). */
+  .area-input__action-button:active:not(:disabled),
+  .area-input__action-button[aria-expanded="true"]:not(:disabled) { background-color: var(--area-bg-component-pressed); }
   /* On a soft field (#f7) the opaque #f3 all but vanishes, so the plate is the translucent pair
      that shows on any ground (audit B-7 C). */
   @media (hover: hover) { .area-input--soft .area-input__action-button:hover:not(:disabled) { background-color: var(--area-bg-hover); } }
-  .area-input--soft .area-input__action-button:active:not(:disabled) { background-color: var(--area-bg-pressed); }
+  .area-input--soft .area-input__action-button:active:not(:disabled),
+  .area-input--soft .area-input__action-button[aria-expanded="true"]:not(:disabled) { background-color: var(--area-bg-pressed); }
   .area-input__action-button:disabled { color: var(--area-fg-disabled); cursor: not-allowed; }
   .area-input__action-button:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); }
 
@@ -281,7 +405,4 @@
 
   /* Outer-edge optical insets are shared in inset.css. */
 
-  .area-input--sm { --_height: var(--area-control-sm); --_radius: var(--area-radius-control-sm); --_icon: var(--area-icon-sm); --_gap: var(--area-gap-sm); --_text: var(--area-control-sm-text); --_leading: var(--area-control-sm-leading); }
-  .area-input--md { --_height: var(--area-control-md); --_radius: var(--area-radius-control-md); --_icon: var(--area-icon-md); --_gap: var(--area-gap-md); --_text: var(--area-control-md-text); --_leading: var(--area-control-md-leading); }
-  .area-input--lg { --_height: var(--area-control-lg); --_radius: var(--area-radius-control-lg); --_icon: var(--area-icon-lg); --_gap: var(--area-gap-lg); --_text: var(--area-control-lg-text); --_leading: var(--area-control-lg-leading); }
 }

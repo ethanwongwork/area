@@ -26,14 +26,14 @@
     max-inline-size: 100%;
     block-size: auto;
     /* spec: an image standing alone takes the container corner (owner, 2026-10-18: "round the corners of images",
-       12 large, 6 thumbnails; was the small corner, 6). */
-    border-radius: var(--area-radius-container);
+       12 large, 6 thumbnails; was the small corner, 6): the frame recipe's block corner (surface.css). */
+    border-radius: var(--_fr-block);
   }
   .area-figure__caption {
     contain: inline-size;
     /* spec: Notion's caption is its UI text (14, as its controls) in the secondary ink, 8 under the media (Carbon 8):
        Area's UI text, muted. */
-    padding-block-start: var(--area-space-8);
+    padding-block-start: var(--_fr-name-gap); /* the item name's gap under a picture (surface.css), 8 */
     color: var(--area-fg-muted);
     font-size: var(--area-text-sm-size);
     line-height: var(--area-text-sm-leading);

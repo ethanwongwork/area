@@ -1,6 +1,91 @@
 # Handoff
 
 ## Current state (2026-11-11)
+- **System evaluation, worktree `design-system-audit-6f0eac` (2026-11-11; research and plan only, nothing built, uncommitted).**
+  Owner: evaluate "all components as a whole design system" in every detail, research other products deeply, then "come
+  up with a plan". Fourteen cited reports in `docs/research/system-evaluation-2026-11-11/` (five source audits, five
+  reference studies, four reviews of all 125 families as rendered light and dark, plus the capture method); `README.md`
+  there is the evaluation and the plan (145 items A–F in phases 0–5, 451 findings placed, coverage table), `plan.json`
+  the same as data, `page.json` its review-page copy with no reference names. Review page
+  https://claude.ai/artifact/44oLG9TkPg6TnirwEWouns: 25 owner decisions, 104 fixes (45 quick wins), 16 capabilities;
+  picks in `verdicts` (doc id = item id with `.` as `-`; empty at publish). Phase 0 starts by merging
+  `electron-app-audit-cleanup-35275b` (heading weight 600, title-xl, light Layer contrast 50, Link as button). The
+  rendered capture set lived in the session scratchpad and is gone; `rendered-method.md` says how to remake it (plan item
+  F1 brings it into the repo as a check). Not verified: hover, focus and pressed paint; live products beyond six.
+  **Phase 0 built (2026-11-11, uncommitted; owner took every recommendation, all 145 picks in the artifact).** F1 rendered check
+  (scripts/rendered, `npm run check:rendered`: 125 families light and dark at true scale, 53 known failures, all text
+  0.6 px off centre, each tied to B2.2; snapshots for header bars, marks, corners, the dark floating edge), F2 behaviour
+  harness (tests/behaviour, `npm run test:behaviour`: 187 tests in headless Edge with real input, 48 gaps marked against
+  plan items; it corrected the audit: Combobox required does block, Radio group required never blocks, Time field and
+  Calendar submit while disabled), F3.1–F3.3 (tile names, gallery/fit.ts fit and true height, demos; Input group and
+  vertical Slider minimums; Panel tiles renamed properties / code-inspector), F4 (REVIEW_REASONS, shown under Status), F5
+  (apps/desktop/scripts/api-rows.mjs generates the API tab from the manifest and prop JSDoc; unions typed from the
+  manifest; no reference names in prop docs, tested; 41 of 48 React-versus-manifest mismatches closed, 7 left with
+  reasons), F6 (stale comments and docs; check:docs asserts counts and writes the Strokes table with `-- --write`), F7
+  (a Specs tab measured live per family, src/specs-tab.tsx; token usage and rules in tokens.json;
+  docs/CONTRAST_PAIRINGS.md), F8 (packages/styles/scripts/vocabulary.mjs and its lint: 74 deviations each with the plan
+  item that migrates it; nothing renamed), F9 (one CSS and one React file per family: 129 and 150 files; exports
+  identical; area.css not byte-identical, same rules, two harmless moves; rendered snapshots unchanged). Every check
+  passed on the final tree: build, typecheck, tokens, contracts, lint:manifest, React, desktop 108, output, consumer,
+  docs, app-css, playgrounds, behaviour, rendered. Electron relaunched from this worktree (the two other sessions'
+  windows were quit). Not done: F0 (merge electron-app-audit-cleanup-35275b once committed, then recapture at light
+  Layers 50), F3.4 (demo copy and a media set: needs the owner on photos), F10 (later), F7's `area check` / `area mcp`
+  reading token usage. Open for the owner: Specs beside Spec as tab names; tokens.json +440 kB in the app bundle; five
+  vocabulary questions (heading vs title, expandedIds vs openIds, identifiers as title, Panel bar vs header, cancelled);
+  component fixes parked for Phase 4 (Chart last tick, Turn notice width, Design card held fit, Tree view guides, a
+  disabled Mention has no look). Phase 1 follows.
+  **Main merged in and Phase 1 built (2026-11-11, uncommitted).** origin/main through #222 (the app audit's heading weight,
+  title-xl, light Layer contrast 50, Link as button; #220; #221) was brought in under the Phase 0 work with a tagged
+  stash (F0 done). The repo sits in an iCloud-synced folder that makes "X 2.ext" copies when many processes write: sweep
+  with `git ls-files --others --exclude-standard | grep -E " [0-9]+(\.[a-z.]+)?$"` before building; copies moved to
+  the session scratchpad. Phase 1 (plan items A1–A11), six workers, every check green on the final tree (tokens 43,733,
+  React 816, desktop 146, behaviour 351, rendered: 48 known cap-centring for B2.2, 1 known dark-edge sample): spacing
+  (gap-row on ui-gap-step, gap-section and inset-page tokens, menu rows 8 with labels at 32 / lists from 160, rows on
+  the height ladder, whole-pixel insets), corners (radius-step = radius-control-md; Card min(container, 0.6 × inset) =
+  10 / 8 / 12; Dialog, Drawer, Design card, Asset card 16; floating lists 12 with rows 8; Table and Plan steps 16; the
+  Corner setting now says "10px on a 32px control"; 35 → 32 distinct corners; a radius lint), type (text-xs for marks
+  only; joined lines at the name's size, muted; item names 500; Page header md 26/30/600 and lg 32/40/600; tabular
+  figures; Tag 11 at every density; text-xs-code-leading; --area-underline-offset; chart ticks sans), ink and dark (dark
+  washes 8 / 14%; bg-float lifts dark floating surfaces one step with one edge, asserted by the rendered check; dark
+  muted #b9b9b9; fg-subtle, fg-disabled, fg-placeholder derived; card media plate; Alert title in default ink), motion
+  (duration-quick, ease-effects, ease-exit; menus 140, dialog 210 / 140, palette 140; list highlight instant;
+  data-opened-by="keyboard" from overlay.ts; press on the plate; Speed now means a dialog's open), focus and targets
+  (the ring off a solid fill, Contrast More 3px, forced-colours coverage, one shared hit target 24 / 44; focus and
+  motion suites in tests/behaviour). About 110 families In review with reasons. Review page (artifact J2qDDqMxy8v2empnncmVNG, picks in `verdicts`):
+  docs/research/system-evaluation-2026-11-11/phase1-review/ (ten owner questions, ids q-…). Not done: the third ink is
+  not distinct (dark APCA Lc 60 floor binds: owner question q-floor); secondary / tertiary rename; Tabs status mark;
+  Number field steppers and Split button trigger under 24; 44 touch targets where neighbours abut; A9.6 regular-weight
+  trial needs a new setting; F3.4 demo media; F10. Captures: .cache/rendered/before-phase1 and after-phase1. Next:
+  Phase 2 (shared parts), after the owner's picks on the Phase 1 page.
+  **Phase 2 built (2026-11-14): all three waves, every check green.** Wave 2: one field shell (input.css; steppers and the
+  Split button trigger own 24 with no overlap; selectable Table rows on the height ladder), two header bars and one
+  corner-control rule (inset.css; a close beside a title centres on the title's cap with its glyph on the side column,
+  the title always on the inset: the one named exception), one floating surface (popup.css: frame, shadow stack, corner
+  table in DESIGN_SYSTEM "Overlays"; Alert and Toast actions wrap, text never cut), twins on one track and a density
+  ratchet (density.test.mjs). Wave 3: open / pressed / hover-reveal paint (touch always shows revealed parts), selection
+  (selection.css, literal fills to roles, state-paint.test.mjs), disabled and read-only one way (read-only = one fill
+  step deeper), leftovers (one floating shadow for Toolbar / Selection bar / Titlebar, pills exactly radius-full, density
+  ratchet 88 → 10). Cap-centring known failures 48 → 13 (all marks: the whole-pixel baseline rule and the centring rule
+  conflict, an owner question). Reports: docs/research/system-evaluation-2026-11-11/phase2/. Owner questions for the
+  Phase 2 review page: mark baseline vs centre; pressed floor above hover (1.009:1 when Hover and Pressed fill steps are
+  set equal at light Layers 100); thin read-only cue (1.02:1 dark Layers 100); on-toggles now press (reverses audit
+  A-13); the footer rule while a body scrolls (reverses dialog.md's exclusion); Board icon gaps 6 → 8 and five other
+  fixes that move the default; Badge inverse; a selection-solid-active role. Next: the Phase 2 review page, then Phase 3.
+  **Phase 2 wave 1 built (2026-11-14, uncommitted).** The owner took every Phase 1 recommendation (verdicts on artifact
+  J2qDDqMxy8v2empnncmVNG; the five questions with no marked recommendation took the first option, which keeps what was
+  built, and adds the Regular weight trial). Wave 1, four workers, reports in
+  docs/research/system-evaluation-2026-11-11/phase2/ (frame, rows, marks, weight): one frame recipe in surface.css for 19
+  families (corner roles block / card / around, inset ladder, nested floor; chat card corner = medium control corner +
+  bar inset = 16 at the defaults, so Composer and Approval 19 → 16; Card follows Corner above 10); one row table and one
+  text-centring model in inset.css (cap slot, line slot, text box; known cap-centring failures 48 → 34, the rest are
+  fields and a few leftovers); one mark recipe in inset.css (14 / 18 / 22 at every density; chips square at Corner 0);
+  a Regular weight setting (axes/regular-weight.ts, 400–470 step 10, default 400, Inspector › Size). Every check green
+  on the combined tree after two fixes: Switch's own target property renamed --_target so the shared hit-target rule is
+  the only --_hit, and a cohesion test's backtracking pattern replaced by a linear walk. Snapshots corners and
+  header-bars updated for the intended moves. Wave 2 (field shell B3 with the centring model and the steppers, header
+  bars B4, popup surfaces B6, twins and density B8 with the leftovers) and wave 3 (state paint B7) follow, then
+  origin/main is merged in (it moved: experiments and typefaces only) and the Phase 2 review page is built. The session
+  scratchpad is wiped when the app restarts: the worker brief is rewritten from this entry and AGENTS.md.
 - **Four products rebuilt from Area, worktree `electron-app-audit-cleanup-35275b` (2026-11-10, PR).** Owner asked for four
   real products' main windows at real scale as a stress test. Built as Patterns: Chat assistant, Document workspace, Code
   editor, Assistant with a document panel (`content/examples/product-*.tsx`, `styles/product-*.css`, layout CSS only, no

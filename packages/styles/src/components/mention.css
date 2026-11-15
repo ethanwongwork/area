@@ -18,7 +18,7 @@
     --_mention-plate: transparent;
     --_mention-plate-hover: transparent;
     --_mention-edge: transparent;
-    /* spec: the chat app's pill pads 2 / 6 (`._Mention_1wujo_2` padding 2px 6px); 0 for plain and underline. */
+    /* 0 for plain and underline; soft takes the inline chip's (below). */
     --_mention-pad-block: 0px;
     --_mention-pad-inline: 0px;
     --_mention-line: transparent;
@@ -41,12 +41,12 @@
     text-decoration-color: var(--_mention-line);
     /* Link's line: one stroke, close under the text (link.css). */
     text-decoration-thickness: var(--area-stroke-width);
-    text-underline-offset: 0.08em;
+    text-underline-offset: var(--area-underline-offset);
     text-decoration-skip-ink: auto;
     white-space: normal;
     overflow-wrap: anywhere;
     /* Motion (MOTION.md, "Hover plate"): a hover lands at once and fades on fast. */
-    transition: background-color var(--area-duration-fast) var(--area-ease-out), text-decoration-color var(--area-duration-fast) var(--area-ease-out);
+    transition: background-color var(--area-duration-fast) var(--area-ease-effects), text-decoration-color var(--area-duration-fast) var(--area-ease-effects);
   }
   /* A link or a button: text you can press, so the pointer says so; a button keeps the sentence's line. */
   .area-mention:is(a, button) { cursor: pointer; }
@@ -85,13 +85,16 @@
   .area-mention--plain { --_mention-line-hover: currentColor; }
   /* underline: Link's line in the mention's own ink, always (a page reference in prose; the chat app's underlined-text). */
   .area-mention--underline { --_mention-line: currentColor; --_mention-line-hover: currentColor; }
-  /* soft: the translucent mark plate (Count soft's `bg-mark` and the Tags stroke group's edge), a pill padded 2 / 6. */
+  /* soft: the translucent mark plate (Count soft's `bg-mark` and the Tags stroke group's edge), a pill on the inline chip
+     recipe (inset.css, "One mark"; plan B5.1, VC24): its plate is its line box, so chips wrapped onto the next line meet
+     without overlapping (the chat app's 2 above and below made a 21 chip in an 18 line, 3 over the next), and its side
+     is the mark side on that line, 6 on an 18 line (the chat app's 6). */
   .area-mention--soft {
     --_mention-plate: var(--area-bg-mark);
     --_mention-plate-hover: var(--area-bg-mark-hover);
     --_mention-edge: var(--area-edge-tags);
-    --_mention-pad-block: 2px; /* spec: the chat app's pill, 2 */
-    --_mention-pad-inline: 6px; /* spec: the chat app's pill, 6 */
+    --_mention-pad-block: var(--_chip-pad-block);
+    --_mention-pad-inline: var(--_chip-pad-inline);
   }
 
   /* Kind: each kind's default mark is set by React (person, document, link, calendar); the kinds paint alike. */

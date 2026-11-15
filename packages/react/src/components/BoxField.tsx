@@ -15,25 +15,35 @@ export interface BoxFieldProps extends Omit<HTMLAttributes<HTMLDivElement>, "def
   label: string;
   /** Keep the caption for assistive tech only (the row already has a visible one). */
   hideLabel?: boolean;
+  /** The four values, controlled, in CSS order; `null` for an empty field. */
   value?: BoxValue;
+  /** The four values at first, uncontrolled; every field empty by default. */
   defaultValue?: BoxValue;
-  /** The four sides, and the event that changed one (audit C-7). */
+  /** Called with the four values and the event that changed one. */
   onValueChange?: (value: BoxValue, event?: SyntheticEvent) => void;
   /** One field per side or corner; otherwise linked (a horizontal and vertical pair, or one radius). */
   independent?: boolean;
+  /** Whether the fields start one per side or corner, uncontrolled. */
   defaultIndependent?: boolean;
+  /** Called with the new mode when the toggle switches between linked and independent. */
   onIndependentChange?: (independent: boolean) => void;
   /** Show the toggle between linked and independent. Off keeps the current mode fixed. */
   toggle?: boolean;
+  /** The height and type of every field and the toggle: `md` (default), `sm` or `lg`. */
   size?: VariantProps<typeof MANIFESTS.boxField>["size"];
   /** Forwarded to each NumberField (a forwarding prop, so not a BoxField manifest axis). */
   variant?: VariantProps<typeof MANIFESTS.numberField>["variant"];
+  /** The least value each field takes. */
   min?: number;
+  /** The greatest value each field takes; no limit by default. */
   max?: number;
+  /** How far each arrow key or step moves a value. */
   step?: number;
+  /** The unit shown after each value ("px"). */
   unit?: string;
+  /** Disables every field and the toggle. */
   disabled?: boolean;
-  /** Values can be read and copied but not changed; the link toggle is disabled (audit S17, B-20). */
+  /** Values can be read and copied but not changed; the link toggle is disabled. */
   readOnly?: boolean;
   /** Submits the four values as one CSS shorthand ("8 16 8 16"). */
   name?: string;

@@ -67,7 +67,7 @@ area     label.area-switch  inline-flex, align flex-start, min-block 24, gap --_
   track    span 1px --_edge, --_track-radius (pill by default), --_off / --_on; centred on the first line
   thumb    span surface, shadow-control (+ contrast ring); inline (inset − border) from the
            track's padding edge, centred on the track's height
-  text     label 14/20 + description 12/16 muted
+  text     label 13/18 + description 13/18 muted (the label's size, plan A9.3)
 ```
 
 Inset: 1px track border + 1px = the 2px thumb inset ChatGPT and Notion use (switch.css:15,
@@ -247,6 +247,7 @@ pointer press.
   down a fixed 1 from the track's padding edge; at a fractional scale the 1px edge snaps to device pixels and the
   offset does not, so it sat 1.3 under the top and 1.9 over the bottom at 0.8x (2 / 2 at 1x). It is now centred on the
   track's height (`inset-block: 0; margin-block: auto`): the same 2 at 1x, equal gaps at any scale or browser zoom.
+- 2026-11-14 · plan B7.10 → unchanged paint (read-only already kept full paint and no hover or press); the behaviour suite `states` now asserts that it is focusable, announced and unchanged. Forced colours: a disabled label is GrayText. Why: docs/research/system-evaluation-2026-11-11 (README §5, phase2/disabled.md); the owner took every recommendation on 2026-11-11.
 
 ## Review note, 2026-10-22 (round 69)
 
@@ -265,3 +266,34 @@ pointer press.
 - **Why:** the owner's balance pass ("no spacing logic between the title and the text … make sure all of this is
   intentional"): a gap near a line's own spacing but not on it reads as no decision. File tile's meta already joined at
   7.7. DESIGN_SYSTEM.md, "Text pairs"; `docs/research/title-balance-2026-11-06`.
+
+## Review note, 2026-11-11 (type rules, plan A9)
+
+- **What changed:** the description joins the label at the label's size in the muted ink (13/18 at md), the same setting as a Setting row's 13 over 13; it was 12/16 (plan A9.3, owner 2026-11-11).
+- **Why:** the system evaluation's type rules (docs/research/system-evaluation-2026-11-11, section 5, A9), owner-approved
+  2026-11-11; the rules are in DESIGN_SYSTEM.md ("Ink and weight", "Size and shape", "Text pairs") and the type skill.
+
+## Review note, 2026-11-11 (focus and targets, plan A6, A11.2)
+
+- **What changed:** On, the track is the ring's own colour: the ring stands off by `focus-gap` (A6.1).
+- **Why:** the system evaluation's focus, forced colours and hit target items (docs/research/system-evaluation-2026-11-11, section 5), owner-approved 2026-11-11; the rules are in DESIGN_SYSTEM.md ("The focus ring", "Targets") and CONTRAST.md (Focus).
+
+## Shared parts (plan B2), 2026-11-13
+
+- **Centring (B2.2, VA2).** The words centre their cap on the track: the track sits at the box's top and the text column is set (track − 1cap) / 2 down, the label trimmed at its start (both ends when it is alone) and a description trimmed at its end, as Checkbox and Radio do. The label sat 0.62 above the track's centre on every tile. The track's `(leading − track) / 2` margin is gone.
+- **Target (B2.5, VA3).** The box is the track's (or the text's) height; the 24 target (44 under a coarse pointer) is the native control's, centred on the box and out of flow. A Switch in a row (Setting row, a Panel) now keeps the row's centre: its track drew at the top of a 24 box, 3 above the line a Select beside it centred on. A Switch alone is 18 tall at type 13 (was 24).
+
+## Sizes beside Checkbox, Radio and Switch (plan B8.1), 2026-11-14
+
+The three choices share one box ladder (`mark-box`, then 4 and 8 more: 14 / 18 / 22 at type 13), matched by what the
+hand marks: a Switch's thumb is a Checkbox's and a Radio's box at the same size name (md 14, lg 18), its track the thumb
+plus its 2 inset round it. So Checkbox and Radio offer md and lg, and Switch sm, md and lg: Switch's sm is a 14 track
+(a 10 thumb) for a dense row; the choices' sm was removed on 2026-09-28, when it differed from md only by its label gap.
+In a dense row, a Checkbox md and a Switch sm stand one height (14). No size is added (COMPONENTS.md, Boundaries).
+
+### 2026-11-14 · Shared parts, leftovers (system plan, Phase 2, wave 3)
+
+- A pill is one value: while the Pills set rounds it, its corner is `radius-full` itself, `max(corner, flag × full)`, never the corner plus full (it computed 10003px and 10005px; the thumb 10001px and 10003px). Draws the same; the corners snapshot records 9999px.
+- The thumb lists the flag too, so it is `radius-full` at a pill.
+- Why: docs/research/system-evaluation-2026-11-11 (plan B6.1, B6.5, B8.2, B2.2; README §5, phase2/leftovers.md); the owner took every recommendation on 2026-11-11. Fix the rule, not the instance.
+- Verdict: awaiting the owner.

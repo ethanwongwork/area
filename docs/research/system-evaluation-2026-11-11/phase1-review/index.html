@@ -1,0 +1,275 @@
+<title>Area Foundations Review</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one working column (max 920) under a sticky bar of sections, progress and the bulk action; each change group is a card. */
+:root {
+  --bg: #f6f7f8; --surface: #ffffff; --fg: #15181c; --muted: #5d6670; --faint: #8a939d;
+  --line: #e2e5e9; --well: #eef0f3; --accent: #1f5fd1; --accent-fg: #ffffff; --accent-wash: #e6eefc;
+  --good: #1a7f4b; --good-wash: #e3f4ea; --warn: #9a6200; --warn-wash: #fbf0d9; --bad: #b3261e; --bad-wash: #fbe7e5;
+  --sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #0b0c0e; --surface: #15171a; --fg: #eceef0; --muted: #a0a8b1; --faint: #727b85;
+  --line: #262a2f; --well: #1c1f23; --accent: #7aa7ff; --accent-fg: #0b0c0e; --accent-wash: #17233b;
+  --good: #5fd08f; --good-wash: #12281c; --warn: #e5b45a; --warn-wash: #2b2212; --bad: #ff8a80; --bad-wash: #2e1614; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #0b0c0e; --surface: #15171a; --fg: #eceef0; --muted: #a0a8b1; --faint: #727b85;
+  --line: #262a2f; --well: #1c1f23; --accent: #7aa7ff; --accent-fg: #0b0c0e; --accent-wash: #17233b;
+  --good: #5fd08f; --good-wash: #12281c; --warn: #e5b45a; --warn-wash: #2b2212; --bad: #ff8a80; --bad-wash: #2e1614; color-scheme: dark }
+* { box-sizing: border-box }
+body { background: var(--bg); color: var(--fg); font: 400 14px/20px var(--sans); margin: 0 }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg) }
+.wrap { max-width: 920px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)) }
+header.top { padding-block: 28px 12px }
+h1 { font: 600 24px/30px var(--sans); margin: 0; letter-spacing: -0.01em; text-wrap: balance }
+.sub { color: var(--muted); margin: 6px 0 0 }
+.bar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--bg); border-bottom: 1px solid var(--line) }
+.bar .wrap { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: center; padding-block: 8px }
+nav.views { display: flex; flex-wrap: wrap; gap: 2px; flex: 1 1 auto; min-width: 0 }
+nav.views a { padding: 5px 10px; border-radius: 6px; color: var(--muted); text-decoration: none; font-weight: 500; white-space: nowrap }
+nav.views a:hover { background: var(--well); color: var(--fg) }
+.progress { color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap }
+button { font: 500 13px/18px var(--sans); color: var(--fg); background: var(--surface); border: 1px solid var(--line); border-radius: 6px; padding: 5px 10px; cursor: pointer }
+button:hover { border-color: var(--faint) }
+button:focus-visible, a:focus-visible, textarea:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px }
+button.primary { background: var(--accent); color: var(--accent-fg); border-color: var(--accent) }
+button[disabled] { opacity: .5; cursor: default }
+main { padding-block: 20px 80px }
+h2 { font: 600 17px/24px var(--sans); margin: 36px 0 10px; scroll-margin-top: 64px }
+h2:first-child { margin-top: 0 }
+p { margin: 0 0 10px; max-width: 72ch }
+.stack { display: grid; gap: 10px }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; min-width: 0; scroll-margin-top: 64px }
+.card.decided { border-color: color-mix(in srgb, var(--good) 45%, var(--line)) }
+.head { display: flex; gap: 8px 10px; align-items: baseline; flex-wrap: wrap }
+.id { font: 500 12px/18px var(--mono); color: var(--faint) }
+.title { font: 600 14px/20px var(--sans); flex: 1 1 240px; min-width: 0 }
+.chip { font: 500 12px/18px var(--sans); padding: 0 7px; border-radius: 999px; background: var(--well); color: var(--muted); white-space: nowrap }
+.chip.decision { background: var(--warn-wash); color: var(--warn) }
+dl.wcw { display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: 4px 12px; margin: 10px 0 0 }
+dl.wcw dt { color: var(--muted) }
+dl.wcw dd { margin: 0; max-width: 72ch }
+.small { color: var(--muted); font-size: 12px; line-height: 18px }
+.scroll { overflow-x: auto; border: 1px solid var(--line); border-radius: 8px; margin-top: 12px }
+table { border-collapse: collapse; width: 100%; font-size: 13px; line-height: 18px }
+th, td { text-align: left; padding: 6px 10px; border-bottom: 1px solid var(--line); vertical-align: top }
+tr:last-child td { border-bottom: 0 }
+th { color: var(--muted); font-weight: 500; white-space: nowrap }
+td.v { font-variant-numeric: tabular-nums; white-space: nowrap }
+td.v.wrap { white-space: normal; min-width: 180px }
+td.arrow { color: var(--faint); padding-inline: 0; width: 1px }
+.pic { margin-top: 16px }
+.pic .cap { font-weight: 500 }
+.shots { display: flex; flex-wrap: wrap; gap: 12px 16px; margin-top: 8px; overflow-x: auto; padding-bottom: 4px; align-items: flex-start }
+.shotrow { display: flex; flex-wrap: wrap; gap: 8px; align-items: flex-start }
+figure { margin: 0; flex: none }
+figure img { display: block; max-width: none; border: 1px solid var(--line); border-radius: 4px; background: var(--well) }
+figure img.px { image-rendering: pixelated }
+figcaption { color: var(--muted); font-size: 12px; line-height: 18px; margin-bottom: 4px; white-space: nowrap }
+figcaption b { color: var(--fg); font-weight: 500 }
+.none { color: var(--faint); font-size: 12px; line-height: 18px; border: 1px dashed var(--line); border-radius: 4px; padding: 8px 10px; align-self: stretch; display: flex; align-items: center; max-width: 220px }
+.note { color: var(--muted); font-size: 13px; line-height: 18px; margin-top: 12px }
+.opts { display: grid; gap: 6px; margin-top: 12px }
+.opt { display: grid; grid-template-columns: 18px minmax(0, 1fr); gap: 8px; align-items: start; text-align: left; padding: 8px 10px; border-radius: 8px; width: 100% }
+.opt .dot { width: 14px; height: 14px; border-radius: 50%; border: 1.5px solid var(--faint); margin-top: 2px }
+.opt[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-wash) }
+.opt[aria-pressed="true"] .dot { border: 4px solid var(--accent) }
+.opt b { font-weight: 600 }
+.opt small { display: block; color: var(--muted); font: 400 13px/18px var(--sans) }
+.rec { font: 500 12px/18px var(--sans); color: var(--good); margin-left: 6px; white-space: nowrap }
+.picks { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 14px; align-items: center }
+.picks button[aria-pressed="true"] { background: var(--fg); color: var(--bg); border-color: var(--fg) }
+textarea { width: 100%; margin-top: 8px; font: 400 13px/18px var(--sans); color: var(--fg); background: var(--bg); border: 1px solid var(--line); border-radius: 6px; padding: 6px 8px; resize: vertical; min-height: 34px }
+ul.plain { margin: 0; padding-left: 18px } ul.plain li { margin-bottom: 4px; max-width: 72ch }
+a { color: var(--accent) }
+.toast { position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(16px + env(safe-area-inset-bottom, 0px)); background: var(--fg); color: var(--bg); padding: 8px 14px; border-radius: 8px; font-weight: 500; z-index: 20 }
+@media (max-width: 520px) { nav.views { flex-wrap: nowrap; overflow-x: auto; flex-basis: 100% } }
+@media (max-width: 520px) { dl.wcw { grid-template-columns: 1fr; gap: 0 } dl.wcw dt { margin-top: 6px } }
+@media (prefers-reduced-motion: no-preference) { button, nav.views a { transition: background-color .12s, border-color .12s } }
+</style>
+
+<header class="top"><div class="wrap">
+  <h1>Area foundations review</h1>
+  <p class="sub" id="sub">Phase 1 of the system plan, 2026-11-11</p>
+</div></header>
+<div class="bar"><div class="wrap">
+  <nav class="views" id="views" aria-label="Sections"></nav>
+  <span class="progress" id="progress">Loading</span>
+  <button id="approveFixes" class="primary" title="Approves every fix you have not decided. Questions are left for you.">Approve every fix</button>
+</div></div>
+
+<main><div class="wrap" id="main"><p class="note">Loading the review.</p></div></main>
+<div class="toast" id="toast" hidden role="status"></div>
+
+<script>
+(() => {
+  const $ = (s, r = document) => r.querySelector(s);
+  const el = (tag, attrs = {}, ...kids) => {
+    const n = document.createElement(tag);
+    for (const [k, v] of Object.entries(attrs)) {
+      if (v == null || v === false) continue;
+      if (k === "class") n.className = v; else if (k === "text") n.textContent = v;
+      else if (k.startsWith("on")) n.addEventListener(k.slice(2), v); else n.setAttribute(k, v === true ? "" : v);
+    }
+    for (const k of kids.flat()) if (k != null && k !== false) n.append(k.nodeType ? k : document.createTextNode(k));
+    return n;
+  };
+  const key = id => id.replace(/[^A-Za-z0-9_-]/g, "-");
+  const LS = "area-phase1-review-picks";
+  let data = null, db = null;
+  const picks = new Map();   // key(id) -> {pick, label, note, at, by}
+  const updaters = new Map(); // id -> [fn]
+  const items = [];          // {id, kind: "fix" | "question", title, options?}
+
+  const toast = msg => { const t = $("#toast"); t.textContent = msg; t.hidden = false; clearTimeout(toast.t); toast.t = setTimeout(() => t.hidden = true, 2600); };
+  const labelOf = (it, pick) => it.kind === "question" ? (it.options[+pick.slice(4)]?.label ?? pick) : ({ approve: "Approve", hold: "Hold" })[pick] ?? pick;
+
+  async function save(it, patch) {
+    const k = key(it.id), cur = picks.get(k) ?? {};
+    const next = { pick: cur.pick ?? null, label: cur.label ?? null, note: cur.note ?? "", by: cur.by ?? "owner", ...patch, at: new Date().toISOString() };
+    if (patch.pick) next.label = labelOf(it, patch.pick);
+    const doc = { pick: next.pick, label: next.label, note: next.note, at: next.at, by: next.by };
+    picks.set(k, doc); refresh(it.id);
+    try { localStorage.setItem(LS, JSON.stringify([...picks])); } catch {}
+    if (!db) return;
+    try { await db.doc("verdicts/" + k).set(doc); }
+    catch (e) { toast("That pick was not saved: " + (e?.message || e?.code || "the store refused it")); }
+  }
+  function refresh(id) {
+    if (id) (updaters.get(id) ?? []).forEach(f => f()); else updaters.forEach(fs => fs.forEach(f => f()));
+    const fixes = items.filter(i => i.kind === "fix"), qs = items.filter(i => i.kind === "question");
+    const done = l => l.filter(i => picks.get(key(i.id))?.pick).length;
+    if (data) $("#progress").textContent = `${done(fixes)} of ${fixes.length} fixes · ${done(qs)} of ${qs.length} questions`;
+  }
+  const onUpdate = (id, f) => { (updaters.get(id) ?? updaters.set(id, []).get(id)).push(f); f(); };
+
+  $("#approveFixes").addEventListener("click", async () => {
+    const todo = items.filter(i => i.kind === "fix" && !picks.get(key(i.id))?.pick);
+    if (!todo.length) { toast("Every fix already has a pick."); return; }
+    $("#approveFixes").disabled = true;
+    for (const it of todo) await save(it, { pick: "approve", by: "approve-every-fix" });
+    $("#approveFixes").disabled = false;
+    toast(`${todo.length} fixes approved.`);
+  });
+
+  function noteBox(it) {
+    const note = el("textarea", { rows: "1", placeholder: "Note", "aria-label": "Note for " + it.title });
+    let t; note.addEventListener("input", () => { clearTimeout(t); t = setTimeout(() => save(it, { note: note.value }), 700); });
+    onUpdate(it.id, () => { const p = picks.get(key(it.id)); if (document.activeElement !== note && (p?.note ?? "") !== note.value) note.value = p?.note ?? ""; });
+    return note;
+  }
+
+  /* ---------- pictures ---------- */
+  const img = (o, alt, zoom) => el("img", { src: o.src, alt, loading: "lazy", width: String(zoom ? o.w * 2 : o.w / 2), height: String(zoom ? o.h * 2 : o.h / 2), class: zoom ? "px" : null });
+  const altOf = (p, theme, which, extra = "") => `${p.family}, ${p.label} tile${p.density ? ", " + p.density : ""}, ${theme}, ${which}${extra}`;
+  function picture(p) {
+    const box = el("div", { class: "pic" }, el("div", {}, el("span", { class: "cap", text: p.family }), " · " + p.label + (p.density ? " · " + p.density : "")));
+    const shots = el("div", { class: "shots" });
+    for (const theme of ["light", "dark"]) {
+      const v = p.themes?.[theme]; if (!v || v.missing) continue;
+      const word = theme === "light" ? "Light" : "Dark";
+      if (p.sheet) { shots.append(el("figure", {}, el("figcaption", {}, el("b", { text: word }), " · after, enlarged"), el("img", { src: v.after.src, alt: altOf(p, theme, "after"), loading: "lazy", width: String(v.after.w), height: String(v.after.h) }))); continue; }
+      const row = el("div", { class: "shotrow" });
+      row.append(v.before ? el("figure", {}, el("figcaption", {}, el("b", { text: word }), " · before"), img(v.before, altOf(p, theme, "before")))
+                          : el("div", { class: "none", text: `${word} before: no capture` }));
+      row.append(el("figure", {}, el("figcaption", {}, el("b", { text: word }), " · after"), img(v.after, altOf(p, theme, "after"))));
+      shots.append(row);
+      if (v.zoomAfter) {
+        const z = el("div", { class: "shotrow" });
+        if (v.zoomBefore) z.append(el("figure", {}, el("figcaption", {}, el("b", { text: word }), " · before, enlarged 4×"), img(v.zoomBefore, altOf(p, theme, "before", ", enlarged 4×"), true)));
+        z.append(el("figure", {}, el("figcaption", {}, el("b", { text: word }), " · after, enlarged 4×"), img(v.zoomAfter, altOf(p, theme, "after", ", enlarged 4×"), true)));
+        shots.append(z);
+      }
+    }
+    box.append(shots);
+    if (p.note) box.append(el("div", { class: "small", text: p.note }));
+    return box;
+  }
+
+  /* ---------- a fix card ---------- */
+  function fixCard(c) {
+    const it = { id: c.id, kind: "fix", title: c.title }; items.push(it);
+    const card = el("article", { class: "card", id: c.id });
+    card.append(el("div", { class: "head" }, el("span", { class: "id", text: c.id }), el("span", { class: "title", text: c.title }), c.plan && el("span", { class: "chip", text: c.plan })));
+    card.append(el("dl", { class: "wcw" }, el("dt", { text: "What changed" }), el("dd", { text: c.what }), el("dt", { text: "Why" }), el("dd", { text: c.why })));
+    if (c.values?.length) card.append(el("div", { class: "scroll" }, el("table", {},
+      el("thead", {}, el("tr", {}, el("th", { text: "Part" }), el("th", { text: "Before" }), el("th", { class: "arrow" }), el("th", { text: "After" }))),
+      el("tbody", {}, c.values.map(([part, b, a]) => el("tr", {}, el("td", { text: part }), el("td", { class: "v" + (b.length > 28 ? " wrap" : ""), text: b || "·" }), el("td", { class: "arrow", text: "→" }), el("td", { class: "v" + (a.length > 28 ? " wrap" : ""), text: a })))))));
+    if (c.motion) card.append(motionTable());
+    for (const p of c.pictures ?? []) card.append(picture(p));
+    if (c.look) card.append(el("div", { class: "note", text: "Look for: " + c.look }));
+    if (c.noPicture) card.append(el("div", { class: "note", text: c.noPicture }));
+    if (c.question) card.append(el("div", { class: "note" }, "Your decision on this: ", el("a", { href: "#" + c.question, text: data.questions.find(q => q.id === c.question)?.title ?? c.question })));
+    const set = [["approve", "Approve"], ["hold", "Hold"]], btns = [];
+    const row = el("div", { class: "picks", role: "group", "aria-label": "Pick for " + c.title });
+    for (const [v, l] of set) { const b = el("button", { type: "button", "aria-pressed": "false", text: l, onclick: () => save(it, { pick: v, by: "owner" }) }); btns.push([v, b]); row.append(b); }
+    card.append(row, noteBox(it));
+    onUpdate(it.id, () => { const p = picks.get(key(it.id)); btns.forEach(([v, b]) => b.setAttribute("aria-pressed", String(p?.pick === v))); card.classList.toggle("decided", !!p?.pick); });
+    return card;
+  }
+  function motionTable() {
+    const box = el("div", {});
+    box.append(el("div", { class: "scroll" }, el("table", {},
+      el("thead", {}, el("tr", {}, ...["Surface", "Enter before", "Enter after", "Exit before", "Exit after"].map(t => el("th", { text: t })))),
+      el("tbody", {}, data.motionRows.map(r => el("tr", {}, el("td", { text: r[0] }), ...r.slice(1).map(x => el("td", { class: "v wrap", text: x || "·" }))))))));
+    box.append(el("div", { class: "note", text: "Milliseconds at Speed 210, Easing Subtle. " + data.motionMeasured }));
+    box.append(el("div", { class: "note", text: "Try in the app:" }), el("ul", { class: "plain small" }, data.tryList.map(t => el("li", { text: t }))));
+    return box;
+  }
+
+  /* ---------- a question ---------- */
+  function questionCard(q) {
+    const it = { id: q.id, kind: "question", title: q.title, options: q.options }; items.push(it);
+    const card = el("article", { class: "card", id: q.id });
+    card.append(el("div", { class: "head" }, el("span", { class: "id", text: q.id }), el("span", { class: "title", text: q.title }), el("span", { class: "chip decision", text: "Your decision" })));
+    card.append(el("p", { text: q.body, style: "margin:10px 0 0" }));
+    const box = el("div", { class: "opts", role: "group", "aria-label": "Options for " + q.title }), btns = [];
+    q.options.forEach((o, i) => {
+      const b = el("button", { class: "opt", type: "button", "aria-pressed": "false", onclick: () => save(it, { pick: "opt:" + i, by: "owner" }) },
+        el("span", { class: "dot" }), el("span", {}, el("b", { text: o.label }), q.rec === i && el("span", { class: "rec", text: "Recommended" }), el("small", { text: o.detail })));
+      btns.push(["opt:" + i, b]); box.append(b);
+    });
+    card.append(box, noteBox(it));
+    onUpdate(it.id, () => { const p = picks.get(key(it.id)); btns.forEach(([v, b]) => b.setAttribute("aria-pressed", String(p?.pick === v))); card.classList.toggle("decided", !!p?.pick); });
+    return card;
+  }
+
+  function render() {
+    const m = $("#main"); m.replaceChildren();
+    const nav = $("#views"); nav.replaceChildren();
+    const link = (id, t) => nav.append(el("a", { href: "#" + id, text: t }));
+    for (const s of data.sections) {
+      link("s-" + s.id, s.title);
+      m.append(el("h2", { id: "s-" + s.id, text: s.title }), el("div", { class: "stack" }, s.cards.map(fixCard)));
+    }
+    link("s-questions", "Questions"); link("s-notdone", "Not done");
+    m.append(el("h2", { id: "s-questions", text: "Questions" }), el("div", { class: "stack" }, data.questions.map(questionCard)));
+    m.append(el("h2", { id: "s-notdone", text: "Not done" }), el("div", { class: "card" }, el("ul", { class: "plain" }, data.notDone.map(t => el("li", { text: t }))),
+      data.corrections?.length ? el("p", { class: "note", text: "Correction during the phase: " + data.corrections.join(" ") }) : null));
+    m.append(el("h2", { id: "s-checks", text: "Checks" }), el("p", { text: data.checks }));
+    const nFix = items.filter(i => i.kind === "fix").length, nQ = items.filter(i => i.kind === "question").length;
+    $("#sub").textContent = `${data.phase}, ${data.date} · ${nFix} change groups to approve or hold, ${nQ} questions · picks save as you go`;
+    if (location.hash) document.getElementById(location.hash.slice(1))?.scrollIntoView();
+  }
+
+  fetch("review.json").then(r => { if (!r.ok) throw new Error(r.status); return r.json(); }).then(d => {
+    data = d;
+    try { for (const [k, v] of JSON.parse(localStorage.getItem(LS) || "[]")) if (!picks.has(k)) picks.set(k, v); } catch {}
+    render(); refresh();
+  }).catch(e => { $("#main").replaceChildren(el("p", { class: "note", text: "The review's data did not load (" + e.message + "). Reload the page to try again." })); $("#progress").textContent = ""; });
+
+  (async () => {
+    const ns = await window.claude?.use?.("db").catch(() => null);
+    if (!ns) return;
+    db = ns;
+    const giveUp = setTimeout(() => toast("Saved picks are slow to load; you can still read and pick."), 10000);
+    db.collection("verdicts").limit(500).onSnapshot(snap => {
+      clearTimeout(giveUp);
+      for (const d of snap.docs) { const v = d.data(); if (v) picks.set(d.id, v); }
+      refresh();
+    }, () => clearTimeout(giveUp));
+  })();
+})();
+</script>

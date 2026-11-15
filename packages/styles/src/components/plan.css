@@ -14,59 +14,24 @@
   /* The frame is the default (surface), so the bare class draws it and `--surface` restates it for manifest parity. */
   .area-plan,
   .area-plan--surface {
-    --_card-list: var(--area-space-4); /* spec: Menu's list padding 4 */
-    --_card-column: calc(var(--_card-list) + var(--area-ui-row-inset)); /* 12 */
+    /* The chat card (surface.css, plan B1.3): rows 4 from the outer edge, the edge counted once, their words and the
+       head's title 12 in; the corner around the medium control at the bar inset (16 at the default). */
+    --_card-list: var(--_chat-list);
+    --_card-column: var(--_chat-column);
     min-inline-size: 0;
     overflow: hidden;
-    border: var(--area-stroke-width) solid var(--area-edge-blocks); /* no shadow under it: a required frame */
-    border-radius: var(--area-radius-container);
+    border: var(--_chat-edge) solid var(--area-edge-blocks); /* no shadow under it: a required frame */
+    border-radius: var(--_fr-corner);
     background-color: var(--area-bg-surface);
     color: var(--area-fg-default);
     font-size: var(--area-text-base-size);
     line-height: var(--area-text-base-leading);
   }
-  .area-plan__head {
-    display: flex;
-    align-items: center;
-    gap: var(--area-space-8);
-    inline-size: 100%;
-    min-block-size: var(--area-ui-row); /* spec: Cursor header 28 (Compact's row) */
-    margin: 0;
-    padding: 0 var(--_card-column); /* spec: Cursor 0 12 */
-    border: 0;
-    background: none;
-    color: inherit;
-    font: inherit;
-    text-align: start;
-    cursor: pointer;
-  }
-  /* Open, no seam under the head or the bar (owner 2026-10-25: "Drop the line on Edit summary, Queue and Plan too", after
-     Code block's header lost its rule; Cursor's to-do tray has none): the first item sits 1.1 rows under the head's
-     middle. Was a row plus a border-decorative rule (round 55). */
-  .area-plan__head:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: calc(-1 * var(--area-focus-width)); border-radius: inherit; }
-  .area-plan__title { min-inline-size: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  /* The count ends on the card column, the items' meta column under it, so the plan's numbers read as one column
-     (owner 2026-10-25, "dense ... visually balanced"; Claude's Context panel: a section's title with its chevron beside
-     it, its numbers at the end). */
-  /* A tracker's figures are metadata, the ramp's secondary step (12) on the row's line (owner, 2026-11-02: "the text size of the numbers on the right look way bigger than the left": the face's figures are cap-height and tabular, so at the label's 13 a count read a size up). */
-  .area-plan__count { flex: none; margin-inline-start: auto; color: var(--area-fg-muted); font-size: var(--area-text-sm-size); letter-spacing: var(--area-text-sm-tracking); font-variant-numeric: tabular-nums; }
-  .area-plan__chevron { display: inline-flex; flex: none; color: var(--area-fg-muted); transform: rotate(-90deg); transition: transform var(--area-duration-fast) var(--area-ease-out); /* MOTION.md: every chevron turns on fast */ }
-  /* Closed points along the reading direction, so it mirrors in right-to-left text (Accordion, Tree view). */
-  .area-plan__chevron:dir(rtl) { transform: rotate(90deg); }
-  .area-plan[data-open] .area-plan__chevron { transform: none; }
-  .area-plan__chevron > svg { inline-size: var(--area-icon-xs); block-size: var(--area-icon-xs); }
-  /* The head answers the pointer as Accordion's does: a plate behind the chevron on hover and press (a square the
-     text's line tall, the small corner; Notion's 5% / 10%), never on the title (round 51: it had no hover at all). */
-  /* The plate: a square the text's line tall, its corner the card's less its inset (concentric; round 52 sat it at the
-     card's end as far from the end as from the top; since 2026-10-25 it sits beside the title, so the count can end the
-     row). */
-  .area-plan__chevron {
-    --_plate-in: calc((var(--area-ui-row) - var(--area-text-base-leading)) / 2);
-    position: relative; isolation: isolate; place-items: center; justify-content: center; align-items: center;
-    inline-size: var(--area-text-base-leading); block-size: var(--area-text-base-leading);
-    margin-inline: calc(-1 * var(--area-space-4)); /* the plate wraps the 12 glyph; the glyph sits 4 after the title */
-  }
-  .area-plan__chevron::before { content: ""; position: absolute; inset: 0; z-index: -1; border-radius: max(var(--area-radius-min), calc(var(--area-radius-small) + (var(--area-radius-container) - var(--area-stroke-width) - var(--_plate-in) - var(--area-radius-small)) * var(--area-radius-concentric))); transition: var(--area-transition); }
+  /* The head, its title, chevron and count are the one collapsible head (inset.css, plan B4.4): a row tall, the title
+     strong in the default ink on the card column (Cursor 0 12), the chevron 4 after it and the count ending on the card
+     column, the items' meta column under it, so the plan's numbers read as one column (owner 2026-10-25). Open, no seam
+     under the head or the bar (owner 2026-10-25: "Drop the line on Edit summary, Queue and Plan too"). The head answers
+     the pointer as Accordion's does: a plate behind the chevron on hover and press, never on the title (round 51). */
   @media (hover: hover) { .area-plan__head:hover .area-plan__chevron::before { background: var(--area-bg-hover); transition-duration: var(--area-hover-in); } }
   .area-plan__head:active .area-plan__chevron::before { background: var(--area-bg-pressed); transition-duration: var(--area-press-in); }
   .area-plan__items {
@@ -79,13 +44,13 @@
   }
   .area-plan__items[hidden] { display: none; }
   /* An item is a Menu row that may wrap: at least a row tall, its first line centred in it (inset.css: first-line
-     alignment), the mark in the row's icon slot, Menu's row gap to the text (gap-row: 12, compact 8). */
+     alignment), the mark in the row's icon slot, Menu's icon-to-label gap to the text (ui-cluster: 8, compact 6; plan B2.3). */
   .area-plan__item {
     /* A grid so an item's steps can sit under its words (2026-10-25): mark, words, meta; steps on a row of their own. */
     display: grid;
     grid-template-columns: var(--area-icon-sm) minmax(0, 1fr) auto;
     align-items: start;
-    column-gap: var(--area-gap-row); /* Menu's row gap (surface.css --_menu-gap), so the text lands on the list column */
+    column-gap: var(--area-ui-cluster); /* Menu's icon-to-label gap (menu.css --_menu-gap), so the text lands on the list column */
     min-inline-size: 0;
     padding-block: calc((var(--area-ui-row) - var(--area-text-base-leading)) / 2);
     padding-inline: var(--area-ui-row-inset);
@@ -159,15 +124,15 @@
      under the title's line, rail rows 4 apart. Its column is the agent card's 12, with Edit summary, Queue and the plain
      Plan (owner 2026-10-28, chat set review: it was 16, Card's, and in a chat column the boxes' text missed each other by
      1-3px; "move them to 13 anyway"). */
-  .area-plan:is(.area-plan--single, .area-plan--segmented) > .area-plan__head { padding-block-start: var(--area-space-8); }
-  .area-plan:is(.area-plan--single, .area-plan--segmented) > .area-plan__head { min-block-size: calc(var(--area-ui-row) + var(--area-space-8)); }
+  .area-plan:is(.area-plan--single, .area-plan--segmented) > .area-plan__head { padding-block-start: var(--area-ui-cluster); }
+  .area-plan:is(.area-plan--single, .area-plan--segmented) > .area-plan__head { min-block-size: calc(var(--area-ui-row) + var(--area-ui-cluster)); }
   .area-plan--rail > .area-plan__items { gap: var(--area-space-4); }
   /* Open, the bar keeps 8 under it, not the folded plan's 16 above the card's edge: with no seam, the 16 left the first
      item 1.3 rows under the bar; 8 brings it to 1.1, as the head without a bar (owner 2026-10-25, "tighten the bar Plan's
      spacing as shown"). */
-  .area-plan[data-open] > .area-plan__bar { padding-block-end: var(--area-space-8); }
+  .area-plan[data-open] > .area-plan__bar { padding-block-end: var(--area-ui-cluster); }
   /* An item's trailing value (its own count, a date): muted, its digits tabular, at the row's end. */
-  .area-plan__meta { flex: none; padding-inline-start: var(--area-space-8); color: var(--area-fg-muted); font-size: var(--area-text-sm-size); letter-spacing: var(--area-text-sm-tracking); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .area-plan__meta { flex: none; padding-inline-start: var(--area-ui-cluster); color: var(--area-fg-muted); font-size: var(--area-text-sm-size); letter-spacing: var(--area-text-sm-tracking); font-variant-numeric: tabular-nums; white-space: nowrap; }
   /* A current item with a known share: the pending ring filling as a pie inside it (Linear's in-progress ring), in the
      bar's fill, so the item and its segment read as one value. */
   .area-plan__mark--ring { position: relative; }
@@ -186,14 +151,14 @@
 
   /* Detail: the values an item acted on or decided, after its words on the line (the agent timeline's chips), 8 after
      the words and 4 apart, wrapping under them when the row is narrow. */
-  .area-plan__text:has(> .area-plan__detail) { display: flex; flex-wrap: wrap; align-items: center; column-gap: var(--area-space-8); row-gap: var(--area-space-4); }
+  .area-plan__text:has(> .area-plan__detail) { display: flex; flex-wrap: wrap; align-items: center; column-gap: var(--area-ui-cluster); row-gap: var(--area-space-4); }
   .area-plan__detail { display: inline-flex; flex-wrap: wrap; align-items: center; gap: var(--area-space-4); color: var(--area-fg-default); }
 
   /* Steps: an item's own steps in a box under its words (owner 2026-10-25, the agent panel's results box: "i dont mind
      adding containers back into the tracker as long as the padding, alignment and visual balance is right"). Only an
      item with steps has one, so it marks the item that is open; the rest stay single rows. The box hangs from the item's
      text column and ends on the item row's own edge, so its rows' inset (8) puts their meta on the plan's meta column
-     and their marks 8 in; the recessed ground (layers.css) under the list padding (4), the list's corner (a row's + 4).
+     and their marks 8 in; the recessed ground (layers.css) under the list padding (4), the block corner (radius-container, plan A2.2).
      8 under the item's line, 4 more than a row's end above the next item, so the box reads as the item's, not the
      next one's. The rail runs on beside it. */
   .area-plan__steps {
@@ -206,7 +171,7 @@
        from the next, as items sit 16 apart. */
     margin: var(--area-space-8) calc(-1 * var(--area-ui-row-inset)) calc((var(--area-text-base-leading) - var(--area-ui-row)) / 2 - var(--area-space-2)) 0;
     padding: var(--area-space-4) 0;
-    border-radius: var(--area-radius-list);
+    border-radius: var(--area-radius-container); /* the block corner (plan A2.2; was the list corner, 14) */
     background-color: var(--area-bg-subtle);
     list-style: none;
   }

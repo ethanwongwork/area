@@ -17,13 +17,16 @@ A screen has at most these, in this order. Leave out what the job doesn't need.
 | Side panel | Acts on or details the selection | `Panel` (inspector), or a second content column | 240–600; min 241–320; max 500 or main − 352 |
 | Bottom panel or dock | Composer, terminal, player, status | `Composer`, `Toolbar`, a bar | Cursor status 22, panel ⅓ of the height; ChatGPT composer floats 16 above the bottom |
 
-**Area's app:** Titlebar 39 at type 13 Compact (Panel's bar formula), Sidebar 240 (200–360), Inspector 256 (256–500),
+**Area's app:** Titlebar 39 at type 13 Compact (the tool bar and its rule), Sidebar 240 (200–360), Inspector 256 (256–500),
 rows 28, every region 14 in (PRODUCT_UI.md, "The app's layout"; `apps/desktop/src/styles/app.css` `.studio`).
 
 ### Rules
 
 - **One bar height per window.** Every bar's rule (or its edge) lines up: Figma's panel header and islands are both
-  48, Area's Titlebar equals Panel's bar. A bar is a control plus equal air: `control + 2 × air (+ rule)`.
+  48, Area's Titlebar equals Panel's bar. A bar is a control plus equal air: `control + 2 × air (+ rule)`. Area has
+  two (DESIGN_SYSTEM.md, "Bars and corner controls"): the region bar, `control-sm + 14` (38 / 40 / 44), for a region's
+  own header, and the tool bar, `control-md + 2 × ui-cluster` (38 / 46 / 54), for a surface's working bar. Pick one;
+  never write a bar height.
 - **A bar's controls sit as far from the side as from the top** (PRODUCT_UI.md, 7 at the app's scale; Figma 8 and 8).
 - **Panels have a default, a floor and a ceiling**, and the content keeps a minimum beside them. Defaults scale with
   the window where it varies widely (Cursor `min(300, window / 4)`; ChatGPT's right panel clamps to the shell height

@@ -12,11 +12,15 @@
   .area-board {
     display: flex;
     align-items: flex-start;
-    /* spec: Notion's columns are 12 apart (288 pitch, 276 wide). */
-    gap: var(--area-space-12);
+    /* Columns are a row's gap apart (plan B8.2): 12 at the default as measured, 8 / 16 at Compact / Comfortable. */
+    gap: var(--area-gap-row);
     min-inline-size: 0;
     overflow-x: auto;
   }
+
+  /* The board's two spaces (plan B8.2): the column's inset (its edge to a card, and card to card) is a cluster, a card's
+     sides a small surface's inset. Both are whole pixels at every type and density. */
+  :where(.area-board-column, .area-board-card) { --_column-inset: var(--area-ui-cluster); --_card-inline: var(--area-inset-surface-sm); }
 
   .area-board-column {
     /* The column's colour: its tone's words (`fg-<tone>`, the ink a Tag of that colour shows), and its ground, half its
@@ -41,7 +45,11 @@
        radius-concentric, as Composer and Toolbar (owner, 2026-10-12: "is the corner radius ... correct?"). 16 at the
        default, Card's, Dialog's and Composer's outer corner (owner, 2026-10-18: "too round compared to the other
        components"; it was 20, the card's container 12 plus 8, the roundest surface in the system). */
-    border-radius: calc(var(--area-radius-row) + var(--area-space-8) * var(--area-radius-concentric));
+    /* The frame recipe's around corner (surface.css): the cards' row corner plus the 8 they sit in, never rounder than
+       the container (22 at Pill, now 20). */
+    --_fr-held: var(--area-radius-row);
+    --_fr-mat: var(--_column-inset);
+    border-radius: var(--_fr-around);
     background-color: var(--_ground);
     color: var(--area-fg-default);
     font-size: var(--area-ui-size);
@@ -61,13 +69,14 @@
   .area-board-column--pink { --_color: var(--area-hue-pink-text); --_surface-tone: var(--area-hue-pink-bg); --_ground: var(--area-hue-pink-bg-translucent); }
   .area-board-column--red { --_color: var(--area-hue-red-text); --_surface-tone: var(--area-hue-red-bg); --_ground: var(--area-hue-red-bg-translucent); }
 
-  /* spec: Notion's group header, 40 tall; the title starts on the cards' text (8 + the card's 10). */
+  /* The group header is the region bar (40 at the defaults, as measured; plan B4.1); the title starts on the cards' text, the column's
+     inset plus the card's (plan B8.2: 14 / 18 / 22 at type 13 Compact / Default / Comfortable; 18 measured). */
   .area-board-column__header {
     display: flex;
     align-items: center;
-    gap: var(--area-space-6);
-    min-block-size: 40px; /* spec */
-    padding-inline: calc(var(--area-space-8) + 10px) var(--area-space-8); /* spec */
+    gap: var(--area-ui-stack);
+    min-block-size: var(--_hb-region); /* the region bar (inset.css, plan B4.1): 38 / 40 / 44; it was 40 at every density */
+    padding-inline: calc(var(--_column-inset) + var(--_card-inline)) var(--_column-inset);
   }
   /* The group's name in plain text (owner, round 7: no badge title), the UI type at the strong weight. */
   .area-board-column__title { min-inline-size: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: var(--area-weight-strong); }
@@ -83,34 +92,34 @@
   }
   .area-board-column__actions { display: flex; align-items: center; gap: var(--area-space-2); margin-inline-start: auto; }
 
-  /* spec: Notion's body pads 0 8 8; cards are 8 apart (40 cards on a 48 pitch). */
+  /* The body pads 0 8 8 and cards are 8 apart at the default (measured: 40 cards on a 48 pitch); both are the column's
+     inset, a cluster (6 / 8 / 10, plan B8.2). */
   .area-board-column__cards {
     display: flex;
     flex-direction: column;
-    gap: var(--area-space-8);
+    gap: var(--_column-inset);
     margin: 0;
-    padding: 0 var(--area-space-8) var(--area-space-8);
+    padding: 0 var(--_column-inset) var(--_column-inset);
     list-style: none;
   }
 
   /* The add row: under the cards, as wide and as tall as a card, its text at the card's start (owner, round 7: "full
      width but still left aligned, same size as the blocks above it"). Muted in a neutral column; in a coloured one
      the text and the hover plate take the colour. */
-  .area-board-column__footer { display: flex; flex-direction: column; padding: 0 var(--area-space-8) var(--area-space-8); }
+  .area-board-column__footer { display: flex; flex-direction: column; padding: 0 var(--_column-inset) var(--_column-inset); }
   .area-board-column__add {
     --_add-ink: var(--area-fg-muted);
     --_add-plate: var(--area-bg-hover);
-    /* spec: pressed (layers.css), as firm as the muted label allows on a gray column: 7.5% black in light (#666 at
-       4.53:1; the shared 10% left 4.3:1), the shared 24% in dark. */
-    --_add-plate-active: light-dark(#00000013, var(--area-bg-pressed));
+    /* Pressed as firm as the muted label allows on a gray ground (`bg-pressed-track`, layers.css; plan B7.4). */
+    --_add-plate-active: var(--area-bg-pressed-track);
     appearance: none;
     display: flex;
     align-items: center;
     gap: var(--area-gap-md);
     inline-size: 100%;
-    min-block-size: calc(var(--area-ui-leading) + var(--area-space-8) * 2);
+    min-block-size: var(--area-ui-row); /* a row (plan A8.2, 2026-11-11; was the line + 16, 34 at every density) */
     margin: 0;
-    padding: var(--area-space-8) 10px; /* spec: the card's 8 10 */
+    padding: calc((var(--area-ui-row) - var(--area-ui-leading)) / 2) var(--_card-inline); /* the row's room; the card's sides */
     border: 0;
     border-radius: var(--area-radius-row);
     background: transparent;
@@ -118,7 +127,7 @@
     font: inherit;
     text-align: start;
     cursor: pointer;
-    transition: background-color var(--area-duration-fast) var(--area-ease-out);
+    transition: background-color var(--area-duration-fast) var(--area-ease-effects);
     user-select: none;
   }
   .area-board-column:not(.area-board-column--neutral) { --_ring-strong: var(--_ink); }
@@ -130,7 +139,7 @@
   }
   @media (hover: hover) { .area-board-column__add:hover { background-color: var(--_add-plate); transition-duration: var(--area-hover-in); } }
   .area-board-column__add:active { background-color: var(--_add-plate-active); transition-duration: var(--area-press-in); }
-  .area-board-column__add:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); }
+  .area-board-column__add:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: calc(-1 * var(--area-focus-width)); } /* a row: inside, by its own width (plan A6.2) */
   .area-board-column__add-icon { display: inline-grid; place-items: center; flex: none; inline-size: var(--area-ui-leading); block-size: var(--area-ui-leading); }
   .area-board-column__add-icon > svg { inline-size: var(--area-icon-md); block-size: var(--area-icon-md); }
 
@@ -139,8 +148,9 @@
     display: flex;
     flex-direction: column;
     gap: var(--area-space-4);
-    /* spec: Notion's card pads 8 10 around its title row. */
-    padding: var(--area-space-8) 10px; /* spec */
+    /* The card pads 8 10 around its title row at the default (measured), a small surface's inset (plan B8.2): sides
+       inset-surface-sm, 8 / 10 / 14 at type 13 Compact / Default / Comfortable, and the block 2 less, 6 / 8 / 12. */
+    padding: calc(var(--_card-inline) - 2px) var(--_card-inline);
     /* A row in its column, as a Menu's rows in their list: the row plate's corner (8 at the default, 6 compact; Notion 10),
        so the column around it stays at a surface's 16 (2026-10-18; it was the container's 12). */
     border-radius: var(--area-radius-row);
@@ -152,7 +162,7 @@
        0 4 12 / 0 1 2 at 2.7% / 2%). */
     box-shadow: var(--area-shadow-edge), var(--area-shadow-resting),
       0 0 0 var(--area-border-width) color-mix(in oklab, color-mix(in oklab, var(--_color, var(--area-fg-default)) calc(var(--area-stroke-cards-step) * 2.5% * var(--area-stroke-strength)), transparent), var(--_ring-strong, var(--area-border-card)) calc(var(--area-contrast-more) * 100%)); /* spec; Contrast takes it to the card frame (the strong stroke at More), or the colour's ink in a colour (2026-10-18) */
-    transition: background-color var(--area-duration-fast) var(--area-ease-out);
+    transition: background-color var(--area-duration-fast) var(--area-ease-effects);
     user-select: none;
   }
   /* Hover darkens the card as a row plate would; the ink stays. */
@@ -181,11 +191,10 @@
     color: var(--area-fg-muted);
   }
   .area-board-card__icon > svg { inline-size: var(--area-icon-md); block-size: var(--area-icon-md); }
-  /* spec: Notion's title is 15/22.5 500; Area's UI type at the strong weight, the nearest step on its ramp. */
+  /* spec: Notion's title is 15/22.5 500; Area's UI type at the strong weight (the item name, surface.css, plan B1.2). */
   .area-board-card__title {
     min-inline-size: 0;
     color: inherit;
-    font-weight: var(--area-weight-strong);
     text-decoration: none;
     overflow-wrap: anywhere;
     outline: none;
@@ -208,7 +217,7 @@
    */
   .area-board-card__actions {
     --_card-action: calc(var(--area-ui-row) - var(--area-space-4) * 2); /* spec: nav.css */
-    --_card-action-inset: calc(var(--area-space-8) + (var(--area-ui-leading) - var(--_card-action)) / 2);
+    --_card-action-inset: calc(var(--_card-inline) - 2px + (var(--area-ui-leading) - var(--_card-action)) / 2); /* the card's block inset */
     position: absolute;
     inset-block-start: var(--_card-action-inset);
     inset-inline-end: var(--_card-action-inset);
@@ -220,7 +229,7 @@
     background-color: var(--_card-bg);
     opacity: 0;
     pointer-events: none;
-    transition: opacity var(--area-fade-fast) var(--area-ease-out);
+    transition: opacity var(--area-fade-fast) var(--area-ease-effects);
   }
   .area-board-card__actions::before {
     content: "";

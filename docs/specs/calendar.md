@@ -146,7 +146,7 @@ Day states: `notion--day--hover--light`, `notion--day-today--rest--light`,
 | range preview | band from the anchor to the hovered/focused day, end unpainted | Notion (after the first click) | — |
 | today | 1px **`edge-control-hover`** ring (#d4, a checkbox's resting edge) in the day's shape | Owner reference (outlined today tile); owner, round 62 ("the strokes arent as light as the other components") | Was `stroke-control` (#83), the darkest line in the system. A ring stays distinct from selection, the band and the circle fills; one step above the tile edge |
 | outside days | **`fg-muted` ink** (calendar.css:78-79), clickable; choosing one selects it and brings its month into view (Calendar.tsx:189-198, :220); no selection paint on the outside copy | Notion ink rgb(161,158,153); audit F-10 A (owner 2026-09-30); react-day-picker, React Aria reveal the month | Was `fg-disabled` (reserved for disabled text) and a choice with no visible change. Two-month ranges repeated the range and end on outside days; only the owning month paints |
-| unavailable | fg-disabled, struck through | React Aria unavailable dates | Bounds (min/max) only dim, like Notion |
+| unavailable | its parts at `opacity-disabled` (the day keeps its ring and a tile's fill), struck through | React Aria unavailable dates; plan B7.8 | Bounds (min/max) only dim, like Notion |
 | fixed weeks | **off** (`fixedWeeks` opt-in) | Owner (2026-09-27: busy); shadcn and rdp default | Notion draws six rows |
 
 Third-pass additions:
@@ -171,7 +171,7 @@ Third-pass additions:
 | selected | `selection-solid` (neutral by default) | Notion selected captured; owner rule |
 | range start / middle / end | band + solid ends | Notion range captured |
 | today | 1px ring in the day's shape | Notion today captured (circle); owner reference (outlined tile) |
-| outside, unavailable, disabled | see Decisions; a disabled calendar dims as a whole at 50% | Notion disabled days captured |
+| outside, unavailable, disabled | see Decisions; a disabled calendar dims as a whole at 50% (the manifest's `disabled` state, on the root's `aria-disabled`) | Notion disabled days captured |
 
 ## Behavior and accessibility
 
@@ -296,6 +296,7 @@ Days press at `bg-pressed` (10%; they pressed with the 5% hover); circle days at
 - 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → motion pass: day plates now appear at once and fade out on fast ease-out like every other plate (were snapped both ways); press and keyboard instant. "Motion and interaction, 2026-10-07".
 - 2026-10-12 · consistency pass (owner: "a consistency and cohesion pass on all the components ... stroke values and how they are used") → the tile edge reads `edge-control-hover` (same #d4; stronger under increased contrast) (calendar.css). (docs/research/consistency-audit-2026-10-12.md)
 - 2026-10-14 · owner: "continue working on the next axis" → Surface is one number, the frame's width: `1` (Default) or `0` (Borderless) (was `outlined` / `borderless`; axes/surface.ts). At 0 the surface calendar lists the Surface axis's `shadow-edge` first in its box-shadow, ChatGPT's frameless-menu edge (`0 0 1px` black 62%, and in dark an inset `0 0 1px` white 20%; captured 2026-10-13), so it keeps an edge at Elevation 0 and in dark, where it had none. Owner approved ("go with your recs"), review https://claude.ai/artifact/L4TCF2W5zcjvBK7xZmaDBN (docs/research/surface-2026-10-14.md).
+- 2026-11-14 · plan B7.8 → an unavailable day dims its parts (number, weekday, month, marker) by opacity-disabled, never the day, so its ring and a tile's fill stay full; was fg-disabled. A disabled calendar still dims once as a whole. Why: docs/research/system-evaluation-2026-11-11 (README §5, phase2/disabled.md); the owner took every recommendation on 2026-11-11.
 
 ## Review note, 2026-10-20 (round 62)
 
@@ -352,3 +353,27 @@ Days press at `bg-pressed` (10%; they pressed with the 5% hover); circle days at
 
 The first month heading's `aria-live` is replaced by `useAnnouncement(formatMonth(visible))` (`announce` / `useAnnouncement` (packages/react/src/components/announce.ts; DESIGN_SYSTEM.md, "Announcements")): the month is said
 when it changes after the first render, once however many months show; the week layout says nothing. No visible change.
+
+- 2026-11-11 · System evaluation F5: the manifest lists the `disabled` state (`stateAttributes: aria-disabled`), so the generated API tab and the parity test read it. No visual change.
+- 2026-11-11 · system evaluation A8.2 · a day is `control-md` and its cell 4 more: 30 / 34 at the default (unchanged), 26 / 30 at the app's Compact (were 28 / 32), so days stand beside the controls around them.
+
+## Review note, 2026-11-11 (type rules, plan A9)
+
+- **What changed:** weekday labels and day numbers move from `text-xs` (11/14) to `text-sm` (12/16, tabular), which the comment always claimed; the weekday row grows by the 2 of its line (plan A9.2, findings T1, VN13). Date picker and Date range picker show the same calendar.
+- **Why:** the system evaluation's type rules (docs/research/system-evaluation-2026-11-11, section 5, A9), owner-approved
+  2026-11-11; the rules are in DESIGN_SYSTEM.md ("Ink and weight", "Size and shape", "Text pairs") and the type skill.
+
+### 2026-11-11 · Ink, dark and colour (system plan, Phase 1)
+
+- **What changed:** In dark it paints the floating ground (`bg-float`, plan A7.2): a step above the layers under it, #0c0c0c on the near-black page at the defaults (was `bg-surface`, the page's own #020202); light is unchanged. Its dark edge is one line (plan A7.1): the frame takes the dark rim's strength (16% at Shadow 8) and the rim is no longer drawn outside it, where it had made a two-tone 2px edge.
+- **Why:** docs/research/system-evaluation-2026-11-11 (README §5); the owner took every recommendation on 2026-11-11.
+- **Verdict:** awaiting the owner.
+- 2026-11-14 · system evaluation B6.1 · the surface's frame and shadow stack are the one floating surface's (popup.css), so it lists a material's layers and takes the overlays' glass (material.css); `plain` is left out of both. No change at the default material.
+
+## Shared bars and corners (plan B4), 2026-11-14
+
+- B4.2: the arrows are corner controls with their plates on the inset, as the outer days' are: their corner is the calendar's less the inset, 16 − 10 = 6 at the defaults (8 at Compact). Plain keeps their own corner.
+
+## State paint (plan B7.2, B7.3), 2026-11-14
+
+- The chosen day presses one step past its hover (`--_selected-pressed`, the solid press on the Selection role); a day in a range band presses to the pressed wash over the band.

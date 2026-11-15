@@ -1,0 +1,343 @@
+<title>Area System Evaluation</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one working column (max 920) under a sticky bar of views and progress; every plan item is a card with its picks. */
+:root {
+  --bg: #f6f7f8; --surface: #ffffff; --fg: #15181c; --muted: #5d6670; --faint: #8a939d;
+  --line: #e2e5e9; --well: #eef0f3; --accent: #1f5fd1; --accent-fg: #ffffff; --accent-wash: #e6eefc;
+  --good: #1a7f4b; --good-wash: #e3f4ea; --warn: #9a6200; --warn-wash: #fbf0d9; --bad: #b3261e; --bad-wash: #fbe7e5;
+  --sans: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #0b0c0e; --surface: #15171a; --fg: #eceef0; --muted: #a0a8b1; --faint: #727b85;
+  --line: #262a2f; --well: #1c1f23; --accent: #7aa7ff; --accent-fg: #0b0c0e; --accent-wash: #17233b;
+  --good: #5fd08f; --good-wash: #12281c; --warn: #e5b45a; --warn-wash: #2b2212; --bad: #ff8a80; --bad-wash: #2e1614; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #0b0c0e; --surface: #15171a; --fg: #eceef0; --muted: #a0a8b1; --faint: #727b85;
+  --line: #262a2f; --well: #1c1f23; --accent: #7aa7ff; --accent-fg: #0b0c0e; --accent-wash: #17233b;
+  --good: #5fd08f; --good-wash: #12281c; --warn: #e5b45a; --warn-wash: #2b2212; --bad: #ff8a80; --bad-wash: #2e1614; color-scheme: dark }
+* { box-sizing: border-box }
+body { background: var(--bg); color: var(--fg); font: 400 14px/20px var(--sans); }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg) }
+.wrap { max-width: 920px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)) }
+header.top { padding-block: 28px 12px }
+h1 { font: 600 24px/30px var(--sans); margin: 0; letter-spacing: -0.01em; text-wrap: balance }
+.sub { color: var(--muted); margin: 6px 0 0; max-width: 68ch }
+.bar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--bg); border-bottom: 1px solid var(--line) }
+.bar .wrap { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: center; padding-block: 8px }
+nav.views { display: flex; flex-wrap: wrap; gap: 2px; flex: 1 1 auto; min-width: 0 }
+nav.views a { padding: 5px 10px; border-radius: 6px; color: var(--muted); text-decoration: none; font-weight: 500; white-space: nowrap }
+nav.views a:hover { background: var(--well); color: var(--fg) }
+nav.views a[aria-current="page"] { background: var(--fg); color: var(--bg) }
+.progress { color: var(--muted); font-variant-numeric: tabular-nums; white-space: nowrap }
+button { font: 500 13px/18px var(--sans); color: var(--fg); background: var(--surface); border: 1px solid var(--line); border-radius: 6px; padding: 5px 10px; cursor: pointer }
+button:hover { border-color: var(--faint) }
+button:focus-visible, a:focus-visible, textarea:focus-visible, input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px }
+button.primary { background: var(--accent); color: var(--accent-fg); border-color: var(--accent) }
+button[disabled] { opacity: .5; cursor: default }
+main { padding-block: 20px 80px }
+section.view[hidden] { display: none !important }
+h2 { font: 600 17px/24px var(--sans); margin: 28px 0 4px }
+h2:first-child { margin-top: 0 }
+h3 { font: 600 14px/20px var(--sans); margin: 20px 0 8px }
+p { margin: 0 0 10px; max-width: 72ch }
+.lede { color: var(--muted); margin-bottom: 14px }
+.stack { display: grid; gap: 10px }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 14px 16px; min-width: 0 }
+.card.decided { border-color: color-mix(in srgb, var(--good) 45%, var(--line)) }
+.head { display: flex; gap: 8px 10px; align-items: baseline; flex-wrap: wrap }
+.id { font: 500 12px/18px var(--mono); color: var(--faint) }
+.title { font: 600 14px/20px var(--sans); flex: 1 1 240px; min-width: 0 }
+.chips { display: flex; gap: 4px; flex-wrap: wrap }
+.chip { font: 500 11px/16px var(--sans); padding: 1px 7px; border-radius: 999px; background: var(--well); color: var(--muted); white-space: nowrap }
+.chip.decision { background: var(--warn-wash); color: var(--warn) }
+.chip.capability { background: var(--accent-wash); color: var(--accent) }
+.chip.quick { background: var(--good-wash); color: var(--good) }
+dl.wcw { display: grid; grid-template-columns: 64px minmax(0, 1fr); gap: 4px 12px; margin: 10px 0 0 }
+dl.wcw dt { color: var(--faint); font-size: 12px }
+dl.wcw dd { margin: 0 }
+.meta { color: var(--faint); font-size: 12px; line-height: 18px; margin-top: 8px }
+.opts { display: grid; gap: 6px; margin-top: 12px }
+.opt { display: grid; grid-template-columns: 18px minmax(0, 1fr); gap: 8px; align-items: start; text-align: left; padding: 8px 10px; border-radius: 8px; width: 100% }
+.opt .dot { width: 14px; height: 14px; border-radius: 50%; border: 1.5px solid var(--faint); margin-top: 2px }
+.opt[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-wash) }
+.opt[aria-pressed="true"] .dot { border: 4px solid var(--accent) }
+.opt b { font-weight: 600 }
+.opt small { display: block; color: var(--muted); font: 400 13px/18px var(--sans) }
+.rec { font: 500 11px/16px var(--sans); color: var(--good); margin-left: 6px; white-space: nowrap }
+.picks { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 12px; align-items: center }
+.picks button[aria-pressed="true"] { background: var(--fg); color: var(--bg); border-color: var(--fg) }
+.picks .recnote { color: var(--faint); font-size: 12px }
+textarea { width: 100%; margin-top: 8px; font: 400 13px/18px var(--sans); color: var(--fg); background: var(--bg); border: 1px solid var(--line); border-radius: 6px; padding: 6px 8px; resize: vertical; min-height: 34px }
+.filters { display: flex; gap: 6px; flex-wrap: wrap; margin: 0 0 12px; align-items: center }
+.filters button[aria-pressed="true"] { background: var(--fg); color: var(--bg); border-color: var(--fg) }
+.filters input { font: 400 13px/18px var(--sans); color: var(--fg); background: var(--surface); border: 1px solid var(--line); border-radius: 6px; padding: 5px 10px; flex: 1 1 160px; min-width: 0 }
+.scroll { overflow-x: auto; border: 1px solid var(--line); border-radius: 10px; background: var(--surface) }
+table { border-collapse: collapse; width: 100%; font-size: 13px; line-height: 18px }
+th, td { text-align: left; padding: 7px 10px; border-bottom: 1px solid var(--line); vertical-align: top }
+tr:last-child td { border-bottom: 0 }
+th { color: var(--muted); font-weight: 500; white-space: nowrap; background: var(--surface); position: sticky; top: 0 }
+td.n, th.n { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap }
+.score { display: inline-grid; grid-auto-flow: column; gap: 2px; vertical-align: middle }
+.score i { width: 10px; height: 10px; border-radius: 2px; background: var(--well) }
+.score i.on { background: var(--fg) }
+.s1, .s2 { color: var(--bad); font-weight: 600 } .s3 { color: var(--warn) } .s4, .s5 { color: var(--good) }
+.tag-out { color: var(--bad) } .tag-in { color: var(--muted) } .tag-ahead { color: var(--good) }
+.grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 10px }
+.stat { font: 600 22px/28px var(--sans); font-variant-numeric: tabular-nums }
+.statl { color: var(--muted); font-size: 12px }
+ul.plain { margin: 0; padding-left: 18px } ul.plain li { margin-bottom: 4px; max-width: 72ch }
+.note { color: var(--muted); font-size: 13px }
+.toast { position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(16px + env(safe-area-inset-bottom, 0px)); background: var(--fg); color: var(--bg); padding: 8px 14px; border-radius: 8px; font-weight: 500; z-index: 20 }
+@media (max-width: 520px) { dl.wcw { grid-template-columns: 1fr; gap: 0 } dl.wcw dt { margin-top: 6px } }
+@media (prefers-reduced-motion: no-preference) { button, nav.views a { transition: background-color .12s, border-color .12s } }
+</style>
+
+<header class="top"><div class="wrap">
+  <h1>Area system evaluation</h1>
+  <p class="sub" id="sub">Every component family judged as one design system, and the plan to clean it up. Pick on each item; your picks are saved as you go.</p>
+</div></header>
+<div class="bar"><div class="wrap">
+  <nav class="views" id="views" aria-label="Views">
+    <a href="#overview">Overview</a><a href="#decisions">Decisions</a><a href="#plan">Plan</a><a href="#rules">Detail rules</a><a href="#families">Families</a><a href="#measures">Measures</a>
+  </nav>
+  <span class="progress" id="progress">Loading</span>
+  <button id="approveFixes" title="Marks every undecided fix that is recommended as Build. Decisions are left for you.">Approve every fix</button>
+  <button id="takeRecs" class="primary" title="Picks the recommendation on every undecided item, decisions included.">Take every recommendation</button>
+</div></div>
+
+<main><div class="wrap">
+  <section class="view" id="v-overview"><p class="lede">Loading the evaluation.</p></section>
+  <section class="view" id="v-decisions" hidden></section>
+  <section class="view" id="v-plan" hidden></section>
+  <section class="view" id="v-rules" hidden></section>
+  <section class="view" id="v-families" hidden></section>
+  <section class="view" id="v-measures" hidden></section>
+</div></main>
+<div class="toast" id="toast" hidden role="status"></div>
+
+<script>
+(() => {
+  const $ = (s, r = document) => r.querySelector(s);
+  const el = (tag, attrs = {}, ...kids) => {
+    const n = document.createElement(tag);
+    for (const [k, v] of Object.entries(attrs)) {
+      if (v == null || v === false) continue;
+      if (k === "class") n.className = v; else if (k === "text") n.textContent = v;
+      else if (k.startsWith("on")) n.addEventListener(k.slice(2), v); else n.setAttribute(k, v === true ? "" : v);
+    }
+    for (const k of kids.flat()) if (k != null && k !== false) n.append(k.nodeType ? k : document.createTextNode(k));
+    return n;
+  };
+  const VIEWS = ["overview", "decisions", "plan", "rules", "families", "measures"];
+  const key = id => id.replace(/[^A-Za-z0-9_-]/g, "-");
+  let data = null, db = null, canWrite = true;
+  const picks = new Map();      // key(id) -> {pick, note}
+  const cards = new Map();      // item id -> [update fns]
+  let planFilter = { phase: "all", kind: "all", state: "all", q: "" };
+
+  const toast = msg => { const t = $("#toast"); t.textContent = msg; t.hidden = false; clearTimeout(toast.t); toast.t = setTimeout(() => t.hidden = true, 2600); };
+
+  /* ---------- picks ---------- */
+  const recPick = it => it.kind === "decision" ? (it.rec == null ? null : "opt:" + it.rec)
+    : it.recommendation === "build" ? "build" : it.recommendation === "later" ? "later" : null;
+  const pickLabel = (it, pick) => {
+    if (!pick) return "";
+    if (pick.startsWith("opt:")) return it.options?.[+pick.slice(4)]?.label ?? pick;
+    return { build: "Build", later: "Later", no: "No" }[pick] ?? pick;
+  };
+  async function save(it, patch) {
+    const k = key(it.id), cur = picks.get(k) ?? {};
+    const next = { ...cur, ...patch, id: it.id, title: it.title, kind: it.kind, at: new Date().toISOString() };
+    if (next.pick) next.label = pickLabel(it, next.pick);
+    picks.set(k, next); refresh(it.id);
+    if (!db) { try { localStorage.setItem("area-eval-picks", JSON.stringify([...picks])); } catch {} return; }
+    try { await db.doc("verdicts/" + k).set(next); }
+    catch (e) { if (e && (e.code === "not_granted" || e.code === "revoked")) canWrite = false; toast("That pick was not saved: " + (e?.message || e?.code || "the store refused it")); }
+  }
+  function refresh(id) {
+    if (id) (cards.get(id) ?? []).forEach(f => f()); else cards.forEach(fs => fs.forEach(f => f()));
+    if (!data) return;
+    const done = data.items.filter(i => picks.get(key(i.id))?.pick).length;
+    const dec = data.items.filter(i => i.kind === "decision");
+    const decDone = dec.filter(i => picks.get(key(i.id))?.pick).length;
+    $("#progress").textContent = `${done} of ${data.items.length} picked · ${decDone} of ${dec.length} decisions`;
+  }
+  async function bulk(filter, what) {
+    const todo = data.items.filter(i => !picks.get(key(i.id))?.pick && filter(i) && recPick(i));
+    if (!todo.length) { toast("Nothing left to pick there."); return; }
+    $("#approveFixes").disabled = $("#takeRecs").disabled = true;
+    let n = 0;
+    for (const it of todo) { await save(it, { pick: recPick(it), by: what }); n++; if (n % 10 === 0) toast(`${n} of ${todo.length} saved`); }
+    $("#approveFixes").disabled = $("#takeRecs").disabled = false;
+    toast(`${n} picks saved.`);
+  }
+  $("#approveFixes").addEventListener("click", () => bulk(i => i.kind === "fix" && i.recommendation === "build", "approve-every-fix"));
+  $("#takeRecs").addEventListener("click", () => bulk(() => true, "take-every-recommendation"));
+
+  /* ---------- an item card ---------- */
+  function itemCard(it) {
+    const card = el("article", { class: "card", id: "item-" + key(it.id) });
+    const chips = el("div", { class: "chips" },
+      it.kind !== "fix" && el("span", { class: "chip " + it.kind, text: it.kind === "decision" ? "Your decision" : "New capability" }),
+      it.quickWin && el("span", { class: "chip quick", text: "Quick win" }),
+      el("span", { class: "chip", text: "Phase " + it.phase }),
+      el("span", { class: "chip", text: ({ S: "Small", M: "Medium", L: "Large" })[it.size] ?? it.size }),
+      el("span", { class: "chip", text: ({ rendered: "Seen rendered", source: "From source", reference: "From references", mixed: "Rendered and source" })[it.evidence] ?? it.evidence }),
+      it.confidence && it.confidence !== "high" && el("span", { class: "chip", text: it.confidence + " confidence" }));
+    card.append(el("div", { class: "head" }, el("span", { class: "id", text: it.id }), el("span", { class: "title", text: it.title }), chips));
+    card.append(el("dl", { class: "wcw" },
+      el("dt", { text: "Today" }), el("dd", { text: it.what }),
+      el("dt", { text: "Change" }), el("dd", { text: it.change }),
+      el("dt", { text: "Why" }), el("dd", { text: it.why }),
+      it.risk && el("dt", { text: "Risk" }), it.risk && el("dd", { text: it.risk })));
+    const fams = it.families ?? [];
+    const meta = [];
+    if (fams.length) meta.push(`${it.familyCount ?? fams.length} ${fams.length === 1 ? "family" : "families"}: ${fams.slice(0, 14).join(", ")}${fams.length > 14 ? ` and ${fams.length - 14} more` : ""}`);
+    if (it.dependsOn?.length) meta.push("After " + it.dependsOn.join(", "));
+    if (meta.length) card.append(el("div", { class: "meta", text: meta.join(" · ") }));
+
+    const controls = [];
+    if (it.kind === "decision" && it.options?.length) {
+      const box = el("div", { class: "opts", role: "group", "aria-label": "Options for " + it.title });
+      it.options.forEach((o, i) => {
+        const b = el("button", { class: "opt", type: "button", "aria-pressed": "false", onclick: () => save(it, { pick: "opt:" + i, by: "owner" }) },
+          el("span", { class: "dot" }),
+          el("span", {}, el("b", { text: o.label }), it.rec === i && el("span", { class: "rec", text: "Recommended" }), el("small", { text: o.detail })));
+        controls.push(["opt:" + i, b]); box.append(b);
+      });
+      card.append(box);
+    } else {
+      const set = it.kind === "capability" ? [["build", "Build"], ["later", "Later"], ["no", "No"]] : [["build", "Build"], ["later", "Hold"], ["no", "No"]];
+      const row = el("div", { class: "picks", role: "group", "aria-label": "Pick for " + it.title });
+      for (const [v, l] of set) { const b = el("button", { type: "button", "aria-pressed": "false", text: l, onclick: () => save(it, { pick: v, by: "owner" }) }); controls.push([v, b]); row.append(b); }
+      const r = recPick(it);
+      if (r) row.append(el("span", { class: "recnote", text: "Recommended: " + (set.find(s => s[0] === r)?.[1] ?? r) }));
+      card.append(row);
+    }
+    const note = el("textarea", { id: "note-" + key(it.id), rows: "1", placeholder: "Note for this item", "aria-label": "Note for " + it.title });
+    let timer; note.addEventListener("input", () => { clearTimeout(timer); timer = setTimeout(() => save(it, { note: note.value }), 700); });
+    card.append(note);
+
+    const update = () => {
+      const p = picks.get(key(it.id));
+      controls.forEach(([v, b]) => b.setAttribute("aria-pressed", String(p?.pick === v)));
+      card.classList.toggle("decided", !!p?.pick);
+      if (document.activeElement !== note && (p?.note ?? "") !== note.value) note.value = p?.note ?? "";
+    };
+    (cards.get(it.id) ?? cards.set(it.id, []).get(it.id)).push(update); update();
+    return card;
+  }
+
+  /* ---------- views ---------- */
+  const bars = n => el("span", { class: "score", role: "img", "aria-label": n + " of 5" }, [1, 2, 3, 4, 5].map(i => el("i", { class: i <= n ? "on" : "" })));
+
+  function renderOverview() {
+    const v = $("#v-overview"); v.replaceChildren();
+    const c = data.counts ?? {};
+    v.append(el("div", { class: "grid2" },
+      ...[[c.families ?? data.families.length, "component families rendered and scored, light and dark"],
+          [c.findings ?? "", "findings from " + (c.reports ?? 14) + " audits, reference studies and rendered reviews"],
+          [data.items.length, "plan items: " + data.items.filter(i => i.kind === "fix").length + " fixes, " + data.items.filter(i => i.kind === "decision").length + " decisions, " + data.items.filter(i => i.kind === "capability").length + " capabilities"],
+          [data.items.filter(i => i.quickWin).length, "quick wins that need no decision"]]
+        .map(([n, l]) => el("div", { class: "card" }, el("div", { class: "stat", text: String(n) }), el("div", { class: "statl", text: l })))));
+    v.append(el("h2", { text: "Verdict" }), ...data.verdict.map(p => el("p", { text: p })));
+    if (data.strengths?.length) v.append(el("h2", { text: "What must not be disturbed" }), el("ul", { class: "plain" }, data.strengths.map(s => el("li", { text: s }))));
+    v.append(el("h2", { text: "Scores" }), el("div", { class: "scroll" }, el("table", {},
+      el("thead", {}, el("tr", {}, el("th", { text: "Dimension" }), el("th", { text: "Score" }), el("th", { text: "Why" }))),
+      el("tbody", {}, data.scores.map(s => el("tr", {}, el("td", { text: s.dimension }), el("td", {}, bars(s.score)), el("td", { text: s.why })))))));
+    v.append(el("h2", { text: "Order of work" }), el("div", { class: "stack" }, data.phases.map(p => el("div", { class: "card" },
+      el("div", { class: "head" }, el("span", { class: "id", text: "Phase " + p.n }), el("span", { class: "title", text: p.title }),
+        el("span", { class: "chip", text: data.items.filter(i => i.phase === p.n).length + " items" })),
+      el("p", { text: p.summary, style: "margin:8px 0 0" }), p.ends && el("div", { class: "meta", text: "Ends in: " + p.ends })))));
+    if (data.notVerified?.length) v.append(el("h2", { text: "What nobody verified" }), el("ul", { class: "plain" }, data.notVerified.map(s => el("li", { text: s }))));
+  }
+  function renderDecisions() {
+    const v = $("#v-decisions"); v.replaceChildren();
+    const dec = data.items.filter(i => i.kind === "decision");
+    v.append(el("h2", { text: "Your decisions" }), el("p", { class: "lede", text: `${dec.length} choices the plan does not make for you. Each lists its options with the evidence; the recommended one is marked.` }),
+      el("div", { class: "stack" }, dec.map(itemCard)));
+  }
+  function renderPlan() {
+    const v = $("#v-plan"); v.replaceChildren();
+    const list = el("div", {});
+    const mk = (group, value, label) => el("button", { type: "button", text: label, "aria-pressed": String(planFilter[group] === value), onclick: () => { planFilter[group] = value; renderPlan(); } });
+    v.append(el("h2", { text: "The plan" }),
+      el("div", { class: "filters", role: "group", "aria-label": "Phase" }, mk("phase", "all", "All phases"), ...data.phases.map(p => mk("phase", p.n, "Phase " + p.n))),
+      el("div", { class: "filters", role: "group", "aria-label": "Kind and state" },
+        mk("kind", "all", "All kinds"), mk("kind", "fix", "Fixes"), mk("kind", "quick", "Quick wins"), mk("kind", "decision", "Decisions"), mk("kind", "capability", "Capabilities"),
+        mk("state", "all", "Any state"), mk("state", "open", "Not picked"),
+        (() => { const i = el("input", { id: "plan-search", type: "search", placeholder: "Search items and families", "aria-label": "Search the plan", value: planFilter.q }); let t; i.addEventListener("input", () => { clearTimeout(t); t = setTimeout(() => { planFilter.q = i.value; fill(); }, 200); }); return i; })()),
+      list);
+    const fill = () => {
+      cards.forEach((fs, id) => { if (data.items.find(i => i.id === id)?.kind !== "decision") cards.delete(id); else fs.length = Math.min(fs.length, 1); });
+      list.replaceChildren();
+      const q = planFilter.q.trim().toLowerCase();
+      const items = data.items.filter(i => (planFilter.phase === "all" || i.phase === planFilter.phase)
+        && (planFilter.kind === "all" || (planFilter.kind === "quick" ? i.quickWin : i.kind === planFilter.kind))
+        && (planFilter.state === "all" || !picks.get(key(i.id))?.pick)
+        && (!q || (i.id + " " + i.title + " " + i.what + " " + i.change + " " + (i.families ?? []).join(" ")).toLowerCase().includes(q)));
+      if (!items.length) { list.append(el("p", { class: "note", text: "No items match these filters." })); return; }
+      for (const ws of data.workstreams) {
+        const mine = items.filter(i => i.workstream === ws.id); if (!mine.length) continue;
+        list.append(el("h3", { text: `${ws.id}. ${ws.title} (${mine.length})` }), el("p", { class: "note", text: ws.summary }), el("div", { class: "stack" }, mine.map(itemCard)));
+      }
+    };
+    fill();
+  }
+  function renderRules() {
+    const v = $("#v-rules"); v.replaceChildren();
+    v.append(el("h2", { text: "The detail rules" }), el("p", { class: "lede", text: "For each kind of detail: the rule Area should hold, what the code does today, and the gap between them." }),
+      el("div", { class: "stack" }, (data.rules ?? []).map(r => el("div", { class: "card" }, el("div", { class: "title", text: r.topic }),
+        el("dl", { class: "wcw" }, el("dt", { text: "Rule" }), el("dd", { text: r.rule }), el("dt", { text: "Today" }), el("dd", { text: r.today }), el("dt", { text: "Gap" }), el("dd", { text: r.gap }))))));
+  }
+  function renderFamilies() {
+    const v = $("#v-families"); v.replaceChildren();
+    const cols = [["balance", "Balance"], ["spacing", "Spacing"], ["type", "Type"], ["shape", "Shape"], ["colour", "Color"], ["feel", "Feel"]];
+    const fams = [...data.families].sort((a, b) => (a.mean ?? 9) - (b.mean ?? 9));
+    v.append(el("h2", { text: "Every family as rendered" }), el("p", { class: "lede", text: `${fams.length} families scored 1 to 5 from true-scale captures at the shipped defaults, weakest first.` }),
+      el("div", { class: "scroll" }, el("table", {},
+        el("thead", {}, el("tr", {}, el("th", { text: "Family" }), ...cols.map(c => el("th", { class: "n", text: c[1] })), el("th", { class: "n", text: "Mean" }), el("th", { text: "Verdict" }))),
+        el("tbody", {}, fams.map(f => el("tr", {}, el("td", { text: f.name ?? f.slug }),
+          ...cols.map(c => { const s = f.scores?.[c[0]]; return el("td", { class: "n" + (s ? " s" + s : ""), text: s == null ? "·" : String(s) }); }),
+          el("td", { class: "n", text: f.mean == null ? "·" : Number(f.mean).toFixed(2) }), el("td", { text: f.verdict })))))));
+  }
+  function renderMeasures() {
+    const v = $("#v-measures"); v.replaceChildren();
+    const word = { outside: "Outside the range", inside: "Inside the range", ahead: "Ahead" }, cls = { outside: "tag-out", inside: "tag-in", ahead: "tag-ahead" };
+    v.append(el("h2", { text: "Area beside shipped products" }), el("p", { class: "lede", text: "The most telling values, Area at its shipped defaults against desktop apps, published systems and live products measured for this evaluation." }),
+      el("div", { class: "scroll" }, el("table", {},
+        el("thead", {}, el("tr", {}, ...["Measure", "Area", "Desktop apps", "Published systems", "Live products", "Reading"].map(t => el("th", { text: t })))),
+        el("tbody", {}, data.references.map(r => el("tr", {}, el("td", { text: r.measure }), el("td", { text: r.area }), el("td", { text: r.apps ?? "—" }), el("td", { text: r.systems ?? "—" }), el("td", { text: r.live ?? "—" }),
+          el("td", {}, el("span", { class: cls[r.reading] ?? "", text: word[r.reading] ?? "" }), r.note ? el("div", { class: "note", text: r.note }) : null)))))));
+  }
+
+  function route() {
+    const name = VIEWS.includes(location.hash.slice(1)) ? location.hash.slice(1) : "overview";
+    for (const n of VIEWS) $("#v-" + n).hidden = n !== name;
+    document.querySelectorAll("#views a").forEach(a => a.getAttribute("href") === "#" + name ? a.setAttribute("aria-current", "page") : a.removeAttribute("aria-current"));
+  }
+  window.addEventListener("hashchange", route); route();
+
+  /* ---------- boot ---------- */
+  fetch("page.json").then(r => { if (!r.ok) throw new Error(r.status); return r.json(); }).then(d => {
+    data = d;
+    try { for (const [k, v] of JSON.parse(localStorage.getItem("area-eval-picks") || "[]")) if (!picks.has(k)) picks.set(k, v); } catch {}
+    renderOverview(); renderDecisions(); renderPlan(); renderRules(); renderFamilies(); renderMeasures(); refresh();
+  }).catch(e => { $("#v-overview").replaceChildren(el("p", { class: "lede", text: "The evaluation's data did not load (" + e.message + "). Reload the page to try again." })); $("#progress").textContent = ""; });
+
+  (async () => {
+    const ns = await window.claude?.use?.("db").catch(() => null);
+    if (!ns) return;
+    db = ns;
+    const giveUp = setTimeout(() => toast("Saved picks are slow to load; you can still read and pick."), 10000);
+    db.collection("verdicts").limit(500).onSnapshot(snap => {
+      clearTimeout(giveUp);
+      for (const d of snap.docs) { const v = d.data(); if (v) picks.set(d.id, v); }
+      refresh();
+    }, () => clearTimeout(giveUp));
+  })();
+})();
+</script>

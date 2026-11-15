@@ -1,7 +1,7 @@
 import { createContext, useCallback, useContext, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import type { ReactNode } from "react";
 import { cx } from "../variants.ts";
-import { Toast, type ToastProps } from "./primitives.tsx";
+import { Toast, type ToastProps } from "./Toast.tsx";
 import { announce } from "./announce.ts";
 
 export interface ToastOptions extends Omit<ToastProps, "children" | "onDismiss"> {
@@ -32,13 +32,15 @@ export function useToaster(): ToasterApi {
 }
 
 export interface ToasterProps {
+  /** The app: `useToaster()` anywhere inside it shows toasts in the region. */
   children?: ReactNode;
   /** Names the region ("Notifications"); the hotkey is added for assistive tech. */
   label?: string;
-  /** Default ms a toast stays (Radix 5000). Toasts with an action never time out. */
+  /** How long a toast stays, in ms, unless it sets its own. Toasts with an action never time out. */
   duration?: number;
-  /** Moves focus to the region (Radix: F8). */
+  /** The key that moves focus to the region. */
   hotkey?: string;
+  /** Classes for the region. */
   className?: string;
 }
 

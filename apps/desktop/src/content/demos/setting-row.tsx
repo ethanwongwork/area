@@ -50,7 +50,7 @@ export const GallerySettingsGroup = () => (
   </SettingsGroup>
 );
 export const GallerySettingsGroupFramed = () => (
-  <SettingsGroup style={page} framed heading="Title">
+  <SettingsGroup style={page} variant="surface" heading="Title">
     <SettingRow label="Label" description="Description"><Switch defaultChecked /></SettingRow>
     <SettingRow label="Label" description="Description"><Switch /></SettingRow>
     <SettingRow label="Label" description="Description"><Segmented size="sm" defaultValue="one" items={options} /></SettingRow>

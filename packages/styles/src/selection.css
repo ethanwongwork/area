@@ -1,0 +1,58 @@
+/* ---------------------------------------------------------------------------
+ * Shared selection paint (DESIGN_SYSTEM.md, "Shared state paint"; plan B7.6, B7.13).
+ *
+ * The selected edge. A chosen cell in a grid of swatches or pictures, and a chosen card or tile, draws one edge: the
+ * Selected edge setting's width (`selected-width`) in the Selection setting's ink (`stroke-selected`), inside the part,
+ * with the Selected tint setting's layer (`selected-tint`) under it. A part with a border of its own recolours it and
+ * the ring makes up the rest, so the border is counted once: the edge is `selected-width` whatever the part's own
+ * border, and never thinner than that border. A grid of glyphs or words (List box grid, Alignment picker) takes the
+ * plate or the mark instead.
+ *
+ *   input   --_selected-border  the part's own border width under the edge (0 where it has none)
+ *   output  --_selected-edge    the inset ring and tint layer, as box-shadow layers; the part draws it in its
+ *                               selected rule (`box-shadow: var(--_selected-edge)`, or first in its own shadow list)
+ *           --_selected-ring    the ring alone, for an overlay drawn over a picture (a tint there would cover it)
+ *
+ * The ring follows the part's corner (a box-shadow takes border-radius), so a selected tile is concentric with its
+ * picture at every Corner. Selected reads apart from focus by placement (the ring on or outside, the edge inside) and
+ * from hover and press by the ink: hover never draws `stroke-selected`.
+ *
+ * Every part on the edge is listed once here; a family opts in by name, as the mark and row recipes do (inset.css), and
+ * sets its border in its own rule (any class rule outranks this zero-specificity default).
+ * ------------------------------------------------------------------------- */
+@layer area.components {
+  :where(.area-asset-card, .area-asset-card__frame, .area-design-card__ground, .area-color-swatch-picker__cell, .area-file-grid__item, .area-custom-select__preview) {
+    --_selected-border: 0px;
+    --_selected-ring: inset 0 0 0 max(0px, calc(var(--area-selected-width) - var(--_selected-border))) var(--area-stroke-selected);
+    --_selected-edge: var(--_selected-ring), inset 0 0 0 100vmax var(--area-selected-tint);
+  }
+
+  /*
+   * Selection as a scope (plan B7.13). A selected or current row is a scope for the inks its parts read: under it the
+   * quiet ink (`fg-quiet`, a ghost action's) points at the row's own ink, the default, so a ghost action in a chosen row
+   * stands at full strength with its words, and no family writes a selected rule for each part inside the row. The
+   * words keep the default ink and the marks `fg-selection` (the plate alone says which row is chosen; owner,
+   * 2026-09-30), so at Selection Neutral and Accent alike only the quiet parts move. The rows are each family's own
+   * state attribute; a composition marks its own row with `data-area-selected`. Restated on the row, since a property
+   * that reads another resolves where it is declared; the row is never a ground, so nothing under it needs re-emitting.
+   */
+  :where(
+    .area-menu__item[data-selected],
+    .area-list-box__item[aria-selected="true"],
+    .area-nav__row:has(> .area-nav__item[aria-current]:not([aria-current="false"])),
+    .area-tree-view [role="treeitem"]:is([aria-selected="true"], [aria-current="page"]),
+    .area-table tbody tr:is([data-selected], [aria-selected="true"]),
+    [data-area-selected]:not([data-area-selected="false"])
+  ) {
+    --area-fg-quiet: var(--area-fg-default);
+  }
+
+  /* Forced colours: the selected edge is the system's selection colour, inside, at the setting's width. */
+  @media (forced-colors: active) {
+    .area-file-grid .area-file-grid__item[aria-selected="true"] {
+      outline: var(--area-selected-width) solid Highlight;
+      outline-offset: calc(-1 * var(--area-selected-width));
+      box-shadow: none;
+    }
+  }
+}

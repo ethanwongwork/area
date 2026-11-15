@@ -119,7 +119,8 @@ test("paint: gridlines the Dividers group's line, the baseline the divider, labe
   assert.match(ruleFor(".area-chart__baseline"), /stroke:\s*var\(--area-border-divider\)/);
   assert.match(ruleFor(".area-chart__tick"), /fill:\s*var\(--area-fg-muted\)/);
   const plot = ruleFor(".area-chart__plot");
-  assert.match(plot, /font-family:\s*var\(--area-font-mono\)/);
+  // Ticks in the UI sans, tabular (owner 2026-11-11, plan A9.11: mono only where characters align by column).
+  assert.match(plot, /font-family:\s*var\(--area-font-sans\)/);
   assert.match(plot, /font-size:\s*var\(--area-text-xs-size\)/);
   assert.match(plot, /font-variant-numeric:\s*tabular-nums/);
   assert.match(ruleFor(".area-chart__plot:focus-visible"), /outline:\s*var\(--area-focus-width\) solid var\(--area-focus-color\)/);

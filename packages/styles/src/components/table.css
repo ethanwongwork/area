@@ -1,0 +1,360 @@
+/* Table (docs/specs/table.md). */
+@layer area.components {
+  /* --- Table -------------------------------------------------------------- */
+  /* Public hooks (2026-10-31, as Asset card's --area-asset-card-corner and -name-inset): --area-table-corner, the frame's
+     corner, and --area-table-edge, the first and last cells' side inset (md and lg; sm keeps one inset), so a page that
+     sets one inset and one corner for every frame (the desktop app's feed) can give its tables the same; and
+     --area-table-fill (2026-11-01), the frame's fill, so such a page's tables take its frames' one fill too;
+     --area-table-head-fill (2026-11-01), the header row's fill, so a page can keep its header a step under its rows when
+     its fills differ from Area's (owner: "the top part was always darker than the cells below"). */
+  /* Body cells align to their first line; headers center labels and controls.
+   * Column dividers are optional, independent of row spacing and stripes. */
+  .area-table-wrapper {
+    inline-size: 100%;
+    overflow-x: auto;
+    /* spec: a table stands alone on the page like a Card, and its edge is never lighter than
+       the row rules inside it, so both take the divider role. */
+    /* A required frame: it keeps its edge under Borderless (audit S10). */
+    border: var(--area-stroke-width) solid var(--area-edge-blocks);
+    /* The block corner, radius-container (plan A2.2: Table, Description list framed, Queue, Plan and Edit summary share
+       one): 16 at the default and Compact. It was the surface corner capped at 1.5 x the cells' side inset (owner,
+       2026-10-12: a compact table put 8px-inset cells under an 18 corner), 14 at the default and 12 Compact; the
+       container's own cap at 1.5 x the surface inset now stands for it. The frame recipe's block corner (surface.css). */
+    border-radius: var(--area-table-corner, var(--_fr-block));
+    background-color: var(--area-table-fill, var(--area-bg-surface));
+  }
+
+  /*
+   * Tables read one step below prose. A table is scanned rather than read, and 16px --
+   * correct for a paragraph -- puts too few columns on screen and makes a row of short
+   * values look sparse. Primer, OpenAI and shadcn all set tables at 14.
+   */
+  .area-table {
+    /* Above and below a cell: see --_cell-inset below (sm 4 / 2 and the UI line; compact pass, round 6). */
+    /* spec: 12 at the sides, compact 8 (Notion table cells 12; VS Code's keybindings table 10). */
+    --_cell-side: var(--area-inset-surface-sm);
+    /* The first and last cells sit a step further from the frame than columns sit from each other, so the frame reads as
+       one object and the columns as its parts (owner, 2026-10-31, feed rhythm pick 2: Primer's props table 16 at the frame
+       and 12 between columns; Cursor's settings 14 at the side). sm keeps one inset (below), as a dense table in a panel
+       wants. */
+    --_cell-edge: var(--area-table-edge, calc(var(--_cell-side) + var(--area-space-4))); /* spec */
+    /* md and lg set their text on the prose line (13/20 at type 13), so a description that wraps reads as prose, not as
+       stacked UI lines (owner pick q-table-lines, 2026-10-31; Primer's props table 1.67, Notion's 1.43; it was 13/18 and
+       Button's Props ran 8 lines on it). sm, a dense table in a panel or a chat reply, keeps the UI line. */
+    --_cell-line: var(--area-text-base-prose-leading);
+    /* Above and below a cell, the text sits as far from the rule as it does from the frame's side: the edge inset less the
+       line's half-leading, so cap and baseline are --_cell-edge from the rules (owner, 2026-10-31: "why do the tables have
+       so much more horizontal spacing inset added than vertical top and bottom spacing?"; it was 7 against 14 at the
+       sides, about 11 on the ink). 9 at type 13 / 32, a 39 row (Cursor's settings rows 42, Primer's 44); 7 at Compact,
+       13 at Comfortable. Read at the cell, where 1cap is its own text's. */
+    --_cell-inset: max(var(--area-space-4), round(nearest, calc(var(--_cell-edge) - (var(--_cell-line) - 1cap) / 2), 1px));
+    /* layout="fixed": the label column (owner, 2026-10-31, feed rhythm pick 3: Primer fixes its Name column at 27%). */
+    --_label-column: 27%; /* spec */
+    inline-size: 100%;
+    border-collapse: collapse;
+    /*
+     * The density scale, not the content ramp. A table is scanned rather than read, so it
+     * is chrome: it compresses with the interface instead of holding at prose size.
+     */
+    font-size: var(--area-ui-size);
+    line-height: var(--_cell-line);
+    /* Every cell sits in a column, so its figures are tabular (plan A9.8): numbers line up in any column, not only a
+       --numeric one, which also ends them. */
+    font-variant-numeric: tabular-nums;
+  }
+
+  .area-table th,
+  .area-table td,
+  .area-table__cell {
+    padding: var(--_cell-inset) var(--_cell-side);
+    text-align: start;
+    vertical-align: top;
+    /* Row rules are standalone dividers, `stroke-width` like the frame, so they stay under Borderless too. */
+    border-block-end: var(--area-stroke-width) solid var(--area-edge-dividers);
+    overflow-wrap: break-word;
+  }
+
+  .area-table tbody tr:last-child td {
+    border-block-end: 0;
+  }
+
+  .area-table :is(th, td):first-child { padding-inline-start: var(--_cell-edge); }
+  .area-table :is(th, td):last-child { padding-inline-end: var(--_cell-edge); }
+
+  /* layout="fixed": the first column takes the label column whatever its content, so every table in a feed starts its
+     values on one line (owner, 2026-10-31: the API tab's label columns were 84, 200 and 145 wide on one page). The
+     columns after it still size to their content. It outranks a fit cell, and the last column always takes the rest, so a
+     fit cell there can't hand its room back to the label column (a Token / Uses table drew its tokens 890 wide). */
+  .area-table--auto { table-layout: auto; }
+  .area-table.area-table--fixed > * > tr > :first-child { inline-size: var(--_label-column); white-space: normal; }
+  .area-table.area-table--fixed > * > tr > .area-table__cell--fit:last-child:not(:first-child) { inline-size: auto; }
+
+  .area-table th {
+    /* The well: a fill that shows at every Layer contrast (bg-subtle, the recessed layer, is the page at 0; 2026-11-01).
+       A header's controls step from it (layers.css). A page sets its own through --area-table-head-fill (2026-11-01). */
+    background-color: var(--area-table-head-fill, var(--area-bg-well));
+    color: var(--area-fg-muted);
+    font-weight: var(--area-weight-regular);
+    white-space: nowrap;
+    vertical-align: middle;
+  }
+
+  /* The hover plate paints the cells, so the transition belongs on them; selection paints the row.
+     Both land at once and fade out on fast (docs/MOTION.md, "Hover plate", "Selected"). */
+  .area-table tbody :is(tr, td) {
+    transition: background-color var(--area-duration-fast) var(--area-ease-effects);
+  }
+  @media (hover: hover) { .area-table--interactive tbody tr:hover td { transition-duration: var(--area-hover-in); } }
+
+  /* Row plates follow Menu and Nav: hover is the component hover fill, selection the active fill. */
+  @media (hover: hover) {
+    .area-table--interactive tbody tr:not([data-selected], [aria-selected="true"]):hover td {
+      background-color: var(--area-bg-component-hover);
+    }
+  }
+
+  /* Pressed (product UI rule 3, docs/PRODUCT_UI.md; DESIGN_SYSTEM.md "Shared state paint"): the row
+     takes the pressed fill while held, one step firmer than selected, landing at once like the hover; a selected row
+     presses too (plan B7.2): the cells' fill lies over the row's selected plate. */
+  .area-table--interactive tbody tr:active td {
+    background-color: var(--area-bg-component-pressed);
+    transition-duration: var(--area-press-in);
+  }
+
+  /* A clickable row (audit F-23 A): one stretched link covers the row, as CardLink covers a card;
+     other controls in the row sit above it, and the row shows the link's focus. */
+  .area-table tbody tr:has(.area-table__link) { position: relative; cursor: pointer; }
+  .area-table__link { color: inherit; text-decoration: none; outline: none; }
+  .area-table__link::after { content: ""; position: absolute; inset: 0; }
+  .area-table tbody tr:has(.area-table__link) :is(a, button, input, select, textarea, [tabindex]):not(.area-table__link) { position: relative; z-index: 1; }
+  .area-table tbody tr:has(.area-table__link:focus-visible) { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: calc(-1 * var(--area-focus-width)); }
+  /* The scrolling wrapper takes focus only while it overflows. */
+  .area-table-wrapper:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-gap); }
+
+  /* A Button in a header cell (a sort control) keeps the row at its text height and its label on
+     the column's text edge: it overhangs the cell's block padding (audit F-24), and the demos pull
+     it onto the edge with align. */
+  .area-table th > .area-button { margin-block: calc((var(--area-ui-leading) - var(--_height)) / 2); }
+
+  /* Code that starts a cell starts on the cell's edge, as the heading above it does (owner, 2026-11-02: the token badges
+     "look off"): its side margin keeps it off the words beside it in running text, and a cell's first word has none. */
+  .area-table :is(th, td) > .area-code:first-child { margin-inline-start: 0; }
+
+  /* Tabular figures so columns of numbers align on the decimal. */
+  .area-table .area-table__cell--numeric {
+    text-align: end;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Shrink-to-fit column, for a cell holding only controls. */
+  .area-table .area-table__cell--fit {
+    inline-size: 1%;
+    white-space: nowrap;
+  }
+  .area-table--sm { --_cell-line: var(--area-ui-leading); --_cell-inset: calc(var(--area-space-4) - var(--area-space-2) * var(--area-ui-dense)); --_cell-edge: var(--_cell-side); }
+  /* md: the base's prose line and balanced inset, stated so a md table inside an sm one keeps them. */
+  .area-table--md { --_cell-line: var(--area-text-base-prose-leading); --_cell-edge: var(--area-table-edge, calc(var(--_cell-side) + var(--area-space-4))); --_cell-inset: max(var(--area-space-4), round(nearest, calc(var(--_cell-edge) - (var(--_cell-line) - 1cap) / 2), 1px)); }
+  /* lg: a step more room above and below than md's balanced inset. */
+  .area-table--lg { --_cell-inset: max(var(--area-space-4), round(nearest, calc(var(--_cell-edge) - (var(--_cell-line) - 1cap) / 2 + var(--area-space-4)), 1px)); }
+  /*
+   * A selectable row (a row with a selection Checkbox; plan B2.5 follow-up, 2026-11-14) is a row of controls, so its
+   * height is a ladder height, the rule counted once inside it (DESIGN_SYSTEM.md, "Rows and composites are on the
+   * ladder"). It was the text row, line + 2 × cell inset + the rule: 39 at type 13 (20 + 9 + 9 + 1), off the ladder,
+   * because the cell inset is set from the frame's side, not from a height; before B2.5 the Checkbox's 24 box made it 44.
+   * The size names the rung: sm control-sm, md control-lg, lg control-xl (md: 34 / 38 / 42 at type 13 Compact / Default /
+   * Comfortable). The words centre on the row: the top inset is half what the line leaves, rounded up, and the bottom
+   * takes the rest less the rule. A row that wraps grows by its extra lines.
+   */
+  .area-table { --_select-row: var(--area-control-lg); }
+  .area-table--sm { --_select-row: var(--area-control-sm); }
+  .area-table--lg { --_select-row: var(--area-control-xl); }
+  .area-table tr:has(> :is(td, th) > .area-checkbox) > :is(td, th) {
+    --_select-top: round(up, calc((var(--_select-row) - var(--_cell-line)) / 2), 1px);
+    padding-block: var(--_select-top) calc(var(--_select-row) - var(--_cell-line) - var(--_select-top) - var(--area-stroke-width));
+  }
+  .area-table tbody tr:last-child:has(> :is(td, th) > .area-checkbox) > td { padding-block-end: calc(var(--_select-row) - var(--_cell-line) - var(--_select-top)); }
+  .area-table--striped tbody tr:nth-child(even) { background: var(--area-bg-well); --_row-paint: var(--area-bg-well); } /* bg-stripe is 1.03:1 at Layer contrast 0 */
+  .area-table--column-dividers :is(th, td):not(:last-child) { border-inline-end: var(--area-stroke-width) solid var(--area-edge-dividers); }
+
+  /*
+   * Flush: the table sits on its surface without a frame (Geist's type table, Cursor's icon sheet;
+   * docs/PRODUCT_UI.md, rule 11). No edge, corner or fill; the header keeps its muted labels on no
+   * ground. Its text and its rules share the content's edges (owner, 2026-10-12: "divider lines
+   * going almost all the way across … should align with the content"): the outer cells drop their
+   * side inset, and a row's hover and selected plate reaches that inset past each edge as a shadow
+   * of its own fill, so text never touches its plate while the rules stay on the content.
+   */
+  .area-table-wrapper:has(> .area-table--flush) {
+    border: 0;
+    border-radius: 0;
+    background-color: transparent;
+    overflow: visible;
+  }
+  .area-table--flush {
+    --_flush-side: var(--_cell-side); /* the cells' side inset */
+  }
+  /* A flush table meets what is above and below as a card or a paragraph does (owner, 2026-10-22: "make sure the gaps
+     vertically are correct and consistent"). Read, not chosen: its first row drops the cell inset above it and its last
+     row the inset below, and their text is trimmed to cap and baseline, as Area trims titles; a cell holding a framed
+     inline (Code, Badge, Kbd) keeps its line box, whose edge the frame reaches. Interactive: the cells keep their inset
+     for the row plates, and the table hangs it into the margin above and below, as the plates hang past each side, so
+     its text, not its padding, meets the content edges. */
+  .area-table--flush.area-table--interactive { margin-block: calc(var(--_cell-inset) * -1); }
+  .area-table--flush:not(.area-table--interactive) > :first-child > tr:first-child > :is(th, td) { padding-block-start: 0; }
+  .area-table--flush:not(.area-table--interactive) > :last-child > tr:last-child > :is(th, td) { padding-block-end: 0; }
+  .area-table--flush:not(.area-table--interactive) > :first-child > tr:first-child > :is(th, td):not(:has(.area-code, .area-badge, .area-kbd)) { text-box-trim: trim-start; text-box-edge: cap alphabetic; }
+  .area-table--flush:not(.area-table--interactive) > :last-child > tr:last-child > :is(th, td):not(:has(.area-code, .area-badge, .area-kbd)) { text-box-trim: trim-end; text-box-edge: cap alphabetic; }
+  .area-table--flush th { background-color: transparent; }
+  .area-table--flush :is(th, td):first-child { padding-inline-start: 0; }
+  .area-table--flush :is(th, td):last-child { padding-inline-end: 0; }
+  @media (hover: hover) {
+    .area-table--flush.area-table--interactive tbody tr:not([data-selected], [aria-selected="true"]):hover td:first-child { box-shadow: calc(var(--_flush-side) * -1) 0 0 0 var(--area-bg-component-hover); }
+    .area-table--flush.area-table--interactive tbody tr:not([data-selected], [aria-selected="true"]):hover td:last-child { box-shadow: var(--_flush-side) 0 0 0 var(--area-bg-component-hover); }
+  }
+  .area-table--flush tbody tr:is([data-selected], [aria-selected="true"]) td:first-child { box-shadow: calc(var(--_flush-side) * -1) 0 0 0 var(--area-bg-component-active); }
+  .area-table--flush tbody tr:is([data-selected], [aria-selected="true"]) td:last-child { box-shadow: var(--_flush-side) 0 0 0 var(--area-bg-component-active); }
+  /* The overhang presses with the cells, a selected row's included (plan B7.2), after the selected overhang it covers. */
+  .area-table--flush.area-table--interactive tbody tr:active td:first-child { box-shadow: calc(var(--_flush-side) * -1) 0 0 0 var(--area-bg-component-pressed); }
+  .area-table--flush.area-table--interactive tbody tr:active td:last-child { box-shadow: var(--_flush-side) 0 0 0 var(--area-bg-component-pressed); }
+  /* The overhang fades with the fill (docs/MOTION.md, "Hover plate"). */
+  .area-table--flush tbody td { transition: background-color var(--area-duration-fast) var(--area-ease-effects), box-shadow var(--area-duration-fast) var(--area-ease-effects); }
+
+  /* Baseline: every cell in a row lines up on its first line's baseline (inset.css, first-line
+     alignment), for rows whose cells are set at different sizes, such as a type specimen beside
+     its token. */
+  .area-table--baseline td { vertical-align: baseline; }
+  .area-table tbody tr:is([data-selected], [aria-selected="true"]) { background: var(--area-bg-component-active); --_row-paint: var(--area-bg-component-active); transition-duration: var(--area-hover-in); }
+  /* Selection when the table isn't focused (components audit V15, 2026-11-07; DESIGN_SYSTEM.md "Shared state paint"): in
+     a table that takes focus (a row's checkbox, a link, a focusable row), a selected row steps back to the hover plate
+     while focus is elsewhere, so the focused list reads as the active one. A table with nothing to focus can't be the
+     active list, so its selection keeps the firm plate. */
+  .area-table:not(:focus-within):has(tbody :is(input, button, a[href], [tabindex])) tbody tr:is([data-selected], [aria-selected="true"]):not(:active) { background: var(--area-bg-component-hover); --_row-paint: var(--area-bg-component-hover); }
+  .area-table--flush:not(:focus-within):has(tbody :is(input, button, a[href], [tabindex])) tbody tr:is([data-selected], [aria-selected="true"]):not(:active) td:first-child { box-shadow: calc(var(--_flush-side) * -1) 0 0 0 var(--area-bg-component-hover); }
+  .area-table--flush:not(:focus-within):has(tbody :is(input, button, a[href], [tabindex])) tbody tr:is([data-selected], [aria-selected="true"]):not(:active) td:last-child { box-shadow: var(--_flush-side) 0 0 0 var(--area-bg-component-hover); }
+  /* The manifest's `selected` state is a body row's (`aria-selected="true"` on the tr); the block holds it while a row is
+     selected (2026-11-07, O7), so the state has a home on the block for the parity check. */
+  .area-table:has(tr[aria-selected="true"]) {}
+  /* The caption's text starts where the first column's does (the frame recipe's inset, `--_cell-edge`: 14 at md, 10 at
+     sm; 0 in a flush table), and stands a row's gap above the grid (plan B8.2): 8 / 12 / 16 at type 13 Compact / Default
+     / Comfortable. It was the row gap on all four sides, 2 short of the column's text at md. */
+  .area-table caption { padding: var(--area-gap-row) var(--_cell-edge); text-align: start; color: var(--area-fg-muted); }
+  .area-table--flush caption { padding-inline: 0; }
+
+  /* --- Table: sticky header and first column (components audit V3, 2026-11-07) ---
+     ChatGPT's TableStickyHeader (`position: sticky; top: 0; z-index: 10; background: var(--color-surface)`) and Claude's
+     sticky column (`--cds-sticky-column-bg`, `--cds-sticky-edge-*`): docs/research/components-audit-2026-11-07/chat-apps.md.
+     Both stick inside the wrapper, the table's own scroller (it scrolls sideways; give it a height to scroll down). A
+     sticky cell keeps a ground, so rows pass under it rather than through it: the header its fill, the first column the
+     table's fill with the row's own paint (stripe, selection, hover) laid over it through --_row-paint. Collapsed borders
+     don't travel with a sticky cell in every engine, so a sticky cell draws its rule itself. */
+  .area-table--sticky-header > thead > tr > th {
+    position: sticky;
+    inset-block-start: 0;
+    z-index: 2;
+    border-block-end-color: transparent;
+    box-shadow: inset 0 calc(-1 * var(--area-stroke-width)) 0 var(--area-edge-dividers);
+  }
+  .area-table--flush.area-table--sticky-header > thead > tr > th { background-color: var(--area-table-fill, var(--area-bg-surface)); }
+  .area-table--sticky-first-column > * > tr > :first-child { position: sticky; inset-inline-start: 0; z-index: 1; }
+  .area-table--sticky-first-column.area-table--sticky-header > thead > tr > th:first-child { z-index: 3; }
+  .area-table.area-table--sticky-first-column > tbody > tr > :is(td, th):first-child {
+    background-color: var(--area-table-fill, var(--area-bg-surface));
+    background-image: linear-gradient(var(--_row-paint, transparent), var(--_row-paint, transparent));
+  }
+  @media (hover: hover) {
+    .area-table--sticky-first-column.area-table--interactive tbody tr:not([data-selected], [aria-selected="true"]):hover { --_row-paint: var(--area-bg-component-hover); }
+  }
+  .area-table--sticky-first-column.area-table--interactive tbody tr:active { --_row-paint: var(--area-bg-component-pressed); }
+  /* The column's seam: a rule at its end, drawn only while columns are scrolled under it (ChatGPT's TableScroller
+     `animation-range: min(2px, 50%) …`, a scroll-linked seam). Where scroll timelines are missing it always shows. */
+  .area-table--sticky-first-column > * > tr > :first-child::after {
+    content: "";
+    position: absolute;
+    inset-block: 0;
+    inset-inline-end: 0;
+    inline-size: var(--area-stroke-width);
+    background-color: var(--area-edge-dividers);
+    pointer-events: none;
+  }
+  @supports (animation-timeline: scroll()) {
+    .area-table--sticky-first-column > * > tr > :first-child::after {
+      opacity: 0;
+      /* Scroll-linked, not timed: no duration or curve of the motion settings applies. */
+      animation-name: area-table-seam;
+      animation-fill-mode: both;
+      animation-timeline: scroll(nearest inline);
+      animation-range: 0 2px; /* spec: ChatGPT min(2px, 50%) */
+    }
+  }
+
+  /* --- Table: sortable headings (V3) ---
+     The heading's Button (`.area-table__sort`, audit F-24's overhang above) names the column; aria-sort on the th says
+     the order. An unsorted column shows its arrow only under the pointer or focus, in the same box, so the label never
+     moves (Primer's SortHeader: the arrow at rest only on the sorted column). */
+  .area-table th > .area-table__sort[data-sort="none"] .area-button__icon { transition: opacity var(--area-fade-fast) var(--area-ease-effects); }
+  /* Hidden only where there is hover (plan B7.11): a touch screen always shows the sort mark. */
+  @media (hover: hover) {
+    .area-table th > .area-table__sort[data-sort="none"] .area-button__icon { opacity: 0; }
+    .area-table th > .area-table__sort[data-sort="none"]:hover .area-button__icon { opacity: 1; transition-duration: 0s; }
+  }
+  .area-table th > .area-table__sort[data-sort="none"]:focus-visible .area-button__icon { opacity: 1; transition-duration: 0s; }
+
+  /* --- Table: row groups (V3) ---
+     A heading row that folds the rows under it, with the group's count and its total (Notion's grouped table: a 24
+     toggle, the group's name 14/500, its aggregate muted; docs/research/components-audit-2026-11-07/notion.md). The
+     heading row is the header's ground, so a group reads as a section of the table, not one of its rows. */
+  .area-table__group-heading > th {
+    padding-block: var(--_cell-inset);
+    color: var(--area-fg-muted); /* a heading over a run of rows: muted (plan A9.4, owner 2026-11-11) */
+    /* A heading over a run of rows is the rows' size at 500 (plan A9.4), with or without its toggle. */
+    font-weight: var(--area-weight-strong);
+  }
+  .area-table__group-row { display: flex; align-items: center; gap: var(--area-ui-cluster); min-inline-size: 0; }
+  .area-table__group-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--area-ui-cluster);
+    min-inline-size: 0;
+    /* The toggle overhangs the cell's block padding, as a heading's sort Button does (audit F-24), so the row keeps its
+       text height; its plate reaches 4 past the column's text edge, where the chevron starts. */
+    margin-block: calc((var(--_cell-line) - var(--area-control-sm)) / 2);
+    margin-inline-start: calc(-1 * var(--area-space-4));
+    padding-block: 0;
+    padding-inline: var(--area-space-4) var(--area-ui-stack); /* the chevron 4 past the text edge (the overhang); the end a stack, 4 / 6 / 8 */
+    block-size: var(--area-control-sm);
+    border: 0;
+    border-radius: var(--area-radius-control-sm);
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    font-weight: var(--area-weight-strong);
+    cursor: pointer;
+    transition: background-color var(--area-duration-fast) var(--area-ease-effects);
+  }
+  @media (hover: hover) { .area-table__group-toggle:hover { background-color: var(--area-bg-component-hover); transition-duration: var(--area-hover-in); } }
+  .area-table__group-toggle:active { background-color: var(--area-bg-component-pressed); transition-duration: var(--area-press-in); }
+  .area-table__group-toggle:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: calc(-1 * var(--area-focus-width)); }
+  .area-table__group-chevron { display: inline-flex; flex-shrink: 0; inline-size: var(--area-icon-md); block-size: var(--area-icon-md); color: var(--area-fg-muted); }
+  .area-table__group-chevron > svg { inline-size: 100%; block-size: 100%; }
+  .area-table__group-name { min-inline-size: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .area-table__group-count,
+  .area-table__group-summary { color: var(--area-fg-muted); font-weight: var(--area-weight-regular); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .area-table__group-summary { margin-inline-start: auto; }
+  /* A folded group keeps only its heading row. */
+  .area-table__group[data-collapsed] > tr:not(.area-table__group-heading) { display: none; }
+  /* Every group's last row keeps its rule, so the next group's heading is ruled off; the table's last row drops it. */
+  .area-table > .area-table__group:not(:last-child) > tr:last-child > td { border-block-end: var(--area-stroke-width) solid var(--area-edge-dividers); }
+  .area-table > .area-table__group[data-collapsed]:last-child > .area-table__group-heading > th { border-block-end: 0; }
+
+  /* --- Table: loading rows (V3) ---
+     Skeleton lines in the cells while rows load (Primer's Table.Skeleton, `rows` default 10; Area 3, the gallery's
+     loading tile): the first column a name's width, the others a value's. Not a target: the rows take no hover. */
+  .area-table__skeleton { pointer-events: none; }
+  .area-table__skeleton-line { inline-size: var(--area-space-48); max-inline-size: 100%; }
+  .area-table__skeleton-line[data-column="first"] { inline-size: var(--area-space-96); }
+  .area-table__cell--numeric > .area-table__skeleton-line { margin-inline-start: auto; }
+
+}
+
+/* The sticky first column's seam, scroll-linked (Table, components audit V3). */
+@keyframes area-table-seam { from { opacity: 0; } to { opacity: 1; } }

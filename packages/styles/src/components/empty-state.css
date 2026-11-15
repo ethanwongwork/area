@@ -34,16 +34,18 @@
     --_glyph: calc(24px - 4px * var(--_glyph-step)); /* spec */
     /* The glyph's line for a 24 slot (1.2 × the 16 line), 20 in compact (base.css size curve). */
     --_glyph-line: calc(var(--area-weight-icon) * (0.8 + 0.0846 * var(--_glyph-step)));
-    /* spec: ChatGPT 16 under the tile, 8 between title and line, 16 above the actions. */
-    --_media-gap: var(--area-space-16);
+    /* 16 under the tile at the default (measured), two clusters (plan B8.2): 12 / 16 / 20 at type 13 Compact / Default /
+       Comfortable. */
+    --_media-gap: calc(var(--area-ui-cluster) * 2);
     /* A heading over its text (DESIGN_SYSTEM.md, "Text pairs", 2026-11-06 balance pass): a 16 title over a 13 line stands
        one step (4) further than the line's own spacing, 14.0 baseline to cap beside the line's 8.8, so it reads as a
        heading above its text (Cursor's settings header: 17/21, 4, 13/18). Joined, it sat 10.0: near the line gap but not
        on it, the spacing the owner read as having no logic. Was 8 after ChatGPT's empty state until 2026-10-22. */
     --_title-gap: var(--area-space-4);
     /* The actions stand off the text by a block's space (owner, 2026-11-02: "update the empty state, the size of the type
-       the gaps between text and the actions", with a mail app's empty state, 24 under its line): 24, was ChatGPT's 16. */
-    --_actions-gap: var(--area-space-24);
+       the gaps between text and the actions", with a mail app's empty state, 24 under its line): a section's space, 16 / 24 /
+       32 at type 13 Compact / Default / Comfortable (plan B8.2); was 16 as measured. */
+    --_actions-gap: var(--area-gap-section);
     /* Its line on the UI step under the 16 title (the mail app's 14 under 18): 13/18, was the secondary 12/16. */
     --_description-size: var(--area-text-base-size);
     --_description-leading: var(--area-text-base-leading);
@@ -65,15 +67,15 @@
     --_glyph-step: round(up, clamp(0, var(--area-ui-dense), 1), 1); /* a native 16 or 12 */
     --_glyph: calc(16px - 4px * var(--_glyph-step)); /* spec */
     --_glyph-line: 1px; /* the icons' own line at 16 and 12 */
-    /* spec: Notion 12 under the icon, 2 between title and line, 8 above the action. */
-    --_media-gap: var(--area-space-12);
+    /* 12 under the icon at the default (measured), a row's gap (plan B8.2): 8 / 12 / 16 at type 13. */
+    --_media-gap: var(--area-gap-row);
     --_title-gap: var(--area-space-4); /* a title stands one step (4) off its copy (DESIGN_SYSTEM.md, "Text pairs"; owner 2026-11-06: joined, "the space between the title and the copy still doesnt look right"): 11.7 over the 12/16 line's own 7.4; was 2 after Notion, then 0 */
     /* The actions a line's space off the text (owner, 2026-11-02; the finance and projects apps' 12): 12, was Notion's 8,
-       which read as part of the text. */
-    --_actions-gap: var(--area-space-12);
+       which read as part of the text. A row's gap (plan B8.2): 8 / 12 / 16 at type 13. */
+    --_actions-gap: var(--area-gap-row);
     --_description-size: var(--area-text-sm-size);
     --_description-leading: var(--area-text-sm-leading);
-    /* spec: Notion 14/20 500, the UI type (12/16 in compact). */
+    /* spec: 14/20 500 as measured, the UI type: 13/18 at the default type 13, at every density. */
     --_title-size: var(--area-ui-size);
     --_title-leading: var(--area-ui-leading);
     /* spec: Notion's Favorites column, 340. */
@@ -110,7 +112,7 @@
     font-weight: var(--area-weight-strong);
     text-wrap: balance;
   }
-  /* spec: ChatGPT and Notion 14/20 in the muted ink; the body step, 12/16 in compact. */
+  /* spec: 14/20 in the muted ink as measured; text-sm, 12/16 at the default type 13, at every density. */
   .area-empty-state__description {
     margin: 0;
     color: var(--area-fg-muted);
@@ -118,12 +120,12 @@
     line-height: var(--_description-leading);
     text-wrap: balance;
   }
-  /* spec: ChatGPT's actions row, 8 apart, centred. */
+  /* The actions row, centred, independent controls a cluster apart (8 measured; 6 / 8 / 10 at type 13). */
   .area-empty-state__actions {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    gap: var(--area-space-8);
+    gap: var(--area-ui-cluster);
     margin-block-start: var(--_actions-gap);
   }
 }

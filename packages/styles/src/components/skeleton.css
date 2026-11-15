@@ -1,0 +1,115 @@
+/* Skeleton (docs/specs/skeleton.md). */
+@layer area.components {
+  /* --- Skeleton ----------------------------------------------------------- */
+  /*
+   * One placeholder with three shapes (docs/specs/skeleton.md, rethink 2026-09-28, owner option A;
+   * research: docs/research/skeleton-rethink-survey.md):
+   *   block   the default: a box the host sizes (Primer SkeletonBox, Fluent's rectangle, Radix,
+   *           Mantine and Chakra all default to a block);
+   *   text    a line of type: the glyph height centred in the host's line box;
+   *   circle  an avatar or icon disc, 1:1.
+   * Two behaviours: still (no shimmer) and wrap (painted on a real element, which keeps its size
+   * and its own corner). The shimmer travels rather than pulsing: travel reads as loading.
+   */
+  .area-skeleton {
+    /* The control fill and its selected step, which every ground restates (layers.css), so a placeholder reads on a
+       card, a menu or a sidebar as on the page and follows Layer contrast and the grey tint (plan B7.4; light was a
+       fixed 10% / 16% grey, #f4 / #ee on white, the measured placeholder; the control fill is #f7 there). */
+    --_skeleton-fill: var(--area-bg-component);
+    --_skeleton-band: var(--area-bg-component-active);
+    /* spec: corners cap at 4 (Primer 3, Radix 3, Fluent 4, MUI 4, Mantine 4, Chakra 4, antd 4,
+       Polaris 4, Atlassian 4); square at Sharp. */
+    --_skeleton-radius: max(var(--area-radius-min), round(down, calc(16px * var(--area-radius-factor)), 2px)); /* spec: 4 at the default, a 16px box's corner, scaling with the setting */
+    display: block;
+    border-radius: var(--_skeleton-radius);
+    background-color: var(--_skeleton-fill);
+    /* The band fades out with the loop factor (axes/motion.ts), so a stopped skeleton is flat. */
+    background-image: linear-gradient(90deg, transparent, color-mix(in srgb, var(--_skeleton-band) calc(var(--area-duration-loop) * 100%), transparent), transparent);
+    background-size: 200% 100%;
+    background-repeat: no-repeat;
+    /* spec: 3s linear, ChatGPT's and Figma's shimmer. A fixed period, as the Spinner's turn: it
+       was 12 x slow, which drifted from the measured 3s when the motion default moved to 210
+       (2026-10-14). MOTION.md: shimmer is linear and long, and stops at motion 0 and under
+       reduced motion: the period takes the loop factor, 0 there. */
+    animation: area-shimmer calc(3s * var(--area-duration-loop)) var(--area-ease-linear) infinite; /* spec */
+  }
+
+  /* spec: a block fills the width and is 16 tall until the host sizes it (Primer 1rem, Fluent
+     16). */
+  .area-skeleton--block {
+    inline-size: 100%;
+    block-size: var(--area-space-16); /* spec */
+  }
+
+  /* spec (2026-09-27 audit): a text line is the glyph height centred in its line box, so stacked
+     lines take the paragraph's own height (Primer SkeletonText; MUI scales the line box). */
+  .area-skeleton--text {
+    inline-size: 100%;
+    block-size: 1em;
+    margin-block: calc((1lh - 1em) / 2);
+  }
+
+  /* spec: a disc, 32 (Avatar md) until the host sizes it; one dimension is enough (Mantine,
+     Fluent). */
+  .area-skeleton--circle {
+    inline-size: var(--area-control-md);
+    aspect-ratio: 1;
+    border-radius: var(--area-radius-full);
+  }
+
+  /* Still: a flat placeholder (Notion; antd, Polaris and Atlassian are still by default). */
+  .area-skeleton--static { animation: none; background-image: none; }
+
+  /*
+   * Paragraph (`lines`): text lines in a column, so each keeps both half-leadings. spec: the last
+   * line is 65% wide, at least 50px (Primer SkeletonText; antd 61%, Polaris and Chakra 80%).
+   */
+  .area-skeleton__lines { display: flex; flex-direction: column; align-items: stretch; min-inline-size: 0; }
+  .area-skeleton__lines {
+    --_last-line: 65%; /* spec */
+    --_last-line-min: 50px; /* spec */
+  }
+  .area-skeleton__lines > .area-skeleton--text:last-child:not(:first-child) {
+    inline-size: var(--_last-line);
+    min-inline-size: var(--_last-line-min);
+  }
+
+  /* Waiting (`delay`, components audit V6, 2026-11-07; WRITING.md's loading ladder): a delayed placeholder keeps its box
+     and shows nothing until its wait has passed, then appears at once. It has no fade of its own, so reduced motion
+     changes nothing here. */
+  .area-skeleton[data-waiting],
+  .area-skeleton__lines[data-waiting] { opacity: 0; }
+
+  @keyframes area-shimmer {
+    from { background-position: 200% 0; }
+    to { background-position: -100% 0; }
+  }
+
+}
+
+/*
+ * Skeleton wrap (docs/specs/skeleton.md): the placeholder is painted on the wrapped element
+ * itself, so it keeps that element's size, place and its own corner (Radix and Spectrum keep the
+ * child's radius). The wrapper takes no box. This sits in the utilities layer because it has to
+ * win over whatever paint the wrapped component draws, without !important or specificity games.
+ */
+@layer area.utilities {
+  .area-skeleton--wrap { display: contents; }
+  .area-skeleton--wrap > * {
+    background-color: var(--_skeleton-fill);
+    background-image: linear-gradient(90deg, transparent, color-mix(in srgb, var(--_skeleton-band) calc(var(--area-duration-loop) * 100%), transparent), transparent);
+    background-size: 200% 100%;
+    background-repeat: no-repeat;
+    border-color: transparent;
+    box-shadow: none;
+    outline: none;
+    color: transparent;
+    pointer-events: none;
+    animation: area-shimmer calc(3s * var(--area-duration-loop)) var(--area-ease-linear) infinite; /* spec: as the base skeleton */
+  }
+  /* What the element holds keeps its space but does not paint. */
+  .area-skeleton--wrap > * > *,
+  .area-skeleton--wrap > *::before,
+  .area-skeleton--wrap > *::after { visibility: hidden; }
+  .area-skeleton--wrap.area-skeleton--static > * { animation: none; background-image: none; }
+}

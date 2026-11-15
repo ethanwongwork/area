@@ -44,7 +44,7 @@ const GROUPS = [
 ] as const;
 
 /* The two weights, shown together on each role's row and card (owner, 2026-10-23; until then two ramps), their values
-   from the UI scale (400, 500). */
+   from the UI scale (400, 500); regular's is the Regular weight setting's (plan A9.6), read from the Canvas. */
 const WEIGHTS = [
   { id: "regular", suffix: "", value: 400 },
   { id: "strong", suffix: " Strong", value: 500 },
@@ -75,11 +75,13 @@ const metrics = (role: TypeRole, type: string) => {
 /** Tracking as read: 0 for none, else the token's em value. */
 const trackingOf = (role: TypeRole, type: string) => { const value = role.metrics[type]!.tracking; return !value || value === "0em" ? "0" : value; };
 /** What a role is made of at a type size, as label and value pairs (the table's columns, the card's rows). */
-const measures = (role: TypeRole, type: string, weights: readonly (typeof WEIGHTS)[number][]) => [
+/** A weight's value: strong's own, regular's the Canvas's Regular weight setting. */
+const weightValue = (weight: (typeof WEIGHTS)[number], regular: string | undefined) => weight.id === "regular" ? Number(regular ?? weight.value) : weight.value;
+const measures = (role: TypeRole, type: string, weights: readonly (typeof WEIGHTS)[number][], regular?: string) => [
   ["Size", `${role.metrics[type]!.size}`],
   ["Line height", `${role.metrics[type]!.leading}`],
   ["Tracking", trackingOf(role, type)],
-  ["Weight", weights.map(entry => entry.value).join(", ")],
+  ["Weight", weights.map(entry => weightValue(entry, regular)).join(", ")],
 ] as const;
 
 /*
@@ -258,7 +260,7 @@ export function TypographyPage() {
                             <td><span className="studio-tabular">{entry.metrics[density]!.size}</span></td>
                             <td><span className="studio-tabular">{entry.metrics[density]!.leading}</span></td>
                             <td><span className="studio-tabular">{trackingOf(entry, density)}</span></td>
-                            <td><span className="studio-tabular studio-nowrap">{shownWeights.map(w => w.value).join(", ")}</span></td>
+                            <td><span className="studio-tabular studio-nowrap">{shownWeights.map(w => weightValue(w, canvas["regular-weight"])).join(", ")}</span></td>
                           </tr>
                         ))}
                       </tbody>
@@ -285,7 +287,7 @@ export function TypographyPage() {
                 <Selection preview={<Preview><span style={roleStyle(role, view ? weight : selectedWeight ?? weight)} aria-hidden="true">Aa</span></Preview>} />
                 <PanelSection heading="Role">
                   <Facts label="Role" items={[
-                    ...measures(role, density, WEIGHTS),
+                    ...measures(role, density, WEIGHTS, canvas["regular-weight"]),
                     ["Type 12 to 16", `${role.metrics["12"]!.size} to ${role.metrics["16"]!.size}`],
                     ["Ratio", (role.metrics[density]!.leading / role.metrics[density]!.size).toFixed(2)],
                     ["Group", role.group === "text" ? "Copy" : "Heading"],
@@ -298,7 +300,7 @@ export function TypographyPage() {
                   ["Roles", TYPE_ROLES.length],
                   ["Headings", TYPE_ROLES.filter(entry => entry.group !== "text").length],
                   ["Copy", TYPE_ROLES.filter(entry => entry.group === "text").length],
-                  ["Weights", WEIGHTS.map(entry => `${entry.id === "regular" ? "Regular" : "Strong"} ${entry.value}`).join(", ")],
+                  ["Weights", WEIGHTS.map(entry => `${entry.id === "regular" ? "Regular" : "Strong"} ${weightValue(entry, canvas["regular-weight"])}`).join(", ")],
                   ["Density", "Copy steps down a size in compact; headings hold."],
                 ]} />
               </PanelSection>

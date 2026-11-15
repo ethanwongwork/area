@@ -35,7 +35,7 @@ const ItemIndex = createContext(0);
 const cx = (...parts: Array<string | false | undefined>) => parts.filter(Boolean).join(" ");
 
 /**
- * An ordered list of like properties (Figma's fills, strokes, effects). Rows reorder by their
+ * An ordered list of like properties (a layer's fills, strokes, effects). Rows reorder by their
  * handle with the pointer, or with ArrowUp/ArrowDown when the handle has focus; the move is
  * announced, and focus stays on the moved item's handle.
  */

@@ -5,13 +5,14 @@ import type { ChangeEvent, KeyboardEvent, MouseEvent, ReactNode, SyntheticEvent 
 import { cx } from "../variants.ts";
 import { Glyph } from "./Glyph.tsx";
 import { Input, InputAction, type InputProps } from "./Input.tsx";
-import { Kbd } from "./primitives.tsx";
+import { Kbd } from "./Kbd.tsx";
 
 export interface SearchFieldProps extends Omit<InputProps, "type" | "value" | "defaultValue" | "trailingAction" | "trailingIcon" | "suffix" | "onSubmit"> {
   /** The query (controlled). */
   value?: string;
+  /** The query at first, uncontrolled. */
   defaultValue?: string;
-  /** Every change to the query, typed or cleared, with the change, key or click that made it (Governance § 4). */
+  /** Called with every change to the query, typed or cleared, and the change, key or click that made it. */
   onValueChange?: (value: string, event: SyntheticEvent) => void;
   /** After the clear action or Escape empties the field. */
   onClear?: () => void;
@@ -24,7 +25,7 @@ export interface SearchFieldProps extends Omit<InputProps, "type" | "value" | "d
   clearLabel?: string;
   /** The leading glyph. Defaults to search; `null` leaves the start to the text. */
   icon?: ReactNode;
-  /** @deprecated Use `icon` (2026-11-07, system gaps C4). Kept for one release; `icon` wins. */
+  /** @deprecated Use `icon`, which wins. Kept for one release. */
   leadingIcon?: ReactNode;
 }
 
@@ -33,7 +34,7 @@ const ariaKeys = (keys: string[]) => keys.map(key => ARIA_KEYS[key.toLowerCase()
 
 /**
  * A field for a search query. The clear action stays out of the Tab order and keeps focus in the
- * field (React Aria, Fluent); Escape clears a query and, on an empty field, is left to the page
+ * field; Escape clears a query and, on an empty field, is left to the page
  * (a dialog can close).
  */
 export const SearchField = /* @__PURE__ */ forwardRef<HTMLInputElement, SearchFieldProps>(function SearchField(
@@ -97,7 +98,8 @@ export const SearchField = /* @__PURE__ */ forwardRef<HTMLInputElement, SearchFi
       trailingAction={query !== "" && editable ? (
         <InputAction
           className="area-search-field__clear"
-          icon={<Glyph name="dismiss-circle" />}
+          // Every field action that clears draws the one dismiss glyph; the filled circle stays a status mark (plan B3.3).
+          icon={<Glyph name="dismiss" />}
           tooltip={clearLabel}
           // Out of the Tab order (Escape does the same), and pressing it keeps the caret in the field.
           tabIndex={-1}

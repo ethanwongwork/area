@@ -122,3 +122,12 @@ The press never showed: the row's hover rule outranked `item:active`. It is now 
   right of the +.
 - **Verdict:** approved (owner, 2026-10-29, review page rounds 85–89); Complete.
 - **Verdict (shortcut):** approved (owner, 2026-10-29, the Composer expansion review page); Complete.
+
+## Review note, 2026-11-11 (focus and targets, plan A6, A11.2)
+
+- **What changed:** One indicator per row (A6.2, S12): focus is the inset ring alone, without the hover plate.
+- **Why:** the system evaluation's focus, forced colours and hit target items (docs/research/system-evaluation-2026-11-11, section 5), owner-approved 2026-11-11; the rules are in DESIGN_SYSTEM.md ("The focus ring", "Targets") and CONTRAST.md (Focus).
+
+## State paint (plan B7.11), 2026-11-14
+
+- The dismiss hides only inside `@media (hover: hover)`; the `(hover: none)` rule is gone.

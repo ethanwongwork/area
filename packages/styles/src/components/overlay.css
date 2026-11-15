@@ -1,0 +1,104 @@
+/* Shared: Popover, Menu and Tooltip opened from a trigger, in the top layer (docs/specs/overlay.md). After the
+   three families' own sheets, which these rules override; the menu and tooltip rules here are their [popover] states. */
+@layer area.components {
+  /* --- Anchored overlays --------------------------------------------------- */
+  /*
+   * A Popover, Menu or Tooltip opened from a trigger is a native popover in the top layer,
+   * placed by the React layer (`left`, `top`, `data-side`, `transform-origin`, the available
+   * height). These rules undo the browser's centred popover box and add the motion.
+   */
+  /*
+   * Motion (docs/MOTION.md, "Popover, menu ..."; plan A5.1, owner 2026-11-11): enter and leave on `fast`, as
+   * opacity and a 0.97 scale from the trigger (`transform-origin` is written by overlay.ts). The enter eases out
+   * (the fade on `ease-effects`, which never overshoots); the exit accelerates away on `ease-exit`, so its last
+   * frames never linger. A transition takes the duration and curve of the state it goes to, so the closed rule
+   * below carries the exit's. Rests at opacity 1, no scale. Until 2026-11-11 it entered on `base` (210) and left
+   * on `fast`, both ease-out.
+   */
+  :is(.area-popover, .area-menu, .area-tooltip)[popover] {
+    --_overlay-duration: var(--area-duration-fast);
+    --_overlay-exit: var(--area-duration-fast);
+    --_overlay-fade: var(--area-fade-fast);
+    --_overlay-fade-exit: var(--area-fade-fast);
+    --_overlay-ease: var(--area-ease-effects);
+    --_overlay-move: var(--area-ease-out);
+    --_overlay-scale: var(--area-overlay-scale);
+    position: fixed;
+    inset: auto;
+    margin: 0;
+    overflow: visible;
+    opacity: 1;
+    scale: none; /* rest without a transform, so layout snaps the surface to whole pixels (MOTION.md, Crispness 2); interpolates as 1 */
+    transition:
+      opacity var(--_overlay-fade) var(--_overlay-ease),
+      scale var(--_overlay-duration) var(--_overlay-move),
+      overlay var(--_overlay-fade) allow-discrete,
+      display var(--_overlay-fade) allow-discrete;
+  }
+  /* The surfaces set their own display, which would otherwise override the browser's hidden popover. */
+  :is(.area-popover, .area-menu, .area-tooltip)[popover]:not(:popover-open) { --_overlay-duration: var(--_overlay-exit); --_overlay-fade: var(--_overlay-fade-exit); --_overlay-ease: var(--area-ease-exit); --_overlay-move: var(--area-ease-exit); display: none; opacity: 0; scale: var(--_overlay-scale); }
+  /* Opened from a key (plan A5.2; `data-opened-by`, written by overlay.ts for every popover and dialog): the surface is
+     at its place and size on the first frame and only fades, on `fade-fast`, so a keyboard open is never slower than
+     the key (docs/MOTION.md, "Opened from the keyboard"). The exit of a surface a key opened fades the same way. */
+  :is(.area-popover, .area-menu, .area-tooltip)[popover][data-opened-by="keyboard"] { --_overlay-scale: none; /* the resting value itself, so no identity transition starts */ }
+  @starting-style {
+    :is(.area-popover, .area-menu, .area-tooltip)[popover]:popover-open { opacity: 0; scale: var(--_overlay-scale); }
+  }
+  /* A tooltip appears on `fast` after its open delay, from 0.97 at its trigger, and leaves at once,
+     so two neighbours never show together (docs/MOTION.md, Tooltip; Radix Themes leaves at once).
+     Inside the skip window (`data-instant`, a neighbour just closed) it appears at once as well. */
+  .area-tooltip[popover] { --_overlay-duration: var(--area-duration-fast); --_overlay-exit: var(--area-duration-instant); --_overlay-fade: var(--area-fade-fast); --_overlay-fade-exit: var(--area-duration-instant); }
+  .area-tooltip[popover][data-instant] { --_overlay-duration: var(--area-duration-instant); --_overlay-fade: var(--area-duration-instant); }
+  /* Tooltip draws no edge: without this the browser's popover border (3px, the ink colour) made
+     every triggered tooltip 34 tall instead of 28 (found in the PR 32 audit S16 pass, 2026-09-30). */
+  .area-tooltip[popover] { border: 0; }
+  /* Content on hover stays while the pointer crosses the gap to it (WCAG 1.4.13): an invisible
+     bridge over the gap on the trigger's side (4, or 8 with the arrow), like Primer's. */
+  .area-tooltip[popover] { --_bridge: var(--area-space-4); }
+  .area-tooltip--arrow[popover] { --_bridge: var(--area-space-8); }
+  .area-tooltip[popover]::before { content: ""; position: absolute; }
+  /* A tooltip that only repeats its trigger's name (`describes={false}`: an icon button's label) lets the pointer through
+     and closes as the pointer leaves the trigger, as macOS's, Cursor's and Figma's do, so it never sits over the next
+     control in a bar, catching the pointer meant for it (2026-10-31, the desktop app's headers). One that describes
+     keeps the hoverable bridge above. */
+  .area-tooltip[popover][data-passthrough] { pointer-events: none; }
+  .area-tooltip[popover][data-side="top"]::before { inset: 100% 0 auto; block-size: var(--_bridge); }
+  .area-tooltip[popover][data-side="bottom"]::before { inset: auto 0 100%; block-size: var(--_bridge); }
+  .area-tooltip[popover][data-side="left"]::before { inset: 0 auto 0 100%; inline-size: var(--_bridge); }
+  .area-tooltip[popover][data-side="right"]::before { inset: 0 100% 0 auto; inline-size: var(--_bridge); }
+  /* A menu longer than the room beside its trigger scrolls inside itself. */
+  .area-menu[popover] {
+    max-block-size: var(--area-overlay-available-height, none);
+    overflow-y: auto;
+  }
+  /* A menu surface that scrolls is a Scroll area (docs/specs/scroll-area.md, "Adoption"): the frame stays
+     on the surface; the inset and the row stack move into the scroller, so the overlay bar sits at the
+     frame's edge, as Figma's does, and rows keep their place. */
+  .area-menu.area-scroll-area { padding: 0; gap: 0; }
+  .area-menu.area-scroll-area[popover] { overflow: hidden; }
+  .area-menu > .area-scroll-area__viewport { padding: var(--_inset); }
+  .area-menu > .area-scroll-area__viewport > .area-scroll-area__content { display: flex; flex-direction: column; gap: var(--area-ui-row-gap); }
+  .area-popover[popover]:focus-visible,
+  .area-menu[popover]:focus-visible { outline: none; }
+
+  /*
+   * Header and footer (components audit V5, 2026-11-07; Cursor's menu regions, `header{border-bottom:1px}`,
+   * `footer{border-top:1px}`): fixed above and below the rows, each set off by the separator's line, edge to edge inside
+   * the frame. With either, the frame holds the three and only the list scrolls; the rows keep the menu's inset and stack.
+   * Each region takes the menu's inset too, so a row in it sits where the list's rows do.
+   */
+  .area-menu:has(> .area-menu__list) { padding: 0; gap: 0; }
+  .area-menu[popover]:has(> .area-menu__list) { overflow: hidden; }
+  .area-menu__list,
+  .area-menu__header,
+  .area-menu__footer { display: flex; flex-direction: column; gap: var(--area-ui-row-gap); padding: var(--_inset); flex-shrink: 0; }
+  .area-menu__list { flex: 1 1 auto; min-block-size: 0; }
+  .area-menu__list.area-scroll-area { padding: 0; gap: 0; }
+  .area-menu__list > .area-scroll-area__viewport { padding: var(--_inset); }
+  .area-menu__list > .area-scroll-area__viewport > .area-scroll-area__content { display: flex; flex-direction: column; gap: var(--area-ui-row-gap); }
+  .area-menu__header { border-block-end: var(--area-border-width) solid var(--area-edge-dividers); }
+  .area-menu__footer { border-block-start: var(--area-border-width) solid var(--area-edge-dividers); }
+  @media (prefers-reduced-motion: reduce) {
+    :is(.area-popover, .area-menu, .area-tooltip)[popover] { --_overlay-scale: none; /* the resting value itself, so no identity transition starts */ }
+  }
+}

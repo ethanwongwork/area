@@ -85,7 +85,7 @@ swatches    1px rgb(230) top rule, padding-top 11; source select 208 × 24; grid
 area (this pass)
 shell       10 rows wide (240 compact, 280 default), 1px `border-float`, radius container, the Surface axis's edge then
             the floating lift (`--area-shadow-edge`, `--area-shadow-float`); `plain`: none of the three
-header      optional, min 40, padding 16 start / 8 end (border counted), `border-decorative` rule
+header      optional, the region bar (38 / 40 / 44; plan B4.1), padding 16 start / 8 end (border counted, the bar's 7 room inside the edge), its end control a corner control (8 in, corner 8 in 16), no rule
 body        padding 16 at both densities (border counted), gap 12 (compact 8): views → contrast → area or grid → controls
             (eyedropper, tracks, preview) → values → note
 swatches    opt-in; `border-decorative` rule, padding rhythm 16 12 (border counted; compact 8 at the top), heading row
@@ -170,7 +170,7 @@ foreground/background popover (the background is a prop).
 | hover (eyedropper) | Button ghost hover (`bg-component-hover` #f3) | `figma--eyedropper--hover--light`: rgba(0,0,0,.05) |
 | focus-visible | Area focus ring on the area thumb and track thumbs; field focus on the value group | Figma thumb focus captured |
 | sampling | eyedropper `aria-pressed` while the EyeDropper API is open | — |
-| disabled | whole picker 50%, not-allowed cursor | Peers |
+| disabled | whole picker 50%, not-allowed cursor; the manifest's `disabled` state, painted on the root's `aria-disabled` | Peers |
 
 ## Behavior and accessibility
 
@@ -371,3 +371,29 @@ The contrast chip's `role="status"` (which said the ratio on every drag step) an
 `useAnnouncement` (`announce` / `useAnnouncement` (packages/react/src/components/announce.ts; DESIGN_SYSTEM.md, "Announcements")): "Contrast passes AA" / "Contrast fails AA" is said when the verdict flips, and the gamut note
 when the color leaves sRGB. The chip's full sentence ("Contrast 4.52 to 1 against #FFFFFF, passes AA") is visually
 hidden text beside the visible ratio, which is `aria-hidden`. No visible change.
+
+- 2026-11-11 · System evaluation F5: the manifest lists the `disabled` state (`stateAttributes: aria-disabled`), and its description no longer names a reference product. No visual change.
+- 2026-11-11 · system evaluation A1.1 · the body's rhythm is `gap-row`: 12 at the default (was 10), Compact 8 unchanged.
+
+## Review note, 2026-11-11 (type rules, plan A9)
+
+- **What changed:** the saved colours' heading takes the group label, 13/18 at 500 in the muted ink; it was 11/14 at 400 (plans A9.2, A9.4).
+- **Why:** the system evaluation's type rules (docs/research/system-evaluation-2026-11-11, section 5, A9), owner-approved
+  2026-11-11; the rules are in DESIGN_SYSTEM.md ("Ink and weight", "Size and shape", "Text pairs") and the type skill.
+
+### 2026-11-11 · Ink, dark and colour (system plan, Phase 1)
+
+- **What changed:** In dark it paints the floating ground (`bg-float`, plan A7.2): a step above the layers under it, #0c0c0c on the near-black page at the defaults (was `bg-surface`, the page's own #020202); light is unchanged. Its dark edge is one line (plan A7.1): the frame takes the dark rim's strength (16% at Shadow 8) and the rim is no longer drawn outside it, where it had made a two-tone 2px edge.
+- **Why:** docs/research/system-evaluation-2026-11-11 (README §5); the owner took every recommendation on 2026-11-11.
+- **Verdict:** awaiting the owner.
+- 2026-11-14 · system evaluation B6.1 · the surface's frame and shadow stack are the one floating surface's (popup.css), so it lists a material's layers and takes the overlays' glass (material.css); the `--_picker-bg / -edge / -lift` properties are gone, and `plain` keeps a clear 1px frame so its parts sit where they do in the surface. No change at the default material.
+
+## Shared bars and corners (plan B4), 2026-11-14
+
+- B4.1: the header is the region bar (38 / 40 / 44); it was 40 at every density. B4.2: its end control is a corner control, 8 from the outer top and end at every density (the bar's 7 room inside the edge; it was a fixed 8 at the end, the same at the defaults), its corner 16 − 8 = 8 (it kept the small control's 6). The plan's "in 3" (its glyph on the 16 text inset) would put it 11 from the end beside 8 from the top; the corner-control rule asks for even, so it stays at 8.
+
+### 2026-11-14 · Shared parts, leftovers (system plan, Phase 2, wave 3)
+
+- Listed, not moved: the opacity field's "%" side 8 (the field's text side is 9 at the default).
+- Why: docs/research/system-evaluation-2026-11-11 (plan B6.1, B6.5, B8.2, B2.2; README §5, phase2/leftovers.md); the owner took every recommendation on 2026-11-11. Fix the rule, not the instance.
+- Verdict: awaiting the owner.

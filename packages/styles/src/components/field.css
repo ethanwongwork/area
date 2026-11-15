@@ -57,8 +57,8 @@
    */
   .area-field__count {
     align-self: flex-end;
-    font-size: var(--area-text-xs-size);
-    line-height: var(--area-text-xs-leading);
+    font-size: var(--area-text-sm-size);
+    line-height: var(--area-text-sm-leading);
     font-variant-numeric: tabular-nums;
     color: var(--area-fg-muted);
     white-space: nowrap;
@@ -66,7 +66,7 @@
   .area-field__count[data-full] { color: var(--area-fg-default); }
   /* The count ends where the control ends: a Field holding a contained control (not full width) hugs it. */
   .area-field:not(.area-field--horizontal, .area-field--inline):has(> .area-field__count):not(:has(> [class*="--full-width"])) { inline-size: fit-content; max-inline-size: 100%; }
-  .area-field:not(.area-field--horizontal, .area-field--inline):has(> .area-field__description + .area-field__count) > .area-field__count { margin-block-start: calc(-1 * (var(--area-text-xs-leading) + var(--area-ui-stack))); }
+  .area-field:not(.area-field--horizontal, .area-field--inline):has(> .area-field__description + .area-field__count) > .area-field__count { margin-block-start: calc(-1 * (var(--area-text-sm-leading) + var(--area-ui-stack))); }
   .area-field:not(.area-field--horizontal, .area-field--inline):has(> .area-field__description + .area-field__count) > .area-field__description { padding-inline-end: calc(9ch + var(--area-space-8)); }
 
   .area-field__validation,
@@ -74,8 +74,8 @@
     display: flex;
     align-items: flex-start;
     gap: var(--area-space-4);
-    font-size: var(--area-text-xs-size);
-    line-height: var(--area-text-xs-leading);
+    font-size: var(--area-text-sm-size);
+    line-height: var(--area-text-sm-leading);
     color: var(--area-field-error-color);
   }
 

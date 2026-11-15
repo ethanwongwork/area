@@ -7,4 +7,4 @@ export const GalleryFigure = () => <Figure caption="Caption">{image}</Figure>;
 /* The media alone. */
 export const GalleryFigureNoCaption = () => <Figure>{image}</Figure>;
 /* A long caption wraps to the media's width. */
-export const GalleryFigureLongCaption = () => <Figure caption="Caption that wraps onto a second line">{image}</Figure>;
+export const GalleryFigureLongCaption = () => <Figure caption="Caption that wraps onto a second line under the picture">{image}</Figure>;

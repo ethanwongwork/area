@@ -8,29 +8,29 @@
  *
  * Two axes set private properties that the base rule consumes:
  *   variant  plain (Notion's board counts: no plate) or soft (Primer's CounterLabel);
- *   size     sm / md, Badge's sm and md heights (14 / 18 at type 13).
+ *   size     sm / md, the mark ladder's sm and md (14 / 18 at type 13, at every density).
  * A count and a status badge on one line share one height, text, shape and text side (owner, 2026-11-07; DESIGN_SYSTEM.md,
  * "Marks on one line"; docs/research/count-badge-2026-11-07).
  * The ink stays fixed with the owner's hover and selection, as Nav's trailing slot does.
  * ------------------------------------------------------------------------- */
 @layer area.components {
   .area-count {
-    /* spec: md, the default. 20 tall (Notion's board count, Fluent medium, shadcn's sidebar
-       count; Primer 18), 6 at the sides (Notion 6, Primer 6, Fluent medium 6). */
+    /* The mark recipe's inputs (inset.css, "One mark"; plan B5.1): a rung of the mark ladder (14 / 18 / 22 at type 13,
+       every density), its Pills flag (the pill role: a count), and its border, drawn only under forced colours (its edge
+       is drawn inside). The recipe gives its text side ((h - 6) / 2, 4 at 14 and 6 at 18, as Badge's), baseline, corner
+       and text (Badge's, text-xs: 11 at type 13). A one-digit count drops its sides instead (below). */
     --_count-height: var(--area-mark-label-md);
-    /* The marks' text side (inset.css, Badge): (height - 6) / 2 from the outer edge, 4 at 14 and 6 at 18, about 0.3 of
-       the height, as GitLab's and Fluent's pills (6 on 20) and Area's Tag (owner, 2026-11-07: "is there too much horizontal
-       padding on the textside?"). Count draws its edge inside, so the whole side is padding. It was (height - 8) / 2, 3 at
-       14, tighter than any count or badge surveyed; a one-digit count drops its sides instead (below). */
-    --_count-gutter: calc((var(--_count-height) - var(--area-space-6)) / 2); /* spec */
-    /* spec: 12/16 (Primer 12, shadcn 12, Fluent medium 12; Notion sets its board count in the
-       14px heading text). Badge's caption text. */
-    --_count-text: var(--area-control-xs-text);
-    --_count-leading: var(--area-control-xs-leading);
+    --_count-edge: 0px;
+    --_count-pill: var(--area-pill-count);
+    --_mark-height: var(--_count-height);
+    --_mark-border: var(--_count-edge);
+    --_mark-pill: var(--_count-pill);
+    --_count-gutter: var(--_mark-side);
+    --_count-text: var(--_mark-text);
+    --_count-leading: var(--_mark-leading);
     --_count-ink: var(--area-fg-muted);
     --_count-plate: transparent;
     --_count-weight: var(--area-weight-regular);
-    --_count-edge: 0px;
 
     display: inline-flex;
     align-items: center;
@@ -41,10 +41,9 @@
     block-size: var(--_count-height);
     padding-inline: var(--_count-gutter);
     /* A pill while data-area-pills lists `count`, the default again since 2026-11-07 with Badge (owner: "maybe they should all
-       be pills then?"; it was off the list from 2026-11-01); otherwise the radius setting's corner for its height (4 at 14
-       and 18). React pill / pill={false} override. */
-    --_count-pill: var(--area-pill-count);
-    border-radius: calc(max(var(--area-radius-min), round(down, calc(var(--_count-height) * var(--area-radius-factor)), 2px)) + var(--_count-pill) * var(--area-radius-full));
+       be pills then?"); otherwise the Corner setting's corner for its height (4 at 14 and 18). React pill / pill={false}
+       override. */
+    border-radius: var(--_mark-corner);
     background: var(--_count-plate);
     color: var(--_count-ink);
     font-family: var(--area-font-sans);
@@ -59,7 +58,7 @@
 
   /* Size. */
   .area-count--sm {
-    /* spec: 16 tall with 4 at the sides (Fluent small, Area's Indicator count). */
+    /* The ladder's sm rung: 14 at type 13, 4 at the sides. */
     --_count-height: var(--area-mark-label-sm);
   }
   .area-count--md {
@@ -82,19 +81,13 @@
     box-shadow: inset 0 0 0 var(--area-stroke-width) var(--area-edge-tags);
   }
 
-  /* The digits sit on Badge's whole-pixel baseline (owner, 2026-11-07: "the vertical alignment the same/consistent?"):
-     the cap centres in the plate and the baseline rounds to a whole pixel from the plate's top, by Badge's formula with its
-     edge (badge.css), so a Count and a Badge of one height on one line draw their text on the same pixel row at every type
-     and density. Centred by its line box it was exact but fractional, up to 0.45 off the badge beside it (type 12; 0.38 at
-     15, 0.10 at 13). A block box trims its line to cap and baseline, and the padding places them; the edge is drawn inside,
-     so only a forced-colors border (below) comes off the padding. */
+  /* The digits sit on the marks' whole-pixel baseline (owner, 2026-11-07: "the vertical alignment the same/consistent?"):
+     a block box trims its line to cap and baseline, and the mark recipe's padding places them (inset.css, "One mark"), so
+     a Count and a Badge of one height on one line draw their text on the same pixel row at every type and density. */
   @supports (text-box: trim-both cap alphabetic) {
     .area-count {
-      --_count-baseline: calc(var(--area-stroke-width) + round(nearest, calc((var(--_count-height) - 2 * var(--area-stroke-width) + 1cap) / 2), 1px));
       display: inline-block;
       text-align: center;
-      text-box: trim-both cap alphabetic;
-      padding-block: calc(var(--_count-baseline) - 1cap - var(--_count-edge)) calc(var(--_count-height) - var(--_count-baseline) - var(--_count-edge));
     }
   }
 
