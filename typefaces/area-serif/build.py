@@ -56,13 +56,8 @@ def variable(ufo):
     stem = int(os.environ.get("AREA_BOLD_STEM", BOLD.STEM))
     bold_ufo, reports, notes = BOLD.bold_font(ufo, stem)
     # 0.80: the Light master, the same engine run below the Regular (bold.LIGHT_STEM); it has no mid master.
-    # 0.81: its side bearings from the references' own Light (spacing.light_bearing_change), not the Bold's run back.
-    engine_bearings = BOLD.bearing_change
-    BOLD.bearing_change = SPACING.light_bearing_change(engine_bearings)
-    try:
-        light_ufo, lreports, lnotes = BOLD.bold_font(ufo, BOLD.LIGHT_STEM)
-    finally:
-        BOLD.bearing_change = engine_bearings
+    # 0.81: its side bearings from the references' own Light (bold.bearing_change reads light_bearings.json).
+    light_ufo, lreports, lnotes = BOLD.bold_font(ufo, BOLD.LIGHT_STEM)
     if "mid" in light_ufo.layers:
         del light_ufo.layers["mid"]
     import overlap as OVERLAP

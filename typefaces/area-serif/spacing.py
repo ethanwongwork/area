@@ -801,31 +801,7 @@ def _class_value(f, k):
     return 0
 
 
-# The Light's side bearings (0.81). 0.80 read them from bold_bearings.json, the Bold's change times bold.vector(55)'s
-# f (-0.371): +1.8 a side in the lowercase, +1.7 in the capitals. The references' own Light (Georgia Pro Light and
-# Serrif 300, less their Regular, times Area's stem loss over theirs: tools/weight/bold_bearings.py light) open
-# +2.3 and +2.9, and most on the right of the open and diagonal letters (v w y K N U W +5 to +10 where the
-# extrapolation gave +1). light_bearings.json holds that change; every glyph it does not name keeps the engine's.
-LIGHT_BEARINGS = "light_bearings.json"
-_LIGHT = None
-
-
-def light_bearing_change(default):
-    """A bold.bearing_change for the Light master: light_bearings.json's change where it names the glyph."""
-    import json
-    import os
-    global _LIGHT
-    if _LIGHT is None:
-        path = os.path.join(os.path.dirname(os.path.abspath(__file__)), LIGHT_BEARINGS)
-        _LIGHT = json.load(open(path))["sides"] if os.path.exists(path) else {}
-
-    def change(name, v):
-        import bold as B
-        ch = name if len(name) == 1 else B._CHARS.get(name)
-        if v["f"] < 0 and ch in _LIGHT:
-            return tuple(_LIGHT[ch])
-        return default(name, v)
-    return change
+# The Light's side bearings (0.81) are bold.bearing_change's (light_bearings.json), one path for every master.
 
 
 # Between the masters (0.81, audit_kern found it). A pair clear in both masters can still close up between them: a

@@ -2246,36 +2246,54 @@ def bearing_change(name, v):
         import os
         _BEARINGS = json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "bold_bearings.json")))
     ch = name if len(name) == 1 else _CHARS.get(name)
-    if v["f"] < 0:                                             # the Light's own bearings, when measured (the
-        lb = light_bearings()                                  # kerning worker's light_bearings.json)
-        if lb is not None:
-            return lb(name, v)
+    if v["f"] < 0:                                             # 0.81: the Light's own change where it is measured
+        lb = light_bearings()
+        if ch in lb:
+            return lb[ch]
     d = _BEARINGS.get(ch, [BEARING_REST, BEARING_REST])
     return d[0] * BEARING_SCALE * v["f"], d[1] * BEARING_SCALE * v["f"]
 
 
+# The Light's side bearings (0.81). 0.80 ran the Bold's measured change backwards (bold_bearings.json times
+# vector(55)'s f, -0.371): +1.8 a side in the lowercase, +1.7 in the capitals. The references' own Light (Georgia Pro
+# Light and Serrif 300 less their Regular, per letter and side, times Area's stem loss over theirs, 0.836:
+# tools/weight/bold_bearings.py light) open +2.3 and +2.9, most on the right of the open and diagonal letters (v w y
+# K N U W +5 to +10 where the extrapolation gave +1). light_bearings.json holds that change in Area's units, applied
+# as is: {"sides": {character: [left, right]}, "scale": 0.836, "note": ...}. A glyph whose character it does not name
+# keeps the Bold's change run backwards. One path: bearing_change, for every master (kerning-0.81.md).
+LIGHT_BEARINGS = "light_bearings.json"
 _LIGHT_BEARINGS = None
 
 
 def light_bearings():
-    """Hook (round 3): a function (name, v) -> (left change, right change) read from light_bearings.json when it
-    exists beside this file, else None (the Light then runs the Bold's measured changes backwards, as before).
-    The file's shape is the kerning worker's; this only finds it."""
+    """{character: (left change, right change)} from light_bearings.json's "sides" ({} when the file is absent)."""
     global _LIGHT_BEARINGS
-    import json
-    import os
-    path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "light_bearings.json")
-    if not os.path.exists(path):
-        return None
     if _LIGHT_BEARINGS is None:
-        _LIGHT_BEARINGS = json.load(open(path))
-    data = _LIGHT_BEARINGS
+        import json
+        import os
+        path = os.path.join(os.path.dirname(os.path.abspath(__file__)), LIGHT_BEARINGS)
+        sides = json.load(open(path))["sides"] if os.path.exists(path) else {}
+        _LIGHT_BEARINGS = {ch: (float(d[0]), float(d[1])) for ch, d in sides.items()}
+    return _LIGHT_BEARINGS
 
-    def get(name, v):
-        ch = name if len(name) == 1 else _CHARS.get(name)
-        d = data.get(name, data.get(ch, data.get("_rest", [BEARING_REST * BEARING_SCALE * v["f"]] * 2)))
-        return float(d[0]), float(d[1])
-    return get
+
+def check_light_bearings(reg, light):
+    """The Light's sides as bearing_change sets them (qa.py): for every glyph light_bearings.json names, the Light's
+    zone edges stand from its advance's ends by the Regular's plus that change (half a unit for the rounding).
+    Returns the misses [(glyph, side, want, got)]."""
+    bad = []
+    v = vector(LIGHT_STEM)
+    for g in reg:
+        ch = g.name if len(g.name) == 1 else _CHARS.get(g.name)
+        if ch not in light_bearings() or not g.contours or g.components or g.name not in light:
+            continue
+        r0, r1 = _zone_edges(glyph_contours(g), g.name)
+        b0, b1 = _zone_edges(glyph_contours(light[g.name]), g.name)
+        dl, dr = bearing_change(g.name, v)
+        for side, want, got in (("left", r0 + dl, b0), ("right", g.width - r1 + dr, light[g.name].width - b1)):
+            if abs(want - got) > 0.5 + 1e-6:
+                bad.append((g.name, side, round(want, 1), round(got, 1)))
+    return bad
 
 
 # 0.81: a part drawn again in other glyphs moves, in every master, as its own glyph does. The comma's ball and tail
