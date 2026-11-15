@@ -57,7 +57,10 @@ class Masters:
         """Contours of glyph `name` at weight w (300 to 700)."""
         def own(font):
             return decomposed(font, name) if decompose else contours_of(font[name])
-        rc = own(self.R)
+        if "overlap" in self.R.layers and name in self.R.layers["overlap"]:     # 0.81: as the variable font has it
+            rc = contours_of(self.R.layers["overlap"][name])
+        else:
+            rc = own(self.R)
         t = self.t(w)
         if t == 0:
             return rc
@@ -153,12 +156,13 @@ def grid(cells, cols, label_h=16, gap=8, bg=(255, 255, 255)):
     """cells: [(label, image)] laid out in rows of `cols`."""
     if not cells:
         return Image.new("RGB", (10, 10), bg)
-    cw = max(im.width for _, im in cells)
+    f = label_font(12)
+    probe = ImageDraw.Draw(Image.new("RGB", (4, 4)))
+    cw = max(max(im.width for _, im in cells), max(int(probe.textlength(lab, font=f)) + 6 for lab, _ in cells))
     ch = max(im.height for _, im in cells) + label_h
     rows = math.ceil(len(cells) / cols)
     out = Image.new("RGB", (cols * (cw + gap) + gap, rows * (ch + gap) + gap), bg)
     d = ImageDraw.Draw(out)
-    f = label_font(12)
     for k, (lab, im) in enumerate(cells):
         r, c = divmod(k, cols)
         x, y = gap + c * (cw + gap), gap + r * (ch + gap)

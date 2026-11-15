@@ -333,6 +333,12 @@ def x_target(t, straight, v):
             return t * (1 + (SIGN_UPRIGHT - 1) * v["f"])
         if 50 <= t <= 55:
             return t * (1 + (SIGN - 1) * v["f"])
+    if v["f"] < 0 and (t >= 76 or (straight and t >= 64) or (t >= 56 and not straight)):
+        # 0.81, towards the Light: a thick part loses in proportion to itself, as the stem does (78 > 55). The
+        # Bold's gains are amounts (the stem's 62, s's turns 1.26 of the round stroke's 64, measured on Bold
+        # references); run backwards as amounts they took from a 60-unit turn what they take from a 78 stem, and
+        # s's turns, j's tail, g's bowl thinned half as fast again as the stem (rays on the variable font, 0.81).
+        return t * v["stem"] / REG_STEM
     if t >= 76 or (straight and t >= 64):
         return t + thick_gain(t, straight, v)
     if t >= 56 and not straight:
@@ -367,7 +373,7 @@ def y_target(t, straight, v):
     if t <= 36:
         return t * (sign_ratio(v) if v.get("sub") == "small sign" and t >= THIN_READ else v["tip"])
     if t >= 64:                                  # a thick level stroke: only a curved one (the top of g's loop,
-        return None if straight or t > 130 else t * (1 + (LEVEL_THICK - 1) * v["f"])   # Q's tail); bold() lets through
+        return None if straight or t > 130 else t * (v["stem"] / REG_STEM if v["f"] < 0 else 1 + (LEVEL_THICK - 1) * v["f"])   # Q's tail); bold() lets through
         #                                          only those between two facing extremes
     if v.get("sub") == "sign" and straight and 50 <= t <= 55:
         return t * (1 + (SIGN - 1) * f)
@@ -567,7 +573,57 @@ def slant_lines(strokes, pos, adj, flats, v, pinned=()):
         st["taper"] = taper
 
 
-def slant_place(strokes, pos, adj, pinned=()):
+def serif_on_slant(strokes, adj, contours, X, Y, moved_to, v):
+    """0.81: a serif on a slanted stroke keeps its reach from the stroke's edge. Its bracket runs from a node on the
+    edge to a node where it leaves the serif's level underside (a level handle); the reach is measured from where
+    the edge's line crosses that level (the corner the bracket rounds), and is the Regular's times v["foot"], as an
+    upright stem's serif's is: that node and the serif's end beyond it move out together. 0.80 moved the serif's end
+    with its x knot alone while the edge moved out with the stroke: x's top left serif kept none of its 47 units
+    of reach at the Bold, and its bracket, with no room left, turned."""
+    nodes_of = {}
+    for ci, P in enumerate(contours):
+        on = [i for i, q in enumerate(P) if q[2] is not None]
+        for k, i in enumerate(on):
+            nodes_of.setdefault(P[i][:2], (ci, k, on))
+    for st in strokes:
+        if "lines" not in st:
+            continue
+        for side, es in enumerate((st["L"], st["R"])):
+            m, c = st["lines"][side]
+            pts = sorted({q for e in es for q in e}, key=lambda q: q[1])
+            if len(pts) < 2 or pts[-1][1] == pts[0][1]:
+                continue
+            (x0, y0), (x1, y1) = pts[0], pts[-1]
+            mr = (x1 - x0) / (y1 - y0)
+            for q in pts:
+                pv, pl_, nx, nl = adj[q]
+                for o, straight, step in ((pv, pl_, -1), (nx, nl, 1)):
+                    if straight or o not in nodes_of:
+                        continue
+                    ci, k, on = nodes_of[o]
+                    P = contours[ci]
+                    i = on[k]
+                    h = P[(i + 1) % len(P)] if step == -1 else P[i - 1]    # o's handle towards the bracket
+                    if h[2] is not None or h[1] != o[1]:
+                        continue                                # the bracket does not leave a level underside
+                    vr = x0 + (o[1] - y0) * mr                  # where the edge's line crosses that level
+                    beyond = [P[on[(k + step * j) % len(on)]][:2] for j in range(1, 7)]
+                    beyond = [w_ for w_ in beyond if (w_[0] - vr) * (o[0] - vr) > 0 and abs(w_[0] - vr) >= abs(o[0] - vr) - 1
+                              and abs(w_[0] - o[0]) <= 20]
+                    if not beyond or (o[0] - vr) * (q[0] - vr) > 0:
+                        continue
+                    yb = moved_to.get(o, (0, Y.get(o[1], o[1])))[1]
+                    want = m * yb + c + (o[0] - vr) * v["foot"]
+                    now = moved_to.get(o, (X.get(o[0], o[0]), yb))[0]
+                    dx = round(want - now)
+                    if not dx:
+                        continue
+                    for w_ in [o] + beyond:
+                        cur = moved_to.get(w_, (X.get(w_[0], w_[0]), Y.get(w_[1], w_[1])))
+                        moved_to[w_] = (cur[0] + dx, cur[1])
+
+
+def slant_place(strokes, pos, adj, pinned=(), handles=None):
     """Every node on a slanted edge: an end that runs into a curve moves onto its line at its own height; a corner
     goes where its two edges' lines meet. Returns {node: (x, y)}."""
     line_of = {}
@@ -601,8 +657,16 @@ def slant_place(strokes, pos, adj, pinned=()):
         o, straight = other[0]
         if not straight:                                       # into a curve: the node keeps its height
             out[q] = (m1 * pos[q][1] + c1, pos[q][1])
+            f_ = _fillet(q, o, adj, pos, m1, c1, nodes, handles or {})
+            if f_:
+                out[q], out[o] = f_
             continue
         (qx, qy), (ox, oy) = pos[q], pos[o]
+        if math.hypot(ox - qx, oy - qy) < 20 and o not in nodes:
+            f_ = _fillet(q, o, adj, pos, m1, c1, nodes, handles or {})
+            if f_:                                             # 0.81: a short flat between this edge and a stem's
+                out[q], out[o] = f_                            # (Nhookleft's 3-unit notch) keeps its place from
+                continue                                       # the corner the two lines make
         if math.hypot(ox - qx, oy - qy) < 20 and abs(oy - qy) > 1e-6 and o not in nodes:
             out[q] = (m1 * qy + c1, qy)                        # a cut corner (z's 6-unit chamfer) goes with the edge
             out[o] = (ox + out[q][0] - qx, oy)
@@ -618,6 +682,57 @@ def slant_place(strokes, pos, adj, pinned=()):
             y = (c2 - c1) / (m1 - m2)
             out[q] = near(q, m1 * y + c1, y, m1, c1)
     return out
+
+
+def handles_of(contours):
+    """{(node, the next node along): the node's handle towards it} for every curve."""
+    out = {}
+    for P in contours:
+        n = len(P)
+        for i, mid, j in segments([_Pt(q) for q in P]):
+            if len(mid) == 2:
+                out[(P[i][:2], P[j][:2])] = P[mid[0]][:2]
+                out[(P[j][:2], P[i][:2])] = P[mid[1]][:2]
+        del n
+    return out
+
+
+def _fillet(q, o, adj, pos, m1, c1, slanted, handles):
+    """0.81: a slanted edge that runs into a short curve (a softened corner, under 20 units) and from it into a
+    straight edge (Whook's diagonal into its upright, an N's diagonal into its stem): the two nodes of the curve
+    stay where they are from the corner the two edges' lines make, in every master. 0.80 moved the slanted end along
+    its own line at its own height and the other end with its knots: the slanted end passed the upright (Whook's
+    17-unit fillet turned from 450). Returns ((x, y), (x, y)) or None."""
+    if math.hypot(o[0] - q[0], o[1] - q[1]) > 20 or o in slanted:
+        return None
+    pv, pl_, nx, nl = adj[o]
+    o2 = nx if pv == q else pv
+    straight = nl if pv == q else pl_
+    if straight:
+        if math.hypot(o2[0] - o[0], o2[1] - o[1]) < 20:
+            return None
+        d2 = (o2[0] - o[0], o2[1] - o[1])
+    else:                                                      # into a curve: its handle at o gives the edge
+        h = handles.get((o, o2))
+        if h is None or math.hypot(h[0] - o[0], h[1] - o[1]) < 10:
+            return None
+        d2 = (h[0] - o[0], h[1] - o[1])
+
+    def meet(a1, b1, a2, b2):                                  # lines through two points each
+        d1 = (b1[0] - a1[0], b1[1] - a1[1])
+        d2 = (b2[0] - a2[0], b2[1] - a2[1])
+        den = d1[0] * d2[1] - d1[1] * d2[0]
+        if abs(den) < 1e-9:
+            return None
+        t = ((a2[0] - a1[0]) * d2[1] - (a2[1] - a1[1]) * d2[0]) / den
+        return (a1[0] + t * d1[0], a1[1] + t * d1[1])
+    pq = adj[q]
+    far = pq[0] if pq[2] == o else pq[2]                       # q's slanted edge runs to `far`
+    VR = meet(far, q, (o[0] + d2[0], o[1] + d2[1]), o)
+    VB = meet((m1 * pos[far][1] + c1, pos[far][1]), (m1 * pos[q][1] + c1, pos[q][1]), (pos[o][0] + d2[0], pos[o][1] + d2[1]), pos[o])
+    if VR is None or VB is None or math.hypot(VR[0] - q[0], VR[1] - q[1]) > 40 or math.hypot(VB[0] - pos[q][0], VB[1] - pos[q][1]) > 120:
+        return None
+    return ((VB[0] + q[0] - VR[0], VB[1] + q[1] - VR[1]), (VB[0] + o[0] - VR[0], VB[1] + o[1] - VR[1]))
 
 
 def inside_flats(strokes, pos, adj, placed, pinned):
@@ -693,7 +808,11 @@ def balls(contours):
     """A ball terminal: two quarter turns the same way, about as wide as tall, that make a half round 50 to 130
     across. [(axis the diameter lies on, lo, hi, the other axis, lo, hi)]."""
     out = []
-    for P in contours:
+    sa = [sum(P[i][0] * P[(i + 1) % len(P)][1] - P[(i + 1) % len(P)][0] * P[i][1] for i in range(len(P))) for P in contours]
+    ink = max(sa, key=abs) > 0 if sa else True
+    for P, a_ in zip(contours, sa):
+        if (a_ > 0) != ink:                                    # 0.81: a counter is not a ball (the command sign's
+            continue                                           # round holes were read as balls and grew 1.4 times)
         on = [(i, q) for i, q in enumerate(P) if q[2] is not None]
         n = len(on)
         for k in range(n):
@@ -1133,8 +1252,22 @@ def set_necks(reg, new, v, pinned=()):
         rng = neck_range(P, N, i, h)
         if rng is None:
             continue
-        best = min(range(max(ny - 60, rng[0]), min(ny + 60, rng[1]) + 1), key=lambda yy: abs(min(PARTS.neck((nx, yy), sg) for sg in segs) - want),
-                   default=ny)
+        score = lambda yy: abs(min(PARTS.neck((nx, yy), sg) for sg in segs) - want)   # noqa: E731
+        if v["f"] < 0:
+            # 0.81, towards the Light (which has no sparse master): a neck is a distance between a point and a
+            # curve, so half way it sags off the straight line between its two values (g's ear 1.6 under at 375).
+            # The crotch goes where the worse of the two misses, at the master and half way, is least: the rule
+            # bold() keeps for a slanted stroke's thickness.
+            half = [[((p[0] + q[0]) / 2, (p[1] + q[1]) / 2) + p[2:] for p, q in zip(Pr, Qn)] for Pr, Qn in zip(reg, new)]
+            hsegs = []
+            for cj, Q in enumerate(half):
+                for a, mid, b in segments([_Pt(q) for q in Q]):
+                    if mid and not (cj == ci and i in (a, b)):
+                        hsegs.append([Q[a][:2]] + [Q[m][:2] for m in mid] + [Q[b][:2]])
+            want_h = d * (1 + (v["neck"] - 1) / 2)
+            score = lambda yy: max(abs(min(PARTS.neck((nx, yy), sg) for sg in segs) - want),   # noqa: E731
+                                   abs(min(PARTS.neck(((x + nx) / 2, (y + yy) / 2), sg) for sg in hsegs) - want_h))
+        best = min(range(max(ny - 60, rng[0]), min(ny + 60, rng[1]) + 1), key=score, default=ny)
         dy = best - ny
         N[i] = (nx, best) + N[i][2:]
         N[h] = (N[h][0], N[h][1] + dy, None, False)
@@ -1427,7 +1560,7 @@ def bold(contours, width, v, name="", hints=None):
         pos = {q: (X[q[0]], Y[q[1]]) for q in adj}
         for _ in range(3):                                     # a tapering stroke has its thickness where its two
             slant_lines(strokes, pos, adj, flats, v, pins)     # edges face; that place moves as its ends slide
-            placed = slant_place(strokes, pos, adj, pins)
+            placed = slant_place(strokes, pos, adj, pins, handles_of(body))
             for st in strokes:
                 ends = [[placed.get(q, pos[q])[1] for e in es for q in e] for es in (st["L"], st["R"])]
                 lo_, hi_ = max(min(ends[0]), min(ends[1])), min(max(ends[0]), max(ends[1]))
@@ -1446,6 +1579,7 @@ def bold(contours, width, v, name="", hints=None):
         fork_dx = fork.pop("dx", 0.0)
         placed.update(fork)
         moved_to = {q: (round(x), round(y)) for q, (x, y) in placed.items()}
+        serif_on_slant(strokes, adj, contours, X, Y, moved_to, v)
     lsb, rsb = xk[0], width - xk[-1]
     all_x = [q[0] for P in contours for q in P if q[2] is not None]
     lsb, rsb = min(all_x), width - max(all_x)
@@ -1639,8 +1773,13 @@ def keep_apart(R, N, ratio, least):
     shifts, total = [0] * len(R), 0
     for a, c in zip(isl, isl[1:]):
         ba, bc_ = rb[a], rb[c]
-        if min(ba[2], bc_[2]) - max(ba[0], bc_[0]) > 0:
-            continue                                           # one over the other, or lapped: not side by side
+        if min(ba[3], bc_[3]) - max(ba[1], bc_[1]) <= 0:
+            continue                                           # one over the other: not side by side
+        if min(ba[2], bc_[2]) - max(ba[0], bc_[0]) > 0 and crosses(R[a], R[c], 0):
+            continue                                           # lapped in the Regular: not this rule's
+        # 0.81: two inks side by side whose boxes lap (the two wedges of the capital double acute, each leaning
+        # over the other's foot) are side by side as much as two whose boxes do not (0.80 skipped them: the
+        # wedges ran into each other from 550)
         want = min(least, gap(R[a], R[c]))
         dx = 0
         while (crosses(N[a], N[c], dx) or gap(N[a], N[c], dx) < want - 0.5) and dx < 200:
@@ -1943,6 +2082,9 @@ def _swell_into_box(contours, W_, H_, want, cx, base, below, foot):
     xs = [q[0] for P in contours for q in P if q[2]]
     ys = [q[1] for P in contours for q in P if q[2]]
     x0, x1, y0, y1 = min(xs), max(xs), min(ys), max(ys)
+    top = y0 if below else y1
+    head = [(ci, [i for i, q in enumerate(P) if q[2] is not None and q[1] == top
+                  and any(P[k][2] == "line" and P[k][1] == top for k in ((i + 1) % len(P), i - 1))]) for ci, P in enumerate(contours)]
 
     def place(Wi, Hi, d):
         sx, sy = Wi / (x1 - x0), Hi / (y1 - y0)
@@ -1957,6 +2099,14 @@ def _swell_into_box(contours, W_, H_, want, cx, base, below, foot):
             P = out_[ci]
             for i in idx:
                 e = base - P[i][1]
+                for k in (i - 1, i, (i + 1) % len(P)):
+                    if k == i or P[k][2] is None:
+                        P[k] = (P[k][0], P[k][1] + e) + P[k][2:]
+        far = min(q[1] for P in out_ for q in P if q[2]) if below else max(q[1] for P in out_ for q in P if q[2])
+        for ci, idx in head:                                   # and the cuts on its far side stay level too
+            P = out_[ci]
+            for i in idx:
+                e = far - P[i][1]
                 for k in (i - 1, i, (i + 1) % len(P)):
                     if k == i or P[k][2] is None:
                         P[k] = (P[k][0], P[k][1] + e) + P[k][2:]
@@ -1993,6 +2143,11 @@ def glyph_bold(g, v):
     folded = lambda r: any(row[5] == "turned over" for row in r.get("x", []) + r.get("y", []))   # noqa: E731
     if folded(rep) and mark and mark_kind(g.name):
         return stretch(c, g.width, mark_kind(g.name), v, below=max(q[1] for P in c for q in P) < 100)
+    if sound(c, out) and not folded(rep) and all("bends" in e for e in sound(c, out)):
+        # 0.81: a smooth node left off its line by the last whole-unit clamp: its handles back on one line
+        out2 = [straighten(N, R) for R, N in zip(c, out)]
+        if not sound(c, out2):
+            out = out2
     if sound(c, out) or folded(rep):                           # not a sound second master: upright and level parts
         first = sound(c, out) or ["a piece of outline turned over"]   # only, and said so; failing that, the Regular's
         out, w, rep = bold(c, g.width, v, g.name, dict(hints or HINTS.get(g.name, {}), upright=True))
@@ -2066,11 +2221,13 @@ def bearing_change(name, v):
 # read at all (42 > 20 at 300), the turned comma above's ball swelled over its tail (crossings from 600), the
 # quotes' crotch climbed their tails. Now each such contour takes the comma's own move at every point, turned and
 # sized as the contour is. KIN: the glyph whose contour is the part, and the most a drawing may stray from it.
-KIN = {"comma": 25}
+KIN = {"comma": (25, "upright or turned"), "arrowright": (8, "any turn")}   # 0.81: the arrows are one arrow turned
+#                                          (charset.arrows; the diagonal ones by 45 and 135 degrees: on the engine's
+#                                          own reading their Light turned over and fell back to upright parts only)
 _KIN = {}
 
 
-def _similar(base, P, tol):
+def _similar(base, P, tol, any_turn=False):
     """(scale, rotation matrix, residual) placing base's points on P's (same order), or None."""
     A, C = np.array(base, float), np.array(P, float)
     Ac, Cc = A - A.mean(0), C - C.mean(0)
@@ -2081,7 +2238,7 @@ def _similar(base, P, tol):
     sc = S.sum() / (Ac ** 2).sum()
     res = float(np.abs(Cc - sc * (Ac @ Rm.T)).max())
     ang = math.degrees(math.atan2(Rm[1, 0], Rm[0, 0]))
-    if res > tol or not 0.6 <= sc <= 1.1 or min(abs(ang), abs(abs(ang) - 180)) > 6:
+    if res > tol or not 0.6 <= sc <= 1.1 or (not any_turn and min(abs(ang), abs(abs(ang) - 180)) > 6):
         return None
     return sc, Rm, res
 
@@ -2174,7 +2331,7 @@ def kin_parts(reg, g, out, rep, v):
     if not g.contours or g.name in KIN:
         return out, rep
     done = []
-    for kname, tol in KIN.items():
+    for kname, (tol, turns_) in KIN.items():
         if kname not in reg:
             continue
         key = (kname, v["stem"])
@@ -2185,12 +2342,21 @@ def kin_parts(reg, g, out, rep, v):
         base, bo = _KIN[key]
         mv = np.array([q[:2] for q in bo], float) - np.array([q[:2] for q in base], float)
         mv -= mv.mean(0)                                       # the part's change of shape, not its place
-        for ci, P in enumerate(glyph_contours(g)):
-            if len(P) != len(base) or [q[2] for q in P] != [q[2] for q in base]:
+        for ci, P0 in enumerate(glyph_contours(g)):
+            if len(P0) != len(base):
                 continue
-            fit_ = _similar([q[:2] for q in base], [q[:2] for q in P], tol)
+            fit_ = None
+            for k in range(len(P0)):                           # the start point may differ (a turned path)
+                P = P0[k:] + P0[:k]
+                if [q[2] for q in P] != [q[2] for q in base]:
+                    continue
+                f_ = _similar([q[:2] for q in base], [q[:2] for q in P], tol, turns_ == "any turn")
+                if f_ and (fit_ is None or f_[2] < fit_[0][2]):
+                    fit_ = (f_, k)
             if fit_ is None:
                 continue
+            fit_, k0 = fit_
+            P = P0[k0:] + P0[:k0]
             sc, Rm, res = fit_
             d = sc * (mv @ Rm.T)
             N = [(round(q[0] + dx), round(q[1] + dy), q[2], q[3]) for q, (dx, dy) in zip(P, d)]
@@ -2204,6 +2370,7 @@ def kin_parts(reg, g, out, rep, v):
             cx = (min(q[0] for q in out[ci]) + max(q[0] for q in out[ci])) / 2   # where the engine put it, across
             nx = (min(q[0] for q in N) + max(q[0] for q in N)) / 2
             N = [(x + round(cx - nx), y, t, s_) for x, y, t, s_ in N]
+            N = N[len(N) - k0:] + N[:len(N) - k0] if k0 else N        # back to the glyph's own start point
             out[ci] = N
             done.append(f"contour {ci}: {kname}'s move x {sc:.2f}{' turned' if abs(Rm[0, 0] + 1) < 0.2 else ''} (drawn {res:.0f} from it)")
     if done:

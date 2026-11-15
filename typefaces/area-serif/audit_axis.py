@@ -253,8 +253,10 @@ def report(title, fails, path):
 def main():
     import os
     import overlap as OVERLAP
-    reg = OVERLAP.vf_source(ufoLib2.Font.open("build/AreaSerif-Regular.ufo"))   # 0.81: as the variable font has it
-    bold = ufoLib2.Font.open("build/AreaSerif-Bold.ufo")
+    d = os.environ.get("AREA_AXIS_DIR", "build")              # another build's masters (a snapshot): its own lists
+    out = "build/weight" if d == "build" else d
+    reg = OVERLAP.vf_source(ufoLib2.Font.open(f"{d}/AreaSerif-Regular.ufo"))   # 0.81: as the variable font has it
+    bold = ufoLib2.Font.open(f"{d}/AreaSerif-Bold.ufo")
     stem = int(sys.argv[1]) if len(sys.argv) > 1 else B.STEM
     v = B.vector(stem)
     mids = bold.layers["mid"] if "mid" in bold.layers else {}
@@ -267,15 +269,15 @@ def main():
     fails = {k: [] for k in keys}
     n_out, n_comp = sweep(reg, bold, mids, ts, tm, lambda t: 30 * (1 + (v["tip"] - 1) * t), fails, w_of=w_bold)
     bad = report(f"weight axis, stem {stem}: {n_out} outlined glyphs and {n_comp} composites, {len(STOPS)} stops ({STOPS[0]} to {STOPS[-1]})",
-                 fails, "build/weight/audit-axis.txt")
-    if os.path.exists("build/AreaSerif-Light.ufo"):            # 0.80: the Light side, 375 down to 300
-        light = ufoLib2.Font.open("build/AreaSerif-Light.ufo")
+                 fails, f"{out}/audit-axis.txt")
+    if os.path.exists(f"{d}/AreaSerif-Light.ufo"):              # 0.80: the Light side, 375 down to 300
+        light = ufoLib2.Font.open(f"{d}/AreaSerif-Light.ufo")
         lv = B.vector(B.LIGHT_STEM)
         lts = [(w, (B.REG_STEM - st) / (B.REG_STEM - B.LIGHT_STEM)) for w, st in B.axis_map(stem, LIGHT_STOPS)]
         lfails = {k: [] for k in keys}
         sweep(reg, light, {}, lts, 1, lambda t: 30 * (1 + (lv["tip"] - 1) * t), lfails, lighter=True, w_of=w_light)
         bad += report(f"weight axis, Light stem {B.LIGHT_STEM}: {len(LIGHT_STOPS)} stops ({LIGHT_STOPS[0]} down to {LIGHT_STOPS[-1]})",
-                      lfails, "build/weight/audit-axis-light.txt")
+                      lfails, f"{out}/audit-axis-light.txt")
     sys.exit(1 if bad else 0)
 
 
