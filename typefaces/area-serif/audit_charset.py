@@ -341,10 +341,12 @@ def audit(font):
         p = C.gp(font, name)
         b = C.bounds(p)
         # the upright: the narrowest level span; the bar: the narrowest upright span
-        cols = [s[1] - s[0] for x in range(int(b[0]) + 5, int(b[2]) - 4, 7) for s in C.scan_v(p, x)]
-        rows = [s[1] - s[0] for y in range(int(b[1]) + 5, int(b[3]) - 4, 7) for s in C.scan_h(p, y)]
-        if abs(min(cols) - w) > 0.6 or abs(min(rows) - w) > 0.6:
-            bad.append(f"{name}: level stroke {min(cols):.0f}, upright {min(rows):.0f}, the minus {w:.0f}")
+        cols = [s[1] - s[0] for x in range(int(b[0]) + 12, int(b[2]) - 11, 7) for s in C.scan_v(p, x)]   # clear of
+        rows = [s[1] - s[0] for y in range(int(b[1]) + 12, int(b[3]) - 11, 7) for s in C.scan_h(p, y)]   # the round ends
+        import collections                      # 0.79: the commonest narrow span (a round end's own rows are narrower)
+        common = lambda v: collections.Counter(round(q) for q in v if q < 2 * w).most_common(1)[0][0]   # noqa: E731
+        if abs(common(cols) - w) > 0.6 or abs(common(rows) - w) > 0.6:
+            bad.append(f"{name}: level stroke {common(cols):.0f}, upright {common(rows):.0f}, the minus {w:.0f}")
     for name in ("bar", "brokenbar"):
         ws = {q[2] - q[0] for q in boxes(name)}
         if any(abs(v - w) > 0.6 for v in ws):
@@ -360,7 +362,7 @@ def audit(font):
             if not cut:
                 continue
             lo, hi = cut
-            if name not in ("slash", "backslash") and (lo[1] - lo[0], hi[1] - hi[0]) != (C.FRACTION_BAR, C.FRACTION_BAR):
+            if name not in ("slash", "backslash") and max(abs(lo[1] - lo[0] - C.FRACTION_BAR), abs(hi[1] - hi[0] - C.FRACTION_BAR)) > 1:
                 bad.append(f"{name}: its bar is {hi[1] - hi[0]} / {lo[1] - lo[0]} wide, not {C.FRACTION_BAR}")
             elif abs((lo[1] - lo[0]) - (hi[1] - hi[0])) > 1:
                 bad.append(f"{name}: its bar is {hi[1] - hi[0]} wide at the top and {lo[1] - lo[0]} at the foot")
@@ -370,8 +372,22 @@ def audit(font):
                 if abs(perp - w) > 1.2:
                     bad.append(f"{name}: {perp:.1f} across, the minus {w:.0f}")
 
+    # 0.79: every plain stroke outside the letters ends on the letters' radius (0.78: 157 glyphs sharp), and the
+    # slash and the fraction bars are still found by the checks above
+    left = C.sharp_ends(font)
+    notes.append(f"plain stroke ends still sharp: {sum(left.values())} on {len(left)} glyphs")
+    if left:
+        bad.append(f"plain stroke ends with sharp corners (the letters' are rounded on {C.SOFT}): "
+                   + " ".join(f"{k} {v}" for k, v in sorted(left.items())[:14]) + (" ..." if len(left) > 14 else ""))
+    for name in ("slash", "backslash", "fraction", "percent"):
+        if not any(C._level_cut(c) for c in font[name].contours):
+            bad.append(f"{name}: its stroke is not read (the checks above skipped it)")
+    for name in ("hyphen", "endash", "emdash", "minus", "underscore", "bar", "plus", "equal", "slash"):
+        if not any(p.type == "curve" for c in font[name].contours for p in c.points):
+            bad.append(f"{name}: no rounded end")
+
     # letter signs: the letter's own points, moved as one, are the sign's points (but where the stroke covers them)
-    for sign, letter in (("dollar", "S"), ("cent", "c"), ("yen", "Y")):
+    for sign, letter in (("cent", "c"), ("yen", "Y")):
         S, G = on_points(font, letter), set(on_points(font, sign))
         best = 0
         for dx in range(-80, 81):
@@ -482,10 +498,96 @@ def audit(font):
     return bad, notes
 
 
+def audit_079(font, bad, notes, bold=None):
+    """0.79: the single-storey g, an alternate differs in form, the 5's bowl, the f ligatures."""
+    import clean as CLEAN
+    # the single-storey g: q's bowl whole (0.78 cut it level at the baseline) and a tail under the whole bowl
+    if "g.ss02" in font:
+        g, q = C.gp(font, "g.ss02"), C.gp(font, "q")
+        P = [p for c in font["g.ss02"].contours for p in c.points]
+        flat = [abs(P[i].x - P[i - 1].x) for i in range(len(P)) if P[i].type == "line" and P[i - 1].type
+                and P[i].y == P[i - 1].y and abs(P[i].y) <= 4]
+        if flat and max(flat) > 20:
+            bad.append(f"g.ss02: a level edge {max(flat)} long at the baseline (the bowl is cut flat)")
+        row_g, row_q = C.scan_h(g, 260), C.scan_h(q, 260)
+        bowl_l, stem_r = row_g[0][0], row_g[-1][1]
+        if abs(bowl_l - row_q[0][0]) > 1 or abs((row_g[0][1] - row_g[0][0]) - (row_q[0][1] - row_q[0][0])) > 1:
+            bad.append("g.ss02: its bowl is not q's")
+        low = min(p.x for p in P if p.type and p.y < -60)
+        share = (stem_r - low) / (stem_r - bowl_l)
+        notes.append(f"g.ss02: tail ends {share:.3f} of the bowl's width from the stem's right edge")
+        if abs(share - C.G_TAIL_END) > 0.02:
+            bad.append(f"g.ss02: its tail ends {share:.2f} of the bowl's width left of the stem, not {C.G_TAIL_END}")
+    # an alternate is a different form (owner): the base's S and s had the default's form (barb ends, the same
+    # spine; S 5 narrower of 489, s 55 of 379) and are not in the font; the dollar, with ball ends, is
+    for name in ("S.ss03", "s.ss03", "dollar.ss03"):
+        if name in font:
+            bad.append(f"{name}: there is one S, one s and one dollar (0.79, 0.80)")
+    # 0.80: the one dollar ends in balls (the owner's pick), so it is not the S, whose ends are barbs
+    S_, D_ = on_points(font, "S"), set(on_points(font, "dollar"))
+    if max(sum(1 for (x, y) in S_ if (x + dx, y) in D_) / len(S_) for dx in range(-80, 81)) > 0.6:
+        bad.append("dollar: it is the S and a stroke (barb ends), not the ball-end dollar")
+    # 0.80: every flag's underside is one curve (n's and k's were two, 18 units shorter at the stem)
+    for name, x, y in CLEAN.flag_unders(font, apply=False):
+        bad.append(f"{name}: the flag at {x},{y} has a two-curve underside, not i's one curve")
+    # 5's bowl
+    c5 = font["five"].contours[0]
+    lo, in_lo, right, in_right, left, foot, top = CLEAN.five_bowl_nodes(c5)
+    P = c5.points
+    low_at = (P[lo].x - left) / (P[right].x - left)
+    wide, in_wide = (P[right].y - foot) / (top - foot), (P[in_right].y - foot) / (top - foot)
+    notes.append(f"5: bowl's lowest point at {low_at:.3f} of its width; widest at {wide:.3f}, counter {in_wide:.3f} of its height")
+    if abs(low_at - CLEAN.FIVE_LOW) > 0.01:
+        bad.append(f"5: the bowl's lowest point lies {low_at:.3f} of its width from the left, not {CLEAN.FIVE_LOW}")
+    if in_wide > wide + 0.005:
+        bad.append(f"5: the counter is widest ({in_wide:.3f}) above the outside's widest point ({wide:.3f}): heavy low on the right")
+    # f ligatures: the hook over i and j; a level top into an ascender; sides and classes of the letters set apart
+    stem = C._stem_x(C.gp(font, "f"), 300)
+    sw = stem[1] - stem[0]
+
+    def side(f_, n):
+        b = C.bounds(C.gp(f_, n))
+        return b[0], f_[n].width - b[2]
+
+    def cls(n, k):
+        return next((gn for gn, m in font.groups.items() if gn.startswith("public.kern" + k) and n in m), None)
+    for name, rest in C.LIGATURES.items():
+        if name not in font:
+            bad.append(f"{name}: missing")
+            continue
+        last = rest[0] if rest else "f"
+        p = C.gp(font, name)
+        rows = C.scan_h(p, 300)
+        if last in "ij":
+            sc = (rows[-1][0] + rows[-1][1]) / 2
+            hook = max(q.x for c in font[name].contours for q in c.points if q.type and q.y > 600)
+            past = (hook - sc) / sw
+            notes.append(f"{name}: hook ends {past:+.2f} stems past the {last}'s stem centre")
+            if abs(past - C.F_HOOK_PAST) > 0.06:
+                bad.append(f"{name}: f's hook ends {past:+.2f} stems from the {last}'s stem centre, not +{C.F_HOOK_PAST}")
+        if last in "lbhk":
+            x0, x1 = rows[-2][1] + 90 if len(rows) > 1 else rows[0][1] + 90, None
+            st = C.scan_h(p, 640)[-1]
+            tops = [max(s[1] for s in C.scan_v(p, x)) for x in range(int(st[0]) - 60, int(st[1]) - 1, 6)]
+            if max(tops) - min(tops) > 1.5:
+                bad.append(f"{name}: the top steps by {max(tops) - min(tops):.0f} where f's arc meets the {last}")
+        for f_, label in ((font, ""), (bold, "Bold ")):
+            if f_ is None or name not in f_:
+                continue
+            l, r = side(f_, name)
+            want_r = side(f_, {"i": "idotless", "j": "jdotless"}.get(last, last))[1]
+            if abs(l - side(f_, "f")[0]) > 1 or abs(r - want_r) > 1:
+                bad.append(f"{label}{name}: sides {l:.0f} / {r:.0f}, the letters set apart {side(f_, 'f')[0]:.0f} / {want_r:.0f}")
+        if cls(name, "2") != cls("f", "2") or cls(name, "1") != cls(last, "1"):
+            bad.append(f"{name}: kerns as {cls(name, '2')} / {cls(name, '1')}, not as f on the left and {last} on the right")
+
+
 def main():
     path = sys.argv[1] if len(sys.argv) > 1 else os.path.join(HERE, "build", "AreaSerif-Regular.ufo")
     font = ufoLib2.Font.open(path)
     bad, notes = audit(font)
+    bpath = os.path.join(os.path.dirname(path), "AreaSerif-Bold.ufo")
+    audit_079(font, bad, notes, ufoLib2.Font.open(bpath) if os.path.exists(bpath) else None)
     for n in notes:
         print("  ", n)
     for b in bad:

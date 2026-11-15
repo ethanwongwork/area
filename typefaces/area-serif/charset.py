@@ -482,14 +482,23 @@ def f_parts(font):
 
 
 def f_join(font, second, dx):
-    """f's arc run level into the ascender of `second`, placed at dx."""
-    f, st, top = f_parts(font)
+    """f's arc run level into the ascender of `second`, placed at dx. 0.79: the arc is cut at its highest point and
+    runs on from there at the ascender's own top, across the whole stem: one level edge from the arc to the stem's
+    far corner. (Until 0.78 the bridge left the arc 15 units before its top, 6 under the ascender line, and stopped
+    at the stem's near edge: the stem's slanted top stood over it as a step.)"""
+    f = gp(font, "f")
     s = gp(font, second)
     ss = _stem_x(s, 640)                                     # the ascender's stem
     s_noflag = op(s, rect(-100, 560, ss[0], 1000), pathops.PathOp.DIFFERENCE)
-    cut_x = st[1] + 70
+    P = _pts(max(font["f"].contours, key=lambda q: len(q.points)))
+    n = len(P)
+    level = [i for i in range(n) if P[i][2] and P[i - 1][2] is None and P[(i + 1) % n][2] is None
+             and P[i - 1][1] == P[i][1] == P[(i + 1) % n][1]]
+    top_out = max(level, key=lambda i: P[i][1])
+    cut_x, top_y = P[top_out][0], max(P[top_out][1], bounds(s)[3])
+    lo = max(scan_v(f, cut_x), key=lambda sp: sp[1])[0]             # the arc's underside at its top
     f_cut = op(f, rect(cut_x, 560, 1000, 1000), pathops.PathOp.DIFFERENCE)
-    bridge = rect(cut_x - 2, top[0], dx + ss[0] + 2, top[1])
+    bridge = rect(cut_x - 2, round(lo), dx + ss[1], top_y)
     return union(f_cut, bridge, moved(s_noflag, dx))
 
 
@@ -500,6 +509,88 @@ def f_bars(font, f_path, dx_list):
     sp = [s for s in scan_v(f, st[1] + 30) if s[0] > 400]
     b0, b1 = sp[0]
     return union(f_path, rect(dx_list[0] + st[1], b0, dx_list[-1] + st[0] + 1, b1))
+
+
+# f before i and j in a ligature (0.79; owner, 2026-11-14: "should f's top reach further toward the i, so the end of
+# the hook sits almost over the dot?"). Until 0.78 fi was the plain f and a dotless i at their ordinary fit: the hook
+# stopped 0.99 stems short of the i's stem centre and nothing stood where the dot had been, so the pair read as f
+# and a dotless i. Measured on eight faces (tools/ligatures.py, HarfBuzz, each in its own n stems): seven draw fi as
+# one glyph without a dot, the hook reaching past the i's stem centre by 0.31 to 0.63 (Georgia Pro 0.41, Serrif
+# 0.43), so its end stands where the dot was; and they set the two stems closer than the letters apart: Georgia Pro
+# 3.18 against 3.58, Serrif 3.66 against 4.15 (0.888 and 0.882 of the unligated distance).
+# With ligatures off nothing changes: f's hook ends 1.29 stems before the dot's centre (the others 0.84 to 1.46)
+# and 0.56 clear of it (0.17 to 0.79), inside the references.
+F_HOOK_PAST = 0.42      # of the stem: the hook's end past the second letter's stem centre (0.41, 0.43)
+F_LIG_STEMS = 0.885     # stem to stem in the ligature, of the two letters set apart (0.888, 0.882)
+
+
+def restretch_x(P, new_x):
+    """P: [(x, y, type, smooth)]; new_x: {index: x} for on-curve points that move. Each handle keeps its share of
+    its own curve across (its offset from its node, scaled by how much the curve's run changed)."""
+    n = len(P)
+    out = [list(p) for p in P]
+    for i, x in new_x.items():
+        out[i][0] = x
+    for i in range(n):
+        a, h1, h2, b = i, (i + 1) % n, (i + 2) % n, (i + 3) % n
+        if not (P[a][2] and P[h1][2] is None and P[h2][2] is None and P[b][2]):
+            continue
+        old = P[b][0] - P[a][0]
+        s = (out[b][0] - out[a][0]) / old if old else None
+        for h, node in ((h1, a), (h2, b)):
+            off = P[h][0] - P[node][0]
+            out[h][0] = round(out[node][0] + (off * s if s is not None else off))
+    return [tuple(p) for p in out]
+
+
+def f_hook(font, reach):
+    """f with its hook's end at x = reach: the ball moves as one piece, the arc's two highest points keep their
+    share of the arc, every handle its share of its curve. The stem, the bar and the foot do not move."""
+    g = font["f"]
+    c = max(g.contours, key=lambda q: len(q.points))
+    P = _pts(c)
+    n = len(P)
+    on = [i for i in range(n) if P[i][2]]
+    asc = max(P[i][1] for i in on)
+    level = [i for i in on if P[i - 1][2] is None and P[(i + 1) % n][2] is None and P[i - 1][1] == P[i][1] == P[(i + 1) % n][1]]
+    top_out = max(level, key=lambda i: P[i][1])                                  # the arc's top, outside
+    top_in = max((i for i in level if P[i][1] < asc - 20 and P[i][1] > asc - 80), key=lambda i: P[i][1])   # and inside
+    k0, k1 = sorted((on.index(top_in), on.index(top_out)))
+    ball = on[k0 + 1:k1]                                                         # the nodes between them
+    ball_r = max(P[i][0] for i in ball)
+    ball_l = min(P[i][0] for i in ball)
+    d = reach - ball_r
+    # where each side of the arc starts: the stem's edge it leaves
+    st_out = P[on[(k1 + 1) % len(on)]][0] if on[k1] == top_out else P[on[k0 - 1]][0]
+    st_in = P[on[k0 - 1]][0] if on[k0] == top_in else P[on[(k1 + 1) % len(on)]][0]
+    new = {i: P[i][0] + d for i in ball}
+    new[top_out] = round(st_out + (P[top_out][0] - st_out) * (ball_r + d - st_out) / (ball_r - st_out))
+    new[top_in] = round(st_in + (P[top_in][0] - st_in) * (ball_l + d - st_in) / (ball_l - st_in))
+    p = pathops.Path()
+    pen = p.getPen()
+    from fontTools.pens.pointPen import PointToSegmentPen
+    pp = PointToSegmentPen(pen)
+    pp.beginPath()
+    for x, y, t, s in restretch_x(P, new):
+        pp.addPoint((x, y), segmentType=t, smooth=s)
+    pp.endPath()
+    return p
+
+
+def lig_offset(font, second):
+    """Where the second letter (i or j) stands after f in a ligature: its stem centre F_LIG_STEMS of the way it
+    stands with ligatures off (the fit, kerning, and the opening spacing.f_before_dots gives the dot)."""
+    import spacing as SPACING
+    base = {"i": "idotless", "j": "jdotless"}[second]
+    fs = _stem_x(gp(font, "f"), 300)
+    ss = scan_h(gp(font, base), 300)[-1] if second == "j" else _stem_x(gp(font, base), 300)
+    fc, sc = (fs[0] + fs[1]) / 2, (ss[0] + ss[1]) / 2
+    gap, k = SPACING.f_gap(font, "f", second)
+    k_off = k + max(0, round(SPACING.F_DOT - gap)) if gap is not None else k
+    apart = font["f"].width + k_off + sc - fc
+    dx = round(fc + F_LIG_STEMS * apart - sc)
+    reach = round(dx + sc + F_HOOK_PAST * (fs[1] - fs[0]))
+    return dx, reach
 
 
 LIGATURES = {
@@ -527,6 +618,18 @@ def ligatures(font):
             dx = last_dx + fw + _kern(font, "f", ch)
             if ch in "lbhk":
                 p = union(p, moved(f_join(font, ch, dx - last_dx), last_dx))
+            elif ch in "ij":                                   # 0.79: the hook runs over the stem, where the dot was
+                off, reach = lig_offset(font, ch)
+                dx = last_dx + off
+                p = union(p, moved(f_hook(font, reach), last_dx), moved(gp(font, ch + "dotless"), dx))
+                # f's bar runs into the second letter's flag (as it does into t and the second f; six of the eight
+                # faces join them). Tucked in, the bar's end stood 12 from the flag: two inks that close on each
+                # other as the weight rises.
+                fst = _stem_x(gp(font, "f"), 300)
+                bar = [s for s in scan_v(gp(font, "f"), fst[1] + 30) if s[0] > 400][0]
+                sst = scan_h(gp(font, ch + "dotless"), 300)[-1]
+                flag_top = max(s[1] for s in scan_v(gp(font, ch + "dotless"), sst[0] - 4) if s[0] > 400)
+                p = union(p, rect(last_dx + fst[1] - 2, bar[0], dx + sst[0] + 2, min(bar[1], flag_top)))
             else:
                 base = {"i": "idotless", "j": "jdotless"}.get(ch, ch)
                 p = union(p, moved(gp(font, "f"), last_dx), moved(gp(font, base), dx))
@@ -703,29 +806,153 @@ def features(font):
 
 # ---------------------------------------------------------------- 5. new glyphs
 
-def single_g(font):
-    """g.ss02 (0.77; owner, 2026-11-14: "it would be nice to have an alternate, non decorative g"): a single-storey
-    g from finished parts, nothing drawn. The bowl and stem are q's, cut at the baseline; below it the stem runs into
-    j's tail (the same 78 stem, the same hook and ball), set under q's stem. It keeps q's advance and sides, and
-    kerns as q does. Reached by the stylistic set ss02."""
-    q, j = gp(font, "q"), None
-    jg = font["j"]
-    j = pathops.Path()
-    pen = j.getPen()
-    body = max(jg.contours, key=lambda c: len(c.points))       # j without its dot
-    from fontTools.pens.pointPen import PointToSegmentPen
-    body.drawPoints(PointToSegmentPen(pen))
-    cut = 2                                                    # j's stem is straight down to here
-    qs = scan_h(q, 200)[-1]                                    # q's stem
-    js = scan_h(j, 200)[0]
-    top = op(q, rect(-500, cut, 3000, 3000), pathops.PathOp.INTERSECTION)
-    tail = op(moved(j, qs[0] - js[0]), rect(-1000, -1000, 3000, cut), pathops.PathOp.INTERSECTION)
-    put(font, "g.ss02", union(top, tail), font["q"].width)
-    font["g.ss02"].unicodes = []
+# The single-storey g, 0.79 (owner, 2026-11-14, on 0.78's: "needs a lot of work ... the bottom of the g is flat").
+# What was wrong: 0.77 cut q level at y = 2 to take its top, which sliced off the bowl's overshoot (it reaches -10):
+# the bowl stood on a 132-unit flat. And the tail was j's narrow hook, ending 0.66 of the bowl's width left of the
+# stem's right edge, where a single-storey g's tail runs under the whole bowl.
+# Measured on the three faces that have the letter (tools/single_g.py: Serrif's ss02, Source Serif 4's and
+# Literata's U+0261), each against its own q:
+#   the bowl is q's, whole (width 0.996, 1.000, 1.000 of q's)
+#   the tail ends 0.973, 0.972, 0.933 of the bowl's width left of the stem's right edge     mean 0.959
+#   its lowest point lies 0.510, 0.529, 0.515 of that width from the same edge              mean 0.518
+#   its depth is 1.043, 1.042, 1.060 of q's descender (Area's j: 1.040, kept)
+# The letter is spliced point for point, no union: q's outline from the top of its stem round the bowl to the
+# crotch, then j's tail from the stem's left edge round the ball and back up the right edge. The tail is j's own
+# (stem, thickness at its lowest point, ball); only its reach changes: the ball moves left as one piece, the lowest
+# points go to their share, and each curve's handles keep their share of the curve (a part scaled across its
+# counter, as m's arches are; stems and the ball never scale). The same splice on the Bold's q and j makes the
+# Bold's (bold.bold_font), so its bowl is the Bold q's and the two masters match point for point.
+G_TAIL_END = 0.959
+G_TAIL_LOW = 0.518
+# 0.80 (owner, 2026-11-14, on 0.79's: "needs adjustments to the tail, its not very smooth, round, and looks off").
+# What was wrong: the tail was still j's hook with its points slid sideways. Its inside ran level for 70 units and
+# then turned into the ball in 41 units of height, and the ball sat as low as j's (top 0.187 of the x-height under
+# the baseline; the references' 0.121, 0.158, 0.134), so the tail read as a flat tray with a knob on its end.
+# The tail is its own part now, four quarter turns between five fixed places: the stem's two edges, the lowest
+# point (outside at the descender's depth, inside one tail thickness above it), and the ball. Every quarter's
+# handles are G_ROUND of their side (0.55, a quarter of an ellipse), so no stretch is level or straight.
+#   the ball's top under the baseline, of the x-height: 0.121, 0.158, 0.134                 mean 0.138
+#   the tail's thickness at its lowest point, of the round letters' hairline: 0.97, 1.00, 0.92   mean 0.963
+# The ball itself is still j's, moved whole.
+G_BALL_TOP = 0.138
+G_TAIL_THICK = 0.963
+G_ROUND = 0.55
+# Along the weight axis (Source Serif 4 and Literata at 700, stems 159): the ball's top rises to 0.120, 0.120 of
+# the x-height under the baseline and the lowest point moves to 0.565, 0.554 of the bowl's width (mean 0.560), so
+# the inside of a heavier tail stays a round quarter. Both go with the stem, in a line from the Regular's values.
+G_BALL_TOP_BOLD = 0.120
+G_TAIL_LOW_BOLD = 0.560
+G_STEMS = (78, 140)                # the Regular's and the Bold's lowercase stems, where the two pairs of values hold
+
+
+def _pts(c):
+    return [(p.x, p.y, p.type, p.smooth) for p in c.points]
+
+
+def _edge_top(P):
+    """The upper end of the longest upright edge that runs upward (a stem's right side on these outlines)."""
+    n = len(P)
+    ups = [i for i in range(n) if P[i][2] == "line" and P[i - 1][2] and P[i - 1][0] == P[i][0] and P[i][1] > P[i - 1][1]]
+    return max(ups, key=lambda i: P[i][1] - P[i - 1][1])
+
+
+def o_hair(contours):
+    """The round letters' hairline: o's thickness at its lowest point, from its point lists."""
+    lows = sorted(min(p[1] for p in c) for c in contours)
+    return lows[1] - lows[0]
+
+
+def single_g_points(q_outer, q_counter, j_body, hair):
+    """The single-storey g's two contours from q's and j's point lists [(x, y, type, smooth)]."""
+    # q: the stem's right edge is the upright line that reaches the x-height; the crotch is where the bowl's lower
+    # stroke meets the stem's left edge
+    n = len(q_outer)
+    top = _edge_top(q_outer)
+    stem_r = q_outer[top][0]
+    crotch = next(i for i in range(top, top + n) if q_outer[i % n][2] and q_outer[(i + 1) % n][2] == "line"
+                  and q_outer[(i + 1) % n][0] == q_outer[i % n][0] and q_outer[(i + 1) % n][1] < 0 and i != top)
+    stem_l = q_outer[crotch % n][0]
+    upper = [q_outer[i % n] for i in range(top, crotch + 1)]
+    bowl_l = min(p[0] for p in upper if p[2])
+    # j: from the stem's left edge below the baseline round the tail to the stem's right edge
+    m = len(j_body)
+    jr = _edge_top(j_body)
+    j_r, j_l = j_body[jr][0], None
+    start = next(i for i in range(jr, jr + m) if j_body[i % m][2] == "line" and j_body[i % m][1] < 0
+                 and j_body[(i - 1) % m][0] == j_body[i % m][0])                         # the left edge's lower end
+    j_l = j_body[start % m][0]
+    assert abs((j_r - j_l) - (stem_r - stem_l)) <= 1, "q's and j's stems differ"
+    tail = [list(j_body[i % m]) for i in range(start, jr + m)]                          # ends at the right edge's foot
+    dx = stem_r - j_r
+    for p in tail:
+        p[0] += dx
+    on = [i for i, p in enumerate(tail) if p[2]]
+    assert len(on) == 7, "j's tail is not stem, inner low point, neck, top, left, outer low point, stem"
+    start, neck, left, end = tail[0], on[2], on[4], tail[-1]
+    xh = q_outer[top][1]
+    bowl_w = stem_r - bowl_l
+    depth = tail[on[5]][1]
+    # the ball, whole: its left side to the tail's end, its top to its height under the baseline
+    ball = [list(p) for p in tail[neck:left + 1]]
+    tw = ((stem_r - stem_l) - G_STEMS[0]) / (G_STEMS[1] - G_STEMS[0])
+    ball_top = G_BALL_TOP + tw * (G_BALL_TOP_BOLD - G_BALL_TOP)
+    tail_low = G_TAIL_LOW + tw * (G_TAIL_LOW_BOLD - G_TAIL_LOW)
+    bx = round(stem_r - G_TAIL_END * bowl_w) - tail[left][0]
+    by = round(-ball_top * xh) - tail[on[3]][1]
+    for p in ball:
+        p[0] += bx
+        p[1] += by
+    nk, lf = ball[0], ball[-1]
+    low_x = round(stem_r - tail_low * bowl_w)
+    in_y = depth + round(G_TAIL_THICK * hair)
+    K = G_ROUND
+
+    def arc(p0, p1, upright_first):
+        """Two handles of a quarter turn from p0 to p1, each K of its side of the box."""
+        if upright_first:
+            return [(p0[0], round(p0[1] + K * (p1[1] - p0[1])), None, False),
+                    (round(p1[0] + K * (p0[0] - p1[0])), p1[1], None, False)]
+        return [(round(p0[0] + K * (p1[0] - p0[0])), p0[1], None, False),
+                (p1[0], round(p1[1] + K * (p0[1] - p1[1])), None, False)]
+
+    # into the neck along the ball's own direction there, so the join is smooth
+    after = ball[1]
+    vx, vy = nk[0] - after[0], nk[1] - after[1]
+    ln = math.hypot(vx, vy)
+    reach = K * (nk[1] - in_y)
+    in_low = (low_x, in_y, "curve", True)
+    out_low = (low_x, depth, "curve", True)
+    tail = ([tuple(start)] + arc(start, in_low, True) + [in_low,
+            (round(low_x + K * (nk[0] - low_x)), in_y, None, False),
+            (round(nk[0] + vx / ln * reach), round(nk[1] + vy / ln * reach), None, False)]
+            + [tuple(p) for p in ball] + arc(lf, out_low, True) + [out_low] + arc(out_low, end, False) + [tuple(end)])
+    outer = [tuple(p) for p in tail[1:]] + upper + [tuple(tail[0])]
+    # contour order: ... tail's last point (the right edge's foot, a curve's end), q's stem top (line), q's bowl,
+    # the crotch, then the tail's first point (line, down the left edge)
+    return [outer, list(q_counter)]
+
+
+def single_g(font, layer=None):
+    """g.ss02 from this font's q and j (see above). Returns its box. It keeps q's advance and kerns as q does."""
+    from ufoLib2.objects import Contour, Point
+    src = layer if layer is not None else font
+    q, j = src["q"], src["j"]
+    q_outer = max(q.contours, key=lambda c: len(c.points))
+    q_counter = min(q.contours, key=lambda c: len(c.points))
+    j_body = max(j.contours, key=lambda c: len(c.points))       # j without its dot
+    g = src["g.ss02"] if "g.ss02" in src else src.newGlyph("g.ss02")
+    g.clearContours()
+    hair = o_hair([_pts(c) for c in src["o"].contours])
+    for pts in single_g_points(_pts(q_outer), _pts(q_counter), _pts(j_body), hair):
+        c = Contour()
+        c.points = [Point(x, y, t, smooth=s) for x, y, t, s in pts]
+        g.contours.append(c)
+    g.width = q.width
+    g.unicodes = []
     for name, members in font.groups.items():
         if name.startswith("public.kern") and "q" in members and "g.ss02" not in members:
             members.append("g.ss02")
-    return bounds(gp(font, "g.ss02"))
+    return bounds(gp(src, "g.ss02")) if layer is None else None
 
 
 def spine_across(path):
@@ -747,50 +974,6 @@ def spine_across(path):
             d += t
         best = min(best, d)
     return best
-
-
-def base_s(font):
-    """S.ss03, s.ss03, dollar.ss03 (0.78; owner, 2026-11-14: "i like the S, s and $ of libre baskerville"). The two
-    letters arrive from derive as the base's own drawings at Area's weight and width; here they take the default
-    letters' side bearings and kerning groups."""
-    done = []
-    for alt, base, height in (("S.ss03", "S", 712), ("s.ss03", "s", 520)):
-        # the spine on Area's ladder: the base's is a quarter heavier across itself (119 and 106 against 95 and 84).
-        # Its two edges close on each other until it measures what the default's does; nothing else moves.
-        for _pass in range(3):
-            over = spine_across(gp(font, alt)) - spine_across(gp(font, base))
-            if over < 1:
-                break
-            CLEAN.spine_thin(font, alt, height, (round(over * 0.6), round(over * 0.6)))
-        done.append((alt, "spine", round(spine_across(gp(font, alt)), 1), round(spine_across(gp(font, base)), 1)))
-        p, b0 = gp(font, alt), bounds(gp(font, base))
-        put(font, alt, p, 0, lsb=b0[0], rsb=font[base].width - b0[2])
-        font[alt].unicodes = []
-        done.append((alt, font[alt].width, font[base].width))
-    # the dollar: the base's own drawing (its ends are balls, not its S's barbs), so not the S and a stroke as the
-    # default is. Its stroke takes the capital hairline, as the default's: the two upright edges move in, each by
-    # half the excess, wherever they show (the stubs above and below, the sides of the two counters).
-    g = font["dollar.ss03"]
-    p0 = gp(font, "dollar.ss03")
-    b = bounds(p0)
-    st = scan_h(p0, b[3] - 10)[0]
-    over = (st[1] - st[0]) - STROKE_UP
-    for c in g.contours:
-        for q in c.points:
-            if abs(q.x - st[0]) < 1.5:
-                q.x = round(st[0] + over / 2)
-            elif abs(q.x - st[1]) < 1.5:
-                q.x = round(st[1] - over / 2)
-    db = bounds(gp(font, "dollar"))
-    put(font, "dollar.ss03", gp(font, "dollar.ss03"), 0, lsb=db[0], rsb=font["dollar"].width - db[2])
-    font["dollar.ss03"].unicodes = []
-    done.append(("dollar.ss03 stroke", round(st[1] - st[0]), STROKE_UP))
-    done.append(("dollar.ss03", font["dollar.ss03"].width, font["dollar"].width))
-    for alt, base in (("S.ss03", "S"), ("s.ss03", "s"), ("dollar.ss03", "dollar")):
-        for name, members in font.groups.items():
-            if name.startswith("public.kern") and base in members and alt not in members:
-                members.append(alt)
-    return done
 
 
 def arrows(font, m, adv):
@@ -1454,15 +1637,32 @@ FRACTION_BAR = 48       # the bar of the fraction slash, the percent sign and ev
 
 
 def _level_cut(c):
-    """A four-point contour with two level edges: ((x0, x1, y) lower, (x0, x1, y) upper), or None."""
+    """A four-cornered contour with two level edges: ((x0, x1, y) lower, (x0, x1, y) upper), or None. Since 0.79 its
+    corners may be rounded (soft_ends): the corners are then where its four straight edges would meet."""
     P = c.points
-    if len(P) != 4 or any(p.type != "line" for p in P):
+    if len(P) == 16 and [p.type for p in P].count("line") == 4:
+        n, edges = len(P), []
+        for i, p in enumerate(P):
+            q = P[(i + 1) % n]
+            if p.type and q.type == "line":
+                edges.append(((p.x, p.y), (q.x, q.y)))
+        pts = []
+        for (a, b), (c2, d) in zip(edges, edges[1:] + edges[:1]):
+            r, s = (b[0] - a[0], b[1] - a[1]), (d[0] - c2[0], d[1] - c2[1])
+            den = r[0] * s[1] - r[1] * s[0]
+            if abs(den) < 1e-9:
+                return None
+            t = ((c2[0] - a[0]) * s[1] - (c2[1] - a[1]) * s[0]) / den
+            pts.append((round(a[0] + t * r[0], 2), round(a[1] + t * r[1], 2)))
+    elif len(P) == 4 and all(p.type == "line" for p in P):
+        pts = [(p.x, p.y) for p in P]
+    else:
         return None
-    ys = sorted({p.y for p in P})
+    ys = sorted({round(y) for _x, y in pts})
     if len(ys) != 2:
         return None
-    lo = sorted(p.x for p in P if p.y == ys[0])
-    hi = sorted(p.x for p in P if p.y == ys[1])
+    lo = sorted(x for x, y in pts if round(y) == ys[0])
+    hi = sorted(x for x, y in pts if round(y) == ys[1])
     return (lo[0], lo[1], ys[0]), (hi[0], hi[1], ys[1])
 
 
@@ -1527,6 +1727,125 @@ def plain_strokes(font, m):
     return done
 
 
+# 0.79 (owner, 2026-11-14, on the three options drawn in 0.78: option 1, soft corners). A plain stroke is two
+# straight, parallel edges ended by a straight cut: the hyphen, the dashes, minus, plus, equals, underscore, bar,
+# slash, the arrows' shafts and heads, the brackets' arms, the bars struck through letters and currency signs. The
+# letters round such an end on radius 7 (normalize.soften_ends: serif tips, the bar ends of f and t); everything
+# this module draws had stayed sharp, so a hyphen beside an f's bar was the one square-cornered thing in a line.
+# The rule is the letters' own, with the same numbers (derive.SOFT, END_ANGLE), on every glyph outside the letters:
+# a cut whose two corners are sharp and whose two neighbouring edges are straight and parallel. A meeting (the
+# inside of the plus, a vertex) is never an end and stays sharp. The cut's length runs to SOFT_FACE: a 52 stroke cut
+# level at the slash's slope measures 55; the heaviest plain stroke in the set (the long stroke overlay, 59 to 60).
+SOFT = 7                          # derive.SOFT, the letters' radius
+SOFT_FACE = (20, 62)
+SOFT_ANGLE = (54, 126)            # normalize.END_ANGLE is 70 to 125; a leaning stroke cut level has corners of its
+                                  # slope and the rest of 180: the slash 65.6 / 114.4, the fraction bar 54.5 / 125.5
+SOFT_PARALLEL = 8                 # degrees the two edges may differ: a plain stroke, not a wedge
+
+
+def soft_skip(font):
+    """Not this rule's: the letters and figures (normalize.soften_ends has them) and the small figures scaled from
+    them, whose stems' feet are meetings with the baseline, not ends."""
+    core = set("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ") | set(FIGS)
+    return core | {g.name for g in font if g.name.endswith(("superior", "inferior")) or g.name.split(".")[0] in core}
+
+
+def _plain_ends(c, ink_ccw):
+    """Indexes of the corners at the ends of plain strokes in one contour."""
+    P, n = c.points, len(c.points)
+    if any(p.type == "qcurve" for p in P):
+        return set()
+    on = [i for i in range(n) if P[i].type]
+    info = {}
+    for k, i in enumerate(on):
+        p, a, b = P[i], P[(i - 1) % n], P[(i + 1) % n]
+        v1, v2 = (p.x - a.x, p.y - a.y), (b.x - p.x, b.y - p.y)
+        if math.hypot(*v1) < 0.5 or math.hypot(*v2) < 0.5:
+            continue
+        turn = math.degrees(math.atan2(v1[0] * v2[1] - v1[1] * v2[0], v1[0] * v2[0] + v1[1] * v2[1]))
+        if abs(turn) < 25 or (turn > 0) != ink_ccw:
+            continue
+        info[i] = (180 - abs(turn), on[k - 1], on[(k + 1) % len(on)])
+    chosen = set()
+    for i, (ang, prev, nxt) in info.items():
+        if nxt not in info or P[nxt].type != "line" or P[i].type != "line" or P[info[nxt][2]].type != "line":
+            continue                                           # the cut and both edges beside it are straight
+        face = math.hypot(P[nxt].x - P[i].x, P[nxt].y - P[i].y)
+        if not (SOFT_FACE[0] <= face <= SOFT_FACE[1] and SOFT_ANGLE[0] <= ang <= SOFT_ANGLE[1]
+                and SOFT_ANGLE[0] <= info[nxt][0] <= SOFT_ANGLE[1]):
+            continue
+        q0, q1 = P[prev], P[info[nxt][2]]
+        e0, e1 = (P[i].x - q0.x, P[i].y - q0.y), (P[nxt].x - q1.x, P[nxt].y - q1.y)
+        l0, l1 = math.hypot(*e0), math.hypot(*e1)
+        if min(l0, l1) < face * 0.45:                          # a stub shorter than half its own width is a notch
+            continue
+        cross = abs(e0[0] * e1[1] - e0[1] * e1[0]) / (l0 * l1)
+        if math.degrees(math.asin(min(1, cross))) > SOFT_PARALLEL or e0[0] * e1[0] + e0[1] * e1[1] < 0:
+            continue
+        chosen |= {i, nxt}
+    return chosen
+
+
+def soft_ends(font, skip=None):
+    """Every plain stroke's end outside the letters gets the letters' radius. Returns the glyphs changed."""
+    from fontTools.pens.areaPen import AreaPen
+    from ufoLib2.objects import Point
+    done = {}
+    skip = soft_skip(font) if skip is None else skip
+    for g in font:
+        if g.name in skip or not g.contours:
+            continue
+        areas = []
+        for c in g.contours:
+            pen = AreaPen()
+            c.draw(pen)
+            areas.append(pen.value)
+        outer = max(areas, key=abs) > 0
+        for c, sg in zip(g.contours, areas):
+            chosen = _plain_ends(c, (sg > 0) == outer)
+            if not chosen:
+                continue
+            P, n, out = c.points, len(c.points), []
+            for i, p in enumerate(P):
+                if i not in chosen:
+                    out.append(p)
+                    continue
+                a, b = P[(i - 1) % n], P[(i + 1) % n]
+
+                def toward(q):
+                    dd = math.hypot(q.x - p.x, q.y - p.y)
+                    r = min(SOFT, dd * 0.33)
+                    return p.x + (q.x - p.x) / dd * r, p.y + (q.y - p.y) / dd * r
+                (ax, ay), (bx, by) = toward(a), toward(b)
+                out.append(Point(round(ax), round(ay), p.type, smooth=False))
+                out.append(Point(round(ax + (p.x - ax) * 0.55), round(ay + (p.y - ay) * 0.55), None))
+                out.append(Point(round(bx + (p.x - bx) * 0.55), round(by + (p.y - by) * 0.55), None))
+                out.append(Point(round(bx), round(by), "curve", smooth=False))
+            c.points[:] = out
+            done[g.name] = done.get(g.name, 0) + len(chosen) // 2
+    return done
+
+
+def sharp_ends(font, skip=None):
+    """The audit's side of soft_ends: the plain stroke ends still sharp, per glyph."""
+    from fontTools.pens.areaPen import AreaPen
+    left = {}
+    skip = soft_skip(font) if skip is None else skip
+    for g in font:
+        if g.name in skip or not g.contours:
+            continue
+        areas = []
+        for c in g.contours:
+            pen = AreaPen()
+            c.draw(pen)
+            areas.append(pen.value)
+        outer = max(areas, key=abs) > 0
+        k = sum(len(_plain_ends(c, (sg > 0) == outer)) // 2 for c, sg in zip(g.contours, areas))
+        if k:
+            left[g.name] = k
+    return left
+
+
 def _contour_path(c):
     p = pathops.Path()
     c.draw(p.getPen())
@@ -1543,18 +1862,23 @@ STROKE_UP, STROKE_LOW = 47, 43          # the ladder's hairlines (balance.CAP_TH
 
 def letter_signs(font, m):
     done = []
-    # dollar: S, the stroke through it
-    old = gp(font, "dollar")
-    ob = bounds(old)
-    st = scan_h(old, ob[3] - 20)[0]                              # the stroke's stub above the S
-    S = gp(font, "S")
-    sb = bounds(S)
-    xc = sb[0] + (sb[2] - sb[0]) * ((st[0] + st[1]) / 2 - ob[0]) / (ob[2] - ob[0])
-    sx = band(xc, STROKE_UP)
-    p = union(S, rect(sx[0], ob[1], sx[1], ob[3]))
-    w0 = font["dollar"].width
-    put(font, "dollar", p, 0, lsb=ob[0], rsb=w0 - ob[2])
-    done.append(f"dollar: S + stroke {st[1] - st[0]:.0f}>{STROKE_UP}")
+    # dollar. 0.80 (owner, 2026-11-14: "just choose 1 dollar symbol, i prefer the rounded pill shaped one"): the
+    # base's own drawing, whose ends are balls, is the one dollar; 0.71 to 0.79 built the default from the finished
+    # S (barb ends) and a stroke, and 0.78 and 0.79 kept the base's as dollar.ss03. Its stroke takes the capital
+    # hairline, as every stroke through a letter: the two upright edges move in, each by half the excess, wherever
+    # they show (the stubs above and below, the sides of the two counters).
+    g = font["dollar"]
+    p0 = gp(font, "dollar")
+    b = bounds(p0)
+    st = scan_h(p0, b[3] - 10)[0]
+    over = (st[1] - st[0]) - STROKE_UP
+    for c in g.contours:
+        for q in c.points:
+            if abs(q.x - st[0]) < 1.5:
+                q.x = round(st[0] + over / 2)
+            elif abs(q.x - st[1]) < 1.5:
+                q.x = round(st[1] - over / 2)
+    done.append(f"dollar: the base's, ball ends; stroke {st[1] - st[0]:.0f}>{STROKE_UP}")
     # cent: c at its own size, the stroke through it
     old = gp(font, "cent")
     ob = bounds(old)

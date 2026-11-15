@@ -499,3 +499,71 @@ than the Regular's in 35, weight stepping back in 3 (capital breves). Four glyph
 uni20A9, dagger, uni2318). Bold kerning is the Regular's opened for collisions. The new alternates (g.ss02,
 S.ss03, s.ss03, dollar.ss03) go through the same engine. Looked at once at 700 (build/weight/alts-bold.png): all
 four are sound; g.ss02's bowl reads lighter than the stem beside it and is not measured yet.
+
+
+## Build 0.79 (14 November 2026, uncommitted): the axis, worked down
+
+`audit_bold.py` (415 parts) and its sweep pass at all 13 stops on the 0.79 Regular. `audit_axis.py`, 0.78 to 0.79:
+
+| Kind | 0.78 | 0.79 | What was done | What is left |
+|---|---|---|---|---|
+| A curve gains an inflection or an extreme | 43 | 18 | `bold.fix_turns`, last on every outline of the Bold and the sparse master, with the audit's own count (`bold.curve_turns`): a shorter handle; at a corner, or at a smooth node between two curves, a turned one. 77 curves brought back, 19 not. A corner's fillet (under 12 units in the Regular) is not read at any weight while it stays under 20 | x (the top-left serif: the diagonal's edge is steeper than the chord from the serif's underside, so no one-way curve exists; the edge's place is the fault), Lmiddletilde, lmiddletilde, Whook, asterisk, c_t, daggerdbl, glottalstop and its reverse, the four curly quotes, ring_acutecomb and its capital, section, uni20A9, uni20BF |
+| An outline gains a crossing | 26 | 18 | `bold.keep_apart`: side-by-side inks never under 13 (quotedbl, quotedblbase, quotedblleft, quotedblright, dieresisbelowcomb, uni21E4); fi's bar joined to the i in the Regular | Estroke, Tdiagonalstroke, astroke, cstroke (a stroke through a letter), Ghook, Nhookleft, ampersand and at (625 and over), commaturnedabovecomb, hookabovecomb.case, the double acute and double grave over capitals (two wedges swollen into each other: build them from the single mark), product, registered, servicemark, trademark, uni20B9 |
+| A stroke thinner than in the Regular | 36 | 30 | The capital breves (below) | 24 wedge accents' thin ends, 1 to 5 under (holding them to the Regular's thinnest cut lost their measured weight: acute fell from 63 to 54); ampersand, astroke, at, one.ss01, ordfeminine, thook, uni2606, two low quotes |
+| Mean stroke steps back | 3 | 0 | `bold.stretch` swells in steps of at most 1.5: the capital breves reach 60.3 (target 64.2; 55.8 before) with nothing folded | |
+
+Fallbacks: Astroke and uni20A1 thicken upright parts only; dagger and uni2318 are the Regular's outline. uni20A9
+has a real Bold since its bars' ends are rounded; uni20A1 lost its own for the same reason (its slashes' rounded
+corners are read as stroke ends). The route for all four is the one g.ss02 now takes: build the glyph again on
+the Bold from the Bold's letter and a Bold stroke, by the Regular's own construction, and accept it when its
+point structure matches. Not started.
+
+New in the Bold in 0.79: g.ss02 is spliced from the Bold's q and j (and from the sparse master's); the f
+ligatures take their letters' sides. Still not done: fitted Bold kerning; an audit table for marks, signs and
+composites; the Bold's plain signs (hyphen 52 to 71 where letters go 78 to 140: measure the references' Bold
+dashes).
+
+Samples: `tools/weight_samples.py` (400, 500, 600, 700 in display, text, alternates, signs) and the editor
+page's Weight section.
+
+## Build 0.80: the Light master, and the serifs along the axis
+
+**Light.** The same engine below the Regular. Measured Light over Regular (`tools/light_refs.py`):
+
+| Part | Georgia Pro | Serrif | Source Serif 4 | Literata | Newsreader | Merriweather | Mean |
+|---|---|---|---|---|---|---|---|
+| n's stem | 0.629 | 0.792 | 0.576 | 0.763 | 0.674 | 0.766 | 0.700 |
+| o's hairline | 0.947 | 0.902 | 0.643 | 0.846 | 0.666 | 0.912 | 0.819 |
+| H's bar | 0.909 | 0.886 | 0.664 | 0.810 | 0.680 | 0.854 | 0.800 |
+| A serif's tip | 0.919 | 0.856 | 0.714 | 0.778 | 0.751 | 0.870 | 0.815 |
+| i's dot | 0.656 | 0.878 | 0.670 | 0.815 | 0.796 | 0.868 | 0.781 |
+| n's advance | 0.970 | 0.981 | 0.998 | 0.973 | 0.972 | 0.985 | 0.980 |
+| A foot's reach | 0.986 | 1.040 | 1.133 | 1.000 | 1.000 | 1.054 | 1.036 |
+
+Stem 78 × 0.700 = 55. The thick parts' share of the Bold's step is f = (55 − 78) / 62 = −0.371. Thin parts need
+−0.50 to −0.78 to reach their ratios (mean −0.64), so they take `LIGHT_THIN` = 1.72 times f. Result at the Light:
+415 of 415 letter and figure parts on target; six glyphs on a fallback (₡, the four diagonal arrows,
+commaturnedabovecomb).
+
+**Serifs** (`tools/serif_axis.py`), medians at 300, 400, 500, 600, 700:
+
+| Kind | Tip | Reach | Bracket ends at |
+|---|---|---|---|
+| Lowercase foot | 23.0, 30.0, 33.0, 36.6, 40.9 | 69, 68, 67, 66, 64 | 74, 80, 82, 86, 90 |
+| Capital foot | 23.0, 30.0, 33.0, 36.6, 41.0 | 76, 75, 74, 73, 71 | 68, 74, 78, 80, 84 |
+| x-height flag (height) | 23.5, 30.4, 33.3, 37.0, 41.2 | 71, 70, 69, 68, 66 | 86, 93, 96, 99, 103 |
+
+Spread within a kind is 0.3 or less on tips at every weight. The one fault found: n's and k's flag bracket (two
+curves, 18 short), fixed by `clean.flag_unders`.
+
+**Still open on the axis after 0.80**
+
+1. Bold side, as 0.79: inflection 18 glyphs, crossing 18, thin 30.
+2. Light side: inflection 5 (Astroke, Lmiddletilde, Whook, dagger, uni20A9), crossing 5 (Astroke, Ghook, uni20A9,
+   uni2303, whook), thin 18 (Astroke, apostrophemod, asterisk, commaaccentcomb and .case, dagger, daggerdbl, six and
+   nine superior and inferior, ordfeminine, rstroke, s_p, servicemark, trademark, uni20A9, yhook).
+3. Fallbacks: Bold Astroke, dagger, uni20A1, uni2318; Light uni20A1, uni2196 to uni2199, commaturnedabovecomb.
+4. Kerning fitted per master; an audit table for marks, signs and composites; the Light at 325, 350, 375 part by part
+   (`audit_bold.py --sweep` covers 400 to 700 only).
+5. Lighter than 300 (the references reach 200 and 100): not started. The engine extrapolates, but thin parts near
+   20 units need their own floor.

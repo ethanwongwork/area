@@ -1401,3 +1401,310 @@ CHANGES += [
 QA.append("0.78: every check passes except audit_axis.py (all glyphs along the weight axis), which FAILS as in 0.77: "
           "an inflection in 43 glyphs, a crossing in 26, a thin stroke in 36 (one more than 0.77: the new S.ss03), "
           "weight stepping back in 3.")
+
+
+# ------------------------------------------------------------------ build 0.79: the owner's notes on 0.78
+BUILD = "0.79"
+VERDICT = ("Build 0.79 answers your six notes on 0.78. Built by rule, each with a check that 0.78 fails: soft corners "
+           "on every plain stroke (the option you picked); the single-storey g rebuilt, whose bowl had been cut flat "
+           "at the baseline; the 5's bowl, whose lowest point lay left of where both references and Area's own 3 "
+           "have it; and the f ligatures, where the hook now runs over the i as it does in seven of eight faces. "
+           "The alternate S and s are removed: measured, they had the default's form and differed only in width. "
+           "The dollar with ball ends stays. Along the weight axis the letters and figures pass at every weight; "
+           "outside them three kinds of failure are smaller and one is closed, and what still fails is listed on "
+           "the axis card. Nothing is committed.")
+N79 = {"prev": "0.78", "build": "0.79", "round": "0.79"}
+for _f in FINDINGS:
+    if _f["id"] == "signs-serif":
+        _f.update(N79, status="fixed", sev="low",
+                  title="Plain signs: soft corners, the option you picked, on every plain stroke",
+                  body="You picked option 1 of the three drawn in 0.78. It is in the build as a rule, not as a list of "
+                       "glyphs: a plain stroke is two straight, parallel edges ended by a straight cut, and every "
+                       "such end outside the letters takes the radius the letters' own cut ends have (7). That "
+                       "covers the hyphen and dashes, minus, plus, equals, underscore, bar, both slashes and the "
+                       "fraction bar, the arrows, the square brackets' arms, the macron, and the bars struck through "
+                       "letters and currency signs. A corner where two strokes meet (the inside of the plus) stays "
+                       "sharp, as it does in the letters.",
+                  after="155 glyphs, 370 ends, in the Regular; the Bold carries them. The radius is 7 along each "
+                        "edge, the same number as a serif tip's. The slash's and fraction bar's corners are not "
+                        "right angles (65.6 and 54.5 degrees), so the rule's corner range runs wider than the "
+                        "letters' (54 to 126 against 70 to 125). At 13 to 16 px nothing is visible; it shows from "
+                        "about 32 px.",
+                  evidence=[["Plain stroke ends with sharp corners", "370 on 157 glyphs → 0"], ["Radius", "7, the letters' (derive.SOFT)"],
+                            ["Stroke weights", "unchanged: 52, fraction bar 48"]],
+                  fix="charset.soft_ends, last in normalize. Check: audit_charset (sharp_ends; and that the slash's "
+                      "and fraction bars' stroke is still read after rounding). 0.78 fails it.",
+                  views=[{"g": "hyphen", "ba": True, "comb": False}, {"g": "plus", "ba": True, "comb": False},
+                         {"g": "slash", "ba": True, "comb": False}, {"g": "arrowright", "ba": True, "comb": False}])
+    if _f["id"] == "s-alt":
+        _f.update(N79, status="fixed",
+                  title="The alternate S and s are removed: they were the default's form; the ball-end dollar stays",
+                  body="Your note: you expected Libre Baskerville's S to differ in form the way its dollar does, and "
+                       "said not to add S as an alternate if it does not. I measured S.ss03 and s.ss03 against the "
+                       "default S and s, with an overlay (the figure 2 sent with this build).",
+                  after="They had the default's form. Both S end in the same cut barbs top and bottom; the spine "
+                        "across itself is 95 against 96 and 85 against 85 (0.78 thinned it to match); S is 5 units "
+                        "narrower of 489 and s 55 of 379; the barbs are a little sharper. That is proportion and "
+                        "weight, not form, so both are gone from the font. The dollar is a different form: the "
+                        "base's ends in balls where the default's ends in barbs. It stays alone, and the set's "
+                        "name in the font is now Ball-end dollar.",
+                  evidence=[["S ink width, default / alternate", "489 / 484"], ["s ink width", "379 / 324"],
+                            ["Spine across itself, S and s", "96 / 95, 85 / 85"], ["Ends of S and s", "barbs in both"],
+                            ["Ends of the dollar", "barbs / balls"]],
+                  fix="derive.ALTS (dollar.ss03 only), charset.base_s. Check: audit_charset fails if S.ss03 or "
+                      "s.ss03 is in the font.",
+                  views=[{"g": "dollar.ss03", "ba": False, "comb": False}, {"g": "dollar", "ba": False, "comb": False}])
+    if _f["id"] == "g-alt":
+        _f.update(N79, status="fixed", sev="medium",
+                  title="Single-storey g: the bowl was cut flat at the baseline, and the tail was j's narrow hook",
+                  body="Your note: \"the bottom of the g is flat for some reason\". The reason: 0.77 took q's top by "
+                       "cutting q level at y = 2. q's bowl dips 10 units under the baseline, so the cut sliced its "
+                       "bottom off and left a level edge 138 units long. Second, the tail was j's hook unchanged, "
+                       "ending 0.66 of the bowl's width left of the stem's right edge. Measured on the three "
+                       "faces that have the letter (Serrif's alternate, Source Serif's and Literata's U+0261), "
+                       "each against its own q: the bowl is q's, whole (0.996, 1.000, 1.000 of its width); the "
+                       "tail ends 0.973, 0.972 and 0.933 of the bowl's width to the left; its lowest point lies "
+                       "0.510, 0.529, 0.515 across.",
+                  after="Rebuilt as a splice of points, with no cut: q's outline from the top of its stem round the "
+                        "whole bowl to the crotch, then j's tail. The tail keeps j's stem, its thickness at the "
+                        "lowest point and its ball; only its reach changes (the ball moves left as one piece, "
+                        "each curve keeps its handles' share), to 0.959 and 0.518, the three faces' means. The "
+                        "Bold's g is spliced the same way from the Bold's q and j, so its bowl is the Bold q's: "
+                        "0.78's Bold bowl, read by the general engine, was lighter than the q beside it.",
+                  evidence=[["Level edge at the baseline", "138 → none"], ["Tail's end, share of the bowl's width", "0.657 → 0.959 (0.973, 0.972, 0.933)"],
+                            ["Tail's lowest point", "0.388 → 0.518 (0.510, 0.529, 0.515)"], ["Depth against q's descender", "1.04 (1.04 to 1.06)"],
+                            ["Bold bowl", "the engine's own → the Bold q's, point for point"]],
+                  fix="charset.single_g, single_g_points; bold.bold_font splices the Bold's. Tool: tools/single_g.py. "
+                      "Check: audit_charset (no level edge at the baseline, the bowl is q's, the tail's reach).",
+                  views=[{"g": "g.ss02", "ba": True, "comb": False}, {"g": "q", "ba": False, "comb": False}])
+    if _f["id"] == "axis-all":
+        _f.update(N79, status="part",
+                  title="The weight axis, every glyph: smaller in three kinds, closed in one, still failing",
+                  after="0.79. New inflections: 43 glyphs to 18. A last guard on every curve of the Bold and of the "
+                        "sparse master (bold.fix_turns) uses the audit's own count and brings a curve back by the "
+                        "smallest change that passes: a shorter handle, then, only at a corner or between two "
+                        "curves, a turned one. W and g are fixed. x is not: on its top-left serif the diagonal's "
+                        "edge and the serif's underside leave no room for a curve that bends one way; that is a "
+                        "fault in where the Bold puts the edge, not in the curve. Crossings: 26 to 18. Two inks "
+                        "that stand side by side never come closer than 13 (the double quotes, the dots below, "
+                        "the tab arrow's bar), and fi's bar joins the i. Still crossing: struck letters, the "
+                        "ampersand and at sign at 625 and over, the double accents over capitals, TM and SM. Thin: "
+                        "36 to 30; 24 of the 30 are the thin ends of wedge accents, 1 to 5 units under the "
+                        "Regular's, which I tried to hold and could not without losing their measured weight. "
+                        "Stepping back: closed (the capital breves, by swelling in small steps).",
+                  evidence=[["A curve gains an inflection", "43 → 18 glyphs (letters: x)"], ["An outline gains a crossing", "26 → 18"],
+                            ["A stroke thinner than in the Regular", "36 → 30 (24 are accents' thin ends)"],
+                            ["Mean stroke steps back as weight rises", "3 → 0"], ["Letters and figures, 13 weights", "415 of 415 parts on target at each"],
+                            ["Glyphs with no real Bold", "4: Ⱥ † ₡ ⌘ (₩ has one now; ₡ lost its own)"]],
+                  fix="bold.fix_turns, keep_apart, stretch (steps of 1.5). audit_axis.py still exits 1; the lists are "
+                      "in build/weight/audit-axis.txt.",
+                  views=[{"g": "W", "ba": False, "comb": False}, {"g": "x", "ba": False, "comb": False}])
+FINDINGS += [
+    dict(N79, id="five-bowl", sev="medium", cls="Proportion", status="fixed",
+         title="The 5's bowl leaned: its lowest point lay left, and its inside was widest above its outside",
+         body="Your note: the bottom of the 5 still leans to the right after 0.77 moved its flag. Measured on the "
+              "bowl of every face (tools/five_bowl.py). The outer edge's lowest point lay 0.365 of the bowl's width "
+              "from its left, where Georgia Pro has 0.446, Serrif 0.468 and Area's own 3 0.452: from there the edge "
+              "ran up to the right in one long slope. And the counter's rightmost point stood at 0.602 of the "
+              "bowl's height where the outside's stood at 0.553 (Georgia Pro 0.531 and 0.535, Serrif 0.469 and "
+              "0.514), which puts the heaviest part of the stroke low on the right: seen from the bowl's middle, "
+              "5 degrees under level, where all eight other faces have it 10 to 30 above. The base's own 5 has "
+              "the counter the same way; the lean given to the upright stroke in 0.33 made it show.",
+         after="The three points are at the two references' means, each moved along the edge it is an extreme of, "
+               "handles keeping their share of their curves. The ball, the upright stroke, the flag and the bowl's "
+               "width and height are unchanged. The heaviest part is now 10 degrees above level. 3 measured inside "
+               "the references on all of these and is unchanged; 6 and 9 are closed bowls and were looked at, not "
+               "changed.",
+         evidence=[["Lowest point, share of the bowl's width", "0.365 → 0.457 (0.446, 0.468; 3: 0.452)"],
+                   ["Outside widest, share of the bowl's height", "0.553 → 0.525 (0.535, 0.514)"],
+                   ["Counter widest", "0.602 → 0.500 (0.531, 0.469)"], ["Heaviest direction, degrees", "-5 → +10 (others +10 to +30)"],
+                   ["Stroke under the bowl over stroke at the side", "0.62 → 0.55 (0.42, 0.39)"]],
+         fix="clean.five_bowl, after five_heel. Check: audit_charset (lowest point; counter not widest above the outside).",
+         views=[{"g": "five", "ba": True, "comb": False}, {"g": "three", "ba": False, "comb": False}]),
+    dict(N79, id="fi-hook", sev="high", cls="Character set", status="fixed",
+         title="fi: f's hook stopped a stem short of the i, with nothing where the dot was",
+         body="Your note: should f's top reach further toward the i, so the end of the hook sits almost over the "
+              "dot? Yes. Measured on eight faces with HarfBuzz (tools/ligatures.py), each in its own stems. With "
+              "ligatures on, seven draw fi as one glyph with no dot, and the hook's end stands past the middle of "
+              "the i's stem by 0.31 to 0.63 (Georgia Pro 0.41, Serrif 0.43); they also bring the two stems closer "
+              "than the letters set apart (Georgia Pro 3.18 against 3.58 stems, Serrif 3.66 against 4.15). "
+              "Area's fi was the plain f and a dotless i at their ordinary fit: the hook ended 0.99 of a stem "
+              "before the i's stem, so it read as f and a dotless i. With ligatures off, f and i measure inside "
+              "the references (hook 1.29 stems before the dot's centre against 0.84 to 1.46; 0.56 clear of it "
+              "against 0.17 to 0.79) and are unchanged.",
+         after="In fi, ffi, fj and ffj the last f's hook is lengthened by rule (the ball moves as one piece, the "
+               "arc's two highest points keep their share of it, the stem and bar stay) until its end is 0.42 of a "
+               "stem past the second letter's stem centre. The second letter stands at 0.885 of its unligated "
+               "distance, and f's bar runs into its flag, as it already ran into t and a second f.",
+         evidence=[["Hook's end from the i's stem centre, stems", "-0.99 → +0.42 (0.41, 0.43)"],
+                   ["Stem to stem, ligature over letters apart", "0.915 → 0.885 (0.888, 0.882)"],
+                   ["Faces whose fi keeps a dot", "1 of 8"], ["Ligatures off", "unchanged, inside the references"]],
+         fix="charset.f_hook, lig_offset, ligatures. Check: audit_charset (hook's end on fi, ffi, fj, ffj).",
+         views=[{"g": "fi", "ba": True, "comb": False}, {"g": "f_f_i", "ba": True, "comb": False}, {"g": "f_j", "ba": True, "comb": False}]),
+    dict(N79, id="lig-pass", sev="medium", cls="Character set", status="fixed",
+         title="Every f ligature: a step where the arc met a tall letter; Bold sides off by 4 and 22",
+         body="A pass over all fifteen (fi fl ff ffi ffl, and fb fh fk fj ft with their ff forms). Construction: "
+              "where f's arc runs into l, b, h or k, the bridge left the arc 15 units before its top, ran 6 under "
+              "the ascender line and stopped at the stem's near edge, so the stem's slanted top stood over it as "
+              "a 10-unit step. Sides: in the Regular every ligature's left side is f's and its right side its "
+              "last letter's; in the Bold every one was 4 wider than f on the left and ff 22 wider on the right, "
+              "because the Bold treated them as glyphs of their own. Kerning classes: all fifteen kern as f on "
+              "the left and as their last letter on the right; nothing to fix.",
+         after="The arc is cut at its highest point and runs level at the ascender's top across the whole stem: "
+               "one edge. The Bold's ligatures take their letters' sides, at 700 and at the sparse master. Looked "
+               "at, Regular and Bold, on and off, at 13, 16, 32 and 100 px (figure 5). Not redrawn: ff and ft, "
+               "which measured and looked right. Not checked: the ligatures' own inside spacing in the Bold "
+               "against the references' Bold.",
+         evidence=[["Step at the top of fl fb fh fk and their ff forms", "10 → 0"], ["Bold sides off their letters'", "15 of 15 → 0"],
+                   ["Kerning classes as the letters'", "15 of 15"], ["Crossings along the axis in fi ffi fj ffj", "none"]],
+         fix="charset.f_join; bold.bold_font (ligature sides). Check: audit_charset (top level; sides in both "
+             "masters; classes).",
+         views=[{"g": "fl", "ba": True, "comb": False}, {"g": "f_h", "ba": True, "comb": False}, {"g": "f_f_l", "ba": True, "comb": False}]),
+]
+for _f in FINDINGS:
+    if _f["id"] == "bold-open":
+        _f.update(build="0.79", round="0.79",
+                  after="0.79: still open. Four glyphs have no real Bold: Ⱥ and ₡ thicken only their upright "
+                        "parts, † and ⌘ are the Regular's outline at every weight (₩ has a real Bold now; ₡ fell "
+                        "back when its bars got round ends). Bold kerning is the Regular's pairs opened for "
+                        "collisions, not fitted against the references' Bold. There is no measured audit for marks, "
+                        "signs and composites in the Bold. The Bold's plain signs are barely heavier than the "
+                        "Regular's level strokes (figure 1).")
+    _f.setdefault("round", _f.get("build") or "0.70")
+CHANGES += [
+    ["0.79", "Plain stroke ends, sharp", "370 on 157 glyphs", "0 (radius 7)", "charset.soft_ends"],
+    ["0.79", "Alternates in ss03", "S, s, dollar", "dollar", "derive.ALTS"],
+    ["0.79", "g.ss02: tail's end, of the bowl's width", "0.657, bowl cut flat", "0.959, q's whole bowl", "charset.single_g"],
+    ["0.79", "5: bowl's lowest point; counter's widest", "0.365; 0.602", "0.457; 0.500", "clean.five_bowl"],
+    ["0.79", "fi ffi fj ffj: hook past the stem centre", "-0.99 stems", "+0.42", "charset.f_hook"],
+    ["0.79", "f into l b h k: step at the top", "10", "0", "charset.f_join"],
+    ["0.79", "Axis, all glyphs: turns / crossings / thin / stepping back", "43 / 26 / 36 / 3", "18 / 18 / 30 / 0", "bold.fix_turns, keep_apart"],
+]
+QA.append("0.79: targets, outlines, parts audit, joins and bowls, evenness, Bold audit (415 of 415), the letters' "
+          "axis sweep (13 stops), interpolatable, character set (with the new checks), fontbakery on both fonts: "
+          "pass. audit_axis.py (all glyphs along the axis) FAILS: an inflection in 18 glyphs, a crossing in 18, a "
+          "thin stroke in 30; stepping back and moved points pass.")
+NOT_CHECKED.append("0.79: the soft corners were looked at on the signs in the figure and at 13 to 32 px, not on each of "
+                   "the 155 glyphs. The single-storey g and the new fi were not set beside the references' in running "
+                   "text. Nothing was rendered on Windows.")
+
+
+# ------------------------------------------------------------------ build 0.80: the owner's notes on 0.79
+BUILD = "0.80"
+VERDICT = ("Build 0.80 answers your notes on 0.79. The single-storey g's tail is redrawn as its own round part; the "
+           "ball-end dollar is the one dollar; every serif was measured at five weights, which found one real fault "
+           "(the bracket under n's and k's flag) and fixed it; and there is a Light master, so the weight axis runs "
+           "from 300 to 700. Alternate candidates are drawn as a figure and written up, none in the font. Along the "
+           "axis every letter and figure is on target at the Light, the Bold and between; outside them the Bold "
+           "side fails as in 0.79 and the Light side adds a shorter list of its own, both on the axis card.")
+N80 = {"prev": "0.79", "build": "0.80", "round": "0.80"}
+for _f in FINDINGS:
+    if _f["id"] == "g-alt":
+        _f.update(N80, status="fixed",
+                  title="Single-storey g: the tail was a flat tray with a knob; redrawn as four quarter turns",
+                  body="Your note on 0.79: the tail is not smooth or round and looks off. What was wrong: 0.79's tail "
+                       "was still j's hook with its points slid sideways. Its inside ran level for 70 units and then "
+                       "turned into the ball within 41 units of height, and the ball sat as low as j's: its top 0.187 "
+                       "of the x-height under the baseline, where the three faces with this letter have 0.121, 0.158 "
+                       "and 0.134. The tail was also thicker at its lowest point than theirs (1.10 of the round "
+                       "letters' hairline against 0.97, 1.00, 0.92).",
+                  after="The tail is its own part: four quarter turns between five fixed places (the stem's two edges, "
+                        "the lowest point outside and inside, the ball), each with its handles at 0.55 of its side, "
+                        "a quarter of an ellipse, so no stretch is level or straight. The ball is j's, moved whole: "
+                        "its top to 0.138 of the x-height under the baseline. The tail is 0.963 of the hairline at "
+                        "its lowest point. Along the weight axis the ball's top and the lowest point follow the "
+                        "stem, to the values Source Serif 4 and Literata have at 700 (0.120; 0.560 of the bowl's "
+                        "width). Not done: g.ss02 before j still touches (the pair is not kerned).",
+                  evidence=[["Ball's top under the baseline, of the x-height", "0.187 → 0.138 (0.121, 0.158, 0.134)"],
+                            ["Level run inside the tail", "70 → none"],
+                            ["Thickness at the lowest point, of the hairline", "1.10 → 0.96 (0.97, 1.00, 0.92)"],
+                            ["Bold: ball's top; lowest point", "0.135; 0.518 → 0.120; 0.560"]],
+                  fix="charset.single_g_points (G_BALL_TOP, G_TAIL_THICK, G_ROUND and the Bold's pair). Measured by "
+                      "tools/single_g.py.",
+                  views=[{"g": "g.ss02", "ba": True, "comb": False}])
+    if _f["id"] == "s-alt":
+        _f.update(N80, status="fixed",
+                  title="One dollar: the ball-end one; stylistic set 3 is gone",
+                  body="Your note on 0.79: choose one dollar, the rounded one. 0.79 had two: the default, built in "
+                       "0.71 from the finished S (barb ends) and a stroke, and Libre Baskerville's own drawing with "
+                       "ball ends as stylistic set 3.",
+                  after="The ball-end drawing is the default dollar and there is no ss03. Its stroke is the capital "
+                        "hairline, as before. The Light and the Bold carry it by rule (no fallback).",
+                  evidence=[["Dollars in the font", "2 → 1"], ["Stylistic sets", "ss01, ss02, ss03 → ss01, ss02"]],
+                  fix="charset.letter_signs (the dollar is no longer the S and a stroke); derive.ALTS. Check: "
+                      "audit_charset (no dollar.ss03; the dollar is not the S's points).",
+                  views=[{"g": "dollar", "ba": True, "comb": False}])
+    if _f["id"] == "axis-all":
+        _f.update(N80, status="open",
+                  after="0.80. Bold side, unchanged: an inflection in 18 glyphs (x among them), a crossing in 18, a "
+                        "part thinner than the Regular's in 30 (24 are accents' thin ends). Light side, new: an "
+                        "inflection or a crossing in 8 (Ⱥ, †, ₩, the hooked G and W, the L with a tilde, ⌃) and a "
+                        "part that thins faster than a serif tip in 18 (asterisk, small 6 and 9, ™, ℠, both "
+                        "daggers, the comma accent and others). The first Light build had 31 of those: its accents "
+                        "were thinned evenly, which takes more from a tapered end; a mark now stops thinning at the "
+                        "tip's ratio. Moved points, weight stepping the wrong way and composites pass on both sides.")
+    if _f["id"] == "bold-open":
+        _f.update(N80,
+                  after="0.80: still open. No real Bold for Ⱥ, †, ₡, ⌘; no real Light for ₡, the four diagonal "
+                        "arrows and one combining comma. Kerning at the Light and the Bold is the Regular's pairs "
+                        "opened for collisions, not fitted. No measured audit for marks, signs and composites away "
+                        "from the Regular. The Bold's plain signs are barely heavier than the Regular's.")
+FINDINGS += [
+    dict(N80, id="flag-under", sev="medium", cls="Serifs", status="fixed",
+         title="Serifs at five weights: one fault, the bracket under n's and k's flag",
+         body="Your note: the serifs may need extra examination, each form, to see that they scale accurately and "
+              "consistently. Every foot serif and flag of the letters was measured the same way at 300, 400, 500, "
+              "600 and 700: its tip, its reach, its thickness half way in and the height where the bracket ends. "
+              "Tips and brackets came out one value per kind at every weight, within half a unit. One real fault: "
+              "under the flag of n and k the bracket was two curves (a short level run, then a quarter turn 26 "
+              "units smaller) where i, j, m, p, r, u, b, d, h and l have one. Those two flags stood 74 tall at the "
+              "stem against 92, at every weight.",
+         after="n's and k's flags (and eng's) take i's one curve. All serifs of a kind now agree at every weight: "
+               "lowercase feet tip 23.0, 30.0, 33.0, 36.6, 41.0 from 300 to 700 and reach 69, 68, 67, 66, 64; "
+               "capital feet the same tips and reach 76 to 71; flags 86, 93, 96, 99, 103 tall. Against the Regular "
+               "the tip is 0.77 at the Light and 1.36 at the Bold; four open references with a weight axis run 0.71 "
+               "to 0.87 and 1.12 to 1.51. The reach is 1.01 and 0.94; theirs 0.97 to 1.13 and 0.72 to 0.94. Left as "
+               "they are, by earlier decisions: the longer bowl-side foot of f, p and q, and r's long right foot.",
+         evidence=[["Flags off their kind's height, five weights", "10 (n and k) → 0"],
+                   ["n's and k's flag at the stem", "74 → 92 (the others' 92)"],
+                   ["Tip, Light and Bold over Regular", "0.77, 1.36 (references 0.71 to 0.87, 1.12 to 1.51)"],
+                   ["Spread of the tip within a kind", "0.3 or less at every weight"]],
+         fix="clean.flag_unders. Checks: audit_charset (no two-curve underside); tools/serif_axis.py (exit 1 on "
+             "any serif off its kind's median).",
+         views=[{"g": "n", "ba": True, "comb": False}, {"g": "k", "ba": True, "comb": False}]),
+    dict(N80, id="light", sev="medium", cls="Weight", status="open",
+         title="A Light master: the axis runs 300 to 700; letters on target, the rest not finished",
+         body="Your note: develop lighter weights as well. The Light is made as the Bold is, from the Regular's own "
+              "points by the same rules, run below the Regular. Its targets are measured on six faces that have a "
+              "Light (Georgia Pro, Serrif, Source Serif 4, Literata, Newsreader, Merriweather), Light over Regular: "
+              "stems 0.63, 0.79, 0.58, 0.76, 0.67, 0.77 (mean 0.70); o's hairline mean 0.82; H's bar 0.80; a "
+              "serif's tip 0.82; i's dot 0.78; n's advance 0.98. Thin parts do not follow the Bold's rule in "
+              "reverse: a Bold's hairline gains little, a Light's gives up most of what the stem does, so thin "
+              "parts take 1.72 times the thick parts' share of the step.",
+         after="Stem 78 to 55. Every letter and figure is on its target at the Light: 415 parts of 415. Open: 8 "
+               "glyphs with an inflection or crossing and 18 with a part that thins too fast (the axis card); six "
+               "glyphs on a fallback; kerning not fitted; the weights between 300 and 400 were checked on every "
+               "glyph for kinks, crossings and thin strokes but not part by part against targets.",
+         evidence=[["Light stem", "55 (0.70 of 78, six faces' mean)"], ["Parts on target at the Light", "415 of 415"],
+                   ["Axis", "400 to 700 → 300 to 700"], ["Glyphs on a fallback at the Light", "6"]],
+         fix="bold.vector (LIGHT_STEM, LIGHT_THIN), bold.axis_map, bold.variable, build.variable. Checks: "
+             "audit_bold.py 55; audit_axis.py (Light side). Measured by tools/light_refs.py.",
+         views=[{"g": "n", "comb": False}, {"g": "a", "comb": False}, {"g": "H", "comb": False}]),
+]
+for _f in FINDINGS:
+    _f.setdefault("round", _f.get("build") or "0.70")
+CHANGES += [
+    ["0.80", "g.ss02: ball's top under the baseline; level run inside", "0.187; 70", "0.138; none", "charset.single_g_points"],
+    ["0.80", "Dollars", "barb-end default + ball-end ss03", "ball-end, one", "charset.letter_signs"],
+    ["0.80", "Flag at the stem, n and k", "74", "92", "clean.flag_unders"],
+    ["0.80", "Serifs off their kind's median at 300 to 700", "10 (n's and k's flags)", "0", "tools/serif_axis.py"],
+    ["0.80", "Weight axis", "400 to 700", "300 to 700 (Light stem 55)", "bold.vector, bold.variable"],
+    ["0.80", "Light: parts on target, letters and figures", "no Light", "415 of 415", "audit_bold.py 55"],
+]
+QA.append("0.80: targets, outlines, parts audit, joins and bowls, evenness, Bold audit (415 of 415), Light audit (415 "
+          "of 415), the letters' axis sweep 400 to 700, interpolatable, character set, fontbakery on both fonts, "
+          "serifs along the axis (0 off): pass. audit_axis.py (all glyphs) FAILS: Bold side as 0.79 (18, 18, 30); "
+          "Light side an inflection in 5 glyphs, a crossing in 5, a thin part in 18.")
+NOT_CHECKED.append("0.80: the Light between 300 and 400 was not audited part by part. The Light's kerning and its "
+                   "marks' sizes were not measured against the references' Light. The alternate candidates are "
+                   "Regular only and unkerned. g.ss02 before j touches. Nothing was rendered on Windows.")

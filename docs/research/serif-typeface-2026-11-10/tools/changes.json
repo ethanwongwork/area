@@ -1,5 +1,82 @@
 [
  {
+  "build": "0.80",
+  "date": "2026-11-14",
+  "items": [
+   {
+    "glyphs": "g",
+    "chars": "g",
+    "text": "The single-storey g's tail (stylistic set 2) is redrawn. What was wrong: it was still j's hook with its points slid sideways. The inside ran level for 70 units and then turned up into the ball within 41 units of height, and the ball sat as low as j's, so the tail read as a flat tray with a knob on the end. Now the tail is its own part: four quarter turns between the stem, the lowest point and the ball, each a true quarter of an ellipse, so nothing in it is level or straight. The ball's top is raised to where the three references with this letter have it (0.14 of the x-height under the baseline; it was 0.19) and the tail is as thin at the bottom as theirs (0.96 of the round letters' hairline; it was 1.10). In the Bold the ball rises a little more and the lowest point moves left, as Source Serif's and Literata's Bold do, so the inside stays round."
+   },
+   {
+    "glyphs": "$",
+    "chars": "$",
+    "text": "One dollar: the ball-end one you prefer. It is now the default and stylistic set 3 is gone. The S-with-barbs dollar I built in 0.71 is removed; the stroke through the new one is the same hairline as before."
+   },
+   {
+    "glyphs": "n k",
+    "chars": "nkŋ",
+    "text": "Serifs, examined one by one at five weights. I measured every foot serif and flag of the letters (tip, reach, thickness half way in, where the bracket ends) at 300, 400, 500, 600 and 700. Result: every true serif of a kind has the same tip and the same bracket at every weight, within half a unit, and they scale as the references' do (tip 0.77 of the Regular's at Light and 1.36 at Bold; four open references run 0.71 to 0.87 and 1.12 to 1.51). One real fault turned up: the bracket under the flag of n and k was drawn as two curves where every other flag has one, so those two flags stood 74 tall at the stem against 92 on i, m, p, r, u, b, d, h and l, at every weight. Both now have the same single curve. f, p and q keep their longer bowl-side foot and r its long right foot; those are earlier decisions, not faults."
+   },
+   {
+    "glyphs": "Light",
+    "chars": "anHRg",
+    "text": "There is a Light now, and the weight slider runs from 300 to 700. It is made the way the Bold is: the Regular's own points moved by the same rules, run below the Regular instead of above it. The numbers come from six faces that have a Light (Georgia Pro, Serrif, Source Serif, Literata, Newsreader, Merriweather), Light over Regular: stems 0.70, so Area's stem goes from 78 to 55; hairlines 0.82; serif tips 0.82; the dot of i 0.78; letters stay almost as wide (0.98). One thing differs from the Bold: towards the Bold thin strokes barely gain, but towards the Light they give up nearly as much as the stems, so contrast holds. Every letter and figure is on its target (415 parts of 415). Outside the letters it is not finished: see the list under this."
+   },
+   {
+    "glyphs": "Open",
+    "chars": "",
+    "text": "Not finished along the weight axis. Bold side, unchanged from 0.79: 18 glyphs gain an inflection (x among them), 18 gain a crossing, 30 have a part thinner than the Regular's (24 are accents' thin ends). Light side, new: 8 glyphs gain an inflection or a crossing (Ⱥ, †, ₩, the hooked G and W, the L with a tilde, ⌃) and 18 have a part that thins more than a serif tip does (the asterisk, small 6 and 9, ™ and ℠, the two daggers, the comma accent). Four glyphs still have no real Bold (Ⱥ † ₡ ⌘) and six no real Light (₡, the four diagonal arrows, one combining comma). The Light's kerning is the Regular's; it is not fitted. The Light was checked at 300 by parts; the weights between 300 and 400 were checked for kinks, crossings and thin strokes on every glyph but not part by part."
+   },
+   {
+    "glyphs": "Alternates",
+    "chars": "al07z",
+    "text": "Alternate candidates are drawn but not in the font: a single-storey a (q's top on d's foot), an l with a tail (l's stem on t's hook), a slashed zero, a dotted zero, a barred 7 and a barred z. The figure shows each beside the default, large and at 16 px. I went through the whole list you pasted, letter by letter, in docs/research/serif-typeface-2026-11-10/alternates-2026-11-14.md: most of it is italic or display forms that do not help interface text. My order if you want any built: slashed zero, then the single-storey a as the partner of the g, then the tailed l."
+   }
+  ]
+ },
+ {
+  "build": "0.79",
+  "date": "2026-11-14",
+  "items": [
+   {
+    "glyphs": "- – — − + = | / _",
+    "chars": "-–—−+=|/_\\[]±¬¦→←↑↓",
+    "text": "Soft corners, the option you picked, is built. Every plain stroke outside the letters now ends on the same small radius the letters' cut ends have (7): the hyphen and dashes, minus, plus, equals, underscore, bar, both slashes and the fraction bar, the arrows, the square brackets' arms, and the bars struck through letters and currency signs (ł đ ħ € ₩ and the rest). 155 glyphs, 370 ends, Regular and Bold. A corner where two strokes meet, like the inside of the plus, stays sharp. At 13 to 16 px you will not see it; at headline sizes the signs stop being the only square-cornered things in a line."
+   },
+   {
+    "glyphs": "S s $",
+    "chars": "$",
+    "text": "You were right about the S. I measured the alternate S and s against the default ones: both end in the same cut barbs, the spine is the same weight (95 and 96, 85 and 85), and the only real differences were width (S 5 units narrower of 489, s 55 of 379) and slightly sharper barbs. That is proportion, not form, so both are removed. The dollar is different in form: Libre Baskerville's ends in balls where the default ends in barbs. It stays, alone, and stylistic set 3 is now called Ball-end dollar."
+   },
+   {
+    "glyphs": "g",
+    "chars": "g",
+    "text": "The single-storey g (stylistic set 2) is rebuilt. What was wrong: I had cut q level at the baseline to take its top, and that sliced off the bottom of the bowl, which dips 10 units under the line. So the bowl stood on a flat 138 units long. That was the flat bottom you saw. The tail was also just j's narrow hook. The three faces I could measure that have this letter (Serrif, Source Serif, Literata) all use their q's whole bowl and run the tail under the whole of it, ending 0.93 to 0.97 of the bowl's width to the left; Area's ended at 0.66. Now the bowl is q's, whole, and the tail is j's stem, thickness and ball, reaching 0.96. The Bold's is put together the same way from the Bold q and j, so its bowl is no longer lighter than the q beside it."
+   },
+   {
+    "glyphs": "5",
+    "chars": "5",
+    "text": "The 5's bowl did lean. Its lowest point lay 0.37 of the way across the bowl from the left, where Georgia Pro and Serrif have 0.45 and 0.47 (and Area's own 3 has 0.45), so the bottom ran up to the right in one long slope. And the inside of the bowl was widest higher up than the outside (0.60 against 0.55 of the bowl's height; the references 0.50 against 0.53), which put the heaviest part of the stroke low on the right. Both are now at the references' mean. The ball, the upright stroke and the flag did not move. 3, 6 and 9 measured inside the references and are unchanged."
+   },
+   {
+    "glyphs": "fi ffi fj ffj",
+    "chars": "ﬁ",
+    "text": "Yes, the hook should reach the i. In seven of the eight faces I measured, the fi ligature has no dot and f's hook runs 0.3 to 0.6 of a stem past the middle of the i's stem, so the end of the hook stands where the dot was. Area's fi was a plain f and a dotless i at their ordinary spacing: the hook stopped a whole stem short, with nothing over the i. Now the hook reaches 0.42 of a stem past the i's stem (Georgia Pro 0.41, Serrif 0.43), the i sits a little closer (0.885 of the distance with ligatures off, as both references), and f's bar runs into the i's flag. The same for ffi, fj and ffj. With ligatures off nothing changed: f and i measured inside the references there."
+   },
+   {
+    "glyphs": "fl fb fh fk ffl",
+    "chars": "ﬂ",
+    "text": "Where f's arc runs into a tall letter, the top had a 10-unit step: the bridge sat a little under the tall letter's slanted top. It is one level edge now, from the arc's highest point to the far corner of the stem. I checked every ligature for its two sides (equal to the letters set apart, in both weights; the Bold's were 4 too wide on the left and ff 22 on the right, fixed), its kerning classes (all as their letters), and looked at each at 13, 16, 32 and 100 px in Regular and Bold, on and off. ff, ft and the tall ones did not need redrawing."
+   },
+   {
+    "glyphs": "Weight",
+    "chars": "",
+    "text": "The weight axis, plainly. What passes: every letter and figure is on its target at all 13 weights from 400 to 700, and the font has no incompatible glyph. What I fixed this build: curves that picked up a wobble between Regular and Bold are down from 43 glyphs to 18 (W and g are fixed; x still has one, on a serif's curve); glyphs whose outline crossed itself from 26 to 18 (the double quotes and the dots under letters no longer close up); the three capital breves no longer get lighter towards Bold. What still fails: those 18 and 18, and 30 glyphs with a part thinner than in the Regular, 24 of them the thin ends of accents (1 to 5 units). Four glyphs still have no real Bold: Ⱥ, †, ₡ and ⌘ (₩ has one now; ₡ lost its own when its bars got round ends). Not done: Bold kerning is still the Regular's opened for collisions, not fitted, and there is no measured audit yet for marks and signs in Bold. The Weight section below shows 400, 500, 600 and 700 at headline and text sizes, with the alternates."
+   }
+  ]
+ },
+ {
   "build": "0.78",
   "date": "2026-11-14",
   "items": [
