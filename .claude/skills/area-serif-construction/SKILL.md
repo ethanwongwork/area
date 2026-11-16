@@ -234,7 +234,11 @@ masters match point for point and every weight between them is sound. Read `bold
   (44); the Bold's diagonal letters measured against n and H and the references (only x outside: 1.134 against 0.997 to
   1.032): x's opening must be constrained where it is measured (across the ink, not on knots) before its angle can be
   kept; s's barbs are not read as strokes (grow 1.05, references 1.27 to 1.53); T's arm reads as a curved level stroke
-  (1.24, capitals' arms 1.33); the Light g's loop needs a centreline construction.
+  (1.24, capitals' arms 1.33); the Light g's loop needs a centreline construction. Owner round 4: s fixed (turns by
+  the round strokes' ratio, barbs read: `HINTS["s"]`); x infeasible as asked: each end's bracket-level and serif-level
+  openings move together, Regular difference 88/87, Bold geometry 66/62 with the angle kept; one of the two whites
+  must be chosen; S (lean drift -0.050, band -0.027 to +0.002) and c's lower stroke (grows 1.24, references 1.58 to
+  1.75) open.
 
 ## What is still outside the system
 

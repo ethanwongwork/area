@@ -578,3 +578,16 @@ terminal table, the axis list (item 6).
   at all 17 weights 300 to 700 (`build/weight/stage3/kern-every25.log`).
 - Regular against round 2: y and ystroke (the ball, 8 units). Figures: `17-advance.png`, `17-lean.png` (img/081);
   `17-lines.png` (with the reference faces drawn, in build/figures/081 only).
+
+## Owner round 4 (15 November 2026)
+
+| # | Item | Result |
+|---|---|---|
+| 52 | x: openings set where measured (`bold.crossing_openings`; crossing recognised only where a stroke's both edges are cut by strokes of the other lean that share its corners: x alone in the face; A's legs, X's whole strokes, the ampersand are not) | **Infeasible under the round's constraints, off.** Each end of the x carries two openings: between its bracket and the thick stroke's (137..378, 184..402) and between its serif's end and the thick stroke's (181..334, 228..359). Moving the end (the only unknown that leaves both thicknesses, the thick angle and the serif and bracket rules alone) moves both alike. Their Regular difference is 88 and 87, and the opening rule keeps it (targets 207.4 and 119.4, 184.4 and 97.4 at the crossing share 0.39, Source Serif 4's least); with the thick angle kept and the brackets from its edge the Bold's difference is 66 and 62. Met at the serif's end, the bracket-level openings are 185 and 159 (22 and 25 short); met at the bracket, the serif-level top opening is 122 (25 over). Only the bracket's offset from its edge or the serif's reach could separate them; both are fixed rules. A decision is needed on which white the x keeps |
+| 53 | s: turns on the round strokes' ratio (`x_target`, sub "turn": t times 146/82), barbs read as strokes and grown by the thin upright rule (`HINTS["s"]`, as C's S's G's) | s lean 400 > 700: -0.097 > -0.128 (drift -0.031; Georgia Pro -0.014, Source Serif 4 +0.024: within 0.02 of the band); top-right quarter 0.19 > 0.17 (within 0.02). Bold advance 551 > 519; Light 457 > 456. Bold, light, sweep and parts audits pass |
+| 54 | S, c | Not landed: S's barbs are already read and its sides grow 1.76 (references 1.71, 1.77); its lean still drifts -0.050 (band -0.027 to +0.002), top-right quarter 0.20 > 0.17. c's lower right 0.16 > 0.13: its lower stroke (56 units, read as a curved level stroke) grows 1.24 where the references' grow 1.58 and 1.75; c's lean is within 0.02 of the band. A rule for level strokes between a hairline and a round stroke was not written |
+| 55 | Light g | Not landed. Every round of the part solve leaves the outer loop's node (471, -74) at 1.34 to 1.83 and thins the counter's bottom 63.3 > 60.7 (4%); the centreline construction was not written |
+
+Final (`build/qa-081.log`, per-master kerning refit run): as round 3 (Light curvature fails on g; audit_axis Bold 8
+thin, Light 1; audit_rays the same 18 glyphs, 27,632 places); bold, light, sweep, parts and interpolation pass.
+Regular unchanged against round 3; masters: s and its accented forms. Figure `18-lines.png`.
