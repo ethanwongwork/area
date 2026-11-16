@@ -904,4 +904,38 @@ def g_loop_master(R, N, laws, yr, rounds=6):
                 key = (f, short(T), abs(s1 - 1) + abs(s2 - 1))
                 if key < best[:3]:
                     best = key + (T,)
+    if best[0]:
+        # owner round 6: the link's node itself slides along the link's straight (the straight shortens, the curve from
+        # the loop's right side gets room to ease into it), the least slide with the curve's two handles that clears
+        # curvecheck with no turn gained and no place short of its law that was not
+        base = best[3]
+        Pn = base[outer]
+        nxt = (i3 + step) % n
+        if Pn[nxt][2] == "line":
+            a = np.array(Pn[i3][:2], float)
+            u = np.array(Pn[nxt][:2], float) - a
+            u /= max(1e-9, np.linalg.norm(u))
+            found = None
+            for dd in range(2, 41, 2):
+                for s1 in np.arange(0.7, 1.41, 0.05):
+                    for s2 in np.arange(0.7, 1.61, 0.05):
+                        T = [list(C) for C in base]
+                        Qt = T[outer]
+                        nd = a + u * dd
+                        Qt[i3] = (round(nd[0]), round(nd[1])) + tuple(Qt[i3][2:])
+                        hb = np.array(Pn[h_b][:2], float) + (nd - a) - nd
+                        Qt[h_b] = (round(nd[0] + hb[0] * s2), round(nd[1] + hb[1] * s2)) + tuple(Qt[h_b][2:])
+                        ha = np.array(Pn[h_a][:2], float) - np.array(Pn[i0][:2], float)
+                        Qt[h_a] = (round(Pn[i0][0] + ha[0] * s1), round(Pn[i0][1] + ha[1] * s1)) + tuple(Qt[h_a][2:])
+                        if K.report("", T, yr)[0] or turns(T):
+                            continue
+                        sh_ = short(T)
+                        if sh_ > best[1]:
+                            continue
+                        key = (abs(s1 - 1) + abs(s2 - 1))
+                        if found is None or key < found[0]:
+                            found = (key, sh_, T)
+                if found:
+                    best = (0, found[1], float(dd), found[2])
+                    break
     return best[3], before, best[0], best[1]          # faults (a gained turn counts ten), places short
