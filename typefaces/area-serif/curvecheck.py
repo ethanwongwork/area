@@ -13,6 +13,8 @@ and for every curve in the region:
   flat    a stretch over FLAT_LEN units whose radius is over FLAT_R (reads level or straight in a round part)
 
 `python curvecheck.py [ufo]` checks the descender loops and tails (REGIONS) and exits 1 on a failure; in qa.py.
+`python curvecheck.py [ufo] --hooks` (axis round 2) checks the ball and neck of every hook or tail ending in a tilted
+ball (hook_regions) instead: on a master it fails on a fault the Regular's own drawing does not have there.
 The thresholds are this file's numbers, set so that 0.80's g (default and ss02) fails and 0.81's passes, and j and y, which
 did not change, pass.
   ease    a curve leaving a straight: the curvature at the join over the curve's tightest. A curve that starts at
@@ -299,15 +301,51 @@ def report(name, contours, yr):
     return bad, worst, N, Cv, E, V
 
 
+# Axis round 2: the hooks and tails that end in a ball drawn at a tilt (bold.tilted_balls: Ƙ Ⱳ Ƴ ⱳ ƴ ƒ and the 22
+# other letters the reading reaches) had no curvature check in any master. Their ball and neck are read here: the box
+# of the ball's three nodes in the master being checked (found by the Regular's point numbers, so it follows the
+# master's own ball), grown by one chord each way so the neck into the ball is inside it.
+HOOK_GROW = 1.0
+
+
+def hook_regions(reg, font):
+    """{glyph: (y0, y1, x0, x1)} for every Regular glyph with a tilted ball, in `font`'s own coordinates."""
+    import bold as B
+    import unicodedata
+    out = {}
+    for g in reg:
+        if not g.contours or g.components or g.name not in font or B.is_mark(g) or g.name in REGIONS:
+            continue
+        cat = unicodedata.category(chr(g.unicodes[0])) if g.unicodes else ""
+        if (cat[:1] in ("P", "S") and g.name not in B.HINTS) or B.HINTS.get(g.name, {}).get("sub") in ("sign", "small sign"):
+            continue
+        R = [[(p.x, p.y, p.type, p.smooth) for p in c.points] for c in g.contours]
+        M = glyph_points(font, g.name)
+        if [len(P) for P in R] != [len(P) for P in M]:
+            continue
+        idx = [i for i, P in enumerate(R) if not B.is_dot(P)]
+        body = [R[i] for i in idx]
+        for t in B.tilted_balls(body, B.balls(body)):
+            ci, ia = idx[t[7][0]], t[7][1]
+            P = M[ci]
+            n = len(P)
+            pts = [P[(ia + k) % n][:2] for k in (0, 3, 6)]
+            d = HOOK_GROW * math.dist(pts[0], pts[2])
+            box = (min(p[1] for p in pts) - d, max(p[1] for p in pts) + d, min(p[0] for p in pts) - d, max(p[0] for p in pts) + d)
+            key = g.name if g.name not in out else f"{g.name}#{len([k for k in out if k.startswith(g.name)])}"
+            out[key] = box
+    return out
+
+
 def glyph_points(font, name):
     return [[(p.x, p.y, p.type, p.smooth) for p in c.points] for c in font[name].contours]
 
 
-def main(path=UFO):
+def main(path=UFO, hooks_only=False):
     import ufoLib2
     font = ufoLib2.Font.open(path)
     fails = []
-    for name, (chooser, yr, *xr) in REGIONS.items():
+    for name, (chooser, yr, *xr) in ({} if hooks_only else REGIONS).items():
         yr = tuple(yr) + (tuple(xr[0]) if xr else ())
         if name not in font:
             if "." not in name:
@@ -322,9 +360,38 @@ def main(path=UFO):
             print("   ", b, f"  (known: {known})" if known else "")
             if not known:
                 fails.append(b)
-    print(f"curve continuity: {'pass' if not fails else 'FAIL'} ({len(fails)} faults)")
+    # the hooks with a tilted ball, their ball and neck (read in the Regular's UFO alongside, for the point numbers)
+    # They are first drawings (outside charset.COVERAGE): the Regular's own faults are listed, and a master fails only
+    # on a fault the Regular does not have at the same node or curve (one the weight engine made).
+    if not hooks_only:
+        print(f"curve continuity: {'pass' if not fails else 'FAIL'} ({len(fails)} faults)")
+        return 1 if fails else 0
+    reg = font if os.path.abspath(path) == os.path.abspath(UFO) else ufoLib2.Font.open(UFO)
+    hooks = hook_regions(reg, font)
+    hooks_reg = hook_regions(reg, reg)
+    import re as _re
+
+    def fault_key(b):                                            # "node 55" / "curve 11-14" and the kind of fault
+        where = _re.search(r"(node \d+|curve \d+-\d+)", b).group(1)
+        kind = next(k for k in ("handles", "curvature", "flat", "inflection", "leaves", "tail") if k in b)
+        return where, kind
+    hook_bad, hook_new = [], []
+    for key, yr in hooks.items():
+        name = key.split("#")[0]
+        bad = report(name, glyph_points(font, name), yr)[0]
+        own = {fault_key(b) for b in report(name, glyph_points(reg, name), hooks_reg.get(key, yr))[0]} if font is not reg else set()
+        for b in bad:
+            (hook_bad if font is reg or fault_key(b) in own else hook_new).append(f"{key}: {b}")
+    print(f"hooks with a ball (ball and neck): {len(hooks)} parts on {len({k.split('#')[0] for k in hooks})} glyphs; "
+          f"{len(hook_bad)} faults the Regular's drawing has (listed), {len(hook_new)} the master made")
+    for b in hook_bad:
+        print("    (drawn)", b)
+    for b in hook_new:
+        print("   ", b)
+    fails += hook_new
+    print(f"curve continuity, hooks with a ball: {'pass' if not fails else 'FAIL'} ({len(fails)} faults)")
     return 1 if fails else 0
 
 
 if __name__ == "__main__":
-    sys.exit(main(*sys.argv[1:2]))
+    sys.exit(main(*[a for a in sys.argv[1:2] if not a.startswith("-")], hooks_only="--hooks" in sys.argv))

@@ -4038,6 +4038,25 @@ def bold_font(reg, stem=STEM, **over):
                 c_.points = [Point(x, y, t, smooth=s_) for x, y, t, s_ in P]
             evened.append(f"{name}{' (mid)' if f_ is layer else ''} {nb0} > {nb1} faults")
     notes.append(f"curvature at nodes: {len(evened)} contours ({'; '.join(evened)})")
+    # axis round 2: the hooks and tails ending in a tilted ball (curvecheck.hook_regions: the ball and its neck, in
+    # this master's own coordinates) by the same rule, kept only where their faults fall and no place thins
+    hooked = []
+    for key, yr_ in _CC.hook_regions(reg, font).items():
+        name = key.split("#")[0]
+        if name in struck:
+            continue
+        all0 = [[(q.x, q.y, q.type, q.smooth) for q in c_.points] for c_ in font[name].contours]
+        nb0 = len(_CC.report(name, all0, yr_)[0])
+        if not nb0:
+            continue
+        new_, nb1, thin_ = _LOOPS.even_part(all0, yr_)
+        if thin_ or nb1 >= nb0:
+            hooked.append(f"{key} kept ({nb0} faults; {nb1} {'thinning' if thin_ else 'left'})")
+            continue
+        for c_, P in zip(font[name].contours, new_):
+            c_.points = [Point(x, y, t, smooth=s_) for x, y, t, s_ in P]
+        hooked.append(f"{key} {nb0} > {nb1} faults")
+    notes.append(f"hooks with a ball, curvature at nodes: {len(hooked)} parts ({'; '.join(hooked)})")
     # owner round 5: g's loop in a master whose loop curvecheck faults (the Light's): built from its centreline
     # (loops.g_loop_master); kept only when its faults fall and no place falls short of its law that the engine's did
     # not

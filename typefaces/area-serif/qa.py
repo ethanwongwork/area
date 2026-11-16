@@ -89,6 +89,10 @@ def main():
                 code, out = run(f"curves, {style}", [PY, "curvecheck.py", mp])
                 print("\n".join(l for l in out.splitlines() if not l.startswith("    ") or "known" not in l))
                 results.append((f"curve continuity in the {style} master", code == 0))
+                # axis round 2: the hooks and tails ending in a tilted ball, their ball and neck
+                code, out = run(f"curves of the hooks with a ball, {style}", [PY, "curvecheck.py", mp, "--hooks"])
+                print("\n".join(l for l in out.splitlines() if "(drawn)" not in l))
+                results.append((f"curve continuity of the hooks with a ball in the {style} master", code == 0))
         code, out = run("axis", [PY, "audit_bold.py", "--sweep"])
         print(out)
         results.append(("weight axis (the same audit every 25 units)", code == 0))
