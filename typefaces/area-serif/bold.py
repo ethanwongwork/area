@@ -3666,7 +3666,8 @@ def bold_font(reg, stem=STEM, **over):
         # 0.81 (close): the places move (white._taper_places) towards the Light only; towards the Bold they moved the
         # quotes' nodes on the Bold master alone, and between it and the quotes' mid master the tail dipped
         # (quotedblleft 40.8 > 35.3 at 675)
-        new_, log_ = WHITE.keep_taper(glyph_contours(g), cs, laws, only_thinner=v["f"] > 0, nodes=v["f"] < 0)
+        new_, log_ = WHITE.keep_taper(glyph_contours(g), cs, laws, only_thinner=v["f"] > 0, nodes=v["f"] < 0,
+                                      cuts=v["f"] > 0)
         if log_:
             for c, P in zip(font[g.name].contours, new_):
                 c.points = [Point(x, y, t, smooth=s_) for x, y, t, s_ in P]

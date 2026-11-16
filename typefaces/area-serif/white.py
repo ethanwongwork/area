@@ -778,7 +778,7 @@ def taper_readings(contours, n_seg=6, close=False):
     return th, eid, where
 
 
-def keep_taper(R, N, laws, tol=0.5, n_seg=6, only_thinner=False, nodes=True):
+def keep_taper(R, N, laws, tol=0.5, n_seg=6, only_thinner=False, nodes=True, cuts=False):
     """Along a tapering stroke (a tail, a hook, a flag) every station keeps at least its own law's share of the
     Regular's thickness there (taper_law): stem-like places the stem's ratio, hairline-like the hairline's, a serif
     tip's or an end's the tip's, in between in proportion, so the taper keeps its shape and no place thins faster than its own kind. A station is
@@ -875,6 +875,11 @@ def keep_taper(R, N, laws, tol=0.5, n_seg=6, only_thinner=False, nodes=True):
         log += log2
         N, log3 = _straight_nodes(R, N, seg_of, eR, turns0, thR, laws[0][1])
         log += log3
+    elif cuts:
+        # axis round 3: towards the Bold a stroke's straight cut end takes the tip's law too (the ogonek's top, 12
+        # units, stayed 12 while its stroke lengthened: 19.7 > 18.7 across it at the Bold); no other node moves
+        N, log2 = _taper_places(R, N, short, seg_of, eR, turns0, thR, cut_only=True)
+        log += log2
     return N, log
 
 
@@ -989,7 +994,7 @@ NODE_JND = 0.03            # a place left short of its law by more than this sha
                            # difference in weight, audit_rays' JND) after the handles moves its nodes
 
 
-def _taper_places(R, N, short, seg_of, eR, turns0, thR):
+def _taper_places(R, N, short, seg_of, eR, turns0, thR, cut_only=False):
     """0.81 (close): when handles cannot hold a place, move the places, not the tension (the construction skill,
     g.ss02's tail). A station still short of its law by more than NODE_JND of its law is a place the handle lengths
     cannot reach: the smooth nodes at the two ends of the curve it lies on and of the curve its ray ends on move,
@@ -1050,6 +1055,8 @@ def _taper_places(R, N, short, seg_of, eR, turns0, thR):
                 continue
             hs = handles_of(P, m)
             level = False
+        elif cut_only:
+            continue
         else:
             hs = handles_of(P, m)
             if len(hs) != 2:
