@@ -819,3 +819,16 @@ ends were kept. A first build turned X in the Light too (6 units' spread at 300,
 300, so the rule acts towards the Bold only. Left as the engine draws it: the x's thick stroke's inner bracket at the
 Bold stands almost upright under its serif (the serif reaches 1 unit past the edge there, 37 in the Regular), as
 before this item. Figure: `item3-x-X.png`.
+
+| # | Item | Cause | Rule | Before > after |
+|---|---|---|---|---|
+| 84 | 4. z and Z: the diagonal's outer ends grow, so the letters lean right as they gain weight | The diagonal already thickens about its centreline (its centreline moves 2 units against the four ends' centre at 700). Its outer corners are the top bar's right end and the bottom bar's left end, so each goes out by half the diagonal's gain across, while the bars' free ends (the beaks) stay: about the four ends' centre at 700, z +5 / +36 / +32 / 0 (TL TR BL BR), Z +5 / +42 / +40 / +2; the references within -10 to +9 of each other, all four growing together (Georgia Pro 38 to 41, Serrif 21 to 29) | The bars' free ends move out level by the difference (`bold.bar_ends`, both masters, after the C rule): the nodes of the top 40% left of its middle (the top-left beak and the bar's end) and of the bottom 40% right of its middle (the bottom-right beak), with their handles; the bars' level edges take up the length. The diagonal, the outer corners and the letter's width stay the engine's; the four ends grow alike, as the references' do. A barred z's middle bar lies in neither band. Composites on Z, z, z.ss06 take the letter's new advance (they were placed before the master rules). Chosen over pulling the diagonal's corners in (turning the diagonal steeper with the bars shifted): that keeps the mean but narrows the Bold z by 31 units (1.044 of the Regular against n's 1.098), where the z's width growth is already inside the references' (1.010 of n's; Georgia Pro 1.013, Source Serif 4 1.001) | ends about their centre at 700: z +37 / +36 / +32 / +32, Z +43 / +42 / +40 / +40 (top-right less top-left -0.6 and -0.6; bottom-left less bottom-right -0.4 and -0.4; limit 8). Spread at 450 to 700 every 50: z 1 2 2 3 3 5, Z 1 1 2 2 3 3 (before: z 11 22 34 47 62 79 read as TR+BL less TL+BR; the band ends' Rd at 700 +40 > +8, Ld +66 > +34). At 300: z 3, Z 1 (before 16 and 15). balance.py dRd/stem at 700: z +0.58 > +0.06, Z +0.65 > +0.03 (references -0.18 to +0.15) |
+
+Item 4, what moved: in both masters z, Z, z.ss06 and their composites (ź ż ž ẑ ẓ ẕ Ź Ż Ž Ẑ Ẓ Ẕ and the .ss06 forms), and the
+struck Ƶ ƶ, which the variable font builds from the master's letter. Advances: Light z 470 > 457, z.ss06 464 > 454, Z 605
+> 590 (the top-left beak, the Light's leftmost ink, comes in 13 and 15); Bold Z 687 > 690, z 530. Regular unchanged.
+Kerning: only keys with the z and Z families (Light 132, Bold 130). Checks against item 3's build: audit_axis, audit_bold
+(both), parts, curvecheck (three masters, hooks), evaluate, even unchanged; audit_rays the same 8 glyphs (27,226 >
+27,240 places); audit_lean 50 > 48 flags: z's lean at 700 (+0.048, references +0.008 to +0.025) and the z and Z centre
+flags at 300 cured; one new: Z at 700 now leans +0.009 against the references' +0.019 to +0.040 (it leaned more before
+and passed). Figures: `item4-z-Z.png`, `item4-derived.png`.

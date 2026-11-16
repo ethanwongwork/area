@@ -799,6 +799,36 @@ def c_terminals(R, N):
 
 
 CROSS_ENDS = ("x", "X")
+Z_SHAPES = ("z", "Z", "z.ss06")
+
+
+def bar_ends(R, N):
+    """Owner round 8, item 4. Towards the Bold a Z's diagonal thickens about its centreline, so its outer corners (the
+    top bar's right end, the bottom bar's left end) go out by half its gain across while the bars' free ends stay: at
+    700 Z's grew +40 and +35 against +5 and +2, z's +36 and +32 against +5 and 0 (about the four ends' centre; the
+    seven references' within -10 to +9 of each other, Georgia Pro 38 to 41 at all four). The bars' free ends (the
+    nodes of the top 40% left of its middle, with the top-left beak; of the bottom 40% right of its middle) move out
+    level by the difference, so the four ends grow alike, the diagonal and the letter's width stay the engine's, and
+    each bar's level edges take up the length. A barred z's middle bar is in neither band. Towards the Light the same
+    rule shortens them. Returns (contours, dx, growth before, growth after)."""
+    g0 = end_growth(R, N)
+    d = round(((g0[1] + g0[2]) - (g0[0] + g0[3])) / 2)
+    if not d:
+        return N, 0, g0, g0
+    pts = [q for P in N for q in P if q[2] is not None]
+    ys = [q[1] for q in pts]
+    y0, y1 = min(ys), max(ys)
+    H = y1 - y0
+    top = [q[0] for q in pts if q[1] >= y0 + 0.6 * H]
+    bot = [q[0] for q in pts if q[1] <= y0 + 0.4 * H]
+    mt, mb = (min(top) + max(top)) / 2, (min(bot) + max(bot)) / 2
+    out = []
+    for P in N:
+        out.append([(q[0] - d, q[1]) + tuple(q[2:]) if q[1] >= y0 + 0.6 * H and q[0] < mt else
+                    (q[0] + d, q[1]) + tuple(q[2:]) if q[1] <= y0 + 0.4 * H and q[0] > mb else q for q in P])
+    return out, d, g0, end_growth(R, out)
+
+
 def end_tips(contours):
     """The outermost on-curve x of the top and bottom 40% of a glyph: (top left, top right, bottom left, bottom right),
     as build/weightscale/balance.py reads a glyph's ends."""
@@ -3902,6 +3932,21 @@ def bold_font(reg, stem=STEM, **over):
             lined.append(f"{name} top {d_[0]:+d} bottom {d_[1]:+d}")
             resided.add(name)
     notes.append(f"C terminals on one line: {', '.join(lined)}")
+    # owner round 8, item 4: a Z's four ends grow alike (bar_ends)
+    barred_ = []
+    for name in Z_SHAPES:
+        if name not in reg or name not in font or name in struck:
+            continue
+        R_, N_ = glyph_contours(reg[name]), glyph_contours(font[name])
+        if [len(P) for P in R_] != [len(P) for P in N_]:
+            continue
+        M_, d_, g0_, g1_ = bar_ends(R_, N_)
+        if d_:
+            for c, P in zip(font[name].contours, M_):
+                c.points = [Point(x, y, t, smooth=s_) for x, y, t, s_ in P]
+            barred_.append(f"{name} {d_:+d} (ends {', '.join(f'{x:+.0f}' for x in g0_)} > {', '.join(f'{x:+.0f}' for x in g1_)})")
+            resided.add(name)
+    notes.append(f"Z bar ends: {', '.join(barred_)}")
     # 0.81 (integration): along a tapering stroke (a tail, a hook, a flag, a terminal) each place keeps its own
     # law's share of the Regular's thickness there, read off the ladder by what it is: a stem's place the stem's
     # ratio, a hairline's the hairline's, a serif tip's or an end's the tip's, in between interpolated
@@ -3971,6 +4016,11 @@ def bold_font(reg, stem=STEM, **over):
             for an in font[name].anchors:
                 an.x += shift
         font[name].width = round(b1 + shift + (g.width - r1) + dr)
+    for g in reg:                                              # owner round 8: a composite on a Z whose bar ends
+        if g.components and not g.contours and g.name in font:  # moved takes its letter's advance again, as the
+            b_ = g.components[0].baseGlyph                     # composites pass gave it before (Ž on Z)
+            if b_ in Z_SHAPES and b_ in resided and b_ in reg and g.width == reg[b_].width:
+                font[g.name].width = font[b_].width
     from ufoLib2.objects import Contour
     layer = font.layers.newLayer("mid")                        # the sparse master: only the glyphs that need one
     for g in reg:
