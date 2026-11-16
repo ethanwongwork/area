@@ -1077,9 +1077,10 @@ def fork_stem(strokes, pos, adj, placed):
     return out
 
 
-def balls(contours):
+def balls(contours, tilted=False):
     """A ball terminal: two quarter turns the same way, about as wide as tall, that make a half round 50 to 130
-    across. [(axis the diameter lies on, lo, hi, the other axis, lo, hi)]."""
+    across. [(axis the diameter lies on, lo, hi, the other axis, lo, hi)]. tilted: also the balls drawn turned off
+    the axis (`tilted_balls`, axis round)."""
     out = []
     sa = [sum(P[i][0] * P[(i + 1) % len(P)][1] - P[(i + 1) % len(P)][0] * P[i][1] for i in range(len(P))) for P in contours]
     ink = max(sa, key=abs) > 0 if sa else True
@@ -1100,7 +1101,122 @@ def balls(contours):
                     cr1 = (b[0] - a[0]) * (c[1] - b[1]) - (b[1] - a[1]) * (c[0] - b[0])
                     if abs(cr1) > 0.3 * d * d:
                         out.append((ax, min(a[ax], c[ax]), max(a[ax], c[ax]), o, min(a[o], b[o]), max(a[o], b[o])))
+    if tilted:
+        out += [t[:6] for t in tilted_balls(contours, out)]
     return out
+
+
+# Axis round (16 November 2026): a ball at any tilt. The IPA hooks' balls (Ƙ Ⱳ Ƴ ⱳ ƴ, ƒ's two) are drawn turned off
+# upright: the diameter's two ends 28 to 30 units apart across the axis (ƒ 14 and 18), so the reading above, which
+# asks for them within 6, never found them and the ball law (`bold`'s "ball" spans, 1 + 0.40 f) never reached them:
+# the engine read the ball's box as a stroke (Ƙ's ball 91 tall went to 64 in the Light, the stem's 0.70, and the
+# neck before it to 0.59 of 400). A ball is found here by what makes it one, not by its alignment: three nodes joined
+# by two curves, the chord between the outer two TILT_D_MIN to 130 long and within TILT_MAX of an axis, the arc's
+# farthest point from the chord BALL_APEX of the chord out (a half round, or a half ellipse no flatter than 0.40 and
+# no longer than 0.70) and within BALL_ALONG of the chord's middle, the turn as above, and ink all along the chord (a
+# ball is solid across its diameter). A ball the reading above already found is not read again (an arc sharing two
+# of its three nodes' box); of two arcs read on one ball, the rounder. Only a letter's: a sign's teardrop (comma,
+# quotes) and an accent are parts of their own (`glyph_bold` reads them by the sign law and the marks' boxes). It adds
+# 30 balls on 28 glyphs (the IPA and Latin Extended hooks and tails with a ball; see axis-0.81.md, axis round).
+TILT_MAX = 25                       # degrees off the axis (the hooks 16.8 to 18.2, ƒ 8.0 and 11.3)
+TILT_D_MIN = 70                     # the chord at least the smallest ball the upright reading finds on a full-size letter
+                                    # (eopen's 71; only superiors and horns are smaller): x's and Y's bracket rounds, 56 to
+                                    # 61, are not balls
+BALL_APEX = (0.40, 0.70)            # the far point's distance from the chord, of the chord (a half circle 0.50)
+BALL_ALONG = 0.12                   # its distance along the chord from the chord's middle, of the chord
+
+
+def _bz(p, t):
+    u = 1 - t
+    return tuple(u ** 3 * p[0][k] + 3 * u * u * t * p[1][k] + 3 * u * t * t * p[2][k] + t ** 3 * p[3][k] for k in (0, 1))
+
+
+def _flatten(P, n=8):
+    """A contour as a polyline (each curve cut in n)."""
+    m = len(P)
+    on = [i for i, q in enumerate(P) if q[2] is not None]
+    pts = []
+    for k, i in enumerate(on):
+        j = on[(k + 1) % len(on)]
+        ctl = [P[(i + d) % m][:2] for d in range((j - i) % m + 1)]
+        if len(ctl) == 4:
+            pts += [_bz(ctl, t / n) for t in range(n)]
+        else:
+            pts.append(ctl[0])
+    return pts
+
+
+def _inside(polys_, p):
+    """Non-zero winding of point p against polylines."""
+    w = 0
+    for Q in polys_:
+        for (x1, y1), (x2, y2) in zip(Q, Q[1:] + Q[:1]):
+            cr = (x2 - x1) * (p[1] - y1) - (p[0] - x1) * (y2 - y1)
+            if y1 <= p[1] < y2 and cr > 0:
+                w += 1
+            elif y2 <= p[1] < y1 and cr < 0:
+                w -= 1
+    return w != 0
+
+
+def tilted_balls(contours, found=()):
+    """Balls at a tilt of more than 6 units (see above): [(ax, lo, hi, o, lo2, hi2, (a, b, c), (ci, ia))]. ax is the
+    axis nearer the chord, (lo, hi) the chord's ends on it, (lo2, hi2) the ball's half width on the other axis from
+    the chord end nearer the far side's node b (as the reading above takes a's)."""
+    out = []
+    flat = None
+    sa = [sum(P[i][0] * P[(i + 1) % len(P)][1] - P[(i + 1) % len(P)][0] * P[i][1] for i in range(len(P))) for P in contours]
+    ink = max(sa, key=abs) > 0 if sa else True
+    boxes = [((lo, hi) if ax == 0 else (lo2, hi2), (lo2, hi2) if ax == 0 else (lo, hi)) for ax, lo, hi, o, lo2, hi2 in found]
+    for ci, (P, a_) in enumerate(zip(contours, sa)):
+        if (a_ > 0) != ink:
+            continue
+        n = len(P)
+        on = [(i, q) for i, q in enumerate(P) if q[2] is not None]
+        for k in range(len(on)):
+            (ia, a), (ib, b), (ic, c) = on[k], on[(k + 1) % len(on)], on[(k + 2) % len(on)]
+            if (ib - ia) % n != 3 or (ic - ib) % n != 3 or P[ib][2] != "curve" or P[ic][2] != "curve":
+                continue
+            D = math.dist(a[:2], c[:2])
+            if not TILT_D_MIN <= D <= 130:
+                continue
+            ax = 0 if abs(c[0] - a[0]) >= abs(c[1] - a[1]) else 1
+            o = 1 - ax
+            if abs(a[o] - c[o]) <= 6 or math.degrees(math.asin(min(1.0, abs(a[o] - c[o]) / D))) > TILT_MAX:
+                continue
+            ux, uy = (c[0] - a[0]) / D, (c[1] - a[1]) / D
+            m = ((a[0] + c[0]) / 2, (a[1] + c[1]) / 2)
+            pts = [_bz([P[(i0 + j) % n][:2] for j in range(4)], t / 16) for i0 in (ia, ib) for t in range(17)]
+            side = [(p[0] - m[0]) * uy - (p[1] - m[1]) * ux for p in pts]
+            if min(side) < -2 and max(side) > 2:                   # the arc crosses its chord: no half round
+                continue
+            far = max(range(len(pts)), key=lambda i: abs(side[i]))
+            h = abs(side[far]) / D
+            along = ((pts[far][0] - m[0]) * ux + (pts[far][1] - m[1]) * uy) / D
+            if not (BALL_APEX[0] <= h <= BALL_APEX[1]) or abs(along) > BALL_ALONG:
+                continue
+            cr1 = (b[0] - a[0]) * (c[1] - b[1]) - (b[1] - a[1]) * (c[0] - b[0])
+            if abs(cr1) <= 0.3 * D * D:
+                continue
+            if any(sum(1 for q in (a, b, c) if bx[0] - 1 <= q[0] <= bx[1] + 1 and by[0] - 1 <= q[1] <= by[1] + 1) >= 2
+                   for bx, by in boxes):
+                continue
+            # a ball is solid across its diameter: the chord runs through ink from end to end (the outside of a curved
+            # stroke, ʔ's and ʕ's tops, is a half round too, but its chord crosses the counter)
+            if flat is None:
+                flat = [_flatten(Q) for Q in contours]
+            if not all(_inside(flat, (a[0] + (c[0] - a[0]) * f_, a[1] + (c[1] - a[1]) * f_)) for f_ in (0.2, 0.35, 0.5, 0.65, 0.8)):
+                continue
+            e = a if abs(a[o] - b[o]) <= abs(c[o] - b[o]) else c
+            out.append((abs(h - 0.5), (ax, min(a[ax], c[ax]), max(a[ax], c[ax]), o, min(e[o], b[o]), max(e[o], b[o]),
+                        (a[:2], b[:2], c[:2]), (ci, ia))))
+    # one ball, one reading: of two arcs that share two nodes (a ball read from its neck and again from its side), the
+    # rounder half
+    keep = []
+    for _h, t in sorted(out, key=lambda r: r[0]):
+        if not any(t[7][0] == k[7][0] and len(set(t[6]) & set(k[6])) >= 2 for k in keep):
+            keep.append(t)
+    return keep
 
 
 def shallow(contours, polys_):
@@ -1722,7 +1838,7 @@ def bold(contours, width, v, name="", hints=None):
         if o == 1 and (lo, hi) not in ys and t <= 36:
             extra_y.append((lo, hi, t * v["tip"], "end"))
     mark = mark_like = bool(hints.get("mark"))                 # a mark is too small for the ball and facing readers
-    bl = [] if mark else balls(body)
+    bl = [] if mark else balls(body, tilted=v.get("sub") not in ("sign", "small sign"))   # axis round: a letter's ball
     ball_knots = {k for ax, lo, hi, o, lo2, hi2 in bl for k in ((lo, hi) if ax == 1 else (lo2, hi2))}
     for key in [k for k, st in ys.items() if k[1] - k[0] >= 64 and (not st.get("pair") or set(k) & ball_knots)]:
         del ys[key]                                            # a thick level thing that is not a stroke (a ball, a blob)

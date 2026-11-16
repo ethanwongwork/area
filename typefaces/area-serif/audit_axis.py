@@ -283,7 +283,37 @@ def points_of(contours, max_deg=60):
             cross = u[0] * w[1] - u[1] * w[0]
             if ang < max_deg and (cross < 0) == (area > 0):       # the ink lies inside the angle
                 out.append(q[:2])
+    # axis round: a point drawn with a flat (a vertex's outside flat, parts.vertices: 0.42 of the stem, 33 at most in
+    # the lowercase) is a pointed end: a straight under FLAT_POINT between two corners, the two lines either side of
+    # it meeting under max_deg with the ink inside. Its place is the flat's middle. (The w's and ⱳ's middle apex: a
+    # level cut 16 units under its 8-unit flat read 19.6 across the two outsides at 300, a cut across a vertex, found
+    # or missed by where a scan line met a node; the two lines meet at 40 degrees.)
+    for P in contours:
+        n = len(P)
+        area = sum(P[i][0] * P[(i + 1) % n][1] - P[(i + 1) % n][0] * P[i][1] for i in range(n))
+        on = [i for i, q in enumerate(P) if q[2] is not None]
+        for k, i in enumerate(on):
+            j = on[(k + 1) % len(on)]
+            if P[j][2] != "line" or P[i][3] or P[j][3] or math.dist(P[i][:2], P[j][:2]) >= FLAT_POINT:
+                continue
+            h, l_ = on[(k - 1) % len(on)], on[(k + 2) % len(on)]
+            if P[i][2] != "line" or P[l_][2] != "line":
+                continue                                            # both sides straight, as a vertex's are
+            u = (P[h][0] - P[i][0], P[h][1] - P[i][1])
+            w = (P[l_][0] - P[j][0], P[l_][1] - P[j][1])
+            if not any(u) or not any(w):
+                continue
+            ang = math.degrees(math.acos(max(-1, min(1, (u[0] * w[0] + u[1] * w[1]) / (math.hypot(*u) * math.hypot(*w))))))
+            # the two sides run away from the flat on the same side of it, and the ink is between them
+            d = (P[j][0] - P[i][0], P[j][1] - P[i][1])
+            side = (d[0] * u[1] - d[1] * u[0]) * (d[0] * w[1] - d[1] * w[0])
+            inside = (d[0] * u[1] - d[1] * u[0] > 0) == (area > 0)
+            if ang < max_deg and side > 0 and inside:
+                out.append(((P[i][0] + P[j][0]) / 2, (P[i][1] + P[j][1]) / 2))
     return out
+
+
+FLAT_POINT = 30           # a flat this short between two converging straights is a point (the serif tip's length)
 
 
 def sweep(reg, master, mids, ts, tm, tip_at, fails, lighter=False, w_of=None):
