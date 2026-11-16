@@ -462,3 +462,49 @@ steps failed with "No such file"); their first lines now name this worktree's in
 - The 27 hook-above composites at 300, 400, 552, 700 render solid on CoreText (`ct_overlaps.py`, AREA_CT_NAMES) and
   FreeType (64 px against the same instance with overlaps removed: at most 17 and 13 of 255 lighter, anti-aliasing,
   no knocked-out overlap); the composites carry no OVERLAP_COMPOUND flag and neither renderer needs it.
+
+## Owner round 2 (15 November 2026)
+
+Figures (`build/figures/081/`, `img/081/`): `16-figures.png` (8 9 0 6 5 3, before under after, 300 to 700),
+`16-lean.png` (lean at 700 against the references' band), `16-thickening.png` (growth per part kind), `16-combs.png`
+(g, a.ss03, l.ss04 in the Light and Bold).
+
+| # | Point | Cause | Rule | Where | Before > after |
+|---|---|---|---|---|---|
+| 48 | The 9 "too steep, slightly italicized" (and the 6, its turned drawing) | Already in the Regular: the quarter from the right extreme to the lowest point 309 by 409 (0.76; Georgia Pro 0.94, Source Serif 4 0.92), the edge from the widest point to 0.15 of the height leaning 17.6 degrees (24.5, 25.8) | The owner's decision on those numbers: the 9's advance stays; its lowest point (and the tail's inside with it) moves left until the quarter is 0.90 as wide as tall; the ball moves with it until its left side stands on the bowl's left extreme; the extreme's downward handle shortens until the edge leans 23.5 degrees; then one curvature at each node (`loops.even_nodes`). The 6 takes the same rule turned half round | `clean.nine_six`, `nine_tail_contour`, `NINE_QUARTER`, `NINE_LEAN` (normalize, after the 5's bowl) | lowest point 249 > 191, ball -32, edge lean 17.6 > 23.6 (the 6 23.4); read on the variable font 25.0 at 400 (refs 24.5 to 25.8), 28.5 at 700 (27.4 to 29.2); curvecheck clean; Bold advances 672 > 684 |
+| 49 | The 5 "bottom right too steep, reads italic" | Not its bowl: at 400 its widest point (0.328 of the height; refs 0.342, 0.325), overhang past the flag (0.040 of the width; 0.046, 0.043), lowest point (0.451; 0.444, 0.447) are inside the references'. Its upright stroke leans 9.5 degrees (Georgia Pro 6.7, Source Serif 4 4.0); the ball sits a little low (0.169 of the height; 0.191, 0.212) | The upright stroke turns about the middle of its height to the references' mean lean (5.35 degrees); the foot's knot and the bowl's join move with the end they hang on, the flag's corners with the top; a curve off the turned line takes its direction | `clean.five_stem`, `FIVE_LEAN` | 9.5 > 5.3 degrees (read on the variable font). The ball's height is left |
+| 50 | Lean of x (and v w V W) at the Bold | The anchors the x knot map places turn the thick stroke 36.4 > 42.7 degrees (refs within 2.2) | Tried: a crossing thick diagonal keeps the Regular's lean (`LEAN_KEEP_THICK`), and a bracket drawn as two curves takes its middle node from the kept edge (`BRACKET_FROM_EDGE`), which removed the brackets' turns (x lean at 700 -0.123 > -0.045, inside the band; Bold advance +24% > +8%). Not kept: the full build missed parts-audit targets (x's openings 193 and 166 against 219.5 and 196.5, v's and w's serif uprights 52 and 50 against 54 and 53, y's and Y's openings by 5 and 2) and the ampersand's crossing stroke fell 52 > 15 at 700; on every thick diagonal (v w V W too) W's middle stroke thinned 41 > 27 and ® met R's leg. Both are off in the build | `bold.slant_lines`, `serif_on_slant` | not changed |
+| 51 | Curvature in the masters (Bold g 1.87, a.ss03 1.76, l.ss04 1.91 and 6.05; Light g) | even_nodes alone thinned the stroke (by 2 to 11%) and was refused | The part is solved with its other edge: each round evens the nodes, then the curves either side of every place now thinner take its thickness back by their handle lengths (`white.keep_taper` with the part's own thickness as the law: nodes and tangents stay, no turn); kept only where faults fall and nothing thins by half the JND | `loops.even_part`; `bold.bold_font` | Bold: all pass (g, its mid master, j, a.ss03, l.ss04, eng, fj, ffj, jdotless). Light g left: 4 faults (1.37, 1.42, a G1 of 6.3 degrees, an ease of 0.56): every solve thinned it |
+
+Lean grows with weight or is drawn (lean at 400 and 700; Area / Georgia Pro / Source Serif 4): s -0.097 > -0.162 /
+-0.073 > -0.087 / -0.096 > -0.072 (in the Regular inside, grows: engine); G -0.081 > -0.138 / -0.073 > -0.107 /
+-0.106 > -0.114 (grows); S -0.072 > -0.122 / -0.065 > -0.093 / -0.091 > -0.089 (grows); X -0.078 > -0.126 / -0.070 >
+-0.097 / -0.060 > -0.084 (drawn a little and grows); z +0.065 > +0.112 / +0.042 > +0.067 / +0.015 > +0.023 (drawn and
+grows); e +0.102 > +0.142 / +0.103 > +0.114 / +0.105 > +0.086 (grows); g +0.030 > -0.009 / -0.012 > -0.009 / +0.005 >
+-0.003 (drawn); w -0.021 > -0.058 / -0.038 > -0.059 / -0.029 > -0.032 (grows past Source only); a +0.000 > +0.033 /
++0.039 > +0.029 / +0.026 > +0.024 (drawn, and grows the other way); c +0.070 > +0.098 / +0.070 > +0.081 / +0.060 >
++0.048 (grows). None fixed. One cause measured for s: its two turns grow 2.3 times (62 > 143) where the stems grow 1.8
+(`bold.SUB_ROUND["turn"]` 1.26 of a round stroke's gain), but setting them to the round strokes' gain moved its lean
+only -0.065 > -0.049 against the references' -0.014 to +0.024: not the main cause; not changed.
+
+Even thickening (`16-thickening.png`, `tools/thickening.py` on audit_bold's part readings of each master): balls 1.398
+to 1.404 at the Bold and 0.848 to 0.852 at the Light; necks within 1.1% and 2.8%; serif tips and reaches within 1.4%;
+stems over 90 within 0.9%. Outside a kind's median by more than the JND: s's turns (2.31 against the stems' 1.78), g's
+ear and link (2.20), the x's and w's thick diagonals (1.82; median 1.72), Z's level strokes (1.33; median 1.26) and E's
+at the Light (0.78; median 0.83); counters and openings (whites, which close by design: g 0.68, K 0.80). Listed, not
+changed.
+
+Not done this round: the j y g.ss02 against f r c a s 3 5 6 9 terminal table beyond the ball (the ball's diameter over
+the stem: round ends 1.13 Regular, 0.88 Bold, 1.36 Light; j 1.10, 0.86, 1.35; y 1.23, 0.96, 1.49: y's ball is 96 where
+the others are 86 to 88, drawn so in the Regular; the neck and exit angle were not measured); the axis list (hooks with
+a ball, Bold same-place flags, @ in the Light, ⌦ ⌫ ✓, ɽ, junction rays) was not worked.
+
+### Final (`build/qa-081.log`)
+
+- qa.py: as the owner round, but `curve continuity in the Bold master` now passes; the Light master still fails on g.
+  audit_axis Bold 8 thin (Khook, at, cedi, ogonek, ogonekcomb, one.ss01, registered, tretroflexhook), Light 1 (yhook);
+  audit_rays 18 glyphs (the same 18), 474 read, 27,584 places. Every 25 units: rays 18 glyphs, 27,438 places; kern
+  pass at all 17 weights (`build/weight/stage2/`).
+- The Regular against the owner round's build: five (the stroke, 15 units), nine and six (72, 73), their superiors and
+  inferiors (as derived), partialdiff (73, drawn from the 6), the fractions that carry them (advances by 1 to 8); 15
+  kerning keys. Advances of 5, 6, 9 unchanged.

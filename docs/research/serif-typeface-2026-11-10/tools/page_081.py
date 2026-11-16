@@ -59,6 +59,27 @@ def img_tag(path, width=1400):
 
 # 0.81 (owner round, 15 November): the owner's three points first, each figure open under a two-line caption: what
 # changed, then what is still open
+STAGE2 = [
+    ("16-figures.png", "Owner round 2, the 9 and the 6: the 9's lower right is fuller (its quarter 0.90 as wide as tall, was 0.76; "
+     "its right edge leans 23.6 degrees, was 17.6; references 24.5 to 25.8), its ball under the bowl's left side; the 6 is the "
+     "same drawing turned. The 5's upright stroke leans 5.4 degrees, was 9.5 (references 4.0 to 6.7).",
+     "Open: the 9's and 6's ink now drifts a little more between top and bottom as the weight rises (0.026 of the height at 700, "
+     "references under 0.009); the 3 needed nothing."),
+    ("16-lean.png", "Owner round 2, lean as the weight rises: each letter's top half against its bottom half at 700, the "
+     "references' band in grey. The 5 moved into line; a fix for the x (its thick stroke kept at the Regular's slant) brought "
+     "it inside the band in a trial build.",
+     "Open: that fix is not in this build: it narrowed the x's openings past their target and thinned the ampersand's crossing; "
+     "s, z, G, S, X, e, g, w, a, c still lean past both references."),
+    ("16-thickening.png", "Owner round 2, does every part thicken evenly: growth from the Regular to 300 and to 700 per part "
+     "kind and size, its spread, and the glyph farthest from its kind (balls, necks, serif tips and reaches within 1.5%).",
+     "Open: s's two turns grow 2.3 times where the stems grow 1.8 (a measured rule, s's turns); g's ear and link; the x's "
+     "thick stroke."),
+    ("16-combs.png", "Owner round 2, the default g's loop, a.ss03 and the tailed l in the Light and Bold masters, curvature "
+     "combs, before over after: in the Bold each part is solved with its other edge, so its curves meet at one curvature "
+     "and the stroke keeps its thickness.",
+     "Open: the Light g's loop (its link and loop curves) could not be solved without thinning; it stands."),
+]
+
 OWNER = [
     ("15-gss02.png", "Point B, the single-storey g: its tail is back to 0.80's proportions (the ball's top 72 units under the "
      "baseline again, where 0.81 had raised it to 16), on 0.81's smooth arc, at every weight.",
@@ -73,6 +94,14 @@ OWNER = [
      "Open: no lean is fixed yet (x worst, then s z G S X e g w a c); the 9 and 6 are not changed yet (their lower right, "
      "upper left, is steeper than both references in the Regular)."),
 ]
+
+
+def stage2_section(figdir):
+    figs = "".join(f"<figure style='margin:18px 0'><figcaption style='font:15px/1.45 system-ui;margin:0 0 6px'>"
+                   f"<div style='font-weight:600'>{html.escape(a)}</div><div>{html.escape(b)}</div></figcaption>"
+                   f"{img_tag(os.path.join(figdir, f))}</figure>"
+                   for f, a, b in STAGE2 if os.path.exists(os.path.join(figdir, f)))
+    return (f"<h2 style='font-size:22px'>Owner round 2: lean, the 9 6 5, smooth tails</h2>{figs}") if figs else ""
 
 
 def owner_section(figdir):
@@ -90,7 +119,7 @@ def section(figdir):
                    f"{html.escape(t)}</figcaption>{img_tag(os.path.join(figdir, f))}</figure>"
                    for f, t in TITLES if os.path.exists(os.path.join(figdir, f)))
     return (f"<section id='changed-081' style='max-width:1400px;margin:0 auto;padding:16px;font:15px/1.5 system-ui;"
-            f"color:inherit'>{owner_section(figdir)}<h2 style='font-size:22px'>What changed in 0.81 ({html.escape(entry['date'])})</h2>"
+            f"color:inherit'>{stage2_section(figdir)}{owner_section(figdir)}<h2 style='font-size:22px'>What changed in 0.81 ({html.escape(entry['date'])})</h2>"
             f"<ul style='padding-left:20px'>{items}</ul><details><summary style='cursor:pointer;font-weight:600'>"
             f"The figures ({sum(1 for f, _ in TITLES if os.path.exists(os.path.join(figdir, f)))})</summary>{figs}"
             f"</details></section>")
