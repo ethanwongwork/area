@@ -3945,6 +3945,64 @@ def bold_font(reg, stem=STEM, **over):
         chorded.append(f"{g.name} curve {ci}:{i} ({m0:+.1f} > {m1:+.1f})")
         resided.add(g.name)
     notes.append(f"curves kept on their chord: {len(chorded)} ({'; '.join(chorded)})")
+    # axis round 3: a letter in a ring (®, whose ring is ©'s point for point in the Regular) takes the ring's own part,
+    # ©'s in this master, and is placed and sized by the ring's counter: centred in it, scaled about its centre so its
+    # white to the counter is the Regular's times the counter's own change across (the way ℗'s P is sized by its
+    # ring in the Regular). The engine had grown the R as a letter (414 > 484 wide at the Bold) and keep_white pushed
+    # the ring out by it: the ring read 40 > 32 by R's leg
+    ringed = []
+    if "copyright" in reg and "copyright" in font:
+        RC = glyph_contours(reg["copyright"])
+        MC = glyph_contours(font["copyright"])
+        import audit_axis as _AA3
+
+        def _gap(A, C_):
+            a_ = np.array(_AA3.flat([A])[0])
+            c_ = np.array(_AA3.flat([C_])[0])
+            return float(np.min(np.hypot(a_[:, None, 0] - c_[None, :, 0], a_[:, None, 1] - c_[None, :, 1])))
+        for g in reg:
+            if g.name == "copyright" or not g.contours or g.components or g.name in struck or g.name not in font \
+                    or g.name in layer:
+                continue
+            R_ = glyph_contours(g)
+            if len(R_) < 3 or [q[:2] for q in R_[0]] != [q[:2] for q in RC[0]] or [q[:2] for q in R_[1]] != [q[:2] for q in RC[1]]:
+                continue
+            N_ = glyph_contours(font[g.name])
+            inner = N_[2:]
+            w0 = min(_gap(R_[1], P) for P in R_[2:])
+            span = lambda P, ax: (min(q[ax] for q in P), max(q[ax] for q in P))   # noqa: E731
+            want = w0 * (span(MC[1], 0)[1] - span(MC[1], 0)[0]) / (span(RC[1], 0)[1] - span(RC[1], 0)[0])
+            # the letter's centre keeps the Regular's offset from the counter's centre, in the counter's own change
+            rx = (min(q[0] for P in R_[2:] for q in P) + max(q[0] for P in R_[2:] for q in P)) / 2 - sum(span(RC[1], 0)) / 2
+            ry = (min(q[1] for P in R_[2:] for q in P) + max(q[1] for P in R_[2:] for q in P)) / 2 - sum(span(RC[1], 1)) / 2
+            kx = (span(MC[1], 0)[1] - span(MC[1], 0)[0]) / (span(RC[1], 0)[1] - span(RC[1], 0)[0])
+            ky = (span(MC[1], 1)[1] - span(MC[1], 1)[0]) / (span(RC[1], 1)[1] - span(RC[1], 1)[0])
+            cx = sum(span(MC[1], 0)) / 2 + rx * kx
+            cy = sum(span(MC[1], 1)) / 2 + ry * ky
+            ix = (min(q[0] for P in inner for q in P) + max(q[0] for P in inner for q in P)) / 2
+            iy = (min(q[1] for P in inner for q in P) + max(q[1] for P in inner for q in P)) / 2
+
+            def placed(sc):
+                return [[(round(cx + (q[0] - ix) * sc), round(cy + (q[1] - iy) * sc)) + tuple(q[2:]) for q in P] for P in inner]
+            lo_, hi_ = 0.7, 1.0
+            if min(_gap(MC[1], P) for P in placed(1.0)) < want:
+                for _ in range(20):
+                    mid_ = (lo_ + hi_) / 2
+                    if min(_gap(MC[1], P) for P in placed(mid_)) >= want:
+                        lo_ = mid_
+                    else:
+                        hi_ = mid_
+                sc = lo_
+            else:
+                sc = 1.0
+            out_ = [MC[0], MC[1]] + placed(sc)
+            for c_, P in zip(font[g.name].contours, out_):
+                c_.points = [Point(x, y, t, smooth=s_) for x, y, t, s_ in P]
+            if g.width == reg["copyright"].width:
+                font[g.name].width = font["copyright"].width
+            ringed.append(f"{g.name} (scale {sc:.3f}, white {min(_gap(MC[1], P) for P in placed(sc)):.0f} for {want:.0f})")
+            resided.add(g.name)
+    notes.append(f"letters in a ring: {len(ringed)} ({'; '.join(ringed)})")
     for g in reg:                                              # 0.81: last, a symmetric sign made so again
         if g.contours and not g.components and g.name in font and g.name not in struck:
             cs = glyph_contours(font[g.name])
