@@ -776,6 +776,21 @@ def s_terminal(R, N):
     return out, d
 
 
+C_SHAPES = ("C", "c")
+
+
+def c_terminals(R, N):
+    """Owner round 8: the top and bottom terminals of a C moved level, half the difference each, until their rightmost
+    ink keeps the Regular's difference (0 since 0.82: joins.terminal_line). Returns (contours, (top dx, bottom dx))."""
+    import joins as _J
+    gap = ((_J.terminal_reach(N, "top") - _J.terminal_reach(N, "bottom"))
+           - (_J.terminal_reach(R, "top") - _J.terminal_reach(R, "bottom")))
+    dt = -round(gap / 2)
+    db = round(gap) + dt
+    out = [_J.move_terminal(_J.move_terminal(N[0], "top", dt), "bottom", db) if (dt or db) else N[0]]
+    return out, (dt, db)
+
+
 def crossing_openings(strokes, adj, X, Y, moved_to, opens, v):
     """Owner round 4: two straight diagonals that cross (x) keep the thick stroke's angle; the openings between their
     ends are then set where they are measured, between the placed nodes (the parts audit's place), not on the x
@@ -3651,6 +3666,26 @@ def bold_font(reg, stem=STEM, **over):
             shaped.append(f"{name} {d_:+d}")
             resided.add(name)
     notes.append(f"S bowls: {', '.join(shaped)}")
+    # owner round 8, item 2: a C's two terminals stay on one vertical in every master, as in the Regular
+    # (joins.TERMINAL_LINE). The engine grew C's top barb 46 and its lower end 34 at the Bold (c: ball 63, lower end
+    # 50; at the Light C -23 / -15, c -24 / -19): the references' stay within a few units of each other. Each terminal
+    # moves level by half the difference, so the two meet on the line between the engine's two reaches. Once the
+    # Regular's terminals end on one x (0.82) the engine's knot map moves them alike, and this holds only what the
+    # later rules shift (the Light c's lower end, 1 unit).
+    lined = []
+    for name in C_SHAPES:
+        if name not in reg or name not in font or name in struck:
+            continue
+        R_, N_ = glyph_contours(reg[name]), glyph_contours(font[name])
+        if [len(P) for P in R_] != [len(P) for P in N_] or len(N_) != 1:
+            continue
+        M_, d_ = c_terminals(R_, N_)
+        if any(d_):
+            for c, P in zip(font[name].contours, M_):
+                c.points = [Point(x, y, t, smooth=s_) for x, y, t, s_ in P]
+            lined.append(f"{name} top {d_[0]:+d} bottom {d_[1]:+d}")
+            resided.add(name)
+    notes.append(f"C terminals on one line: {', '.join(lined)}")
     # 0.81 (integration): along a tapering stroke (a tail, a hook, a flag, a terminal) each place keeps its own
     # law's share of the Regular's thickness there, read off the ladder by what it is: a stem's place the stem's
     # ratio, a hairline's the hairline's, a serif tip's or an end's the tip's, in between interpolated

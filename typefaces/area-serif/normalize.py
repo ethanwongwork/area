@@ -1176,6 +1176,7 @@ def normalize(font):
     print("joins: diagonals", JOINS.steep_diagonals(font), JOINS.even_fillets(font))   # 0.53, 0.54
     print("joins: G", JOINS.G_lower(font, cap=D.CAP_HEIGHT))             # 0.54
     print("joins: C end", JOINS.C_end(font, cap=D.CAP_HEIGHT))          # 0.52, on the trued and tidied outline
+    print("joins: terminals on one line", JOINS.terminal_line(font))    # 0.82 (owner round 8): C c, before the extremes
     print("joins: u heads", JOINS.u_flags(font, xh=D.X_HEIGHT))          # 0.67: i's flag on both of u's stems
     print("balance: capital thins", BALANCE.cap_thins(font))             # 0.67: arms 46, crossbars 49, closing strokes 47
     print("balance: B", BALANCE.B_lower(font))                           # 0.67: the lower bowl at the O's weight

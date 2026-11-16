@@ -776,3 +776,29 @@ collision keys before j: g.ss02 / ɡ with j, ĵ, ȷ 71 > 37 (Regular), 72 / 69 >
 85 / 64 > 57 / 32), and the Bold's g.ss02 florin 16 > none: the 0.80 tail reaches less far under the j. No kerning refit
 was needed. Figures (`build/owner8/`): `new-over-080.png` (0.82 filled, 0.80 red), `new-over-081.png` (0.82 filled, round
 7 red), `before-081-over-080.png`; numbers in `new-over-080.txt`, `diff-vs-081.txt`. Pages not rebuilt.
+
+### Owner round 8, items 2 to 4 (16 November 2026): weight gained evenly on both sides
+
+The owner looked at overlays (the Regular grey under each weight in red) and ruled that some letters "do not gain
+weight evenly on both sides, causing visual imbalance". Measured first with `build/weightscale/balance.py` (part B,
+against seven reference families, numbers only); ends are the outermost ink of the top and bottom 40% of the glyph.
+Each item was built, diffed against the build before it (all three masters, the Bold's mid layer, the Regular TTF and
+the variable font at 300, 400, 550, 700), audited and looked at before the next. Figures and numbers: `build/owner8/`.
+
+| # | Item | Cause | Rule | Before > after |
+|---|---|---|---|---|
+| 82 | 2. C and c: "the c top part is way longer than the bottom part ... the top and bottom parts should be aligned" | Drawn so in the Regular: C's top barb reached 33 units past its lower end (C 661 against 628), c's lower end 10 past its ball; every reference has the bottom as far out as the top or further (C top - bottom -30 to +2). The engine then grew the top more (C +12, c +13 at 700) | The two terminals end on one vertical (`joins.terminal_line`, in normalize after `C_end`, before the extremes are solved): the line is the references' median reach of the rightmost terminal over the round letter's width (C over O 0.891, range 0.887 to 0.901; c over o 0.882, range 0.820 to 0.923; `build/owner8/cshare.py`), so C's top barb comes in 11 and its lower end goes out 22, c's ball goes out 10 and its lower end stays (1 unit). A terminal moves level as one piece and the half of the letter it ends is stretched level to meet it: the outer and counter extremes keep their share of the run from the left extreme, each handle its share of its curve (`joins.move_terminal`, as `charset.restretch_x`); moving the terminal alone left a flat place in C's lower arc. In the masters the two terminals share one x knot, so the engine moves them alike; `bold.c_terminals` holds them on one line after the later rules (half the difference each; no glyph needed it in the final build). The advance follows the rightmost ink: C 680 > 669 (side bearings unchanged), c 505 | top - bottom, variable font, 300 / 350 / 400 / 450 / 500 / 550 / 600 / 650 / 700: C +25 +28 +33 +35 +36 +38 +41 +42 +45 > 0 at every stop; c -15 -13 -10 -8 -7 -4 -2 0 +3 > +1 at every stop. Advances: C Light 660 > 653, Regular 680 > 669, Bold 723 > 707; c 489 > 486, 505, 553 > 554 |
+
+Item 2, what followed and what did not. Moved (every master and the variable font): C c and their composites (Ç ç Ć ć
+Č č Ĉ ĉ Ċ ċ Ḉ ḉ), the barred and struck forms (Ꞓ ꞓ Ȼ ȼ), ¢ and ₡; nothing else, and only these glyphs' kerning keys
+(Light 70, Regular 6, Bold 72: collision and fit keys of the C and c families). Not derived from C or c, so unchanged:
+©'s C (Libre Baskerville's own drawing inside the ring), ₵ (its own drawing; the rebuild from Area's C is still the
+owner's decision, `23-cedi.png`), Ɔ ɔ (own drawings, not turned C's), Ƈ ƈ (own drawings). G: its top barb is its own
+(not C's points) and already ends 17 units inside its stem in the Regular (`joins.G_lower` put the stem in line with the
+top barb as Georgia Pro has it); G's ends grow the other way (top - bottom -9 / -20 / -51), the lean the hand-over lists
+(open item 6). G was not changed. Checks against the build before: audit_axis, audit_bold (Bold and Light), parts,
+curvecheck (three masters, hooks), even: unchanged; audit_rays the same 8 glyphs (27,271 > 27,235 places, the C family's);
+audit_lean one flag fewer (C's lean at 300); evaluate: c's ball node 2.8 > 2.6 times. Read on the whole glyph with
+curvecheck's comb (outside its regions): Regular C as before, c 1.31 / 2.78 / 1.39 > 1.33 / 2.71 / 1.37 at its three
+worst nodes; Bold c four faults > two; Light c 1.92 > 1.35 at its left extreme, but the Light C's left extreme now
+reads 1.27 (limit 1.25). Figures: `item2-C-c.png`, `item2-derived.png` (before | after at 300, 550, 700).
