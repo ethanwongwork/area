@@ -873,6 +873,107 @@ def keep_taper(R, N, laws, tol=0.5, n_seg=6, only_thinner=False, nodes=True):
     if nodes:
         N, log2 = _taper_places(R, N, short, seg_of, eR, turns0, thR)
         log += log2
+        N, log3 = _straight_nodes(R, N, seg_of, eR, turns0, thR, laws[0][1])
+        log += log3
+    return N, log
+
+
+def _straight_nodes(R, N, seg_of, eR, turns0, thR, stem_ratio):
+    """Axis round 2: a smooth node joining a straight to a curve (a tail's inside leaving its straight, a stem's edge
+    running into a tail: ƴ's, ɲ's) is moved by no other rule: _taper_places moves only nodes with a handle each side,
+    while the stroke's opposite edge moves with the engine's map (ƴ's tail at 300: its inside's node stayed while the
+    outside straight moved 29 left, 45 > 15 across). Where a station on its curve (or one whose ray ends on that curve)
+    is short of its law by more than NODE_JND of the law, the node travels along its own straight (the straight keeps
+    its line, the curve its tangent there), its handle on the curve rescaled by the curve's chord, by the least slide
+    that brings those places within NODE_JND of their law, or failing that the slide that leaves them least short;
+    kept only when it takes the worst of them at least NODE_JND of its law nearer, with no new turn and no new
+    crossing. Never within 4 units of the straight's other end, nor past half the curve's chord.
+    Returns contours and [(contour, node, slide, worst before, worst after)]."""
+    import axis_exact as X
+    thN = taper_readings(N)[0]
+    want = thR * stem_ratio                                    # no part thins faster than the stem (audit_rays' law)
+    bad = np.where(~np.isnan(thR) & (np.nan_to_num(thN, nan=1e9) < want * (1 - NODE_JND) - 1.0))[0]
+    if not len(bad):
+        return N, []
+    crossings0 = len(X.crossings(R, R, N))
+    cands = {}
+    for k in bad:
+        for s_ in (seg_of[k], seg_of[eR[k]] if 0 <= eR[k] < len(seg_of) else None):
+            if s_ is None:
+                continue
+            ci, i = s_
+            P = N[ci]
+            n = len(P)
+            on = [m for m, q in enumerate(P) if q[2] is not None]
+            if i not in on:
+                continue
+            j = on[(on.index(i) + 1) % len(on)]
+            if P[(i + 1) % n][2] is not None:
+                continue                                       # the station's segment is a line
+            # the curve i..j: a node at either end that is smooth, with a straight on its other side
+            for m, h, far in ((i, (i + 1) % n, j), (j, (j - 1) % n, i)):
+                q = P[m]
+                o = on[(on.index(m) + (-1 if m == i else 1)) % len(on)]
+                line_ = (q[2] == "line") if m == i else (P[o][2] == "line")
+                if not q[3] or not line_ or not P[far][3]:
+                    continue                                   # a curve ending on a corner is a bracket into a serif
+                cands.setdefault((ci, m, h, far, o), []).append(k)
+    log = []
+    for (ci, m, h, far, o), ks in cands.items():
+        P = N[ci]
+        q, qo = P[m], P[o]
+        L_ = math.dist(q[:2], qo[:2])
+        chord = math.dist(q[:2], P[far][:2])
+        if L_ < 8 or chord < 8:
+            continue
+        u = ((qo[0] - q[0]) / L_, (qo[1] - q[1]) / L_)          # along the straight, towards its other end
+        hv = (P[h][0] - q[0], P[h][1] - q[1])
+        ks = np.array(sorted(set(ks)))
+
+        n = len(P)
+        fh = (far - 1) % n if h == (m + 1) % n else (far + 1) % n   # the curve's other handle, at its far node
+        fv = (P[fh][0] - P[far][0], P[fh][1] - P[far][1])
+
+        def moved(s):
+            # the node's handle rescaled by the curve's chord; where the curve would gain a turn, its far handle
+            # shortens, step by step, until it does not (ƴ's tail from 50 units of slide)
+            nx, ny = q[0] + u[0] * s, q[1] + u[1] * s
+            r = math.dist((nx, ny), P[far][:2]) / chord
+            for k2 in (1.0, 0.85, 0.7, 0.55, 0.4):
+                M = [list(Q) for Q in N]
+                M[ci][m] = (round(nx), round(ny)) + tuple(q[2:])
+                M[ci][h] = (round(nx + hv[0] * r), round(ny + hv[1] * r)) + tuple(P[h][2:])
+                M[ci][fh] = (round(P[far][0] + fv[0] * r * k2), round(P[far][1] + fv[1] * r * k2)) + tuple(P[fh][2:])
+                if len(X.turns(R, R, M, 12, 20)) <= turns0:
+                    return M
+            return None
+
+        def worst(M):
+            # a place whose ray no longer leaves (nan) counts as not held; one leaving through the next piece of the
+            # same edge (the node moved along it) is read as it is
+            th_ = taper_readings(M)[0][ks]
+            w_ = np.nan_to_num(want[ks], nan=1e9)
+            return float(np.max(np.where(np.isnan(th_), 1.0, (w_ - th_) / w_)))
+        w0 = worst(N)
+        if w0 <= NODE_JND:
+            continue                                           # held already (by an earlier slide)
+        best = None
+        for s in sorted(range(-int(chord * 0.5), int(min(L_ - 4, chord)) + 1, 2), key=abs):
+            if s == 0:
+                continue
+            M = moved(s)
+            if M is None:
+                continue
+            w = worst(M)
+            if (best is None or w < best[1] - 1e-9) and w0 - w >= NODE_JND and len(X.crossings(R, R, M)) <= crossings0:
+                best = (s, w, M)
+                if w <= NODE_JND:
+                    break
+        if best is None:
+            continue
+        s, w, M = best
+        N = M
+        log.append((ci, m, s, round(w0, 3), round(w, 3)))
     return N, log
 
 
