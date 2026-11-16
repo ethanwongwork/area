@@ -76,7 +76,7 @@ An axis never reaches into another axis's namespace.
 | `css/properties.css` | `@property` registrations, for leaf tokens only. Derived tokens and colour pairs are never registered, or inheritance would freeze them. |
 | `css/tokens.css` | Every default under `:where(:root)` in `@layer area.tokens` |
 | `css/axes.css` | One rule per preset in `@layer area.axes`. Each derived token is re-stated on every element that carries an axis attribute feeding one of its inputs, because a custom property resolves where it is declared (`emit/rederive.ts`, since 2026-10-25: one rule per set of attributes, so an element restates a token at most once). A derived token that reads or is a token some stylesheet or inline style overrides (`OVERRIDABLE`) is re-stated at every axis attribute, as all were before. |
-| `tokens.json`, `tokens.d.ts` | The token table and types (the app's Foundations › Color reads the JSON) |
+| `tokens.json`, `tokens.d.ts` | The token table and types (the app's Foundations › Color reads the JSON). `usage` gives every public token its kind and what it is for, with `rules` naming quotes in `tokenRules` from DESIGN_SYSTEM, CONTRAST and THEMING (`emit/usage.ts`; plan F7) |
 | `config.js` | `AXIS_PRESETS`, `DEFAULT_AXES`, `mergeAxes`, `themeAttributes`, `DEPTH_LEVERS`, `MATERIAL_*`: DOM-free helpers the app's Inspector and React's `Theme` use |
 | `brand.js`, `brand.d.ts` | `@area/tokens/brand` (2026-10-26): `brandDeclarations`, `brandCss`, `brandInfo`, bundled by esbuild from `src/brand-entry.ts` with the derivations a brand restates embedded as data (`emit/brand-derived.ts`), so it never loads the axes. The build prints its size: 205.7 kB minified, 29.8 kB gzipped |
 | `cli.js` | The `area-tokens` command: `area-tokens brand --primary <hex> [--secondary] [--tertiary] [--status] [--selector] > brand.css` |
@@ -93,13 +93,20 @@ files:
 | `reset.css`, `fonts.css`, `base.css` | Reset, Geist (pinned), body type, `::selection`, Glyph stroke widths, `data-area-switching` (no transitions while a setting changes), `.area-sr-only` |
 | `layers.css` | Every component that paints a ground (raised, recessed or page) points the control-fill tokens at it, so a field on a Card fills from the Card and a button on a recessed head plates from the head; `cohesion.test.mjs` fails an undeclared ground |
 | `inset.css` | The shared inset contract: `--_inset-start/end` from box height, border and cap height for Button, Input, Menu item, Badge and others |
+| `selection.css` | The shared selection paint: the selected edge a chosen tile or swatch draws (`--_selected-border` in, `--_selected-edge` and `--_selected-ring` out), and the ink scope under a chosen row |
 | `material.css` | Material paints, active only under `[data-area-material]`. They fill `--_m-layers` and never replace a component's shadow. |
 | `forced-colors.css` | System colours for required edges, selection and focus under `forced-colors: active` |
 
-After those come the 99 component files in `src/components/`, all in
-`@layer area.components`. Some files hold several blocks (`surface.css`: Card, Alert,
-Dialog, Popover, Menu, Tooltip, Toast; `display.css`, `choice.css`, `color.css`,
-`navigation.css`).
+After those come the 129 component files in `src/components/`, all in
+`@layer area.components`: one per block family, named by its slug, with the family's parts in
+it (Avatar group in `avatar.css`, Toaster in `toast.css`). Two families still share one:
+`choice.css` holds Checkbox and Radio, whose rules interleave through shared
+`:is(.area-checkbox, .area-radio)` rules. Two shared files hold rules several families read,
+each imported where the cascade needs it: `popup.css` (the floating frame Popover and Menu
+both draw, and the corner of a list opened from a field), before `popover.css` and
+`menu.css`; `overlay.css` (Popover, Menu and Tooltip opened in the top layer), after
+`toast.css`. `surface.css` holds 3 blocks: Surface, and the corner it reads from Card and
+Panel. `check:docs` keeps these counts true.
 
 ### The component CSS pattern
 
@@ -113,17 +120,18 @@ From `components/count.css`, the smallest complete example:
     --_count-ink: var(--area-fg-muted);
     --_count-plate: transparent;
     --_count-weight: var(--area-weight-regular);
-    /* 2. One base rule consumes the slots: geometry, paint, type. */
+    /* 2. A shared recipe's inputs (inset.css, "One mark"): the height and the Pills flag. */
+    --_mark-height: var(--_count-height);
+    --_mark-pill: var(--area-pill-count);
+    /* 3. One base rule consumes the slots and the recipe's outputs: geometry, paint, type. */
     block-size: var(--_count-height);
+    padding-inline: var(--_mark-side);
+    border-radius: var(--_mark-corner);
     background: var(--_count-plate);
     color: var(--_count-ink);
     font-weight: var(--_count-weight);
-    /* Shape: the radius setting's corner for this height, plus the pills flag. */
-    border-radius: calc(max(var(--area-radius-min),
-      round(down, calc(var(--_count-height) * var(--area-radius-factor)), 2px))
-      + var(--_count-pill) * var(--area-radius-full));
   }
-  /* 3. Modifiers only re-point slots. */
+  /* 4. Modifiers only re-point slots. */
   .area-count--sm   { --_count-height: var(--area-mark-label-sm); }
   .area-count--soft { --_count-plate: var(--area-bg-mark); --_count-weight: var(--area-weight-strong); }
 }
@@ -146,7 +154,7 @@ The rules:
 
 ### The manifest
 
-`src/manifest.ts` declares every block once; there are 138 blocks:
+`src/manifest.ts` declares every block once; there are 150 blocks:
 
 ```ts
 export const count = {
@@ -207,7 +215,8 @@ The contract:
 
 - `forwardRef` to the native element.
 - Props extend that element's native attributes, and `...rest` is forwarded.
-- Variant props come from the manifest types.
+- Variant props come from the manifest types: `VariantProps<typeof MANIFESTS.x>[axis]` (or a family's `*Variants`), never
+  a literal union; `check:contracts` fails on a hand-typed one and on a value or state one side lacks.
 - Every prop has JSDoc, which the app's API tab shows.
 - State goes to native or ARIA attributes first and `data-*` hooks second.
 - Behaviour names follow the [vocabulary](GOVERNANCE.md#4-one-vocabulary).
@@ -220,6 +229,11 @@ Shared behaviour:
   delays.
 - `Theme` / `useTheme`: a scope from `mergeAxes` + `themeAttributes`.
 - `Glyph.tsx`: draws Area icons from the generated `glyphs.ts`.
+- One file per family, its compound parts with it (`Card.tsx` holds Card's twelve parts).
+  What more than one family reads sits in a lower-case module: `shared.ts` (`Div`,
+  `NO_ITEMS`), `tab-indicator.ts` (Tabs and Code block's language tabs) and `choice.ts`
+  (Checkbox and Radio's props), which `index.ts` doesn't export, and `loading-delay.ts`
+  (Skeleton, Spinner, Table and Message), whose `LoadingDelay` and `useLoadingDelay` are public.
 
 **Tests** (`packages/react/tests/*.test.mjs`, `node:test`, against `dist/`, so build first):
 
@@ -257,18 +271,21 @@ Electron's Node strip types); no dependencies.
 ## The app (`apps/desktop`)
 
 `scripts/renderer.mjs` bundles `src/main.tsx` with esbuild and copies `area.css`. It
-provides two virtual modules:
+provides two virtual modules, and `build.mjs` and `dev.mjs` add a third:
 
 - `virtual:demo-snippets`: the source text of every `export const GalleryX = () => (…)` in
   `src/content/demos/*.tsx`, so a tile and its code sample are the same function;
 - `virtual:component-sources`: specs, component CSS, React sources and their `*Props`
-  JSDoc, which feed the family's Documentation, API, Code and Spec tabs.
+  JSDoc, which feed the family's Documentation, API, Code and Spec tabs;
+- `virtual:api-rows` (`scripts/api-rows.mjs`): each family's API rows, generated with the TypeScript compiler from the
+  manifest (each visual prop's values and default) and the `*Props` interfaces (every other prop, its type, default and
+  JSDoc), then the page's own `api` notes. `node apps/desktop/scripts/api-rows.mjs <slug>` prints a family's rows.
 
 **Content** (`src/content/`):
 
 | File | Holds |
 |---|---|
-| `pages.mjs` | `COMPONENT_PAGES`: one entry per family (slug, name, manifest, imports, `api` rows, `examples` with notes). 119 families, plus the icon pilot page. |
+| `pages.mjs` | `COMPONENT_PAGES`: one entry per family (slug, name, manifest, imports, `api` notes the sources cannot give, `examples` with notes). 126 families (one deprecated), plus the icon pilot page. |
 | `demos/<family>.tsx` | The demos, one exported function each, unique names across files |
 | `registry.tsx` | Imports every demo module into `DEMOS` (a duplicate name throws) |
 | `specimens.mjs` | `GALLERY_SPECIMENS`: each family's tiles, one variant per tile; without an entry, `Gallery<Name>` or the first example |
@@ -287,6 +304,12 @@ provides two virtual modules:
 - The Inspector's Theme view writes `data-area-*` from `src/gallery/controls.ts` onto the
   Canvas only. The app chrome stays at type 13, Compact (`src/app-scale.ts`).
 - `src/gallery/fit.ts` scales each tile's specimen to its card; it never upscales.
+- **A family's Specs tab** (`src/specs-tab.tsx`, plan F7, 2026-11-11) is measured, never written: it draws the family's
+  Default, Sizes, Variants and leading-icon tiles twice on an out-of-sight bench at scale 1, once in the specimens' scope
+  and once in Area's defaults, and `src/specs-measure.ts` reads height, sides (border + shell + slot), icon box and gap,
+  corner, stroke and each text part's type from computed styles and rects, names the tokens whose resolved value equals
+  each (the family's own stylesheet's first), and reads each state's paint from the document's rules for that state's
+  hook. What it can't read is left out. `tests/specs.test.ts` holds its defaults to the rendered check's capture.
 
 ## Adding a component: the files
 
@@ -342,5 +365,5 @@ Known debt, recorded so nobody builds on it:
 - **Manifests without a `*Variants` helper.** 25 manifests have none (Card, Dialog,
   Kbd, Code, Titlebar, Board…), so their React files write class strings by hand. Add the
   helper when the family is next touched.
-- **Two prop sources.** Prop tables are written by hand in `pages.mjs` `api` and also read
-  from JSDoc. JSDoc is the one to keep current.
+- **Undocumented props.** The API tab is generated (`virtual:api-rows`), so a prop without JSDoc shows no
+  description. Write it when the family is next touched.

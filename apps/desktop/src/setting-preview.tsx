@@ -99,6 +99,7 @@ const TILES: Record<string, Tile[]> = {
   "series-lightness": [T.meterParts],
   contrast: [T.input, T.checkbox, T.outline, T.card],
   type: [drawn("Type", "type"), T.button, T.input, T.menu],
+  "regular-weight": [drawn("Regular and strong", "regular-weight"), T.menu, T.nav, T.table, T.alert],
   density: [T.menu, T.nav, T.button, T.input, T.options],
   radius: [T.button, T.input, T.segmented, T.badge, T.card, T.options],
   pills: [T.button, T.chip, T.badge, T.count, T.switch, T.avatar],

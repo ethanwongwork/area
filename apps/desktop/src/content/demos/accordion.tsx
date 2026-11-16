@@ -27,7 +27,7 @@ export const GalleryAccordionNested = () => (
   </AccordionItem>
 );
 export const GalleryAccordionLongTitle = () => (
-  <AccordionItem style={frame} heading="A longer title that wraps onto a second line" defaultOpen>Body text</AccordionItem>
+  <AccordionItem style={frame} heading="A longer title that wraps onto a second line in the row" defaultOpen>Body text</AccordionItem>
 );
 export const GalleryAccordionDivided = () => (
   <Accordion variant="divided" size="sm" defaultValue={["one"]} style={frame}>

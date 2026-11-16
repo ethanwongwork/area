@@ -27,7 +27,7 @@ export const OVERRIDABLE: readonly string[] = [
   "--area-choice-min", "--area-choice-ratio", "--area-code-block-corner", "--area-code-block-fill", "--area-code-block-inset", "--area-chrome-bg", "--area-chrome-fill", "--area-composer-edge",
   "--area-composer-focus-color", "--area-edge-control", "--area-edge-control-hover", "--area-edge-control-strong", "--area-edge-regions",
   "--area-edge-selected", "--area-edge-shift-dark", "--area-edge-shift-light", "--area-fg-default",
-  "--area-fg-muted", "--area-fg-on-action", "--area-fg-on-neutral", "--area-file-tile-figure", "--area-fill-toggle",
+  "--area-fg-muted", "--area-fg-quiet", "--area-fg-on-action", "--area-fg-on-neutral", "--area-file-tile-figure", "--area-fill-toggle",
   "--area-fill-toggle-hover", "--area-fill-track", "--area-fill-track-hover", "--area-folder-size",
   "--area-hue-gray-border", "--area-hue-neutral-border",
   "--area-font-sans", "--area-frame-width", "--area-indicator-anchor-offset", "--area-input-bg-disabled",

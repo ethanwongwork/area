@@ -11,12 +11,16 @@ Values are Default / Compact (the app runs Compact). Tokens are in `packages/tok
 | Role | Separates | Area | Use |
 |---|---|---|---|
 | Inside a control | an icon and its label | the tier's icon gap: 6 (sm–lg), 4 (xs, compact) | set by the component; layout never reads it |
+| Inside a row | a row's icon and its label (the label column, 32 / 30) | `ui-cluster` 8 / 6 (plan B2.3) | Menu, Nav, Tree view, the palette, every picker's options |
+| Joined set | segments, a row's actions | 2 | set by the component |
+| Header actions | actions in a header or a line of text | 4 | Card, Panel, Alert, Toast headers |
 | Joined | a title and its own description | no gap between line boxes (baseline to cap 10–12) | Card, Dialog, Section heading, choices |
 | Label to control | a field label and its one control | `ui-stack` 6 / 4 | `Field` |
-| Related | items that read as one: a label and value, an icon row, chips | `ui-cluster` 8 / 6 | `Stack gap="related"`, bar clusters |
+| Related | items that read as one: a label and value, an icon row, chips; independent controls (a footer's buttons, a page header's actions, stacked toasts) | `ui-cluster` 8 / 6 | `Stack gap="related"`, bar clusters, footers (plan A1.2) |
 | Group | members of a set: rows of fields, cards in a grid | `gap-row` 12 / 8 | `Stack gap="group"`, card grids |
 | Heading to block | a section's title (and lede) to what it names | one step past the block's items (options 8 apart → 12) | `SectionHeading` over its block |
-| Section | sections of a page or panel | `Stack gap="section"` 24 / 16 | inside a Surface or panel |
+| Section | sections of a page or panel | `gap-section` 24 / 16 (`Stack gap="section"`) | inside a Surface or panel (plan A1.4) |
+| Page inset | the page's edge to its sections | `inset-page` 32 / 24 | a page's own padding; the feed's margin (plan A1.4) |
 | Surface inset | a container's edge to its content | `inset-surface-sm` 12 / 8, `inset-surface-md` 16 / 12; Surface's text inset sm / md / lg 14 / 16 / 20 (Compact 10 / 12 / 14) | `Surface`, `Card` (set by size, never by prop) |
 | Region inset | a panel's edge to its rows | 14 / 14, Comfortable 18 (type 13; 16 / 20 at type 14): `max(14, inset-surface-md)`; a list's plates hang Panel's row pad (6) into it, so they sit 8 from the edge and the text on the inset | `Panel` md |
 | Feed | a documentation or gallery feed | Compact / Default / Comfortable: margin 24 / 32 / 40; cards 8 / 12 / 16 apart (at least 260 wide, at most four across); one inset inside every frame 12 / 16 / 20 and one corner, 16; heading to block 12 / 16 / 20; sections 40 / 48 / 56; loose text 4 in from the frames; fills the Canvas | the app's Canvas (`app.css` `--_canvas-*`, `--_frame-inset`) |

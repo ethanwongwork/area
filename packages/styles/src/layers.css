@@ -19,14 +19,15 @@
  * docs/research/layers-2026-10-16/.
  * ------------------------------------------------------------------------- */
 @layer area.base {
-  :where(
-    .area-dialog, .area-drawer, .area-menu, .area-popover, .area-hover-card, .area-toggletip, .area-toast,
-    .area-command-palette, .area-panel, .area-table-wrapper, .area-board-card, .area-file-upload, .area-color-picker,
-    .area-calendar:not(.area-calendar--plain), .area-calendar--surface, .area-toolbar--surface, .area-selection-bar--floating, .area-settings-group--framed > .area-settings-group__rows, .area-description-list--framed, .area-titlebar--floating,
-    .area-file-upload-item, .area-code-block, .area-edit-summary:not(.area-edit-summary--plain), .area-edit-summary--surface, .area-plan:not(.area-plan--plain), .area-plan--surface, .area-queue,
-    .area-menu__search-surface, .area-diff, .area-surface--surface, .area-asset-card--raised,
-    .area-asset-card--overlay.area-asset-card--image > .area-asset-card__head > .area-asset-card__actions, .area-asset-card--overlay.area-asset-card--group > .area-asset-card__head > .area-asset-card__actions, .area-asset-card--overlay.area-asset-card--screen > .area-asset-card__head > .area-asset-card__actions, .area-asset-card__badge
-  ),
+  :where(.area-toggletip, .area-panel, .area-table-wrapper, .area-board-card, .area-file-upload,
+    .area-settings-group--surface > .area-settings-group__rows, .area-description-list--surface, .area-file-upload-item,
+    .area-code-block, .area-edit-summary:not(.area-edit-summary--plain), .area-edit-summary--surface,
+    .area-plan:not(.area-plan--plain), .area-plan--surface, .area-queue, .area-diff, .area-surface--surface,
+    .area-asset-card--raised,
+    .area-asset-card--overlay.area-asset-card--image > .area-asset-card__head > .area-asset-card__actions,
+    .area-asset-card--overlay.area-asset-card--group > .area-asset-card__head > .area-asset-card__actions,
+    .area-asset-card--overlay.area-asset-card--screen > .area-asset-card__head > .area-asset-card__actions,
+    .area-asset-card__badge),
   [data-area-ground="raised"] {
     --area-bg-component: var(--area-bg-component-raised);
     --area-bg-component-hover: var(--area-bg-component-raised-hover);
@@ -38,18 +39,37 @@
     --area-selection-band: var(--area-selection-band-raised);
     --area-selection-band-hover: var(--area-selection-band-raised-hover);
   }
-  /* The native Select's picker paints the raised ground too; a pseudo-element cannot join the list above (an unsupported
+  /* The floating ground (`bg-float`, plan A7.2, owner 2026-11-11): menus, popovers, toasts, dialogs, drawers, pickers and
+     floating bars. In light it is the raised layer; in dark a step above the lightest layer under it, so a menu reads
+     apart from the card it opens over and the page stays near black. */
+  :where(
+    .area-dialog, .area-drawer, .area-menu, .area-popover, .area-hover-card, .area-toast, .area-command-palette, .area-color-picker,
+    .area-calendar:not(.area-calendar--plain), .area-calendar--surface, .area-toolbar--surface, .area-selection-bar--floating, .area-titlebar--floating,
+    .area-menu__search-surface
+  ),
+  [data-area-ground="float"] {
+    --area-bg-component: var(--area-bg-component-float);
+    --area-bg-component-hover: var(--area-bg-component-float-hover);
+    --area-bg-component-active: var(--area-bg-component-float-active);
+    --area-input-bg-soft: var(--area-bg-component-float);
+    --area-input-bg-disabled: var(--area-bg-component-float);
+    --area-selection-surface: var(--area-selection-surface-float);
+    --area-selection-surface-hover: var(--area-selection-surface-float-hover);
+    --area-selection-band: var(--area-selection-band-float);
+    --area-selection-band-hover: var(--area-selection-band-float-hover);
+  }
+  /* The native Select's picker paints the floating ground too; a pseudo-element cannot join the list above (an unsupported
      one would void the whole rule), so it restates the same pointers. */
   .area-select::picker(select) {
-    --area-bg-component: var(--area-bg-component-raised);
-    --area-bg-component-hover: var(--area-bg-component-raised-hover);
-    --area-bg-component-active: var(--area-bg-component-raised-active);
-    --area-input-bg-soft: var(--area-bg-component-raised);
-    --area-input-bg-disabled: var(--area-bg-component-raised);
-    --area-selection-surface: var(--area-selection-surface-raised);
-    --area-selection-surface-hover: var(--area-selection-surface-raised-hover);
-    --area-selection-band: var(--area-selection-band-raised);
-    --area-selection-band-hover: var(--area-selection-band-raised-hover);
+    --area-bg-component: var(--area-bg-component-float);
+    --area-bg-component-hover: var(--area-bg-component-float-hover);
+    --area-bg-component-active: var(--area-bg-component-float-active);
+    --area-input-bg-soft: var(--area-bg-component-float);
+    --area-input-bg-disabled: var(--area-bg-component-float);
+    --area-selection-surface: var(--area-selection-surface-float);
+    --area-selection-surface-hover: var(--area-selection-surface-float-hover);
+    --area-selection-band: var(--area-selection-band-float);
+    --area-selection-band-hover: var(--area-selection-band-float-hover);
   }
   /* A region painted the page tone (a Titlebar, a flush Panel) inside a raised or recessed one points the fills back at
      the page (Layers sweep 2026-10-16: inside a raised gallery tile a Titlebar's selected tab came out lighter than the
@@ -122,7 +142,7 @@
     --area-selection-band: var(--area-selection-band-frame-raised);
     --area-selection-band-hover: var(--area-selection-band-frame-raised-hover);
   }
-  :where(.area-surface--soft, .area-radio--card.area-radio--preview, .area-checkbox--card.area-checkbox--preview, .area-radio--thumbnail > .area-radio__visual, .area-checkbox--thumbnail > .area-checkbox__visual, .area-plan__steps, .area-approval__visual),
+  :where(.area-surface--soft, .area-radio--surface.area-radio--preview, .area-checkbox--surface.area-checkbox--preview, .area-radio--thumbnail > .area-radio__visual, .area-checkbox--thumbnail > .area-checkbox__visual, .area-plan__steps, .area-approval__visual),
   [data-area-ground="recessed"] {
     --area-bg-component: var(--area-bg-component-recessed);
     --area-bg-component-hover: var(--area-bg-component-recessed-hover);
@@ -137,7 +157,8 @@
   /* A well (`bg-well`, color/layers.ts): a fill painted to be seen, the recessed tone but never closer to the page than the
      page's own control fill, so it shows at Layer contrast 0, where the recessed tone is the page (2026-11-01: Table's
      header had painted the page there). Controls in it step from it. A soft Surface, a preview choice card and Plan's
-     steps stay recessed: Flat keeps them flat (owner, 2026-10-29, Surface's spec). */
+     steps stay recessed: Flat keeps them flat (owner, 2026-10-29, Surface's spec; cohesion.test.mjs and layers.test.ts
+     hold it). */
   :where(.area-table th),
   [data-area-ground="well"] {
     --area-bg-component: var(--area-bg-component-well);
@@ -176,13 +197,13 @@
   :where(
     .area-card, .area-dialog, .area-drawer, .area-menu, .area-popover, .area-hover-card, .area-toggletip, .area-toast,
     .area-command-palette, .area-panel, .area-table-wrapper, .area-board-card, .area-file-upload, .area-color-picker,
-    .area-calendar:not(.area-calendar--plain), .area-calendar--surface, .area-toolbar--surface, .area-selection-bar--floating, .area-settings-group--framed > .area-settings-group__rows, .area-description-list--framed, .area-titlebar--floating,
+    .area-calendar:not(.area-calendar--plain), .area-calendar--surface, .area-toolbar--surface, .area-selection-bar--floating, .area-settings-group--surface > .area-settings-group__rows, .area-description-list--surface, .area-titlebar--floating,
     .area-file-upload-item, .area-code-block, .area-edit-summary:not(.area-edit-summary--plain), .area-edit-summary--surface, .area-plan:not(.area-plan--plain), .area-plan--surface, .area-queue,
     .area-menu__search-surface, .area-diff, .area-surface--surface, .area-asset-card--raised,
     .area-asset-card--overlay.area-asset-card--image > .area-asset-card__head > .area-asset-card__actions, .area-asset-card--overlay.area-asset-card--group > .area-asset-card__head > .area-asset-card__actions, .area-asset-card--overlay.area-asset-card--screen > .area-asset-card__head > .area-asset-card__actions, .area-asset-card__badge,
     .area-titlebar:not(.area-titlebar--floating), .area-panel--flush, .area-asset-card__frame, .area-asset-card--raised > .area-asset-card__frame,
     .area-asset-card:not(.area-asset-card--containerless, .area-asset-card--raised), .area-design-card__ground, .area-surface--soft,
-    .area-radio--card.area-radio--preview, .area-checkbox--card.area-checkbox--preview, .area-radio--thumbnail > .area-radio__visual, .area-checkbox--thumbnail > .area-checkbox__visual, .area-plan__steps, .area-approval__visual, .area-table th
+    .area-radio--surface.area-radio--preview, .area-checkbox--surface.area-checkbox--preview, .area-radio--thumbnail > .area-radio__visual, .area-checkbox--thumbnail > .area-checkbox__visual, .area-plan__steps, .area-approval__visual, .area-table th
   ),
   [data-area-ground],
   :where([data-area-theme], [data-area-neutral], [data-area-ground-light], [data-area-ground-dark], [data-area-layers-light],
@@ -198,6 +219,16 @@
         oklch(from color-mix(in oklab, var(--area-bg-component-active), var(--area-fg-default) 14%)
           min(l, pow(max(0, calc((pow(var(--area-layer-dark-muted), 3) + 0.05) / 4.6 - 0.05)), 0.333333)) c h)
         calc(25% * var(--area-fill-pressed-step)))); /* spec */
+    /* The press on a control fill (plan B7.4): Segmented's and soft Toggle group's options on their track, Board's add
+       row. The translucent pressed wash (`wash-pressed-*`, emit/base.ts), capped at the alpha where the muted label keeps
+       4.6:1 on this ground's control fill: the composite's luminance is solved in sRGB from the fill's lightness (a grey's
+       luminance is l³), black over it in light, white in dark. At the defaults 8.5% black on the page's #f7 and the
+       pressed wash's 15.7% white in dark; color/track-press.test.ts walks every ground, Layers step, fill and cast. */
+    --area-bg-pressed-track: light-dark(
+      oklch(from var(--area-bg-component) 0 0 0 / max(0, min(var(--area-wash-pressed-light),
+        calc(1 - (1.055 * pow(calc(4.6 * (pow(var(--area-layer-light-muted), 3) + 0.05) - 0.05), 0.416667) - 0.055) / (1.055 * pow(l, 1.25) - 0.055))))),
+      oklch(from var(--area-bg-component) 1 0 0 / max(0, min(var(--area-wash-pressed-dark),
+        calc((1.055 * pow(max(0.0031308, calc((pow(var(--area-layer-dark-muted), 3) + 0.05) / 4.6 - 0.05)), 0.416667) - 1.055 * pow(l, 1.25)) / (1.055 - 1.055 * pow(l, 1.25))))))); /* spec */
   }
   /* The translucent pressed plate is derived with its twins in tokens (emit/base.ts), from the Pressed fill setting. */
 
@@ -217,17 +248,25 @@
    * At the defaults only what sits on the recessed layer and on an Asset card's tile moves, 0.024 L in light; nothing
    * moves in dark.
    */
-  :where(.area-dialog, .area-drawer, .area-menu, .area-popover, .area-hover-card, .area-toggletip, .area-toast,
-    .area-command-palette, .area-panel, .area-table-wrapper, .area-board-card, .area-file-upload, .area-color-picker,
-    .area-calendar:not(.area-calendar--plain), .area-calendar--surface, .area-toolbar--surface, .area-selection-bar--floating, .area-settings-group--framed > .area-settings-group__rows,
-    .area-description-list--framed, .area-titlebar--floating, .area-file-upload-item, .area-code-block,
-    .area-edit-summary:not(.area-edit-summary--plain), .area-edit-summary--surface, .area-plan:not(.area-plan--plain), .area-plan--surface, .area-queue, .area-menu__search-surface, .area-diff,
-    .area-surface--surface, .area-asset-card--raised, .area-asset-card--overlay.area-asset-card--image > .area-asset-card__head > .area-asset-card__actions, .area-asset-card--overlay.area-asset-card--group > .area-asset-card__head > .area-asset-card__actions, .area-asset-card--overlay.area-asset-card--screen > .area-asset-card__head > .area-asset-card__actions, .area-asset-card__badge,
-    .area-titlebar:not(.area-titlebar--floating), .area-panel--flush), [data-area-ground="raised"], [data-area-ground="page"] {
+  :where(.area-toggletip, .area-panel, .area-table-wrapper, .area-board-card, .area-file-upload,
+    .area-settings-group--surface > .area-settings-group__rows, .area-description-list--surface, .area-file-upload-item,
+    .area-code-block, .area-edit-summary:not(.area-edit-summary--plain), .area-edit-summary--surface,
+    .area-plan:not(.area-plan--plain), .area-plan--surface, .area-queue, .area-diff, .area-surface--surface,
+    .area-asset-card--raised,
+    .area-asset-card--overlay.area-asset-card--image > .area-asset-card__head > .area-asset-card__actions,
+    .area-asset-card--overlay.area-asset-card--group > .area-asset-card__head > .area-asset-card__actions,
+    .area-asset-card--overlay.area-asset-card--screen > .area-asset-card__head > .area-asset-card__actions,
+    .area-asset-card__badge, .area-titlebar:not(.area-titlebar--floating), .area-panel--flush), [data-area-ground="raised"], [data-area-ground="page"] {
     --area-edge-shift-light: 0;
     --area-edge-shift-dark: 0;
   }
-  :where(.area-surface--soft, .area-radio--card.area-radio--preview, .area-checkbox--card.area-checkbox--preview, .area-radio--thumbnail > .area-radio__visual, .area-checkbox--thumbnail > .area-checkbox__visual, .area-plan__steps, .area-approval__visual), [data-area-ground="recessed"] {
+  :where(.area-dialog, .area-drawer, .area-menu, .area-popover, .area-hover-card, .area-toast, .area-command-palette, .area-color-picker,
+    .area-calendar:not(.area-calendar--plain), .area-calendar--surface, .area-toolbar--surface, .area-selection-bar--floating, .area-titlebar--floating,
+    .area-menu__search-surface), [data-area-ground="float"] {
+    --area-edge-shift-light: 0;
+    --area-edge-shift-dark: max(0, calc(var(--area-layer-dark-float) - var(--area-layer-dark-raised)));
+  }
+  :where(.area-surface--soft, .area-radio--surface.area-radio--preview, .area-checkbox--surface.area-checkbox--preview, .area-radio--thumbnail > .area-radio__visual, .area-checkbox--thumbnail > .area-checkbox__visual, .area-plan__steps, .area-approval__visual), [data-area-ground="recessed"] {
     --area-edge-shift-light: max(0, calc(var(--area-layer-light-page) - var(--area-layer-light-recessed)));
     --area-edge-shift-dark: max(0, calc(var(--area-layer-dark-recessed) - var(--area-layer-dark-raised)));
   }
@@ -253,13 +292,13 @@
   }
   :where(.area-dialog, .area-drawer, .area-menu, .area-popover, .area-hover-card, .area-toggletip, .area-toast,
     .area-command-palette, .area-panel, .area-table-wrapper, .area-board-card, .area-file-upload, .area-color-picker,
-    .area-calendar:not(.area-calendar--plain), .area-calendar--surface, .area-toolbar--surface, .area-selection-bar--floating, .area-settings-group--framed > .area-settings-group__rows,
-    .area-description-list--framed, .area-titlebar--floating, .area-file-upload-item, .area-code-block,
+    .area-calendar:not(.area-calendar--plain), .area-calendar--surface, .area-toolbar--surface, .area-selection-bar--floating, .area-settings-group--surface > .area-settings-group__rows,
+    .area-description-list--surface, .area-titlebar--floating, .area-file-upload-item, .area-code-block,
     .area-edit-summary:not(.area-edit-summary--plain), .area-edit-summary--surface, .area-plan:not(.area-plan--plain), .area-plan--surface, .area-queue, .area-menu__search-surface, .area-diff,
-    .area-surface--surface, .area-asset-card--raised, .area-asset-card--overlay.area-asset-card--image > .area-asset-card__head > .area-asset-card__actions, .area-asset-card--overlay.area-asset-card--group > .area-asset-card__head > .area-asset-card__actions, .area-asset-card--overlay.area-asset-card--screen > .area-asset-card__head > .area-asset-card__actions, .area-asset-card__badge, [data-area-ground="raised"],
+    .area-surface--surface, .area-asset-card--raised, .area-asset-card--overlay.area-asset-card--image > .area-asset-card__head > .area-asset-card__actions, .area-asset-card--overlay.area-asset-card--group > .area-asset-card__head > .area-asset-card__actions, .area-asset-card--overlay.area-asset-card--screen > .area-asset-card__head > .area-asset-card__actions, .area-asset-card__badge, [data-area-ground="raised"], [data-area-ground="float"],
     .area-titlebar:not(.area-titlebar--floating), .area-panel--flush, [data-area-ground="page"],
     .area-asset-card__frame, [data-area-ground="frame"], .area-asset-card--raised > .area-asset-card__frame, [data-area-ground="frame-raised"],
-    .area-surface--soft, .area-radio--card.area-radio--preview, .area-checkbox--card.area-checkbox--preview, .area-radio--thumbnail > .area-radio__visual, .area-checkbox--thumbnail > .area-checkbox__visual, .area-plan__steps, .area-approval__visual, .area-table th, [data-area-ground="well"],
+    .area-surface--soft, .area-radio--surface.area-radio--preview, .area-checkbox--surface.area-checkbox--preview, .area-radio--thumbnail > .area-radio__visual, .area-checkbox--thumbnail > .area-checkbox__visual, .area-plan__steps, .area-approval__visual, .area-table th, [data-area-ground="well"],
     [data-area-ground="recessed"], .area-card, [data-area-ground="card"],
     .area-asset-card:not(.area-asset-card--containerless, .area-asset-card--raised), .area-design-card__ground, [data-area-ground="tile"]) > * {
     --area-border-decorative: light-dark(oklab(from var(--area-border-decorative-page) calc(l - var(--area-edge-shift-light) * (1 - var(--area-contrast-more))) a b), oklab(from var(--area-border-decorative-page) calc(l + var(--area-edge-shift-dark) * (1 - var(--area-contrast-more))) a b));
@@ -306,18 +345,19 @@
    * reads the scope's own re-derived ground fills. cohesion.test.mjs keeps the settings and grounds equal to the lists
    * above and to the registry.
    */
-  @scope (.area-dialog, .area-drawer, .area-menu, .area-popover, .area-hover-card, .area-toggletip, .area-toast,
-    .area-command-palette, .area-panel, .area-table-wrapper, .area-board-card, .area-file-upload, .area-color-picker,
-    .area-calendar:not(.area-calendar--plain), .area-calendar--surface, .area-toolbar--surface, .area-selection-bar--floating, .area-settings-group--framed > .area-settings-group__rows,
-    .area-description-list--framed, .area-titlebar--floating, .area-file-upload-item, .area-code-block,
-    .area-edit-summary:not(.area-edit-summary--plain), .area-edit-summary--surface, .area-plan:not(.area-plan--plain), .area-plan--surface, .area-queue, .area-menu__search-surface, .area-diff,
-    .area-surface--surface, .area-asset-card--raised,
+  @scope (.area-toggletip, .area-panel, .area-table-wrapper, .area-board-card, .area-file-upload,
+    .area-settings-group--surface > .area-settings-group__rows, .area-description-list--surface, .area-file-upload-item,
+    .area-code-block, .area-edit-summary:not(.area-edit-summary--plain), .area-edit-summary--surface,
+    .area-plan:not(.area-plan--plain), .area-plan--surface, .area-queue, .area-diff, .area-surface--surface,
+    .area-asset-card--raised,
     .area-asset-card--overlay.area-asset-card--image > .area-asset-card__head > .area-asset-card__actions,
-    .area-asset-card--overlay.area-asset-card--group > .area-asset-card__head > .area-asset-card__actions, .area-asset-card--overlay.area-asset-card--screen > .area-asset-card__head > .area-asset-card__actions, .area-asset-card__badge, [data-area-ground="raised"]) {
+    .area-asset-card--overlay.area-asset-card--group > .area-asset-card__head > .area-asset-card__actions,
+    .area-asset-card--overlay.area-asset-card--screen > .area-asset-card__head > .area-asset-card__actions,
+    .area-asset-card__badge, [data-area-ground="raised"]) {
     :where(
     [data-area-theme], [data-area-neutral], [data-area-tint-hue], [data-area-tint-hue-dark], [data-area-colours], [data-area-tint-light], [data-area-tint-dark],
     [data-area-ink-tint], [data-area-accent], [data-area-accent-strength], [data-area-solid-light],
-    [data-area-solid-dark], [data-area-label-tint], [data-area-status-colours], [data-area-tone-tint], [data-area-tone-contrast], [data-area-series-lightness], [data-area-action],
+    [data-area-solid-dark], [data-area-label-tint], [data-area-status-colours], [data-area-tone-tint], [data-area-tone-contrast], [data-area-series-lightness], [data-area-regular-weight], [data-area-action],
     [data-area-selection], [data-area-ground-light], [data-area-ground-dark], [data-area-layers-light],
     [data-area-layers-dark], [data-area-card-tone-light], [data-area-card-tone-dark], [data-area-type],
     [data-area-density], [data-area-radius], [data-area-surface], [data-area-shadow-rest], [data-area-elevation],
@@ -339,11 +379,39 @@
       --area-selection-band-hover: var(--area-selection-band-raised-hover);
     }
   }
+  @scope (.area-dialog, .area-drawer, .area-menu, .area-popover, .area-hover-card, .area-toast, .area-command-palette, .area-color-picker,
+    .area-calendar:not(.area-calendar--plain), .area-calendar--surface, .area-toolbar--surface, .area-selection-bar--floating, .area-titlebar--floating,
+    .area-menu__search-surface, [data-area-ground="float"]) {
+    :where(
+    [data-area-theme], [data-area-neutral], [data-area-tint-hue], [data-area-tint-hue-dark], [data-area-colours], [data-area-tint-light], [data-area-tint-dark],
+    [data-area-ink-tint], [data-area-accent], [data-area-accent-strength], [data-area-solid-light],
+    [data-area-solid-dark], [data-area-label-tint], [data-area-status-colours], [data-area-tone-tint], [data-area-tone-contrast], [data-area-series-lightness], [data-area-regular-weight], [data-area-action],
+    [data-area-selection], [data-area-ground-light], [data-area-ground-dark], [data-area-layers-light],
+    [data-area-layers-dark], [data-area-card-tone-light], [data-area-card-tone-dark], [data-area-type],
+    [data-area-density], [data-area-radius], [data-area-surface], [data-area-shadow-rest], [data-area-elevation],
+    [data-area-stroke], [data-area-stroke-cards], [data-area-stroke-blocks], [data-area-stroke-callouts], [data-area-stroke-floating], [data-area-stroke-regions], [data-area-stroke-dividers], [data-area-stroke-fields], [data-area-stroke-buttons], [data-area-stroke-options], [data-area-stroke-tracks], [data-area-stroke-tags], [data-area-stroke-media],
+    [data-area-shadow-resting], [data-area-shadow-hover], [data-area-shadow-field],
+    [data-area-shadow-size], [data-area-shadow-softness], [data-area-shadow-light], [data-area-shadow-color],
+    [data-area-focus-ring], [data-area-stroke-hover], [data-area-selected-stroke], [data-area-selected-tint],
+    [data-area-fill-hover], [data-area-fill-selected], [data-area-fill-pressed], [data-area-danger-hover],
+    [data-area-motion], [data-area-easing], [data-area-feedback], [data-area-ui], [data-area-contrast]
+    ) {
+      --area-bg-component: var(--area-bg-component-float);
+      --area-bg-component-hover: var(--area-bg-component-float-hover);
+      --area-bg-component-active: var(--area-bg-component-float-active);
+      --area-input-bg-soft: var(--area-bg-component-float);
+      --area-input-bg-disabled: var(--area-bg-component-float);
+      --area-selection-surface: var(--area-selection-surface-float);
+      --area-selection-surface-hover: var(--area-selection-surface-float-hover);
+      --area-selection-band: var(--area-selection-band-float);
+      --area-selection-band-hover: var(--area-selection-band-float-hover);
+    }
+  }
   @scope (.area-titlebar:not(.area-titlebar--floating), .area-panel--flush, .area-asset-card__frame, [data-area-ground="page"]) {
     :where(
     [data-area-theme], [data-area-neutral], [data-area-tint-hue], [data-area-tint-hue-dark], [data-area-colours], [data-area-tint-light], [data-area-tint-dark],
     [data-area-ink-tint], [data-area-accent], [data-area-accent-strength], [data-area-solid-light],
-    [data-area-solid-dark], [data-area-label-tint], [data-area-status-colours], [data-area-tone-tint], [data-area-tone-contrast], [data-area-series-lightness], [data-area-action],
+    [data-area-solid-dark], [data-area-label-tint], [data-area-status-colours], [data-area-tone-tint], [data-area-tone-contrast], [data-area-series-lightness], [data-area-regular-weight], [data-area-action],
     [data-area-selection], [data-area-ground-light], [data-area-ground-dark], [data-area-layers-light],
     [data-area-layers-dark], [data-area-card-tone-light], [data-area-card-tone-dark], [data-area-type],
     [data-area-density], [data-area-radius], [data-area-surface], [data-area-shadow-rest], [data-area-elevation],
@@ -369,7 +437,7 @@
     :where(
     [data-area-theme], [data-area-neutral], [data-area-tint-hue], [data-area-tint-hue-dark], [data-area-colours], [data-area-tint-light], [data-area-tint-dark],
     [data-area-ink-tint], [data-area-accent], [data-area-accent-strength], [data-area-solid-light],
-    [data-area-solid-dark], [data-area-label-tint], [data-area-status-colours], [data-area-tone-tint], [data-area-tone-contrast], [data-area-series-lightness], [data-area-action],
+    [data-area-solid-dark], [data-area-label-tint], [data-area-status-colours], [data-area-tone-tint], [data-area-tone-contrast], [data-area-series-lightness], [data-area-regular-weight], [data-area-action],
     [data-area-selection], [data-area-ground-light], [data-area-ground-dark], [data-area-layers-light],
     [data-area-layers-dark], [data-area-card-tone-light], [data-area-card-tone-dark], [data-area-type],
     [data-area-density], [data-area-radius], [data-area-surface], [data-area-shadow-rest], [data-area-elevation],
@@ -395,7 +463,7 @@
     :where(
     [data-area-theme], [data-area-neutral], [data-area-tint-hue], [data-area-tint-hue-dark], [data-area-colours], [data-area-tint-light], [data-area-tint-dark],
     [data-area-ink-tint], [data-area-accent], [data-area-accent-strength], [data-area-solid-light],
-    [data-area-solid-dark], [data-area-label-tint], [data-area-status-colours], [data-area-tone-tint], [data-area-tone-contrast], [data-area-series-lightness], [data-area-action],
+    [data-area-solid-dark], [data-area-label-tint], [data-area-status-colours], [data-area-tone-tint], [data-area-tone-contrast], [data-area-series-lightness], [data-area-regular-weight], [data-area-action],
     [data-area-selection], [data-area-ground-light], [data-area-ground-dark], [data-area-layers-light],
     [data-area-layers-dark], [data-area-card-tone-light], [data-area-card-tone-dark], [data-area-type],
     [data-area-density], [data-area-radius], [data-area-surface], [data-area-shadow-rest], [data-area-elevation],
@@ -417,12 +485,12 @@
       --area-selection-band-hover: var(--area-selection-band-tile-hover);
     }
   }
-  @scope (.area-surface--soft, .area-radio--card.area-radio--preview, .area-checkbox--card.area-checkbox--preview, .area-radio--thumbnail > .area-radio__visual, .area-checkbox--thumbnail > .area-checkbox__visual, .area-plan__steps, .area-approval__visual,
+  @scope (.area-surface--soft, .area-radio--surface.area-radio--preview, .area-checkbox--surface.area-checkbox--preview, .area-radio--thumbnail > .area-radio__visual, .area-checkbox--thumbnail > .area-checkbox__visual, .area-plan__steps, .area-approval__visual,
     [data-area-ground="recessed"]) {
     :where(
     [data-area-theme], [data-area-neutral], [data-area-tint-hue], [data-area-tint-hue-dark], [data-area-colours], [data-area-tint-light], [data-area-tint-dark],
     [data-area-ink-tint], [data-area-accent], [data-area-accent-strength], [data-area-solid-light],
-    [data-area-solid-dark], [data-area-label-tint], [data-area-status-colours], [data-area-tone-tint], [data-area-tone-contrast], [data-area-series-lightness], [data-area-action],
+    [data-area-solid-dark], [data-area-label-tint], [data-area-status-colours], [data-area-tone-tint], [data-area-tone-contrast], [data-area-series-lightness], [data-area-regular-weight], [data-area-action],
     [data-area-selection], [data-area-ground-light], [data-area-ground-dark], [data-area-layers-light],
     [data-area-layers-dark], [data-area-card-tone-light], [data-area-card-tone-dark], [data-area-type],
     [data-area-density], [data-area-radius], [data-area-surface], [data-area-shadow-rest], [data-area-elevation],
@@ -448,7 +516,7 @@
     :where(
     [data-area-theme], [data-area-neutral], [data-area-tint-hue], [data-area-tint-hue-dark], [data-area-colours], [data-area-tint-light], [data-area-tint-dark],
     [data-area-ink-tint], [data-area-accent], [data-area-accent-strength], [data-area-solid-light],
-    [data-area-solid-dark], [data-area-label-tint], [data-area-status-colours], [data-area-tone-tint], [data-area-tone-contrast], [data-area-series-lightness], [data-area-action],
+    [data-area-solid-dark], [data-area-label-tint], [data-area-status-colours], [data-area-tone-tint], [data-area-tone-contrast], [data-area-series-lightness], [data-area-regular-weight], [data-area-action],
     [data-area-selection], [data-area-ground-light], [data-area-ground-dark], [data-area-layers-light],
     [data-area-layers-dark], [data-area-card-tone-light], [data-area-card-tone-dark], [data-area-type],
     [data-area-density], [data-area-radius], [data-area-surface], [data-area-shadow-rest], [data-area-elevation],

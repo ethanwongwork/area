@@ -99,3 +99,10 @@ test("media cards keep a list row's alignment and draw the picture in a concentr
   assert.match(block, /--_media-mat: var\(--area-space-8\)/);
   assert.match(block, /border-radius: max\(var\(--area-radius-min\), calc\(var\(--area-radius-container\) - var\(--_media-mat\) \* var\(--area-radius-concentric\)\)\)/);
 });
+
+// Plan B1.1: the one frame prop. `surface` is the contained option; `card` stays a deprecated alias for one release.
+test("Radio variant surface is the contained option, and the deprecated card draws the same class", () => {
+  const html = renderToString(h(RadioGroup, { label: "Label", defaultValue: "a" }, h(Radio, { variant: "card", value: "a", label: "A" }), h(Radio, { variant: "surface", value: "b", label: "B" })));
+  assert.equal((html.match(/area-radio--surface/g) || []).length, 2);
+  assert.doesNotMatch(html, /area-radio--card/);
+});

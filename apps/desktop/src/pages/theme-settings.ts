@@ -45,32 +45,6 @@ export const ALSO: Record<string, Record<string, string>> = {
   "shadow-hover": { ...NO_SHADOW, "data-area-surface": "0" },
   easing: { "data-area-motion": "300" },
 };
-/** What a preview is set to besides its own setting, said in the Inspector so a tile is never mistaken for the default. */
-export const HELD: Record<string, string> = {
-  easing: "Motion at 300, so the curve has time to show.",
-  accent: "Action and Selection at Accent, so the accent shows on buttons and marks.",
-  "accent-strength": "Action and Selection at Accent, so the accent shows on buttons and marks.",
-  "solid-light": "Action and Selection at Accent, so the solid shows on buttons and marks.",
-  "solid-dark": "Action and Selection at Accent, so the solid shows on buttons and marks.",
-  "label-tint": "Action at Accent and Solid at 750, so the label has room to take the hue.",
-  "status-colours": "Accent strength at 50, so Match shows.",
-  neutral: "Layers at 8, so the greys are large enough for the tint to show.",
-  "tint-hue": "Grey tint at 38, so each hue shows.",
-  "tint-hue-dark": "Dark grey tint at 38, so each hue shows.",
-  "tint-light": "Tint hue at 70°, so each strength shows.",
-  "tint-dark": "Tint hue at 70°, so each strength shows.",
-  "ink-tint": "Tint hue at 70° and strength 8, so the text's share shows.",
-  surface: "Shadows off, so only the line shows.",
-  stroke: "Shadows off, so only the strokes show.",
-  "shadow-rest": "Stroke width 0 and the other shadows off, so only this shadow shows.",
-  "shadow-resting": "Stroke width 0 and the other shadows off, so only this shadow shows.",
-  "shadow-field": "The surface's own shadows off, so only the field's shows.",
-  "shadow-hover": "Stroke width 0 and the other shadows off, so only the lift shows.",
-  "shadow-size": "Drawn on the Floating shadow at 8, where the change is large enough to see.",
-  "shadow-softness": "Drawn on the Floating shadow at 8, where the change is large enough to see.",
-  "shadow-light": "Drawn on the Floating shadow at 8, where the change is large enough to see.",
-  "shadow-color": "Drawn on the Floating shadow at 8, where the change is large enough to see.",
-};
 
 /*
  * Light and dark (owner, 2026-10-19: "dark mode should be automatic? or handled separately but more cohesively ... show
@@ -90,8 +64,6 @@ const HUE_PAIR: Readonly<Record<Mode, string>> = { light: "tint-hue", dark: "tin
 export const modeOfSetting = (id: string): Mode | null =>
   PER_THEME.test(id) ? (id.endsWith("-dark") ? "dark" : "light") : id === HUE_PAIR.light ? "light" : id === HUE_PAIR.dark ? "dark" : null;
 export const inMode = (id: string, mode: Mode) => { const own = modeOfSetting(id); return own === null || own === mode; };
-/** The same setting in the other theme ("ground-dark" for "ground-light"). */
-export const pairOf = (id: string, mode: Mode) => PER_THEME.test(id) ? id.replace(/-(light|dark)$/, `-${mode}`) : id === HUE_PAIR.light || id === HUE_PAIR.dark ? HUE_PAIR[mode] : id;
 
 /*
  * The settings: the Inspector's own list (src/gallery/controls.ts), its labels, options, order and defaults, so Theme
@@ -136,18 +108,9 @@ export const writes = (setting: Setting, preset?: string) => {
   return Object.entries(tokens);
 };
 export const isDefault = (setting: Setting, preset: string) => setting.defaults.includes(preset);
-/** The default preset's name. */
-export const defaultLabel = (setting: Setting) => setting.id === "pills"
-  ? setting.presets.filter(entry => isDefault(setting, entry.id)).map(entry => entry.label).join(", ")
-  : setting.presets.find(entry => isDefault(setting, entry.id))?.label ?? "—";
 /** What a preset's tile is scoped to: its attribute (System contrast writes none), and what the setting needs to show. */
 export const scopeOf = (setting: Setting, preset: string): Record<string, string> =>
   setting.id === "contrast" && preset === "system" ? {} : { ...ALSO[setting.id], [`data-area-${setting.id}`]: preset };
 export const attributeOf = (setting: Setting, preset?: string) => setting.id === "contrast" && preset === "system"
   ? "no attribute (the OS decides)" : `data-area-${setting.id}${preset ? `="${preset}"` : ""}`;
 
-/** A tile's name with a detail in its brackets: "Light (Default)", and "0 (None, Default)" where the name has brackets. */
-export const tileLabel = (label: string, detail?: string) =>
-  !detail ? label : label.endsWith(")") ? `${label.slice(0, -1)}, ${detail})` : `${label} (${detail})`;
-/** The light or dark theme a setting is drawn in: its own for the per-theme settings, else the page's. */
-export const themeOf = (id: string, mode: Mode): Mode => modeOfSetting(id) ?? mode;

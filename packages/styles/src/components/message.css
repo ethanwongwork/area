@@ -36,8 +36,9 @@
        85% beside an artifact, Cursor 32 in under 480); 70% of the Inspector's 268 was 188, a word or two a line. */
     max-inline-size: max(70%, min(100% - var(--area-space-48), 456px));
     padding: calc(10px - var(--area-space-4) * var(--area-ui-dense)) var(--area-inset-surface-md); /* spec: 10 × 16, compact 6 × 12 on 14/20 */
-    /* The composer's corner: its control radius plus its inset (16, compact 12). */
-    --_bubble-radius: calc(var(--area-radius-control-md) + var(--area-ui-cluster) * var(--area-radius-concentric));
+    /* The chat card's corner (surface.css, plan B1.3), the Composer's, where the words were typed: the medium control's
+       corner plus the bar inset, never rounder than the container (16 at the default, 14 at Compact). */
+    --_bubble-radius: var(--_fr-corner);
     /* Where two of the person's bubbles meet in a stack, their end corners tighten to a quarter of the corner (4 at 16,
        3 at compact 12), so it follows the Radius setting. spec: derived; the reference sets the meeting corner per
        look and ships no default (docs/research/components-audit-2026-11-07/chat-apps.md, Message bubble stack). */
@@ -83,7 +84,7 @@
     font-size: var(--area-text-base-size); /* Turn notice's size */
     line-height: var(--area-text-base-leading);
   }
-  .area-message__status > svg { flex: none; inline-size: var(--area-icon-sm); block-size: var(--area-icon-sm); color: var(--area-fg-danger); }
+  .area-message__status > svg { flex: none; inline-size: var(--area-icon-sm); block-size: var(--area-icon-sm); color: var(--area-fg-danger-mark); } /* a tone glyph: the mark ink (plan A3.4) */
   .area-message__status-text { min-inline-size: 0; overflow-wrap: anywhere; }
   .area-message--error > .area-message__status > .area-message__status-text { color: var(--area-fg-default); }
 
@@ -93,6 +94,20 @@
      4) and the next block is the gap after it. */
   .area-message__content { min-inline-size: 0; overflow-wrap: anywhere; }
   .area-message__content > * { margin-block: 0; }
+  /* A reply's headings are its own (plan A9.1), so a host never has to set them: h1 to h3 a heading over a block,
+     title-xs at 500 (16/22 at type 13); h4 to h6 the reply's size at 500. The reply's own children only, never every
+     heading under it (a Card's title set in a reply keeps its own). */
+  .area-message__content > :is(h1, h2, h3) {
+    font-size: var(--area-title-xs-size);
+    line-height: var(--area-title-xs-leading);
+    letter-spacing: var(--area-title-xs-tracking);
+    font-weight: var(--area-weight-strong);
+  }
+  .area-message__content > :is(h4, h5, h6) {
+    font-size: inherit;
+    line-height: inherit;
+    font-weight: var(--area-weight-strong);
+  }
   /* The reply starts on its first cap and ends at its last line's descent (Q-T2, owner 2026-11-04, "Apply both"; Kit Type
      Decisions): the half-leading above and below the text is trimmed, as Card trims its title and last line, so every gap
      around a reply (a section's title over it, the turn above, its actions under it) is read on the glyphs (DESIGN_SYSTEM,
@@ -106,7 +121,7 @@
   .area-message__content > * + * { margin-block-start: var(--area-text-lg-prose-gap); }
   .area-message__content > :is(h1, h2, h3, h4, h5, h6):not(:first-child) { margin-block-start: calc(var(--area-text-lg-prose-gap) + var(--area-space-8)); }
   .area-message__content > :is(h1, h2, h3, h4, h5, h6) + *,
-  .area-message__content > * + :is(ul, ol) { margin-block-start: var(--area-space-8); }
+  .area-message__content > * + :is(ul, ol) { margin-block-start: var(--area-space-8); /* a join in reading text: a heading or a lead-in with what it introduces, at every density */ }
   /* The reply's own lists only (`:not([class*="area-"])`: markdown's ul and ol, an app's too), never a component's list set in a reply (2026-11-04
      kit pass: a Reference list in a reply took these markers over its own, its numbers drawn over its words). */
   .area-message__content :is(ul, ol):not([class*="area-"]) > li + li { margin-block-start: var(--area-space-4); }
@@ -124,25 +139,31 @@
   .area-message__content ul:not([class*="area-"]) > li::before { content: "\2022"; }
   .area-message__content ol:not([class*="area-"]) > li::before { content: counter(area-message-list) "."; font-variant-numeric: tabular-nums; }
 
-  /* spec: 32 icon buttons with no gap, muted (ChatGPT 143 on 13 ink). The buttons' plates line
-   * up with the turn: the assistant's first plate starts on the text edge, the person's last
-   * plate ends on the bubble's edge (owner, 2026-09-27; ChatGPT pulls the row out so its icons,
-   * not its plates, sit on the edge, and a hover plate then hangs outside the column). */
+  /* spec: icon buttons with no gap, muted. They are edge ghost buttons (inset.css, plan B4.3, 2026-11-14): the
+   * assistant's first glyph starts on the text's edge and the person's last glyph ends on the bubble's edge, the row
+   * pulled out by the button's gutter, (H − icon) / 2, 7 at the defaults, so a hover plate hangs outside the column. The
+   * plates lined up with the turn until then (2026-09-27), the glyphs 7 inside it. The gap above them stays two: 4 under
+   * the person's bubble, whose edge is drawn, and the reply's block gap under its prose, whose last line is not. */
   .area-message__actions {
     display: flex;
     align-items: center;
     gap: 0;
   }
+  .area-message--assistant > .area-message__actions > .area-button--ghost:first-child { margin-inline-start: calc(-1 * var(--_pull-start)); }
+  .area-message--user > .area-message__actions > .area-button--ghost:last-child { margin-inline-end: calc(-1 * var(--_pull-end)); }
   /* Actions take the quiet ghost Button ink as every icon action does (audit S6b, owner 2026-09-30); was fg-muted. */
   /* The person's actions show on hover or focus (ChatGPT hides them until then); the latest
    * assistant turn keeps its actions shown. */
-  .area-message--user > .area-message__actions { opacity: 0; transition: opacity var(--area-fade-fast) var(--area-ease-out); }
+  .area-message--user > .area-message__actions { transition: opacity var(--area-fade-fast) var(--area-ease-effects); }
+  /* Hidden only where there is hover (plan B7.11): a touch screen always shows them. */
+  @media (hover: hover) {
+    .area-message--user > .area-message__actions { opacity: 0; }
+    .area-message--user:hover > .area-message__actions { opacity: 1; }
+  }
   /* Keyboard focus shows them at once (MOTION.md: focus is instant, nothing opened from the keyboard
      waits on a fade); the pointer's reveal keeps the duration-fast fade both ways, as the system's
      other reveal-on-hover rows (Card, Tree view) do. */
   .area-message--user:focus-within > .area-message__actions { opacity: 1; transition-duration: 0s; }
-  @media (hover: hover) { .area-message--user:hover > .area-message__actions { opacity: 1; } }
-  @media (hover: none) { .area-message--user > .area-message__actions { opacity: 1; } }
 
   /* While the answer streams in, a dot follows the last word: drawn on the last text block itself (its last line, or its
      last item's) when the reply ends in one, and the cursor element after it stands down; a cursor after a block sat on

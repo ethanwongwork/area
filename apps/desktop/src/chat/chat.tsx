@@ -23,10 +23,15 @@
  *   P10     the composer grows to eight lines, then Expand; starters in the / menu; a long paste becomes a chip
  *   P11     the + menu says how Claude helps: Ask, Suggest or Change
  *
- * In the Inspector the transcript is the Panel's body and the composer its footer, with no rule above it; the session
- * lives at the app's level (ChatProvider), so a conversation survives switching tabs and views.
+ * In the Inspector the transcript is the Panel's body and the composer its footer, with no rule above it; the sessions
+ * live at the app's level (ChatProvider), so a conversation survives switching tabs and views.
+ *
+ * A chat belongs to its place (owner, 2026-11-10; docs/research/desktop-app-analysis-2026-11-10, T1 and U4): each
+ * project and each system has its own conversation, the rest of the app shares one, and a tab shows its place's. A
+ * project with a folder has its chat work there (electron/agent.cjs), and the @ menu lists that folder's files. Chats
+ * are kept beside their place (store.ts) and open again from Past chats in the conversation's head.
  */
-import { createContext, Fragment, useContext, useEffect, useLayoutEffect, useRef, useState, type Dispatch, type ReactNode, type RefObject, type SetStateAction } from "react";
+import { createContext, Fragment, useCallback, useContext, useEffect, useLayoutEffect, useMemo, useRef, useState, type Dispatch, type ReactNode, type RefObject, type SetStateAction } from "react";
 import { Accordion, AccordionItem, Approval, Attachment, Button, Chip, CodeBlock, Composer, ComposerMenu, CopyButton, Diff, EditSummary, EditSummaryChange, EditSummaryFile, EmptyState, Menu, MenuItem, MenuLabel, MenuSeparator, Message, MessageActions, ModelPicker, Plan, PromptSuggestions, Queue, Reasoning, ScrollToLatest, Step, StepGroup, Timestamp, Tooltip, TurnNotice, formatTimestamp, TIMESTAMP_GAP, type ComposerMenuGroup, type ComposerMenuItem, type DiffHunk } from "@area/react";
 import { AddIcon, ChatAddIcon, ChatIcon, ChatQuestionIcon, CommandIcon, ComponentIcon, DocumentIcon, HistoryIcon, ImagePlusIcon, LayersIcon, LightbulbIcon, PaletteIcon, PencilIcon, RotateIcon, TextQuoteIcon } from "@area/icons";
 import { RECORDINGS, ASK, LOG_CHANGES, SHOW_OPTIONS, type LoggedChange } from "./recording.ts";
@@ -34,6 +39,10 @@ import { useChatSession, type Attached, type ChatSession, type HelpMode, type Ou
 import { AskedQuestion, OptionSet, QuestionCard, ReplyText } from "./chat-parts.tsx";
 import { plainName, plainStep, workLine } from "./words.ts";
 import { readStored, writeStored } from "../storage.ts";
+import { APP_PLACE, keepChat, keptChat, newChatId, placeKey, useKeptChats, type ChatPlace, type KeptChat } from "./store.ts";
+import { folderName } from "../output.ts";
+import { activityOf, noticeOf, setActivity, type Activity } from "./activity.ts";
+import { hrefOf, projectName, systemName } from "../places.ts";
 import { useStudio } from "../studio.tsx";
 import { FAMILIES } from "../pages/components.tsx";
 import { GALLERY_CONTROLS } from "../gallery/controls.ts";
@@ -59,36 +68,23 @@ function useStoredChoice<T extends string>(key: string, event: string, fallback:
 
 /** The model chats start with (Settings › Chat), kept between launches; every reader follows a change. */
 export const useDefaultModel = () => useStoredChoice<string>("chat-model", "area-chat-model", CHAT_MODELS[0]!.value, value => CHAT_MODELS.some(entry => entry.value === value));
+/** Settings › Chat › Notices (T10): a macOS notice while the window is in the background, when a reply ends and when
+ *  Claude needs an answer. Both on by default. */
+export const useNotifyEnded = () => useStoredChoice<"on" | "off">("chat-notify-ended", "area-chat-notify", "on", value => value === "on" || value === "off");
+export const useNotifyAsking = () => useStoredChoice<"on" | "off">("chat-notify-asking", "area-chat-notify", "on", value => value === "on" || value === "off");
 /** How the work shows (Settings › Chat › Work, P5): one line in plain words, or every step. */
 export type WorkView = "summary" | "steps";
 export const useWorkView = () => useStoredChoice<WorkView>("chat-work", "area-chat-work", "summary", value => value === "summary" || value === "steps");
 
-/** A finished conversation, kept so a new one can bring it in from the @ menu (P6): its first prompt as its title, when
- *  it last changed, and what was said, in words. */
-export interface PastChat { id: string; title: string; at: number; text: string }
-const HISTORY_KEY = "chat-history", HISTORY_EVENT = "area-chat-history", HISTORY_LIMIT = 20, HISTORY_TEXT = 6000;
-const readHistory = () => { const saved = readStored<PastChat[]>(HISTORY_KEY, []); return Array.isArray(saved) ? saved.filter(entry => entry && typeof entry.id === "string") : []; };
-/** The kept conversations, newest first; every reader follows a change. */
-export function usePastChats(): PastChat[] {
-  const [chats, setChats] = useState(readHistory);
-  useEffect(() => {
-    const follow = () => setChats(readHistory());
-    addEventListener(HISTORY_EVENT, follow);
-    return () => removeEventListener(HISTORY_EVENT, follow);
-  }, []);
-  return chats;
-}
-function keepChat(chat: PastChat) {
-  writeStored(HISTORY_KEY, [chat, ...readHistory().filter(entry => entry.id !== chat.id)].slice(0, HISTORY_LIMIT));
-  dispatchEvent(new Event(HISTORY_EVENT));
-}
-/** A conversation in words, as the agent reads a past chat: who said what, the reply's text without its More marker. */
-const chatText = (turns: readonly Turn[]) => turns.map(turn => turn.author === "user" ? `Person: ${turn.text}` : `Claude: ${plainText(turn)}`).join("\n\n").slice(0, HISTORY_TEXT);
-let conversations = 0;
-const newConversation = () => `conversation-${Date.now().toString(36)}-${++conversations}`;
+/** Chats from before they were kept beside their place (until 2026-11-10: the last 20, in this browser's storage, as
+ *  words only). The app's own @ menu still offers them; they can't be opened again. */
+interface OldChat { id: string; title: string; at: number; text: string }
+const oldChats = (): OldChat[] => { const saved = readStored<OldChat[]>("chat-history", []); return Array.isArray(saved) ? saved.filter(entry => entry && typeof entry.id === "string") : []; };
 
 /** The Design view's changes waiting in the composer (P9): the card, what the agent reads, and what happens once sent. */
-export interface ChangeSet { title: string; items: ReadonlyArray<{ thing: string; change: string }>; prompt: string; onSent?: () => void }
+export interface ChangeSet { title: string; items: ReadonlyArray<{ thing: string; change: string }>; prompt: string; onSent?: () => void;
+  /** Pictures that ride with it (the Preview's chosen element): they join the composer's own. */
+  pictures?: readonly File[] }
 
 interface ChatContextValue {
   session: ChatSession;
@@ -105,7 +101,20 @@ interface ChatContextValue {
   setChanges: (changes: ChangeSet | null) => void;
   /** This conversation's id among the kept ones, so the @ menu leaves it out. */
   conversation: string;
+  /** Where the chat belongs: a project, a system, or the app. */
+  place: ChatPlace;
+  /** The project's folder the agent works in, and the project's name, when the place is a project that has them. */
+  folder?: string;
+  about?: ChatAbout;
+  /** Open a kept chat in this one's place. */
+  openChat: (chat: KeptChat) => void;
 }
+/** A place's name for a notice, and the hash that opens it (a project's Overview, a system's Themes, Home). */
+const placeName = (place: ChatPlace) => place.kind === "project" ? projectName(place.id) : place.kind === "system" ? systemName(place.id) : "Area";
+const placeHash = (place: ChatPlace) => hrefOf(place.kind === "project" ? { page: "project", project: place.id } : place.kind === "system" ? { page: "themes", system: place.id } : { page: "home" });
+
+/** The project a chat is about, for the agent's instructions and the chat's own words. */
+export interface ChatAbout { name: string; system?: string; theme?: string }
 const ChatContext = createContext<ChatContextValue | null>(null);
 export const useChat = () => {
   const value = useContext(ChatContext);
@@ -123,26 +132,104 @@ function lastActivity(turns: Turn[], index: number): number | undefined {
   return prompt && prompt.author === "user" ? prompt.at + (previous.seconds ?? 0) * 1000 : undefined;
 }
 
-/** The app's one conversation, above every tab (src/studio.tsx). */
-export function ChatProvider({ selection, children }: { selection?: string; children: ReactNode }) {
+/**
+ * One place's conversation: its session, composer, draft and waiting changes. It stays mounted once its place has been
+ * open, so a reply goes on while another tab shows; `current` says its tab is the one showing, and only then does it
+ * follow the place's folder and the Canvas's selection.
+ */
+function ChatHost({ place, current, folder, about, selection, onValue }: {
+  place: ChatPlace; current: boolean; folder?: string; about?: ChatAbout; selection?: string; onValue: (value: ChatContextValue) => void;
+}) {
+  // What the place was when its tab last showed: a chat working behind another tab keeps its folder.
+  const held = useRef({ folder, about, selection });
+  if (current) held.current = { folder, about, selection };
   // The composer's menu changes this chat's model; Settings › Chat sets the one chats start with, and this chat follows it.
   const [preferred] = useDefaultModel();
   const [model, setModel] = useState(preferred);
   useEffect(() => setModel(preferred), [preferred]);
   // The app's chat is live wherever the engine answers (the Electron app); elsewhere it plays the recordings.
-  const session = useChatSession(undefined, { live: true, model });
+  const session = useChatSession(undefined, { live: true, model, folder: held.current.folder, about: held.current.about });
   const composer = useRef<HTMLTextAreaElement | null>(null);
   const [draft, setDraft] = useState("");
   const [changes, setChanges] = useState<ChangeSet | null>(null);
-  // Each finished turn keeps the conversation (P6: past chats in the @ menu); New chat starts another.
-  const [conversation, setConversation] = useState(newConversation);
+  // Each finished turn keeps the conversation beside its place (store.ts); New chat starts another. A kept chat that
+  // was only opened is not kept again: `worked` says a reply has run since.
+  const [conversation, setConversation] = useState(newChatId);
+  const worked = useRef(false);
+  if (session.running) worked.current = true;
   useEffect(() => {
-    if (!session.turns.length) { setConversation(newConversation()); return; }
-    const first = session.turns.find(turn => turn.author === "user");
-    if (session.running || !first || first.author !== "user" || !session.turns.some(turn => turn.author === "assistant" && turn.done)) return;
-    keepChat({ id: conversation, title: first.text.slice(0, 120), at: Date.now(), text: chatText(session.turns) });
-  }, [session.turns, session.running]); // eslint-disable-line react-hooks/exhaustive-deps
-  return <ChatContext.Provider value={{ session, model, setModel, selection, composer, draft, setDraft, changes, setChanges, conversation }}>{children}</ChatContext.Provider>;
+    if (!session.turns.length) { setConversation(newChatId()); worked.current = false; return; }
+    if (session.running || !worked.current) return;
+    const chat = keptChat(conversation, session, { folder: held.current.folder });
+    if (chat) keepChat(place, chat);
+  }, [session.turns, session.running, session.edits, session.answers]); // eslint-disable-line react-hooks/exhaustive-deps
+  // What it is doing, for the tab's mark, a notice and the question before quitting (activity.ts). A reply that ends
+  // while its tab isn't showing stays "done" until the tab shows.
+  const [ended, setEnded] = useState<"done" | "failed" | null>(null);
+  const wasRunning = useRef(false);
+  useEffect(() => {
+    if (wasRunning.current && !session.running) {
+      const last = session.turns.at(-1);
+      setEnded(last?.author === "assistant" && (last.error || last.stopped) ? "failed" : "done");
+    }
+    wasRunning.current = session.running;
+  }, [session.running]); // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => { if (current) setEnded(null); }, [current]);
+  const [notifyEnded] = useNotifyEnded();
+  const [notifyAsking] = useNotifyAsking();
+  const activity = activityOf(session, ended, current);
+  const before = useRef<Activity | null>(null);
+  useEffect(() => {
+    setActivity(place, activity);
+    const prior = before.current;
+    before.current = activity;
+    // A notice only while the window is in the background: in front, the tab's mark says it.
+    if (typeof document === "undefined" || document.hasFocus()) return;
+    // A reply that ended in front of the person ends as nothing (shown); in the background it ends as done.
+    const next = activity ?? (prior === "working" || prior === "asking" ? (ended ?? "done") : null);
+    const last = session.turns.at(-1);
+    const reply = last?.author === "assistant" ? last.parts.filter(part => part.kind === "text").map(part => (part as { text: string }).text).join(" ") : "";
+    const notice = noticeOf(next, prior, placeName(place), reply, { ended: notifyEnded === "on", asking: notifyAsking === "on" });
+    if (notice) window.areaDesktop?.notify?.({ ...notice, hash: placeHash(place) });
+  }, [activity]); // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => () => setActivity(place, null), [place]);
+  const { open } = session;
+  const openChat = useCallback((chat: KeptChat) => {
+    worked.current = false;
+    setConversation(chat.id);
+    // The agent goes on from where the chat left off only in the folder it worked in.
+    open(chat, (chat.folder ?? "") === (held.current.folder ?? ""));
+    setDraft("");
+  }, [open]);
+  const shown = held.current;
+  const value = useMemo<ChatContextValue>(() => ({ session, model, setModel, selection: shown.selection, composer, draft, setDraft, changes, setChanges, conversation, place, folder: shown.folder, about: shown.about, openChat }),
+    [session, model, shown.selection, draft, changes, conversation, place, shown.folder, shown.about, openChat]);
+  useLayoutEffect(() => { if (current) onValue(value); }, [current, value, onValue]);
+  return null;
+}
+
+/**
+ * The app's conversations, above every tab (src/studio.tsx): one per place, the open tab's shown. `folder` and `about`
+ * are the open project's (none elsewhere).
+ */
+export function ChatProvider({ place = APP_PLACE, folder, about, selection, children }: { place?: ChatPlace; folder?: string; about?: ChatAbout; selection?: string; children: ReactNode }) {
+  const key = placeKey(place);
+  const [seen, setSeen] = useState<ChatPlace[]>(() => [{ kind: place.kind, id: place.id }]);
+  const places = seen.some(entry => placeKey(entry) === key) ? seen : [...seen, { kind: place.kind, id: place.id }];
+  useEffect(() => { if (places !== seen) setSeen(places); }, [places, seen]);
+  // The showing place's value, published by its host before paint; the last one stands in while a new host mounts.
+  const [value, setValue] = useState<ChatContextValue | null>(null);
+  const publish = useCallback((next: ChatContextValue) => setValue(next), []);
+  return (
+    <>
+      {places.map(entry => {
+        const current = placeKey(entry) === key;
+        return <ChatHost key={placeKey(entry)} place={entry} current={current} folder={current ? folder : undefined} about={current ? about : undefined}
+          selection={current ? selection : undefined} onValue={publish} />;
+      })}
+      {value ? <ChatContext.Provider value={value}>{children}</ChatContext.Provider> : null}
+    </>
+  );
 }
 
 /** A conversation of its own, for a screen that shows chats side by side (the Testing frames). */
@@ -151,7 +238,7 @@ export function ChatScope({ session, selection, children }: { session: ChatSessi
   const composer = useRef<HTMLTextAreaElement | null>(null);
   const [draft, setDraft] = useState("");
   const [changes, setChanges] = useState<ChangeSet | null>(null);
-  return <ChatContext.Provider value={{ session, model, setModel, selection, composer, draft, setDraft, changes, setChanges, conversation: "" }}>{children}</ChatContext.Provider>;
+  return <ChatContext.Provider value={{ session, model, setModel, selection, composer, draft, setDraft, changes, setChanges, conversation: "", place: APP_PLACE, openChat: () => {} }}>{children}</ChatContext.Provider>;
 }
 
 /** A Canvas item's path as words: "button/size-small" → "Button · Size small". */
@@ -392,7 +479,7 @@ function TurnView({ turn, view }: { turn: Turn; view: WorkView }) {
  * Ask about this (P13), which quotes them into the composer.
  */
 export function ChatTranscript({ scroller }: { scroller: RefObject<HTMLElement | null> }) {
-  const { session, composer, setDraft } = useChat();
+  const { session, composer, setDraft, place, folder, about } = useChat();
   const [view] = useWorkView();
   const pinned = useRef(true);
   const transcript = useRef<HTMLDivElement | null>(null);
@@ -420,16 +507,21 @@ export function ChatTranscript({ scroller }: { scroller: RefObject<HTMLElement |
     setQuote({ text, top: rect.bottom - outer.top + 4, left: Math.max(0, Math.min(rect.left - outer.left, outer.width - 120)) });
   };
   if (!session.turns.length) {
-    return (
+    return (<>
+      <PastChatsHead />
       <div className="studio-chat__empty">
-        <EmptyState size="sm" icon={<ChatIcon />} title="Ask about Area"
-          description={session.mode === "live" ? "Claude works in this repository and asks before each change."
-            : "Replies here are recorded runs: Claude answers in the Area app."} />
+        <EmptyState size="sm" icon={<ChatIcon />} title={about ? `Ask about ${about.name}` : "Ask about Area"}
+          description={session.mode !== "live" ? "Replies here are recorded runs: Claude answers in the Area app."
+            : folder ? `Claude works in ${folderName(folder)}, this project's folder, and asks before each change.`
+            : place.kind === "project" ? "This project has no folder yet, so Claude works in Area's own code. Choose a folder on the project's Overview."
+            : "Claude works in Area’s code and asks before each change."} />
+        {/* In a project's folder the starters are about that project; elsewhere they are the recorded runs' prompts. */}
         <PromptSuggestions layout="chips" label="Suggested prompts"
-          items={RECORDINGS.map(recording => ({ id: recording.id, label: recording.prompt }))}
+          items={folder && session.mode === "live" ? FOLDER_STARTERS.map((label, index) => ({ id: `starter-${index}`, label }))
+            : RECORDINGS.map(recording => ({ id: recording.id, label: recording.prompt }))}
           onSelect={suggestion => { session.send(suggestion.label); composer.current?.focus(); }} />
       </div>
-    );
+    </>);
   }
   const title = session.turns.find(turn => turn.author === "user");
   return (
@@ -438,6 +530,7 @@ export function ChatTranscript({ scroller }: { scroller: RefObject<HTMLElement |
           turns scroll under it; the Inspector's bar holds the view pills, with no room for it at 256. */}
       <div className="studio-chat__head">
         <span className="studio-chat__title">{title?.author === "user" ? title.text : "Chat"}</span>
+        <PastChatsButton />
         <NewChatButton />
       </div>
       <div ref={transcript} className="studio-chat__transcript" aria-live="polite" aria-busy={session.running || undefined}
@@ -467,7 +560,34 @@ export function ChatTranscript({ scroller }: { scroller: RefObject<HTMLElement |
 
 // ---- The composer ----------------------------------------------------------------------------------------------
 
-/** Files the @ menu offers after the design things (P6): real paths in this repo, for whoever wants a file. */
+/** A project's folder's files, for the @ menu: read when the folder or the conversation changes (electron/folder.cjs). */
+function useFolderFiles(folder: string | undefined, conversation: string): readonly string[] | null {
+  const [files, setFiles] = useState<readonly string[] | null>(null);
+  useEffect(() => {
+    const bridge = window.areaDesktop?.folder;
+    if (!folder || !bridge) { setFiles(null); return; }
+    let alive = true;
+    bridge.files(folder).then(list => { if (alive) setFiles(list); }, () => { if (alive) setFiles([]); });
+    return () => { alive = false; };
+  }, [folder, conversation]);
+  return files;
+}
+/** The files that match what was typed, a match in the file's own name before one in its folders'. */
+function matchFiles(all: readonly string[], query: string, taken: readonly string[], limit: number): string[] {
+  if (!query) return all.filter(path => !taken.includes(path)).slice(0, limit);
+  const named: string[] = [], within: string[] = [];
+  for (const path of all) {
+    if (taken.includes(path)) continue;
+    const lower = path.toLowerCase();
+    if (!lower.includes(query)) continue;
+    (lower.slice(lower.lastIndexOf("/") + 1).includes(query) ? named : within).push(path);
+    if (named.length >= limit) break;
+  }
+  return [...named, ...within].slice(0, limit);
+}
+
+/** Files the @ menu offers after the design things (P6): real paths in this repo, for whoever wants a file. In a
+ *  project with a folder, that folder's own files take their place. */
 const MENTION_FILES = [
   "packages/styles/src/components/button.css", "packages/styles/src/components/input.css", "packages/styles/src/components/card.css",
   "packages/styles/src/components/composer.css", "packages/styles/src/components/surface.css", "packages/styles/src/components/plan.css",
@@ -520,8 +640,10 @@ const base64Of = (file: File) => new Promise<string>((done, fail) => {
 /** The design things the @ menu offers: this page and its layers (in a project), components, the theme's settings. */
 function useThings(): Thing[] {
   const studio = useStudio();
-  const { conversation } = useChat();
-  const past = usePastChats();
+  const { conversation, place } = useChat();
+  // The place's kept chats; the app's own also offers the ones from before chats were kept as files.
+  const kept = useKeptChats(place);
+  const past = useMemo(() => [...kept, ...(place.kind === "app" ? oldChats().filter(old => !kept.some(chat => chat.id === old.id)) : [])], [kept, place.kind]);
   const things: Thing[] = [];
   const project = studio.openProject;
   if (project) {
@@ -552,7 +674,8 @@ function useThings(): Thing[] {
  *  context row (the selection, @-mentioned things, pictures, a long paste, the Design view's changes, how Claude helps)
  *  and the @ and / menu. An Approval or the agent's question takes its place while the agent asks. */
 export function ChatComposer({ scroller }: { scroller: RefObject<HTMLElement | null> }) {
-  const { session, model, setModel, selection, composer, draft, setDraft, changes, setChanges } = useChat();
+  const { session, model, setModel, selection, composer, draft, setDraft, changes, setChanges, folder, about: project, conversation } = useChat();
+  const mentionFiles = useFolderFiles(folder, conversation) ?? (folder ? [] : MENTION_FILES);
   // The selection rides along until it is dismissed; choosing something else on the Canvas brings it back.
   const [dismissed, setDismissed] = useState<string | undefined>();
   const context = selection && selection !== dismissed ? selection : undefined;
@@ -582,7 +705,7 @@ export function ChatComposer({ scroller }: { scroller: RefObject<HTMLElement | n
     ? (["This page", "Components", "Theme", "Past chats"] as const).map((label): ComposerMenuGroup => ({
         label, items: offered.filter(thing => thing.group === label && matches(thing.label) && !things.some(entry => entry.id === thing.id)).slice(0, label === "Components" ? 6 : label === "Past chats" ? 4 : 5)
           .map(thing => ({ id: thing.id, label: thing.label, ...(thing.detail ? { path: thing.detail } : {}), icon: thingIcon(thing.group) })),
-      })).concat([{ label: "Files", items: MENTION_FILES.filter(path => matches(path) && !files.includes(path)).slice(0, trigger.query ? 5 : 3)
+      })).concat([{ label: "Files", items: matchFiles(mentionFiles, trigger.query, files, trigger.query ? 5 : 3)
         .map(path => ({ id: `file-${path.replace(/[^a-z0-9]+/gi, "-")}`, label: path.split("/").at(-1)!, path: path.split("/").slice(0, -1).join("/"), icon: <DocumentIcon /> })) }])
       .filter(group => group.items.length)
     : [{ label: "Commands", items: COMMANDS.filter(command => command.id.includes(trigger.query) || command.label.toLowerCase().includes(trigger.query))
@@ -603,7 +726,7 @@ export function ChatComposer({ scroller }: { scroller: RefObject<HTMLElement | n
       return;
     }
     if (item.id.startsWith("file-")) {
-      const path = MENTION_FILES.find(candidate => `file-${candidate.replace(/[^a-z0-9]+/gi, "-")}` === item.id);
+      const path = mentionFiles.find(candidate => `file-${candidate.replace(/[^a-z0-9]+/gi, "-")}` === item.id);
       if (path) setFiles(list => [...list, path]);
     } else {
       const thing = offered.find(entry => entry.id === item.id);
@@ -618,6 +741,9 @@ export function ChatComposer({ scroller }: { scroller: RefObject<HTMLElement | n
     setImages(current => [...current, ...pictures.map(file => ({ id: `image-${++attachedIds}`, file, name: file.name || "Pasted image", src: URL.createObjectURL(file) }))]);
     return true;
   };
+  // Pictures that came with the waiting changes join the composer's, once for each set.
+  const took = useRef<ChangeSet | null>(null);
+  useEffect(() => { if (changes?.pictures?.length && took.current !== changes) { took.current = changes; attach(changes.pictures); } }, [changes]); // eslint-disable-line react-hooks/exhaustive-deps
   const removeImage = (id: string) => setImages(current => { const gone = current.find(image => image.id === id); if (gone) URL.revokeObjectURL(gone.src); return current.filter(image => image.id !== id); });
   const clearAll = () => { setThings([]); setFiles([]); setPastes([]); setImages(current => { current.forEach(image => URL.revokeObjectURL(image.src)); return []; }); };
   // What the agent reads about the message (the bubble shows the things' names): the selection, things, files, pictures.
@@ -699,7 +825,7 @@ export function ChatComposer({ scroller }: { scroller: RefObject<HTMLElement | n
         <ApprovalAsk />
       ) : (
         <Composer ref={composer} layout="stacked" value={draft} onValueChange={next => { setDraft(next); }}
-          placeholder={session.running ? "Queue another message…" : helpNow.placeholder}
+          placeholder={session.running ? "Queue another message…" : help === "change" && project ? `Ask about ${project.name}, or a change to make` : helpNow.placeholder}
           loading={session.running} onStop={session.stop}
           context={chips}
           expandable expanded={expanded} onExpandedChange={setExpanded}
@@ -752,7 +878,7 @@ function ApprovalAsk() {
   const command = typeof asked.input.command === "string" ? asked.input.command : undefined;
   const title = editing && path ? `Change ${plainName(path)}?` : asked.tool_name === "Bash" ? "Run a check?" : asked.title;
   const description = editing && path ? `${path.split("/").at(-1)}${asked.description && !asked.description.endsWith(path.split("/").at(-1) ?? "") ? `. ${asked.description}` : ""}`
-    : asked.tool_name === "Bash" ? (typeof asked.input.description === "string" ? asked.input.description : "A command in this repository") : asked.description;
+    : asked.tool_name === "Bash" ? (typeof asked.input.description === "string" ? asked.input.description : "A command in Area’s code") : asked.description;
   const code = editing ? <Diff aria-label={`Changes to ${path?.split("/").at(-1) ?? "the file"}`}
     hunks={editOf({ kind: "tool", id: asked.tool_use_id, name: asked.tool_name, input: asked.input, status: "running" }).hunks} />
     : command ? <CodeBlock size="sm" lineNumbers={false} code={command} wrap /> : null;
@@ -765,6 +891,41 @@ function ApprovalAsk() {
       {code ? <Accordion variant="plain" size="sm" className="studio-chat__show-code"><AccordionItem value="code" heading="Show code">{code}</AccordionItem></Accordion> : null}
     </Approval>
   );
+}
+
+/** What to ask first in a project's folder: each answered by reading, changing nothing. */
+const FOLDER_STARTERS = ["What is in this project?", "Which screens use the system?", "Find colors written by hand"];
+
+/** A kept chat's day, as its row says it: today's by its time. */
+const whenOf = (at: number) => {
+  const date = new Date(at), now = new Date();
+  return date.toDateString() === now.toDateString() ? date.toLocaleTimeString(undefined, { hour: "numeric", minute: "2-digit" })
+    : date.toLocaleDateString(undefined, { month: "short", day: "numeric", ...(date.getFullYear() === now.getFullYear() ? {} : { year: "numeric" }) });
+};
+
+/** The place's kept chats, from the conversation's head: each opens in this one's place. Nothing while there are none. */
+export function PastChatsButton() {
+  const { session, place, about, conversation, openChat, composer } = useChat();
+  const kept = useKeptChats(place).filter(chat => chat.id !== conversation);
+  if (!kept.length) return null;
+  return (
+    <Menu aria-label="Past chats" side="bottom" align="end" tooltip="Past chats"
+      trigger={<Button variant="ghost" tone="neutral" size="sm" iconOnly aria-label="Past chats" icon={<HistoryIcon />} />}>
+      <MenuLabel>{place.kind === "project" && about ? `Chats in ${about.name}` : place.kind === "system" ? "Chats in this system" : "Past chats"}</MenuLabel>
+      {kept.map(chat => (
+        // A reply at work is not replaced: its chat opens once it is done or stopped.
+        <MenuItem key={chat.id} disabled={session.running} onClick={() => { openChat(chat); composer.current?.focus(); }}>
+          <span className="studio-chat__past">{chat.title}</span><span className="studio-chat__aside">{whenOf(chat.at)}</span>
+        </MenuItem>
+      ))}
+    </Menu>
+  );
+}
+/** Before the first prompt there is no title, only Past chats on the head's end, when the place has any. */
+function PastChatsHead() {
+  const { place, conversation } = useChat();
+  const any = useKeptChats(place).some(chat => chat.id !== conversation);
+  return any ? <div className="studio-chat__head"><span className="studio-chat__title" /><PastChatsButton /></div> : null;
 }
 
 /** Starts a new conversation, from the conversation's head. */

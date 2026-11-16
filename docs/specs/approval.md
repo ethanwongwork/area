@@ -86,7 +86,7 @@ area-approval                 the Composer's edge, corner and field fill; the ag
 | options | **filled, aligned**: each a plate in a soft field's paint (fill `input-bg-soft`, edge `input-edge-soft` inside), 4 apart, no hairlines; the number square 6 in on every side (row 34 at type 13); corner the card's less the mat (`--_approval-plate`: 10 in a 22 card); hover bg-component-hover, focus the same with the ring, pressed bg-component-pressed, chosen bg-component-active | peer: soft fields (input.css); DESIGN_SYSTEM nested radius | the answers and the fields in a question share one paint; every corner follows the one outside it |
 | number | Kbd sm as a square the extra-small control tall (22), 6 in, its corner the plate's less 6 (`--_approval-key-radius`: 4); the label's first line centred on it; key to words `ui-cluster` | DESIGN_SYSTEM Keycaps (a keycap in a plate takes its corner less its inset) | Kbd's own 8 corner sat nearly level with the plate's 10 and looked squeezed into it |
 | Skip | a ghost Button sm at the free row's end, its plate 4 from the row's end, top and foot (the small control centred in the 34 row), corner the plate's less 4 (6) | — | its outline had sat 2 from the end and 6 from the top |
-| card corner | the Composer's (22 at type 13); a visual question's unit sets `--area-approval-corner` to row radius + 12 (22) for the frame and the question | — | a 12 mat needs a 22 card for a 10 plate (16 left a 4 plate) |
+| card corner | the Composer's, the chat card's (16 at the default; plan B1.3); a visual question's unit sets `--area-approval-corner` to row radius + 12 (22) for the frame and the question | — | an answer's plate is the card's less the 12 mat, never under a row's corner (8 at the default; the frame recipe's nested floor, plan B1.1) |
 | instead | the last numbered row, its field unfilled | Claude Code (last option is free text) | a filled field added a third grey (cleanup pass 2026-10-19) |
 | hint | the card's last row: ui-row tall, centred, text-base muted; Esc a filled Kbd sm, ui-cluster from the words | claude-code "Esc to cancel"; Kbd's rule (a key named in a sentence is filled) | rounds 52 and 53 |
 | option description | text-base muted under the label; the row grows with 6 above and below; the key on the label's line, the check centred | peer: Menu's row with a note (model-picker.md: 6 / 6, check centred); inset.css first-line alignment | the card's own description type, so a choice's note and the question's read alike |
@@ -344,3 +344,29 @@ plate's start and foot. The question unit's frame and card share 22; Several at 
   rule for every surface title (Card, Dialog, Confirm dialog, Drawer, Popover, Alert, Toast, Approval, Empty state sm).
   DESIGN_SYSTEM.md, "Text pairs"; `docs/research/title-balance-2026-11-06`.
 - The owner approved the 4 step ("4 is right", 2026-11-06).
+
+## Review note, 2026-11-11 (focus and targets, plan A6, A11.2)
+
+- **What changed:** One indicator per row (A6.2, S12): focus is the inset ring alone; the hover plate no longer shows with it. Forced colours: a selected option or tile keeps a Highlight edge (A6.4, S18).
+- **Why:** the system evaluation's focus, forced colours and hit target items (docs/research/system-evaluation-2026-11-11, section 5), owner-approved 2026-11-11; the rules are in DESIGN_SYSTEM.md ("The focus ring", "Targets") and CONTRAST.md (Focus).
+
+### 2026-11-11 · Ink, dark and colour (system plan, Phase 1)
+
+- **What changed:** The field's placeholder reads `input-placeholder` (plan A3.3, finding T19), the subtle ink since plan A3.2.
+- **Why:** docs/research/system-evaluation-2026-11-11 (README §5); the owner took every recommendation on 2026-11-11.
+- **Verdict:** awaiting the owner.
+
+### 2026-11-13 · One chat card (system plan, Phase 2, B1.1, B1.3)
+
+- The card takes the Composer's corner, now the chat card's (16 at the default, was 19). An answer's plate keeps the
+  12 mat and takes the frame recipe's nested floor, a row's 8 (16 − 12 gave the floor's 4).
+
+### 2026-11-14 · Shared parts, leftovers (system plan, Phase 2, wave 3)
+
+- The way on (Back, Skip, Continue) takes the overlay footer pair's minimum width, `round(up, 2.25 × H, 1px)`: 59 on its 26 sm Button at the default, so a short word is never narrower than a long one beside it.
+- Why: docs/research/system-evaluation-2026-11-11 (plan B6.1, B6.5, B8.2, B2.2; README §5, phase2/leftovers.md); the owner took every recommendation on 2026-11-11. Fix the rule, not the instance.
+- Verdict: awaiting the owner.
+
+## State paint (plan B7.2), 2026-11-14
+
+- The chosen option and tile press to the pressed plate (the tile rule moved after the selected one).

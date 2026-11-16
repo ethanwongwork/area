@@ -1,20 +1,32 @@
 import { useSystemDefault } from "./SystemDefaults.tsx";
 import { forwardRef, useEffect, useId, useImperativeHandle, useRef, useState } from "react";
 import type { ChangeEvent, InputHTMLAttributes, ReactNode } from "react";
-import { Spinner } from "./primitives.tsx";
+import { Spinner } from "./Spinner.tsx";
 import { MANIFESTS, switchVariants, type VariantProps } from "../variants.ts";
 
-type Options = Omit<VariantProps<typeof MANIFESTS.switch>, "rounded">;
+type SwitchAxes = VariantProps<typeof MANIFESTS.switch>;
+type Options = Omit<SwitchAxes, "rounded" | "size" | "track" | "labelPosition" | "fullWidth"> & {
+  /** The height and type; the track follows the type size: `md` (default), `sm` or `lg`. */
+  size?: SwitchAxes["size"];
+  /** `short` (default) or `long`, a wider track with a pill thumb. */
+  track?: SwitchAxes["track"];
+  /** Which side of the switch the label sits: `end` (default) or `start`. */
+  labelPosition?: SwitchAxes["labelPosition"];
+  /** Fills its container's width, the label and the switch at opposite ends, as in a settings row. */
+  fullWidth?: boolean;
+};
 export type SwitchProps = Omit<InputHTMLAttributes<HTMLInputElement>, "size" | "type"> & Options & {
+  /** The setting's visible name. */
   label?: ReactNode;
+  /** A line under the label, read as the switch's description. */
   description?: ReactNode;
+  /** Pending: a spinner shows and presses are ignored; off by default. */
   loading?: boolean;
   /** Unset: a pill while the theme's `pills` list names this component (the default). `true` forces a pill, `false` the radius setting's corner. */
   pill?: boolean;
-  /** @deprecated The tone axis is gone (audit H-13): set `--area-switch-color` (and
-   *  `--area-switch-color-hover`) on any Switch for a custom on colour. Ignored. */
+  /** @deprecated Ignored: set `--area-switch-color` (and `--area-switch-color-hover`) on any Switch for a custom on color. */
   tone?: "neutral" | "custom";
-  /** Called with the new state and the change event (audit S17: value first, event second). */
+  /** Called with the new state and the change event. */
   onCheckedChange?: (checked: boolean, event: ChangeEvent<HTMLInputElement>) => void;
   "data-hover"?: string;
   "data-active"?: string;

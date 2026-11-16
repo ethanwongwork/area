@@ -1,0 +1,7 @@
+node_modules/
+dist/
+# Trial fonts are licensed for testing only and may not be redistributed.
+fonts/trial/*
+!fonts/trial/README.md
+recordings/
+drafts/

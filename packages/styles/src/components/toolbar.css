@@ -32,8 +32,8 @@
    */
   .area-toolbar--surface {
     --_toolbar-inset: var(--area-ui-cluster); /* spec: 8, compact 6 (compact pass) */
-    --_toolbar-bg: var(--area-bg-surface);
-    --_toolbar-shadow: var(--area-shadow-edge), inset 0 0 0 var(--area-border-width) var(--area-edge-floating), var(--area-shadow-float);
+    --_toolbar-bg: var(--area-bg-float);
+    --_toolbar-shadow: var(--_float-frame), var(--_float-shadow); /* the one floating stack (popup.css) */
   }
   .area-toolbar--sm { --_height: var(--area-control-sm); --_toolbar-icon: var(--area-icon-sm); --_toolbar-text: var(--area-control-sm-text); --_toolbar-leading: var(--area-control-sm-leading); --_toolbar-radius: var(--area-radius-control-sm); }
   .area-toolbar--md { --_height: var(--area-control-md); --_toolbar-icon: var(--area-icon-md); --_toolbar-text: var(--area-control-md-text); --_toolbar-leading: var(--area-control-md-leading); --_toolbar-radius: var(--area-radius-control-md); }
@@ -58,7 +58,7 @@
   }
   .area-toolbar--floating.area-toolbar--surface { --_toolbar-inset: var(--area-space-2); /* spec: the notes app's bars, pad 2 */ }
   @media (hover: hover) {
-    .area-toolbar--floating { opacity: 0; transition: opacity var(--area-fade-fast) var(--area-ease-out); }
+    .area-toolbar--floating { opacity: 0; transition: opacity var(--area-fade-fast) var(--area-ease-effects); }
     :not(:hover, :focus-within) > .area-toolbar--floating:not(:has([aria-expanded="true"])) { pointer-events: none; }
     :is(:hover, :focus-within) > .area-toolbar--floating, .area-toolbar--floating:has([aria-expanded="true"]) { opacity: 1; transition-duration: 0s; }
   }

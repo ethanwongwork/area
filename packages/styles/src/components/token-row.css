@@ -12,7 +12,7 @@
 @layer area.components {
   /* Two classes, so the row's layout wins over Code's inline box (code.css loads after this file). */
   .area-token-row.area-code {
-    --_token-height: round(nearest, calc(1em + var(--area-space-10)), 1px);
+    --_token-height: var(--area-control-xs); /* the ladder's xs (plan A8.2, 2026-11-11; was round(1em + 10), 21) */
     display: flex;
     align-items: center;
     gap: var(--area-space-4);
@@ -23,7 +23,7 @@
     padding-block: 0;
     padding-inline: round(nearest, calc((var(--_token-height) - 1cap) / 2 - var(--_code-border, var(--area-border-width))), 1px);
     /* A row, not code in a sentence: the small text role, not inline Code's 0.875em of its host (text pass 2026-10-22:
-       12.25/16.54 in a 14 host, off the type ramp; the row stays 22 tall). */
+       12.25/16.54 in a 14 host, off the type ramp). */
     font-size: var(--area-text-xs-size);
     line-height: var(--area-text-xs-leading);
     text-align: start;
@@ -33,7 +33,7 @@
   .area-token-row__value {
     flex: none;
     max-inline-size: 50%;
-    margin-inline-start: var(--area-space-8);
+    margin-inline-start: var(--area-ui-cluster);
     overflow: hidden;
     color: var(--area-fg-muted);
     font-variant-numeric: tabular-nums;
@@ -54,5 +54,5 @@
     .area-token-row--copyable.area-code:hover { --_code-bg: var(--area-bg-component-hover); transition-duration: var(--area-hover-in); } /* MOTION.md: hover lands at once */
   }
   .area-token-row--copyable.area-code:active { --_code-bg: var(--area-bg-component-pressed); transition-duration: var(--area-press-in); }
-  .area-token-row--copyable:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); }
+  .area-token-row--copyable:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: calc(-1 * var(--area-focus-width)); } /* a row: inside, by its own width (plan A6.2) */
 }

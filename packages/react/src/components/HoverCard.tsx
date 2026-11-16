@@ -9,26 +9,32 @@ const useIsoLayoutEffect = typeof window === "undefined" ? useEffect : useLayout
 export interface HoverCardProps extends HTMLAttributes<HTMLDivElement> {
   /** The link or control the card previews. It must work on its own: the card is extra. */
   trigger: ReactElement<Record<string, unknown>>;
+  /**
+   * The trigger's side the card opens on: `bottom` (default), `top`, `right` or `left`; it flips when there is no
+   * room.
+   */
   side?: VariantProps<typeof MANIFESTS.popover>["side"];
   /** Where the card lines up along the link. Defaults to its start. */
   align?: OverlayAlign;
   /** Gap from the link, in pixels. Defaults to Popover's 8. */
   offset?: number;
-  /** ms the pointer rests on the trigger before the card opens (Radix 700; GitHub ≈ 750). The
-   * same name as Tooltip's (audit S17). */
+  /** How long the pointer rests on the trigger before the card opens, in ms; the same name as Tooltip's. */
   delay?: number;
   /** @deprecated Use `delay`. */
   openDelay?: number;
   /** ms after the pointer leaves the trigger and card before it closes, time to cross the gap. */
   closeDelay?: number;
   /**
-   * Keyboard focus opens the card (at once, as Tooltip). Turn it off only where the card's content and actions are
-   * also reached another way: an option in a sheet the arrows sweep across, whose details a panel beside it shows
-   * (the app's Icons tab and its Inspector). The pointer still opens it. docs/specs/hover-card.md.
+   * Keyboard focus opens the card at once, as Tooltip's. Turn it off only where the card's content and actions are
+   * also reached another way, such as an option in a sheet the arrows sweep across whose details a panel beside it
+   * shows. The pointer still opens it.
    */
   openOnFocus?: boolean;
+  /** Whether the card is open, controlled. */
   open?: boolean;
+  /** Whether the card starts open, uncontrolled. */
   defaultOpen?: boolean;
+  /** Called when the card opens or closes. */
   onOpenChange?: (open: boolean) => void;
 }
 

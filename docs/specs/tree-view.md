@@ -90,8 +90,8 @@ chevron on column n, its icon on n + 1 and its label on n + 2.
 | row · ink selected/current | `fg-default` + `bg-component-active` (navigation kind; checkbox kind `bg-component`) (tree-view.css:26-27, 46-47) | Peer Nav current | Was `bg-component-hover` |
 | row · start padding | **8** | Nav 8; Notion 8 | Was 4 |
 | chevron · slot | **16** (Area chevron glyph), 20px hover plate, 24px target | Area icon slots; Notion's 12px chevron in a 22px slot | Was a 28px box, pushing labels to 56px. Notion shows the chevron only on hover, sharing the icon's slot; Area keeps it visible, since a file or filter tree must show what expands |
-| chevron → icon → label | **6 and 6** (row gap 6, label inset 0) | Owner (pass 3): evenly spaced on shared columns | Was 4 and 8 (pass 1, Notion's 8 to the label). Tree keeps its own grid, not the `--area-gap-row` 12 that puts Menu, Nav, Command palette and Select labels at 36 (audit S11a). Box gaps are equal; visible ink gaps are about 11 and 9, since the chevron's ink sits about 3px inside its box and the folder's about 2px. Not corrected per glyph (inset rules) |
-| indent · per level | **22** (slot 16 + gap 6) | Owner (pass 3): a child's chevron under its parent's icon, its icon under the parent's label | Was 20: a child's icon landed at 48 under a parent label at 52 |
+| chevron → icon → label | **8 and 8** at the default type 13, 6 and 6 at the app's Compact (row gap `--area-ui-cluster`, label inset 0) | Owner (pass 3): evenly spaced on shared columns; owner 2026-11-11 (plan B2.3): one icon-to-label gap for every row family | Was 4 and 8 (pass 1, Notion's 8 to the label), then a fixed 6 beside the `--area-gap-row` that put Menu, Nav, Command palette and Select labels at 34 (audit S11a) until 2026-11-11. Box gaps are equal; visible ink gaps are about 11 and 9, since the chevron's ink sits about 3px inside its box and the folder's about 2px. Not corrected per glyph (inset rules) |
+| indent · per level | **24** at the default, 22 at Compact (slot 16 + the row gap) | Owner (pass 3): a child's chevron under its parent's icon, its icon under the parent's label | Was 20: a child's icon landed at 48 under a parent label at 52 |
 | label · text | 14/20 400 | Notion 14/21 400 | — |
 | chevron · hover plate | **20** (inset −2), pointer target 24 (`::after`); painted `bg-hover`, so it shows on a hovered or current row (`tree-view.css:73`) | Owner (pass 2); audit S11c | Was 24: its edge met the icon box (0px). Now 2px clear of the icon, 6px from the row edge. The paint was `bg-component-hover`, invisible on a hovered row and a lighter hole on a current one |
 | focus-visible | 2px `focus-color` outline, inset (offset −2), as Nav and Tabs (`tree-view.css:50`) | Audit S11b (owner) | Was a 2px offset. Menu keeps plate-only focus |
@@ -308,3 +308,24 @@ Tile: Content / Change words and unseen.
   asserted, and Hover fill floors at 25, so it is never invisible (CONTRAST.md, "The quieter selected plate has a
   floor"). At Selected fill 0 the two are one plate and nothing changes.
 - **Verdict:** awaiting the owner.
+- 2026-11-11 · system evaluation B2.3 (owner) · chevron, icon and label are `ui-cluster` apart, every row family's icon-to-label gap: 8 at the default (was 6), 6 at the app's Compact (unchanged); a level is 24 / 22.
+
+## Review note, 2026-11-11 (motion, plan A5)
+
+- **What changed:** rows land and leave at once: no transition on a row (A5.3; they faded out over `fast`). The chevron's plate, the check and revealed actions keep theirs.
+- **Why:** the system evaluation's motion items (docs/research/system-evaluation-2026-11-11, section 5, A5), owner-approved
+  2026-11-11; the rules are in docs/MOTION.md (Tokens, Roles, Recipes) and kept by cohesion.test.mjs and
+  tests/behaviour/suites/motion.test.mjs. The motion tables above are history; these values are current.
+
+## Shared parts (plan B2), 2026-11-13
+
+- **Centring (B2.2, VN8).** The label and a text trailing part are cap slots (inset.css): the cap sits on the row's centre (it sat 0.62 high, centred on its line box), as Nav's beside it in a sidebar.
+- **Row table (B2.1).** The icon's muted ink is the row table's (inset.css), shared with Menu and Nav, so tree-view.css no longer sets it. Gap and level step unchanged (ui-cluster).
+
+## Selection paint (plan B7.13), 2026-11-14
+
+- A selected or current row is a selection scope (selection.css): its ghost actions read the row ink at full strength.
+
+## State paint (plan B7.2, B7.3, B7.11), 2026-11-14
+
+- Selected and current rows press; the chevron plate presses to `bg-pressed`, pins to `bg-component-pressed`, row actions to `bg-pressed` (was `bg-active`). Row actions and guides hide only inside `@media (hover: hover)`; focus inside the actions shows them.

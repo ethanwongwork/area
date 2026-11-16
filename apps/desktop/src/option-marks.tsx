@@ -221,7 +221,7 @@ export function optionMark(axis: Axis, value: string, canvas: CanvasAxes): React
     case "danger-hover": return value === "tint" ? <Plate ink={0.22} color="var(--area-danger-solid)" /> : <Plate ink={0.12} />;
     case "pills": return PILL[value] ? <Svg>{PILL[value]}</Svg> : null;
     case "motion": {
-      // The Menu's open as a share of the longest, 300 ms; 0 (None) is an empty ring.
+      // A dialog's open as a share of the longest, 300 ms; 0 (None) is an empty ring.
       const f = n / 300, a = f * 2 * Math.PI - Math.PI / 2;
       return (
         <Svg>

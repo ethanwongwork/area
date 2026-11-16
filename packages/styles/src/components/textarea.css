@@ -6,14 +6,24 @@
  * native resize directions explicitly.
  * ------------------------------------------------------------------------- */
 @layer area.components {
+  /* The shell, its tiers, soft, focus and status are the one field shell (input.css, "One field shell"); Textarea reads
+     its own public seam (textarea-*) and never takes the Pills setting's round ends. */
   .area-textarea {
-    --_height: var(--area-control-md);
+    --_bg: var(--area-textarea-bg);
     --_border: var(--area-textarea-edge);
     --_border-hover: var(--area-textarea-edge-hover);
-    --_border-focus: color-mix(in srgb, var(--_border), var(--area-field-focus-color) calc(var(--area-field-focus-recolor) * 100%)); /* the ring's colour only under Focus ring Halo (axes/states.ts) */
-    --_focus-outline: var(--area-field-focus-color);
-    --_focus-halo: var(--area-field-focus-halo-color);
-    --_bg: var(--area-textarea-bg);
+    --_ink: var(--area-textarea-text);
+    --_bg-soft: var(--area-textarea-bg-soft);
+    --_border-soft: var(--area-textarea-edge-soft); /* none, or the strong edge under increased contrast */
+    --_border-soft-hover: var(--area-textarea-edge);
+    --_bg-disabled: var(--area-textarea-bg-disabled);
+    --_tone-invalid: var(--area-textarea-invalid-color);
+    --_tone-invalid-halo: var(--area-textarea-invalid-halo-color);
+    --_tone-success: var(--area-textarea-success-color);
+    --_tone-success-halo: var(--area-textarea-success-halo-color);
+    --_tone-warning: var(--area-textarea-warning-color);
+    --_tone-warning-halo: var(--area-textarea-warning-halo-color);
+    --_field-pill: 0;
     /* spec (owner 2026-09-28, "do whatever makes the most sense"): the text starts where a
        same-size Input's does, by the shared equal-inset rule (inset.css), so stacked fields
        align and each size is distinct: sm 9, md 11, lg 15. The block inset stays 4 less. */
@@ -23,8 +33,6 @@
     --_gutter-inline: round(nearest, calc((var(--_height) - var(--_box-text)) / 2), 1px);
     /* Rounded so the box stays a whole number of pixels. */
     --_gutter-block: max(var(--area-space-2), round(nearest, calc(var(--_gutter-inline) - var(--area-space-4)), 1px));
-    --_text: var(--area-control-md-text);
-    --_leading: var(--area-control-md-leading);
 
     display: block;
     inline-size: var(--area-textarea-inline-size);
@@ -32,45 +40,13 @@
     min-block-size: calc(var(--_height) * 2);
     padding-block: max(0px, calc(var(--_gutter-block) - var(--area-stroke-width)));
     padding-inline: max(0px, calc(var(--_gutter-inline) - var(--area-stroke-width)));
-
-    border: var(--area-stroke-width) solid var(--_border);
-    /* The per-tier control radius, as Button (audit S4, owner 2026-09-30); was radius-control (8) at every size. */
-    border-radius: min(var(--_radius, var(--area-radius-control-md)), max(var(--area-radius-min), round(down, calc(var(--_height) * var(--area-radius-factor)), 2px)));
-    background-color: var(--_bg);
-    color: var(--area-textarea-text);
     font-family: inherit;
-    font-size: var(--_text);
-    line-height: var(--_leading);
-    /* spec (outline pass, docs/specs/number-field.md): controls at rest carry no shadow, as Button (ChatGPT, Notion, Figma
-       fields), by default: Field shadow (axes/depth.ts, 0 by default, a transparent role) lifts them when
-       chosen (shadcn's shadow-xs, Primer's). Soft fields stay flat. The focus halo lists after it, so the two crossfade. */
-    --_field-lift: var(--area-shadow-field);
-    box-shadow: var(--_field-lift);
     resize: vertical;
     outline: none;
-    /* Motion (docs/MOTION.md, 2026-10-07), as Input: paint and the focus halo appear at once and
-       fade out on fast; the halo keeps its fade into hover. */
-    --_t-paint: var(--area-duration-fast);
-    --_t-halo: var(--area-duration-fast);
-    transition-property: background-color, border-color, color, box-shadow;
-    transition-duration: var(--_t-paint), var(--_t-paint), var(--_t-paint), var(--_t-halo);
-    transition-timing-function: var(--area-ease-out);
   }
-
 
   .area-textarea:not([rows]) {
     min-block-size: calc(var(--_leading) * 4 + var(--_gutter-block) * 2 + var(--area-stroke-width) * 2);
-  }
-
-  /* Explicit for manifest parity; the base class remains the framework-free default. */
-  .area-textarea--outline { --_bg: var(--area-textarea-bg); }
-
-  .area-textarea--soft {
-    --_field-lift: 0 0 0 0 transparent;
-    box-shadow: var(--_field-lift);
-    --_bg: var(--area-textarea-bg-soft);
-    --_border: var(--area-textarea-edge-soft); /* none, or the strong edge under increased contrast */
-    --_border-hover: var(--area-textarea-edge);
   }
 
   .area-textarea--full-width { inline-size: 100%; }
@@ -83,67 +59,23 @@
   .area-textarea::placeholder {
     color: var(--area-textarea-placeholder);
   }
-  @media (hover: hover) {
-    .area-textarea:hover:not(:disabled, :read-only):not(:focus) {
-      --_t-paint: var(--area-hover-in);
-      border-color: var(--_border-hover);
-    }
+  /* Disabled and read-only are the field shell's (input.css); a disabled field can't be resized. */
+  .area-textarea:disabled { resize: none; }
+
+  /* The resize grip is drawn, never the platform's (plan B3.3: the platform's sat over the rounded corner): two strokes
+     in the field's chevron ink, parallel to the corner's diagonal, the first 2 past the inner corner's radius and the
+     second 4 further, so both end on the straight edges, inside the curve. At Corner 0 they sit 6 and 10 from the corner.
+     The grip's box is the platform's (its size is not styleable); a field that cannot resize has none. */
+  .area-textarea::-webkit-resizer {
+    --_grip-at: max(var(--area-space-4), calc(var(--_field-shape) - var(--area-stroke-width)));
+    --_grip-1: calc(100% - (var(--_grip-at) + var(--area-space-2)) / sqrt(2));
+    --_grip-2: calc(100% - (var(--_grip-at) + var(--area-space-6)) / sqrt(2));
+    background:
+      linear-gradient(135deg, transparent calc(var(--_grip-1) - 0.5px), var(--area-input-chevron) 0, var(--area-input-chevron) calc(var(--_grip-1) + 0.5px), transparent 0),
+      linear-gradient(135deg, transparent calc(var(--_grip-2) - 0.5px), var(--area-input-chevron) 0, var(--area-input-chevron) calc(var(--_grip-2) + 0.5px), transparent 0);
   }
 
-  .area-textarea:focus {
-    --_t-paint: 0s;
-    --_t-halo: 0s;
-    border-color: var(--_border-focus);
-    box-shadow: var(--_field-lift), 0 0 0 var(--area-field-focus-halo-width) var(--_focus-halo);
-    outline: var(--area-field-focus-outline-width) solid var(--_focus-outline);
-    outline-offset: var(--area-focus-offset);
-  }
-
-  /* A tone or disabled paint lands at once (motion, 2026-10-07); clearing it fades on fast. */
-  .area-textarea:is([data-invalid], [aria-invalid="true"], [data-success], [data-warning], :disabled) { --_t-paint: 0s; }
-
-  .area-textarea[data-invalid],
-  .area-textarea[aria-invalid="true"] {
-    --_border: var(--area-textarea-invalid-color);
-    --_border-hover: var(--area-textarea-invalid-color);
-    --_border-focus: var(--area-textarea-invalid-color);
-    --_focus-outline: var(--area-textarea-invalid-color);
-    --_focus-halo: var(--area-textarea-invalid-halo-color);
-  }
-
-  .area-textarea[data-success] {
-    --_border: var(--area-textarea-success-color);
-    --_border-hover: var(--area-textarea-success-color);
-    --_border-focus: var(--area-textarea-success-color);
-    --_focus-outline: var(--area-textarea-success-color);
-    --_focus-halo: var(--area-textarea-success-halo-color);
-  }
-
-  .area-textarea[data-warning] {
-    --_border: var(--area-textarea-warning-color);
-    --_border-hover: var(--area-textarea-warning-color);
-    --_border-focus: var(--area-textarea-warning-color);
-    --_focus-outline: var(--area-textarea-warning-color);
-    --_focus-halo: var(--area-textarea-warning-halo-color);
-  }
-
-  /* Read-only keeps its variant's rest paint, no hover edge, default cursor (audit B-9). */
-  .area-textarea:read-only { cursor: default; }
-
-  .area-textarea:disabled {
-    --_bg: var(--area-textarea-bg-disabled);
-    --_border: var(--area-border-faint);
-    color: var(--area-fg-disabled);
-    cursor: not-allowed;
-    resize: none;
-  }
-
-  .area-textarea:disabled::placeholder { color: var(--area-fg-disabled); }
-  /* A soft field never gains an edge when disabled (audit B-9). */
-  .area-textarea--soft:disabled { --_border: transparent; }
 
   /* Multiline fields use a tighter block inset than a one-line control: the text's own
-     leading already supplies vertical breathing room. The inline inset follows the height. */
-  .area-textarea--sm { --_height: var(--area-control-sm); --_radius: var(--area-radius-control-sm); --_text: var(--area-control-sm-text); --_leading: var(--area-control-sm-leading); }
-  .area-textarea--md { --_height: var(--area-control-md); --_radius: var(--area-radius-control-md); --_text: var(--area-control-md-text); --_leading: var(--area-control-md-leading); }
+     leading already supplies vertical breathing room. The inline inset follows the height (sm and md, the shell's). */
 }

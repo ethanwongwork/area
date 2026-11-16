@@ -9,14 +9,39 @@
  * the content keeps its width on every platform.
  * ------------------------------------------------------------------------- */
 @layer area.components {
-  .area-scroll-area {
-    /* spec: Figma's track 10 with 2 padding (a 6 thumb); shadcn 10 with a 7 thumb. */
-    --_bar-track: 10px; /* spec */
-    --_bar-inset: var(--area-space-2);
+  /*
+   * One scroller (plan B6.6; DESIGN_SYSTEM.md, "Scrollers"): every scrolling region is a Scroll area, or, where it
+   * cannot be one (a native field or pre that scrolls itself, a table's wrapper, Select's native picker), reads the same
+   * thumb as a thin native bar, so one bar style is drawn everywhere. The thumb is one value, here.
+   */
+  :where(.area-scroll-area, .area-textarea, .area-code-block__pre, .area-table-wrapper, .area-command-palette__preview) {
     /* spec: Figma's thumb, #b3b3b3 at 50%, composites to 217 on white; the same depth taken from the
        default ink (18% of rgb 40 is 217 on white) so the dark theme draws a light thumb. ChatGPT
        draws its native thin thumb at 30% of its ink, a step darker. */
     --_bar-thumb: color-mix(in oklab, var(--area-fg-default) 18%, transparent); /* spec */
+  }
+  :where(.area-textarea, .area-code-block__pre, .area-table-wrapper, .area-command-palette__preview) {
+    scrollbar-width: thin;
+    scrollbar-color: var(--_bar-thumb) transparent;
+  }
+  @supports (appearance: base-select) {
+    :where(.area-select)::picker(select) {
+      --_bar-thumb: color-mix(in oklab, var(--area-fg-default) 18%, transparent); /* spec: the one thumb, above */
+      scrollbar-width: thin;
+      scrollbar-color: var(--_bar-thumb) transparent;
+    }
+  }
+
+  .area-scroll-area {
+    /* spec: Figma's track 10 with 2 padding (a 6 thumb); shadcn 10 with a 7 thumb. */
+    --_bar-track: 10px; /* spec */
+    --_bar-inset: var(--area-space-2);
+    /* Corner-aware ends (plan B6.6, VN3): inside a rounded frame the track's ends stand in by the corner less the bar's
+       side inset, so the thumb never runs into the curve and is cut: 14 at a 16 corner, 10 at a 12 list, 0 square. The
+       corner is the frame's: a family whose surface is the Scroll area sets `--_bar-corner` (popup.css); a frame drawn
+       round one by its host names it with the public `--area-scroll-area-corner`. */
+    --_bar-corner: var(--area-scroll-area-corner, 0px);
+    --_bar-end: max(0px, calc(var(--_bar-corner) - var(--_bar-inset)));
 
     position: relative;
     display: flex;
@@ -56,21 +81,21 @@
     opacity: 0;
     pointer-events: none;
     /* Motion (docs/MOTION.md, "Hover plate"): appears at once, fades out on fast. */
-    transition: opacity var(--area-fade-fast) var(--area-ease-out);
+    transition: opacity var(--area-fade-fast) var(--area-ease-effects);
   }
   .area-scroll-area__scrollbar[data-orientation="vertical"] {
-    inset-block: 0;
+    inset-block: var(--_bar-end);
     inset-inline-end: 0;
     inline-size: var(--_bar-track);
   }
   .area-scroll-area__scrollbar[data-orientation="horizontal"] {
-    inset-inline: 0;
+    inset-inline: var(--_bar-end);
     inset-block-end: 0;
     block-size: var(--_bar-track);
   }
   /* With both bars, each stops short of the other's corner. */
-  .area-scroll-area[data-overflow-x][data-overflow-y] > .area-scroll-area__scrollbar[data-orientation="vertical"] { inset-block-end: var(--_bar-track); }
-  .area-scroll-area[data-overflow-x][data-overflow-y] > .area-scroll-area__scrollbar[data-orientation="horizontal"] { inset-inline-end: var(--_bar-track); }
+  .area-scroll-area[data-overflow-x][data-overflow-y] > .area-scroll-area__scrollbar[data-orientation="vertical"] { inset-block-end: max(var(--_bar-track), var(--_bar-end)); }
+  .area-scroll-area[data-overflow-x][data-overflow-y] > .area-scroll-area__scrollbar[data-orientation="horizontal"] { inset-inline-end: max(var(--_bar-track), var(--_bar-end)); }
   /* A bar exists only for an axis that overflows. */
   .area-scroll-area:not([data-overflow-y]) > .area-scroll-area__scrollbar[data-orientation="vertical"],
   .area-scroll-area:not([data-overflow-x]) > .area-scroll-area__scrollbar[data-orientation="horizontal"] { display: none; }

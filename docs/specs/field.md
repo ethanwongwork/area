@@ -169,6 +169,7 @@ Textarea is already `round()`ed; no transforms. Open question: none.
 - 2026-10-01 · audit B-14 → a Field around an InputGroup disables and invalidates the controls inside it: the group takes `disabled` and validation and passes them on through `InputGroupContext` → InputGroup.tsx, input-group-context.ts.
 - 2026-10-01 · compact pass round 5 → the label-to-control gap reads `ui-stack` (6, compact 4) and a horizontal Field's gap `ui-cluster` (8, compact 6). Default unchanged. docs/research/compact-pass-2026-10-01.md.
 - 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → Field has no motion of its own; its controls carry it (no change to `field.css`). See "Motion and interaction, 2026-10-07".
+- 2026-11-14 · plan B7.8 → the rule is now system-wide: a label outside the control and every description keep their inks; Field's label at fg-muted is the model Setting row follows. Why: docs/research/system-evaluation-2026-11-11 (README §5, phase2/disabled.md); the owner took every recommendation on 2026-11-11.
 
 ## Review note, 2026-10-21
 
@@ -183,3 +184,21 @@ Textarea is already `round()`ed; no transforms. Open question: none.
   (labels above, beside or by width as a system's structure choice; a use's own `orientation` wins).
 - **Why:** the Inspector's inventory rows (docs/research/system-inventory-2026-11-08) put a list of values beside its
   axis's name; centred, the name floated beside the middle value.
+
+## Review note, 2026-11-11 (type rules, plan A9)
+
+- **What changed:** the character count and validation messages move from `text-xs` (11/14 at type 13) to `text-sm` (12/16), the description's size, so a count sits on its description's baseline and an error is never the smallest words in the system (plan A9.2, findings T1, VA12).
+- **Why:** the system evaluation's type rules (docs/research/system-evaluation-2026-11-11, section 5, A9), owner-approved
+  2026-11-11; the rules are in DESIGN_SYSTEM.md ("Ink and weight", "Size and shape", "Text pairs") and the type skill.
+
+### 2026-11-11 · Ink, dark and colour (system plan, Phase 1)
+
+- **What changed:** Dark messages and state edges use luminous vivid inks (plan A10.2): danger #fe999e, warning #fe9f53, at the most chroma that clears 4.6:1 and APCA 61.
+- **Why:** docs/research/system-evaluation-2026-11-11 (README §5); the owner took every recommendation on 2026-11-11.
+- **Verdict:** awaiting the owner.
+
+### 2026-11-14 · One field shell (system plan, Phase 2, B3)
+
+- The label gap is the one rule: a label over its control `ui-stack`; Slider's top label now takes it (it was 2); a Panel caption the panel's `ui-stack − 2`.
+- Why: docs/research/system-evaluation-2026-11-11 (B3.1, B3.2, B3.3, B2.2 in fields; README §5); the owner took every recommendation on 2026-11-11 and the 24 targets on 2026-11-13. B3.2: field text stays on Button's inset (Keep 10, the pick), so nothing moved.
+- Verdict: awaiting the owner.

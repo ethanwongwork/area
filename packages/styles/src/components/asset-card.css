@@ -11,7 +11,7 @@
  *   group   up to four assets as a 2 x 2 mosaic, 4 apart, each cell at the frame's corner, no frame of its own
  *
  * Geometry (the designs at 300: card corner 16, edge 1, head 33 + the edge, frame 4 in, frame corner 11):
- *   card     Card's corner, the container corner plus the inset (16 at the default), so the frame is concentric;
+ *   card     the container corner (16 at the default; plan A2.3), so the frame is concentric;
  *            the recessed fill (the designs' #fafafa) with the card edge (#f0f0f0)
  *   head     a small control plus the inset above and below (control-sm + 2 × 4); the name in the UI text, regular,
  *            its cap centred, as far in as the head is tall less its cap ((H − 1cap) / 2, inset.css); controls at the
@@ -64,8 +64,10 @@
        (selected, Elevation 0's hover) is an indicator, so it never drops under stroke-width (DESIGN_SYSTEM.md, Strokes). */
     --_edge: var(--area-border-width);
     --_edge-state: max(var(--area-border-width), var(--area-stroke-width));
-    /* spec: Card's corner, the container corner plus the inset (16 at the default; the designs' 16). */
-    --_corner: var(--area-asset-card-corner, max(var(--area-radius-floor), calc(var(--area-radius-container) + var(--_inset) * var(--area-radius-concentric))));
+    /* spec: the floating corner, radius-container (16 at the default; the designs' 16). Plan A2.3 (owner 2026-11-11)
+       caps it there: a resting card is never rounder than a Popover or Menu over it. It was the container plus the
+       inset, 20 at the default since Corner 10. */
+    --_corner: var(--area-asset-card-corner, var(--_fr-block)); /* the frame recipe's block corner (surface.css) */
     /* Concentric: the card's corner less what lies between the two outlines, the edge and the inset (16 − 1 − 4 = 11). */
     /* The edge always counts, it is physical; the inset counts where corners are concentric (radius-concentric, 0 at
        Square): 2026-10-26, a card held at a corner by the hook kept its frame 1 rounder than its inner curve at Square. */
@@ -80,7 +82,7 @@
        inside the edge, inset.css), or the hook's length, the head then as tall as the name and that inset on both sides
        (owner, 2026-10-24: the app's cards match its colour cards' 16). `--_name-pad` is the same inside the edge. `1cap`
        resolves in the head, where it is used. */
-    --_name-inset: var(--area-asset-card-name-inset, calc((var(--_head) - 1cap) / 2 + var(--_edge)));
+    --_name-inset: var(--area-asset-card-name-inset, calc(round(nearest, calc((var(--_head) - 1cap) / 2), 1px) + var(--_edge))); /* whole pixels (plan A11.1) */
     --_name-pad: calc(var(--_name-inset) - var(--_edge));
     /* A group's inset and the gap between its cells: the design's 4, or, where the host sets the name's inset, that inset,
        so the cells line up with the name and sit as far apart as from the edge (owner, 2026-10-24: "the images inside the
@@ -109,7 +111,7 @@
     line-height: var(--area-ui-leading);
     text-align: start;
     /* The lift fades in on `fast` ease-out and out on `base` ease-in; the edge crossfades on `fast` (MOTION.md, Lift). */
-    transition: border-color var(--area-duration-fast) var(--area-ease-out), box-shadow var(--area-duration-base) var(--area-ease-in);
+    transition: border-color var(--area-duration-fast) var(--area-ease-effects), box-shadow var(--area-duration-base) var(--area-ease-in);
   }
   .area-asset-card--asset {}
   .area-asset-card--interactive { cursor: default; outline: none; }
@@ -121,19 +123,19 @@
     display: flex;
     flex: none;
     align-items: center;
-    gap: var(--area-space-8);
+    gap: var(--area-ui-cluster);
     min-inline-size: 0;
     block-size: max(var(--_head), calc(var(--_name-pad) * 2 + 1cap));
     /* The controls end as far in as their box sits from the head's top and bottom, so a button's edge keeps the name's
        inset less its own half-height over the cap: 0 past the inset on a framed card, 4 on a basic one, at the default. */
-    padding-inline: max(0px, calc(var(--_name-pad) - var(--_inset))) max(0px, calc(var(--_name-pad) - var(--_inset) - (var(--area-control-sm) - 1cap) / 2));
+    padding-inline: max(0px, calc(var(--_name-pad) - var(--_inset))) max(0px, round(nearest, calc(var(--_name-pad) - var(--_inset) - (var(--area-control-sm) - 1cap) / 2), 1px));
   }
   .area-asset-card__name {
     flex: 1 1 auto;
     min-inline-size: 0;
     overflow: clip;
     overflow-clip-margin: var(--area-space-4); /* room for descenders a cap-trimmed name paints below its box */
-    font-weight: var(--area-weight-regular); /* spec: the designs' regular title */
+    /* Strong in the default ink: the item name (surface.css, plans B1.2, A9.5; it was the designs' regular title). */
     text-overflow: ellipsis;
     white-space: nowrap;
     text-box: trim-both cap alphabetic;
@@ -177,7 +179,7 @@
     place-items: center;
     min-inline-size: 0;
     min-block-size: 0;
-    padding: var(--area-space-12); /* spec: pick, the least room around a specimen */
+    padding: var(--area-space-12); /* spec: pick, the least room around a specimen: a media size, at every density */
   }
   /* An image covers the frame, cropped (the image design), inside the frame's edge. */
   .area-asset-card--image .area-asset-card__media { padding: 0; }
@@ -277,8 +279,9 @@
   .area-asset-card--strip .area-asset-card__cell:has(> .area-asset-card__thumb) { aspect-ratio: 1; }
 
   /* Selected: the card's edge in the selection colour, at least stroke-width. */
-  /* The Selected stroke setting's width, inside (the edge plus a ring), and the Selected tint setting's layer. */
-  .area-asset-card:is([data-selected], [aria-pressed="true"], [aria-selected="true"]):not(.area-asset-card--containerless) { --_edge: var(--_edge-state); border-color: var(--area-stroke-selected); --_sel-ring: inset 0 0 0 max(0px, calc(var(--area-selected-width) - var(--_edge))) var(--area-stroke-selected), inset 0 0 0 100vmax var(--area-selected-tint); }
+  /* The selected edge (selection.css, plan B7.6): the Selected edge setting's width, inside (the edge plus a ring), and
+     the Selected tint setting's layer. */
+  .area-asset-card:is([data-selected], [aria-pressed="true"], [aria-selected="true"]):not(.area-asset-card--containerless) { --_edge: var(--_edge-state); border-color: var(--area-stroke-selected); --_selected-border: var(--_edge); --_sel-ring: var(--_selected-edge); }
 
   /* Interactive: the card shows its states (the asset grid's, below, for a card that is not an option). */
   .area-asset-card--interactive:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-gap); }
@@ -286,7 +289,7 @@
     .area-asset-card--interactive:hover {
       --_lift: var(--area-shadow-lift);
       transition-duration: var(--area-duration-fast);
-      transition-timing-function: var(--area-ease-out);
+      transition-timing-function: var(--area-ease-effects);
     }
     [data-area-shadow-hover="0"] .area-asset-card--interactive:not([data-selected], [aria-pressed="true"], [aria-selected="true"]):hover { --_edge: var(--_edge-state); border-color: var(--area-edge-control-hover); }
   }
@@ -300,12 +303,14 @@
   .area-asset-card--below > .area-asset-card__head { order: 1; }
   /* Outside (owner, 2026-11-01, the card explorer's pick: "apply 8 and update the corner radius to 16"; "move the below
      text/button row even closer to 4"): the card is its frame alone, the asset `--area-asset-card-inset` in from the card's
-     edge on every side (8 by default here), and the head sits under the card on the page, 4 below it, its name 4 in and
-     its controls ending on the card's edge. The frame draws everything the card drew (fill, edge, corner, lift, the
+     edge on every side (8 by default here), and the head sits under the card on the page, the item name's line 8 below it
+     and on its edge (plan B1.2; it was 4 below and 4 in), its controls ending on the card's edge. The frame draws everything the card drew (fill, edge, corner, lift, the
      selected edge); the asset inside takes the inner corner. */
   .area-asset-card.area-asset-card--outside {
     --_inset: max(0px, calc(var(--area-asset-card-inset, calc(var(--area-space-8) + var(--_edge))) - var(--_edge)));
-    gap: var(--area-space-4); /* spec: owner, "even closer to 4" */
+    /* The item name (surface.css, plan B1.2): its line 8 under the frame, the head row centring it. It was 4 between
+       the frame and the head (owner 2026-11-01, "even closer to 4"). */
+    gap: max(0px, calc(var(--_fr-name-gap) - (var(--area-control-sm) - var(--area-ui-leading)) / 2));
     padding: 0;
     overflow: visible;
     border-width: 0;
@@ -320,7 +325,7 @@
     border-radius: var(--_corner);
     background-color: var(--area-bg-tile);
     box-shadow: var(--_sel-ring, inset 0 0 0 0 transparent), var(--area-shadow-edge), var(--_lift);
-    transition: border-color var(--area-duration-fast) var(--area-ease-out), box-shadow var(--area-duration-base) var(--area-ease-in);
+    transition: border-color var(--area-duration-fast) var(--area-ease-effects), box-shadow var(--area-duration-base) var(--area-ease-in);
   }
   .area-asset-card.area-asset-card--outside.area-asset-card--color > .area-asset-card__frame { padding: 0; background-color: var(--_asset-color); }
   /* A screen held the inset in is 16:9 itself, the card the inset taller and wider round it (owner, 2026-11-02: "make sure
@@ -328,7 +333,7 @@
      720 × 405 card), so a window covering it lost its foot. A window fits whole at 16:9 (2026-11-01). */
   .area-asset-card.area-asset-card--outside.area-asset-card--screen:not(.area-asset-card--image) > .area-asset-card__frame { aspect-ratio: auto; }
   .area-asset-card.area-asset-card--outside.area-asset-card--screen:not(.area-asset-card--image) > .area-asset-card__frame > :not(.area-asset-card__badge) { aspect-ratio: 16 / 9; } /* spec */
-  .area-asset-card.area-asset-card--outside > .area-asset-card__head { order: 1; block-size: var(--area-control-sm); padding: 0 0 0 var(--area-space-4); }
+  .area-asset-card.area-asset-card--outside > .area-asset-card__head { order: 1; block-size: var(--area-control-sm); padding: 0; /* the item name on the frame's edge (plan B1.2; it was 4 in) */ }
   .area-asset-card--outside .area-asset-card__media { border-radius: var(--_frame-corner); overflow: clip; }
   /* A group's cells as far apart as from the card's outer edge (the inset and the edge). */
   .area-asset-card--outside .area-asset-card__mosaic { gap: calc(var(--_inset) + var(--_edge)); }
@@ -355,16 +360,17 @@
   .area-asset-card--below > .area-asset-card__head > .area-asset-card__actions,
   .area-asset-card--overlay > .area-asset-card__head > .area-asset-card__actions {
     position: absolute;
-    --_actions-offset: max(0px, calc(var(--_name-pad) - (var(--area-control-sm) - 1cap) / 2));
+    --_actions-offset: max(0px, round(nearest, calc(var(--_name-pad) - (var(--area-control-sm) - 1cap) / 2), 1px));
     /* Concentric with the card from where they sit: its corner less the edge and their offset (16 − 1 − 6 = 9 in the
        app), as the frame's is (round 52's rule); a button's corner and its plate's take it. */
     --_actions-corner: max(var(--area-radius-min), round(nearest, calc(var(--_corner) - (var(--_edge) + var(--_actions-offset)) * var(--area-radius-concentric)), 1px));
     inset-block-start: var(--_actions-offset);
     inset-inline-end: var(--_actions-offset);
     z-index: 1;
-    opacity: 0;
-    transition: opacity var(--area-fade-fast) var(--area-ease-out);
+    transition: opacity var(--area-fade-fast) var(--area-ease-effects);
   }
+  /* Hidden only where there is hover (plan B7.11): a touch screen always shows the controls. */
+  @media (hover: hover) { .area-asset-card--below > .area-asset-card__head > .area-asset-card__actions { opacity: 0; } }
   /* Overlay: the asset fills the card; the name sits on it at the bottom start, the name's inset from the edge, and the
      head shows, with the controls, under the pointer or with focus (owner, 2026-10-24, the app's cards: "have
      names/titles appear on hover"; "the text and copy button can be hidden on hover for everything"). On an image or a
@@ -380,9 +386,10 @@
     block-size: auto;
     padding: 0;
     pointer-events: none; /* the card under it takes the press; the controls take their own */
-    opacity: 0;
-    transition: opacity var(--area-fade-fast) var(--area-ease-out);
+    transition: opacity var(--area-fade-fast) var(--area-ease-effects);
   }
+  /* Hidden only where there is hover (plan B7.11): a touch screen always shows the name and the controls. */
+  @media (hover: hover) { .area-asset-card--overlay > .area-asset-card__head { opacity: 0; } }
   .area-asset-card--overlay > .area-asset-card__head > .area-asset-card__name {
     position: absolute;
     inset-inline-start: var(--_name-pad);
@@ -396,7 +403,7 @@
   .area-asset-card--overlay.area-asset-card--image > .area-asset-card__head > .area-asset-card__name,
   .area-asset-card--overlay.area-asset-card--group > .area-asset-card__head > .area-asset-card__name,
   .area-asset-card--overlay.area-asset-card--screen > .area-asset-card__head > .area-asset-card__name {
-    --_plate-pad: calc((var(--area-control-sm) - 1cap) / 2);
+    --_plate-pad: round(nearest, calc((var(--area-control-sm) - 1cap) / 2), 1px);
     display: flex;
     align-items: center;
     inset-inline-start: max(0px, calc(var(--_name-pad) - var(--_plate-pad)));
@@ -427,7 +434,7 @@
      default; then moved 8 in (below). The mark alone (an iconOnly badge) takes a round plate. Where a card has a name row
      (caption above, below or outside), a status belongs there instead: the slot is for pictures with no row of their own. */
   .area-asset-card__badge {
-    --_plate-pad: calc((var(--area-control-sm) - 1cap) / 2);
+    --_plate-pad: round(nearest, calc((var(--area-control-sm) - 1cap) / 2), 1px);
     /* 8 in from the frame's top and start (owner, 2026-11-01: "the on pictures badge should be more inset"; it sat 2 in,
        concentric with the corner): the asset's own inset in a card (--area-asset-card-inset), so the plate floats on the
        picture as the picture floats in the card. */
@@ -455,10 +462,6 @@
   }
   :is(.area-asset-card--overlay:focus-within, .area-asset-card--overlay:focus-visible, .area-asset-grid__item:focus-visible > .area-asset-card--overlay) > .area-asset-card__head,
   :is(.area-asset-card--below:focus-within, .area-asset-card--below:focus-visible, .area-asset-grid__item:focus-visible > .area-asset-card--below) > .area-asset-card__head > .area-asset-card__actions { opacity: 1; transition-duration: 0s; }
-  @media (hover: none) {
-    .area-asset-card--overlay > .area-asset-card__head,
-    .area-asset-card--below > .area-asset-card__head > .area-asset-card__actions { opacity: 1; }
-  }
   /* Basic: one surface (owner, 2026-10-22). No inset and no frame of its own: the asset sits on the card's fill, the
      head over or under it with nothing between; its corner is Card's, with no frame inside to be concentric with. The
      head's controls end 4 in, where the card no longer pads them (the head rule, with no inset). */
@@ -549,7 +552,7 @@
   /* The frame alone: a containerless card with no name and no controls has no head, so it is its frame, filling its
      column at its aspect, as an inspector's preview of the selection (Preview frame, folded in 2026-10-26). With no card
      around it to carry it, it keeps its edge at rest, and takes the container corner (it is the outermost shape). */
-  .area-asset-card--containerless:not(:has(> .area-asset-card__head)) { padding: 0; border-width: 0; --_corner: var(--area-asset-card-corner, var(--area-radius-container)); --_frame-corner: var(--_corner); }
+  .area-asset-card--containerless:not(:has(> .area-asset-card__head)) { padding: 0; border-width: 0; --_corner: var(--area-asset-card-corner, var(--_fr-block)); --_frame-corner: var(--_corner); }
   .area-asset-card--containerless:not(:has(> .area-asset-card__head)):not(.area-asset-card--color, .area-asset-card--image, .area-asset-card--group) > .area-asset-card__frame { border-color: var(--area-border-divider); }
   /* Framed or basic with no head: the card's inset on all four sides. Not outside: there the frame is the card and holds
      the inset itself, so a headless outside card (a colour with its name on it) took 7 at the top alone and its grid's rows
@@ -561,12 +564,12 @@
   .area-asset-card--containerless { background-color: transparent; border-color: transparent; box-shadow: none; }
   .area-asset-card--containerless > .area-asset-card__frame { border-color: transparent; }
   .area-asset-card--containerless:is(.area-asset-card--image, .area-asset-card--group) > .area-asset-card__frame { border-width: 0; }
-  .area-asset-card--containerless > .area-asset-card__frame { box-shadow: var(--_ring, 0 0 0 0 transparent); transition: border-color var(--area-duration-fast) var(--area-ease-out), box-shadow var(--area-duration-fast) var(--area-ease-out); }
+  .area-asset-card--containerless > .area-asset-card__frame { box-shadow: var(--_ring, 0 0 0 0 transparent); transition: border-color var(--area-duration-fast) var(--area-ease-effects), box-shadow var(--area-duration-fast) var(--area-ease-effects); }
   /* Selected: the asset carries it, the card stays clear; two lines where the asset has no edge to recolour (pick). */
   .area-asset-card--containerless:is([data-selected], [aria-pressed="true"], [aria-selected="true"]),
   .area-asset-grid__item[aria-selected="true"] .area-asset-card--containerless { border-color: transparent; }
   .area-asset-card--containerless:is([data-selected], [aria-pressed="true"], [aria-selected="true"]) > .area-asset-card__frame,
-  .area-asset-grid__item[aria-selected="true"] .area-asset-card--containerless > .area-asset-card__frame { border-color: var(--area-stroke-selected); --_ring: inset 0 0 0 max(0px, calc(var(--area-selected-width) - var(--area-stroke-width))) var(--area-stroke-selected), inset 0 0 0 100vmax var(--area-selected-tint); }
+  .area-asset-grid__item[aria-selected="true"] .area-asset-card--containerless > .area-asset-card__frame { border-color: var(--area-stroke-selected); --_selected-border: var(--area-stroke-width); --_ring: var(--_selected-edge); }
   .area-asset-card--containerless:is(.area-asset-card--image, .area-asset-card--group):is([data-selected], [aria-pressed="true"], [aria-selected="true"]) > .area-asset-card__frame,
   .area-asset-grid__item[aria-selected="true"] .area-asset-card--containerless:is(.area-asset-card--image, .area-asset-card--group) > .area-asset-card__frame {
     --_ring: 0 0 0 var(--area-selected-width) var(--area-stroke-selected); /* the Selected stroke setting's width, round an edgeless image or group */
@@ -623,13 +626,13 @@
     cursor: default;
     outline: none;
   }
-  .area-asset-grid__item[aria-selected="true"] .area-asset-card:not(.area-asset-card--containerless) { --_edge: var(--_edge-state); border-color: var(--area-stroke-selected); --_sel-ring: inset 0 0 0 max(0px, calc(var(--area-selected-width) - var(--_edge))) var(--area-stroke-selected), inset 0 0 0 100vmax var(--area-selected-tint); }
+  .area-asset-grid__item[aria-selected="true"] .area-asset-card:not(.area-asset-card--containerless) { --_edge: var(--_edge-state); border-color: var(--area-stroke-selected); --_selected-border: var(--_edge); --_sel-ring: var(--_selected-edge); }
   .area-asset-grid__item:focus-visible .area-asset-card { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-gap); }
   @media (hover: hover) {
     .area-asset-grid__item:hover:not([data-disabled]) .area-asset-card {
       --_lift: var(--area-shadow-lift);
       transition-duration: var(--area-duration-fast);
-      transition-timing-function: var(--area-ease-out);
+      transition-timing-function: var(--area-ease-effects);
     }
     /* Elevation 0 draws no shadow, so the edge steps instead. */
     [data-area-shadow-hover="0"] .area-asset-grid__item:not([aria-selected="true"], [data-disabled]):hover .area-asset-card { --_edge: var(--_edge-state); border-color: var(--area-edge-control-hover); }

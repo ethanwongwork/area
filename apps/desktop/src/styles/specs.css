@@ -1,0 +1,22 @@
+/* A family's Specs tab (src/specs-tab.tsx): layout only. */
+  /* The bench the specimens are measured on: laid out at their own size, off the page's start edge and out of reach
+     (inert, hidden from assistive tech). Not `visibility: hidden`, which the measuring skips as not drawn. Wide, so no
+     specimen is squeezed below the width its tile gives it; no zoom or scale, so lengths are the component's own. */
+  .studio-specs__bench {
+    position: absolute;
+    inset-block-start: 0;
+    inset-inline-start: -20000px;
+    inline-size: 1200px;
+    pointer-events: none;
+    contain: layout paint;
+  }
+  .studio-specs__bench > [data-specs-scope] { display: grid; gap: var(--area-space-16); justify-items: start; }
+  .studio-specs__specimen { max-inline-size: 100%; }
+
+  /* The size switch sits between the section's title and its table, the gap a heading keeps to its block. */
+  .studio-specs__controls { display: flex; margin-block-end: var(--area-space-12); }
+
+  /* A value and the tokens it equals, on one line, wrapping between whole tokens. */
+  .studio-specs__value { display: inline-flex; flex-wrap: wrap; align-items: baseline; column-gap: var(--area-gap-md); row-gap: var(--area-space-2); }
+  /* A state's paints, one per line: Fill, Text, Edge, Ring, Opacity. */
+  .studio-specs__paint { display: grid; row-gap: var(--area-space-2); }

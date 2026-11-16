@@ -23,8 +23,17 @@ export interface ComponentManifest {
   booleans?: readonly string[];
   /** Runtime states, expressed as data attributes rather than classes. */
   states?: readonly string[];
-  /** Native/ARIA exceptions to the default data-state adapter, on the state-bearing element. */
+  /**
+   * Native/ARIA exceptions to the default data-state adapter, on the state-bearing element: an attribute (`open`,
+   * `aria-busy`, `aria-expanded`) or a native pseudo-class the browser sets (`:popover-open`), which no adapter writes.
+   */
   stateAttributes?: Record<string, string>;
+  /**
+   * States another component draws for this one, by its manifest key: Box field's `disabled` is its Number fields',
+   * Confirm dialog's `open` its Dialog's. The state is that component's, with that component's hook; this block paints
+   * nothing of its own for it (lint:manifest checks the other component declares it).
+   */
+  statesFrom?: Record<string, string>;
   /** BEM sub-elements, e.g. `__icon`. */
   elements?: readonly string[];
   /** Modifiers applied to a named sub-element. */
@@ -69,6 +78,9 @@ export const toggleGroup = {
   description: "Keeps a set of toggle buttons: any number pressed, or at most one.",
   variants: { variant: ["soft", "outline", "ghost"], size: ["sm", "md", "lg"] },
   booleans: ["full-width"],
+  // disabled: its Buttons' (each item takes the group's); the group dims through toggle-group.css:72's :has() (F5).
+  states: ["disabled"],
+  statesFrom: { disabled: "button" },
   defaults: { variant: "soft", size: "md" },
 } as const satisfies ComponentManifest;
 
@@ -79,6 +91,11 @@ export const splitButton = {
   variants: { variant: ["solid", "soft", "outline", "ghost"], size: ["sm", "md", "lg"] },
   booleans: ["icon-only"],
   elements: ["action", "trigger", "menu"],
+  // open: the trigger's aria-expanded (split-button.css:108). selected, disabled, loading: its two Buttons' own, the
+  // dimmed pair a :has() rule (split-button.css:125) (F5, 2026-11-11).
+  states: ["open", "selected", "disabled", "loading"],
+  stateAttributes: { open: "aria-expanded" },
+  statesFrom: { selected: "button", disabled: "button", loading: "button" },
   defaults: { variant: "solid", size: "md" },
 } as const satisfies ComponentManifest;
 
@@ -100,7 +117,9 @@ export const alignmentPicker = {
   // Responsive (owner, 2026-10-04): fills its parent; sizes and the stretch layouts were removed.
   variants: { variant: ["soft", "plain"] },
   // `preview`: the cell shows the glyph it would set (a static hover hook for docs, data-preview).
-  states: ["preview"],
+  // disabled: the whole picker, painted on aria-disabled (F5, 2026-11-11).
+  states: ["preview", "disabled"],
+  stateAttributes: { disabled: "aria-disabled" },
   elements: ["cell", "dot"],
   defaults: { variant: "soft" },
 } as const satisfies ComponentManifest;
@@ -108,8 +127,10 @@ export const alignmentPicker = {
 export const colorPicker = {
   block: "area-color-picker",
   variants: { variant: ["surface", "plain"] }, defaults: { variant: "surface" },
-  description: "Edits a color like Figma's fill picker, with spectrum, grid and slider views, six color models, a contrast check, a before/after preview and saved swatches; or picks an exact OKLCH colour inside a gamut.",
+  description: "Edits a color, with spectrum, grid and slider views, six color models, a contrast check, a before/after preview and saved swatches; or picks an exact OKLCH colour inside a gamut.",
   elementModifiers: { area: ["gamut"] },
+  states: ["disabled"],
+  stateAttributes: { disabled: "aria-disabled" },
   elements: ["header", "body", "views", "contrast", "contrast-pair", "contrast-ratio", "contrast-unit", "contrast-level", "area", "plane", "band", "band-region", "band-edge", "thumb", "channel", "grid", "controls", "tracks", "channel-row", "channel-label", "slider", "hue", "alpha", "preview", "preview-new", "preview-original", "values", "model", "fields", "text-field", "opacity", "note", "swatches", "heading"],
 } as const satisfies ComponentManifest;
 
@@ -117,6 +138,8 @@ export const calendar = {
   block: "area-calendar",
   description: "Shows a month grid for choosing a date, a range or several dates.",
   variants: { variant: ["plain", "surface"], days: ["square", "circle", "tile"], layout: ["month", "week"], caption: ["label", "menus"] },
+  states: ["disabled"],
+  stateAttributes: { disabled: "aria-disabled" },
   elements: ["months", "month", "header", "title", "nav", "menus", "grid", "weekday", "cell", "day", "day-number", "day-weekday", "day-month", "marker", "week"],
   defaults: { variant: "surface", days: "square", layout: "month", caption: "label" },
 } as const satisfies ComponentManifest;
@@ -132,6 +155,8 @@ export const colorSwatchPicker = {
   block: "area-color-swatch-picker",
   description: "Chooses one labeled color from a row or grid of swatches.",
   variants: { size: ["sm", "md", "lg"], layout: ["grid", "row", "palette"] },
+  states: ["disabled"],
+  stateAttributes: { disabled: "aria-disabled" },
   elements: ["cell"],
   defaults: { size: "md", layout: "grid" },
 } as const satisfies ComponentManifest;
@@ -188,7 +213,7 @@ export const otpField = {
   variants: { variant: ["outline", "soft"], size: ["sm", "md", "lg"] },
   // success / warning: a Field's status, as Input's (components audit 2026-11-07, O1).
   states: ["invalid", "success", "warning", "disabled", "read-only"],
-  elements: ["group", "slot", "caret", "separator", "control"],
+  elements: ["group", "slot", "char", "caret", "separator", "control"],
   defaults: { variant: "outline", size: "md" },
 } as const satisfies ComponentManifest;
 
@@ -196,6 +221,10 @@ export const timeField = {
   block: "area-time-field",
   description: "A time of day typed in segments, with an optional list of times at a fixed step.",
   variants: {},
+  // disabled, read-only, invalid: Input's, on the same element (data-disabled, data-read-only, aria-invalid; the field
+  // shell paints them, plan B7.8, B7.10); open: its list is a Menu (`:popover-open`).
+  states: ["disabled", "read-only", "invalid", "open"],
+  statesFrom: { disabled: "input", "read-only": "input", invalid: "input", open: "menu" },
   elements: ["segments", "part", "literal", "segment", "period", "list", "trigger"],
   defaults: {},
 } as const satisfies ComponentManifest;
@@ -215,6 +244,8 @@ export const inputGroup = {
   description: "Combines independently named controls and passive segments in one shell.",
   variants: { variant: ["outline", "soft"], size: ["sm", "md", "lg"] },
   booleans: ["full-width"],
+  states: ["disabled"],
+  stateAttributes: { disabled: "aria-disabled" },
   elements: ["text"],
   defaults: { variant: "outline", size: "md" },
 } as const satisfies ComponentManifest;
@@ -266,8 +297,9 @@ export const meter = {
 export const descriptionList = {
   block: "area-description-list",
   description: "Lists labelled values: a term and its value per row.",
-  variants: { layout: ["columns", "justified"] },
-  booleans: ["divided", "framed"],
+  // variant: the one frame prop (plan B1.1): surface draws Table's frame; plain, the default, draws none and writes no class.
+  variants: { layout: ["columns", "justified"], variant: ["plain", "surface"] },
+  booleans: ["divided"],
   elements: ["item", "term", "icon", "label", "value", "more", "more-label"],
   defaults: { layout: "columns" },
 } as const satisfies ComponentManifest;
@@ -284,7 +316,8 @@ export const scrollArea = {
   block: "area-scroll-area",
   description: "Scrolls its content with a thin overlay scrollbar.",
   variants: { type: ["hover", "scroll", "always"] },
-  states: ["scrolling", "overflow-x", "overflow-y"],
+  // scroll-more: the region can scroll further down, so a host draws its end cue (plan B6.6).
+  states: ["scrolling", "overflow-x", "overflow-y", "scroll-more"],
   elements: ["viewport", "content", "scrollbar", "thumb"],
   defaults: { type: "hover" },
 } as const satisfies ComponentManifest;
@@ -301,8 +334,10 @@ export const toggletip = {
   block: "area-toggletip",
   description: "Shows a short note about a label from a small info or help button.",
   variants: { size: ["sm", "md"] },
-  // expanded: pinned open by a press (aria-expanded); the hover and focus preview leaves it false.
-  states: ["expanded"],
+  // expanded: pinned open by a press (aria-expanded); the hover and focus preview leaves it false. open: the note shown,
+  // by a press or a preview, a Tooltip surface (`:popover-open`, surface.css:1834).
+  states: ["expanded", "open"],
+  statesFrom: { open: "tooltip" },
   elements: ["surface"],
   defaults: { size: "md" },
 } as const satisfies ComponentManifest;
@@ -356,7 +391,8 @@ export const textarea = {
   },
   booleans: ["full-width"],
   states: ["invalid", "success", "warning", "disabled", "read-only"],
-  stateAttributes: { invalid: "aria-invalid", disabled: "disabled", "read-only": "readonly" },
+  // read-only: native readonly, painted data-read-only as every field (plan B7.10).
+  stateAttributes: { invalid: "aria-invalid", disabled: "disabled" },
   elements: [],
   defaults: { variant: "outline", size: "md", resize: "vertical" },
 } as const satisfies ComponentManifest;
@@ -377,7 +413,7 @@ export const checkbox = {
   description: "Toggles a single independent option.",
   // soft and list (owner 2026-10-25, Notion Calendar's settings rows, a proposal card's options): a filled option with
   // its control first and a value at its end.
-  variants: { variant: ["card", "soft"], layout: ["row", "list", "tile", "preview", "thumbnail", "media", "media-row"], size: ["md", "lg"] },
+  variants: { variant: ["surface", "soft"], layout: ["row", "list", "tile", "preview", "thumbnail", "media", "media-row"], size: ["md", "lg"] }, // variant: the one frame prop (plan B1.1; surface was `card`)
   // read-only: a state set elsewhere, not toggled (components audit 2026-11-07, O2; a native checkbox ignores readonly).
   states: ["checked", "indeterminate", "disabled", "invalid", "read-only"],
   elements: ["control", "visual", "meta"],
@@ -396,7 +432,7 @@ export const checkboxGroup = {
 export const radio = {
   block: "area-radio",
   description: "Picks one option from a mutually exclusive set.",
-  variants: { variant: ["card", "soft"], layout: ["row", "list", "tile", "preview", "thumbnail", "media", "media-row"], size: ["md", "lg"] },
+  variants: { variant: ["surface", "soft"], layout: ["row", "list", "tile", "preview", "thumbnail", "media", "media-row"], size: ["md", "lg"] }, // variant: the one frame prop (plan B1.1; surface was `card`)
   // read-only: set on each option of a read-only Radio group.
   states: ["disabled", "read-only"],
   elements: ["control", "visual", "meta"],
@@ -407,8 +443,8 @@ export const radioGroup = {
   block: "area-radio-group",
   description: "Groups mutually exclusive Radio options under one label.",
   variants: { orientation: ["vertical", "horizontal"] },
-  // read-only: a value shown, not chosen here (owner 2026-10-26: Setup's past answers): the chosen option drops its
-  // selected edge and tint. Spelled `readonly` / `data-readonly` until 2026-11-07 (O2), still painted for one release.
+  // read-only: a value shown, not chosen here (owner 2026-10-26: Setup's past answers): it keeps every state's paint,
+  // the chosen option's selected edge included, and drops the pointer's (plan B7.10). One spelling, data-read-only.
   // success / warning: a non-error validation message, as Checkbox group's (O1).
   states: ["disabled", "invalid", "success", "warning", "read-only"],
   elements: ["legend", "description", "options", "validation"],
@@ -434,24 +470,26 @@ export const switchControl = {
 export const sliderRange = {
   block: "area-slider-range",
   description: "Picks a range with two handles on one rail, with optional number fields.",
-  variants: { size: ["sm", "md", "lg"], variant: ["track", "bar"] },
+  // variant: rail, the default, is the bare block's look; `--rail` is its empty class (F5, 2026-11-11).
+  variants: { size: ["sm", "md", "lg"], variant: ["rail", "track", "bar"] },
   states: ["overlap", "disabled", "pressed", "dragging"],
   elements: ["track", "input", "start", "end"],
-  defaults: { size: "md" },
+  defaults: { size: "md", variant: "rail" },
 } as const satisfies ComponentManifest;
 
 export const slider = {
   block: "area-slider",
   description: "Picks a value from an ordered range.",
+  // rail, inline and horizontal, the defaults, are the bare block's look, each with an empty class (F5, 2026-11-11).
   variants: {
     size: ["sm", "md", "lg"],
-    variant: ["track", "bar"],
-    labelPosition: ["top", "inside"],
-    orientation: ["vertical"],
+    variant: ["rail", "track", "bar"],
+    labelPosition: ["inline", "top", "inside"],
+    orientation: ["horizontal", "vertical"],
   },
   states: ["disabled", "hover", "focus-visible", "pressed", "dragging"],
   elements: ["label", "track", "control", "rail", "fill", "buffer", "thumb", "value", "marks", "ends", "end"],
-  defaults: { size: "md" },
+  defaults: { size: "md", variant: "rail", labelPosition: "inline", orientation: "horizontal" },
 } as const satisfies ComponentManifest;
 
 export const chip = {
@@ -496,7 +534,7 @@ export const indicator = {
   block: "area-indicator", description: "Displays a compact notification count or activity dot.",
   // tone: Button's and Badge's seven (components audit 2026-11-07, O4).
   variants: {kind: ["count", "dot"], tone: ["neutral", "info", "success", "warning", "caution", "danger", "discovery"]},
-  states: ["processing", "border"],
+  states: ["processing", "border", "single"], // data-single: a one-character count drops its sides, as Count's (plan B5.3)
   defaults: {kind: "dot", tone: "danger"},
 } as const satisfies ComponentManifest;
 
@@ -549,7 +587,7 @@ export const editSummary = {
 export const diff = {
   block: "area-diff", description: "A unified diff in Code block sm's metrics: line numbers, a + or − marker and a tint on added and removed lines, folds between hunks.",
   variants: {},
-  elements: ["lines", "line", "number", "marker", "text", "fold"],
+  elements: ["lines", "line", "number", "marker", "text", "fold", "comment", "note"],
   elementModifiers: { line: ["added", "deleted", "removed"] }, // removed: deprecated for deleted (components audit D6)
   defaults: {},
 } as const satisfies ComponentManifest;
@@ -579,7 +617,7 @@ export const plan = {
   states: ["open"],
   elements: ["head", "icon", "title", "count", "chevron", "bar", "segment", "items", "item", "mark", "text", "detail", "meta", "steps"],
   elementModifiers: { item: ["complete", "current", "pending", "cancelled", "done"], mark: ["ring"] }, // done: a deprecated alias of complete (2026-11-07)
-  defaults: { bar: "none" }, // variant unset draws the frame (surface), so the default writes no class
+  defaults: { bar: "none", variant: "surface" }, // the bare class and --surface draw the same frame
 } as const satisfies ComponentManifest;
 
 export const turnNotice = {
@@ -601,7 +639,7 @@ export const attachment = {
 export const composerMenu = {
   block: "area-composer-menu", description: "The @ and / suggestions above the composer: Menu rows with an icon, a name and a muted path, in groups.",
   variants: {},
-  elements: ["path", "empty"],
+  elements: ["path"],
   defaults: {},
 } as const satisfies ComponentManifest;
 
@@ -769,6 +807,9 @@ export const hoverCard = {
   description: "Previews what a link points to while the pointer rests on it.",
   variants: {},
   elements: ["identity", "meta"],
+  // open: the card is a Popover (`:popover-open`).
+  states: ["open"],
+  statesFrom: { open: "popover" },
   defaults: {},
 } as const satisfies ComponentManifest;
 
@@ -777,6 +818,9 @@ export const contextMenu = {
   description: "Opens a Menu where you right-click.",
   variants: {},
   elements: ["menu"],
+  // open: its Menu's (`:popover-open`). Its `disabled` prop paints nothing: it only keeps the browser's own menu.
+  states: ["open"],
+  statesFrom: { open: "menu" },
   defaults: {},
 } as const satisfies ComponentManifest;
 
@@ -787,7 +831,10 @@ export const commandPalette = {
   booleans: ["inline"],
   // path, more, back, step, body, preview: a result's path, a step's chevron, Back and trail, and the preview pane
   // beside the results (components audit V4, 2026-11-07).
-  elements: ["modal", "search", "search-icon", "input", "list", "group", "item", "text", "description", "path", "more", "back", "step", "body", "preview", "empty", "footer", "hint", "keys"],
+  elements: ["modal", "search", "search-icon", "input", "list", "group", "item", "text", "description", "path", "more", "back", "step", "body", "preview", "footer", "hint", "keys"],
+  // open: the modal dialog's own [open] (surface.css:938, 953).
+  states: ["open"],
+  stateAttributes: { open: "open" },
   defaults: {},
 } as const satisfies ComponentManifest;
 
@@ -797,7 +844,7 @@ export const combobox = {
   variants: {},
   booleans: ["full-width"],
   states: ["open"],
-  elements: ["listbox", "option", "description", "empty", "group"],
+  elements: ["listbox", "option", "description", "group"],
   defaults: {},
 } as const satisfies ComponentManifest;
 
@@ -835,7 +882,7 @@ export const tagPicker = {
   booleans: ["full-width"],
   states: ["open", "disabled", "invalid", "success", "warning", "read-only"],
   stateAttributes: { invalid: "aria-invalid" },
-  elements: ["field", "input", "listbox", "hint", "option", "create", "empty"],
+  elements: ["field", "input", "listbox", "hint", "option", "create"],
   defaults: { variant: "outline", size: "md" },
 } as const satisfies ComponentManifest;
 
@@ -856,6 +903,8 @@ export const confirmDialog = {
   description: "Asks for a forced choice before an action that can't be undone.",
   variants: {},
   elements: [],
+  states: ["open"], // its Dialog's
+  statesFrom: { open: "dialog" },
   defaults: {},
 } as const satisfies ComponentManifest;
 
@@ -864,6 +913,9 @@ export const drawer = {
   description: "Slides a panel in from an edge of the screen for a task beside the page.",
   variants: { side: ["end", "start", "bottom"], size: ["sm", "md"], actions: ["row", "stacked"] },
   elements: ["modal", "header", "heading", "title", "description", "dismiss", "body", "footer"],
+  // open: the modal dialog's [open], or :popover-open when it is not modal (drawer.css:36, 113).
+  states: ["open"],
+  stateAttributes: { open: "open" },
   defaults: { side: "end", size: "sm", actions: "row" },
 } as const satisfies ComponentManifest;
 
@@ -873,6 +925,9 @@ export const boxField = {
   variants: { size: ["sm", "md", "lg"] },
   elements: ["label", "fields", "field", "toggle"],
   elementModifiers: { field: ["wide"] },
+  // disabled, read-only: its Number fields' (BoxField passes both on; F5, 2026-11-11).
+  states: ["disabled", "read-only"],
+  statesFrom: { disabled: "numberField", "read-only": "numberField" },
   defaults: { size: "md" },
 } as const satisfies ComponentManifest;
 
@@ -921,8 +976,10 @@ export const dialog = {
   variants: { size: ["sm", "md", "lg", "xl"] },
   // full-height: the tallest the screen allows, whatever the content (V1).
   booleans: ["full-height"],
-  // scrolled: the body has scrolled, so a rule shows under the header (V1).
-  states: ["scrolled"],
+  // scrolled: the body has scrolled, so a rule shows under the header (V1). open: the modal dialog's own [open]
+  // (surface.css:938, 953).
+  states: ["scrolled", "open"],
+  stateAttributes: { open: "open" },
   elements: ["header", "heading", "title", "description", "dismiss", "body", "footer", "modal"],
   defaults: { size: "md" },
 } as const satisfies ComponentManifest;
@@ -933,6 +990,9 @@ export const popover = {
   variants: { side: ["top", "right", "bottom", "left"] },
   booleans: ["arrow"],
   elements: ["header", "title", "description", "body", "footer", "step", "media", "arrow", "arrow-edge"],
+  // open: the native popover's (surface.css:1834).
+  states: ["open"],
+  stateAttributes: { open: ":popover-open" },
   defaults: { side: "bottom" },
 } as const satisfies ComponentManifest;
 
@@ -940,8 +1000,10 @@ export const menu = {
   block: "area-menu",
   description: "Lists actions triggered from a button.",
   variants: {},
-  // inactive: a row that looks disabled but stays reachable and says why in its note (V2, 2026-11-07).
-  states: ["disabled", "highlighted", "selected", "inactive"],
+  // inactive: a row that looks disabled but stays reachable and says why in its note (V2, 2026-11-07). open: the native
+  // popover's (surface.css:1834).
+  states: ["disabled", "highlighted", "selected", "inactive", "open"],
+  stateAttributes: { open: ":popover-open" },
   // `search-surface` is deprecated (audit D-22): a searchable list is a Combobox or Command palette.
   // `trailing`: a row's count or badge before its shortcut (2026-11-07, O7), as Nav item's.
   // header, footer: fixed regions above and below the rows, each with a rule; list: the rows' scroller between them;
@@ -957,9 +1019,11 @@ export const tooltip = {
   description: "Names a control on hover or focus.",
   variants: { side: ["top", "right", "bottom", "left"] },
   booleans: ["arrow"],
-  // instant: opened inside the skip window, so it shows without the enter fade (motion pass 2026-10-07).
-  states: ["instant"],
-  elements: [],
+  // instant: opened inside the skip window, so it shows without the enter fade (motion pass 2026-10-07). open: the
+  // native popover's (surface.css:1834).
+  states: ["instant", "open"],
+  stateAttributes: { open: ":popover-open" },
+  elements: ["text"],
   defaults: { side: "top" },
 } as const satisfies ComponentManifest;
 
@@ -986,12 +1050,13 @@ export const tabs = {
   description: "Switches between views: transparent tabs with a rounded underline whose labels align with panel content, or (selection plate) a soft plate behind the selected tab.",
   // `selection` names how the selected tab is marked, as Nav's does: the underline (default, a marker) or a plate
   // (owner 2026-11-06, docs/specs/tabs.md "Plate").
-  variants: { size: ["sm", "md", "lg"], orientation: ["vertical"], selection: ["plate"] },
+  // horizontal and marker, the defaults, are the bare block's look, each with an empty class (F5, 2026-11-11).
+  variants: { size: ["sm", "md", "lg"], orientation: ["horizontal", "vertical"], selection: ["marker", "plate"] },
   booleans: ["track"],
   states: ["selected", "disabled"],
   // unseen: a dot for a tab whose content changed since it was last looked at (components audit D6, 2026-11-07).
-  elements: ["list", "tab", "panel", "label", "reserve", "icon", "unseen"],
-  defaults: { size: "md" },
+  elements: ["list", "tab", "panel", "label", "text", "reserve", "icon", "unseen"],
+  defaults: { size: "md", orientation: "horizontal", selection: "marker" },
 } as const satisfies ComponentManifest;
 
 export const table = {
@@ -1058,16 +1123,16 @@ export const nav = {
   block: "area-nav",
   description: "Site navigation, vertical or horizontal.",
   // `orientation` is the axis; `selection` chooses a plate or a marker for the current item.
-  // A nav with neither modifier is vertical with a plate, which is the sidebar case. The
-  // marker's colour is the Selection role, not a variant.
-  variants: { orientation: ["horizontal"], selection: ["marker"] },
+  // Vertical with a plate is the sidebar case and the bare block's look (`--vertical` is its empty class, F5,
+  // 2026-11-11). The marker's colour is the Selection role, not a variant.
+  variants: { orientation: ["vertical", "horizontal"], selection: ["marker"] },
   // A group's heading may fold its run (`toggle`, `chevron`, the run in `items`) and hold `actions` (2026-11-01).
   elements: ["group", "label", "toggle", "chevron", "items", "item", "icon", "picture", "text", "trailing", "separator", "row", "actions"],
   // A nested group is an expandable item's children, stepped in like a Tree view level (audit D-20).
   elementModifiers: { group: ["nested"], row: ["reveal"], label: ["sticky"] },
   // inactive: an item that looks disabled but keeps focus and says why in a Tooltip (components audit V2, 2026-11-07).
   states: ["inactive"],
-  defaults: {},
+  defaults: { orientation: "vertical" },
 } as const satisfies ComponentManifest;
 
 export const token = {
@@ -1199,8 +1264,9 @@ export const settingRow = {
 export const settingsGroup = {
   block: "area-settings-group",
   description: "Groups setting rows under an optional heading, with a rule between rows.",
-  variants: {},
-  booleans: ["framed"],
+  // variant: the one frame prop (plan B1.1, B8.1 hand-over 2026-11-14): surface draws the block frame round the rows;
+  // plain, the default, sets them on the page.
+  variants: { variant: ["plain", "surface"] },
   elements: ["rows"],
   defaults: {},
 } as const satisfies ComponentManifest;
@@ -1238,8 +1304,10 @@ export const chart = {
   description: "Plots rows of data as bars, lines, areas or a donut, with a legend that hides series, a tooltip the keys reach and a table of the data; the number shows one figure with its change.",
   variants: { kind: ["bar", "line", "area", "donut", "number"], size: ["sm", "md", "lg"] },
   booleans: ["stacked"],
-  states: ["active", "busy"],
-  stateAttributes: { busy: "aria-busy" },
+  // loading: aria-busy on the root (chart.css:171), GOVERNANCE § 4's word; `busy` is its deprecated alias, kept for one
+  // release (F5, 2026-11-11).
+  states: ["active", "loading", "busy"],
+  stateAttributes: { loading: "aria-busy", busy: "aria-busy" },
   elements: [
     "plot", "svg", "grid", "baseline", "guide", "tick", "mark", "band", "line", "wash", "part", "dot", "center", "center-label",
     "tooltip", "tooltip-title", "tooltip-row", "key", "legend", "legend-item", "legend-label", "view", "table", "empty",
@@ -1295,21 +1363,23 @@ export const fileGrid = {
 export const assetCard = {
   block: "area-asset-card",
   description: "Shows one asset in a card: its name and controls in a head, the asset in a square frame under it (an image in its own ratio, cropped to the card's aspect or whole within it; an element, a colour, or a group as a 2×2 mosaic or a strip); framed, basic or containerless, its name above, below or over the asset on hover, recessed or raised or on a transparency checker, square, landscape, wide, 16:9 screen or hugging its asset; with no name or controls and containerless, the frame alone (an inspector's preview).",
-  variants: { layout: ["asset", "image", "color", "group"], container: ["framed", "basic", "containerless"], caption: ["above", "below", "overlay", "outside"], fill: ["recessed", "raised", "checker"], aspect: ["square", "landscape", "hug", "wide", "screen"], fit: ["natural", "cover", "contain"], mosaic: ["grid", "strip"] },
+  // kind: what the card holds (plan B1.1, structure B-S8: content kind is kind, not layout; it was `layout`).
+  variants: { kind: ["asset", "image", "color", "group"], container: ["framed", "basic", "containerless"], caption: ["above", "below", "overlay", "outside"], fill: ["recessed", "raised", "checker"], aspect: ["square", "landscape", "hug", "wide", "screen"], fit: ["natural", "cover", "contain"], mosaic: ["grid", "strip"] },
   booleans: ["interactive", "borderless"],
   states: ["selected"],
   elements: ["head", "name", "actions", "frame", "media", "mosaic", "cell", "thumb", "badge"],
-  defaults: { layout: "asset", container: "framed", caption: "above", fill: "recessed", aspect: "square", fit: "natural", mosaic: "grid" },
+  defaults: { kind: "asset", container: "framed", caption: "above", fill: "recessed", aspect: "square", fit: "natural", mosaic: "grid" },
 } as const satisfies ComponentManifest;
 
 export const designCard = {
   block: "area-design-card",
   description: "Shows one design in a container at its true size, placed by its layout's rule: a part (a control, a component, a pattern, a type line) in a tenth of the card's short side, never past 100% and held at 50% and cropped on its focus below that; a screen whole in a 16:9 card; a phone standing from the top and running off the bottom; an icon at whole multiples; a colour painting the card. Its name and true size sit under it; opened, the same ground grows to Full view.",
-  variants: { layout: ["part", "screen", "phone", "icon", "color"], aspect: ["square", "wide"] }, // wide: 16:9 (Asset card's wide is 2:1; `screen` would collide with the screen layout's class, so the names meet when Asset card retires)
+  // kind: what the card holds (plan B1.1, structure B-S8; it was `layout`). wide: 16:9 (Asset card's wide is 2:1; `screen` would collide with the screen kind's class, so the names meet when Asset card retires).
+  variants: { kind: ["part", "screen", "phone", "icon", "color"], aspect: ["square", "wide"] },
   booleans: ["interactive"],
   states: ["selected"],
   elements: ["ground", "design", "caption", "name", "detail", "actions"],
-  defaults: { layout: "part", aspect: "square" },
+  defaults: { kind: "part", aspect: "square" },
 } as const satisfies ComponentManifest;
 
 export const assetGrid = {
@@ -1387,6 +1457,8 @@ export const zoomControl = {
   variants: {},
   booleans: ["stepper"],
   elements: ["value", "menu", "field", "stepper", "step"],
+  states: ["open"], // its Menu's
+  statesFrom: { open: "menu" },
   defaults: {},
 } as const satisfies ComponentManifest;
 
@@ -1403,6 +1475,9 @@ export const dateRangePicker = {
   description: "A field showing a range of dates that opens presets and a range calendar.",
   variants: {},
   elements: ["presets", "preset"],
+  // Its root is a Date picker too (`area-date-picker`), so these are Date picker's, on the same element and trigger.
+  states: ["open", "invalid", "read-only"],
+  statesFrom: { open: "datePicker", invalid: "datePicker", "read-only": "datePicker" },
   defaults: {},
 } as const satisfies ComponentManifest;
 

@@ -9,17 +9,24 @@
  *   system.resolve_token       a token's declarations, or the tokens declared with a value
  *   system.validate_diff       a unified diff (or files) checked against the system (check.ts)
  *   system.get_rules           DESIGN.md
+ *   preview.screenshot         a component's picture, as Area draws it under the project's theme (picture.ts)
  */
 import { createInterface } from "node:readline";
 import { addedLines, validate, wholeFile } from "./check.ts";
 import { getComponent, readProject, resolveToken, searchComponents, type Project } from "./project.ts";
+import { picture } from "./picture.ts";
 import type { Destination } from "./write.ts";
 
 const LEGACY = ["2025-11-25", "2025-06-18", "2025-03-26", "2024-11-05"];
 const MODERN = ["2026-07-28"];
 const VERSION_KEY = "io.modelcontextprotocol/protocolVersion";
 
-interface Tool { name: string; title: string; description: string; inputSchema: object; run: (project: Project, args: Record<string, unknown>) => unknown }
+/** What a tool is given besides the project: the Area checkout the command runs from (a picture is drawn by its app). */
+export interface ToolContext { library?: string }
+interface Tool { name: string; title: string; description: string; inputSchema: object; run: (project: Project, args: Record<string, unknown>, context: ToolContext) => unknown }
+/** A tool's answer that carries a picture: the PNG as base64, and the words about it. */
+interface Pictured { image: string; about: Record<string, unknown> }
+const isPictured = (value: unknown): value is Pictured => Boolean(value) && typeof (value as Pictured).image === "string" && typeof (value as Pictured).about === "object";
 
 const text = (value: unknown) => typeof value === "string" ? value : "";
 
@@ -58,12 +65,31 @@ export const TOOLS: Tool[] = [
     inputSchema: { type: "object", additionalProperties: false },
     run: project => ({ design: project.design ?? "This project has no DESIGN.md." }),
   },
+  {
+    name: "preview.screenshot", title: "Picture a component",
+    description: "A picture (PNG) of one of the design system's components as it is drawn under the project's theme settings, in light or dark. Use it to see what a component looks like before using it, or to compare your UI with it. Shows the component's default specimen; takes a few seconds.",
+    inputSchema: { type: "object", properties: {
+      component: { type: "string", description: "Its name or slug: \"Button\", \"segmented\"." },
+      mode: { type: "string", enum: ["light", "dark"], description: "Light by default." },
+      theme: { type: "string", description: "One of the system's themes, by id; its first by default." },
+    }, required: ["component"], additionalProperties: false },
+    run: async (project, args, context) => {
+      const entry = getComponent(project, text(args.component));
+      if (!entry) throw new Error(`No component "${text(args.component)}" in ${project.name}.`);
+      if (!context.library) throw new Error("A picture needs the Area checkout this command runs from.");
+      const theme = project.themes.find(t => t.id === text(args.theme)) ?? project.themes[0];
+      const mode = args.mode === "dark" ? "dark" : "light";
+      const { png } = await picture(context.library, { slug: entry.slug, mode, settings: theme?.settings ?? {} });
+      return { image: png.toString("base64"), about: { component: entry.name, theme: theme?.name ?? "Area's defaults", mode, note: "The default specimen under the theme's settings. A theme's exact colors, own accent and material are not drawn here." } } satisfies Pictured;
+    },
+  },
 ];
 
 export interface Message { jsonrpc: "2.0"; id?: string | number; method?: string; params?: Record<string, unknown> }
 
-/** One message's answer (null for a notification). `project` is read per call, so a new write is seen at once. */
-export function answer(message: Message, project: () => Project, serverVersion: string): object | null {
+/** One message's answer (null for a notification). `project` is read per call, so a new write is seen at once. A tool
+ *  that takes time (a picture) answers with a promise; every other answer is ready at once. */
+export function answer(message: Message, project: () => Project, serverVersion: string, context: ToolContext = {}): object | Promise<object> | null {
   const { id, method, params = {} } = message;
   if (id === undefined || id === null) return null;
   const meta = (params._meta ?? {}) as Record<string, unknown>;
@@ -71,7 +97,7 @@ export function answer(message: Message, project: () => Project, serverVersion: 
   const ok = (result: object) => ({ jsonrpc: "2.0", id, result: modern ? { resultType: "complete", ...result } : result });
   const fail = (code: number, msg: string, data?: object) => ({ jsonrpc: "2.0", id, error: { code, message: msg, ...(data ? { data } : {}) } });
   const info = { name: "area-system", version: serverVersion };
-  const instructions = "Tools for building inside this project's design system. Search components before writing UI, use only the options a component lists, paint with its tokens, and check a change with system.validate_diff.";
+  const instructions = "Tools for building inside this project's design system. Search components before writing UI, use only the options a component lists, paint with its tokens, look at a component with preview.screenshot when its look matters, and check a change with system.validate_diff.";
   if (modern && !MODERN.includes(String(meta[VERSION_KEY]))) return fail(-32022, "Unsupported protocol version", { supported: [...MODERN, ...LEGACY], requested: meta[VERSION_KEY] });
   switch (method) {
     case "initialize": {
@@ -85,26 +111,30 @@ export function answer(message: Message, project: () => Project, serverVersion: 
     case "tools/call": {
       const tool = TOOLS.find(t => t.name === params.name);
       if (!tool) return fail(-32602, `Unknown tool ${String(params.name)}`);
+      const done = (result: unknown) => isPictured(result)
+        ? ok({ content: [{ type: "image", data: result.image, mimeType: "image/png" }, { type: "text", text: JSON.stringify(result.about, null, 2) }], structuredContent: result.about })
+        : ok({ content: [{ type: "text", text: JSON.stringify(result, null, 2) }], structuredContent: result as object });
+      const failed = (error: unknown) => ok({ content: [{ type: "text", text: String((error as Error).message) }], isError: true });
       try {
-        const result = tool.run(project(), (params.arguments ?? {}) as Record<string, unknown>);
-        return ok({ content: [{ type: "text", text: JSON.stringify(result, null, 2) }], structuredContent: result });
-      } catch (error) {
-        return ok({ content: [{ type: "text", text: String((error as Error).message) }], isError: true });
-      }
+        const result = tool.run(project(), (params.arguments ?? {}) as Record<string, unknown>, context);
+        return result instanceof Promise ? result.then(done, failed) : done(result);
+      } catch (error) { return failed(error); }
     }
     default: return fail(-32601, `Method not found: ${method}`);
   }
 }
 
-export function serve(dest: Destination, serverVersion: string, input = process.stdin, output = process.stdout): void {
+export function serve(dest: Destination, serverVersion: string, context: ToolContext = {}, input = process.stdin, output = process.stdout): void {
   const lines = createInterface({ input });
+  const pending: Array<Promise<void>> = [];
   lines.on("line", line => {
     if (!line.trim()) return;
     let message: Message;
     try { message = JSON.parse(line) as Message; }
     catch { output.write(`${JSON.stringify({ jsonrpc: "2.0", id: null, error: { code: -32700, message: "Parse error" } })}\n`); return; }
-    const reply = answer(message, () => readProject(dest), serverVersion);
-    if (reply) output.write(`${JSON.stringify(reply)}\n`);
+    const reply = answer(message, () => readProject(dest), serverVersion, context);
+    if (reply) pending.push(Promise.resolve(reply).then(ready => { output.write(`${JSON.stringify(ready)}\n`); }));
   });
-  lines.on("close", () => process.exit(0));
+  // An answer still being made (a picture) is sent before the server leaves.
+  lines.on("close", () => { void Promise.allSettled(pending).then(() => process.exit(0)); });
 }

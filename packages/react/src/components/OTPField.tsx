@@ -12,8 +12,9 @@ export interface OTPFieldProps extends Omit<InputHTMLAttributes<HTMLInputElement
   length?: number;
   /** The code (controlled). */
   value?: string;
+  /** The characters it starts with, uncontrolled; empty by default. */
   defaultValue?: string;
-  /** The cleaned code and the change or paste event that made it (Governance § 4). */
+  /** Called with the cleaned code and the change or paste event that made it. */
   onValueChange?: (value: string, event: ChangeEvent<HTMLInputElement> | ClipboardEvent<HTMLInputElement>) => void;
   /** Once every slot is filled, with the code. */
   onComplete?: (value: string) => void;
@@ -23,8 +24,11 @@ export interface OTPFieldProps extends Omit<InputHTMLAttributes<HTMLInputElement
   characters?: "digits" | "alphanumeric";
   /** Draws each entered character as a dot. */
   mask?: boolean;
+  /** The slots' treatment, as Input's; outline by default. */
   variant?: Manifest["variant"];
+  /** The slots' height, as Input's; md by default. */
   size?: Manifest["size"];
+  /** Marks the code as wrong: the danger edge and `aria-invalid`. */
   invalid?: boolean;
   /** Semantic validation paint, as Input's: `error` (also `invalid`), `success` or `warning`. A Field passes its own. */
   validationStatus?: ValidationStatus;
@@ -32,6 +36,7 @@ export interface OTPFieldProps extends Omit<InputHTMLAttributes<HTMLInputElement
   "data-validation-status"?: ValidationStatus;
   /** Class and style of the row of slots, the outer element. */
   className?: string;
+  /** Style for the row of slots, the outer element. */
   style?: InputHTMLAttributes<HTMLInputElement>["style"];
 }
 
@@ -43,7 +48,7 @@ const PATTERN = { digits: "[0-9]*", alphanumeric: "[0-9A-Za-z]*" };
  * with one name, one value and one Tab stop, and the platform's own editing works: SMS and password-manager
  * autofill (`autocomplete="one-time-code"` only applies to a single field), paste (spaces and dashes dropped),
  * Backspace, arrows, undo and select-all. The slots only draw it: the character in each, the caret in the
- * slot it will fill, the selection. input-otp (shadcn, Untitled UI) and GOV.UK's single code input do the same.
+ * slot it will fill, the selection.
  */
 export const OTPField = /* @__PURE__ */ forwardRef<HTMLInputElement, OTPFieldProps>(function OTPField(
   { length = 6, value, defaultValue = "", onValueChange, onComplete, groups, characters = "digits", mask, variant, size, invalid,
@@ -156,7 +161,7 @@ export const OTPField = /* @__PURE__ */ forwardRef<HTMLInputElement, OTPFieldPro
       const active = focused && !disabled && (start === end ? index === caretAt : index >= start && index < end);
       cells.push(
         <span key={index} className="area-otp-field__slot" data-active={active ? "" : undefined} data-filled={char ? "" : undefined}>
-          {char ? (mask ? "•" : char) : null}
+          {char ? <span className="area-otp-field__char">{mask ? "•" : char}</span> : null}
           {active && start === end && !char ? <span className="area-otp-field__caret" /> : null}
         </span>,
       );

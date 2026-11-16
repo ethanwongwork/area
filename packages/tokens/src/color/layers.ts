@@ -7,7 +7,7 @@
  *
  *   ground-light  the light page's OKLCH lightness, 1 (white) to 0.90 in 0.01 steps.
  *   ground-dark   the dark page's lightness: 0 (black), 0.085 (Area's near-black, the default), 0.12 to 0.24.
- *   layers-light  layer contrast in light, 0 (Flat) to 8, 4 the default: how far raised layers (cards, menus,
+ *   layers-light  layer contrast in light, 0 (Flat, the default since 2026-10-25) to 100 (axes/layers.ts; 0 to 8, 4 the default, before): how far raised layers (cards, menus,
  *                 dialogs) and recessed ones (sidebars, wells) sit from the page, and a control's fill from its ground.
  *   layers-dark   the same in dark. One setting per theme since 2026-10-17 (owner: "save all the layer picks for the
  *                 most possible customization"); each theme's formulas read only its own.
@@ -35,8 +35,16 @@ export const GROUND_DARK_STEPS = Array.from({ length: 25 }, (_, i) => i);
 export const LAYER_STEPS = [0, 2, 4, 6, 8] as const;
 export const DEFAULT_GROUND_LIGHT = 100;
 export const DEFAULT_GROUND_DARK = 8;
-/** Flat by default (owner, defaults review 2026-10-25; was 4): frames set layers apart, controls still step from their ground. */
-export const DEFAULT_LAYERS = 0;
+/**
+ * Layer contrast's defaults, in the model's units (0 to 8), one per theme since 2026-11-11.
+ *   light  4 (position 50): the sidebar, cards and menus sit a clear tone from the page. It was 4 until the defaults
+ *          review of 2026-10-25 made it 0 (Flat), and is 4 again after the four product screens (owner, 2026-11-11, on
+ *          "Should Area's default Layer contrast move from 0 to 50 in light?": "Yes, 50 in light";
+ *          docs/research/product-recreations-2026-11-10): at 0 a window read as one sheet with hairlines.
+ *   dark   0 (Flat): on the near-black page a tone step has almost no room, so frames set layers apart there.
+ */
+export const DEFAULT_LAYERS_LIGHT = 4;
+export const DEFAULT_LAYERS_DARK = 0;
 
 /**
  * Tint (axes/tint.ts, owner 2026-10-22): a hue, every degree since 2026-10-26 (5° steps before), a strength per mode in steps of 0.005 OKLCH chroma, and the
@@ -196,11 +204,49 @@ export const CONTRAST_EDGE_SHARE = 1;
 /** The edges a pointer steps to: they reach the strong hover stroke, so a hover still reads under More. */
 const HOVER_EDGES: ReadonlySet<string> = new Set(["border", "hover"]);
 /** Inks: today's text and edge where they pass (light #282828 / #666666 / #838383, hover #747474; dark #eeeeee /
- * #c5c5c5 / #939393, hover #a4a4a4), else darkened (light) or lightened (dark) just enough to hold the target. */
+ * #b9b9b9 / #939393, hover #a4a4a4), else darkened (light) or lightened (dark) just enough to hold the target.
+ * Dark muted steps back from L 0.823 (#c5c5c5, 12:1 on the page, only 1.49 from the default ink) to L 0.785 (plan A3.1,
+ * 2026-11-11): the darkest grey that keeps the dark APCA content floor (Lc 60, contrast/assertions.ts) on the lightest
+ * fill text sits on at the defaults (#1f1f1f, a hovered row), with a margin for the tinted neutrals. The plan aimed for
+ * L 0.70 (8:1, 2.2 from the default, light's step); under Lc 60 near black no grey that dark reads as content, so the
+ * floor, never lowered, is where it stops (#b9b9b9, 10.6:1, 1.70 from the default). */
 export const INK_TODAY = {
   light: { body: 0.27685, muted: 0.51028, edge: 0.60999, edgeHover: -0.05102 },
-  dark: { body: 0.94912, muted: 0.82344, edge: 0.66325, edgeHover: 0.05546 },
+  dark: { body: 0.94912, muted: 0.785, edge: 0.66325, edgeHover: 0.05546 },
 } as const;
+/**
+ * The subtle ink (`fg-subtle`, plan A3.2, owner 2026-11-11): a third text ink for meta that must sit quieter than a
+ * description (a placeholder, a shortcut, a timestamp, an empty value, line numbers), never a description. It is text, so
+ * it keeps 4.6:1 (the text target) on every ground meta sits on: each layer, its rest fill (a soft field) and its hover
+ * fill (a hovered row or field), never a selected or pressed plate, where meta takes the muted ink. It starts at #767676
+ * in light (`light`, 4.5:1 on white) and is never darker than muted there; in dark it is the darkest ink that holds the
+ * target on the lightest hover fill (`dark` the floor), never lighter than muted. A narrow step by construction: at the
+ * light default (Layer contrast 50) the sidebar's hovered field binds it near muted. In dark the APCA content floor
+ * (Lc 60) that muted already stands on leaves no room under it at the defaults, so subtle is muted there (`dark`, the
+ * floor, is muted's); on a lighter dark ground the text target lifts muted and subtle keeps a step under it.
+ */
+export const SUBTLE_TODAY = { light: 0.56589, dark: 0.785 } as const;
+/**
+ * The disabled ink (`fg-disabled`, plan A3.2): this share of the way from its ground (the page in light, the raised layer
+ * in dark) to the muted ink, so it follows the ground, the Layers settings and the cast. At the defaults it is the
+ * #a4a4a4 and #666666 it was as fixed rungs. Disabled text is exempt from the text target (WCAG 1.4.3); the gate holds
+ * it to 1.9:1 so it still shows.
+ */
+export const DISABLED_SHARE = { light: 0.558, dark: 0.6077 } as const;
+/**
+ * The floating ground (`bg-float`, plan A7.2, owner 2026-11-11: "Dark lifts floating and modal one layer step"): menus,
+ * popovers, toasts, dialogs and drawers. In light it is the raised layer, as before. In dark it sits this far above the
+ * lightest layer under it (the raised layer or a Card's tone), from DARK_LAYER_FLOOR at the least, so a menu reads a
+ * step off a card and the page stays near black (#0c0c0c over #020202 at the defaults).
+ */
+export const FLOAT_LIFT = { dark: 0.036 } as const;
+/**
+ * A media placeholder's plate (`bg-plate`, plan A10.1, findings VS6 and VC7, 2026-11-11): the well a Card's picture sits
+ * in before it loads, one perceived step off the card in both themes. Light: this far under the card (#f2f2f2 on white;
+ * the 25 rung it was, #fafafa, measured 1.04:1). Dark: this far over it, from the dark fill floor at the least (#161616 on
+ * the near-black card; the 800 rung, #282828, read as a solid block).
+ */
+export const PLATE_STEP = { light: 0.035, dark: 0.035 } as const;
 /** Targets, a touch over WCAG's 4.5 and 3 so a rounded hex never lands under them. */
 export const INK_TARGET = { text: 4.6, edge: 3.1 } as const;
 /** The lightest a dark selected fill sits (2026-10-23 theme review): where white text still keeps the text target once
@@ -311,7 +357,7 @@ export const TINT_LIFT = { layer: { from: 0.3, perL: 4 }, fill: { from: 0.315, p
 
 export interface Cast { chroma: number; hue: number }
 export interface LayerSelection { groundLight: number; groundDark: number; layersLight: number; layersDark: number }
-export const DEFAULT_LAYER_SELECTION: LayerSelection = { groundLight: DEFAULT_GROUND_LIGHT, groundDark: DEFAULT_GROUND_DARK, layersLight: DEFAULT_LAYERS, layersDark: DEFAULT_LAYERS };
+export const DEFAULT_LAYER_SELECTION: LayerSelection = { groundLight: DEFAULT_GROUND_LIGHT, groundDark: DEFAULT_GROUND_DARK, layersLight: DEFAULT_LAYERS_LIGHT, layersDark: DEFAULT_LAYERS_DARK };
 
 export interface LayerLightness {
   page: number; raised: number; recessed: number; stripe: number; step: number;
@@ -323,10 +369,14 @@ export interface LayerLightness {
    * to be seen (a Table header, a soft Surface, an image well) shows at Layer contrast 0 too, where the recessed tone is the
    * page (2026-11-01, docs/research/color-system-2026-11-01). */
   well: number;
+  /** The floating ground (`bg-float`, FLOAT_LIFT): the raised layer in light, a step above it in dark. */
+  float: number;
+  /** A media placeholder's plate (`bg-plate`, PLATE_STEP): a step off the card. */
+  plate: number;
   /** Rest, hover, pressed / selected on each ground. */
-  fill: { page: [number, number, number]; raised: [number, number, number]; recessed: [number, number, number]; card: [number, number, number]; tile: [number, number, number]; frame: [number, number, number]; frameRaised: [number, number, number]; well: [number, number, number] };
+  fill: { page: [number, number, number]; raised: [number, number, number]; recessed: [number, number, number]; card: [number, number, number]; tile: [number, number, number]; frame: [number, number, number]; frameRaised: [number, number, number]; well: [number, number, number]; float: [number, number, number] };
   edge: Record<keyof typeof EDGE_OFFSET.light, number>;
-  ink: { body: number; muted: number; edge: number; edgeHover: number };
+  ink: { body: number; muted: number; subtle: number; disabled: number; edge: number; edgeHover: number };
   /** How far the vivid and tonal inks mix toward black (light) and tinted labels toward white (dark), 0 to 1. */
   vividDarken: number; tonalDarken: number; tintLift: number; tintLiftFill: number;
 }
@@ -351,8 +401,8 @@ export function layerLightnessAt(theme: "light" | "dark", g: number, n: number, 
     const card = explicit ?? raised, tile = explicit ?? recessed;
     const frameIn = frameFor(page, recessed), frame = frameIn(tile), frameRaised = frameIn(raised);
     const fills = (x: number) => FM.light.map(m => x - m * s) as [number, number, number];
-    const well = Math.min(recessed, page - FM.light[0] * s);
-    const fill = { page: fills(page), raised: fills(raised), recessed: fills(recessed), card: fills(card), tile: fills(tile), frame: fills(frame), frameRaised: fills(frameRaised), well: fills(well) };
+    const well = Math.min(recessed, page - FM.light[0] * s), float = raised;
+    const fill = { page: fills(page), raised: fills(raised), recessed: fills(recessed), card: fills(card), tile: fills(tile), frame: fills(frame), frameRaised: fills(frameRaised), well: fills(well), float: fills(float) };
     const edge = Object.fromEntries(Object.entries(EDGE_OFFSET.light).map(([k, d]) => [k, page - d])) as LayerLightness["edge"];
     // The deepest surface text sits on: the recessed layer, or a card darker than it (Card tone); its hovered fill for
     // edges, its selected fill for body text. A hovered soft mark sits on the page or a card, whichever is darker.
@@ -360,13 +410,17 @@ export function layerLightnessAt(theme: "light" | "dark", g: number, n: number, 
     const edgeInk = Math.min(INK_TODAY.light.edge, inkOn("light", deepest - s, INK_TARGET.edge));
     // Text is solved on the deepest selected fill pressed by PRESS_ROOM, so a press has room on every ground.
     const firmest = deepest - FM.light[2] * s - PRESS_ROOM.light;
+    // Muted sits on hovered, selected and pressed rows (a count in a selected sidebar row) and on the soft-mark plate.
+    const muted = Math.min(INK_TODAY.light.muted, inkOn("light", firmest, INK_TARGET.text), inkOn("light", MARK_SHADE * deepest, INK_TARGET.text), inkOn("light", washedLightness(markGround, MARK_HOVER_KEEP), markHoverTarget(markGround)));
     const ink = {
       body: Math.min(INK_TODAY.light.body, inkOn("light", firmest, INK_TARGET.text)),
-      // Muted sits on hovered, selected and pressed rows (a count in a selected sidebar row) and on the soft-mark plate.
-      muted: Math.min(INK_TODAY.light.muted, inkOn("light", firmest, INK_TARGET.text), inkOn("light", MARK_SHADE * deepest, INK_TARGET.text), inkOn("light", washedLightness(markGround, MARK_HOVER_KEEP), markHoverTarget(markGround))),
+      muted,
+      // Subtle sits on the deepest ground's hover fill at the most (SUBTLE_TODAY), never darker than muted.
+      subtle: Math.max(muted, Math.min(SUBTLE_TODAY.light, inkOn("light", deepest - FM.light[1] * s, INK_TARGET.text))),
+      disabled: page + DISABLED_SHARE.light * (muted - page),
       edge: edgeInk, edgeHover: edgeInk + INK_TODAY.light.edgeHover,
     };
-    return { page, raised, recessed, card, tile, frame, frameRaised, well, stripe: page - 0.6 * s, step: s, fill, edge, ink, vividDarken: darkenFor(Math.min(page, card), VIVID_Y), tonalDarken: darkenFor(deepest, TONAL_Y), tintLift: 0, tintLiftFill: 0 };
+    return { page, raised, recessed, card, tile, frame, frameRaised, well, float, plate: card - PLATE_STEP.light, stripe: page - 0.6 * s, step: s, fill, edge, ink, vividDarken: darkenFor(Math.min(page, card), VIVID_Y), tonalDarken: darkenFor(deepest, TONAL_Y), tintLift: 0, tintLiftFill: 0 };
   }
   // The floor arrives over the first whole step of Layer contrast (positions 0 to 12), as the CSS has it, so a position
   // past Flat doesn't jump a black page's layers to 0.12 at once.
@@ -377,23 +431,28 @@ export function layerLightnessAt(theme: "light" | "dark", g: number, n: number, 
   const frameIn = frameFor(page, recessed), frame = frameIn(tile), frameRaised = frameIn(raised);
   const fills = (x: number) => { const rest = Math.max(x + s, DARK_FILL_FLOOR), t = Math.min(s, Math.max(0, (DARK_FILL_CEILING - rest) / FM.dark[2])); return FM.dark.map(m => rest + m * t) as [number, number, number]; };
   const well = Math.max(recessed, fills(page)[0]);
-  const fill = { page: fills(page), raised: fills(raised), recessed: fills(recessed), card: fills(card), tile: fills(tile), frame: fills(frame), frameRaised: fills(frameRaised), well: fills(well) };
-  // The lightest surface text sits on: the raised layer, a card lighter than it (Card tone), or a well.
-  const top = fills(Math.max(raised, card, tile, well));
+  const float = Math.max(raised, card, DARK_LAYER_FLOOR) + FLOAT_LIFT.dark;
+  const fill = { page: fills(page), raised: fills(raised), recessed: fills(recessed), card: fills(card), tile: fills(tile), frame: fills(frame), frameRaised: fills(frameRaised), well: fills(well), float: fills(float) };
+  // The lightest surface text sits on: the raised layer, a card lighter than it (Card tone), a well or a floating surface.
+  const top = fills(Math.max(raised, card, tile, well, float));
   const edge = Object.fromEntries(Object.entries(EDGE_OFFSET.dark).map(([k, d]) => [k, Math.max(EDGE_DARK_TODAY[k as keyof typeof EDGE_DARK_TODAY], raised + d)])) as LayerLightness["edge"];
   // The lightest surface text sits on is that layer's selected fill (raised, the lightest layer in dark, unless a card is
   // lighter) pressed by PRESS_ROOM; muted text sits there too (a count in a selected row). Past L 0.563 no ink keeps 4.6:1,
   // so at the lightest grounds (24 + 8) both inks are white and the room is what white allows.
   const edgeInk = Math.max(INK_TODAY.dark.edge, inkOn("dark", top[0], INK_TARGET.edge));
   const firmest = top[2] + PRESS_ROOM.dark;
+  const muted = Math.max(INK_TODAY.dark.muted, inkOn("dark", firmest, INK_TARGET.text));
   const ink = {
     body: Math.max(INK_TODAY.dark.body, inkOn("dark", firmest, INK_TARGET.text)),
-    muted: Math.max(INK_TODAY.dark.muted, inkOn("dark", firmest, INK_TARGET.text)),
+    muted,
+    // Subtle: the darkest ink that keeps the text target on the lightest hover fill, never lighter than muted.
+    subtle: Math.min(muted, Math.max(SUBTLE_TODAY.dark, inkOn("dark", top[1], INK_TARGET.text))),
+    disabled: raised + DISABLED_SHARE.dark * (muted - raised),
     edge: edgeInk, edgeHover: Math.min(1, edgeInk + INK_TODAY.dark.edgeHover),
   };
   const toWhite = (L: number, { from, perL }: { from: number; perL: number }) => Math.min(1, Math.max(0, (L - from) * perL));
-  const tintLift = toWhite(Math.max(raised, card, tile, well), TINT_LIFT.layer), tintLiftFill = toWhite(top[1], TINT_LIFT.fill);
-  return { page, raised, recessed, card, tile, frame, frameRaised, well, stripe: raised + 0.5 * s, step: s, fill, edge, ink, vividDarken: 0, tonalDarken: 0, tintLift, tintLiftFill };
+  const tintLift = toWhite(Math.max(raised, card, tile, well, float), TINT_LIFT.layer), tintLiftFill = toWhite(top[1], TINT_LIFT.fill);
+  return { page, raised, recessed, card, tile, frame, frameRaised, well, float, plate: Math.max(card + PLATE_STEP.dark, DARK_FILL_FLOOR), stripe: raised + 0.5 * s, step: s, fill, edge, ink, vividDarken: 0, tonalDarken: 0, tintLift, tintLiftFill };
 }
 
 /** The Neutral setting's tint: the hue and chroma of its own ramp, at 50 in light and 900 in dark. */
@@ -463,7 +522,8 @@ export const LAYER_COLOR_TOKENS = [
   "bg-frame", "bg-frame-raised", "bg-component-frame", "bg-component-frame-hover", "bg-component-frame-active",
   "bg-component-frame-raised", "bg-component-frame-raised-hover", "bg-component-frame-raised-active",
   "bg-well", "bg-component-well", "bg-component-well-hover", "bg-component-well-active",
-  "fg-default", "fg-muted", "fg-placeholder",
+  "bg-float", "bg-component-float", "bg-component-float-hover", "bg-component-float-active", "bg-plate",
+  "fg-default", "fg-muted", "fg-subtle", "fg-placeholder", "fg-disabled",
   "border-decorative", "border-card", "border-float", "border-faint", "border-divider", "border-subtle", "border", "border-hover",
   "stroke-control", "stroke-control-hover", "fill-track", "fill-track-hover",
 ] as const;
@@ -481,10 +541,11 @@ export function layerTokens(theme: "light" | "dark", sel: LayerSelection, cast: 
     "bg-component-frame": hx(m.fill.frame[0]), "bg-component-frame-hover": hx(m.fill.frame[1]), "bg-component-frame-active": hx(m.fill.frame[2]),
     "bg-component-frame-raised": hx(m.fill.frameRaised[0]), "bg-component-frame-raised-hover": hx(m.fill.frameRaised[1]), "bg-component-frame-raised-active": hx(m.fill.frameRaised[2]),
     "bg-well": hx(m.well), "bg-component-well": hx(m.fill.well[0]), "bg-component-well-hover": hx(m.fill.well[1]), "bg-component-well-active": hx(m.fill.well[2]),
+    "bg-plate": hx(m.plate), "bg-float": hx(m.float), "bg-component-float": hx(m.fill.float[0]), "bg-component-float-hover": hx(m.fill.float[1]), "bg-component-float-active": hx(m.fill.float[2]),
     "bg-component": hx(m.fill.page[0]), "bg-component-hover": hx(m.fill.page[1]), "bg-component-active": hx(m.fill.page[2]),
     "bg-component-raised": hx(m.fill.raised[0]), "bg-component-raised-hover": hx(m.fill.raised[1]), "bg-component-raised-active": hx(m.fill.raised[2]),
     "bg-component-recessed": hx(m.fill.recessed[0]), "bg-component-recessed-hover": hx(m.fill.recessed[1]), "bg-component-recessed-active": hx(m.fill.recessed[2]),
-    "fg-default": ink(m.ink.body), "fg-muted": ink(m.ink.muted), "fg-placeholder": ink(m.ink.muted),
+    "fg-default": ink(m.ink.body), "fg-muted": ink(m.ink.muted), "fg-subtle": ink(m.ink.subtle), "fg-placeholder": ink(m.ink.subtle), "fg-disabled": ink(m.ink.disabled),
     "border-decorative": hx(m.edge.decorative), "border-card": hx(m.edge.card), "border-float": hx(m.edge.float), "border-faint": hx(m.edge.faint),
     "border-divider": hx(m.edge.faint), "border-subtle": hx(m.edge.subtle), "border": hx(m.edge.border), "border-hover": hx(m.edge.hover),
     "stroke-control": hx(m.ink.edge), "stroke-control-hover": hx(m.ink.edgeHover),
@@ -536,6 +597,12 @@ export function layerLightnessCss(): Record<string, string> {
     // A well: the recessed tone, never closer to the page than the page's own control fill (rest).
     "layer-light-well": `min(${v("layer-light-recessed")}, calc(${gl} - ${v("layer-light-step")}))`,
     "layer-dark-well": `max(${v("layer-dark-recessed")}, ${gd} + ${v("layer-dark-step")}, ${num(DARK_FILL_FLOOR)})`,
+    // The floating ground (FLOAT_LIFT): the raised layer in light; in dark a step above the lightest layer under it.
+    "layer-light-float": v("layer-light-raised"),
+    "layer-dark-float": `calc(max(${v("layer-dark-raised")}, ${v("layer-dark-card")}, ${num(DARK_LAYER_FLOOR)}) + ${num(FLOAT_LIFT.dark)})`,
+    // A media placeholder's plate (PLATE_STEP): a step under the card in light, over it in dark from the fill floor.
+    "layer-light-plate": `calc(${v("layer-light-card")} - ${num(PLATE_STEP.light)})`,
+    "layer-dark-plate": `max(calc(${v("layer-dark-card")} + ${num(PLATE_STEP.dark)}), ${num(DARK_FILL_FLOOR)})`,
   };
   // An Asset card's frame: the page, or the recessed tone where the card is the page's and the recessed tone is farther
   // from it (frameFor): `same` is 1 under FRAME_SAME and `farther` 1 past the page's distance, each over FRAME_EDGE.
@@ -546,7 +613,7 @@ export function layerLightnessCss(): Record<string, string> {
     const farther = `clamp(0, (${fromRecessed} - ${fromPage}) / ${num(FRAME_EDGE)}, 1)`;
     out[`layer-${theme}-${name}`] = `calc(${page} + (${recessed} - ${page}) * ${same} * ${farther})`;
   }
-  for (const ground of ["page", "raised", "recessed", "card", "tile", "frame", "frame-raised", "well"]) lm.forEach((m, i) => {
+  for (const ground of ["page", "raised", "recessed", "card", "tile", "frame", "frame-raised", "well", "float"]) lm.forEach((m, i) => {
     out[`layer-light-${ground}-fill-${i}`] = lf(v(`layer-light-${ground}`), m);
     out[`layer-dark-${ground}-fill-${i}`] = df(v(`layer-dark-${ground}`), dm[i]!);
   });
@@ -560,23 +627,28 @@ export function layerLightnessCss(): Record<string, string> {
   const inkDark = (bg: string, ratio: number, today: number) => `max(${num(today)}, ${root3(`min(1, ${num(ratio)} * (${cube(bg)} + 0.05) - 0.05)`)})`;
   // The deepest ground text sits on in light (recessed, or a darker card), the lightest in dark (raised, or a lighter card).
   const deep = (i: number) => `min(${v(`layer-light-recessed-fill-${i}`)}, ${v(`layer-light-card-fill-${i}`)}, ${v(`layer-light-tile-fill-${i}`)}, ${v(`layer-light-well-fill-${i}`)})`;
-  const top = (i: number) => `max(${v(`layer-dark-raised-fill-${i}`)}, ${v(`layer-dark-card-fill-${i}`)}, ${v(`layer-dark-tile-fill-${i}`)}, ${v(`layer-dark-well-fill-${i}`)})`;
+  const top = (i: number) => `max(${v(`layer-dark-raised-fill-${i}`)}, ${v(`layer-dark-card-fill-${i}`)}, ${v(`layer-dark-tile-fill-${i}`)}, ${v(`layer-dark-well-fill-${i}`)}, ${v(`layer-dark-float-fill-${i}`)})`;
   // Its selected fill pressed by PRESS_ROOM, where text is solved.
   const firmestLight = `calc(${deep(2)} - ${num(PRESS_ROOM.light)})`, firmestDark = `calc(${top(2)} + ${num(PRESS_ROOM.dark)})`;
   const deepest = `min(${v("layer-light-recessed")}, ${v("layer-light-card")}, ${v("layer-light-tile")}, ${v("layer-light-well")})`, markGround = `min(${v("layer-light-page")}, ${v("layer-light-card")})`;
   Object.assign(out, {
     "layer-light-body": inkLight(firmestLight, INK_TARGET.text, INK_TODAY.light.body),
     "layer-light-muted": `min(${inkLight(firmestLight, INK_TARGET.text, INK_TODAY.light.muted)}, ${inkLight(`calc(${num(MARK_SHADE)} * ${deepest})`, INK_TARGET.text, INK_TODAY.light.muted)}, ${inkLightCss(`pow(pow(calc((calc(1.055 * pow(pow(${markGround}, 3), ${num(1 / 2.4)}) - 0.055) * ${num(MARK_HOVER_KEEP)} + 0.055) / 1.055), 2.4), ${num(1 / 3)})`, `calc(4.5 + min(${num(INK_TARGET.text - 4.5)}, calc((1 - ${markGround}) * ${MARK_HOVER_RAMP})))`, INK_TODAY.light.muted)})`,
+    // Subtle (SUBTLE_TODAY): on the deepest hover fill at the most, never darker than muted; disabled (DISABLED_SHARE).
+    "layer-light-subtle": `max(${v("layer-light-muted")}, ${inkLight(deep(1), INK_TARGET.text, SUBTLE_TODAY.light)})`,
+    "layer-light-disabled": `calc(${gl} + ${num(DISABLED_SHARE.light)} * (${v("layer-light-muted")} - ${gl}))`,
     "layer-light-edge": inkLight(deep(0), INK_TARGET.edge, INK_TODAY.light.edge),
     "layer-dark-body": inkDark(firmestDark, INK_TARGET.text, INK_TODAY.dark.body),
     "layer-dark-muted": inkDark(firmestDark, INK_TARGET.text, INK_TODAY.dark.muted),
+    "layer-dark-subtle": `min(${v("layer-dark-muted")}, ${inkDark(top(1), INK_TARGET.text, SUBTLE_TODAY.dark)})`,
+    "layer-dark-disabled": `calc(${v("layer-dark-raised")} + ${num(DISABLED_SHARE.dark)} * (${v("layer-dark-muted")} - ${v("layer-dark-raised")}))`,
     "layer-dark-edge": inkDark(top(0), INK_TARGET.edge, INK_TODAY.dark.edge),
     "layer-light-vivid-darken": `calc(1 - min(1, ${root3(`max(0, (${cube(tintedVivid)} + 0.05) / ${num(INK_TARGET.text)} - 0.05) / ${num(VIVID_Y)}`)}))`,
     "layer-light-tonal-darken": `calc(1 - min(1, ${root3(`max(0, (${cube(tintedTonal)} + 0.05) / ${num(INK_TARGET.text)} - 0.05) / ${num(TONAL_Y)}`)}))`,
     // The status and label tones' darken, for the Tone contrast floor's target and bound (axes/tone-floor.ts); the
     // tonal one's at 4.5 and wherever Contrast is raised.
     "layer-light-floor-darken": `calc(1 - min(1, ${root3(`max(0, (${cube(tintedTonal)} + 0.05) / ${floorAt("target", INK_TARGET.text)} - 0.05) / ${floorAt("y", TONAL_Y)}`)}))`,
-    "layer-dark-tint-lift": `clamp(0, calc((max(${v("layer-dark-raised")}, ${v("layer-dark-card")}, ${v("layer-dark-tile")}, ${v("layer-dark-well")}) - ${num(TINT_LIFT.layer.from)}) * ${num(TINT_LIFT.layer.perL)}), 1)`,
+    "layer-dark-tint-lift": `clamp(0, calc((max(${v("layer-dark-raised")}, ${v("layer-dark-card")}, ${v("layer-dark-tile")}, ${v("layer-dark-well")}, ${v("layer-dark-float")}) - ${num(TINT_LIFT.layer.from)}) * ${num(TINT_LIFT.layer.perL)}), 1)`,
     "layer-dark-tint-lift-fill": `clamp(0, calc((${top(1)} - ${num(TINT_LIFT.fill.from)}) * ${num(TINT_LIFT.fill.perL)}), 1)`,
   });
   return out;
@@ -734,9 +806,14 @@ export function layerCss(): Record<string, string> {
     [`${P}bg-frame`]: both("frame"),
     [`${P}bg-frame-raised`]: both("frame-raised"),
     [`${P}bg-well`]: both("well"),
+    [`${P}bg-float`]: both("float"),
+    [`${P}bg-plate`]: both("plate"),
     [`${P}fg-default`]: inkColor(L("light", "body"), L("dark", "body")),
     [`${P}fg-muted`]: inkColor(L("light", "muted"), L("dark", "muted")),
-    [`${P}fg-placeholder`]: inkColor(L("light", "muted"), L("dark", "muted")),
+    [`${P}fg-subtle`]: inkColor(L("light", "subtle"), L("dark", "subtle")),
+    // A placeholder is meta: the subtle ink (plan A3.2).
+    [`${P}fg-placeholder`]: inkColor(L("light", "subtle"), L("dark", "subtle")),
+    [`${P}fg-disabled`]: inkColor(L("light", "disabled"), L("dark", "disabled")),
     [`${P}stroke-control`]: both("edge"),
     [`${P}stroke-control-hover`]: color(`calc(${L("light", "edge")} - ${num(-INK_TODAY.light.edgeHover)})`, `min(1, calc(${L("dark", "edge")} + ${num(INK_TODAY.dark.edgeHover)}))`),
     // Each edge on the page, then on the ground under it (GROUND_EDGES).
@@ -765,12 +842,12 @@ export function layerCss(): Record<string, string> {
   const suffix = ["", "-hover", "-active"];
   // `bg-component` is the page's fill until a surface points it at its own ground; `-page` keeps the page's, so a region
   // painted the page tone inside a raised one (a Titlebar or a flush Panel in a card or a gallery tile) can point back.
-  for (const [ground, prefix] of [["page", "bg-component"], ["page", "bg-component-page"], ["raised", "bg-component-raised"], ["recessed", "bg-component-recessed"], ["card", "bg-component-card"], ["tile", "bg-component-tile"], ["frame", "bg-component-frame"], ["frame-raised", "bg-component-frame-raised"], ["well", "bg-component-well"]] as const)
+  for (const [ground, prefix] of [["page", "bg-component"], ["page", "bg-component-page"], ["raised", "bg-component-raised"], ["recessed", "bg-component-recessed"], ["card", "bg-component-card"], ["tile", "bg-component-tile"], ["frame", "bg-component-frame"], ["frame-raised", "bg-component-frame-raised"], ["well", "bg-component-well"], ["float", "bg-component-float"]] as const)
     suffix.forEach((s, i) => { out[`${P}${prefix}${s}`] = both(`${ground}-fill-${i}`); });
   // The Selection role on a raised or recessed ground, as base.ts writes it on the page: the ground's pressed fill (or
   // hovered, for a band) mixed toward the accent when Selection is Accent. A surface points the role at these.
   const mix = (fill: string, accent: string) => `color-mix(in srgb, var(${P}${fill}), var(${P}${accent}) calc(var(${P}selection-accent) * 100%))`;
-  for (const ground of ["page", "raised", "recessed", "card", "tile", "frame", "frame-raised", "well"] as const) Object.assign(out, {
+  for (const ground of ["page", "raised", "recessed", "card", "tile", "frame", "frame-raised", "well", "float"] as const) Object.assign(out, {
     [`${P}selection-surface-${ground}`]: mix(`bg-component-${ground}-active`, "accent-surface"),
     [`${P}selection-surface-${ground}-hover`]: mix(`bg-component-${ground}-active`, "accent-surface-hover"),
     [`${P}selection-band-${ground}`]: mix(`bg-component-${ground}-hover`, "accent-surface"),

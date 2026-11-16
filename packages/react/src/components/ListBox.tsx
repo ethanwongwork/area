@@ -13,10 +13,11 @@
 import { createContext, forwardRef, useCallback, useContext, useId, useLayoutEffect, useMemo, useRef, useState } from "react";
 import type { FocusEvent, HTMLAttributes, KeyboardEvent, MouseEvent, ReactNode, SyntheticEvent } from "react";
 import { cx } from "../variants.ts";
+import type { MANIFESTS, VariantProps } from "../variants.ts";
 import { Glyph } from "./Glyph.tsx";
 import { TYPEAHEAD_RESET } from "./Overlays.tsx";
 
-type Layout = "list" | "grid";
+type Layout = NonNullable<VariantProps<typeof MANIFESTS.listBox>["layout"]>;
 
 interface ListBoxContext {
   id: string;
@@ -44,22 +45,26 @@ export interface ListBoxProps extends Omit<HTMLAttributes<HTMLDivElement>, "defa
   layout?: Layout;
   /** The selected option's value (controlled). */
   value?: string | null;
+  /** The option chosen at first, uncontrolled; none by default. */
   defaultValue?: string | null;
-  /** The chosen value and the click, key or focus that chose it (Governance § 4). */
+  /** Called with the chosen value and the click, key or focus that chose it. */
   onValueChange?: (value: string, event: SyntheticEvent) => void;
   /** Moving with the keyboard also selects, so a preview beside the set follows the keys (one choice only). */
   selectionFollowsFocus?: boolean;
   /**
-   * Chooses any number of options (components audit V7): `aria-multiselectable`, and the choice is `values` /
-   * `defaultValues` / `onValuesChange`, as Custom select's `multiple` (`value` and `onValueChange` are ignored).
+   * Chooses any number of options (`aria-multiselectable`), and the choice is `values` / `defaultValues` /
+   * `onValuesChange`, as Custom select's `multiple` (`value` and `onValueChange` are ignored).
    */
   multiple?: boolean;
   /** The chosen options' values, in the set's order (controlled; with `multiple`). */
   values?: readonly string[];
+  /** With `multiple`, the options chosen at first, uncontrolled. */
   defaultValues?: readonly string[];
   /** The new set, in the set's order, and the click or key that changed it. */
   onValuesChange?: (values: string[], event: SyntheticEvent) => void;
+  /** Disables every option. */
   disabled?: boolean;
+  /** The options: List box items, in sections or not. */
   children?: ReactNode;
 }
 
@@ -236,7 +241,9 @@ export interface ListBoxItemProps extends Omit<HTMLAttributes<HTMLDivElement>, "
   value: string;
   /** The text typeahead matches, when the content has none of its own (an icon, a swatch). */
   textValue?: string;
+  /** The option can't be chosen; the keys skip it. */
   disabled?: boolean;
+  /** What the option shows: its label, an icon, a swatch. */
   children?: ReactNode;
 }
 
@@ -289,6 +296,7 @@ export const ListBoxItem = /* @__PURE__ */ forwardRef<HTMLDivElement, ListBoxIte
 export interface ListBoxSectionProps extends Omit<HTMLAttributes<HTMLDivElement>, "title"> {
   /** The group's heading, which names it. */
   title: ReactNode;
+  /** The section's options. */
   children?: ReactNode;
 }
 

@@ -23,7 +23,9 @@ named end in brackets ("0 (Flat)", "100 (White)", "8 (Smooth)"); no label carrie
 
 **The defaults** were chosen by the owner on the defaults review (2026-10-25, docs/research/defaults-2026-10-25/), one
 group at a time on real components in light and dark. Four moved: Type 13 (was 14), Corner 10 (was 8), Layer contrast
-0, Flat, in both modes (was 4), and Selection Neutral (was Accent); every other setting kept its default. The app's own
+0, Flat, in both modes (was 4), and Selection Neutral (was Accent); every other setting kept its default. Since
+2026-11-11 Layer contrast is 50 in light again and stays 0 in dark (owner, after four real products' windows were rebuilt
+from Area and read as one sheet at 0: "Yes, 50 in light"; docs/research/product-recreations-2026-11-10). The app's own
 UI is drawn in the defaults, cards and Canvas included, and the Inspector's settings reach only the specimens inside
 them ([Product UI](PRODUCT_UI.md), rule 18).
 
@@ -81,7 +83,7 @@ in the mode shown (4 in light, 15 in dark).
 | `tint-light`, `tint-dark` | `auto` (default: Neutral's strength), `0` (None) … `100`, every whole number, 100 is OKLCH chroma 0.08 (0 to 16 in steps of 0.005 until 2026-10-26; to 0.08 since 2026-10-23, for a butter-yellow page) | How strongly the grays take the hue, per mode. A step past what sRGB can show at a hue and lightness is held at that room (`tintRoom`, two slopes under the gamut), not clipped, so steps past it draw the same colour; clipping moved luminance and hue (a blue tint at 8 on a 97 page painted cyan). Every hue at every strength clears the Layers gate (`layers.test.ts`, "every tint is usable"; every page a pick can paint, `colours.test.ts`) |
 | `ink-tint` | `0` (None) … `100` (Full), every whole number, `50` (default; `0` … `4` in quarters until 2026-10-26) | How much of the tint body and muted text take. Text also moves 0.25 × the strength away from its ground, so it keeps 4.5:1 on every hue (`INK_MARGIN`, docs/research/custom-neutral-2026-10-22/) |
 | `card-tone-light`, `card-tone-dark` | `auto` (default: each container's own tone, a Card raised, an Asset card recessed), `-100` (darker) … `0` (the page) … `+100` (lighter), every whole number (−4 to +4 in half steps until 2026-10-26); 100 is 0.048 L in light, 0.12 in dark | Cards and asset cards against the page, per mode; their controls step from it and text is solved against the darkest (light) or lightest (dark) card, so every position reads (`layers.test.ts`, "every card tone is usable", "every position is usable"). Menus, popovers and dialogs stay raised. An Asset card's inner frame stays the page tone, and takes the recessed tone where its card is within 0.005 L of the page (0, clamped at white or black, or a position that small) and the recessed tone is farther from it, so it reads apart as far as the layers allow |
-| `layers-light`, `layers-dark` | `0` (Flat, default since 2026-10-25) … `100`, every whole number (five steps, 0 to 8, from 2026-10-22 to 26; 50 is the old 4) | How far raised layers (cards, menus) and recessed ones (sidebars, wells) sit from the page, and control fills from their ground |
+| `layers-light`, `layers-dark` | `0` (Flat) … `100`, every whole number; default `50` in light (since 2026-11-11; it was 0 from 2026-10-25) and `0` in dark (five steps, 0 to 8, from 2026-10-22 to 26; 50 is the old 4) | How far raised layers (cards, menus) and recessed ones (sidebars, wells) sit from the page, and control fills from their ground |
 
 The action and selection settings combine:
 
@@ -110,8 +112,9 @@ outside both roles.
 | Setting | Values (default) | What it sets |
 |---|---|---|
 | `type` | `12` … `16`, `13` (default since 2026-10-25; was 14) | The base UI text size (`text-base`). Every type role follows, Cursor's ramp at 13 (2026-11-02): small text 2 under (never under 10), secondary text (`text-sm`) 1 under, reading text (`text-lg`) 1 over on its prose line, titles 16 / 18 / 20 / 26 at 13 in proportion. Also the icon stroke, the icon slot (16, or 20 from type 15, where a default-size icon's line takes the size curve's ratio `type-icon-line`, 0.8846: 1.33px at 15, 1.42 at 16), the check box and toggle size, and which densities are allowed (Compact up to 14, Comfortable from 13). |
+| `regular-weight` | `400` (default) … `470` in steps of 10, one for both modes | The `wght` every regular text role draws at (`weight-regular`): running text, descriptions, field text and labels, rows, menus. Strong (500), heading (600), the icon line, type size and density never move. The body and every scope that carries the attribute restate `font-weight` from it, so a canvas set to 430 draws 430 below a 400 page. The interface face is variable (wght 100 to 900), so each step draws as itself; 470 keeps regular 30 under strong. Weight moves a glyph's advance, never its line, so control heights and row heights hold and only a single line widens by its text. A face with no weight axis draws its regular file if it declares it over the range (`font-weight: 400 470`); one that has a Medium file but does not would draw Medium from 401, so a static face must. Inspector › Size › Regular weight; plan A9.6, a trial the owner set on 2026-11-13 to compare 430 to 450 |
 | `density` | `28` (Compact), `32` (default), `36` (Comfortable) | The room around text, named by the medium Button's height at type 14. It sets control heights (the text line plus twice the room, never under 24), rows (the text line plus twice the room, never under 5 a side: 28 at type 13 Compact, owner 2026-10-22), gaps, layout steps, surface insets and the regions' spacing (below). |
-| `radius` | `0` (Sharp), `2`, `4`, `6`, `8`, `10` (default since 2026-10-25; was 8), `12`, `14`, `pill` | The medium Button's corner. Every corner derives from it ([Size and shape](DESIGN_SYSTEM.md#size-and-shape)) |
+| `radius` | `0` (Sharp), `2`, `4`, `6`, `8`, `10` (default since 2026-10-25; was 8), `12`, `14`, `pill` | The corner of a 32 control, the medium Button's at type 14; at the default type 13 the medium Button is 30 and draws 8 at Corner 10, and that real medium corner is `radius-step` (plan A2.1). Every corner derives from it: controls and full-width rows (menus' too) by their height, surfaces, resting cards (never rounder than the floating corner) and nested shapes ([Size and shape](DESIGN_SYSTEM.md#size-and-shape)) |
 
 **What density does to a screen** (2026-10-31, `docs/research/region-balance-2026-10-31`). Every spacing role steps
 with the rows and controls, so a level changes a screen's room evenly, never its rows alone (`area-ui-compose` ›
@@ -120,7 +123,12 @@ spacing.md rule 6). At type 13, the app's type:
 | Role | Compact (28) | Default (32) | Comfortable (36) | Token or rule |
 |---|---|---|---|---|
 | Row (Nav, Tree view, Menu) | 28 | 30 | 34 | `ui-row` |
-| Small / medium control | 24 / 26 | 26 / 30 | 30 / 34 | `control-sm`, `control-md` |
+| Small / medium control | 24 / 26 | 26 / 30 | 30 / 34 | `control-sm`, `control-md` (the ladder stays derived, owner 2026-11-11, plan A8.1) |
+| A row's icon to its label (the label column) | 6 (30) | 8 (32) | 10 (34) | `ui-cluster` (plan B2.3) |
+| Independent controls apart (footers, toolbars, page header actions, toasts) | 6 | 8 | 10 | `ui-cluster` (plan A1.2) |
+| A group's items apart (Stack's group, Card sm's blocks) | 8 | 12 | 16 | `gap-row` (whole steps since plan A1.1; was 10 at Default) |
+| Sections apart (Stack's section) | 16 | 24 | 32 | `gap-section` (plan A1.4) |
+| The page's edge to its sections | 24 | 32 | 40 | `inset-page` (plan A1.4; the feed's margin below) |
 | Region inset (Panel md: a Sidebar's, an Inspector's edge to its text) | 14 | 14 | 18 | `max(14, inset-surface-md)`; 16 / 20 at type 14 |
 | Row plates from the region's edge | 8 | 8 | 12 | the region inset less Panel's row pad, 6 (Cursor's) |
 | Table row (md, one line, in the feed) | 35 | 43 | 51 | the prose line + the frame inset less its half-leading, twice |
@@ -130,7 +138,8 @@ spacing.md rule 6). At type 13, the app's type:
 | Inside every feed frame (tiles, cards, tables, rows) | 12 | 16 | 20 | `16 + 4 × ui-level` |
 | Heading to its block | 12 | 16 | 20 | `16 + 4 × ui-level` |
 | Sections apart | 40 | 48 | 56 | `48 + 8 × ui-level` |
-| Header (each region's) | 38 | 40 | 44 | the small control, 7 above and below |
+| Header (each region's): the region bar | 38 | 40 | 44 | the small control, 7 above and below (inset.css, plan B4.1) |
+| Tool bar (Panel md, Titlebar md, the palette's search) | 38 | 46 | 54 | the medium control, `ui-cluster` above and below, plus a drawn rule |
 
 Claude Code steps the same way between its two densities (pads 12 → 16, section gaps 32 → 40, rows 26 → 32); Cursor's
 Agents window is one density, near Area's Compact (text 14 from the edge, rows 28). The region inset holds 14 at
@@ -140,11 +149,17 @@ references keep them 8 away.
 - `data-area-ui` is shorthand, not an axis: `compact` is type 12 with density 28,
   `default` is type 14 with 32. An explicit `type` or `density` on the same element wins.
 - `ui-dense` is the spacing step that each density level keeps against the type size: 1 at
-  Compact 12, 0 at Default 14, negative above, in halves. Component insets are written against it.
-- `ui-gap-step` is the same curve in whole steps, for gaps on the 2px ladder (`ui-stack`, `ui-cluster`,
-  `gap-sm`, `gap-md`, `gap-xl`), so a gap is always 2, 4, 6, 8 or 10 and never lands between them (owner,
-  2026-11-07, system gaps L3: Card's list items were 7 apart at type 13 Default; now 8). Insets keep the half
-  step (14 at type 13).
+  Compact 12 (and Compact 13), 0.5 at the default type 13, 0 at Default 14, negative above, in halves. Component
+  insets (an edge to its content) are written against it, and only insets.
+- `ui-gap-step` is the same curve in whole steps, and every gap reads it (`ui-stack`, `ui-cluster`, `gap-sm`,
+  `gap-md`, `gap-xl`, `gap-row`, `gap-section`, and a family's `N − 4 × ui-gap-step`), so a gap is always on the
+  2px ladder and never lands between its rungs (owner, 2026-11-07, system gaps L3: Card's list items were 7 apart at
+  type 13 Default; plan A1.1, 2026-11-11, carried it to `gap-row`, 10 → 12, and the families' own gaps: Card's section
+  14 → 16, Tabs 18 → 20, Stack's section 20 → 24). Insets keep the half step (14 at type 13). `cohesion.test.mjs`
+  fails a gap that reads `ui-dense`.
+- The height ladder stays derived and the default density 32 (owner, 2026-11-11, plan A8.1: by its ratio to text the
+  derived ladder already sits inside the measured products, and snapping it to 4px would move the app's medium
+  control 26 → 28). Rows and composites read the ladder too (plan A8.2).
 - A value a token already holds is read from the token, never written out again: `gap-row`, `ui-cluster` and
   `ui-stack` for gaps, `inset-surface-sm` / `-md` for surface insets, `radius-control-*` for a corner on a
   control height (`cohesion.test.mjs`, "named derivations").
@@ -166,7 +181,7 @@ headings, **Stroke** and **Shadow**, and the states under **States**:
 |---|---|---|---|
 | `surface` | Stroke › Width | `0` (Flat), `hairline`, `0.5`, `1` (default), `1.5`, `2` px | The frame of cards, panels and floating surfaces (`frame-width`, read as `border-width`). Hairline is one device pixel (`--area-device-pixel`: 1px at 1x, 0.5px at 2x, a third at 3x; owner 2026-10-31, after Claude Code's ring hairline) |
 | `stroke` | Stroke › Edge contrast | `0` (None) … `8` in half steps (since 2026-10-22), `4` (default) | How dark every stroke is, its distance from its ground; a style, where Contrast is the accessibility layer |
-| `stroke-cards` … `stroke-media` | Stroke › Cards, Blocks, Callouts, Floating, Regions, Dividers, Fields, Buttons, Options, Tracks, Tags, Media | `0` (None) … `8` in half steps; defaults 4, 5, 4, 5, 3, 3, 5, 3, 4, 3, 3, 2 (the owner's picks, 2026-10-30) | Each group's stroke: its amount × 2.5% of the text colour over the ground, times Edge contrast / 4; Contrast takes it on to the 3:1 stroke. Members: DESIGN_SYSTEM.md, "Strokes" (axes/stroke-groups.ts) |
+| `stroke-cards` … `stroke-media` | Stroke › Cards, Blocks, Callouts, Floating, Regions, Dividers, Fields, Buttons, Options, Tracks, Tags, Media | `0` (None) … `8` in half steps; defaults 4, 5, 4, 5, 3, 4, 5, 3, 4, 3, 4, 2 (the owner's picks, 2026-10-30; Dividers and Tags 3 → 4, 10%, plan A10.3, 2026-11-11: at 7.5% rules and mark rings vanished on near black) | Each group's stroke: its amount × 2.5% of the text colour over the ground, times Edge contrast / 4; Contrast takes it on to the 3:1 stroke. Members: DESIGN_SYSTEM.md, "Strokes" (axes/stroke-groups.ts) |
 | `shadow-rest` | Shadow › Edge | `0` (None, default) … `8` | `shadow-edge`, a subtle edge round the same surfaces, with the line or instead of it |
 | `elevation` | Shadow › Floating | `0` (Flat) … `8`, `8` (default; `3` until 2026-11-05) | The Menu's shadow strength in percent: tooltip, float and modal roles |
 | `shadow-resting` | Shadow › Resting | `0` … `8`, `3` (default) | Cards, panels and raised thumbs at rest: cards and panels one small contact layer, `0 0.5px 1.5px -0.5px`, 4% at 3 (owner, 2026-10-30; was ChatGPT's sm at 8%); raised thumbs the control role |
@@ -200,7 +215,7 @@ Selected and focus share a colour and differ by placement: the selected edge ins
 |---|---|---|---|
 | `stroke-hover` | States › Hover edge | `0` (None) … `4`, `2` (default) | How far a control's edge darkens under the pointer (`edge-control-hover`), equal steps |
 | `selected-stroke` | States › Selected edge | `1`, `2` (default), `3` px | A selected card's, tile's or choice card's edge, drawn inside (`selected-width`) |
-| `focus-ring` | States › Focus ring | `hug` (default), `gap`, `halo`, `inset`, `bold` | Where the keyboard ring sits: `focus-width`, `focus-offset` (controls), `focus-gap` (containers and text) and the fields' ring, recolour and halo switches |
+| `focus-ring` | States › Focus ring | `hug` (default), `gap`, `halo`, `inset`, `bold` | Where the keyboard ring sits. It writes leaves (`focus-ring-width`, `focus-ring-offset`, `focus-ring-inside-solid`, `focus-gap`) and the fields' ring, recolour and halo switches; `emit/base.ts` derives `focus-width`, `focus-offset` and the solid-fill placement (`focus-solid-offset`, `focus-solid-inside`) from them and Contrast: a ring never sits flush on a solid fill, and at Contrast More every option is 3px off by the gap (plan A6.1, A6.3) |
 | `fill-hover` | States › Hover fill | `25` … `100`, `50` (default; 1 to 4 until 2026-10-26) | The hover plate under rows and ghost controls, opaque and translucent (`bg-component-hover`, `bg-hover`) |
 | `fill-selected` | States › Selected fill | `0` (Same as hover) … `100`, `25` (default; 0 to 4 until 2026-10-26) | How far past hover the selected plate sits (`bg-component-active`, `bg-active`) |
 | `fill-pressed` | States › Pressed fill | `25` … `100`, `100` (default; 1 to 4 until 2026-10-26) | The share of the way from selected to the firmest press: 12% toward the ink in light (ChatGPT's), 14% in dark, stopped where muted text keeps 4.6:1, which is always at least the press room past selected |
@@ -214,15 +229,21 @@ Selected and focus share a colour and differ by placement: the selected edge ins
   and on raised ones in dark from 16 + 8. At the defaults muted text is #646464 (was #666666) and the page's firmest press
   L 0.913 (was 0.925). A rule, not a setting: a press that cannot show is not a viable look.
 - The dark translucent washes (`bg-hover`, `bg-active`, `bg-pressed`, for plates over a ground a component can't know)
-  stop where muted text still reads: hover at 18.3%, selected at 20.3%, pressed at 22% (`DARK_WASH`, emit/base.ts), so
-  selected stays a step past hover and every press shows at every Fill setting (2026-10-24); Hover 3 and 4 share the stop.
+  are white at 4% a Hover step and 6% more a Selected step: 8% hover and 14% selected at the defaults (plan A4, owner
+  2026-11-11; 14% and 19% before, two to three times the desktop references), so the dark plate sits as far off near
+  black as the light 5% sits off white. They stop where muted text still reads: hover at 18.3%, selected at 20.3%,
+  pressed at 22% (`DARK_WASH`, emit/base.ts), so selected stays a step past hover and every press shows at every Fill
+  setting (2026-10-24). Light is unchanged.
+- In dark, floating and modal surfaces paint the floating ground (`bg-float`, plan A7.2): a step (0.036 L) above the
+  lightest layer under them, from L 0.12 at the least, at every Ground and Layer contrast; the page never moves. Light's
+  floating ground is the raised layer.
 - Contrast More still lifts the hover edge to its 3:1 stroke, and a field's ring always draws under it.
 
 **Motion**
 
 | Setting | Values (default) | What it sets |
 |---|---|---|
-| `motion` | `0` (None) … `300` in steps of 30, `210` (default) | The Menu's open in milliseconds. Every duration is a third-multiple of it ([Motion](MOTION.md)) |
+| `motion` | `0` (None) … `300` in steps of 30, `210` (default) | A dialog's open in milliseconds; a menu opens in two thirds of it (140 at 210). Every duration is a third-multiple of it ([Motion](MOTION.md)) |
 | `easing` | `subtle` (default since 2026-10-24), `standard`, `snappy`, `gentle`, `spring` | The shape of every transition (`--area-ease-*`, owned by Easing since 2026-10-19). Subtle's ease-out is `(0.22, 1, 0.36, 1)`, a gentler start than Standard's; Spring overshoots on enters and moves, never on exits ([Motion](MOTION.md)) |
 | `feedback` | `off`, `subtle` (default), `pronounced` | How a control answers the pointer (`--area-feedback-*`, 2026-10-24): hover's and a press's arrival as shares of `duration-fast` (derived `--area-hover-in`, `--area-press-in` in `emit/base.ts`), and the give under a pointer press by size (`feedback-scale-sm`, `feedback-scale`, `feedback-scale-lg`, `feedback-scale-wide`). Reduced motion resolves it to Off ([Motion](MOTION.md)) |
 
@@ -276,6 +297,12 @@ Selected and focus share a colour and differ by placement: the selected edge ins
 - **Grounds survive a scope.** A setting scope inside a region (a sidebar, a card, a menu, a `data-area-ground`) keeps
   that region's control fills: each ground re-points them on the setting scopes inside it, the nearest ground winning
   (`styles/layers.css`, 2026-10-23).
+- **A chosen row is an ink scope** (plan B7.13, `styles/selection.css`). Under a selected or current row (Menu, List
+  box, Nav, Tree view, Table, each by its own state attribute) or an element marked `data-area-selected`, `fg-quiet`
+  points at the row's `fg-default`, so a ghost action in the row reads at full strength with no rule of its own. It
+  moves no setting and no ground: the row is never a ground, so nothing under it re-emits.
+- **Selected words on a ground with its own ink.** `::selection` reads `var(--area-selection-ink, fg-default)`; an
+  inverse surface sets `--area-selection-ink` to its words' ink (plan B7.4).
 - **Tokens, not layout.** A scope selects tokens, not layout or component behaviour. Custom
   HTML must consume the right foreground, background and type roles itself.
 - **Text restarts at a Type scope.** An element below the page root that carries `data-area-type` sets its text to

@@ -1,0 +1,37 @@
+/* ---------------------------------------------------------------------------
+ * Product chat (content/examples/product-chat.tsx): a conversation app's main window, 1440 × 900. App classes only
+ * (product UI rule 13): these lay the regions out; every control, surface, text style and colour is an Area component
+ * or token. A literal length is a region's size, marked as measured or as a pick.
+ * ------------------------------------------------------------------------- */
+.px-chat { display: grid; grid-template-columns: 260px minmax(0, 1fr); inline-size: 1440px; min-block-size: 900px; block-size: 900px; overflow: hidden; background: var(--area-bg-page); color: var(--area-fg-default); font-family: var(--area-font-sans); font-size: var(--area-text-lg-size); line-height: var(--area-text-lg-leading); } /* pick: 260 sidebar, inside the measured 240–340 (chatgpt-desktop.md, Nav panel); 1440 × 900 is the brief's window */
+
+/* Sidebar: Panel's public width hook takes the column; groups 16 apart (measured: chatgpt-desktop.md, sidebar groups gap-4). */
+.px-chat__side { --area-panel-inline-size: 100%; min-block-size: 0; block-size: 100%; }
+.px-chat__side-groups { display: grid; gap: var(--area-space-16); }
+.px-chat__person { display: flex; align-items: center; gap: var(--area-space-8); padding-inline: var(--area-ui-row-inset); }
+.px-chat__person-text { display: grid; flex: 1 1 0; min-inline-size: 0; }
+.px-chat__person-name { font-size: var(--area-text-base-size); line-height: var(--area-text-base-leading); }
+.px-chat__person-plan { color: var(--area-fg-muted); font-size: var(--area-text-sm-size); line-height: var(--area-text-sm-leading); }
+
+/* Main: bar, thread, dock. The bar is 52 (measured: chatgpt-desktop.md, Main toolbar, the web build), 8 in at each end. */
+.px-chat__main { position: relative; display: grid; grid-template-rows: 52px minmax(0, 1fr) auto; min-inline-size: 0; min-block-size: 0; } /* measured: chatgpt-desktop.md Headers, web toolbar 52 */
+.px-chat__bar { display: flex; align-items: center; gap: var(--area-space-4); padding-inline: var(--area-space-8); }
+.px-chat__grow { flex: 1 1 0; min-inline-size: 0; }
+
+/* Thread: one scroller; a 768 column with 16 a side; it starts 32 under the bar and ends 32 above the dock; turns 16 apart
+   (measured: chatgpt-desktop.md, Thread width, Top and bottom, Turn gaps). */
+/* The thread scrolls in its own row: nothing runs under the dock. */
+.px-chat__thread { min-block-size: 0; overflow: hidden; }
+.px-chat__column { box-sizing: content-box; inline-size: 100%; max-inline-size: 768px; margin-inline: auto; padding-inline: var(--area-space-16); --area-composer-inline-size: 100%; } /* measured: --thread-content-max-width 768 + 16 a side */
+.px-chat__turns { display: grid; gap: var(--area-space-16); padding-block: var(--area-space-32); }
+.px-chat__turns > * { min-inline-size: 0; }
+/* A sent file sits over its message at the bubble's end, 4 apart (measured: captures/message user-message, row-gap 4). */
+.px-chat__sent { display: grid; justify-items: end; gap: var(--area-space-4); }
+/* A reply's heading: Message spaces headings but gives them no type role, so the small title role is set here from tokens. */
+.px-chat__heading { font-size: var(--area-title-sm-size); line-height: var(--area-title-sm-leading); letter-spacing: var(--area-title-sm-tracking); font-weight: var(--area-weight-heading); }
+
+/* Dock: the composer at the column's width, the note under it; the web build's composer sits in the flow under the thread. */
+.px-chat__dock { padding-block: 0 var(--area-space-8); }
+
+/* The sidebar is the window's chrome: it paints the subtle ground (Panel data-area-chrome), so Layer contrast sets it apart from the page. */
+.px-chat__side { --area-chrome-fill: var(--area-bg-subtle); }

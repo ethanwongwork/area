@@ -9,7 +9,7 @@
  * ------------------------------------------------------------------------- */
 @layer area.components {
   .area-editable-text {
-    --_pad-x: var(--area-space-8); /* spec: Figma 8, Notion 8 */
+    --_pad-x: var(--area-space-8); /* spec: 8; an inline field a line tall, its side with its fixed height, at every density */
     --_pad-y: var(--area-space-4); /* spec: Figma, a 16 line in a 24 field */
     display: inline-grid;
     grid-template: auto / minmax(0, auto);
@@ -42,14 +42,16 @@
   /* Activation sets the pointer: Figma's double-click keeps the arrow, Notion's click-to-type shows a text cursor. */
   .area-editable-text--dblclick { --_cursor: default; /* spec: Figma */ }
   .area-editable-text--click, .area-editable-text--focus { --_cursor: text; /* spec: Notion */ }
-  .area-editable-text__preview[data-placeholder] { color: var(--area-fg-muted); }
+  .area-editable-text__preview[data-placeholder] { color: var(--area-input-placeholder); } /* a placeholder reads the placeholder role (plan A3.3) */
   /* Hover paints the shared row plate (owner, review round 8: "not very clear that the text is editable,
      no hover state"), so the text reads as something you can act on; the ink stays. Figma's layer rows and
      file name take a hover plate; Notion's title doesn't, which is why it read as plain text. */
-  .area-editable-text__preview { transition: background-color var(--area-duration-fast) var(--area-ease-out); }
+  .area-editable-text__preview { transition: background-color var(--area-duration-fast) var(--area-ease-effects); }
   @media (hover: hover) {
     .area-editable-text:not([data-editing], [data-disabled]) .area-editable-text__preview:hover { background-color: var(--area-bg-hover); transition-duration: var(--area-hover-in); }
   }
+  /* Held, the translucent pressed plate one step past the hover (plan B7.3). */
+  .area-editable-text:not([data-editing], [data-disabled]) .area-editable-text__preview:active { background-color: var(--area-bg-pressed); transition-duration: var(--area-press-in); }
   .area-editable-text__preview:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-gap); }
   /* While editing the preview keeps the draft's width under the field, so the field grows as you type. */
   .area-editable-text[data-editing] .area-editable-text__preview { visibility: hidden; }
@@ -60,8 +62,10 @@
     inline-size: 0;
     min-inline-size: 100%;
     background: var(--area-selection-surface); /* spec: Figma rgb(242, 249, 255) */
-    outline: var(--area-stroke-width) solid var(--area-field-focus-color); /* spec: Figma 1px rgb(13, 153, 255), inset */
-    outline-offset: calc(var(--area-stroke-width) * -1);
+    /* The field's focus roles (plan A6.2): its ring, drawn inside, never thinner than the 1px edge (Halo draws no ring). */
+    --_ring: max(var(--area-stroke-width), var(--area-field-focus-outline-width));
+    outline: var(--_ring) solid var(--area-field-focus-color);
+    outline-offset: calc(-1 * var(--_ring));
     cursor: text;
   }
 

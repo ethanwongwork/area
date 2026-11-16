@@ -11,18 +11,18 @@ that research; component specs cite this file.
 
 ## Tokens
 
-Durations (the motion axis, `packages/tokens/src/axes/motion.ts`): one number, the Menu's open in
-milliseconds (`duration-base`), `0` (None) to `300` in steps of 30, `210` by default (owner,
-2026-10-14; it replaced the None, Subtle and Expressive presets, and the owner moved the default from
-150 to 210 to match ChatGPT's popover, 220, and Figma's dropdown, 250). Every duration is a third-multiple
-of it; `0` and `prefers-reduced-motion` make every one 0.
+Durations (the motion axis, `packages/tokens/src/axes/motion.ts`): one number, `duration-base` in
+milliseconds, a dialog's open (the Menu's open until 2026-11-11, when anchored surfaces moved to `fast`, plan A5.1),
+`0` (None) to `300` in steps of 30, `210` by default (owner, 2026-10-14; it replaced the None, Subtle and Expressive
+presets). Every duration is a third-multiple of it; `0` and `prefers-reduced-motion` make every one 0.
 
 | Token | Of the number | 150 | 210 (default) | 240 | 300 | Use |
 |---|---|---|---|---|---|---|
-| `--area-duration-instant` | 0 | 0 | 0 | 0 | 0 | hover-in, press, focus, keyboard-driven changes |
-| `--area-duration-fast` | 2/3 | 100 | 140 | 160 | 200 | colour leaving a state; small marks (check, radio dot, chevron); anchored surface exits |
-| `--area-duration-base` | 1 | 150 | 210 | 240 | 300 | anchored surfaces entering; indicators that slide (switch thumb, tabs, segmented); dialog exit |
-| `--area-duration-moderate` | 4/3 | 200 | 280 | 320 | 400 | dialog enter; drawer and accordion exit; scrim |
+| `--area-duration-instant` | 0 | 0 | 0 | 0 | 0 | focus, keyboard-driven changes, a list's moving highlight |
+| `--area-duration-quick` | 1/3 | 50 | 70 | 80 | 100 | colour and shadow leaving a state (`--area-transition`; plan A5.5, 2026-11-11, was `fast`) |
+| `--area-duration-fast` | 2/3 | 100 | 140 | 160 | 200 | small marks (check, radio dot, chevron); anchored surfaces entering and leaving; dialog exit; a press's release |
+| `--area-duration-base` | 1 | 150 | 210 | 240 | 300 | dialog enter; indicators that slide (switch thumb, tabs, segmented); toast exit |
+| `--area-duration-moderate` | 4/3 | 200 | 280 | 320 | 400 | drawer and accordion exit |
 | `--area-duration-slow` | 5/3 | 250 | 350 | 400 | 500 | drawer and toast enter; accordion open |
 
 150 is the old Subtle default. The thirds are the old Subtle's ratios; the old Expressive (150 / 250 / 320 / 400) sat within 10ms
@@ -45,22 +45,29 @@ product's own (`docs/research/motion-2026-10-07/design-systems.md`, `docs/resear
 | Standard | `(0.16, 1, 0.3, 1)` | `(0.65, 0, 0.35, 1)` | `(0.4, 0, 1, 1)` | `(0.32, 0.72, 0, 1)` | ChatGPT, Radix; Figma; Material, Tailwind; Vaul (the default until 2026-10-24) |
 | Snappy | `(0.19, 1, 0.22, 1)` | `(0.6, 0, 0.2, 1)` | `(0.6, 0, 0.8, 0.6)` | `(0.19, 1, 0.22, 1)` | Linear's expo-out; Primer; Atlassian in-practical |
 | Gentle | `(0.33, 1, 0.68, 1)` | `(0.33, 0, 0.67, 1)` | `(0.5, 0, 1, 1)` | `(0.33, 1, 0.68, 1)` | Primer overlay and side sheet; Fluent EasyEase; Spectrum |
-| Spring | `(0.175, 0.885, 0.32, 1.1)` | `(0.175, 0.885, 0.32, 1.275)` | `(0.4, 0, 1, 1)` | `(0.175, 0.885, 0.32, 1.1)` | Geist's swift; Material's switch handle; exits never overshoot |
+| Spring | a spring, `linear()` | `(0.65, 0, 0.35, 1)` | `(0.4, 0, 1, 1)` | the same spring | a damped spring (ratio 0.9, stiffness 700) sampled at 24 steps over its 317ms settle and stretched to each duration; it peaks at 1.0015 (plan A5.4, 2026-11-11; until then cubics past 1, `(0.175, 0.885, 0.32, 1.1)` out and `(…, 1.275)` in-out) |
 
+Two roles sit beside these at every value (plan A5.1, A5.4, 2026-11-11): `ease-effects`, the curve of every colour,
+opacity and shadow, is the value's `ease-out`, and Subtle's out under Spring, so nothing but movement ever passes its
+mark; `ease-exit`, the curve of a surface leaving, is the value's `ease-in`, so an exit accelerates away and never
+lingers on its last frames. `ease-in-out`, `ease-in` and `ease-exit` never overshoot at any value (easing.test.ts).
 `ease-linear` is linear at every value, and the deprecated `ease-spring` keeps its value. Reduced motion makes every
 duration 0, so the curve no longer applies there.
 
 | Token | Value (Subtle) | Use |
 |---|---|---|
-| `--area-ease-out` | `cubic-bezier(0.22, 1, 0.36, 1)` | almost everything: colour, enters, exits of anchored surfaces, marks, a press's give |
+| `--area-ease-out` | `cubic-bezier(0.22, 1, 0.36, 1)` | movement: enters, marks, a press's give and release |
+| `--area-ease-effects` | `cubic-bezier(0.22, 1, 0.36, 1)` | colour, opacity and shadow, everywhere: never overshoots |
+| `--area-ease-exit` | `cubic-bezier(0.4, 0, 1, 1)` | every surface leaving: anchored surfaces, dialogs, the palette, drawers, toasts, scrims |
 | `--area-ease-in-out` | `cubic-bezier(0.65, 0, 0.35, 1)` | something moving across the screen while visible: switch thumb, tabs and segmented indicator, accordion height (Figma, Primer) |
 | `--area-ease-drawer` | `cubic-bezier(0.32, 0.72, 0, 1)` | surfaces sliding from a screen edge, both ways (Vaul) |
 | `--area-ease-in` | `cubic-bezier(0.4, 0, 1, 1)` | rarely: a full-screen surface leaving for good, and a lift fading out |
 | `--area-ease-linear` | `linear` | spinners, progress, shimmer |
 | `--area-ease-spring` | deprecated | never; an overshoot reads as play, not as Area |
 
-`--area-transition` is the shared transition (background, border, colour, box-shadow and `scale` over `duration-fast`
-with `ease-out`): the leave of every state, the release of a press.
+`--area-transition` is the shared transition: background, border, colour and box-shadow over `duration-quick` on
+`ease-effects`, then `scale` over `duration-fast` on `ease-out` (the leave of every state, the release of a press).
+The colours come first, so a family that narrows `transition-property` to colours keeps their clocks by position.
 
 Feedback: one setting, `data-area-feedback` (`axes/feedback.ts`, owner 2026-10-24: "alot of the components dont have
 any visible motion/interaction animation ... implement the subtle package as the default"; bencho.dev the reference).
@@ -86,23 +93,26 @@ Atlassian's composite tokens). Pick the role, then take its clock and curve; nev
 
 | Role | Clock | Curve | Use |
 |---|---|---|---|
-| Hover | `hover-in` in, `fast` out | `ease-out` | a plate, an edge or a reveal answering the pointer |
-| State change | `press-in` / `hover-in` in, `fast` out (`--area-transition`) | `ease-out` | selected, checked, pressed, a colour or a lift |
-| Enter | `base` (anchored), `moderate` (modal), `slow` (from an edge, a toast) | `ease-out`; `ease-drawer` from an edge | a surface arriving: fade (`fade-*`) and the overlay scale, or a slide |
-| Exit | one step faster than its enter: `fast`, `base`, `moderate` | as its enter; `ease-in` only for a full-screen surface leaving for good | a surface leaving |
+| Hover | `hover-in` in, `quick` out | `ease-effects` | a standalone control's plate, edge or reveal answering the pointer; never a list's moving highlight (instant) |
+| State change | `press-in` / `hover-in` in, `quick` out (`--area-transition`) | `ease-effects` (a press's scale `ease-out`) | selected, checked, pressed, a colour or a lift |
+| Enter | `fast` (anchored, the palette), `base` (a dialog), `slow` (from an edge, a toast) | `ease-out`, the fade `ease-effects`; `ease-drawer` from an edge | a surface arriving: fade (`fade-*`) and the overlay scale, or a slide. Opened from a key: no scale, the fade only |
+| Exit | never slower than its enter: `fast` (anchored, the palette, a dialog), `base` (a toast), `moderate` (a drawer) | `ease-exit` | a surface leaving |
 | Move | `base` | `ease-in-out` | something visible travelling or resizing: a thumb, an indicator, a body opening, a panel's width |
 
 The opacity of any role reads the matching `fade-*` token, and its movement (scale, translate, rotate, size) the
 `duration-*` token, so reduced motion can keep the one and drop the other (below). An exit is never slower than its
-enter (`cohesion.test.mjs`).
+enter and always reads `ease-exit`; colour and opacity never read an overshooting curve; a list highlight has no
+transition; a press scales the plate, never the label (`cohesion.test.mjs`; `tests/behaviour/suites/motion.test.mjs`
+measures them in a browser).
 
 ## Recipes
 
 | Interaction | Enter | Leave | Properties | Notes |
 |---|---|---|---|---|
-| Hover plate / colour | `hover-in` ease-out | `fast` ease-out | colours only | `:hover { transition-duration: var(--area-hover-in) }` under `@media (hover: hover)`: ≈91ms at Feedback Subtle, 0 at Off (ChatGPT 0s, Notion 20ms, Linear 0s in / 150 out; bencho 160 in). A highlight the keyboard moves stays instant |
+| Hover plate / colour | `hover-in` ease-effects | `quick` ease-effects | colours only | a standalone control: `:hover { transition-duration: var(--area-hover-in) }` under `@media (hover: hover)`: ≈91ms at Feedback Subtle, 0 at Off; the leave 70 at Speed 210 (plan A5.5, 2026-11-11; it was 140) |
+| List highlight (Menu and every list on its rows: Context menu, List box, Custom select, Combobox, Command palette; the native Select's options; Nav; Tree view) | instant | instant | — | a highlight moving through a list lands and leaves at once, under the pointer and the keys alike, so no plate trails behind the pointer (plan A5.3, 2026-11-11; until then it faded in over `hover-in` and out over `fast`). The row has no transition; its own marks (a check, a chevron, revealed actions) keep theirs |
 | Lift (linked Card, gallery tiles) | `fast` ease-out | `base` ease-in | `box-shadow` to the lift shadow (Elevation's `lift` role, shadow8 at half the float's weight; owner, 2026-10-18: the float shadow read "too drastic") | the edge stays; a press drops the lift at once; Elevation 0 steps the edge instead (owner, 2026-10-18; Notion's linked card fades its shadow in 150 / out 200, `docs/research/card-hover-2026-10-18.md`). A selected gallery tile is one line, its own edge in the selection colour, crossfading on `fast` ease-out both ways and lifting like the rest (owner, 2026-10-18: the 2px stroke read thick and landed at once) |
-| Press | `press-in` ease-out | `fast` ease-out | colours + `scale` to the give | `:active { transition-duration: var(--area-press-in) }`; the give only for a pointer press (Feedback, above) |
+| Press | `press-in` ease-out | `fast` ease-out (a spring under Easing Spring) | colours + `scale` of the plate to the give | `:active { transition-duration: var(--area-press-in) }`; the give only for a pointer press (Feedback, above). The plate gives, the label does not (plan A5.6, owner 2026-11-11): Button and Chip scale their box (its fill, edge and shadow) and hand each part inside the inverse scale on the same clocks, so the label and icons keep their size and pixels; Split button, Button group and Toggle group take it from Button. Until 2026-11-11 the whole control, label included, scaled |
 | Focus ring | instant | instant | outline / box-shadow | rings never fade in; a ring that animates lags the keyboard |
 | Selected / checked colour | `hover-in` | `fast` | colours | same clock as hover; a check made by the keyboard lands at once |
 | Small mark (checkbox tick, radio dot, indeterminate bar) | `fast` ease-out | `fast` | `scale` from 0.6 + `opacity` | no overshoot; marks are drawn 1:1 on the control's own pixel grid, one drawing per size, whole pixels at rest |
@@ -111,15 +121,18 @@ enter (`cohesion.test.mjs`).
 | Tabs / Segmented indicator | `base` ease-in-out | same | `translate` + `inline-size` of one indicator | Segmented slides one plate since 2026-10-24 (`data-plate`, docs/specs/segmented.md); Tabs slide one bar since 2026-10-26 (`data-indicator`, docs/specs/tabs.md), Code block's language tabs too |
 | Slider thumb and fill | `fast` ease-out | same | `--_slider-ratio` (registered), the thumb by `translate` | the thumb and fill are drawn over the native input (owner 2026-10-26), so every change that is not a drag eases: a click on the track, a key step, a controlled change, the settle onto a step. A drag follows the pointer exactly once it moves (`data-dragging`; Apple, Radix, Material 3); a stepped range glides between steps (`glide`). A host whose change is costly applies it in `onValueCommit` (release, key step) or once the pointer rests, never on every step of a drag (the Inspector's bars, 2026-10-25) |
 | Slider press | `press-in` ease-out | `fast` ease-out | `scale` to `1 + (1 − feedback-scale) × 4` (1.12 at Subtle) | the knob is picked up, so it grows rather than gives; the bar lifts its grip; pointer only, 1 at Off |
-| Popover, menu, select list, combobox list, hover card, date panel | `base` ease-out | `fast` ease-out | `opacity` + `scale` from 0.97 | `transform-origin` at the trigger (overlay.ts writes it); `@starting-style` for the enter; exit by `allow-discrete` on `display`/`overlay` |
-| Context menu | `fast` ease-out | `fast` | `opacity` + `scale` from 0.97 | origin at the pointer |
-| Tooltip | `fast` ease-out after the open delay | instant | `opacity` + `scale` 0.97 | open delay 500–700ms; once one tooltip is open, neighbours open at once (skip window ~300ms) |
-| Dialog, command palette, confirm dialog | `moderate` ease-out | `base` ease-out | `opacity` + `scale` 0.97 | scrim `opacity` on `moderate`; no translate |
-| Drawer / sheet | `slow` ease-drawer | `moderate` ease-drawer | `translate` 100% on the edge axis | scrim as Dialog |
+| Popover, menu, select list, combobox list, hover card, date panel, the native Select's picker | `fast` ease-out | `fast` ease-exit | `opacity` + `scale` from 0.97 | `transform-origin` at the trigger (overlay.ts writes it); `@starting-style` for the enter; exit by `allow-discrete` on `display`/`overlay`, held on the fade. Plan A5.1, owner 2026-11-11: 140 / 140 at Speed 210 (was `base` in, 210) |
+| Opened from the keyboard (any of the above, the Command palette) | `fade-fast` | `fade-fast` ease-exit | `opacity` only | at its place and size on the first frame (plan A5.2): overlay.ts writes `data-opened-by="keyboard"` on every popover and dialog that opens while the last input was a key (one document listener; a pointer open removes it), and the overlay rules then rest `--_overlay-scale` at `none`. Never slower than the key |
+| Context menu | `fade-fast` | `fade-fast` ease-exit | `opacity` only | the most frequent open: no scale at all since 2026-11-11 (plan A5.2); origin at the pointer |
+| Tooltip | `fast` ease-out after the open delay | instant | `opacity` + `scale` 0.97 | open delay 500–700ms; once one tooltip is open, neighbours open at once (skip window ~300ms); opened by focus, no scale |
+| Dialog, confirm dialog | `base` ease-out | `fast` ease-exit | `opacity` + `scale` 0.97 | scrim `opacity` on the same clocks; no translate. Was `moderate` / `base` until 2026-11-11 |
+| Command palette | `fast` ease-out | `fast` ease-exit | `opacity` + `scale` 0.97; by its shortcut `opacity` only | the anchored clocks (plan A5.2); its scrim on `fade-fast` |
+| Drawer / sheet | `slow` ease-drawer | `moderate` ease-exit | `translate` 100% on the edge axis | scrim as Dialog's, on the drawer's clocks |
 | Panel width (a resizable Panel's width set by the app) | `moderate` ease-drawer | `moderate` ease-drawer | `inline-size` | never while it is dragged (`data-resizing`), so the edge stays under the pointer; the desktop app's Sidebar widening for a list (2026-11-01). Off under reduced motion |
+| Region shown or hidden (the desktop app's Sidebar and Inspector, ⌘B and ⌥⌘B) | `moderate` ease-drawer | `moderate` ease-drawer | the region's `translate` from its edge; the Canvas's edge moves with it, its content never stretched | a view transition (studio.tsx `moveRegions`), as the regions mount and unmount; at Motion 0 and under reduced motion it lands at once. The smoothness pass, 2026-11-11 |
 | Resize edge (Splitter's handle, Panel's resizable edge; components audit N6) | a step after the pointer rests 300 ms | instant | the line's width (1 → 2) and ink, the hit area (4 → 12) | a wait, never an animation (`transition` 0s with a 300 ms delay, splitter.css `--_sash-delay`), so passing over an edge never flashes and reduced motion has nothing to stop; while dragging the line takes the accent at once. A drag follows the pointer exactly |
 | Hover-revealed actions (Toolbar `floating`, Panel `revealActions`, Code block `revealActions`, Nav row actions) | instant | `fade-fast` ease-out | `opacity` | the actions keep their place, so nothing reflows; hidden, they stay in the tab order and focus inside the host shows them; a touch screen always shows them |
-| Toast | `slow` ease-out | `base` ease-out | `opacity` + `translate` 8–16px from the toaster's edge | stack reflow on `base` ease-in-out |
+| Toast | `slow` ease-out | `base` ease-exit | `opacity` + `translate` 8–16px from the toaster's edge | stack reflow on `base` ease-in-out; the exit's fade on `fade-base` |
 | Folder open (drop target, `open`) | `base` ease-in-out | `fast` ease-in-out | the pocket's `d` (it tips forward: top 88 → 152, flaring 16 past each side) and the sheet's `translate` | shape moving while visible, so ease-in-out; nothing in a File tile moves on hover (PRODUCT_UI rule 2); docs/specs/folder.md |
 | Accordion body, and every disclosure body | `slow` ease-in-out | `moderate` ease-in-out | `block-size` via `interpolate-size: allow-keywords` + `opacity`, with the body's own gap (margin, list padding) | progressive enhancement; without support it snaps. Since 2026-10-26 the same rule opens Step's body (and Step group's, Reasoning's), Plan's and Queue's items and an Edit summary file's diff (accordion.css; they hide with `hidden`, so the open eases from `@starting-style` and `display` is held through the close). Tree view and Panel sections stay instant (Figma's layers and panels, Finder's outline) |
 | Spinner | 1s per turn, linear | — | `rotate` | stops at Motion 0 and under reduced motion. Its `delay` (300 or 1000 ms, components audit V6) is a wait, not motion: it holds under reduced motion and Motion 0, and the ring then appears at once, with no fade |
@@ -130,9 +143,9 @@ enter (`cohesion.test.mjs`).
 | A turn of a conversation (Setup's chat) | rise 8px and fade, `slow` ease-out | — | `opacity` + `translate` | a new question, and a reopened one's choices; the thread scrolls to it smoothly (instantly under reduced motion). Earlier turns stay; nothing leaves |
 | A preview's picture (Setup's stage) | crossfade `moderate` ease-out | — | `opacity` of a copy of the old drawing | a pick or a hover preview only; a run of changes (a drag) cuts (setup-screen.tsx, `crossfade`) |
 
-Exits are one step faster than entrances. Anything opened from the keyboard should feel no slower
-than pressing a key: keep keyboard-opened surfaces on the same short clock and never delay focus
-for an animation. Interrupted transitions reverse from where they are (CSS transitions do; avoid
+Exits are never slower than entrances, and accelerate away. Anything opened from the keyboard is no slower than
+pressing a key: it appears at its size and only fades (`data-opened-by`, above), and focus is never delayed for an
+animation. Interrupted transitions reverse from where they are (CSS transitions do; avoid
 keyframe animations for state that can flip back mid-way).
 
 ## Crispness
@@ -151,7 +164,9 @@ an edge stays put at a fractional scale (browser zoom included):
 2. Animate `transform` and `opacity` where you can, and end at identity (`scale: 1`, `translate: 0`). Size animates
    only where nothing else can say it, on the Move role: Accordion's and every disclosure body's height, a Panel's
    width, the Switch thumb's press-stretch and the Tabs / Segmented indicator's width (it said "only" until 2026-11-07,
-   which these recipes contradicted). Never leave `will-change` on a resting element; it freezes the layer at its first
+   which these recipes contradicted). Progress and Meter are not among them: their fill moves by a rounded
+   `translate` only (plan A5.7, 2026-11-11; its width was also in the transition until then, laying the bar out on
+   every frame of a change). Never leave `will-change` on a resting element; it freezes the layer at its first
    raster.
 3. Borders and rings: `border`/`outline` snap to device pixels, `box-shadow` does not. Draw a
    1px edge with `border` or `outline`, and halos (focus) with `box-shadow` only when they are soft.

@@ -146,7 +146,7 @@ export default {
     ],
     // Spec: Anatomy, Decisions.
     parts: {
-      root: "The group: one Tab stop that keeps the pressed set. Soft draws a track with pressed toggles raised; outline joins the toggles; ghost spaces them apart.",
+      root: "The group: one Tab stop that keeps the pressed set. Soft draws Segmented's track, the same inset, corner and edge, with pressed toggles raised; outline joins the toggles; ghost spaces them apart.",
     },
     // Source: ToggleGroup.tsx handleKeyDown and focus handling; native button keys.
     keyboard: [
@@ -262,7 +262,7 @@ export default {
     ],
     // Spec: Anatomy.
     parts: {
-      root: "The track: owns the control height, the even inset around the items, the track fill, ring and corner.",
+      root: "The track: owns the control height, the even inset around the items, the track fill, ring and corner, the same track a soft Toggle group draws.",
       item: "One option as a radio button, inset inside the track; the selected one is a raised plate.",
       icon: "The option's square icon box; decorative, since the label names the option.",
       label: "The option's text. With iconOnly it is visually hidden but still names the option.",
@@ -299,7 +299,7 @@ export default {
       ["Do", "Give every Checkbox a visible label; a leading visual is decoration and never names the option."],
       ["Do", "Put related options in a CheckboxGroup, which owns the legend, the group description and group validation."],
       ["Do", "Use indeterminate on a parent whose children are only partly checked."],
-      ["Do", "Use the card variant for a contained option in a list or grid: row for one line, tile for a visual above the label."],
+      ["Do", "Use variant=\"surface\" for a contained option in a list or grid (it was variant=\"card\"): row for one line, tile for a visual above the label."],
       ["Do", "Use variant=\"soft\" layout=\"list\" for a settings list of options: filled rows, the control first, meta for what each comes to."],
       ["Do", "Mark a single required option with invalid; put errors about the whole set on CheckboxGroup."],
       ["Do", "Give CheckboxGroup value and onValueChange (an array) and each Checkbox a value when the group's answer is one list; name submits each under one name."],
@@ -320,7 +320,7 @@ export default {
       indeterminate: "The box fills and shows a dash instead of the check, for a partial selection.",
       disabled: "The whole option dims to half and ignores input; native disabled.",
       invalid: "The edge and label turn danger; a checked invalid box becomes one danger fill.",
-      "read-only": "Rest paint, no hover or press; the box keeps its state (the click is cancelled) and announces aria-readonly. A chosen card keeps its rest edge.",
+      "read-only": "Every state keeps its paint, a chosen card its selected edge and tint; no hover or press; the box keeps its state (the click is cancelled) and announces aria-readonly.",
     },
     // Native checkbox keys.
     keyboard: [
@@ -346,7 +346,7 @@ export default {
       ["Do", "Put every Radio in a RadioGroup: it renders the legend and shares the name, value and disabled state."],
       ["Do", "Give the group a visible label; it becomes the fieldset's legend."],
       ["Do", "Use vertical for settings stacks and horizontal for a short inline choice."],
-      ["Do", "Use card layout=\"preview\" when each option is best shown as itself (a theme, a layout, a typeface): pass its picture as leadingVisual; the label stays the name."],
+      ["Do", "Use variant=\"surface\" layout=\"preview\" when each option is best shown as itself (a theme, a layout, a typeface): pass its picture as leadingVisual; the label stays the name."],
       ["Do", "Use layout=\"thumbnail\" for a settings row of pictures (light, dark, a layout): the picture is the card, drawing the edge and the selected stroke, and the name sits under it outside, at the start."],
       ["Do", "Use layout=\"media\" when a picture choice also needs its row (the radio, the name, meta), as a chosen picture shown as an answer: the picture in an 8px mat, the row under it."],
       ["Do", "Use layout=\"media-row\" for the same card in a full-width list: the picture at the row's start (--area-choice-media sets its share, 32%), the row centred beside it."],
@@ -369,7 +369,7 @@ export default {
     // Spec: States.
     states: {
       disabled: "The option dims to half and ignores input; disabling the group disables every option.",
-      "read-only": "In a read-only group: no hover or press, and the chosen card keeps its rest edge; the group is a radiogroup with aria-readonly.",
+      "read-only": "In a read-only group: no hover or press; the chosen card keeps its selected edge and tint; the group is a radiogroup with aria-readonly.",
     },
     // Native radio keys (spec: arrow keys are the browser's).
     keyboard: [
@@ -380,7 +380,7 @@ export default {
     aria: [
       ["aria-describedby", "On RadioGroup's fieldset, pointing at its description and error; on a Radio, at its caption."],
       ["aria-invalid", "On RadioGroup's fieldset when it has an error."],
-      ["data-read-only", "On RadioGroup's fieldset and each option while read-only; data-readonly is the deprecated spelling."],
+      ["data-read-only", "On RadioGroup's fieldset and each option while read-only."],
     ],
   },
 
@@ -651,7 +651,7 @@ export default {
     ],
     // Spec: Anatomy.
     parts: {
-      root: "One flat keycap holding a chord's keys, with the spoken chord as hidden text; md is 20 tall for hints and Buttons, sm is 16 for dense rows.",
+      root: "One flat keycap holding a chord's keys, with the spoken chord as hidden text; md is 18 tall at the default type for hints and Buttons, sm is 14 for dense rows.",
       key: "One key's glyph or letter, hidden from assistive tech, set a small gap from the next key.",
     },
     // Display only: no keys of its own.
@@ -677,19 +677,21 @@ export default {
       ["Do", "Use action or blue when links must stand out from the text, and a hue only to name a color, never a status."],
       ["Do", "Set external for another site: it opens a new tab, shows the external mark and says so to assistive tech."],
       ["Do", "Use linkVariants to give a router's own anchor the same classes."],
-      ["Don't", "Use a Link to run an action; use a Button."],
-      ["Don't", "Disable a link; a destination that can't be reached is plain text."],
+      ["Do", "Use as=\"button\" for a place with no address: the rest of a list, a step, a row another row names. It is the same text as a native button."],
+      ["Don't", "Use a Link to run an action that changes something; use a Button."],
+      ["Don't", "Disable an anchor; a destination that can't be reached is plain text. Only the button form takes disabled."],
       ["Don't", "Set a size on a link; it takes the size of the text it sits in."],
     ],
     // Spec: Anatomy, Close underline.
     parts: {
-      root: "The native anchor: no box of its own, the text's size and ink, and an underline set close under the letters.",
+      root: "The native anchor, or a native button with as=\"button\": no box of its own, the text's size and ink, and an underline set close under the letters.",
       icon: "The external mark after the text, centred on the cap height; shown with external and hidden from assistive tech.",
     },
     // Native anchor keys.
     keyboard: [
       ["Tab", "Moves focus to the link; the underline shows in full with a focus ring."],
       ["Enter", "Follows the link."],
+      ["Space", "With as=\"button\": presses it, as Enter does."],
     ],
     aria: [
       ["target, rel", "With external: _blank and noopener noreferrer, unless you set your own."],

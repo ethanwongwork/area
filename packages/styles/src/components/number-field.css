@@ -1,68 +1,20 @@
 /* Numeric entry shares Input's chrome and system UI scale; the controls remain optional. */
 @layer area.components {
+  /* The shell, its tiers, soft, focus and status are the one field shell (input.css, "One field shell"). */
   .area-number-field {
-    --_height: var(--area-control-md);
-    --_icon: var(--area-icon-md);
-    --_gap: var(--area-gap-md);
-    --_text: var(--area-control-md-text);
-    --_leading: var(--area-control-md-leading);
     /* spec: a stepper is Input's nested action square (icon + 8: 24 at md), 4 in from the edge. */
     /* Each stepper is the field less a 4px ring, 20 / 24 / 32, concentric (audit B-7 B). */
     --_step: calc(var(--_height) - var(--area-space-8));
-    --_border: var(--area-input-edge);
-    --_border-hover: var(--area-input-edge-hover);
-    --_border-focus: color-mix(in srgb, var(--_border), var(--area-field-focus-color) calc(var(--area-field-focus-recolor) * 100%)); /* the ring's colour only under Focus ring Halo (axes/states.ts) */
-    --_bg: var(--area-input-bg);
     display: inline-flex;
     align-items: center;
     gap: var(--_gap);
-    block-size: var(--_height);
     inline-size: var(--area-input-inline-size);
     max-inline-size: 100%;
-    border: var(--area-stroke-width) solid var(--_border);
-    /* The per-tier control radius, as Button (audit S4, owner 2026-09-30); was radius-control (8) at every size. */
-    border-radius: calc(min(var(--_radius, var(--area-radius-control-md)), max(var(--area-radius-min), round(down, calc(var(--_height) * var(--area-radius-factor)), 2px))) + var(--area-pill-field) * var(--area-radius-full));
-    background-color: var(--_bg);
-    color: var(--area-input-text);
-    font-size: var(--_text);
-    line-height: var(--_leading);
-    /* spec (outline pass, docs/specs/number-field.md): controls at rest carry no shadow, as Button (ChatGPT, Notion, Figma fields). */
-    --_field-lift: var(--area-shadow-field); /* Field shadow (axes/depth.ts), transparent by default */
-    box-shadow: var(--_field-lift);
-    /* Motion (docs/MOTION.md, 2026-10-07), as Input: paint and the focus halo appear at once and
-       fade out on fast; the halo keeps its fade into hover. */
-    --_t-paint: var(--area-duration-fast);
-    --_t-halo: var(--area-duration-fast);
-    transition-property: background-color, border-color, color, box-shadow;
-    transition-duration: var(--_t-paint), var(--_t-paint), var(--_t-paint), var(--_t-halo);
-    transition-timing-function: var(--area-ease-out);
+    font-variant-numeric: tabular-nums; /* a value that changes in place keeps its width (plan A9.8) */
   }
-  .area-number-field--outline { --_bg: var(--area-input-bg); }
-  .area-number-field--soft { --_field-lift: 0 0 0 0 transparent; box-shadow: var(--_field-lift); --_bg: var(--area-input-bg-soft); --_border: var(--area-input-edge-soft); --_border-hover: var(--area-input-edge); }
-  .area-number-field--sm { --_height: var(--area-control-sm); --_radius: var(--area-radius-control-sm); --_icon: var(--area-icon-sm); --_gap: var(--area-gap-sm); --_text: var(--area-control-sm-text); --_leading: var(--area-control-sm-leading); }
-  .area-number-field--md { --_height: var(--area-control-md); --_radius: var(--area-radius-control-md); --_icon: var(--area-icon-md); --_gap: var(--area-gap-md); --_text: var(--area-control-md-text); --_leading: var(--area-control-md-leading); }
-  .area-number-field--lg { --_height: var(--area-control-lg); --_radius: var(--area-radius-control-lg); --_icon: var(--area-icon-lg); --_gap: var(--area-gap-lg); --_text: var(--area-control-lg-text); --_leading: var(--area-control-lg-leading); }
   .area-number-field--full-width { inline-size: 100%; }
-  @media (hover: hover) { .area-number-field:hover:not([data-disabled], [data-read-only]):not(:focus-within) { --_t-paint: var(--area-hover-in); border-color: var(--_border-hover); } }
-  /* Tones set slots and the one focus rule reads them, as Input, Textarea and Select (audit B-28). */
-  .area-number-field:focus-within {
-    --_t-paint: 0s;
-    --_t-halo: 0s;
-    border-color: var(--_border-focus);
-    box-shadow: var(--_field-lift), 0 0 0 var(--area-field-focus-halo-width) var(--_focus-halo, var(--area-field-focus-halo-color));
-    outline: var(--area-field-focus-outline-width) solid var(--_focus-outline, var(--area-field-focus-color));
-    outline-offset: var(--area-focus-offset);
-  }
-  /* A tone or disabled paint lands at once (motion, 2026-10-07); clearing it fades on fast. */
-  .area-number-field:is([data-invalid], [aria-invalid="true"], [data-success], [data-warning], [data-disabled]) { --_t-paint: 0s; }
-  .area-number-field:is([data-invalid], [aria-invalid="true"]) { --_border: var(--area-input-invalid-color); --_border-hover: var(--area-input-invalid-color); --_border-focus: var(--area-input-invalid-color); --_focus-outline: var(--area-input-invalid-color); --_focus-halo: var(--area-input-invalid-halo-color); }
-  .area-number-field[data-success] { --_border: var(--area-input-success-color); --_border-hover: var(--area-input-success-color); --_border-focus: var(--area-input-success-color); --_focus-outline: var(--area-input-success-color); --_focus-halo: var(--area-input-success-halo-color); }
-  .area-number-field[data-warning] { --_border: var(--area-input-warning-color); --_border-hover: var(--area-input-warning-color); --_border-focus: var(--area-input-warning-color); --_focus-outline: var(--area-input-warning-color); --_focus-halo: var(--area-input-warning-halo-color); }
-  .area-number-field[data-disabled] { --_bg: var(--area-input-bg-disabled); --_border: var(--area-border-faint); color: var(--area-fg-disabled); cursor: not-allowed; }
-  /* Read-only keeps its variant's rest paint, no hover edge, default cursor (audit B-9); a soft
-     field never gains an edge when disabled. */
-  .area-number-field[data-read-only] { cursor: default; }
-  .area-number-field--soft[data-disabled] { --_border: transparent; }
+  /* Disabled and read-only are the field shell's (input.css): the disabled fill, edge and ink on the value, unit, scrub
+     and steppers; read-only one fill step deeper, no steppers (React). */
   .area-number-field[data-scrubbing] { cursor: ew-resize; }
   .area-number-field__control {
     flex: 1;
@@ -109,9 +61,6 @@
   }
   .area-number-field__scrub::after { content: ""; position: absolute; inset: calc((var(--_icon) - var(--_height)) / 2); }
   .area-number-field__scrub svg { inline-size: 100%; block-size: 100%; }
-  .area-number-field[data-disabled] .area-number-field__scrub { cursor: not-allowed; }
-  /* The unit, scrub handle and steppers take the disabled ink with the value (audit B-10). */
-  .area-number-field[data-disabled] :is(.area-number-field__unit, .area-number-field__scrub, .area-number-field__step) { color: var(--area-fg-disabled); }
   /*
    * spec (docs/specs/number-field.md, steppers): minus then plus, two nested squares after the
    * value (React Aria and Carbon: decrease, increase; Base UI: - and + around the value). Each
@@ -121,6 +70,11 @@
     display: flex;
     align-items: center;
     flex-shrink: 0;
+    /* Two abutting steppers each own a 24 target (owner, 2026-11-13; WCAG 2.5.8): their centres sit the target floor
+       apart, so the gap between the plates is what the floor leaves over a stepper, 24 − (H − 8), and each target meets
+       the other's halfway across it. 2 at the default md, 6 at Compact md, 8 at Compact sm; 0 from a 32 field up. The
+       plates keep their size and their concentric corner. */
+    gap: max(0px, calc(var(--area-space-24) - var(--_step)));
   }
   .area-number-field__step {
     display: inline-flex;
@@ -131,14 +85,14 @@
     padding: 0;
     border: 0;
     /* Concentric with the field, floored at radius-floor, 4 (radius audit 2026-10-03; all even 2026-10-03). */
-    border-radius: max(min(var(--area-radius-floor), max(var(--area-radius-min), round(down, calc(var(--_step) * var(--area-radius-factor)), 2px))), calc(calc(min(var(--_radius, var(--area-radius-control-md)), max(var(--area-radius-min), round(down, calc(var(--_height) * var(--area-radius-factor)), 2px))) + var(--area-pill-field) * var(--area-radius-full)) - var(--area-space-4)));
+    border-radius: max(min(var(--area-radius-floor), max(var(--area-radius-min), round(down, calc(var(--_step) * var(--area-radius-factor)), 2px))), calc(var(--_field-shape) - var(--area-space-4)));
     background: transparent;
     color: var(--area-input-icon);
     cursor: pointer;
     touch-action: manipulation;
     /* The plate appears at once on hover and press and fades on fast (docs/MOTION.md, 2026-10-07;
        was instant both ways), as Input's action. A held press keeps the pressed plate. */
-    transition: background-color var(--area-duration-fast) var(--area-ease-out);
+    transition: background-color var(--area-duration-fast) var(--area-ease-effects);
     user-select: none;
   }
   @media (hover: hover) { .area-number-field__step:hover { transition-duration: var(--area-hover-in); } }

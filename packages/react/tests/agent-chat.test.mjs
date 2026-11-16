@@ -122,7 +122,7 @@ test("an Approval numbers its choices, focuses the first only when asked and off
   assert.match(html, /<input class="area-approval__field" type="text" aria-label="Tell it what to do instead"[^>]*aria-keyshortcuts="3"/);
   // Every key is a keycap (owner 2026-10-22): the row numbers are keycap squares (2026-11-04, aligned answers), the free
   // row's too, and a key named in the hint's sentence.
-  assert.equal((html.match(/area-approval__key" aria-hidden="true"><span class="area-kbd area-kbd--sm area-kbd--default/g) ?? []).length, 3);
+  assert.equal((html.match(/area-approval__key" aria-hidden="true"><span class="area-kbd area-kbd--md area-kbd--default/g) ?? []).length, 3);
   assert.doesNotMatch(html, /area-kbd--quiet/);
   assert.match(html, /<p class="area-approval__hint"><span class="area-kbd area-kbd--sm area-kbd--default"/);
   assert.match(html, /area-approval__hint/);
@@ -184,7 +184,7 @@ test("a Plan's bar is one progress bar for the whole plan; its segments and item
   ];
   assert.doesNotMatch(renderToString(h(Plan, { items })), /area-plan__bar/);
   const single = renderToString(h(Plan, { items, bar: "single" }));
-  assert.match(single, /class="area-plan area-plan--single"/);
+  assert.match(single, /class="area-plan area-plan--single area-plan--surface"/);
   assert.match(single, /class="area-plan__bar" role="progressbar"[^>]*aria-valuenow="25"[^>]*aria-valuetext="1 of 4"/);
   assert.equal(single.match(/area-plan__segment/g).length, 1);
   const segmented = renderToString(h(Plan, { items, bar: "segmented", count: "5 of 12", defaultOpen: false }));
@@ -209,7 +209,7 @@ test("a Plan on a rail holds its items' detail and the current item's steps in o
       { id: "2b", label: "Step two", status: "pending" },
     ] },
   ] }));
-  assert.match(html, /class="area-plan area-plan--none area-plan--rail"/);
+  assert.match(html, /class="area-plan area-plan--none area-plan--surface area-plan--rail"/);
   assert.match(html, /<span class="area-plan__icon" aria-hidden="true"><svg data-test="icon"><\/svg><\/span><span id="[^"]+" class="area-plan__title">Title/);
   // Detail sits in the item's words, before its status for assistive tech.
   assert.match(html, /One<span class="area-plan__detail"><span class="chip">Value<\/span><\/span><span class="area-sr-only">, Done/);

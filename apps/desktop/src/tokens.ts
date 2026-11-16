@@ -60,6 +60,4 @@ export const SCALES: Scale[] = Object.entries(TOKENS.scales as unknown as Record
   steps: scale.steps,
 }));
 
-export const SPACE_RAMP = TOKENS.spaceRamp as number[];
-export const RADIUS_PRESETS = axis("radius").presets.map(preset => preset.id);
 export const AXES = TOKENS.axes as unknown as Axis[];

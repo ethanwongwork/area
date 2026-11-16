@@ -56,7 +56,8 @@ export { BoxModel, type BoxModelProps, type BoxSides, type BoxCorners } from "./
 export { TokenRow, type TokenRowProps } from "./components/TokenRow.tsx";
 export { CopyButton, CopyStatus, useCopy, COPY_FEEDBACK_MS, type CopyButtonProps, type CopyState, type CopyValue } from "./components/CopyButton.tsx";
 export { ListBox, ListBoxItem, ListBoxSection, type ListBoxProps, type ListBoxItemProps, type ListBoxSectionProps } from "./components/ListBox.tsx";
-export { Titlebar, SectionHeading, type TitlebarProps, type SectionHeadingProps } from "./components/AppShell.tsx";
+export { Titlebar, type TitlebarProps } from "./components/Titlebar.tsx";
+export { SectionHeading, type SectionHeadingProps } from "./components/SectionHeading.tsx";
 export { PageHeader, type PageHeaderProps } from "./components/PageHeader.tsx";
 export { SelectionBar, selectionCountLabel, type SelectionBarProps } from "./components/SelectionBar.tsx";
 export { Mention, withMentions, type MentionKind, type MentionProps, type MentionToken } from "./components/Mention.tsx";
@@ -70,7 +71,7 @@ export { FilePage, type FilePageProps } from "./components/FilePage.tsx";
 export { FileImage, type FileImageProps } from "./components/FileImage.tsx";
 export { FileTile, FileGrid, FileGridItem, type FileTileProps, type FileGridProps, type FileGridItemProps } from "./components/FileTile.tsx";
 export { AssetCard, AssetGrid, AssetGridItem, type AssetCardProps, type AssetGridProps, type AssetGridItemProps } from "./components/AssetCard.tsx";
-export { DesignCard, placeDesign, type DesignCardProps, type DesignLayout, type DesignFocus, type DesignPlacement } from "./components/DesignCard.tsx";
+export { DesignCard, placeDesign, type DesignCardProps, type DesignKind, type DesignLayout, type DesignFocus, type DesignPlacement } from "./components/DesignCard.tsx";
 export { Surface, type SurfaceProps } from "./components/Surface.tsx";
 export { Stack, type StackProps } from "./components/Stack.tsx";
 export { PreviewFrame, type PreviewFrameProps } from "./components/PreviewFrame.tsx";
@@ -98,10 +99,35 @@ export {
   type NavGroupProps,
   type NavItemProps,
 } from "./components/Nav.tsx";
-export * from "./components/primitives.tsx";
+export * from "./components/Avatar.tsx";
+export * from "./components/Alert.tsx";
+export * from "./components/Card.tsx";
+export * from "./components/Separator.tsx";
+export * from "./components/loading-delay.ts";
+export * from "./components/Skeleton.tsx";
+export * from "./components/Spinner.tsx";
+export * from "./components/Progress.tsx";
+export * from "./components/Panel.tsx";
+export * from "./components/Slider.tsx";
+export * from "./components/Chip.tsx";
+export * from "./components/Table.tsx";
+export * from "./components/Tooltip.tsx";
+export * from "./components/Popover.tsx";
+export * from "./components/Menu.tsx";
+export * from "./components/Toast.tsx";
+export * from "./components/Tabs.tsx";
+export * from "./components/Dialog.tsx";
+export * from "./components/Segmented.tsx";
+export * from "./components/Code.tsx";
+export * from "./components/CodeBlock.tsx";
+export * from "./components/Kbd.tsx";
 export { computePosition } from "./components/overlay.ts";
 export type { OverlayAlign, OverlaySide, Position, PositionOptions } from "./components/overlay.ts";
-export * from "./components/forms.tsx";
+export * from "./components/Select.tsx";
+export * from "./components/Textarea.tsx";
+export * from "./components/Checkbox.tsx";
+export * from "./components/Radio.tsx";
+export { Switch, type SwitchProps } from "./components/Switch.tsx";
 export * from "./variants.ts";
 
 export { Theme, useTheme, type ThemeProps, type AxisSelection, type PillShape } from "./components/Theme.tsx";
@@ -112,11 +138,14 @@ export { Indicator, IndicatorAnchor, type IndicatorProps, type IndicatorAnchorPr
 export { Count, type CountProps } from "./components/Count.tsx";
 export { AccordionItem, Accordion, type AccordionItemProps, type AccordionProps } from "./components/Accordion.tsx";
 export { Step, StepGroup, Reasoning, type StepProps, type StepGroupProps, type ReasoningProps, type StepRunStatus } from "./components/Step.tsx";
-export { EditSummary, EditSummaryChange, EditSummaryFile, Diff, type EditSummaryProps, type EditSummaryChangeProps, type EditSummaryFileProps, type EditFileState, type EditFileStatus, type DiffProps, type DiffHunk, type DiffLine } from "./components/EditSummary.tsx";
+export { EditSummary, EditSummaryChange, EditSummaryFile, Diff, type EditSummaryProps, type EditSummaryChangeProps, type EditSummaryFileProps, type EditFileState, type EditFileStatus, type DiffProps, type DiffHunk, type DiffLine, type DiffLineAt, type DiffNote } from "./components/EditSummary.tsx";
 export { Approval, type ApprovalProps, type ApprovalOption } from "./components/Approval.tsx";
 export { Plan, type PlanProps, type PlanItem } from "./components/Plan.tsx";
 export { TurnNotice, type TurnNoticeProps, type TurnNoticeStatus } from "./components/TurnNotice.tsx";
-export { Attachment, ComposerMenu, Queue, Timestamp, formatTimestamp, TIMESTAMP_GAP, type AttachmentProps, type AttachmentStatus, type ComposerMenuProps, type ComposerMenuItem, type ComposerMenuGroup, type QueueProps, type QueueItem, type TimestampProps } from "./components/ComposerParts.tsx";
+export { Attachment, type AttachmentProps, type AttachmentStatus } from "./components/Attachment.tsx";
+export { ComposerMenu, type ComposerMenuProps, type ComposerMenuItem, type ComposerMenuGroup } from "./components/ComposerMenu.tsx";
+export { Queue, type QueueProps, type QueueItem } from "./components/Queue.tsx";
+export { Timestamp, formatTimestamp, TIMESTAMP_GAP, type TimestampProps } from "./components/Timestamp.tsx";
 
 export { ColorPicker, hexToHsv, hsvToHex, type ColorPickerProps, type ColorModel, type ColorView, type ColorGamut, type OklchValue } from "./components/ColorPicker.tsx";
 export { AREA_COLOR_GRID } from "./components/color-grid.ts";

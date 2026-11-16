@@ -1,0 +1,7 @@
+build/
+__pycache__/
+.venv/
+build.ninja
+.ninja_log
+* 2.ninja
+.ninja_log *

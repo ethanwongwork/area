@@ -47,13 +47,17 @@ export function createVariants<const M extends ComponentManifest>(manifest: M) {
   return fn;
 }
 
-/** Data-state adapter for plain HTML; React may use native or ARIA state instead. */
+/**
+ * Data-state adapter for plain HTML; React may use native or ARIA state instead. A state whose hook is a pseudo-class
+ * (`:popover-open`) is set by the browser, not by an attribute, so it writes nothing.
+ */
 export function stateAttributes<M extends ComponentManifest>(manifest: M, state: Partial<Record<States<M>, boolean>> = {}): Record<string, string | true> {
   const out: Record<string, string | true> = {};
   for (const [name,value] of Object.entries(state)) {
     if (!manifest.states?.includes(name)) throw new RangeError(`${manifest.block}: unknown state ${name}`);
     if (value !== undefined && typeof value !== 'boolean') throw new TypeError(`${manifest.block}: ${name} must be boolean`);
     const attribute = manifest.stateAttributes?.[name] ?? `data-${name}`;
+    if (attribute.startsWith(":")) continue;
     if (value) out[attribute] = attribute.startsWith("aria-") ? "true" : attribute.startsWith("data-") ? "" : true;
   }
   return out;

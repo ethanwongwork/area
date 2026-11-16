@@ -1,29 +1,28 @@
 /* Badge: token-sized metadata, with native links and orthogonal dot composition. */
 @layer area.components {
   .area-badge {
-    /* Size scale 16 / 20 / 24 (sm / md / lg), shared with Kbd (16/20) and the Indicator
-       count (16). The base rule is md, the default: caption text 12/16, so a label sits a
-       step below the text it annotates (owner 2026-09-27). See docs/specs/badge.md. */
-    --_height: var(--area-mark-label-md); /* spec: 20, the mark ladder role (audit S21a) */
-    /* Every inner value is a function of the height (compact pass, 2026-10-01), restating the
-     * measured 16 / 20 / 24 rows: text sides (h - 6) / 2, 5 / 7 / 9 (4 / 6 / 8 at type 13's 14 / 18 / 22; Count's
-     * too, 2026-11-07) and dot side 4 / 6 / 8 (both by the inset contract, inset.css), icon and media 12 / 16 / 16, gap 2 / 4 / 4, media side
-     * 2 / 2 / 4, media gap 4 / 4 / 6. So a mark
-     * the UI scale shortens (compact md is 16) is drawn as the default mark of that height. */
+    /* The mark recipe's inputs (inset.css, "One mark"; plan B5.1): a rung of the mark ladder (14 / 18 / 22 at type 13,
+       every density), its real border, and its Pills flag (the pill role: a status). The recipe gives its text side,
+       baseline, corner, text and gap; every inner slot is a function of the height. See docs/specs/badge.md. */
+    --_height: var(--area-mark-label-md);
+    --_mark-height: var(--_height);
+    --_mark-border: var(--area-stroke-width);
     /* spec (owner, review round 8: "can the icons be smaller?"): 12 at every size, as Untitled UI's
        badges (12 at sm, md and lg); avatars and flags keep 12 / 16 / 16. */
     --_icon: min(var(--area-icon-xs), calc(var(--_height) - var(--area-space-4))); /* spec */
     /* At most the plate less 4, as the media (owner, 2026-10-17: "go with 10px icons"): 12 at every default size, 10 in
-       Compact's 14 plate, where icons and the dismiss glyph draw their 10px cuts (docs/specs/icons.md "10px cuts"). */
+       a 14 plate, where icons and the dismiss glyph draw their 10px cuts (docs/specs/icons.md "10px cuts"). */
     --_glyph-cut10: max(0, sign(var(--area-icon-xs) - var(--_icon)));
     --_media: min(var(--area-icon-md), calc(var(--_height) - var(--area-space-4))); /* spec */
-    --_gap: min(var(--area-space-4), calc(var(--_height) / 2 - var(--area-space-6))); /* spec */
-    --_media-gap: max(var(--area-space-4), calc(var(--_height) / 2 - var(--area-space-6))); /* spec */
-    --_text: var(--area-control-xs-text); --_leading: var(--area-control-xs-leading); /* spec */
-    /* A pill while data-area-pills lists `badge` (the default); otherwise the radius setting's corner
-       for its height, 4 at the default. React pill / pill={false} (`--pill` / `--rounded`) override. */
+    /* The mark's internal gaps, 2 or 4 (plan B5.1: they were min(4, h / 2 - 6), 1 / 3 / 4, and the media's 4 / 4 / 5). */
+    --_gap: var(--_mark-gap);
+    --_media-gap: var(--area-space-4);
+    --_text: var(--_mark-text); --_leading: var(--_mark-leading);
+    /* A pill while data-area-pills lists `badge` (the default); otherwise the Corner setting's corner for its height, 4 at
+       the default. React pill / pill={false} (`--pill` / `--rounded`) override. */
     --_badge-pill: var(--area-pill-badge);
-    --_badge-radius: calc(max(var(--area-radius-min), round(down, calc(var(--_height) * var(--area-radius-factor)), 2px)) + var(--_badge-pill) * var(--area-radius-full));
+    --_mark-pill: var(--_badge-pill);
+    --_badge-radius: var(--_mark-corner);
     --_solid: var(--area-neutral-solid); --_solid-hover: var(--area-neutral-solid-hover);
     /* spec (audit S6a, owner 2026-09-30): Count's translucent soft plate (6% black, 10% white
        in dark), so a Badge stays visible on a hovered or selected row; hover and press lay the
@@ -48,32 +47,14 @@
   }
   .area-badge__label { min-inline-size: 0; line-height: var(--_leading); }
   /*
-   * The label carries the badge's baseline, whatever slot comes first. An inline-flex box
-   * takes its baseline from its first item, and a leading dot, icon or avatar has none, so
-   * the browser used that slot's bottom edge and the badge sat low in text and table rows.
-   * As the only baseline participant the label is placed at the top of the content box;
-   * padding it to the full content height keeps the cap exactly where centring put it.
+   * The label carries the badge's baseline, whatever slot comes first. An inline-flex box takes its baseline from its
+   * first item, and a leading dot, icon or avatar has none, so the browser used that slot's bottom edge and the badge sat
+   * low in text and table rows. As the only baseline participant the label is placed at the top of the content box; the
+   * mark recipe (inset.css, "One mark") trims it and pads it to the full content height, so the cap sits on the mark's
+   * whole-pixel baseline, and moves a dot or an icon onto the label's cap (owner, 2026-11-01, 2026-10-18).
    */
   @supports (text-box: trim-both cap alphabetic) {
-    .area-badge > .area-badge__label {
-      align-self: baseline;
-      /* The cap centres in the plate, as Count's digits do (owner, 2026-11-01, on the pill variants: "the vertical alignment
-         of these badges is off"): the marks' optical lift (inset.css) pushed the rounding a whole step up, so the word and
-         its icon sat 0.9 above the plate's middle at type 13 (0.6 at lg); centred, they are within 0.45 at every type and
-         density (0.10 at 13). Status words begin with a capital. The baseline lands on a whole pixel from the plate's top
-         (owner, 2026-10-18: "the text vertical centering in the badge does not look super consistent"): with a fractional
-         offset the plate's edges and the glyphs snap to device pixels apart, so the same badge drew its cap 10 or 11 device
-         pixels down depending on where it sat. Rounded, both snap together and every badge of a size draws alike. */
-      --_baseline: round(nearest, calc((var(--_height) - 2 * var(--area-stroke-width) + 1cap) / 2), 1px);
-      padding-block: calc(var(--_baseline) - 1cap) calc(var(--_height) - 2 * var(--area-stroke-width) - var(--_baseline));
-    }
-    /* An icon or dot centres on the label's cap, not on the plate (owner, 2026-11-01: "the text doesnt seem vertically
-       aligned with the icon"): it moves by the label's whole-pixel rounding (at most 0.45), so the mark and the word share
-       one centre at every size. The slot moves, never a glyph. */
-    .area-badge > :is(.area-badge__leading-icon, .area-badge__trailing-icon, .area-badge__dot) {
-      translate: 0 calc(round(nearest, calc((var(--_height) - 2 * var(--area-stroke-width) + 1cap) / 2), 1px) - 1cap / 2 - (var(--_height) - 2 * var(--area-stroke-width)) / 2);
-    }
-    .area-badge--icon-only > .area-badge__leading-icon, .area-badge--dot-only > .area-badge__dot { translate: none; }
+    .area-badge > .area-badge__label { align-self: baseline; }
   }
   .area-badge__leading-icon, .area-badge__trailing-icon {
     display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0;
@@ -187,16 +168,16 @@
   .area-badge--solid { --_bg: var(--_solid); --_bg-hover: var(--_solid-hover); --_fg: var(--_on-solid); --_dot-color: var(--_on-solid); }
   .area-badge--outline { --_bg: transparent; --_bg-hover: var(--_surface); --_fg: var(--_tone-fg); --_border: var(--_line); --_border-hover: var(--_line-hover); }
   /*
-   * Plain: no plate and no edge; the add-on (a dot or an icon) and the words carry the tone, in regular weight (owner,
-   * 2026-11-01: "i kinda like the merge icons with the colors, no backplate", Claude Code's sidebar status marks; Count's
-   * plain is the same ink-only mark). With nothing behind it the text sides are 0, so the mark starts on the
-   * column of the text it annotates (inset.css). A plain link underlines its label on hover; its ink never moves.
+   * Plain: no plate and no edge; the add-on (a dot or an icon) and the words carry the tone (owner, 2026-11-01: "i kinda
+   * like the merge icons with the colors, no backplate"; Count's plain is the same ink-only mark), at the mark weight as
+   * every Badge (plan B5.1, VS18: it dropped to regular, the one variant off it). With nothing behind it the text sides
+   * are 0, so the mark starts on the column of the text it annotates (inset.css). A plain link underlines its label on
+   * hover; its ink never moves.
    */
   .area-badge--plain {
     --_bg: transparent; --_bg-hover: transparent; --_border: transparent; --_border-hover: transparent;
     --_fg: light-dark(var(--_vivid, var(--_tone-fg)), var(--_tone-fg)); /* spec */
     --_dot-color: var(--_mark, var(--_tone-fg));
-    font-weight: var(--area-weight-regular);
   }
   /*
    * Plain's colours (owner, 2026-11-01, on the live sheet: "these colors are nicer, can you make the light mode colors more
@@ -229,7 +210,7 @@
   .area-badge--danger { --_vivid: var(--area-fg-danger-vivid); --_mark: light-dark(var(--area-red-450), var(--area-fg-danger-vivid)); /* spec */ --_mark-tint: light-dark(var(--area-red-400), var(--area-fg-danger-vivid)); /* spec */ }
   .area-badge--info { --_vivid: var(--area-fg-info-vivid); --_mark: light-dark(var(--area-blue-450), var(--area-fg-info-vivid)); /* spec */ --_mark-tint: light-dark(var(--area-blue-400), var(--area-fg-info-vivid)); /* spec */ }
   .area-badge--discovery { --_vivid: var(--area-fg-discovery-vivid); --_mark: light-dark(var(--area-purple-450), var(--area-fg-discovery-vivid)); /* spec */ --_mark-tint: light-dark(var(--area-purple-400), var(--area-fg-discovery-vivid)); /* spec */ }
-  @media (hover: hover) { a.area-badge--plain:hover .area-badge__label { text-decoration: underline; text-underline-offset: 0.2em; } }
+  @media (hover: hover) { a.area-badge--plain:hover .area-badge__label { text-decoration: underline; text-underline-offset: var(--area-underline-offset); } }
   /* Transparent inverse treatments use inverse ink (the background endpoint). */
   .area-badge--inverse:is(.area-badge--outline, .area-badge--plain) { --_tone-fg: var(--area-bg-inverse); }
   .area-badge--dot.area-badge--inverse { --_dot-color: var(--_fg); }
@@ -250,13 +231,14 @@
      variant and tone (it pressed with the hover paint). The dismiss button presses on its own. */
   :is(a, button).area-badge:active:not(:has(.area-badge__dismiss:active)) { background: linear-gradient(var(--area-bg-hover), var(--area-bg-hover)) var(--_bg-hover); border-color: var(--_border-hover); transition-duration: var(--area-press-in); }
   :is(a, button).area-badge:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); }
+  /* A solid badge never takes the ring flush on its fill (plan A6.1), as a solid Button. */
+  :is(a, button).area-badge--solid:focus-visible { outline-color: color-mix(in srgb, var(--area-focus-color), var(--_on-solid) calc(var(--area-focus-solid-inside) * 100%)); outline-offset: var(--area-focus-solid-offset); }
   :is(a, button).area-badge::after { content: ""; position: absolute; inset: 50% auto auto 50%; translate: -50% -50%; min-inline-size: var(--area-space-24); min-block-size: var(--area-space-24); inline-size: 100%; block-size: 100%; }
   @media (pointer: coarse) { :is(a, button).area-badge::after { min-inline-size: calc(var(--area-space-40) + var(--area-space-4)); min-block-size: calc(var(--area-space-40) + var(--area-space-4)); } }
-  /* spec: 16px, 12/16 text, 12px icon/media/dismiss slots, 2px slot insets. */
+  /* The mark ladder's rungs: 14 / 18 / 22 at type 13 (16 / 20 / 24 at type 14) at every density; lg takes the UI text. */
   .area-badge--sm { --_height: var(--area-mark-label-sm); }
   .area-badge--md { --_height: var(--area-mark-label-md); /* spec */ }
-  /* spec: 24px, the previous md geometry. */
-  .area-badge--lg { --_height: var(--area-mark-label-lg); --_text: var(--area-control-md-text); --_leading: var(--area-control-md-leading); }
+  .area-badge--lg { --_height: var(--area-mark-label-lg); }
   .area-badge--color { --_border: var(--_line); --_border-hover: var(--_line-hover); --_dot-color: var(--_solid); }
   .area-badge--modern { --_bg: var(--area-bg-surface); --_bg-hover: var(--area-bg-component-hover); --_fg: var(--area-fg-default); --_border: var(--area-edge-selected); --_border-hover: var(--area-edge-control-hover); --_dot-color: var(--_solid); box-shadow: var(--area-shadow-control); } /* the raised plate's edge, as the Segmented thumb's (consistency pass 2026-10-12; was the #f3 seam; Untitled's modern ring is #d5) */
   /*
@@ -285,7 +267,7 @@
   .area-badge:has(> :is(.area-badge__dot, .area-badge__avatar, .area-badge__flag)) { gap: var(--_media-gap); }
   /* spec: the dismiss box already holds 2px of air around its glyph (Untitled gap-0.5). */
   .area-badge:has(> .area-badge__dismiss) { gap: var(--area-space-2); }
-  .area-badge__dismiss { display: inline-flex; align-items: center; justify-content: center; inline-size: var(--_media); block-size: var(--_media); flex: none; padding: 0; border: 0; border-radius: var(--_badge-radius); background: transparent; color: inherit; cursor: pointer; transition: background-color var(--area-duration-fast) var(--area-ease-out); user-select: none; }
+  .area-badge__dismiss { display: inline-flex; align-items: center; justify-content: center; inline-size: var(--_media); block-size: var(--_media); flex: none; padding: 0; border: 0; border-radius: var(--_badge-radius); background: transparent; color: inherit; cursor: pointer; transition: background-color var(--area-duration-fast) var(--area-ease-effects); user-select: none; }
   .area-badge__dismiss > svg { inline-size: var(--_icon); block-size: var(--_icon); }
   /* The visible box stays the badge's media square; an invisible 24px target (44 on coarse
      pointers) centred on it meets WCAG 2.5.8, as Badge links already do (audit C-5). */
@@ -301,29 +283,6 @@
   /* A control nested in its host rings at 0, as Tag's remove and a field's actions (owner, 2026-10-12: O1 of the consistency
      pass); at the focus offset the ring sat outside the badge. */
   .area-badge__dismiss:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); }
-  /* spec: Notion's multi-select cell, 6 between lines and 8 between tags
-     (notion--multi-select-wrap; was Primer's 4 both ways). */
-  .area-badge-group { --_group-gap: var(--area-ui-stack) var(--area-ui-cluster); /* 6 × 8, compact 4 × 6 */ display: flex; align-items: center; flex-wrap: wrap; gap: var(--_group-gap); min-inline-size: 0; max-inline-size: 100%; }
-  .area-badge-group--inline { flex-wrap: wrap; }
-  .area-badge-group--overlay { flex-wrap: nowrap; }
-  .area-badge-group__item { display: inline-flex; flex-shrink: 0; }
-  .area-badge-group__overflow-trigger[hidden] { display: none; }
-  .area-badge-group__overflow-trigger { flex-shrink: 0; }
-  /* One line of hidden badges where they fit: Popover's own 240px width wrapped three. */
-  .area-popover.area-badge-group__overflow-content { margin: auto; inline-size: max-content; max-inline-size: calc(100vw - var(--area-space-32)); max-block-size: calc(100% - var(--area-space-32)); overflow: auto; }
-  .area-badge-group__overflow-content:popover-open { display: flex; flex-wrap: wrap; gap: var(--area-ui-stack) var(--area-ui-cluster); /* spec: as the group */ }
-  /* Native top-layer overflow stays attached to its own trigger where anchors exist. */
-  @supports (anchor-name: --area-anchor) {
-    .area-badge-group__overflow-trigger { anchor-name: var(--_overflow-anchor); }
-    .area-badge-group__overflow-content {
-      position-anchor: var(--_overflow-anchor);
-      inset: auto;
-      inset-block-start: calc(anchor(bottom) + var(--area-space-4));
-      inset-inline-start: anchor(start);
-      margin: 0;
-      position-try-fallbacks: flip-block, flip-inline;
-    }
-  }
   @media (forced-colors: active) {
     .area-badge { background: Canvas; color: CanvasText; border-color: CanvasText; }
     /* The disc is the ::before; painting the slot drew a square (audit C-28). */

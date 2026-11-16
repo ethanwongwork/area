@@ -74,7 +74,7 @@ export function ElementPanel({ project, page, layer, stage, path, onSelect, onEd
 
   if (!read) return <PanelSection heading="Selection"><p className="studio-muted">This element is no longer in the screen.</p></PanelSection>;
   const change = (row: PropertyRow, value: string, label: string) => {
-    const words = { target: read.target, label: read.label, name: row.name, from: row.currentLabel.replace(/ · (off scale|mixed)$/, ""), to: label };
+    const words = { target: read.target, label: read.label, name: row.name, from: row.currentLabel.replace(/, (off scale|mixed)$/, ""), to: label };
     if (onEdit?.(row.property, value, words)) return;
     updateProject(project.id, current => logChange(current, { page: page.id, layer: layer.id, path, ...words, property: row.property, value }));
   };
@@ -271,7 +271,7 @@ export function ChangeLog({ project, page, layer, onOpen, screenFile }: ChangeLo
             return (
               <li key={change.id} className="studio-design__change">
                 <button type="button" className="studio-design__change-open" onClick={() => onOpen(change)}>
-                  <span className="studio-design__change-what">{thing(change)}{elsewhere ? <span className="studio-muted"> · {layerName(change)}</span> : null}</span>
+                  <span className="studio-design__change-what">{thing(change)}{elsewhere ? <span className="studio-muted">, {layerName(change)}</span> : null}</span>
                   <span className="studio-design__change-how">{said(change)}</span>
                 </button>
                 <ChromeButton label={`Undo ${change.name} on ${thing(change)}`} icon={<DismissIcon />}

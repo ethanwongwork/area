@@ -10,9 +10,9 @@
  * ------------------------------------------------------------------------- */
 @layer area.components {
   .area-shortcut-list {
-    /* spec: ChatGPT's rows are 8 above and below a 20 line (36 without its editable 36 pill): the UI row + 4
-       (32 + 4; 24 + 4 in compact), as Description list grows Notion's rows by 2. */
-    --_row: calc(var(--area-ui-row) + var(--area-space-4));
+    /* spec: ChatGPT's rows are 8 above and below a 20 line (36 without its editable 36 pill): the UI row and one room
+       step, ui-stack (36 at the default, 32 Compact; plan A8.2, 2026-11-11: was the UI row + 4, off the ladder). */
+    --_row: calc(var(--area-ui-row) + var(--area-ui-stack));
     /* The surface around the list (Dialog, Popover, Panel) owns the content inset, so the text lines up with its
        title and the rules run the content width. ChatGPT's rows add 12 / 16 inside a 12-padded list because its
        list bleeds to the dialog's edge; Area's surfaces inset their content instead (docs/specs/shortcut-list.md). */
@@ -25,8 +25,9 @@
     font-size: var(--area-ui-size);
     line-height: var(--area-ui-leading);
   }
-  /* spec: ChatGPT's groups are 32 apart. */
-  .area-shortcut-list + .area-shortcut-list { margin-block-start: var(--area-space-32); }
+  /* Groups are 32 apart at the default (measured), on the gap ladder (plan B8.2): 32 − 8 × ui-gap-step, 24 / 32 / 40 at
+     type 13 Compact / Default / Comfortable. */
+  .area-shortcut-list + .area-shortcut-list { margin-block-start: calc(var(--area-space-32) - var(--area-space-8) * var(--area-ui-gap-step)); }
 
   /* spec: ChatGPT's group title, 14 500 in the muted ink, 28 tall (2 + 24 + 2): the UI type with 4 above and below. */
   .area-shortcut-list__title {
@@ -43,8 +44,9 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    /* spec: ChatGPT and Description list justified, 24 between the name and the value at the end. */
-    gap: var(--area-space-24);
+    /* Justified, 24 between the name and the value at the end at the default (measured), a section's space (plan B8.2):
+       16 / 24 / 32 at type 13. */
+    gap: var(--area-gap-section);
     min-block-size: var(--_row);
     box-sizing: border-box;
     padding-inline: var(--_inset);
@@ -65,8 +67,8 @@
     flex-wrap: wrap;
     justify-content: flex-end;
     align-items: center;
-    /* Alternatives (ChatGPT's "⇧⌘Delete" and "⇧⌘Backspace"): Kbd's sequence gap, 8. */
-    gap: var(--area-space-8);
+    /* Alternatives ("⇧⌘Delete" and "⇧⌘Backspace"), independent marks a cluster apart: 6 / 8 / 10 at type 13. */
+    gap: var(--area-ui-cluster);
     flex: none;
     margin: 0;
     color: var(--area-fg-muted);

@@ -1,0 +1,386 @@
+<meta charset="utf-8">
+<title>Sen Curves</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter+Tight:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+  /* Layout: the set is black and white. Each kanji large in a square shows its construction
+     in colour: the line's body as a pale tint with a hairline edge, its centre line and
+     on-curve points in blue (squares at corners and ends, circles where the curve runs
+     smooth), and handles in pink. */
+  :root {
+    --ground: #ffffff;
+    --ink: #000000;
+    --muted: #6e6e6e;
+    --rule: #e2e2e2;
+    --tint: #e8edff;
+    --edge: #9aabff;
+    --curve: #2448ff;
+    --handle: #ff2a7f;
+    --display: 'Instrument Serif', 'Times New Roman', serif;
+    --text: 'Inter Tight', system-ui, -apple-system, sans-serif;
+    --mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) { --ground: #000000; --ink: #ffffff; --muted: #8c8c8c; --rule: #262626; --tint: #0c1333; --edge: #3549b8; --curve: #6d87ff; --handle: #ff5ca0; color-scheme: dark; }
+  }
+  :root[data-theme="dark"] { --ground: #000000; --ink: #ffffff; --muted: #8c8c8c; --rule: #262626; --tint: #0c1333; --edge: #3549b8; --curve: #6d87ff; --handle: #ff5ca0; color-scheme: dark; }
+
+  * { box-sizing: border-box; }
+  body { background: var(--ground); color: var(--ink); font: 400 15px/1.55 var(--text); -webkit-font-smoothing: antialiased; }
+  .page {
+    max-width: 1320px; margin: 0 auto; display: grid; gap: 36px;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+    padding-block: 40px 72px;
+  }
+  .head { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px 48px; align-items: end; }
+  h1 { font: italic 400 clamp(44px, 6.4vw, 80px)/0.95 var(--display); margin: 0; text-wrap: balance; }
+  p { margin: 0; max-width: 62ch; }
+  .mono { font-family: var(--mono); font-size: 12px; font-variant-numeric: tabular-nums; }
+  .muted { color: var(--muted); }
+  svg { display: block; width: 100%; height: auto; aspect-ratio: 1; }
+
+  .set { display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); border-top: 1px solid var(--rule); border-left: 1px solid var(--rule); }
+  .set svg { border-right: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
+
+  .bar { display: flex; justify-content: space-between; align-items: center; gap: 12px 24px; flex-wrap: wrap; border-top: 1px solid var(--ink); padding-top: 12px; }
+  .key { display: flex; flex-wrap: wrap; gap: 6px 18px; }
+  .key span { display: inline-flex; align-items: center; gap: 7px; }
+  .toggle { font: 500 13px var(--text); color: var(--ink); background: var(--ground); border: 1px solid var(--ink); padding: 6px 12px; cursor: pointer; }
+  .toggle:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+
+  .wall { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px 24px; }
+  .glyph { margin: 0; display: grid; gap: 10px; min-width: 0; }
+  .glyph svg { border: 1px solid var(--rule); }
+  .glyph figcaption { display: flex; justify-content: space-between; gap: 6px 16px; flex-wrap: wrap; align-items: baseline; font-size: 13px; }
+  .glyph figcaption .name { display: flex; gap: 8px; align-items: baseline; }
+  .glyph figcaption b { font-weight: 600; font-size: 15px; }
+  .glyph figcaption i { font-family: var(--display); font-size: 18px; }
+  .solid-only .build { display: none; }
+  .solid-only .solid { display: inline; }
+  .solid { display: none; }
+
+  .notes { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px 40px; border-top: 1px solid var(--rule); padding-top: 22px; font-size: 13px; }
+  .notes p { max-width: none; }
+
+  @media (max-width: 900px) { .head, .notes { grid-template-columns: minmax(0, 1fr); } .set { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+  @media (max-width: 640px) { .wall { grid-template-columns: minmax(0, 1fr); } }
+</style>
+
+<main class="page">
+  <header class="head">
+    <div style="display:grid;gap:14px">
+      <div class="mono muted">Sen 線体 · curved cut · eight complex kanji · 2026-11-10</div>
+      <h1>Sen, one line through eight kanji</h1>
+    </div>
+    <p class="muted">One line of one width, flat ends and round corners, drawn through the centre of Noto Sans JP. Points sit only where they have to: at ends, at corners, and where a curve can't be one cubic. A straight run is a single line; handles lie along the line they continue, or level or upright.</p>
+  </header>
+
+  <div class="set" id="set"></div>
+
+  <div class="bar">
+    <div class="key mono muted" id="key"></div>
+    <button class="toggle" id="toggle" type="button" aria-pressed="true">Hide points and handles</button>
+  </div>
+
+  <div class="wall" id="wall"></div>
+
+  <footer class="notes">
+    <p><b>Skeletons.</b> Centre lines of Noto Sans JP Thin (SIL OFL 1.1), found by thinning its outlines at 2 units a pixel. Units are thousandths of the em.</p>
+    <p><b>Points.</b> Each stroke is smoothed (Gaussian, σ 10 units) and drawn with the fewest points that stay within 5 units of it: one curve first, then its straight runs as lines, then one more point at a time, placed where the stroke turns exactly level or upright when it does. Short hooks at free ends are cut.</p>
+    <p><b>Curves.</b> Hobby's method, as in METAFONT: through each smooth point the direction is solved so that curvature runs on unbroken, and handle lengths follow from the angles. A single curve between two set directions takes its handle lengths from the stroke, never reaching past where the two directions meet. No curve dips past its ends without a point there.</p>
+    <p><b>Corners.</b> Strokes meeting in an L become one path; each corner is a circular arc of radius 40 written as one cubic. Ends that meet another stroke stop on its centre line, so nothing opens at any weight.</p>
+  </footer>
+</main>
+
+<script>
+  const DATA = {"龍":{"strokes":[{"closed":false,"joined":[false,true],"d":"M276 50L276 163"},{"closed":false,"joined":[false,false],"d":"M70 163L485 163"},{"closed":false,"joined":[false,false],"d":"M50 376L505 376"},{"closed":false,"joined":[true,true],"d":"M127 612L430.4 612"},{"closed":false,"joined":[true,true],"d":"M127 740L430.4 740"},{"closed":false,"joined":[false,false],"d":"M200.6 342.7L154.6 197.9"},{"closed":false,"joined":[false,false],"d":"M351.9 345.7L410.1 198.3"},{"closed":false,"joined":[true,false],"d":"M430.4 489L127 489L127 949"},{"closed":false,"joined":[false,false],"d":"M430.4 476L430.4 933.7L305.6 933.7"},{"closed":false,"joined":[true,false],"d":"M581 153L943 153"},{"closed":false,"joined":[true,false],"d":"M581.3 559L900 559"},{"closed":false,"joined":[true,false],"d":"M581.3 672L894 672"},{"closed":false,"joined":[true,false],"d":"M581.3 788L904 788"},{"closed":false,"joined":[false,true],"d":"M581 49L581 292"},{"closed":false,"joined":[false,false],"d":"M566 446L887 446L887 292L566 292"},{"closed":false,"joined":[true,false],"d":"M581.3 446L581.3 892.5C581.3 909.9 602.6 927.3 619 927.3L890.1 927.3C902.6 927.3 924.5 917.9 929 905.7L952.5 840.6"}]},"鶴":{"strokes":[{"closed":false,"joined":[true,false],"d":"M141.3 522L458 522"},{"closed":false,"joined":[true,false],"d":"M141.3 677L458 677"},{"closed":false,"joined":[true,false],"d":"M141.3 838L471 838"},{"closed":false,"joined":[false,false],"d":"M466 314L466 181L86 181L86 314"},{"closed":false,"joined":[true,true],"d":"M303 375.3L303 838"},{"closed":false,"joined":[false,false],"d":"M467 375.3L169.3 375.3C156.6 375.3 141.3 392 141.3 404.4L141.3 920"},{"closed":false,"joined":[true,false],"d":"M303 369.7L357.8 248.9"},{"closed":false,"joined":[true,true],"d":"M542 156L872 156L872 400L542 400"},{"closed":false,"joined":[false,true],"d":"M542 143L542 620L921.9 620"},{"closed":false,"joined":[true,false],"d":"M542 509L954 509"},{"closed":false,"joined":[true,true],"d":"M542 279L872 279"},{"closed":false,"joined":[false,false],"d":"M722 933L829.5 933C858.4 933 881.3 924.9 888 894.4L903.3 824.6C915.7 768.1 922 663.8 922 605"},{"closed":false,"joined":[true,false],"d":"M663.8 156L707.5 55.9"},{"closed":false,"joined":[false,false],"d":"M471.8 912.2C501.7 833.9 515.1 785.6 530 703.1"},{"closed":false,"joined":[false,false],"d":"M604.7 717.4L623.4 884.5"},{"closed":false,"joined":[false,false],"d":"M750.6 848.3L699.5 703.4"},{"closed":false,"joined":[false,false],"d":"M858.8 786.3L782.8 681.3"},{"closed":false,"joined":[false,false],"d":"M92 448C196.4 316.9 237.4 215.4 284.2 56.5"}]},"霧":{"strokes":[{"closed":false,"joined":[false,false],"d":"M141 109L861 109"},{"closed":false,"joined":[false,false],"d":"M187 295L413 295"},{"closed":false,"joined":[false,false],"d":"M175 386L414 386"},{"closed":false,"joined":[false,false],"d":"M580 386L832 386"},{"closed":false,"joined":[false,false],"d":"M580 295L815 295"},{"closed":false,"joined":[true,false],"d":"M497 109L497 428"},{"closed":false,"joined":[false,false],"d":"M108 350L108 207L892 207L892 350"},{"closed":false,"joined":[false,true],"d":"M98 467L429.8 467"},{"closed":false,"joined":[false,true],"d":"M490 764L859.4 764"},{"closed":false,"joined":[false,true],"d":"M61 636L456.4 636"},{"closed":false,"joined":[true,false],"d":"M274.2 567.8C339.8 537.9 382.4 504.4 439.3 459.5"},{"closed":false,"joined":[false,false],"d":"M462.6 624.3L380.8 778.9"},{"closed":false,"joined":[false,true],"d":"M67.3 861.4C147.8 827.6 221.5 715 271 636"},{"closed":false,"joined":[true,false],"d":"M281.5 636L281.5 934.3L165.1 934.3"},{"closed":false,"joined":[false,false],"d":"M365.4 613C301.1 579.1 243 549.8 172 531.8"},{"closed":false,"joined":[false,false],"d":"M477 583.7L641.8 415.9"},{"closed":false,"joined":[false,true],"d":"M921 489C818.5 489 597.5 493.1 558.6 500.7"},{"closed":false,"joined":[false,false],"d":"M675.5 933.6L779.4 933.6C819.7 933.6 834 906.7 840.3 870.9L862 749"},{"closed":false,"joined":[false,false],"d":"M438.3 938.4C605.1 908 646.8 841.1 690.3 688"},{"closed":false,"joined":[false,true],"d":"M931.7 702.8C875.9 693.2 734.3 657.7 692.4 623.3L551.7 507.6"},{"closed":false,"joined":[false,true],"d":"M472.4 709.9C638.3 664.2 732 632.4 836.8 489.6"}]},"麗":{"strokes":[{"closed":false,"joined":[false,false],"d":"M925 405L143 405C143 503.4 142.2 692.2 127.7 751.2L103.3 849.8C96.6 876.9 72.9 918.3 57.4 944.8"},{"closed":false,"joined":[false,true],"d":"M511 329L511 405"},{"closed":false,"joined":[true,true],"d":"M383 405L383 641"},{"closed":false,"joined":[true,true],"d":"M634 405L634 641"},{"closed":false,"joined":[true,false],"d":"M281 760L529 760"},{"closed":false,"joined":[false,false],"d":"M153.4 926.9L543 880.7"},{"closed":false,"joined":[true,false],"d":"M599.3 783.9L893.2 715"},{"closed":false,"joined":[false,true],"d":"M942.4 812.3L931.5 887.3C929 904.1 911.7 921.8 894.1 921.8L634.2 921.8C618.7 921.8 599.3 906.1 599.3 890.1L599.3 641"},{"closed":false,"joined":[true,true],"d":"M142.5 509L883 509L883 641L138.9 641"},{"closed":false,"joined":[true,true],"d":"M281 641L281 911.8"},{"closed":false,"joined":[false,false],"d":"M91 107L480 107"},{"closed":false,"joined":[false,false],"d":"M542 107L931 107"},{"closed":false,"joined":[false,false],"d":"M436 359L436 197L150 197L150 361"},{"closed":false,"joined":[false,false],"d":"M878 359L878 197L586 197L586 361"},{"closed":false,"joined":[false,false],"d":"M250.4 244.6L323.8 337.8"},{"closed":false,"joined":[false,false],"d":"M684.1 246.6L768.3 336.3"}]},"響":{"strokes":[{"closed":false,"joined":[true,true],"d":"M383 188L621 188"},{"closed":false,"joined":[false,false],"d":"M158 522L860 522"},{"closed":false,"joined":[true,true],"d":"M220 811L782 811"},{"closed":false,"joined":[true,true],"d":"M220 902L782 902"},{"closed":false,"joined":[false,false],"d":"M59 638L942 638"},{"closed":false,"joined":[true,false],"d":"M282.4 352.5L45.4 371.3"},{"closed":false,"joined":[true,false],"d":"M613.7 392.1L316 423.3"},{"closed":false,"joined":[false,false],"d":"M61.5 523.6C209.6 458.1 259.6 416.2 325.5 267.9"},{"closed":false,"joined":[false,false],"d":"M786.5 420.5L880.4 420.5C911.3 420.5 930.3 389.4 930.3 361.1C930.3 326.1 869.8 265.7 836.1 233L932.7 90.1"},{"closed":false,"joined":[true,false],"d":"M191.5 277.7L66.9 157.9"},{"closed":false,"joined":[true,false],"d":"M114 203.1L217.1 56.5"},{"closed":false,"joined":[true,false],"d":"M114.9 365.8C172.9 306.5 234 223.7 291.9 145.5"},{"closed":false,"joined":[true,false],"d":"M926.7 99L720 99L720 491"},{"closed":false,"joined":[true,true],"d":"M383 416.3L383 99L621 99L621 277L382 277"},{"closed":false,"joined":[false,true],"d":"M498 437L498 522"},{"closed":false,"joined":[false,false],"d":"M782 948L782 722L220 722L220 951"},{"closed":false,"joined":[true,false],"d":"M383.6 638L306.2 543.4"},{"closed":false,"joined":[false,false],"d":"M663.9 441.7L538.7 318"},{"closed":false,"joined":[true,false],"d":"M625 638L697.8 545.6"}]},"藍":{"strokes":[{"closed":false,"joined":[false,false],"d":"M62 146L945 146"},{"closed":false,"joined":[true,false],"d":"M595 360L932 360"},{"closed":false,"joined":[false,false],"d":"M579 552L911 552"},{"closed":false,"joined":[false,false],"d":"M329 50L329 235"},{"closed":false,"joined":[true,true],"d":"M306 267L306 372"},{"closed":false,"joined":[true,true],"d":"M306 490L306 595"},{"closed":false,"joined":[false,false],"d":"M667 50L667 235"},{"closed":false,"joined":[false,false],"d":"M60 903L943 903"},{"closed":false,"joined":[true,true],"d":"M397 682L397 903"},{"closed":false,"joined":[true,true],"d":"M611 682L611 903"},{"closed":false,"joined":[true,true],"d":"M185 903L185 682L827 682L827 903"},{"closed":false,"joined":[false,false],"d":"M648.4 248.6C617.1 328.2 570 405.6 517.4 490.2"},{"closed":false,"joined":[true,true],"d":"M124 490L461 490L461 372L124 372"},{"closed":false,"joined":[false,false],"d":"M498 267L124 267L124 595L509 595"}]},"鑑":{"strokes":[{"closed":false,"joined":[false,false],"d":"M729 488L946 488"},{"closed":false,"joined":[false,false],"d":"M694 507L440 507L440 97L682 97"},{"closed":false,"joined":[true,true],"d":"M562 97L562 232"},{"closed":false,"joined":[true,true],"d":"M562 374L562 507"},{"closed":false,"joined":[false,false],"d":"M357 907L958 907"},{"closed":false,"joined":[true,true],"d":"M440 374L661 374L661 232L440 232"},{"closed":false,"joined":[false,false],"d":"M710.5 364.9C753.1 254.6 773.2 177 792.4 60.4"},{"closed":false,"joined":[false,false],"d":"M48.4 895.8L396.4 819.2"},{"closed":false,"joined":[false,false],"d":"M105 309L362 309"},{"closed":false,"joined":[false,false],"d":"M53 479L380 479"},{"closed":false,"joined":[false,false],"d":"M99.3 565.3C115.8 631.2 136.3 715.4 136.3 771.1"},{"closed":false,"joined":[false,false],"d":"M309 753.5L355.5 555.4"},{"closed":false,"joined":[true,true],"d":"M231 309L231 855.6"},{"closed":false,"joined":[true,false],"d":"M756.6 228L951 228"},{"closed":false,"joined":[true,true],"d":"M601 617L601 907"},{"closed":false,"joined":[true,true],"d":"M745 617L745 907"},{"closed":false,"joined":[true,true],"d":"M459 907L459 617L891 617L891 907"},{"closed":false,"joined":[false,true],"d":"M37 330.7C124.1 241.2 177.4 162.3 231.9 50.3"},{"closed":false,"joined":[false,false],"d":"M399.2 251.1C345.1 177.7 295.3 115.6 231.7 50"}]},"驚":{"strokes":[{"closed":false,"joined":[false,false],"d":"M66 113L538 113"},{"closed":false,"joined":[false,false],"d":"M210 49L210 168"},{"closed":false,"joined":[false,false],"d":"M395 49L395 168"},{"closed":false,"joined":[false,false],"d":"M64.2 298.5C109.1 262.3 140.8 218.5 180.7 161.8"},{"closed":false,"joined":[true,true],"d":"M481.5 206C382.4 206 182 207.3 141.8 215.6"},{"closed":false,"joined":[false,true],"d":"M944 154.5L606.4 154.5"},{"closed":false,"joined":[false,false],"d":"M345.5 415.6L433 415.6C479.2 415.6 481.6 228.8 481.6 193"},{"closed":false,"joined":[false,false],"d":"M521.2 267.9C579.8 195.3 619.5 140.4 665.3 58.6"},{"closed":false,"joined":[false,true],"d":"M516.4 412.4C598.6 412.4 789.1 302.1 824.1 226L857 154.5"},{"closed":false,"joined":[false,true],"d":"M953 422.1C801.6 393.8 698 293.4 588.6 180.1"},{"closed":false,"joined":[true,true],"d":"M155 277L155 375"},{"closed":false,"joined":[true,true],"d":"M155 277L355 277L355 375L155 375"},{"closed":false,"joined":[true,false],"d":"M210 563L798 563"},{"closed":false,"joined":[true,false],"d":"M210 660L802 660"},{"closed":false,"joined":[true,true],"d":"M210 758L889.9 758"},{"closed":false,"joined":[false,false],"d":"M837 465L210 465L210 774"},{"closed":false,"joined":[true,true],"d":"M499 465L499 758"},{"closed":false,"joined":[false,false],"d":"M705 935.8L806.9 935.8C822.5 935.8 838.6 935 851 925.5C869.9 910.9 872 885.1 875.3 861.4L891.8 745"},{"closed":false,"joined":[false,false],"d":"M75.6 945.7C100.2 927.8 164.6 855 203.1 811.1"},{"closed":false,"joined":[false,false],"d":"M319.4 814.4L350.1 936.5"},{"closed":false,"joined":[false,false],"d":"M482.3 813.1L543.5 919.8"},{"closed":false,"joined":[false,false],"d":"M726.9 882.9L647.7 803.7"}]}};
+  const LIST = [
+    ['龍', 'ryū', 'dragon'], ['鶴', 'tsuru', 'crane'], ['霧', 'kiri', 'fog'], ['麗', 'rei', 'beautiful'],
+    ['響', 'hibiki', 'echo'], ['藍', 'ai', 'indigo'], ['鑑', 'kan', 'mirror, model'], ['驚', 'kyō', 'surprise'],
+  ];
+  const ONLY = new URLSearchParams(location.search).get('only');
+  if (ONLY) LIST.splice(0, LIST.length, ...LIST.filter(([c]) => ONLY.includes(c)));
+  const W = 46; // line width, units of the em
+  const R = 40; // corner radius
+
+  // The line's geometry: vectors, cubic segments, corners rounded as circular arcs written as one
+  // cubic, and L-shaped meetings merged into one path. Shared by the Variable Kanji piece and,
+  // through scripts/sen-specimen.mjs, inlined into the curves and tester artifacts.
+  
+  // ———————————————————————————— vectors
+  const add = (a, b) => [a[0] + b[0], a[1] + b[1]];
+  const sub = (a, b) => [a[0] - b[0], a[1] - b[1]];
+  const mul = (a, k) => [a[0] * k, a[1] * k];
+  const dot = (a, b) => a[0] * b[0] + a[1] * b[1];
+  const len = (a) => Math.hypot(a[0], a[1]);
+  const unit = (a) => { const n = len(a) || 1; return [a[0] / n, a[1] / n]; };
+  const dist = (a, b) => len(sub(a, b));
+  const lerp = (a, b, t) => [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t];
+  const perp = (a) => [-a[1], a[0]];
+  const hash = (x, y) => { const s = Math.sin(x * 12.9898 + y * 78.233) * 43758.5453; return s - Math.floor(s); };
+  
+  // ———————————————————————————— strokes as segments (lines and cubics)
+  function parse(d) {
+    const t = d.match(/[MLCZ]|-?\d+(?:\.\d+)?/g);
+    const segs = [];
+    let cur = null;
+    let closed = false;
+    for (let i = 0; i < t.length; ) {
+      const c = t[i++];
+      if (c === 'M') cur = [+t[i++], +t[i++]];
+      else if (c === 'L') { const q = [+t[i++], +t[i++]]; segs.push({ c: false, p: [cur, q] }); cur = q; }
+      else if (c === 'C') { const a = [+t[i++], +t[i++]]; const b = [+t[i++], +t[i++]]; const e = [+t[i++], +t[i++]]; segs.push({ c: true, p: [cur, a, b, e] }); cur = e; }
+      else if (c === 'Z') closed = true;
+    }
+    return { segs, closed };
+  }
+  const bez = (p, t) => { const s = 1 - t; return add(add(mul(p[0], s * s * s), mul(p[1], 3 * s * s * t)), add(mul(p[2], 3 * s * t * t), mul(p[3], t * t * t))); };
+  function split(p, t) {
+    const a = lerp(p[0], p[1], t), b = lerp(p[1], p[2], t), c = lerp(p[2], p[3], t);
+    const d = lerp(a, b, t), e = lerp(b, c, t), f = lerp(d, e, t);
+    return [[p[0], a, d, f], [f, e, c, p[3]]];
+  }
+  function segLen(s) {
+    if (!s.c) return dist(s.p[0], s.p[1]);
+    let L = 0, prev = s.p[0];
+    for (let k = 1; k <= 24; k++) { const q = bez(s.p, k / 24); L += dist(prev, q); prev = q; }
+    return L;
+  }
+  /** Parameter at which the arc length from the start reaches `target`. */
+  function paramAt(s, target) {
+    let L = 0, prev = s.p[0];
+    for (let k = 1; k <= 64; k++) {
+      const q = bez(s.p, k / 64), step = dist(prev, q);
+      if (L + step >= target) return (k - 1 + (target - L) / (step || 1)) / 64;
+      L += step; prev = q;
+    }
+    return 1;
+  }
+  const startTan = (s) => unit(sub(s.c ? (dist(s.p[1], s.p[0]) > 0.5 ? s.p[1] : s.p[2]) : s.p[1], s.p[0]));
+  const endTan = (s) => (s.c ? unit(sub(s.p[3], dist(s.p[2], s.p[3]) > 0.5 ? s.p[2] : s.p[1])) : unit(sub(s.p[1], s.p[0])));
+  function trimEnd(s, t) {
+    if (!s.c) return { ...s, p: [s.p[0], add(s.p[1], mul(unit(sub(s.p[0], s.p[1])), t))] };
+    return { ...s, p: split(s.p, paramAt(s, segLen(s) - t))[0] };
+  }
+  function trimStart(s, t) {
+    if (!s.c) return { ...s, p: [add(s.p[0], mul(unit(sub(s.p[1], s.p[0])), t)), s.p[1]] };
+    return { ...s, p: split(s.p, paramAt(s, t))[1] };
+  }
+  
+  /** The arc joining segment a's end to segment b's start, with both trimmed back. */
+  function corner(s, nx, r) {
+    const u = endTan(s), v = startTan(nx);
+    const phi = Math.acos(Math.max(-1, Math.min(1, dot(u, v))));
+    if (phi < (25 * Math.PI) / 180) return null; // only real corners
+    const half = Math.tan(Math.min(phi, 3.0) / 2);
+    const t = Math.min(r * half, segLen(s) * 0.48, segLen(nx) * 0.48);
+    if (t < 10) return null; // too short to round without a crowd of points
+    const rr = t / half;
+    const a = trimEnd(s, t), b = trimStart(nx, t);
+    const A = a.p.at(-1), B = b.p[0];
+    const k = (4 / 3) * Math.tan(phi / 4) * rr;
+    return { a, b, arc: { c: true, fillet: true, p: [A, add(A, mul(endTan(a), k)), sub(B, mul(startTan(b), k)), B] } };
+  }
+  
+  /** Rounds every corner with a circular arc of radius r, written as one cubic. */
+  function fillet(st, r) {
+    if (!r) return st;
+    const segs = st.segs.map((s) => ({ c: s.c, p: s.p.map((q) => q.slice()) }));
+    const out = [];
+    for (let i = 0; i < segs.length; i++) {
+      const s = segs[i], nx = segs[i + 1];
+      if (!nx) { out.push(s); break; }
+      const k = corner(s, nx, r);
+      if (!k) { out.push(s); continue; }
+      out.push(k.a, k.arc);
+      segs[i + 1] = k.b;
+    }
+    // A closed path also turns where it closes.
+    if (st.closed && out.length > 1) {
+      const k = corner(out.at(-1), out[0], r);
+      if (k) { out[out.length - 1] = k.a; out[0] = k.b; out.push(k.arc); }
+    }
+    return { ...st, segs: out };
+  }
+  
+  const ptAt = (s, t) => (s.c ? bez(s.p, t) : lerp(s.p[0], s.p[1], t));
+  const reverseSegs = (segs) => segs.slice().reverse().map((s) => ({ ...s, p: s.p.slice().reverse() }));
+  function splitSeg(s, t) {
+    if (s.c) { const [a, b] = split(s.p, t); return [{ c: true, p: a }, { c: true, p: b }]; }
+    const m = lerp(s.p[0], s.p[1], t);
+    return [{ c: false, p: [s.p[0], m] }, { c: false, p: [m, s.p[1]] }];
+  }
+  /** Where on a stroke a point lies: segment, parameter, distance, arc length from the start. */
+  function locate(st, P, skip = () => false) {
+    let best = null, acc = 0;
+    st.segs.forEach((s, si) => {
+      const n = s.c ? 48 : 64, L = segLen(s);
+      for (let j = 0; j <= n; j++) {
+        const t = j / n, at = acc + L * t;
+        if (skip(at)) continue;
+        const d = dist(ptAt(s, t), P);
+        if (!best || d < best.d) best = { si, t, d, at };
+      }
+      acc += L;
+    });
+    return best && { ...best, total: acc };
+  }
+  function cutAt(st, si, t) {
+    const [h, k] = splitSeg(st.segs[si], t);
+    const head = [...st.segs.slice(0, si), h].filter((s) => segLen(s) > 0.5);
+    const tail = [k, ...st.segs.slice(si + 1)].filter((s) => segLen(s) > 0.5);
+    return [head, tail];
+  }
+  
+  /**
+   * Turns L-shaped meetings into corners. Where a stroke's joined end lands on another
+   * stroke within `reach` of that stroke's end, the overshoot is cut and the two become
+   * one path with a corner, which fillet() can round. A path that meets itself closes.
+   */
+  function mergeCorners(strokes, reach = 90) {
+    let list = strokes.map((s) => ({ ...s }));
+    for (let guard = 0; guard < 40; guard++) {
+      let done = true;
+      for (const A of list) {
+        if (A.closed) continue;
+        for (const atEnd of [false, true]) {
+          const k = atEnd ? 1 : 0;
+          if (!A.joined[k]) continue;
+          const P = atEnd ? A.segs.at(-1).p.at(-1) : A.segs[0].p[0];
+          // Meeting itself: the far end of the same path, near its end.
+          const own = locate(A, P, (at) => (atEnd ? at > segTotal(A) - 60 : at < 60));
+          if (own && own.d < 10 && segTotal(A) > 300 && !(atEnd ? A.segs.at(-1).c : A.segs[0].c)) {
+            const far = atEnd ? own.at : own.total - own.at;
+            if (far < reach) {
+              // The end lands near the start (or the start near the end): drop the overshoot, close the loop.
+              const [head, tail] = cutAt(A, own.si, own.t);
+              A.segs = atEnd ? tail : head;
+              A.closed = true;
+              A.joined = [false, false];
+              done = false;
+              break;
+            }
+          }
+          let best = null;
+          for (const B of list) {
+            if (B === A || B.closed) continue;
+            const l = locate(B, P);
+            if (l && l.d < 10 && (!best || l.d < best.l.d)) best = { B, l };
+          }
+          if (!best) continue;
+          const { B, l } = best;
+          const nearStart = l.at < l.total - l.at;
+          if (Math.min(l.at, l.total - l.at) > reach) continue;
+          // Only an L of two real strokes, running within 20° of square where they meet,
+          // becomes a corner (a dot touching a bar, or a diagonal, stays apart).
+          if (segTotal(A) < 60 || segTotal(B) < 60) continue;
+          const aSeg = atEnd ? A.segs.at(-1) : A.segs[0];
+          const da = atEnd ? endTan(aSeg) : startTan(aSeg);
+          const db = startTan(splitSeg(B.segs[l.si], Math.min(0.999, Math.max(0.001, l.t)))[1]);
+          if (Math.abs(dot(da, db)) > Math.cos((70 * Math.PI) / 180)) continue;
+          const [head, tail] = cutAt(B, l.si, l.t);
+          const keep = nearStart ? tail : reverseSegs(head);
+          const aSegs = atEnd ? A.segs : reverseSegs(A.segs);
+          const merged = { segs: [...aSegs, ...keep], closed: false, joined: [atEnd ? A.joined[0] : A.joined[1], nearStart ? B.joined[1] : B.joined[0]] };
+          list = [...list.filter((s) => s !== A && s !== B), merged];
+          done = false;
+          break;
+        }
+        if (!done) break;
+      }
+      if (done) break;
+    }
+    return list;
+  }
+  const segTotal = (st) => st.segs.reduce((t, s) => t + segLen(s), 0);
+
+  // ———————————————————————————— one glyph
+
+  function strokesOf(ch) {
+    let sts = DATA[ch].strokes.map((s) => ({ ...parse(s.d), joined: s.joined.slice() }));
+    sts = mergeCorners(sts);
+    return sts.map((st) => fillet(st, R));
+  }
+  const fmt = (q) => `${q[0].toFixed(1)} ${q[1].toFixed(1)}`;
+  function segsD(segs, closed) {
+    let d = `M${fmt(segs[0].p[0])}`;
+    for (const s of segs) d += s.c ? `C${fmt(s.p[1])} ${fmt(s.p[2])} ${fmt(s.p[3])}` : `L${fmt(s.p[1])}`;
+    return closed ? `${d}Z` : d;
+  }
+  /** The path for the outline's inside: free ends drawn back by the outline's own width. */
+  function innerD(st, e) {
+    if (st.closed) return segsD(st.segs, true);
+    let segs = st.segs.slice();
+    if (!st.joined[0] && segLen(segs[0]) > e * 2) segs[0] = trimStart(segs[0], e);
+    if (!st.joined[1] && segLen(segs.at(-1)) > e * 2) segs[segs.length - 1] = trimEnd(segs.at(-1), e);
+    return segsD(segs, false);
+  }
+
+  const PAD = 70, S = (1000 - 2 * PAD) / 1000;
+  const frame = (inner, label) => `<svg viewBox="0 0 1000 1000" role="img" aria-label="${label}"><rect width="1000" height="1000" fill="var(--ground)"/><g transform="translate(${PAD} ${PAD}) scale(${S})">${inner}</g></svg>`;
+  const lineAttrs = 'fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="4"';
+
+  function solid(ch) {
+    const sts = strokesOf(ch);
+    return frame(`<g ${lineAttrs} stroke="var(--ink)" stroke-width="${W}">${sts.map((st) => `<path d="${segsD(st.segs, st.closed)}"/>`).join('')}</g>`, ch);
+  }
+
+  function build(ch) {
+    const sts = strokesOf(ch);
+    const e = 1.2 / S; // edge width, so it draws near 0.8 px at this size
+    let on = 0, off = 0;
+    let handles = '', offs = '', ons = '';
+    const hair = 'vector-effect="non-scaling-stroke"';
+    for (const st of sts) {
+      const segs = st.segs;
+      segs.forEach((s, i) => {
+        if (s.c) {
+          handles += `M${fmt(s.p[0])}L${fmt(s.p[1])}M${fmt(s.p[3])}L${fmt(s.p[2])}`;
+          offs += `<circle cx="${s.p[1][0].toFixed(1)}" cy="${s.p[1][1].toFixed(1)}" r="4.5"/><circle cx="${s.p[2][0].toFixed(1)}" cy="${s.p[2][1].toFixed(1)}" r="4.5"/>`;
+          off += 2;
+        }
+      });
+      // On-curve points: squares at ends and corners, circles where the line runs smooth.
+      const nodes = [segs[0].p[0], ...segs.map((s) => s.p.at(-1))];
+      const count = st.closed ? nodes.length - 1 : nodes.length;
+      for (let k = 0; k < count; k++) {
+        const q = nodes[k];
+        const before = k > 0 ? segs[k - 1] : st.closed ? segs.at(-1) : null;
+        const after = k < segs.length ? segs[k] : st.closed ? segs[0] : null;
+        const smooth = before && after && dot(endTan(before), startTan(after)) > Math.cos((3 * Math.PI) / 180);
+        ons += smooth ? `<circle cx="${q[0].toFixed(1)}" cy="${q[1].toFixed(1)}" r="5.5"/>` : `<rect x="${(q[0] - 5).toFixed(1)}" y="${(q[1] - 5).toFixed(1)}" width="10" height="10"/>`;
+        on++;
+      }
+    }
+    const outer = sts.map((st) => `<path d="${segsD(st.segs, st.closed)}"/>`).join('');
+    const inner = sts.map((st) => `<path d="${innerD(st, e)}"/>`).join('');
+    const art = `<g ${lineAttrs} stroke="var(--edge)" stroke-width="${W}">${outer}</g><g ${lineAttrs} stroke="var(--tint)" stroke-width="${W - 2 * e}">${inner}</g>`;
+    const solidArt = `<g ${lineAttrs} stroke="var(--ink)" stroke-width="${W}">${outer}</g>`;
+    const marks = `<g ${lineAttrs} stroke="var(--curve)" stroke-width="1" ${hair}>${outer}</g><path d="${handles}" fill="none" stroke="var(--handle)" stroke-width="0.75" ${hair}/><g fill="var(--handle)">${offs}</g><g fill="var(--curve)">${ons}</g>`;
+    return { svg: frame(`<g class="build">${art}${marks}</g><g class="solid">${solidArt}</g>`, `${ch} with its points and handles`), on, off, strokes: sts.length, curves: sts.reduce((t, st) => t + st.segs.filter((s) => s.c).length, 0), lines: sts.reduce((t, st) => t + st.segs.filter((s) => !s.c).length, 0) };
+  }
+
+  document.getElementById('set').innerHTML = LIST.map(([ch]) => solid(ch)).join('');
+  document.getElementById('wall').innerHTML = LIST.map(([ch, romaji, meaning]) => {
+    const b = build(ch);
+    return `<figure class="glyph">${b.svg}<figcaption><span class="name"><b lang="ja">${ch}</b><i>${romaji}</i><span class="muted">${meaning}</span></span><span class="mono muted">${b.strokes} paths · ${b.lines} lines · ${b.curves} curves · ${b.on} points · ${b.off} handles</span></figcaption></figure>`;
+  }).join('');
+
+  const key = (shape, label) => `<span><svg viewBox="0 0 20 20" style="width:14px;height:14px;aspect-ratio:auto">${shape}</svg>${label}</span>`;
+  document.getElementById('key').innerHTML = [
+    key('<rect x="6" y="6" width="8" height="8" fill="var(--curve)"/>', 'corner or end'),
+    key('<circle cx="10" cy="10" r="4.5" fill="var(--curve)"/>', 'smooth point'),
+    key('<path d="M2 18L14 6" stroke="var(--handle)" stroke-width="0.9"/><circle cx="14" cy="6" r="3.5" fill="var(--handle)"/>', 'handle'),
+  ].join('');
+
+  const wall = document.getElementById('wall');
+  const toggle = document.getElementById('toggle');
+  toggle.addEventListener('click', () => {
+    const show = wall.classList.toggle('solid-only');
+    toggle.setAttribute('aria-pressed', String(!show));
+    toggle.textContent = show ? 'Show points and handles' : 'Hide points and handles';
+  });
+</script>

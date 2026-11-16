@@ -2,7 +2,6 @@
  * Examples (pages/examples.tsx): whole screens built from Area. App classes only (product UI rule 13): these lay the
  * screen out; every control, surface and colour is an Area component or token.
  * ------------------------------------------------------------------------- */
-.ex-canvas { min-inline-size: 960px; border: var(--area-border-width) solid var(--area-border-card); border-radius: var(--area-radius-container, 12px); overflow: hidden; background: var(--area-bg-page) }
 .ex-thumb { inline-size: 1200px; pointer-events: none }
 /* Settings (content/examples/settings.tsx): Untitled UI's Appearance page, a label and its description beside each control. */
 .ex-app--settings { min-block-size: 760px; } /* pick */

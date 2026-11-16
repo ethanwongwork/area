@@ -31,3 +31,15 @@ Oct 14" within a year, else "Oct 14, 2025", then the time.
 ## 2026-11-04: read on its glyphs (Q-T2)
 
 Owner, "Apply both" on Kit Type Decisions (artifact KeEDPx5sUTQXE6iKtu6sw1; docs/research/kit-type-2026-11-04). Its line gives back its half-leading above and below, so a time 8 over its message is 8 from its baseline (it measured 12). Test: `packages/react/tests/type-rhythm.test.mjs`.
+
+## Review note, 2026-11-11 (type rules, plan A9)
+
+- **What changed:** takes tabular figures (plan A9.8).
+- **Why:** the system evaluation's type rules (docs/research/system-evaluation-2026-11-11, section 5, A9), owner-approved
+  2026-11-11; the rules are in DESIGN_SYSTEM.md ("Ink and weight", "Size and shape", "Text pairs") and the type skill.
+
+### 2026-11-11 · Ink, dark and colour (system plan, Phase 1)
+
+- **What changed:** Reads the subtle ink (`fg-subtle`, plan A3.2): meta a step under a description.
+- **Why:** docs/research/system-evaluation-2026-11-11 (README §5); the owner took every recommendation on 2026-11-11.
+- **Verdict:** awaiting the owner.

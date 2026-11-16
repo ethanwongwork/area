@@ -9,7 +9,14 @@ export const GalleryCountSizeSm = () => <Count size="sm" count={12} />;
 export const GalleryCountSizeMd = () => <Count size="md" count={12} />;
 export const GalleryCountSingleDigit = () => <Count variant="soft" count={3} />;
 export const GalleryCountOverflow = () => <Count variant="soft" count={125} />;
-export const GalleryCountZeroHidden = () => <Count variant="soft" count={0} showZero={false} />;
+/* Zero hidden renders nothing, so the tile shows the rows it sits on: the second row's 0 is not drawn (a Count alone at 0
+   left an empty tile; system evaluation F3.3). */
+export const GalleryCountZeroHidden = () => (
+  <Nav aria-label="Label">
+    <NavItem href="#gallery-count-zero" current trailing={<Count variant="soft" count={3} />}>Item one</NavItem>
+    <NavItem href="#gallery-count-zero" trailing={<Count variant="soft" count={0} showZero={false} />}>Item two</NavItem>
+  </Nav>
+);
 export const GalleryCountLabel = () => <Count variant="soft" count={3} label="unread" />;
 
 export const GalleryCountNav = () => (

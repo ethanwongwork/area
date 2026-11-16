@@ -19,7 +19,7 @@
  * the visuals take the picks.
  */
 import { AddIcon, ChatAddIcon, InfoIcon, MoonIcon, OptionsIcon, ResetIcon, SunIcon } from "@area/icons";
-import { Approval, Badge, Button, Checkbox, CheckboxGroup, CodeBlock, ColorPicker, ColorSwatch, ColorSwatchPicker, DescriptionList, DescriptionListItem, Message, Pagination, Panel, Plan, ScrollToLatest, Segmented, Select, Slider, Switch, Tooltip, ZoomControl, type ApprovalOption } from "@area/react";
+import { Approval, Badge, Button, Checkbox, CheckboxGroup, CodeBlock, ColorPicker, ColorSwatch, ColorSwatchPicker, DescriptionList, DescriptionListItem, Message, Pagination, Panel, Plan, ScrollToLatest, Segmented, Select, Slider, Switch, Tooltip, ZoomControl, type ApprovalOption, Link } from "@area/react";
 import { Fragment, useEffect, useLayoutEffect, useRef, useState, type ReactNode } from "react";
 import { LoopingPress } from "../abstract.tsx";
 import { appScale } from "../app-scale.ts";
@@ -243,7 +243,7 @@ export function ThemeSetup({ mode, setMode, onBrowse }: ThemeSetupProps) {
       description: `${choice === "essentials" ? "The choices that change the most" : "Every setting, chapter by chapter"}, ${paths[choice]} questions, about ${minutesFor(paths[choice])} min`,
     })),
     value: path, choose: choice => { setPath(choice as Path); select(QUESTIONS.find(entry => (choice === "complete" || entry.essential) && (!entry.when || entry.when(values, studioColours)))?.id ?? "review"); },
-    detail: changed ? <p className="setup-step__note"><InfoIcon /><span>Starting from your {changed} changed settings. <button type="button" className="setup__link" onClick={restart}>Start from the defaults</button></span></p> : undefined,
+    detail: changed ? <p className="setup-step__note"><InfoIcon /><span>Starting from your {changed} changed settings. <Link as="button" onClick={restart}>Start from the defaults</Link></span></p> : undefined,
     position: { at: 1, count: 2, go: n => setOpening(n as 0 | 1), label: "Welcome questions" },
     footer: <Button size="sm" onClick={next}>Start</Button>,
     dismiss: { label: "go back", run: () => setOpening(0) },
@@ -260,7 +260,7 @@ export function ThemeSetup({ mode, setMode, onBrowse }: ThemeSetupProps) {
     const context = entry.context?.(values);
     const notes = <>
       {entry.note ? <p className="setup-step__note"><InfoIcon /><span>{entry.note}</span></p> : null}
-      {context ? <p className="setup-step__note setup-step__note--context"><InfoIcon /><span>{context.note} <button type="button" className="setup__link" onClick={() => set(context.set)}>{context.action}</button></span></p> : null}
+      {context ? <p className="setup-step__note setup-step__note--context"><InfoIcon /><span>{context.note} <Link as="button" onClick={() => set(context.set)}>{context.action}</Link></span></p> : null}
     </>;
     const base = {
       id: entry.id, title: entry.question, description: entry.description,

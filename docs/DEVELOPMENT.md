@@ -46,24 +46,29 @@ npm test               # token math, axes and the contrast gate
 | App chat code | `npm run test:desktop` |
 | Output (`packages/output`), or anything it reads (axes, component CSS, React sources) | `npm run test:output` (after a build), `npm run typecheck`; `npm run fidelity -w @area/output` after a change to the axes, base or component CSS (the written CSS must paint exactly what Area paints; `AREA_SYSTEM_FILE=<system.json>` adds a saved system) |
 
+Behaviour (keys, focus, pointer, typeahead, forms, modals, hit targets): build, then `npm run test:behaviour` (or `-- menu|list|forms|modal|hit`). Suites drive real components in headless Edge with real input; `gap("<plan item>", …)` marks a known gap and fails once it is fixed: unmark it in the same change. See tests/behaviour/README.md.
+
+Rendered lengths, corners, marks, header bars, the dark floating edge and the gallery's tiles: build the app, then `npm run check:rendered` (see Rendered checks below).
+
 **Full sweep before a pull request:** `npm run build && npm run typecheck && npm test && npm run test:contracts && node --test packages/react/tests/*.test.mjs && npm run test:desktop && npm run check:playgrounds -w @area/desktop && npm run check:docs -w @area/desktop && npm run check:app-css -w @area/desktop`.
 
 ## Continuous integration
 
-`.github/workflows/ci.yml` runs on every pull request and on `main` (Ubuntu, Node 24,
-about ten minutes, most of it the icon build). It runs:
+`.github/workflows/ci.yml` runs on every pull request and on `main` (Ubuntu, Node 24) as two jobs side by side.
+**Token, axis and contrast tests** (`npm ci`, then `npm test`; about 20 minutes, since its sweeps cover every
+setting position; its own job since 2026-11-15, when it outgrew the shared 30-minute limit). **checks** (about
+fifteen minutes, most of it the build) runs:
 
 1. `npm ci`;
 2. `build`, which lints every icon;
 3. `typecheck`;
-4. `npm test`;
-5. `test:contracts`;
-6. `test:icons`;
-7. the React suites;
-8. the desktop app's tests (`test:desktop`; since 2026-11-07);
-9. the desktop build with `check:playgrounds`, `check:docs` and `check:app-css`;
-10. `test:consumer`;
-11. a check that the build left tracked files unchanged.
+4. `test:contracts`;
+5. `test:icons`;
+6. the React suites;
+7. the desktop app's tests (`test:desktop`; since 2026-11-07);
+8. the desktop build with `check:playgrounds`, `check:docs` and `check:app-css`;
+9. `test:consumer`;
+10. a check that the build left tracked files unchanged.
 
 It skips the Electron binary and checks nothing in a browser. Preview, rendered contrast,
 forced colours and a 1x display still need a session. `npm ci` refuses a lockfile that
@@ -94,6 +99,50 @@ The app is the source of truth, so every visible change is judged there.
   CSP (`script-src 'self'`) blocks `eval` and injected `<script>` tags. Pass the script's
   full text as the browser tool's JavaScript instead: that runs through DevTools, outside
   the page's CSP. Fetching it from the dev server returns the app's page, not the script.
+
+## Rendered checks
+
+`npm run check:rendered` renders the Components Overview from the built app
+(`apps/desktop/dist`) at the shipped defaults, light and dark, measures every tile, and
+asserts the rule tables in `scripts/rendered/rules/*.mjs` (plan F1,
+`docs/research/system-evaluation-2026-11-11/`). Lengths come from the DOM in CSS px;
+only the dark floating edge reads pixels. It never gates on picture diffs.
+
+- **When.** After a change to component CSS, tokens or settings that moves a rendered
+  length, a corner, a mark, a header bar or a dark edge, and after gallery or demo
+  changes; before a pull request that touches any of them. Build the app first
+  (`npm run build -w @area/desktop`, in the build lock when sessions share a tree).
+- **How long.** About 5 minutes for the capture on an idle machine, 14 with other browsers and builds running (125 families, both themes side by side),
+  then seconds for the rules. `-- --reuse` re-checks the last capture without a browser.
+- **What it opens.** Its own static server on a free port over a copy of `dist`, and a
+  headless Edge (or Chrome; `AREA_RENDERED_BROWSER` names another) per theme, in fresh
+  profiles that are deleted afterwards. It never touches an open Area window. Output goes
+  to `.cache/rendered/` (ignored by git); PNGs never go in the repository.
+- **True scale.** Everything is measured at zoom 100% with every tile's stage at `scale:
+  1`. The gallery shrinks a specimen wider than a whole row to fit its card, so a family
+  with a shrunk stage is measured in a wider window, widened until every stage is at 1.
+  A capture fails, naming the tile, if any measured stage is at another scale.
+- **Two kinds of rule.** An assert rule (cap centring, extent, visible at rest, tile
+  names, wrap tiles) fails on a violation that `scripts/rendered/known-failures.json` does
+  not list, and on a listed one that no longer fails. Each entry names the plan item that
+  will fix it. When a fix lands, delete its lines or run `-- --reuse --prune-known`. A
+  snapshot rule (header bars, marks, corners, dark floating edge) fails when any recorded
+  value changes.
+- **Updating a snapshot deliberately.** Only when the change is the intended one: run
+  `npm run check:rendered -- --reuse --update <rule id>` (for example `marks`), review
+  the diff of `scripts/rendered/snapshots/<rule id>.json`, and say why in the commit.
+  Never update a snapshot or a known failure to make an unintended change pass.
+- **One family for a review page.** `npm run capture:rendered -- <slug> …` writes
+  `.cache/rendered/capture/<slug>/light.png`, `dark.png` and the measures (`--theme dark`,
+  `--no-png`, `--set type=12 --set density=28` for Compact). Families whose tiles are cut
+  by their cards are laid out one card per row, or in a wider window. Then
+  `node scripts/rendered/merge.mjs` writes `measure.json` and `index.json`,
+  `node scripts/rendered/open.mjs <slug>[/<tile>]` captures overlays open, and
+  `node scripts/rendered/sheets.mjs` writes contact sheets.
+- **Not in CI.** It needs a Chromium browser. CI would need Chrome or Edge on the runner
+  (`AREA_RENDERED_BROWSER`), the desktop build first, and the bundled fonts; headless
+  Chromium versions differ from Electron's by a subpixel in text rasterisation, which is
+  why its tolerances are in CSS px from the DOM.
 
 ## Icons
 

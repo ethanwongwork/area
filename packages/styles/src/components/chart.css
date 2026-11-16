@@ -8,8 +8,8 @@
  *
  * The plot is SVG drawn at its box's measured width, so text never scales; its marks follow the data views system:
  * marks 2 apart, a corner of min(4, side / 4) at the value end only, flat fills with no edge, 1px strokes (gridlines the
- * Dividers group's line, the baseline the divider, a guide dashed 2 2), labels at the data label style (text-xs, mono,
- * tabular, muted). Series paint the series tokens in order (`--area-series-<n>-fill` for fills and keys, the mark
+ * Dividers group's line, the baseline the divider, a guide dashed 2 2), labels at the data label style (text-xs, the UI
+ * sans, tabular, muted; plan A9.11: mono only where characters align by column). Series paint the series tokens in order (`--area-series-<n>-fill` for fills and keys, the mark
  * `--area-series-<n>` for lines). The tooltip is Area's Tooltip; the table view is Area's Table.
  * ------------------------------------------------------------------------- */
 @layer area.components {
@@ -23,7 +23,7 @@
     /* A guide (the hovered x, a reference): the muted ink at 45% over the ground, dashed 2 2 (data views round 6). */
     --_chart-guide: color-mix(in oklab, var(--area-fg-muted) 45%, var(--_chart-ground)); /* spec */
     display: grid;
-    gap: var(--area-space-12); /* spec: body blocks 12 apart (data views round 9) */
+    gap: var(--area-gap-row); /* spec: body blocks 12 apart at the default (data views round 9) */
     min-inline-size: 0;
     color: var(--area-fg-default);
     font-size: var(--area-text-base-size);
@@ -49,7 +49,7 @@
     min-inline-size: 0;
     block-size: var(--_chart-height);
     border-radius: var(--area-radius-control-sm);
-    font-family: var(--area-font-mono);
+    font-family: var(--area-font-sans);
     font-size: var(--area-text-xs-size);
     line-height: var(--area-text-xs-leading);
     font-variant-numeric: tabular-nums;
@@ -84,8 +84,9 @@
      2; the ring kept, the dot one step smaller beside a 1.5 line). */
   .area-chart__dot { fill: var(--_chart-stroke); stroke: var(--_chart-ground); stroke-width: 2px; /* spec */ }
 
-  /* The donut's centre: the total, the second-rank figure (title-sm, 500, mono), over its label in the data label style. */
-  .area-chart__center { fill: var(--area-fg-default); font-size: var(--area-title-sm-size); font-weight: var(--area-weight-strong); }
+  /* The donut's centre: the total, the second-rank figure (plan A9.11: one figure role, sans, 400, tabular, title-sm with
+     its tracking), over its label in the data label style. */
+  .area-chart__center { fill: var(--area-fg-default); font-size: var(--area-title-sm-size); letter-spacing: var(--area-title-sm-tracking); font-weight: var(--area-weight-regular); font-variant-numeric: tabular-nums; }
   .area-chart__center-label { fill: var(--area-fg-muted); }
   .area-chart--donut .area-chart__plot { display: flex; justify-content: center; }
   .area-chart--donut .area-chart__mark[data-active] { fill: color-mix(in oklab, var(--_chart-fill) 80%, var(--area-fg-default)); /* spec: a slice under the pointer, a step deeper */ }
@@ -107,9 +108,9 @@
     display: grid;
     grid-template-columns: auto minmax(0, 1fr) auto;
     align-items: center;
-    column-gap: var(--area-space-8);
+    column-gap: var(--area-ui-cluster);
   }
-  .area-chart__tooltip-row > :last-child { margin-inline-start: var(--area-space-8); font-variant-numeric: tabular-nums; }
+  .area-chart__tooltip-row > :last-child { margin-inline-start: var(--area-ui-cluster); font-variant-numeric: tabular-nums; }
 
   /* A key: an 8 square, corner 2 (data views: strips and keys 8, corner 2). */
   .area-chart__key {
@@ -125,14 +126,14 @@
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: var(--area-space-4) var(--area-space-16);
+    gap: var(--area-space-4) calc(var(--area-ui-cluster) * 2);
     min-inline-size: 0;
   }
   .area-chart--donut .area-chart__legend { justify-content: center; }
   .area-chart__legend-item {
     display: inline-flex;
     align-items: center;
-    gap: var(--area-space-8);
+    gap: var(--area-ui-cluster);
     min-inline-size: 0;
     padding: 0;
     border: 0;
@@ -172,7 +173,7 @@
 
   /* --- The number: one figure, its label and its change ------------------- */
   /* Label (text, muted) · figure (CardValue's: title-lg, regular, tabular) · the change (a soft Badge) and what it is
-     against (the data label style, mono, muted); 4 apart, as Card's text pairs. */
+     against (the data label style, sans, muted); 4 apart, as Card's text pairs. */
   .area-chart--number { gap: var(--area-space-4); }
   .area-chart__label { color: var(--area-fg-muted); overflow-wrap: anywhere; }
   .area-chart__figure {
@@ -182,10 +183,10 @@
     font-weight: var(--area-weight-regular);
     font-variant-numeric: tabular-nums;
   }
-  .area-chart__change { display: flex; flex-wrap: wrap; align-items: center; gap: var(--area-space-4) var(--area-space-8); min-inline-size: 0; }
+  .area-chart__change { display: flex; flex-wrap: wrap; align-items: center; gap: var(--area-space-4) var(--area-ui-cluster); min-inline-size: 0; }
   .area-chart__note {
     color: var(--area-fg-muted);
-    font-family: var(--area-font-mono);
+    font-family: var(--area-font-sans);
     font-size: var(--area-text-xs-size);
     line-height: var(--area-text-xs-leading);
     font-variant-numeric: tabular-nums;

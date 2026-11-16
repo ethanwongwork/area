@@ -162,8 +162,21 @@ const tint = (alpha: string, dark = DARK) =>
  * twice the light alpha as dark shadows are, to 16% (Radix's 17%): Floating 3 draws 6%, Resting 3 at half weight 3%,
  * Field 0 nothing. Transparent in light, so light is unchanged.
  */
-const RIM_MAX = 0.16;
-const rim = (alpha: string) => `0 0 0 1px light-dark(transparent, rgb(255 255 255 / min(${num(RIM_MAX)}, calc(${alpha} * ${num(DARK)}))))`;
+export const RIM_MAX = 0.16;
+const rim = (alpha: string, spread = "1px") => `0 0 0 ${spread} light-dark(transparent, rgb(255 255 255 / min(${num(RIM_MAX)}, calc(${alpha} * ${num(DARK)}))))`;
+/**
+ * One edge per floating surface (plan A7.1, finding VN1, 2026-11-11). Every menu, popover, toast, dialog and drawer draws
+ * its frame (`border-width`, in the Floating stroke group's colour), so a rim outside it drew a second, brighter line: a
+ * two-tone 2px edge in dark. The floating and modal roles draw their rim only where no frame is (Stroke width 0, or the
+ * part of a pixel a Hairline leaves), and the frame takes the rim's strength in dark instead (stroke-groups.ts,
+ * `edge-floating`), so the brighter of the two is the one line. Tooltip's edge is its own inset line (tooltip.css), which
+ * takes the tooltip role's rim strength (`shadow-tooltip-rim`), so its role draws no rim either.
+ */
+const FRAMED_RIM = `max(0px, calc(1px - ${v("border-width")}))`;
+/** The rim's alpha a floating surface's frame takes in dark: the float role's at the Shadow step. */
+/** The tooltip role's rim alpha, which Tooltip's own inset edge takes in dark. */
+export const tooltipRimAlpha = () => `min(${num(RIM_MAX)}, calc(${v("elevation")} / 100 * ${num(ROLES.tooltip.weight)} * ${num(DARK)}))`;
+export const floatRimAlpha = () => `min(${num(RIM_MAX)}, calc(${v("elevation")} / 100 * ${num(ROLES.float.weight)} * ${num(DARK)}))`;
 
 /**
  * One role: the lip, the dark rim, the six soft layers, then the highlight, every slot always present (a transparent layer where a
@@ -176,7 +189,8 @@ export function roleShadow(role: keyof typeof ROLES | keyof typeof TIGHT): strin
   const { geometry: [ga, gy, gb], weight, step } = ROLES[role as keyof typeof ROLES];
   const alpha = `${v(step)} / 100 * ${num(weight)}`;
   const d = v("shadow-size");
-  const layers = [`0 1px 0 0 ${tint(v("shadow-lip"), 1.6)}`, rim(alpha)];
+  // Tooltip draws its own inset edge (tooltip.css), which takes the rim's strength, so its role draws none (plan A7.1).
+  const layers = [`0 1px 0 0 ${tint(v("shadow-lip"), 1.6)}`, rim(alpha, role === "float" || role === "modal" ? FRAMED_RIM : role === "tooltip" ? "0px" : "1px")];
   for (let i = 1; i <= SHADOW_SLOTS; i++) {
     const t = v(`shadow-slot-${i}-t`), g = v(`shadow-slot-${i}-g`);
     const y = `${d} * ${num(gy)}px * ${t}`;
@@ -204,6 +218,8 @@ function tightShadow(role: keyof typeof TIGHT): string {
 export function depthDerived(): Record<string, string> {
   return {
     ...Object.fromEntries(SHADOW_ROLES.map(role => [`${PREFIX}shadow-${role}`, roleShadow(role)])),
+    // Tooltip's dark edge strength: the rim its role no longer draws outside it (plan A7.1).
+    [`${PREFIX}shadow-tooltip-rim`]: tooltipRimAlpha(),
     // The ladder: the roles in depth order, for apps.
     [`${PREFIX}shadow-1`]: v("shadow-control"),
     [`${PREFIX}shadow-2`]: v("shadow-resting"),

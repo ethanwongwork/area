@@ -14,6 +14,7 @@
  *   contrast     the edges a stronger contrast draws: a field, a box, an outline button (a close-up, 1.25x)
  *   type         the type ramp, each role at the preset's size, so what follows the base (body, captions, the small
  *                heading) and what holds (titles, the display jump at 14) is plain
+ *   regular weight  a field's text and a box's label at the weight, beside a button whose strong label holds
  *   density      a list's rows (a close-up, 1.25x)
  *   radius       a field's and a button's corners (a close-up, 1.25x)
  *   Stroke and Shadow (owner, 2026-10-19: "fix the visuals for stroke and shadow to be more custom tailored to each
@@ -342,8 +343,6 @@ const CLOSE_UPS: Record<string, { scale: number; subject: () => ReactNode }> = {
   "danger-hover": { scale: 1.25, subject: DangerMenu },
 };
 
-/** Whether a setting draws a close-up (its component cropped a little over its size) rather than a fitted drawing. */
-export const hasCloseUp = (axis: string) => axis in CLOSE_UPS;
 
 /** The whole component, centred in a window on the page's ground, a little over its size. */
 function CloseUp({ scale, children }: { scale: number; children: ReactNode }) {
@@ -454,6 +453,14 @@ function drawing(axis: string, preset?: string): [number, ReactNode] {
       )];
     case "type":
       return [FILL.wide, <Ramp size={preset ?? DEFAULT_TYPE} />];
+    // Regular weight (plan A9.6): the field's text and the box's label move; the button's strong label holds.
+    case "regular-weight":
+      return [FILL.wide, (
+        <div className="lang-col">
+          <Input aria-label="Label" defaultValue="Body text" />
+          <div className="lang-row"><Checkbox label="Option" /><Button variant="outline" tone="neutral">Button</Button></div>
+        </div>
+      )];
     case "density":
       return [FILL.wide, <Rows />];
     case "radius":
@@ -471,15 +478,6 @@ function drawing(axis: string, preset?: string): [number, ReactNode] {
   }
 }
 
-/**
- * The settings whose change shows only in a state (hover, selection, focus, press): no view draws that state, so the
- * Setup's stage draws the state itself, the close-up's component at true scale (theme-setup.tsx).
- */
-export const STATE_SETTINGS = new Set(["stroke-hover", "selected-stroke", "selected-tint", "focus-ring", "shadow-hover", "fill-hover", "fill-selected", "fill-pressed", "danger-hover"]);
-export function StateDrawing({ axis }: { axis: string }) {
-  const Subject = CLOSE_UPS[axis]?.subject;
-  return Subject ? <Fit fill={FILL.window} max={1} group={`stage-${axis}`}><div className="lang-zoom-whole"><Subject /></div></Fit> : null;
-}
 
 /** The same fit for the Theme tab's Setup views (theme-setup.tsx): one zoom per group, by its largest drawing. */
 export { Fit as Scaled, FILL, LoopingPress, LoopingSwitch };

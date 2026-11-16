@@ -47,7 +47,9 @@ tab. A segmented control picks a value and is filled on a track; Nav moves betwe
 What keeps Tabs and Segmented apart is the job and the track: Segmented's options sit in a
 filled trough with a raised, edged plate; plate tabs have no track and a flat plate in the
 active fill. A horizontal Nav paints the same plate for routes and open documents (closable
-rows); Tabs own the tablist role, panels and arrow keys.
+rows); Tabs own the tablist role, panels and arrow keys. The boundary (COMPONENTS.md, Boundaries; plan B8.1): Tabs
+switch panels in place; a strip of places (open documents, records) is Nav horizontal, so a document tab's close,
+dirty mark and pin go on Nav's items, and Tabs gains only `iconOnly`.
 
 ## Variants
 
@@ -128,7 +130,7 @@ Area (node trees): md 32px tall, 20px apart, selected ink rgb(40, 40, 40), rest 
 |---|---|---|---|
 | tab · height | 28 / 32 / 40 (`control-sm/md/lg`) | Owner (three sizes); control tier | Notion 28 in a 40 row, Figma 24, Untitled 32 / 36 |
 | tab · inline padding | 0, content-aligned | Manifest contract ("labels align with panel content"); `inset.css:65` | Notion pads 8 each side; kept (third pass): padding would carry the underline past the content |
-| tab · gap | 16 / 20 / 24 (`space-*`) | not found (searched PRIOR_DECISIONS.md, navigation.css comments); unsourced, kept in the third pass | Notion 16 label to label (8 + 8, no gap); Untitled 12 |
+| tab · gap | 16 / 20 / 24 at the default, each N − 4 × `ui-gap-step` (sm 12 / 16 / 20, md 16 / 20 / 24, lg 20 / 24 / 28 at type 13 Compact / Default / Comfortable; lg was 24 at every density until plan B8.2) | not found (searched PRIOR_DECISIONS.md, navigation.css comments); unsourced, kept in the third pass | Notion 16 label to label (8 + 8, no gap); Untitled 12 |
 | text | 14/20 at every size (`control-sm/md/lg-text`; sm was 12/16 until small controls moved to 14/20); **400 at rest, 500 selected**, each tab's width reserved at 500 | Owner 2026-10-21 (C); Figma 450 → 550 with a hidden copy; Radix 400 → 500 with a hidden copy; Fluent and Primer 400 → 600, reserved | A written exception to one weight per label (DESIGN_SYSTEM.md): tabs carry no fill, so weight marks the selected view. Notion, Material 3, shadcn and Atlassian keep 500; Spectrum 2 and Ant keep 400 |
 | rest / selected ink | `fg-muted` #646464 / `fg-default` #282828 | Second pass: unselected options muted (Figma 50% black, Notion tertiary) | Untitled selected brand-700 |
 | indicator | 2px, `radius-full`, `fg-selection` (neutral: `fg-default`), whole tab | Owner (rounded underline spanning icon and count); Notion 2px in primary ink | Untitled 2px square-ended brand-600 |
@@ -157,6 +159,8 @@ Settled in the third pass (kept; [cohesion audit](../research/cohesion-audit.md#
 | focus-visible | 2px ring standing the room clear of the label | `navigation.css`, `.area-tabs__tab:focus-visible::before` |
 | selected (`data-selected`, `aria-selected`) | `fg-default` at 500, indicator `fg-selection`; the width does not change | `area--default` tab 1; `notion--tabs-underline` node 3; headless Edge 2026-10-21: tab widths 56.89 / 57.69 / 67.14 whichever is selected, label box 2.5 + 27 unchanged |
 | disabled | opacity 0.5, `not-allowed`; skipped by arrow keys | `area--disabled` |
+
+**Default classes.** `orientation` `horizontal` and `selection` `marker` are manifest values with their defaults and empty classes (`--horizontal`, `--marker`): the bare block draws them, and React writes the class.
 
 ## Behavior and accessibility
 
@@ -306,6 +310,7 @@ Tab labels are not selectable. See [interaction polish](../research/interaction-
 - 2026-10-02 · compact pass round 9 → sm tab gap 16 → 12 and the panel's top inset reads `inset-surface-md` (16 / 12) at compact. docs/research/compact-pass-2026-10-01.md (round 9).
 - 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → hover, press and selection land at once and fade out on fast; sliding indicator left as an open question.
 - 2026-10-12 · consistency pass (owner: "a consistency and cohesion pass on all the components ... stroke values and how they are used") → the track is at `stroke-width`, a standalone divider (was `border-width`) (navigation.css). (docs/research/consistency-audit-2026-10-12.md)
+- 2026-11-11 · system evaluation F5 · horizontal and marker are manifest values with their defaults and empty classes React writes; built stylesheet differs only by the empty rules.
 
 ## Review note, 2026-10-21
 
@@ -354,3 +359,16 @@ Items take `status`, the shared change words (Governance § 4, "Change words"; `
 selected too (Cursor's document tabs colour the label by its git decoration, cursor.md); the word is read after the
 label. `unseen` draws a 6 dot after the label in `accent-indicator` (Tree view's), read as "Unseen", apart from the
 status. Tile: Change words and unseen.
+- 2026-11-11 · system evaluation A1.1 · the gap between tabs reads whole steps: md 20 (was 18), sm 16 (was 14) at the default; Compact 16 / 12 unchanged.
+
+## Shared parts (plan B2), 2026-11-13
+
+- **Centring (B2.2, VN8).** The label's words are their own part, `.area-tabs__text`, the trimmed cap slot of the one centring model (inset.css), inside the column that stacks the strong-width reserve: a flex column cannot be trimmed, so the label's line box was centred and its cap sat 0.62 high at type 13. The cap now sits on the tab's centre at every type and density. Code block's tabs render the old markup and still sit 0.62 high until Code block takes `__text`.
+
+## Density (plan B8.2), 2026-11-14
+
+- lg's gap follows density as sm and md do: 24 − 4 × `ui-gap-step`, 20 / 24 / 28 at type 13 Compact / Default /
+  Comfortable (20 at type 12, 28 / 28 / 32 at 16). A vertical panel's top is `ui-stack` (4 / 6 / 8; was 6). The vertical
+  tab's start is the rail plus the glyph edge (`ui-row-inset`, 8 at every density), and the list's room for an
+  Indicator's overhang stays 8 at every density (a mark's).
+- Boundary written (plan B8.1): Tabs switch panels in place; a strip of places is Nav horizontal (COMPONENTS.md).

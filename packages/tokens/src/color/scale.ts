@@ -14,7 +14,7 @@
  *   Which of black or white each rung carries, by measurement.
  *   Which rung is the solid fill, and its hover -- see `chooseSolid`.
  */
-import { type Oklch, SRGB, parseHex, toHex, toOklchCss } from "./oklab.ts";
+import { type Oklch, SRGB, clampRgb, labToLch, oklchToRgb, parseHex, rgbToOklab, toHex, toOklchCss } from "./oklab.ts";
 import { gamutMap, maxChromaAt } from "./gamut.ts";
 import { colourAt } from "./place.ts";
 import { DARK_CHROMA_CAP, DARK_LIGHTNESS_LIFT, DARK_TONAL_CHROMA, DEFAULT_TONE_TINT, LIGHT_TONAL_CHROMA, TINT_HUE_LEVEL, VIVID_PEAK_CHROMA, type Level, type Ramp, CHROMA_TRIM, HUE_DRIFT, HUE_ROTATION, INVERSION, LEVELS, chromaTrimWeight, hueDrift } from "./curves.ts";
@@ -650,6 +650,31 @@ function quietestStroke(
     (s) => wcagContrastHex(s.hex, ground) >= bar && apcaMagnitude(s.hex, ground) >= apcaBar,
   );
   return (found ?? order[order.length - 1]!).level;
+}
+
+/**
+ * A dark vivid ink made as colourful as its hue allows (plan A10.2, finding VA15, 2026-11-11). In dark the walk above
+ * stops at the first rung that reads on the code ground, and for red, orange, pink and blue that rung sits at the edge of
+ * sRGB at its lightness: an invalid field read pale pink (chroma 0.09) beside a vivid green success (0.22). Here the
+ * hue keeps its rung's angle and walks down in lightness, at the most chroma sRGB holds there (2% inside), to the
+ * colourful point that still clears the same two bars on the same ground (WCAG 4.6, APCA 61); it is used only when it
+ * carries more chroma than the rung. APCA's content floor near black is what stops it (red at about 0.13).
+ */
+const LUMINOUS = new Map<string, string>();
+export function luminousDarkVivid(hex: string): string {
+  const known = LUMINOUS.get(hex);
+  if (known) return known;
+  const ground = groundHex(INVERSION.code.dark);
+  const start = labToLch(rgbToOklab(parseHex(hex), SRGB));
+  let best = { hex, C: start.C };
+  for (let L = start.L; L > start.L - 0.2; L -= 0.002) {
+    const C = maxChromaAt(L, start.h, SRGB) * 0.98;
+    if (C <= best.C) continue;
+    const candidate = toHex(clampRgb(oklchToRgb({ L, C, h: start.h }, SRGB)));
+    if (wcagContrastHex(candidate, ground) >= 4.6 && apcaMagnitude(candidate, ground) >= 61) best = { hex: candidate, C };
+  }
+  LUMINOUS.set(hex, best.hex);
+  return best.hex;
 }
 
 /** A ground's hex, where the ground may be a rung or the palette's white constant. */

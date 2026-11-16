@@ -7,16 +7,19 @@ import { cx } from "../variants.ts";
 import { Glyph } from "./Glyph.tsx";
 import { Input } from "./Input.tsx";
 import { Button, type ButtonProps } from "./Button.tsx";
-import { Menu, MenuItem, MenuSeparator, Tooltip } from "./primitives.tsx";
+import { Menu, MenuItem, MenuSeparator } from "./Menu.tsx";
+import { Tooltip } from "./Tooltip.tsx";
 
 export interface ZoomControlProps extends Omit<ButtonProps, "value" | "defaultValue" | "children" | "onChange"> {
   /** The zoom as a scale: 1 is 100% (controlled). */
   value?: number;
+  /** The zoom at first as a scale, uncontrolled. */
   defaultValue?: number;
-  /** The new zoom and the click or key that set it (Governance § 4). */
+  /** Called with the new zoom and the click or key that set it. */
   onValueChange?: (zoom: number, event: SyntheticEvent) => void;
-  /** The range, as scales. Figma's is 2% to 25,600%. */
+  /** The least zoom, as a scale (0.02 is 2%). */
   min?: number;
+  /** The greatest zoom, as a scale (256 is 25,600%). */
   max?: number;
   /** Zoom in and out multiply and divide by this. */
   step?: number;
@@ -29,8 +32,8 @@ export interface ZoomControlProps extends Omit<ButtonProps, "value" | "defaultVa
   /** More rows after the zoom rows, such as view toggles (MenuItem with `checked`). */
   children?: ReactNode;
   /**
-   * Zoom out and Zoom in buttons either side of the percentage, which still opens the menu (Chrome's
-   * and ChatGPT Atlas's "− 100% +" zoom row). The percentage drops its chevron.
+   * Zoom out and Zoom in buttons either side of the percentage, which still opens the menu ("− 100% +"). The
+   * percentage drops its chevron.
    */
   stepper?: boolean;
   /** The zooms the stepper's buttons and the Zoom in / out rows move between, as scales; without them they multiply and divide by `step`. */
@@ -50,7 +53,9 @@ export interface ZoomControlProps extends Omit<ButtonProps, "value" | "defaultVa
   presetLabel?: (zoom: number) => string;
   /** The menu is open (controlled); `defaultOpen` opens it at first. */
   open?: boolean;
+  /** Whether the menu starts open, uncontrolled. */
   defaultOpen?: boolean;
+  /** Called when the menu opens or closes. */
   onOpenChange?: (open: boolean) => void;
 }
 

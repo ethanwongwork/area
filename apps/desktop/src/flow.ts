@@ -133,11 +133,11 @@ export function linkAt(page: ProjectPage, layer: string, path: readonly number[]
   return best;
 }
 
-/** A layer's name with its number: "2 Verify email", "1a Sign in", "Verify email · Error". */
+/** A layer's name with its number: "2 Verify email", "1a Sign in", "Verify email, Error". */
 export function stepName(flow: Flow, layer: Layer): string {
   const step = flow.byId.get(layer.id);
   if (!step) return layer.name;
-  if (step.role === "state") { const owner = flow.byId.get(step.of!); return `${owner?.layer.name ?? ""} · ${layer.state}`; }
+  if (step.role === "state") { const owner = flow.byId.get(step.of!); return `${owner?.layer.name ?? ""}, ${layer.state}`; }
   return `${step.number} ${layer.name}`;
 }
 

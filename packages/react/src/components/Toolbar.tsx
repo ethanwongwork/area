@@ -4,12 +4,16 @@ import { cx, toolbarVariants, type VariantProps, MANIFESTS } from "../variants.t
 import { InToolbar, ToolbarSize, toolbarItemProps } from "./toolbar-context.ts";
 import { Button } from "./Button.tsx";
 import { Glyph } from "./Glyph.tsx";
-import { Menu, type MenuProps } from "./primitives.tsx";
+import { Menu, type MenuProps } from "./Menu.tsx";
 
 export interface ToolbarProps extends HTMLAttributes<HTMLDivElement> {
+  /** `plain` (default): no plate, inside an existing surface. `surface`: its own raised bar, over the canvas. */
   variant?: VariantProps<typeof MANIFESTS.toolbar>["variant"];
+  /** Every control's height and type: `md` (default), `sm` or `lg`. */
   size?: VariantProps<typeof MANIFESTS.toolbar>["size"];
+  /** `horizontal` (default) or `vertical`; the arrow keys follow it. */
   orientation?: VariantProps<typeof MANIFESTS.toolbar>["orientation"];
+  /** The bar fills its container's width. */
   fullWidth?: boolean;
   /**
    * The hover action bar: over the top-end corner of its parent (a row, a block), shown while the parent is hovered or
@@ -73,13 +77,16 @@ export const Toolbar = forwardRef<HTMLDivElement, ToolbarProps>(function Toolbar
     onKeyDown={handleKeyDown} /></ToolbarOrientation.Provider></ToolbarSize.Provider></InToolbar.Provider>;
 });
 
-export interface ToolbarItemProps { children: ReactElement<{ tabIndex?: number; "data-area-toolbar-item"?: string }> }
+export interface ToolbarItemProps {
+  /** One Button, link or other focusable control, which joins the toolbar's arrow-key order. */
+  children: ReactElement<{ tabIndex?: number; "data-area-toolbar-item"?: string }>;
+}
 /** Marks an existing Button, link, or other focusable control for toolbar navigation. */
 export function ToolbarItem({ children }: ToolbarItemProps) {
   return cloneElement(children, { tabIndex: -1, "data-area-toolbar-item": "" });
 }
 
-/** Groups related commands. One-of-several choices (Figma's mode switch, text alignment) are a
+/** Groups related commands. One-of-several choices (a mode switch, text alignment) are a
  * Segmented control placed in the toolbar, not a group variant. */
 export type ToolbarGroupProps = HTMLAttributes<HTMLDivElement>;
 export const ToolbarGroup = forwardRef<HTMLDivElement, ToolbarGroupProps>(function ToolbarGroup(
@@ -97,7 +104,7 @@ export const ToolbarSeparator = forwardRef<HTMLSpanElement, HTMLAttributes<HTMLS
 });
 
 export interface ToolbarOverflowProps extends Omit<MenuProps, "trigger"> {
-  /** Names the trigger that opens the menu, as SplitButton's `menuLabel` (audit A-17). */
+  /** Names the trigger that opens the menu, as Split button's `menuLabel`. */
   menuLabel?: string;
   /** @deprecated Use `menuLabel`. */
   label?: string;

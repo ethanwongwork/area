@@ -70,6 +70,8 @@ keys (typing, editing, Home, End); ArrowDown moves to the rows and Escape closes
 a preset closes the menu and returns focus to the button; a view toggle (`checked`) stays open. The page binds the
 shortcuts; the menu shows them.
 
+**State hooks (manifest).** `open` is its Menu's (`statesFrom`, `:popover-open`).
+
 ## Visual pass
 
 In the gallery (light): the menu hangs end-aligned under the button; shortcuts end on one column after the reserve was
@@ -121,3 +123,9 @@ Resolved 2026-10-10 (owner: "go with your recommendations"); kept for the record
 - **What changed:** `open` / `defaultOpen` join `onOpenChange`; `onValueChange(zoom, event)` passes the click or key.
 - **Why:** ZoomControl.tsx:15, :49. From the components audit's internal peer comparison (`docs/research/components-audit-2026-11-07/internal.md`); the owner took every recommendation ("Take all recs", 2026-11-07).
 - **Verdict:** awaiting the owner.
+- 2026-11-11 · system evaluation F5 · the manifest declares `open` as its Menu's (`statesFrom`); no paint changed.
+- 2026-11-11 · system evaluation A2.1 · rows in a floating list take their height's corner (radius-list-row capped by radius-row, and radius-step is the real medium control's corner): rows 10 → 8 and the list 14 → 12 at the default Corner 10, the corner of a Nav row and a medium Button of the same 30. emit/base.ts; radius.test.ts.
+
+## State paint (plan B7.1), 2026-11-14
+
+- Its open plate is Button's open rule, now for every popup kind; no change in look.

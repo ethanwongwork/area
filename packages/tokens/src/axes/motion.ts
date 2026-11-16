@@ -2,15 +2,17 @@
  * Motion: how long transitions take, as one number (owner, 2026-10-14: "go with motion, same
  * one-number approach as elevation"). It was three presets, None, Subtle and Expressive.
  *
- * The number is the Menu's open in milliseconds (`duration-base`), as elevation is the Menu's shadow,
+ * The number is `duration-base` in milliseconds: the Menu's open until 2026-11-11, a dialog's open since menus and
+ * other anchored surfaces moved to `fast` (plan A5.1, owner 2026-11-11). Elevation is the Menu's shadow,
  * the radius setting the medium Button's corner and the type setting the base text size: 0 (None) to
  * 300, in steps of 30, 210 by default (owner, 2026-10-14: "make 210 the default", matching the target
  * products: ChatGPT's popover opens in 220ms, Figma's dropdown in 250). Every duration scales from it,
  * in thirds:
  *
- *   fast      2/3   colour leaving a state, small marks, anchored surface exits
- *   base      1     anchored surfaces entering (the number), sliding indicators, dialog exit
- *   moderate  4/3   dialog enter, drawer and accordion exit, scrim
+ *   quick     1/3   colour leaving a state (plan A5.5, 2026-11-11: 70 at 210; it was fast)
+ *   fast      2/3   small marks, anchored surfaces both ways (plan A5.1), dialog exit
+ *   base      1     dialog enter, sliding indicators
+ *   moderate  4/3   drawer and accordion exit
  *   slow      5/3   drawer and toast enter, accordion open
  *
  * The thirds are the old Subtle's ratios (100 / 150 / 200 / 250; Expressive's 150 / 250 / 320 / 400
@@ -50,6 +52,7 @@ export const duration = (step: number, thirds: number) => `${(step / 3) * thirds
 function stepTokens(step: number) {
   return tokens({
     "duration-instant": "0ms",
+    "duration-quick": duration(step, 1),
     "duration-fast": duration(step, 2),
     "duration-base": duration(step, 3),
     "duration-moderate": duration(step, 4),
@@ -60,12 +63,12 @@ function stepTokens(step: number) {
 
 const describe = (step: number) =>
   step === 0 ? "Instant. Also what `prefers-reduced-motion` resolves to."
-    : `The Menu opens in ${step}ms; every duration scales from it${step === 210 ? " (default: ChatGPT's popover, 220)" : step === 150 ? " (the old Subtle)" : step === 240 ? " (the old Expressive)" : step === 300 ? " (Primer's ceiling: the slowest at 500ms)" : ""}.`;
+    : `A dialog opens in ${step}ms and a menu in ${(step / 3) * 2}ms; every duration scales from it${step === 210 ? " (default)" : step === 150 ? " (the old Subtle)" : step === 240 ? " (the old Expressive)" : step === 300 ? " (the slowest reaches 500ms)" : ""}.`;
 
 export const MOTION_AXIS: AxisDefinition = {
   id: "motion",
   label: "Speed",
-  description: "How long transitions take, as the Menu's open in ms from 0 (none) to 300, 210 by default; every duration scales from it.",
+  description: "How long transitions take, as a dialog's open in ms from 0 (none) to 300, 210 by default; every duration scales from it.",
   defaultPreset: "210",
   namespaces: ["--area-duration-"],
   presets: MOTION_STEPS.map(step => ({

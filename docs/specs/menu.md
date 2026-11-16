@@ -91,13 +91,13 @@ Items:
 |---|---|---|---|
 | item · height | 32 (`ui-row`); 24 in compact | Notion 28, ChatGPT 36, Figma 40; compact: VS Code 24, Figma 24 (owner 2026-10-01) | Default sits between ChatGPT and Notion |
 | item · icon inset | 8 default, 6 compact (`ui-row-inset`; the row reserves `ui-row − 2 × inset`, the 16px icon at default) | Notion 8 (20px icon, 28px row); VS Code compact rows (compact pass) | ChatGPT 10. Compact rows are 24 at 12/16 with labels on a 30 column (docs/research/compact-pass-2026-10-01.md) |
-| item · icon → label | **12**, the density token `--area-gap-row` (label at 36; `--_menu-gap`, surface.css:984) | ChatGPT and Notion both start the label at 36 | Was 8 (label at 32), then a literal 12 until audit S11a. Nav, Command palette and the Select picker share the token, so every icon row's label sits at 36. Icons stay 16 (Area's icon sizes are 12/16/24; the products draw 20) |
+| item · icon → label | **8**, the cluster gap `--area-ui-cluster` (6 at Compact, 10 at Comfortable; `--_menu-gap`, menu.css), so the label sits at 32 at the default type 13 and 30 at the app's Compact (owner 2026-11-11, plan B2.3) | The measured desktop lists start the label at 30 at their density | Was 8 (label at 32), then a literal 12, then `gap-row` (10 at type 13, label 34) until 2026-11-11. Nav, Command palette and the Select picker share the token, so every icon row's label sits at 36. Icons stay 16 (Area's icon sizes are 12/16/24; the products draw 20) |
 | item · text-only inset | 11 (shared rule) | ChatGPT 10 | Within 1px |
 | item · text | 14/20 400 | ChatGPT 14/20 400; Notion 14 400 | — |
 | hover, keyboard focus | **`bg-component-hover`** plate (the shared row plate since the cohesion audit; was the `bg-hover` wash) on hover, `data-highlighted` and `:focus-visible` | ChatGPT 5% black, Notion 5% warm black, pointer and keyboard alike | Keyboard focus had no style of its own. Focus is the plate only, with no ring (audit S11b; Nav and Tree rows draw an inset ring). Forced colours draw a Highlight ring |
 | danger | red label; hover, highlight and pressed plates follow **Danger hover**: `tint` (default) the row's plate at its own lightness in the danger hue (light: as much chroma as sRGB holds at that lightness, 0.017 hover and 0.034 pressed at the defaults, Area's own `danger-surface-hover` and `-active`; dark 0.061 and 0.075), `neutral` the shared wash | shadcn destructive item (`focus:bg-destructive/10`, dark `/20`), Primer danger ActionList item (`control-danger-bgColor-hover`); `neutral`: ChatGPT "Delete" (red text, 5% wash) | Owner 2026-10-23 chose the tint. Was the neutral wash since 2026-09-26, and before that a red-tinted row with darker red text |
 | shortcut | 12/16 400 in the UI font, muted; a Kbd in a row renders the same, unboxed (kbd.css:89-102); on a danger row it takes the row ink (kbd.css:104) | Notion (12px, tertiary ink, UI font) | Was monospace. A Kbd here was the keyboard face at 500 until audit S12a |
-| separator · spacing | **6 / 1 / 6**, compact **5 / 1 / 5** (margin plus the row gap) | Cursor desktop chat-actions menu 6 / 1 / 6 (`compact/cursor-app--menu--open--light`); VS Code and Cursor web 5 / 1 / 5; Figma 7 / 1 / 7 | Owner 2026-10-02. Was 4 / 1 / 4 (Notion; the owner had cut 10 / 1 / 10 as too big); ChatGPT 8. Line starts level with the icons (Notion) |
+| separator · spacing | **6 / 1 / 6**, compact **5 / 1 / 5** (margin plus the row gap), Comfortable 7; ends on the plates' edges (the row table, inset.css; plan B2.1) | Cursor desktop chat-actions menu 6 / 1 / 6 (`compact/cursor-app--menu--open--light`); VS Code and Cursor web 5 / 1 / 5; Figma 7 / 1 / 7 | Owner 2026-10-02. Was 4 / 1 / 4 (Notion; the owner had cut 10 / 1 / 10 as too big); ChatGPT 8. Line starts level with the icons (Notion) |
 | checkable row | `MenuItem checked` → `menuitemcheckbox`; with `radio`, `menuitemradio` (primitives.tsx:1143-1161); trailing check (default) or `indicator="switch"`; indicator 8px from the end | Notion toggle rows (whole row is the control, 30×18 switch 8px from the end, input `tabindex=-1`); ChatGPT model picker (trailing check) | Area draws its sm switch (28×16) display-only, with no nested input, so the row stays the only focusable element |
 | selected row | **check only**: `radio checked` (one of several) or `checked`; no plate at rest, the plate stays the highlight. The raw `data-selected` plate (`bg-component-active`, surface.css:1055) is the value-picker hook only (Select, Combobox) | ChatGPT model picker (check, no plate) | Audit S13 C. The Selected tile and the Composer mode menu drew the plate plus a Fluent check in the shortcut slot |
 | surface · shadow | **`--area-shadow-float`**, the Elevation axis's float role: `0 0 2` + `0 8 16` at the Elevation step in % (8% key at the default 8, 3% until 2026-11-05), the ambient half, dark doubled; transparent at step 0 (axes/elevation.ts) | Notion's two layers; ChatGPT 8/16; Figma 2/5 + 10/16 | Was `shadow-2` (1–2px), a flat card edge. A Surface axis role since audit S10 |
@@ -134,6 +134,8 @@ Items keep their own Tab stops (inline menus in panels rely on this); a popup ho
 on Tab (SplitButton). Opening, anchoring and dismissal are the host's job (native popover in
 SplitButton). Verified in the gallery: arrows wrap, Home/End, typeahead ("s" → Settings), and
 SplitButton's menu uses the same handler.
+
+**State hooks (manifest).** `open` is the native popover's `:popover-open` (`stateAttributes`). `loading` is not a state: the menu shows its `__loading` row and is `aria-busy`, which no CSS reads (the parity test keeps it, with that reason).
 
 ## Visual pass
 
@@ -267,6 +269,8 @@ Rows press at `bg-component-pressed`, one step past selected (Notion presses at 
 - 2026-10-17 · owner: "go with your recs" (after round 30), the hover and pressed sweep (docs/research/layers-2026-10-16/sweep/states.mjs) → a danger item's red is solved for the row's pressed fill, the deepest it sits on: in light it darkens beyond the page's own darken by what the raised pressed fill needs (`--_danger-darken`, from `layer-light-raised-fill-2` and the vivid bound, 0.063 at the defaults), in dark it lifts past a raised pressed fill of L 0.396, 6.1× the excess (`--_danger-lift`, fitted over every accent and neutral; 0 up to the defaults). The same red at rest, so the ink stays fixed across states. Was 4.15:1 hovered and 3.97:1 pressed at the defaults, 3.2:1 pressed at dark 24 + 8.
 - 2026-10-22 · owner: "work through each of these items ... more intentional, consistent and overall professional" (docs/research/cursor-audit-2026-10-22.md item 1) → group labels take Nav's label, the owner's ChatGPT pick of 2026-09-27: the rows' size at 500, muted (was 12/16 at 400 since 2026-09-27's batch 2, left behind when Nav moved). One label for every run of rows. Evidence: ChatGPT sidebar 14/18 500 over 14 rows, Figma panel headings 550 at the rows' 11 (same size); Notion 12/16 500 over 14 and Cursor 11/14 over 12 (a step down) → surface.css (.area-menu__label).
 - 2026-10-23 · owner: "should the semantic red part of the menu backplate also be red? ... i would prefer the better ux and more visually appealing option, if that means adding the red" → a danger row's plates follow a new setting, Danger hover (`axes/states.ts`): `tint` (default) turns the row's hover and pressed plates to the danger hue at their own lightness (`--_danger-hover`, `--_danger-pressed`, surface.css), so the red solved for the neutral pressed fill holds (a hue at the same OKLab L is within 1.6% of the grey's luminance); `neutral` keeps the shared wash as before. Evidence: shadcn's destructive item and Primer's danger ActionList item tint; ChatGPT does not, and Notion keeps "Move to Trash" in the default ink. Ghost danger Buttons already hovered their tone's surface.
+- 2026-11-11 · system evaluation F5 · the manifest declares `open` on `:popover-open` (`stateAttributes`); `loading` stays a part, not a state; no paint changed.
+- 2026-11-14 · plan B7.12 (VN11) → an inactive row dims as a whole: its words (label, danger label, trailing) take fg-muted at full strength, the ink its note reads, so the note is never stronger than the label; its glyphs stay at opacity-disabled. Was the label at 0.5 opacity over the default ink (≈ L0.64) under a full-strength muted note (L0.510). Forced colours: GrayText. Why: docs/research/system-evaluation-2026-11-11 (README §5, phase2/disabled.md); the owner took every recommendation on 2026-11-11.
 
 ## Settings collisions fixed (2026-10-18)
 
@@ -376,3 +380,48 @@ computes the same fill, image, frost, stroke and box-shadow as a plain Menu.
 - **Why:** those lists are Menu's rows, so the mark is Menu's part; weight, not colour, holds on every plate and in
   forced colours. The owner took every recommendation ("Take all recs", 2026-11-07).
 - **Verdict:** awaiting the owner.
+- 2026-11-11 · system evaluation A2.1 · rows in a floating list take their height's corner (radius-list-row capped by radius-row, and radius-step is the real medium control's corner): rows 10 → 8 and the list 14 → 12 at the default Corner 10, the corner of a Nav row and a medium Button of the same 30. emit/base.ts; radius.test.ts.
+- 2026-11-11 · system evaluation B2.3 (owner) · the icon-to-label gap is `ui-cluster`, 8 at the default (label at 32), 6 at the app's Compact (label at 30); the list floor is 160 (was 224); a plain row's empty check column after a shortcut is 16 + that gap. Was `gap-row`, 10 / 8.
+
+## Review note, 2026-11-11 (type rules, plan A9)
+
+- **What changed:** the shortcut wrapper moves from `text-xs` to `text-sm` (12/16), as its comment said (plan A9.2); a Kbd in a row reads the mark text (`text-xs`, 11 at type 13) instead of a fixed 11, so keys grow with Type 14 to 16 (plan A9.9). Menu's 12/16 descriptions stay: the one written exception to "a joined line is the name's size" (plan A9.3).
+- **Why:** the system evaluation's type rules (docs/research/system-evaluation-2026-11-11, section 5, A9), owner-approved
+  2026-11-11; the rules are in DESIGN_SYSTEM.md ("Ink and weight", "Size and shape", "Text pairs") and the type skill.
+
+## Review note, 2026-11-11 (motion, plan A5)
+
+- **What changed:** the surface enters and leaves on `duration-fast` (140 at Speed 210; it entered on `base`, 210), the enter easing out with the fade on `ease-effects`, the exit accelerating away on `ease-exit` (A5.1); opened from a key it appears at its size and only fades on `fade-fast` (`data-opened-by="keyboard"`, written by overlay.ts; A5.2); rows land and leave at once, under the pointer and the keys alike: no transition on a row (A5.3; they faded in over `hover-in` and out over `fast`).
+- **Why:** the system evaluation's motion items (docs/research/system-evaluation-2026-11-11, section 5, A5), owner-approved
+  2026-11-11; the rules are in docs/MOTION.md (Tokens, Roles, Recipes) and kept by cohesion.test.mjs and
+  tests/behaviour/suites/motion.test.mjs. The motion tables above are history; these values are current.
+
+### 2026-11-11 · Ink, dark and colour (system plan, Phase 1)
+
+- **What changed:** In dark it paints the floating ground (`bg-float`, plan A7.2): a step above the layers under it, #0c0c0c on the near-black page at the defaults (was `bg-surface`, the page's own #020202); light is unchanged. Its dark edge is one line (plan A7.1): the frame takes the dark rim's strength (16% at Shadow 8) and the rim is no longer drawn outside it, where it had made a two-tone 2px edge. A shortcut reads the subtle ink (`fg-subtle`, plan A3.2).
+- **Why:** docs/research/system-evaluation-2026-11-11 (README §5); the owner took every recommendation on 2026-11-11.
+- **Verdict:** awaiting the owner.
+
+## Shared parts (plan B2), 2026-11-13
+
+- **Row table (B2.1).** Text-only rows, their group labels and the empty line start on the glyph edge (8, `--_box-start: var(--_box-icon)`), every list's one start column; they sat on the cap-centred 10. Row icons take the muted ink (a danger row's its red). The separator's room is the row table's, round(6 − ui-dense) from the plates (5 / 6 / 7), its ends now on the plates' edges (it was inset 8 more). The icon-to-label gap falls back to ui-cluster wherever a list of Menu rows sits outside `.area-menu`.
+- **Two-line rows (B2.4, G10).** The leading icon sits in a box one label line tall at the content's top (the box technique), 8 higher than when it centred over both lines; the trailing check stays centred.
+- **Empty line (B2.6).** `.area-menu__empty` is every list's empty, loading and no-results line.
+- **Centring (B2.2).** A trailing string (a count) is a text box, trimmed (it sat 0.62 high).
+
+## Density (plan B8.2), 2026-11-14
+
+Space between pieces reads a density role (DESIGN_SYSTEM.md, Size and shape; `density.test.mjs`). Values at type 13
+Compact / Default / Comfortable; each is whole at type 12 to 16 and every density, and the default is unchanged unless said.
+
+- A row with a description pads its block by the one-line row's room, (row − line) / 2: 5 / 6 / 8 (it was 6 at every
+  density). Row and label sides read `ui-row-inset` (8, a constant), the same value as before.
+- 2026-11-14 · system evaluation B6.1, B6.3, B6.4, B6.6 · the frame, shadow stack, padding and corner are the one floating surface's (popup.css): the list corner is its rows' corner plus its 4 padding by one equation, written in DESIGN_SYSTEM.md ("Overlays") and pinned by `popups.test.mjs` at every Corner, Type and Density (unchanged everywhere but Corner 2: 4 round 2 rows, was 2); the padding is counted inside the 1px edge (B6.4, kept and written); the searchable menu's surface takes the list corner and padding (was the container's 16 round 8 rows); a menu that scrolls keeps its bar's ends off its corner.
+
+## Selection paint (plan B7.13), 2026-11-14
+
+- A selected row is a selection scope (selection.css): ghost parts read the row ink at full strength.
+
+## State paint (plan B7.2), 2026-11-14
+
+- The chosen row (`data-selected`) presses to the pressed plate, danger rows to their pressed tint; the `[data-selected]` exclusion is gone. A submenu row keeps the hover plate while open (a list highlight).

@@ -7,7 +7,7 @@ import type { AriaAttributes, HTMLAttributes, MouseEvent, ReactElement, ReactNod
 import { settingRowVariants, settingsGroupVariants, type VariantProps, MANIFESTS } from "../variants.ts";
 import { Button } from "./Button.tsx";
 import { Glyph } from "./Glyph.tsx";
-import { SectionHeading } from "./AppShell.tsx";
+import { SectionHeading } from "./SectionHeading.tsx";
 
 type SettingRowVariants = VariantProps<typeof MANIFESTS.settingRow>;
 
@@ -54,7 +54,7 @@ export interface SettingRowProps extends Omit<HTMLAttributes<HTMLDivElement>, "c
    * always under the text, for a control that needs the line (pictures, a list, a text area).
    */
   orientation?: SettingRowVariants["orientation"];
-  /** The setting can't be changed here: the words take the disabled ink and the control is disabled. */
+  /** The setting can't be changed here: the control is disabled and the name steps to the muted ink; the description keeps its ink. */
   disabled?: boolean;
 }
 
@@ -133,7 +133,9 @@ export interface SettingsGroupProps extends Omit<HTMLAttributes<HTMLElement>, "t
   description?: ReactNode;
   /** The heading's level, 2 by default (a settings page's title is its 1). */
   headingLevel?: 2 | 3 | 4 | 5 | 6;
-  /** The rows in a frame (the Blocks edge, the container corner, the surface), inset 16; without it they sit on the page. */
+  /** plain (the default): the rows sit on the page. surface: the rows in a block frame, on the surface, inset as a card's text. */
+  variant?: VariantProps<typeof MANIFESTS.settingsGroup>["variant"];
+  /** @deprecated Use `variant="surface"`. */
   framed?: boolean;
   /** Setting rows. */
   children?: ReactNode;
@@ -141,12 +143,12 @@ export interface SettingsGroupProps extends Omit<HTMLAttributes<HTMLElement>, "t
 
 /** Setting rows under an optional heading, a rule between them; a `section` named by its heading. */
 export const SettingsGroup = /* @__PURE__ */ forwardRef<HTMLElement, SettingsGroupProps>(function SettingsGroup(
-  { heading, description, headingLevel = 2, framed, className, children, "aria-labelledby": labelledBy, ...rest },
+  { heading, description, headingLevel = 2, variant, framed, className, children, "aria-labelledby": labelledBy, ...rest },
   ref,
 ) {
   const headingId = `area-settings-group-${useId().replace(/:/g, "")}`;
   return (
-    <section ref={ref} className={settingsGroupVariants({ framed }, className)} aria-labelledby={labelledBy ?? (heading ? headingId : undefined)} {...rest}>
+    <section ref={ref} className={settingsGroupVariants({ variant: variant ?? (framed ? "surface" : undefined) }, className)} aria-labelledby={labelledBy ?? (heading ? headingId : undefined)} {...rest}>
       {heading ? <SectionHeading title={heading} lede={description} level={headingLevel} titleId={headingId} /> : null}
       <div className={settingsGroupVariants.element("rows")}>{children}</div>
     </section>

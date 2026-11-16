@@ -18,13 +18,12 @@
   .area-approval {
     /* The Composer's shell (composer.css), which this replaces until it is answered. */
     --_approval-inset: var(--area-ui-cluster); /* the Composer's inset: 8, compact 6 */
-    /* The Composer's corner, term for term (composer.css, 2026-10-29): Card's corner, never past half the composer's
-       one-line height, square at Sharp (a cohesion test keeps the two equal). */
+    /* The Composer's corner, term for term (composer.css): the chat card's (surface.css, plan B1.3), never past half the
+       composer's one-line height, square at Sharp (a cohesion test keeps the two equal). */
     --_approval-height: calc(var(--area-control-md) + 2 * var(--_approval-inset));
-    --_approval-term: calc((var(--_approval-inset) - var(--area-space-4) - var(--area-space-2) * var(--area-ui-dense)) * var(--area-radius-concentric));
     /* Public hook `--area-approval-corner`: a host that sets the card beside another frame (a visual question's Asset
        card) gives both one corner; docked in the composer's place it stays the Composer's. */
-    --_approval-radius: var(--area-approval-corner, min(calc(var(--_approval-height) / 2), max(var(--area-radius-floor), calc(var(--area-radius-container) + min(var(--_approval-term), var(--area-radius-container))))));
+    --_approval-radius: var(--area-approval-corner, min(calc(var(--_approval-height) / 2), var(--_fr-corner)));
     display: grid;
     grid-template-columns: minmax(0, 1fr);
     gap: var(--area-ui-cluster);
@@ -43,10 +42,10 @@
     --_approval-row: var(--area-space-6);
     --_approval-mat: max(0px, calc(var(--area-space-12) - var(--area-stroke-width)));
     /* Each corner the one outside it less the gap between them (DESIGN_SYSTEM, nested radius: max(min(floor, own),
-       outer − inset)): an answer's plate the card's less the mat (the edge counted once), its number square the
-       plate's less the row inset, Skip's plate the plate's less its own inset. */
-    --_approval-plate: max(min(var(--area-radius-floor), var(--area-radius-row)), calc(var(--_approval-radius) - var(--_approval-mat) - var(--area-stroke-width)));
-    --_approval-key-radius: max(var(--area-radius-min), calc(var(--_approval-plate) - var(--_approval-row) * var(--area-radius-concentric)));
+       outer − inset)): an answer's plate the card's less the mat (the edge counted once), never under a row's corner
+       (the frame recipe's nested floor, plan B1.1: 16 − 12 gave the floor's 4, so it is 8 at the default), Skip's plate
+       the plate's less its own inset. The number is a Kbd, which keeps the chip corner (plan B5.1). */
+    --_approval-plate: max(min(var(--area-radius-row), var(--_approval-radius)), calc(var(--_approval-radius) - (var(--_approval-mat) + var(--area-stroke-width)) * var(--area-radius-concentric)));
     padding: var(--_approval-mat);
     border: var(--area-stroke-width) solid var(--area-composer-edge);
     border-radius: var(--_approval-radius);
@@ -107,21 +106,20 @@
     font: inherit;
     text-align: start;
     cursor: pointer;
-    transition: background-color var(--area-duration-fast) var(--area-ease-out);
+    transition: background-color var(--area-duration-fast) var(--area-ease-effects);
   }
   @media (hover: hover) { .area-approval__option:hover { background-color: var(--area-bg-component-hover); transition-duration: var(--area-hover-in); } }
+  /* One indicator per row (plan A6.2): the inset ring alone, as Nav; the plate is hover's. */
   .area-approval__option:is(:focus-visible, :has(> .area-approval__field:focus-visible)) {
-    background-color: var(--area-bg-component-hover);
     outline: var(--area-focus-width) solid var(--area-focus-color);
     outline-offset: calc(-1 * var(--area-focus-width));
     transition-duration: 0s;
   }
-  button.area-approval__option:active:not([data-selected]) { background-color: var(--area-bg-component-pressed); } /* Menu's pressed fill (Shared state paint) */
-  /* The number: a keycap square the extra-small control tall (22 at type 13), 6 in from the plate's start, top and foot,
-     its corner the plate's less that 6 (4 in a 10 plate), so the square follows the plate's curve (it was Kbd's own 8,
-     nearly the plate's 10, and looked squeezed into it). The label's first line centres on it. */
+  button.area-approval__option:active { background-color: var(--area-bg-component-pressed); } /* Menu's pressed fill (Shared state paint); the chosen option presses too (plan B7.2) */
+  /* The number's slot: the extra-small control's square (22 at type 13), 6 in from the plate's start, top and foot. The
+     key in it is a Kbd md, a square of the ladder's md rung (18) with the chip corner, as every key (plan B5.1, VS13: it
+     was a 22 key at the plate's concentric 2, beside the hint's 14 at 4). The label's first line centres on it. */
   .area-approval__key { display: inline-flex; flex: none; align-items: center; justify-content: center; inline-size: var(--area-control-xs); block-size: var(--area-control-xs); color: var(--area-fg-muted); font-variant-numeric: tabular-nums; }
-  .area-approval__key > .area-kbd { --_height: var(--area-control-xs); --_min: var(--area-control-xs); --_radius: var(--_approval-key-radius); }
   .area-approval__label { min-inline-size: 0; overflow-wrap: anywhere; }
   /* A choice with what it comes to under it (Claude Code's question options): Menu's row with a note (model-picker.md:
      6 above and below, the row grows), the note in the card's own description type. The key sits on the label's line
@@ -135,7 +133,7 @@
      Selection role's ink; the other rows keep the check's column with the mark at rest (MOTION.md small mark). */
   .area-approval__option[data-selected] { background-color: var(--area-bg-component-active); transition-duration: 0s; }
   .area-approval__check { display: inline-grid; flex: 0 0 var(--area-icon-md); place-items: center; inline-size: var(--area-icon-md); block-size: var(--area-icon-md); margin-inline-start: auto; color: var(--area-fg-selection); }
-  .area-approval__check > svg { inline-size: 100%; block-size: 100%; transition: opacity var(--area-fade-fast) var(--area-ease-out), scale var(--area-duration-fast) var(--area-ease-out); }
+  .area-approval__check > svg { inline-size: 100%; block-size: 100%; transition: opacity var(--area-fade-fast) var(--area-ease-effects), scale var(--area-duration-fast) var(--area-ease-out); }
   .area-approval__option:not([data-selected]) > .area-approval__check > svg { opacity: 0; scale: 0.6; /* spec: MOTION.md small mark */ }
   /* What to do instead: the field is the row's text, with no fill, edge or ring of its own. */
   .area-approval__instead { cursor: text; }
@@ -150,7 +148,7 @@
     color: inherit;
     font: inherit;
   }
-  .area-approval__field::placeholder { color: var(--area-fg-muted); opacity: 1; }
+  .area-approval__field::placeholder { color: var(--area-input-placeholder); opacity: 1; } /* the placeholder role (plan A3.3) */
   /* Skip at the end of the answer-of-one's-own row (2026-11-03, the measured question card): the way past the question
      sits where the last answer would be typed; the hint row under the options goes. */
   /* Skip is a ghost button at the free row's end, its plate as far from the row's end as from its top and foot (4: the
@@ -222,17 +220,17 @@
     /* The answer's plate, as a row's (a soft field's paint), the picture on it as on a mat 4 in. */
     background-color: var(--area-input-bg-soft);
     box-shadow: inset 0 0 0 var(--area-stroke-width) var(--area-input-edge-soft);
-    transition: background-color var(--area-duration-fast) var(--area-ease-out);
+    transition: background-color var(--area-duration-fast) var(--area-ease-effects);
   }
   @media (hover: hover) { .area-approval__tile:has(> .area-approval__option:hover) { background-color: var(--area-bg-component-hover); transition-duration: var(--area-hover-in); } }
   .area-approval__tile:has(> .area-approval__option:focus-visible) {
-    background-color: var(--area-bg-component-hover);
     outline: var(--area-focus-width) solid var(--area-focus-color);
     outline-offset: calc(-1 * var(--area-focus-width));
     transition-duration: 0s;
   }
-  .area-approval__tile:has(> .area-approval__option:active:not([data-selected])) { background-color: var(--area-bg-component-pressed); }
   .area-approval__tile:has(> .area-approval__option[data-selected]) { background-color: var(--area-bg-component-active); transition-duration: 0s; }
+  /* After the chosen tile's plate, so a press on it shows too (plan B7.2). */
+  .area-approval__tile:has(> .area-approval__option:active) { background-color: var(--area-bg-component-pressed); }
   .area-approval__tile > .area-approval__option,
   .area-approval__tile > .area-approval__option:is(:focus-visible, :active, [data-selected]) { background-color: transparent; box-shadow: none; outline: none; }
   @media (hover: hover) { .area-approval__tile > .area-approval__option:hover { background-color: transparent; } }

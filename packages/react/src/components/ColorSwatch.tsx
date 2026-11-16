@@ -3,7 +3,9 @@ import type { CSSProperties, HTMLAttributes } from "react";
 import { colorSwatchVariants, type VariantProps, MANIFESTS } from "../variants.ts";
 
 export interface ColorSwatchProps extends HTMLAttributes<HTMLSpanElement> {
+  /** The CSS color it shows; a transparent one shows the checkerboard through it. */
   color: string;
+  /** The swatch's size: `md` (default), `sm` or `lg`. */
   size?: VariantProps<typeof MANIFESTS.colorSwatch>["size"];
 }
 

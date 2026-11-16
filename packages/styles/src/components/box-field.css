@@ -22,7 +22,7 @@
     min-inline-size: 0;
   }
 
-  /* Outside a Panel the caption is Field's label (14/20 in the default ink, 6 above the control),
+  /* Outside a Panel the caption is Field's label (text-base, 13/18 at the default, in the default ink, ui-stack 6 above the control),
      so a BoxField beside a labelled field shows one caption style; inside a Panel it takes the
      panel tier and the muted ink, as PanelRow's caption (audit B-22 B). */
   .area-box-field__label {
@@ -48,8 +48,14 @@
   .area-box-field__field--wide { grid-column: 1 / 3; }
   .area-box-field__toggle { grid-column: 3; grid-row: 1; justify-self: center; }
 
-  /* A box field without a toggle (always split, or always linked) gives the square back. */
+  /* A box field without a toggle (always split, or always linked) gives the square back, unless its Panel section reserves
+     the action column (panel.css, plan B2.7): there the fields keep the section's columns and the square is the
+     section's action column, hung as the rows' is. */
   .area-box-field__fields:not(:has(> .area-box-field__toggle)) { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  .area-panel__section:has(:is(.area-panel__row-action, .area-box-field__toggle, .area-property-list__actions)) .area-box-field__fields {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) var(--_row);
+    margin-inline-end: calc(-1 * var(--_action-hang));
+  }
 
   /* --- Sizes -------------------------------------------------------------- */
   /* The trailing square is the control height, so the toggle is as tall as the fields. */

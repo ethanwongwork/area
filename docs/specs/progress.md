@@ -188,3 +188,10 @@ progress", which describes the indeterminate loop; a value change is a state cha
 - **Why:** your pick of option B: one setting colours everything selected, so a selected card's edge and the mark
   inside it always match (docs/research/selection-colour-2026-10-22). With an accent chosen, most of the system was
   blue already; buttons follow Action, which stays neutral.
+
+## Review note, 2026-11-11 (motion, plan A5)
+
+- **What changed:** the fill's transition is the rounded `translate` alone; its width is no longer transitioned, so neither a value change nor the switch to indeterminate lays the bar out on every frame (A5.7). A translate rather than a scale keeps the pill end round.
+- **Why:** the system evaluation's motion items (docs/research/system-evaluation-2026-11-11, section 5, A5), owner-approved
+  2026-11-11; the rules are in docs/MOTION.md (Tokens, Roles, Recipes) and kept by cohesion.test.mjs and
+  tests/behaviour/suites/motion.test.mjs. The motion tables above are history; these values are current.

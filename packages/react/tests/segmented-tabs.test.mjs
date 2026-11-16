@@ -41,8 +41,8 @@ test("a selected tab is strong and every tab reserves the strong width with a hi
   const { readFileSync } = await import("node:fs");
   const html = renderToString(h(Tabs, { "aria-label": "Views", tabs: [{ id: "a", label: "Overview" }, { id: "b", label: "Code" }] }));
   assert.equal((html.match(/<span class="area-tabs__reserve" aria-hidden="true">/g) ?? []).length, 2);
-  assert.match(html, /<span class="area-tabs__label">Overview<span class="area-tabs__reserve" aria-hidden="true">Overview<\/span><\/span>/);
-  const css = readFileSync(new URL("../../styles/src/components/navigation.css", import.meta.url), "utf8");
+  assert.match(html, /<span class="area-tabs__label"><span class="area-tabs__text">Overview<\/span><span class="area-tabs__reserve" aria-hidden="true">Overview<\/span><\/span>/);
+  const css = readFileSync(new URL("../../styles/src/components/tabs.css", import.meta.url), "utf8");
   assert.match(css, /\.area-tabs__tab\[data-selected\] \.area-tabs__label \{ font-weight: var\(--area-weight-strong\); \}/);
   assert.match(css, /\.area-tabs__reserve \{ block-size: 0; overflow: hidden; visibility: hidden; font-weight: var\(--area-weight-strong\); \}/);
   // The track is painted inside the list, so the indicator lies on it rather than above a border.
@@ -54,7 +54,7 @@ test("tabs slide one indicator once measured, and draw each tab's own bar before
   const html = renderToString(h(Tabs, { "aria-label": "Views", tabs: [{ id: "a", label: "One" }, { id: "b", label: "Two" }] }));
   // Static markup has not measured: no indicator, so the selected tab's own bar shows.
   assert.doesNotMatch(html, /data-indicator/);
-  const css = readFileSync(new URL("../../styles/src/components/navigation.css", import.meta.url), "utf8");
+  const css = readFileSync(new URL("../../styles/src/components/tabs.css", import.meta.url), "utf8");
   assert.match(css, /\.area-tabs__list \{\n    position: relative;/);
   assert.match(css, /\.area-tabs__list\[data-indicator\]::after \{[^}]*translate: var\(--_ind-x\) calc\(var\(--_ind-y\) \+ var\(--_ind-h\) - var\(--area-space-2\)\);[^}]*translate var\(--area-duration-base\) var\(--area-ease-in-out\)/);
   assert.match(css, /\.area-tabs__list\[data-indicator\] > \.area-tabs__tab\[data-selected\]::after \{ background-color: transparent; \}/);
@@ -64,7 +64,7 @@ test("tabs slide one indicator once measured, and draw each tab's own bar before
 // (the inset outline cut through it), and the panel's ring takes the same room round its content.
 test('a focused tab and panel ring their content with room', async () => {
   const { readFileSync } = await import('node:fs');
-  const css = readFileSync(new URL('../../styles/src/components/navigation.css', import.meta.url), 'utf8');
+  const css = readFileSync(new URL('../../styles/src/components/tabs.css', import.meta.url), 'utf8');
   assert.match(css, /\.area-tabs \{ --_focus-room: max\(0px, calc\(\(var\(--_tab-height\) - var\(--_tab-leading\)\) \/ 2\)\); \}/);
   assert.match(css, /\.area-tabs__tab:focus-visible \{ outline: none; \}/);
   const ring = css.match(/\.area-tabs__tab:focus-visible::before \{[^}]*\}/)[0];
@@ -97,7 +97,7 @@ test("a tab's change takes the shared change word and ink; unseen is a dot apart
     { value: "b", label: "old.css", status: "removed" },
     { value: "c", label: "notes.md" },
   ] }));
-  assert.match(html, /data-status="modified"[^>]*><span class="area-tabs__label">button\.css<span class="area-tabs__reserve" aria-hidden="true">button\.css<\/span><\/span><span class="area-sr-only"> Modified<\/span><span class="area-tabs__unseen"><span class="area-sr-only"> Unseen<\/span><\/span>/);
-  assert.match(html, /data-status="deleted"[^>]*><span class="area-tabs__label">old\.css/);
+  assert.match(html, /data-status="modified"[^>]*><span class="area-tabs__label"><span class="area-tabs__text">button\.css<\/span><span class="area-tabs__reserve" aria-hidden="true">button\.css<\/span><\/span><span class="area-sr-only"> Modified<\/span><span class="area-tabs__unseen"><span class="area-sr-only"> Unseen<\/span><\/span>/);
+  assert.match(html, /data-status="deleted"[^>]*><span class="area-tabs__label"><span class="area-tabs__text">old\.css/);
   assert.doesNotMatch(html.split("notes.md")[0].split("old.css").pop(), /data-status/);
 });

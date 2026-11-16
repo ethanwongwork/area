@@ -26,7 +26,7 @@ export default {
       root: "An article for one turn, named \"<name> said\"; it lays out the bubble or the prose, then the actions.",
       bubble: "The person's words: at most 70% of a wide column and nearly the whole of a narrow one (48 short of it), at its end, on the Composer's corner and the neutral component fill.",
       content: "The assistant's prose across the column, at the body size; paragraphs, lists, code and citations sit inside it.",
-      actions: "MessageActions: a named group of ghost icon Buttons with no gap. On the person's turn it shows on hover and focus (always on touch).",
+      actions: "MessageActions: a named group of ghost icon Buttons with no gap, pulled out so the first glyph (the person's: the last) sits on the text's or the bubble's edge. On the person's turn it shows on hover and focus (always on touch).",
       cursor: "The dot after the last word while streaming; it breathes, and rests at full ink with Motion 0 or reduced motion.",
       stack: "MessageGroup's turns, or a split message's bubbles: 2 apart, the end corners a quarter of the bubble's corner where two bubbles meet.",
       status: "The line under a message on its way, in the notice line's type: Sending… in the muted ink, or the danger mark, Not sent in the default ink and Retry.",
@@ -133,7 +133,6 @@ export default {
     parts: {
       root: "A listbox above the composer at its width, on Menu's surface and rows; it scrolls past its maximum height.",
       path: "A file's folder at the row's end in the shortcut ink, cut from its start; it gives way before the name does.",
-      empty: "One muted row a row tall at the text inset, as every list's empty row, shown when no group has items.",
     },
     aria: [
       ["role=\"listbox\", aria-label", "On the root, from aria-label (\"Files\", \"Commands\"); the deprecated label is the fallback."],
@@ -210,13 +209,13 @@ export default {
     parts: {
       root: "The agent card: a section with Code block's frame, at the card's text size, named by its head.",
       head: "A button a row tall that folds the list; the messages follow it with no rule between.",
-      title: "\"N queued\" by default, in the muted ink; cut short on one line.",
-      chevron: "Points down while open, turns when folded; Accordion's hover plate behind it.",
+      title: "\"N queued\" by default, strong in the default ink; cut short on one line.",
+      chevron: "Right after the title, as Plan's: points down while open, turns when folded; Accordion's hover plate behind it.",
       items: "The ordered list (ol) of waiting messages, in the order they will send; hidden while folded.",
       item: "One message as a Menu row. Sending: dimmed, with a spinner. Failed: a mark, and Retry in place of Send now.",
       text: "The message on one line, cut short with an ellipsis.",
       status: "The spinner on a sending row, or the failed mark.",
-      actions: "Send now (or Retry) and Remove over the row's end on hover and focus; always shown on a failed row and on touch.",
+      actions: "Send now (or Retry) and Remove over the row's end on hover and focus, as far from the end as from the top, their corner the row's less that; always shown on a failed row and on touch.",
     },
     // Manifest state; source: data-open.
     states: {
@@ -463,6 +462,8 @@ export default {
       ["Do", "Set title to the count (\"Edited 2 files\"); without it the head says \"Edited files\"."],
       ["Do", "For a person who judges the design, not the code, list EditSummaryChange rows in the design's words (\"Save button\", Corner 8 → 12) and pass the files as code: they fold under Show code, the counts move onto that row."],
       ["Do", "Settle design rows with the summary's Keep all and Undo all, and pass each row the status they come to."],
+      ["Do", "For a review, pass the Diff onComment: each line gets a + at its start, and you draw what is said under its line with notes (the comment, or the field it is written in)."],
+      ["Do", "Give the Diff numbered lines in a review, so a comment can name its line; a diff without numbers names the line by its text."],
       ["Don't", "Use it as a review tool for staging or commits; it keeps or undoes one turn's edits."],
       ["Don't", "Signal a change by color alone: keep the +N −N and the diff's + and − markers."],
     ],
@@ -481,7 +482,7 @@ export default {
       name: "A button with the file's name and counts that opens its diff; it presses like a Menu row, with the pressed fill.",
       chevron: "Shown when the file has a diff; it turns as the diff opens.",
       status: "\"Kept\" or \"Undone\" once the file is settled, in place of the actions.",
-      diff: "The file's Diff, 4 under its row and as wide as the row plate; a wide one scrolls sideways.",
+      diff: "The file's Diff, 4 under its row and as wide as the row plate; a wide one scrolls sideways. With onComment each line has a + at its start on hover and focus, and notes sit under their lines.",
       change: "EditSummaryChange: one change in the design's words, a Menu row's metrics with nothing to press.",
       "change-name": "What changed (\"Save button\") in the default ink; it keeps up to two thirds of the row.",
       "change-value": "The property, from → to, muted after the name; it is cut at its end first.",
@@ -498,12 +499,14 @@ export default {
     keyboard: [
       ["Tab", "Moves to Undo all and Keep all, then each file's name, its Undo and Keep, and an open diff."],
       ["Enter or Space", "On a file's name, opens or closes its diff; on Show code, opens or closes the files; on an action, runs it."],
+      ["Up or Down", "On a Diff's comment button, moves to the line above or below; the buttons are one Tab stop."],
     ],
     aria: [
       ["aria-labelledby", "On the section, from the title, unless you pass aria-label."],
       ["aria-expanded, aria-controls", "On a file's name, when it has a diff, and on Show code."],
       ["aria-label", "On a file's Undo and Keep (\"Undo <name>\"); on the Diff, from aria-label (\"Changes\" by default; the deprecated label reads \"Changes to <label>\")."],
       ["tabindex", "The Diff is a Tab stop, so a wide diff can be scrolled from the keyboard."],
+      ["aria-label", "On a line's comment button: \"Comment on line 12\", \"Comment on deleted line 12\", or the line's own words when the diff has no numbers."],
     ],
   },
 

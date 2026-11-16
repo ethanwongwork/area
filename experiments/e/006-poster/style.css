@@ -1,0 +1,110 @@
+:root {
+  --paper: #f1ece1;
+  --ink: #141414;
+  --accent: #ff3b1f;
+  --mono: 'JetBrains Mono Variable', ui-monospace, monospace;
+  --serif: 'Fraunces Variable', serif;
+}
+
+body {
+  background: #1a1a1a;
+}
+
+#stage {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+}
+
+.is-thumb body,
+.is-thumb #stage {
+  background: var(--paper);
+}
+
+.poster {
+  --w: min(92vh / 1.414, 92vw);
+  position: relative;
+  width: var(--w);
+  aspect-ratio: 1 / 1.414;
+  background: var(--paper);
+  color: var(--ink);
+  overflow: hidden;
+  container-type: inline-size;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  padding: 4cqw;
+  box-shadow: 0 30px 80px -30px rgb(0 0 0 / 0.6);
+}
+
+.is-thumb .poster {
+  --w: min(100vh / 1.414, 100vw);
+  box-shadow: none;
+}
+
+.meta,
+.foot {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 3cqw;
+  font: 400 1.9cqw / 1.35 var(--mono);
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  position: relative;
+  z-index: 2;
+}
+
+.meta span:nth-child(2) {
+  text-align: center;
+}
+
+.meta span:last-child {
+  text-align: right;
+}
+
+.foot p {
+  margin: 0;
+  text-transform: none;
+}
+
+.foot p:first-child {
+  text-transform: uppercase;
+}
+
+.rule {
+  height: 1px;
+  background: currentColor;
+  margin: 2cqw 0 0;
+  transform-origin: 0 50%;
+}
+
+.headline {
+  align-self: center;
+  margin: 0;
+  font-family: var(--serif);
+  font-weight: 300;
+  font-size: 30cqw;
+  line-height: 0.8;
+  letter-spacing: -0.045em;
+  position: relative;
+  z-index: 1;
+}
+
+.headline .line:nth-child(2) {
+  text-align: right;
+  font-style: italic;
+}
+
+.disc {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 46cqw;
+  aspect-ratio: 1;
+  margin: -23cqw 0 0 -23cqw;
+  border-radius: 50%;
+  background: var(--accent);
+  mix-blend-mode: multiply;
+  z-index: 3;
+  pointer-events: none;
+}

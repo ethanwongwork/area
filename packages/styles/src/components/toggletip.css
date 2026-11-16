@@ -25,7 +25,7 @@
     margin: 0;
     padding: 0;
     border: 0;
-    /* The control corner for this height, as Tag's: 4 on the 20 box at the default radius (Spectrum 6 on 20). */
+    /* The control corner for this height, as Tag's: 4 on the 18 box (the UI line) at the default Corner 10. */
     border-radius: max(var(--area-radius-min), round(down, calc(var(--_box) * var(--area-radius-factor)), 2px));
     background: transparent;
     /* spec: a quiet mark, the field chevrons' ink (stroke-control, #838383 light): ChatGPT #8f8f8f,
@@ -57,12 +57,11 @@
 
   /* Hover: the neutral ghost Button's plate (bg-component-hover, the row plate), the ink fixed
      (ChatGPT, Fluent and Untitled darken the ink instead; Spectrum plates). Pressed and pinned keep
-     the pressed plate, as an open menu trigger. */
+     the pressed plate, as every open trigger (plan B7.1; it was the selected plate while pinned). */
   @media (hover: hover) {
     .area-toggletip:hover { background-color: var(--area-bg-component-hover); transition-duration: var(--area-hover-in); }
   }
-  .area-toggletip[aria-expanded="true"] { background-color: var(--area-bg-component-active); transition-duration: var(--area-press-in); }
-  .area-toggletip:active { background-color: var(--area-bg-component-pressed); transition-duration: var(--area-press-in); }
+  .area-toggletip:is(:active, [aria-expanded="true"]) { background-color: var(--area-bg-component-pressed); transition-duration: var(--area-press-in); }
   .area-toggletip:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); }
 
   /* An invisible 24px target (44 on coarse pointers) centred on the box (WCAG 2.5.8), as Tag's remove. */
@@ -73,7 +72,15 @@
 
   /* The note is Tooltip's surface (inverse, 10 corner, 4 / 10 inset, 288 wide): ChatGPT and Notion
      show these notes on their tooltip, Carbon on its dark one. A sentence and a link flow as text, so
-     it is a block; untrimmed, as Tooltip's flex box is, so each line keeps Tooltip's 28 rhythm
-     (two lines 48: ChatGPT's two-line note 48). */
-  .area-tooltip.area-toggletip__surface { display: block; text-box: none; text-wrap: pretty; }
+     it is a block, and each line keeps Tooltip's rhythm. */
+  /* Its words are a text box on the one centring model (inset.css, plan B2.2): trimmed to the cap and the baseline and
+     given their line back above and below, so one line's cap sits on the bubble's centre and wrapped lines keep their
+     leading (it was untrimmed, its cap 0.62 high at type 13). */
+  .area-tooltip.area-toggletip__surface {
+    display: block;
+    text-box: trim-both cap alphabetic;
+    padding-block: calc(var(--_tooltip-inset-block) + (1lh - 1cap) / 2);
+    block-size: calc-size(auto, round(up, size, 1px));
+    text-wrap: pretty;
+  }
 }

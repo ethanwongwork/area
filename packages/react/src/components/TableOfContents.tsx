@@ -14,6 +14,7 @@ export interface TableOfContentsItem {
 }
 
 export interface TableOfContentsProps extends Omit<HTMLAttributes<HTMLElement>, "title"> {
+  /** The sections, each its id, label and nested `children`. */
   items: TableOfContentsItem[];
   /** The visible label, "On this page" by default; `false` for none (the nav keeps an accessible name). */
   title?: ReactNode | false;
@@ -30,7 +31,7 @@ export interface TableOfContentsProps extends Omit<HTMLAttributes<HTMLElement>, 
   /** Called when the section being read changes, by scrolling or a click: the section, and the click that chose it
    * (absent when scrolling moved it). */
   onValueChange?: (id: string | undefined, event?: SyntheticEvent) => void;
-  /** @deprecated Use `value` (DESIGN_SYSTEM.md, One API vocabulary). */
+  /** @deprecated Use `value`. */
   current?: string;
   /** @deprecated Use `onValueChange`. */
   onCurrentChange?: (id: string | undefined) => void;

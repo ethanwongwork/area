@@ -8,6 +8,7 @@ import { AnchoredTooltip } from "./Overlays.tsx";
 export interface AbbreviationProps extends Omit<HTMLAttributes<HTMLElement>, "title"> {
   /** What it stands for: "Bachelor of Science". Shown in the Tooltip and given to assistive tech as its description. */
   title: string;
+  /** The short form as it reads in the text ("BSc"). */
   children?: ReactNode;
 }
 

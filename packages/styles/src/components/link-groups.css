@@ -16,13 +16,13 @@
     display: flex;
     flex-direction: column;
     /* spec: the title 12 above the groups (as Infobox's header sat above its sections, until it was removed 2026-10-26). */
-    gap: var(--area-space-12);
+    gap: var(--area-gap-row);
     min-inline-size: 0;
     color: var(--area-fg-default);
     font-size: var(--area-ui-size);
     line-height: var(--area-ui-leading);
   }
-  .area-link-groups--divided { padding-block-start: var(--area-space-16); border-block-start: var(--area-stroke-width) solid var(--area-edge-dividers); }
+  .area-link-groups--divided { padding-block-start: calc(var(--area-ui-cluster) * 2); border-block-start: var(--area-stroke-width) solid var(--area-edge-dividers); }
   .area-link-groups__title {
     margin: 0;
     font-size: var(--area-title-xs-size);
@@ -33,11 +33,11 @@
   .area-link-groups__groups {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(min(100%, 10em), 1fr));
-    gap: var(--area-space-24);
+    gap: var(--area-gap-section);
   }
   /* spec: the heading 8 above its links (Linear 16 at 13 for a whole-site footer; half for a page's block). */
-  .area-link-groups__group { display: flex; flex-direction: column; gap: var(--area-space-8); min-inline-size: 0; }
-  .area-link-groups__label { margin: 0; font-size: inherit; line-height: inherit; font-weight: var(--area-weight-strong); }
+  .area-link-groups__group { display: flex; flex-direction: column; gap: var(--area-ui-cluster); min-inline-size: 0; }
+  .area-link-groups__label { margin: 0; color: var(--area-fg-muted); font-size: inherit; line-height: inherit; font-weight: var(--area-weight-strong); } /* a heading over a run of rows: muted (plan A9.4, owner 2026-11-11) */
   /* spec: one link per line, 4 apart (Vercel's 20 line + 2 + 2). The list owns the links' muted ink (Linear tertiary,
      Vercel gray-900): a Link inherits it, so a plain standalone Link is right without ink="muted" (audit 2026-10-19). */
   .area-link-groups__list { color: var(--area-fg-muted); display: flex; flex-direction: column; align-items: start; gap: var(--area-space-4); margin: 0; padding: 0; list-style: none; }

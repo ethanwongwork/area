@@ -89,7 +89,7 @@ function LabCells() {
           <MenuItem icon={<TokenIcon />}>Item three</MenuItem>
         </Menu>
         <Toast tone="success" icon={<CheckIcon />} style={fit}>Body text</Toast>
-        <Dialog role="group" aria-modal={undefined} showCloseButton={false} title="Title" description="Description" footer={<><Button variant="ghost">Cancel</Button><Button>Action</Button></>} style={fit} />
+        <Dialog role="group" aria-modal={undefined} showCloseButton={false} title="Title" description="Description" footer={<><Button variant="soft" tone="neutral">Cancel</Button><Button>Action</Button></>} style={fit} />
       </Group>
       <Group id="tracks" name="Tracks">
         <Slider aria-label="Label" min={0} max={100} defaultValue={40} />

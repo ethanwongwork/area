@@ -11,7 +11,7 @@ data views kit (the marks' system)
 ## Owner decisions
 
 - 2026-11-01 – 11-02: data views rounds 1–19 (docs/research/data-views-2026-11-01/README.md): flat marks with no edge,
-  marks 2 apart, corner min(4, side / 4) at the value end, 1px strokes (grid, rule, guide dashed 2 2), labels 11/14 mono
+  marks 2 apart, corner min(4, side / 4) at the value end, 1px strokes (grid, rule, guide dashed 2 2), labels 11/14 in the UI sans
   muted and tabular, plots 192 tall, the series colours as palette steps, status never a series.
 - 2026-11-07: components audit, "Take all recs": N7 Chart is built (review page St7jcEipvPoa3GvSwnAvBT).
 
@@ -46,8 +46,8 @@ Intake gates:
   loading, Button for the table toggle, Badge for the change, `announce()` for what the keys reach, the series tokens for
   colour, the Dividers group and divider roles for lines.
 - **Consistent.** Its marks, strokes, type and gaps are the data views kit's (owner rounds 1–19); its labels are the data
-  label style (`area-type-usage`: text-xs, mono, tabular, muted); its colours are the series in their order.
-- **Worth maintaining.** Two states (`active`, `busy`), a keyboard contract (Tab, arrows, Home, End, Escape), the legend
+  label style (`area-type-usage`: text-xs, the UI sans, tabular, muted); its colours are the series in their order.
+- **Worth maintaining.** Two states (`active`, `loading`), a keyboard contract (Tab, arrows, Home, End, Escape), the legend
   toggles, the table, empty and loading, tested in `chart.test.mjs`. Not built (above), and written down in the
   Documentation entry.
 
@@ -96,7 +96,7 @@ number        div.area-chart.area-chart--number  4 between parts
   label       div                             text-base, fg-muted
   figure      div                             CardValue's style: title-lg, regular, tabular
   change      div                             a soft Badge (arrow + change), then the note; 8 apart
-    note      span                            text-xs, mono, muted, tabular
+    note      span                            text-xs, sans, muted, tabular
 ```
 
 Inset equations: the plot has none; the drawing reserves a gutter of max(40, the longest tick label + 8) at the start, 8
@@ -116,7 +116,7 @@ at the top (half a label line clears the top tick), and 4 + one label line (14 a
 | Point | r 4, 2 ring in the ground, only at the hovered x | Cursor dots r 5, ring 2 (data views README); "no dots until hover" (Tremor, shadcn, GitHub, Stripe) | One step smaller beside a 1.5 line |
 | Gridlines | 1px `--area-edge-dividers`, horizontal only; baseline `--area-border-divider` | Kit: grid decorative, baseline divider; "horizontal only, no y-axis line, one baseline" (round 1) | Gridlines take the Dividers stroke group (the 2026-10-30 rule for every divider) |
 | Guide | 1px dashed 2 2, the muted ink at 45% over the ground | Kit round 6 | — |
-| Labels | text-xs (11/14 at type 13), Geist Mono, tabular, fg-muted; y labels 8 from the plot, x labels 4 under | Kit (round 3, round 9); area-type-usage "a data label" | — |
+| Labels | text-xs (11/14 at type 13), the UI sans, tabular, fg-muted (owner, 2026-11-11, plan A9.11; was Geist Mono); y labels 8 from the plot, x labels 4 under | Kit (round 3, round 9); area-type-usage "a data label" | — |
 | Ticks | about one per 48 of height, at round steps (1, 2, 2.5, 5 × 10ⁿ) from zero | Kit `ticksFor` (4 on 192) | — |
 | X labels | bars: every category that fits (label + 16), else every second, third…; lines: about one per 96, the ends always | Kit `tickIdx` (one per 96) | Categories are each a name worth reading, so bars show them all where they fit |
 | Legend | key 8 square, corner 2, 8 to its words; items 16 apart, 4 between rows; text-xs, fg-muted; 12 under the plot | Kit legend (round 9: blocks 12 apart) | Words in the sans (area-type-usage: numbers in mono, words in Geist) |
@@ -124,8 +124,8 @@ at the top (half a label line clears the top tick), and 4 + one label line (14 a
 | Tooltip | Area's Tooltip (inverse ground), the x in 500, then rows: key 8, name, value tabular, 8 apart (16 before the value) | Cursor chat tooltip (context, labels, values 500 tabular, 16 between label and value); the kit used `.area-tooltip` | The value stays regular: the tooltip's one strong line is its title |
 | Tooltip place | beside the x, 12 off, on the side with more room (a donut: outside its ring), held inside the plot's box; top at the plot's top | Tremor's crosshair tooltip | — |
 | Colours | series n by place (1–8, cycling): `-fill` for bars, areas, keys, donut parts; the mark `--area-series-<n>` for lines; `color` overrides | DESIGN_SYSTEM.md data colours | — |
-| Donut total | title-sm, 500, mono; its label under it in the data label style | Kit `.studio-data__total` (title-sm mono 500); Notion 42.6/600 over 12 | — |
-| Number | label text-base muted; figure title-lg regular tabular (CardValue); change a soft Badge with an up / down arrow, note text-xs mono muted; 4 between parts, 8 in the change row | Kit stat tile (CardValue, Badge soft, note in the label style) | — |
+| Donut total | title-sm with its tracking, 400, sans, tabular (plan A9.11; was 500 mono); its label under it in the data label style | Kit `.studio-data__total` (title-sm mono 500); Notion 42.6/600 over 12 | — |
+| Number | label text-base muted; figure title-lg regular tabular (CardValue); change a soft Badge with an up / down arrow, note text-xs sans muted; 4 between parts, 8 in the change row | Kit stat tile (CardValue, Badge soft, note in the label style) | — |
 | Empty | `emptyText` "No values yet", fg-muted, centred in the plot's height | WRITING.md (name what is missing) | — |
 | Loading | Skeleton block filling the plot's box, with `delay`; root `aria-busy` | Skeleton `delay` (V6); Table's loading | — |
 
@@ -134,9 +134,11 @@ at the top (half a label line clears the top tick), and 4 + one label line (14 a
 | State | Slot · property changes | Evidence |
 |---|---|---|
 | active (`data-active`) | bars: the band's plate (bg-hover); lines and areas: the guide and a point per series; donut: the part a step deeper (80% toward the ink); the tooltip shows | Chat app tooltip; kit hover titles |
-| busy (`aria-busy="true"`) | a Skeleton in the plot's place; no legend, no table | Table `loading` |
+| loading (`aria-busy="true"`; `busy` a deprecated alias) | a Skeleton in the plot's place; no legend, no table | Table `loading` |
 | hidden series (`aria-pressed="false"` on its toggle) | its marks leave the plot (the scale follows the shown ones); the table keeps every series | Chat app `data-d-hidden` |
 | table view | Area's Table (size sm) in the plot's place; the legend's toggles leave; the toggle is selected | Chat app `tableView`; GitHub "View as table" |
+
+**State hooks (manifest).** The pending state is `loading` (GOVERNANCE § 4's word), on `aria-busy` (`stateAttributes`; `chart.css` gives the plot the progress cursor). `busy`, its first name, stays a deprecated alias of `loading` with the same hook for one release.
 
 ## Behavior and accessibility
 
@@ -213,3 +215,16 @@ the repository.
 - 2026-11-07 · components audit N7 → built (In review); the analytics example's hand-drawn chart is not swapped (it
   plots a 10–30 range with a dashed previous period in the accent; Chart plots from zero in the series colours), so the
   swap waits for the owner.
+- 2026-11-11 · system evaluation F5 · the manifest's `busy` state is `loading`, GOVERNANCE § 4's word, on the same `aria-busy`; `busy` kept as a deprecated alias for one release; no paint changed.
+
+## Review note, 2026-11-11 (type rules, plan A9)
+
+- **What changed:** one figure role (owner, 2026-11-11, plan A9.11, "sans tabular ticks and centre"): ticks, the legend and the number's note take the UI sans at `text-xs`, tabular, muted (they were Geist Mono); the donut's centre is sans 400 tabular at `title-sm` with its tracking (it was 500 mono without it). The number's figure stays `title-lg` 400 tabular.
+- **Why:** the system evaluation's type rules (docs/research/system-evaluation-2026-11-11, section 5, A9), owner-approved
+  2026-11-11; the rules are in DESIGN_SYSTEM.md ("Ink and weight", "Size and shape", "Text pairs") and the type skill.
+
+### 2026-11-14 · Shared parts, leftovers (system plan, Phase 2, wave 3)
+
+- Body blocks are `gap-row` apart (8 / 12 / 16); the tooltip row's columns, the value's start, a legend item's swatch gap and the change row's gap are `ui-cluster` (6 / 8 / 10); legend items are `2 × ui-cluster` apart (12 / 16 / 20). Values at type 13 Compact / Default / Comfortable; unchanged at the default.
+- Why: docs/research/system-evaluation-2026-11-11 (plan B6.1, B6.5, B8.2, B2.2; README §5, phase2/leftovers.md); the owner took every recommendation on 2026-11-11. Fix the rule, not the instance.
+- Verdict: awaiting the owner.

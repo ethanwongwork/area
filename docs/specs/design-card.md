@@ -56,10 +56,10 @@ is, in a gallery card that never enlarges it and never shrinks a part past legib
 
 ## Anatomy
 
-- root: the ground over the caption, 4 apart.
-- ground: the container (corner 16 at the default, tile tone, card edge, lift). It clips what runs past it.
+- root: the ground over the caption, the name's line 8 under the ground (the item name, plan B1.2).
+- ground: the container (corner `radius-container`, 16 at the default Corner 10; tile tone, card edge, lift). It clips what runs past it.
 - design: the design's box at true size, positioned by a transform.
-- caption: the name 4 in, the detail (true size by default, muted, tabular figures), the actions at the end.
+- caption: the name on the ground's edge, the detail (true size by default, muted, tabular figures), the actions at the end.
 
 ## Decisions
 
@@ -101,9 +101,9 @@ is, in a gallery card that never enlarges it and never shrinks a part past legib
 
 | Value | Source |
 |---|---|
-| Corner 16 at the default | The card system (2026-11-01): container radius + 8, concentric |
-| Caption 4 under the ground | The card system (2026-11-01) |
-| Name 4 in | Asset card, caption outside |
+| Corner: the frame recipe's block corner (`radius-container`, `surface.css`): 16 at the default Corner 10 (plan A2.3, owner 2026-11-11: a resting card never out-rounds the floating corner) | The card system (2026-11-01): corner 16 |
+| The item name's line 8 under the ground (plan B1.2) | was the card system's 4 between the ground and the caption row (2026-11-01) |
+| Name on the ground's edge (plan B1.2) | was 4 in (Asset card, caption outside) |
 | Margin 12 to 48 (part), 8 to 48 (framed) | Owner's pick Q2 |
 | Hold at 50% | Owner's pick Q3 |
 | Phone at 60% of the width | Owner's pick Q4, Illustrations 2026-11-04 |
@@ -133,3 +133,31 @@ is, in a gallery card that never enlarges it and never shrinks a part past legib
   - Patterns (long pages at their own width);
   - Illustrations (its own gallery frames);
   - images, collections, colours and type sheets.
+- 2026-11-11 · system evaluation A2.3 · the ground takes radius-container: 24 → 16 at the default (the card system's 16). design-card.css; cohesion.test.mjs.
+
+## Review note, 2026-11-11 (type rules, plan A9)
+
+- **What changed:** the name is 500 in the default ink, the one weight for an item's name on a picture card (owner, 2026-11-11, plans B1.2, A9.5); it was 400.
+- **Why:** the system evaluation's type rules (docs/research/system-evaluation-2026-11-11, section 5, A9), owner-approved
+  2026-11-11; the rules are in DESIGN_SYSTEM.md ("Ink and weight", "Size and shape", "Text pairs") and the type skill.
+
+## Review note, 2026-11-11 (focus and targets, plan A6, A11.2)
+
+- **What changed:** Forced colours: the selected ground keeps a Highlight edge (A6.4, S18).
+- **Why:** the system evaluation's focus, forced colours and hit target items (docs/research/system-evaluation-2026-11-11, section 5), owner-approved 2026-11-11; the rules are in DESIGN_SYSTEM.md ("The focus ring", "Targets") and CONTRAST.md (Focus).
+
+### 2026-11-13 · Frame recipe, item name and kind (system plan, Phase 2, B1.1, B1.2)
+
+- `layout` became `kind` (what the card holds; structure B-S8), `layout` kept as a deprecated alias; the classes are unchanged.
+- The ground's corner is the frame recipe's block corner (16 at the default, unchanged).
+- The item name: its line 8 under the ground, on the ground's edge (was 4 under the ground's caption row and 4 in).
+
+### 2026-11-14 · Shared parts, leftovers (system plan, Phase 2, wave 3)
+
+- The caption's gap and the name under the picture follow `ui-cluster` (6 / 8 / 10). Values at type 13 Compact / Default / Comfortable; unchanged at the default.
+- Why: docs/research/system-evaluation-2026-11-11 (plan B6.1, B6.5, B8.2, B2.2; README §5, phase2/leftovers.md); the owner took every recommendation on 2026-11-11. Fix the rule, not the instance.
+- Verdict: awaiting the owner.
+
+## Selection paint (plan B7.6), 2026-11-14
+
+- The selected edge reads the shared recipe (`--_selected-edge`, selection.css); same paint.

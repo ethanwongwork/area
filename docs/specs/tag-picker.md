@@ -73,7 +73,7 @@ root    div.area-tag-picker[data-open]            owns: variant/size locals
   span.area-sr-only[role=status]                    announcements
   listbox ScrollArea.area-menu.__listbox[popover=manual][role=listbox][aria-multiselectable]
     hint  div.area-menu__label.__hint
-    empty div.__empty                               "No tags" (`emptyText`) when nothing matches
+    empty div.area-menu__empty                      "No tags" (`emptyText`) when nothing matches: Menu's empty line
     option div.area-menu__item.__option[role=option]: Tag + check
     create div.area-menu__item.__create[role=option]: "Create" + Tag
 ```
@@ -234,6 +234,7 @@ None.
 - 2026-10-16 · owner: "go with your recs, fix them in that order" (after the Layers sweep, docs/research/layers-2026-10-16/sweep/README.md) → tags in the field take Tag's field lift (`--_lift: var(--area-layer-dark-tint-lift-fill)`, tag.css): in dark their labels sit on the field's fill, lighter than a card, so caution fell to 4.14:1 in a soft field at ground 24 + layers 8. Defaults unchanged.
 - 2026-10-23 · owner, 2026-10-23: "is it supposed to be much rounder than the actual input? im okay with it being a bit rounder but it seems drastic" → a list opened from a field takes the field's corner (surface.css, "A list opened from a field"; navigation.css for Select's picker): rows at the field's corner, the list 4 rounder (or, below a 4 corner, the rows' own corner more), rows short of a pill before Pill. Default: sm 6 → list 10 / rows 6 (Notion's field 6, menu 10, rows 6; was 12 / 8, twice the field), md 8 → 12 / 8 (unchanged), lg 10 → 14 / 10. Menus and Context menus keep 12 / 8. Swept every size × Radius 0–14 and Pill × density 28/32/36 × pill fields: Select, Custom select, Combobox and Tag picker agree at every combination.
 - 2026-10-23 · owner: "make sure all inset corner radius pairings are not broken" → corner audit (every family, default settings): tags in the field nest in its corner (see Spacing audit); swept Radius 0–14 and Pill.
+- 2026-11-14 · plan B7.8, B7.10 → disabled and read-only are the field shell's disabled and read-only recipe (input.css): this family's own copies are removed. Read-only now rests one fill step deeper than editable (outline on the soft fill, soft on its hover step). A tag in a disabled field dims by opacity, as marks do. Why: docs/research/system-evaluation-2026-11-11 (README §5, phase2/disabled.md); the owner took every recommendation on 2026-11-11.
 
 ## Spacing audit (2026-10-17)
 
@@ -253,3 +254,22 @@ Fixed 2026-10-23 (owner: "make sure all inset corner radius pairings are not bro
 ### 2026-11-07 · One announcer (components audit D1)
 
 The hidden status span is replaced by `announce` (`announce` / `useAnnouncement` (packages/react/src/components/announce.ts; DESIGN_SYSTEM.md, "Announcements")). No visible change.
+- 2026-11-11 · system evaluation B2.3 and A11.1 · the list floor is 160 (was 224); the empty line's side rounds to a whole pixel, 10 (was 10.38).
+
+## Review note, 2026-11-11 (focus and targets, plan A6, A11.2)
+
+- **What changed:** The field's ring takes `focus-offset` as every field (A6.2, S12); forced colours restore Highlight focus (A6.4).
+- **Why:** the system evaluation's focus, forced colours and hit target items (docs/research/system-evaluation-2026-11-11, section 5), owner-approved 2026-11-11; the rules are in DESIGN_SYSTEM.md ("The focus ring", "Targets") and CONTRAST.md (Focus).
+- 2026-11-14 · system evaluation B2.6 (hand-over) and B6.3 · the empty line is Menu's shared `.area-menu__empty` (a row tall, its text on the 8 glyph edge; was its own line 10 in) and the part `empty` leaves the manifest; the list's corner follows its rows by the one overlay corner equation (popup.css), unchanged at every setting.
+
+### 2026-11-14 · One field shell (system plan, Phase 2, B3)
+
+- The field is the one field shell; the tag's nested corner reads the shell's `--_field-shape` (computed on the root too, so a tag in the list nests the same). No visible change. The list's own empty line is the popups worker's.
+- Why: docs/research/system-evaluation-2026-11-11 (B3.1, B3.2, B3.3, B2.2 in fields; README §5); the owner took every recommendation on 2026-11-11 and the 24 targets on 2026-11-13. B3.2: field text stays on Button's inset (Keep 10, the pick), so nothing moved.
+- Verdict: awaiting the owner.
+
+### 2026-11-14 · Shared parts, leftovers (system plan, Phase 2, wave 3)
+
+- Listed, not moved: the Create row's gap 6 (the row role is 8 at the default).
+- Why: docs/research/system-evaluation-2026-11-11 (plan B6.1, B6.5, B8.2, B2.2; README §5, phase2/leftovers.md); the owner took every recommendation on 2026-11-11. Fix the rule, not the instance.
+- Verdict: awaiting the owner.

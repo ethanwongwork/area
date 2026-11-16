@@ -13,10 +13,10 @@
     /* spec: Figma's Layout-panel alignment grid is 88 x 56 (figma--auto-layout-alignment--rest). */
     --_aspect: 88 / 56;
     --_alignment-bg: var(--area-input-bg-soft);
-    /* Owner 2026-10-08 (recommendation accepted): no edge in either theme, as Figma's inspector
-       controls and Area's soft NumberField (a transparent 1px edge, counted once in the 4 inset,
-       which forced colours still draw). Was border-decorative, invisible on the dark fill. */
-    --_alignment-edge: transparent;
+    /* The grid is the whole affordance when nothing is chosen, so it keeps the stronger control edge in both themes (plan
+       A10.3, owner 2026-11-11; counted once in the 4 inset): with no edge (owner 2026-10-08) its 0.982 well vanished on a
+       0.98 ground in light and its dots read faint in dark. */
+    --_alignment-edge: var(--area-edge-control-hover);
     display: grid;
     grid-template: repeat(3, minmax(0, 1fr)) / repeat(3, minmax(0, 1fr));
     box-sizing: border-box;

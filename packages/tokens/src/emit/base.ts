@@ -141,11 +141,13 @@ function role(_id: string, switchName: string, map: Record<string, [string, stri
  * `<aside data-area-ui="compact">` correctly re-derive its own corner radius.
  */
 /**
- * The dark translucent state washes (`bg-hover`, `bg-active`, `bg-pressed`): white at 7% a Hover step, 5% more a Selected
+ * The dark translucent state washes (`bg-hover`, `bg-active`, `bg-pressed`): white at 4% a Hover step, 6% more a Selected
  * step and 0.425% more a Pressed step, the press stopping at `max`. Hover stops where a selected plate still sits
  * `gap` above it with the press's room left, and selected where the press has its room, so the three stay in order.
+ * 8% hover and 14% selected at the defaults (plan A4, owner 2026-11-11: the dark plate's step off near black matches the
+ * light wash's 5% off white; it was 7% a step and 5% more, 14% and 19%, two to three times every desktop reference).
  */
-export const DARK_WASH = { hover: 0.07, selected: 0.05, pressed: 0.00425, max: 0.22, gap: 0.02 } as const;
+export const DARK_WASH = { hover: 0.04, selected: 0.06, pressed: 0.00425, max: 0.22, gap: 0.02 } as const;
 const DARK_SELECTED_MAX = DARK_WASH.max - 4 * DARK_WASH.pressed, DARK_HOVER_MAX = DARK_SELECTED_MAX - DARK_WASH.gap;
 /** The washes' alphas at a setting, as the CSS computes them. */
 export function darkWashAlphas(hover: number, selected: number, pressed: number): { hover: number; selected: number; pressed: number } {
@@ -225,6 +227,10 @@ function derivedOnPage(): Record<string, string> {
     // on a hovered or selected row plate; hover lays bg-hover's 5% wash over it (6% + 5% of 94% = 10.7%).
     [`${PREFIX}bg-mark`]: "light-dark(rgb(0 0 0 / 0.06), rgb(255 255 255 / 0.1))",
     [`${PREFIX}bg-mark-hover`]: "light-dark(rgb(0 0 0 / 0.107), rgb(255 255 255 / 0.226))",
+    // The soft mark pressed (plan B7.4): past hover by the Pressed fill's share of the mark's equal step, 15.4% black and
+    // 24% white at the default 4 (Chip input's measured press, as far as its label holds 4.5:1 at dark 24 + 8), and
+    // 11.9% / 23% at 1, so every Pressed step shows past hover.
+    [`${PREFIX}bg-mark-pressed`]: `light-dark(rgb(0 0 0 / calc(0.107 + 0.01175 * var(${PREFIX}fill-pressed-step))), rgb(255 255 255 / calc(0.226 + 0.0035 * var(${PREFIX}fill-pressed-step))))`,
     // The quiet ink of icon actions (audit S6b): neutral outline and ghost Buttons, their groups and Split button.
     [`${PREFIX}fg-quiet`]: `color-mix(in oklab, var(${PREFIX}fg-default), var(${PREFIX}fg-muted) 75%)`,
     // Editable fields keep their 1px edge and colour it with the focus role, plus a halo of
@@ -240,6 +246,20 @@ function derivedOnPage(): Record<string, string> {
       contrastMix(strokeEdge("card"), `var(${PREFIX}stroke-control)`),
     [`${PREFIX}composer-focus-color-page`]:
       contrastMix(rawEdge("subtle"), `var(${PREFIX}focus-color)`),
+    // The keyboard ring (plan A6.1, A6.3): the Focus ring setting's width and offset (axes/states.ts), and under Contrast
+    // More (contrast-more 1, the OS preference included) the Bold preset's 3px off by the gap at every preset; the levels
+    // below More keep the setting's ring. `round(down, contrast-more, 1)` is 1 only at More.
+    [`${PREFIX}focus-width`]:
+      `max(var(${PREFIX}focus-ring-width), calc(3px * round(down, var(${PREFIX}contrast-more), 1)))`,
+    [`${PREFIX}focus-offset`]:
+      `calc(var(${PREFIX}focus-ring-offset) + (var(${PREFIX}focus-gap) - var(${PREFIX}focus-ring-offset)) * round(down, var(${PREFIX}contrast-more), 1))`,
+    // A ring never sits flush on a solid fill (a solid Button or Badge link), which at the shipped Selection is the
+    // ring's own colour: it stands off by the gap, or under Inset runs inside the fill one pixel in, in the fill's own
+    // ink (`focus-solid-inside` 1: the component mixes its on-colour in), so it touches the fill on both sides.
+    [`${PREFIX}focus-solid-inside`]:
+      `calc(var(${PREFIX}focus-ring-inside-solid) * (1 - round(down, var(${PREFIX}contrast-more), 1)))`,
+    [`${PREFIX}focus-solid-offset`]:
+      `calc(var(${PREFIX}focus-gap) * (1 - var(${PREFIX}focus-solid-inside)) - (var(${PREFIX}focus-width) + 1px) * var(${PREFIX}focus-solid-inside))`,
     // A field's focus, by the Focus ring setting (axes/states.ts): the ring when the setting draws one (and always under
     // increased contrast), the soft halo when it does not; the field's edge takes the ring's colour only in Halo.
     [`${PREFIX}field-focus-outline-width`]:
@@ -248,15 +268,20 @@ function derivedOnPage(): Record<string, string> {
       `calc((var(${PREFIX}space-2) + var(${PREFIX}focus-width) * var(${PREFIX}contrast-more)) * var(${PREFIX}field-focus-halo))`,
     // The translucent plates, for a plate over a ground a component cannot know (a segmented track, a swatch cell, a
     // control on a row): the state fills' steps as washes (axes/states.ts). At the defaults they are what they were,
-    // hover #141414 at 5% and selected black at 7% (dark white 14% / 19%); pressed adds 1.375% a step past selected,
+    // hover #141414 at 5% and selected black at 7% (dark white 8% / 14% since plan A4, 2026-11-11; 14% / 19% before);
+    // pressed adds 1.375% a step past selected,
     // 5.5% at the default 4 (12.5% black, about ChatGPT's 12%), and dark 0.425% a step. The dark washes stop at 22%: a
     // translucent plate cannot be bounded by its ink, and 24% left muted text at 4.43:1 at dark 24 + 8 (2026-10-16). Hover
     // stops at 18.3% and selected at 20.3% (`DARK_WASH`), so selected stays a step past hover and every press shows:
     // capped one by one at 21% / 21% / 22%, at Hover 3 and 4 every Selected and Pressed step equalled hover (theme review
-    // 2026-10-24). The defaults sit under both stops (14%, 19%, 20.7%), so they are unchanged.
+    // 2026-10-24). The defaults sit under both stops (8%, 14%, 15.7%).
     [`${PREFIX}bg-hover`]: `light-dark(rgb(20 20 20 / calc(0.05 * max(1.25, 1.5 + 0.375 * (var(${PREFIX}fill-hover-step) - 2)) / 1.5)), rgb(255 255 255 / ${darkWashCss("hover")}))`,
     [`${PREFIX}bg-active`]: `light-dark(rgb(0 0 0 / calc(0.07 * (max(1.25, 1.5 + 0.375 * (var(${PREFIX}fill-hover-step) - 2)) + 0.625 * var(${PREFIX}fill-selected-step)) / 2.125)), rgb(250 250 250 / ${darkWashCss("selected")}))`,
     [`${PREFIX}bg-pressed`]: `light-dark(rgb(0 0 0 / calc(0.07 * (max(1.25, 1.5 + 0.375 * (var(${PREFIX}fill-hover-step) - 2)) + 0.625 * var(${PREFIX}fill-selected-step)) / 2.125 + 0.01375 * var(${PREFIX}fill-pressed-step))), rgb(252 252 252 / ${darkWashCss("pressed")}))`,
+    // The pressed wash's strength as numbers, light and dark (plan B7.4): layers.css caps it on each ground's control fill
+    // (`bg-pressed-track`), which needs the alpha apart from the colour.
+    [`${PREFIX}wash-pressed-light`]: `calc(0.07 * (max(1.25, 1.5 + 0.375 * (var(${PREFIX}fill-hover-step) - 2)) + 0.625 * var(${PREFIX}fill-selected-step)) / 2.125 + 0.01375 * var(${PREFIX}fill-pressed-step))`,
+    [`${PREFIX}wash-pressed-dark`]: darkWashCss("pressed"),
     // Selected tint (axes/states.ts): under a selected container's stroke, the accent's faint surface (half in dark, where
     // it reads as a fill) or the selected wash, by the setting's two switches; transparent at None.
     [`${PREFIX}selected-tint`]: `color-mix(in srgb, light-dark(var(${PREFIX}accent-surface), color-mix(in srgb, var(${PREFIX}accent-surface) 50%, transparent)) calc(var(${PREFIX}selected-tint-accent) * 100%), color-mix(in srgb, var(${PREFIX}bg-active) calc(var(${PREFIX}selected-tint-neutral) * 100%), transparent))`,
@@ -342,6 +367,11 @@ function derivedOnPage(): Record<string, string> {
     [`${PREFIX}fg-change-deleted`]: `var(${PREFIX}fg-danger)`,
     [`${PREFIX}fg-change-untracked`]: `var(${PREFIX}fg-info)`,
     [`${PREFIX}fg-change-renamed`]: `var(${PREFIX}fg-info)`,
+    // The changed lines' plates, one pair for a Diff and a Code block (plan B7.4): the solid status colour mixed into the
+    // ground, 14% / 12% in light and 24% in dark (owner, round 73: the status surfaces left added and removed alike).
+    // Translucent, so they read on any code ground. Not registered: they read other roles.
+    [`${PREFIX}bg-change-added`]: `light-dark(color-mix(in oklab, var(${PREFIX}success-solid) 14%, transparent), color-mix(in oklab, var(${PREFIX}success-solid) 24%, transparent))`,
+    [`${PREFIX}bg-change-deleted`]: `light-dark(color-mix(in oklab, var(${PREFIX}danger-solid) 12%, transparent), color-mix(in oklab, var(${PREFIX}danger-solid) 24%, transparent))`,
     [`${PREFIX}input-invalid-color`]: `var(${PREFIX}fg-danger-vivid)`,
     [`${PREFIX}input-invalid-halo-color`]:
       `color-mix(in srgb, var(${PREFIX}input-invalid-color) 14%, transparent)`,
@@ -421,10 +451,13 @@ function derivedOnPage(): Record<string, string> {
     // `data-area-radius` subtree re-derives its own corners.
     ...radiusDerivations(),
 
-    // Standard transition for interactive chrome. Only properties that actually change. `scale` carries a press's give
-    // (Feedback); it rests at 1, so a control that never presses never moves.
+    // Standard transition for interactive chrome. Only properties that actually change. Colours and shadows leave on
+    // `duration-quick` (a third of the Speed number, 70 at 210; plan A5.5, 2026-11-11, was fast) on `ease-effects`,
+    // which never overshoots (plan A5.4). `scale` carries a press's give (Feedback) and its release, on `fast` and the
+    // movement curve (a spring under Easing Spring); it rests at 1, so a control that never presses never moves. The
+    // colours stay first: a family that narrows `transition-property` to colours keeps their clocks by position.
     [`${PREFIX}transition`]:
-      `background-color var(${PREFIX}duration-fast) var(${PREFIX}ease-out), border-color var(${PREFIX}duration-fast) var(${PREFIX}ease-out), color var(${PREFIX}duration-fast) var(${PREFIX}ease-out), box-shadow var(${PREFIX}duration-fast) var(${PREFIX}ease-out), scale var(${PREFIX}duration-fast) var(${PREFIX}ease-out)`,
+      `background-color var(${PREFIX}duration-quick) var(${PREFIX}ease-effects), border-color var(${PREFIX}duration-quick) var(${PREFIX}ease-effects), color var(${PREFIX}duration-quick) var(${PREFIX}ease-effects), box-shadow var(${PREFIX}duration-quick) var(${PREFIX}ease-effects), scale var(${PREFIX}duration-fast) var(${PREFIX}ease-out)`,
     // Feedback (axes/feedback.ts) on the Speed setting: how long a hover and a press take to arrive. A state's own rule
     // sets its arrival to these (the base transition is the leave), so Off and Speed 0 land at once as before.
     [`${PREFIX}hover-in`]: `calc(var(${PREFIX}duration-fast) * var(${PREFIX}feedback-hover))`,
@@ -451,7 +484,8 @@ function derivedOnPage(): Record<string, string> {
  *         `ui-dense`, the factor component insets are written against (`x − y × ui-dense`, every
  *         y 2, 4 or 8, so halves stay whole pixels): 1 at Compact 12, 0 at Default 14. Gaps on the 2px
  *         ladder read `ui-gap-step`, the curve rounded to whole steps, so they stay on 2 · 4 · 6 · 8.
- * marks   text labels (Badge, Count, Kbd) sit on the small-text line plus the level's room; the
+ * marks   text labels (Badge, Count, Tag, Kbd, Citation, Indicator's count) sit on the small-text line plus 0 / 4 / 8,
+ *         the same at every density (plan B5.1); the
  *         check box and toggle come from the type (`type-box`); static marks hold.
  */
 function sizeDerivations(): Record<string, string> {
@@ -485,15 +519,26 @@ function sizeDerivations(): Record<string, string> {
     [`${PREFIX}ui-row-gap`]: "1px",
     [`${PREFIX}ui-stack`]: `calc(6px - 2px * ${gapStep})`,
     [`${PREFIX}ui-cluster`]: `calc(8px - 2px * ${gapStep})`,
-    [`${PREFIX}gap-row`]: `calc(12px - 4px * ${step})`,
+    // A gap reads whole steps; only an inset (edge to content) keeps the half step (plan A1.1, 2026-11-11): gap-row was
+    // 12 − 4 × ui-dense, 10 at the default type 13, between the ladder's rungs. 8 / 12 / 16 at type 13 Compact / Default /
+    // Comfortable. A row's icon-to-label gap is ui-cluster, not gap-row (plan B2.3).
+    [`${PREFIX}gap-row`]: `calc(12px - 4px * ${gapStep})`,
+    // Section and page spaces, named (plan A1.4): a section is two groups apart (Stack's section, 24, Compact 16); the page
+    // inset is the Canvas's edge to its sections (the feed's margin, 32, Compact 24). No new value: each names what Stack
+    // and the feed already computed.
+    [`${PREFIX}gap-section`]: `calc(24px - 8px * ${gapStep})`,
+    [`${PREFIX}inset-page`]: `calc(32px + 8px * ${level})`,
     [`${PREFIX}inset-surface-sm`]: `calc(12px - 4px * ${step})`,
     [`${PREFIX}inset-surface-md`]: `calc(16px - 4px * ${step})`,
     [`${PREFIX}mark-sm`]: "16px",
     [`${PREFIX}mark-md`]: "20px",
     [`${PREFIX}mark-lg`]: "24px",
+    // The mark ladder (plan B5.1, 2026-11-13): the small text's line, then 4 and 8 more, at every density, so every
+    // mark size is distinct at every density (14 / 18 / 22 at type 13). Compact took 4 off md and lg, so its sm and md
+    // marks were one size (14) and its lg was Default's md.
     [`${PREFIX}mark-label-sm`]: v("type-small-leading"),
-    [`${PREFIX}mark-label-md`]: `calc(${v("type-small-leading")} + 4px + 4px * ${down})`,
-    [`${PREFIX}mark-label-lg`]: `calc(${v("type-small-leading")} + 8px + 4px * ${down})`,
+    [`${PREFIX}mark-label-md`]: `calc(${v("type-small-leading")} + 4px)`,
+    [`${PREFIX}mark-label-lg`]: `calc(${v("type-small-leading")} + 8px)`,
     [`${PREFIX}mark-box`]: v("type-box"),
     [`${PREFIX}mark-toggle`]: `calc(${v("type-box")} + 4px)`,
   };
@@ -529,23 +574,33 @@ function radiusDerivations(): Record<string, string> {
   // inset (owner, 2026-10-12): a compact popover's 12 inset stops its corner at 18 when the setting
   // asks for 20 or 24. Default and Comfortable insets never reach the cap.
   out[`${PREFIX}radius-container`] = `min(var(${PREFIX}radius-surface), round(down, calc(var(${PREFIX}inset-surface-md) * 1.5), 2px))`;
-  // Small nested shapes (code, disclosure plates): the smallest control's corner, 6 (compact 4).
+  // Small nested shapes (code, disclosure plates): the smallest control's corner, 6 at the default and compact.
   out[`${PREFIX}radius-small`] = `var(${PREFIX}radius-control-xs)`;
-  // A full-width row's plate: the row's own height, 8 (compact 6).
+  // A full-width row's plate: the row's own height, 8 at the default and compact (30 and 28 rows).
   out[`${PREFIX}radius-row`] = corner(`var(${PREFIX}ui-row)`);
-  // The setting itself, the medium Button's corner at the default height (0 ... 14, Pill 16).
-  out[`${PREFIX}radius-step`] = corner("32px");
+  // The setting's own step: the corner of the real medium control at the current type and density (plan A2.1,
+  // 2026-11-11). The preset number is that corner on a 32 control (the medium Button at type 14); at the default type 13
+  // the medium Button is 30 and the step is its 8 at Corner 10. It was corner(32px), 10 at the default, so everything it
+  // capped ran 2 rounder than every Button.
+  out[`${PREFIX}radius-step`] = `var(${PREFIX}radius-control-md)`;
   // The sharpest corner a nested shape takes (an item in a track, a row in a menu): 4, or the
-  // setting where it is smaller (2), so only Sharp is square anywhere.
-  out[`${PREFIX}radius-floor`] = `min(4px, var(${PREFIX}radius-step))`;
+  // setting where it is smaller (2), so only Sharp is square anywhere. It reads the setting's own number (the corner of
+  // a 32 control), not the step, so Corner 4 keeps its 4 floor where its medium control draws 2.
+  out[`${PREFIX}radius-floor`] = `min(4px, ${corner("32px")})`;
   // Rows in a floating list (Menu, Combobox, Command palette, Select's picker) and the list itself
-  // (owner, 2026-10-04: "menu rows wait for pill"). A row is the surface less its 4px padding (8 at
-  // both densities), floored, no rounder than the medium Button, and 2px short of a pill until
-  // Pill (the min() term is 0 only when the factor is 0.5). The list stops at its rows plus the
-  // padding, so it stays concentric: 12 at the default, 14 / 16 / 18 at 10 / 12 / 14, 20 at Pill.
+  // (owner, 2026-10-04: "menu rows wait for pill"). A row is the surface less its 4px padding,
+  // floored, no rounder than its height's corner (radius-row, plan A2.1), so a row in a menu takes the corner of a row
+  // anywhere (Nav, Tree view) and of a Button of its height: 8 at the default and at Compact. At Pill the row's corner
+  // gives way to half the row (the second term is radius-row until the factor reaches 0.5), and the last term keeps a
+  // row 2px short of a pill until Pill. The list stops at its rows plus the padding, so it stays concentric: 12 at the
+  // default Corner 10.
   out[`${PREFIX}radius-list-row`] =
-    `min(max(var(${PREFIX}radius-floor), calc(var(${PREFIX}radius-container) - 4px)), var(${PREFIX}radius-step), calc(var(${PREFIX}ui-row) / 2 - min(2px, (0.5 - var(${PREFIX}radius-factor)) * 1000px)))`;
-  out[`${PREFIX}radius-list`] = `min(var(${PREFIX}radius-container), calc(var(${PREFIX}radius-list-row) + 4px))`;
+    `min(max(var(${PREFIX}radius-floor), calc(var(${PREFIX}radius-container) - 4px)), max(var(${PREFIX}radius-row), calc(var(${PREFIX}ui-row) / 2 - (0.5 - var(${PREFIX}radius-factor)) * 1000px)), calc(var(${PREFIX}ui-row) / 2 - min(2px, (0.5 - var(${PREFIX}radius-factor)) * 1000px)))`;
+  // The list is its rows plus the 4 padding they sit in (the overlay corner table, plan B6.3; DESIGN_SYSTEM.md, "Overlay
+  // corners"): concentric at every setting. Below a 4 corner it adds the rows' own corner, so it stays at most twice them
+  // (Corner 2: 2 / 4; it was capped at the container there, 2 round 2 rows). popup.css writes the same equation on each
+  // list, so a list whose rows take a field's corner follows them.
+  out[`${PREFIX}radius-list`] = `calc(var(${PREFIX}radius-list-row) + min(4px, var(${PREFIX}radius-list-row)) * var(${PREFIX}radius-concentric))`;
   return out;
 }
 
@@ -571,13 +626,15 @@ export const REGISTERED_PROPERTIES = [
   { name: `${PREFIX}radius-surface`, syntax: "<length>", initial: "12px" },
   { name: `${PREFIX}radius-min`, syntax: "<length>", initial: "2px" },
   { name: `${PREFIX}radius-factor`, syntax: "<number>", initial: "0.25" },
-  { name: `${PREFIX}focus-width`, syntax: "<length>", initial: "2px" },
-  { name: `${PREFIX}focus-offset`, syntax: "<length>", initial: "0px" },
+  // The Focus ring setting's leaves; `focus-width` and `focus-offset` are derived from them and Contrast, so they are not.
+  { name: `${PREFIX}focus-ring-width`, syntax: "<length>", initial: "2px" },
+  { name: `${PREFIX}focus-ring-offset`, syntax: "<length>", initial: "0px" },
   // The Surface leaf; `border-width` is derived from it and contrast, so it is not registered.
   { name: `${PREFIX}frame-width`, syntax: "<length>", initial: "1px" },
   // The Rest shadow leaf; `shadow-edge` is derived from it, so it is not registered.
   { name: `${PREFIX}shadow-rest-step`, syntax: "<number>", initial: "0" },
   // The motion axis's default step, so a missing or invalid duration falls back to the default.
+  { name: `${PREFIX}duration-quick`, syntax: "<time>", initial: duration(Number(MOTION_AXIS.defaultPreset), 1) },
   { name: `${PREFIX}duration-fast`, syntax: "<time>", initial: duration(Number(MOTION_AXIS.defaultPreset), 2) },
   { name: `${PREFIX}duration-base`, syntax: "<time>", initial: duration(Number(MOTION_AXIS.defaultPreset), 3) },
 ] as const;

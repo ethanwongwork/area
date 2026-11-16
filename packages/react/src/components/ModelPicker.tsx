@@ -1,11 +1,14 @@
 import { forwardRef, useState } from "react";
 import type { HTMLAttributes, MouseEvent, ReactNode, Ref } from "react";
-import { modelPickerVariants } from "../variants.ts";
+import { modelPickerVariants, type VariantProps, MANIFESTS } from "../variants.ts";
 import { Button, type ButtonProps } from "./Button.tsx";
 import { Glyph } from "./Glyph.tsx";
-import { Menu, MenuItem, MenuLabel } from "./primitives.tsx";
+import { Menu, MenuItem, MenuLabel } from "./Menu.tsx";
 /** The empty collection, one reference so effects keyed on it stay still. */
 const NO_ITEMS: never[] = [];
+
+/** The trigger's sizes, Button's axis. */
+type TriggerSize = VariantProps<typeof MANIFESTS.button>["size"];
 
 export interface ModelOption {
   value: string;
@@ -16,30 +19,37 @@ export interface ModelOption {
 }
 
 export interface ModelPickerProps extends Omit<HTMLAttributes<HTMLDivElement>, "onChange" | "defaultValue"> {
-  /** The models. Collections are `items` everywhere (audit H-14). */
+  /** The models. */
   items?: ModelOption[];
   /** @deprecated Use `items`. */
   models?: ModelOption[];
+  /** The chosen model's value, controlled. */
   value?: string;
+  /** The model chosen at first, uncontrolled; the first model by default. */
   defaultValue?: string;
+  /** Called with the chosen model's value and the press that chose it. */
   onValueChange?: (value: string, event: MouseEvent<HTMLButtonElement>) => void;
-  /** Props and ref for the trigger Button; `ref` and the rest land on the wrapper (audit S17, G-24). */
+  /** Props and a ref for the trigger Button; `ref` and the rest land on the wrapper. */
   triggerProps?: Omit<ButtonProps, "children" | "variant" | "tone" | "size" | "trailingIcon"> & { ref?: Ref<HTMLButtonElement> };
   /** Names the menu and the trigger ("Model"). */
   label?: string;
   /** An optional heading over the rows. */
   heading?: ReactNode;
   /**
-   * How hard the model works ("Light", "Medium", "High"): shown muted after the model's name on the trigger ("Opus 5.5
-   * Medium", Codex's "6 Astra Light"), chosen in an Effort group under the models.
+   * How hard the model works ("Light", "Medium", "High"): shown muted after the model's name on the trigger ("Opus
+   * 5.5 Medium"), chosen in an Effort group under the models.
    */
   efforts?: ModelOption[];
+  /** The chosen effort's value, controlled. */
   effort?: string;
+  /** The effort chosen at first, uncontrolled; the first effort by default. */
   defaultEffort?: string;
+  /** Called with the chosen effort's value and the press that chose it. */
   onEffortChange?: (effort: string, event: MouseEvent<HTMLButtonElement>) => void;
   /** Names the effort group ("Effort"). */
   effortLabel?: string;
-  size?: "sm" | "md" | "lg";
+  /** The trigger's size, one of Button's. */
+  size?: TriggerSize;
 }
 
 /**

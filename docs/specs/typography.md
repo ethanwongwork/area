@@ -137,14 +137,19 @@ Read from Cursor's bundle (`docs/research/type-presentation-2026-11-01`): `--cur
 | `title-xs` | 16 / 22 | 16 × B / 13 | 15 / 22, the reading size |
 | `title-sm` | 18 / 24 | 18 × B / 13 | 19 / 26 |
 | `title-md` | 20 / 28 | 20 × B / 13 | 22 / 30 |
-| `title-lg` | 26 / 30 | 26 × B / 13 | 30 / 38 |
+| `title-lg` | 26 / 30 | 26 × B / 13: a page's title (Page header `md`, 600) and a figure (400) | 30 / 38 |
+| `title-xl` | 32 / 40 | 2.5 × B on the size ramp: 30/38, 32/40, 34/42, 37/46, 40/48 for B 12 to 16; a top-level page's title (Page header `lg`, 600) | new 2026-11-11 |
+| `text-xs-code-leading` | 11 / 16 | the small step's line + 2: 10/16, 11/16, 12/18, 13/20, 14/22 for B 12 to 16; density never moves it | new 2026-11-11 (was 17, the fixed 18 less density) |
 | `display-sm`, `display-lg` | 52 / 52, 67 / 68 | 56 and 72 × B / 14 | same |
 
-Secondary text took `text-sm` in every family: Approval's descriptions and hints, choice and group descriptions, the
-Composer group's note, Custom select's caption, Empty state's description, Field's description, Figure's caption, File
-tile's meta, File upload's hint, Hover card's meta, Meter's description, Menu's description, Switch's description,
-Section heading's lede and Timestamp. A surface's own body (Card, Dialog and Popover descriptions) stays `text-base`;
-counts stay `text-xs`.
+Secondary text set apart takes `text-sm`: the Composer group's note, Empty state `sm`'s description, Field's
+description, count and messages, Figure's caption, File upload's hint, Meter's description, Menu's description (the one
+dense exception), Timestamp, a slider's ends, the calendar's days and weekdays, a panel's `sm` labels, the palette's key
+hints. A line joined to a name takes the name's size, muted (owner, 2026-11-11, plan A9.3): choice, group and Switch
+descriptions, Custom select's caption, File tile's and Hover card's meta, Asset row's meta, Section heading's lede (on
+the 13/20 prose line). A surface's own body (Card, Dialog and Popover descriptions) stays `text-base`. Marks keep
+`text-xs` (Badge, Count, Tag, Kbd, Indicator, Citation, data labels, status letters, small code); no word does. Body
+text carries no tracking (the 10–13 hairs, +0.01 to +0.0025em, were dropped 2026-11-11); titles keep theirs.
 
 **Reading step, Claude's (2026-11-02, later the same day).** The owner put Claude Code's chat beside the Feed Kit's Copy
 (14/22) and picked "15/22 like Claude". Measured: Claude Code's reply text has a 10.5 cap on a 21 line (15 at Claude's
@@ -152,3 +157,30 @@ sans); the Claude app's bundle (`ion-dist.asar`) sets prose `--cds-font-size-pro
 `--cds-leading-prose--sm` 1.375rem, 15/22, and claude.ai's response body 16/24. `text-lg` is now B + 2 on the UI ratio's
 line (14/20, 15/22, 16/24, 17/26, 18/28 for B 12–16), its prose line the same and its paragraph gap 16 at 13. The
 1.5 prose rule stays for `text-sm` and `text-base`.
+
+### 2026-11-11 · A page title and a heading weight (the four product screens)
+
+- **What changed:** two roles, both additive (no component reads them yet, so nothing moved): `title-xl` (32/40 at 13,
+  tracking −0.025em), a document's own title, the one word size between `title-lg` (26, used for figures) and display
+  (52, specimens); and `--area-weight-heading` (600), for a document's title and headings and a long reply's headings.
+- **Why:** the four real products rebuilt from Area at 1440 × 900 read flat: every heading sat at 500 within a few
+  sizes of body text, and a document's title had no size between 26 and 52 (docs/research/product-recreations-2026-11-10).
+- **Open:** the weight rules disagree with each other and the code (another session's audit, T4), and Message has no
+  heading role, so replies' headings are still set by hosts. Interface titles keep 500.
+
+### 2026-11-11 · Type rules (plan A9, docs/research/system-evaluation-2026-11-11)
+
+- **What changed:** page > section > item is 26/600 > 16/500 > 13/500 (Page header `md` `title-lg`, `lg` `title-xl`, both
+  at `weight-heading`; Section heading and Empty state `title-xs` at 500); Message's h1–h3 are `title-xs` at 500. Words at
+  the mark size moved to `text-sm` or the UI line (A9.2); a joined line takes its name's size (A9.3); one weight table
+  (A9.5, item names on picture and file cards 500); a heading over a run of rows is the rows' size at 500, muted (A9.4);
+  tabular figures wherever numbers change or align (A9.8); Kbd, code lines and sub-floor text read the type axis (A9.9:
+  `text-xs-code-leading`; Tag and Kbd at the mark text at every density); no body tracking and one
+  `underline-offset` token (A9.10); figures and chart labels in the UI sans (A9.11); reading size only where prose is
+  written (A9.12); a label beside a value muted 400 (A9.13). Button labels keep 500 on every variant (A9.7).
+- **Why:** the evaluation's type census (type-ink.md) found 37 styles where about 28 do the work, words at 11, three
+  group-label treatments, two weights for item names and page titles no larger than 20/500. The owner approved every
+  recommendation on 2026-11-11.
+- **Open:** A9.6 (a regular weight of 430–450) is to look at before deciding; no Typography setting holds the regular
+  weight yet. Heading inks over runs of rows (Panel, Table group, Link groups, Reference list, TOC) wait for the ink pass.
+

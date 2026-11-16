@@ -92,20 +92,22 @@ footer action in the opposite corner by the same rule (12/12).
 
 | Slot · property | Area value | Basis | Reason when it differs |
 |---|---|---|---|
-| surface · inset, gap | 16 (border included), `inset-surface-md` between sections (16, compact 12) | shadcn 16/16; Primer 16 | ChatGPT 24 |
-| surface · compact | inset **16** (border included, held), corner **16** (the surface corner plus 4, below), section gap 12 (`inset-surface-md`) | Figma Share dialog (`compact/figma--share-dialog--open--light`): header title 16 in, field row 16 in, corner 13; VS Code save dialog 13 / 9, corner 8 | Owner 2026-10-02 (cursor-desktop.md): Figma holds 16 in its dense UI; R8's compact 12 rested on VS Code alone |
+| surface · inset, gap | 16 (border included); between sections the block gap, `min(inset-surface-md, 16)` (14 at the default type 13, 16 at Comfortable where it was 18, 12 at Compact; popup.css, plan B6.2) | shadcn 16/16; Primer 16 | ChatGPT 24 |
+| surface · compact | inset **16** (border included, held), corner **16** (the surface corner, below), section gap 12 (the block gap) | Figma Share dialog (`compact/figma--share-dialog--open--light`): header title 16 in, field row 16 in, corner 13; VS Code save dialog 13 / 9, corner 8 | Owner 2026-10-02 (cursor-desktop.md): Figma holds 16 in its dense UI; R8's compact 12 rested on VS Code alone |
 | surface · width | by `size`: 384 / **480** / 720 / 880, at most the viewport less 32 (`--_dialog-size`, surface.css) | md: between shadcn 384 and ChatGPT 600 / Primer 640; sm: shadcn 384 and Drawer's sm; lg, xl: Claude | Claude's sm 400 and md 520 were not taken: md stays the 480 Dialog always had, and sm takes Drawer's 384 so one name is one width |
 | header · scroll rule | `edge-dividers`, 1px, edge to edge inside the border, in the middle of the header-to-body gap (rounded to a pixel); `opacity` 0 → 1 on `fade-fast` while `data-scrolled` | Claude, Cursor (a rule over the body only when it scrolls) | Undivided at rest, as Excluded below keeps the footer |
 | surface · border | `border-width` `border-float`, the floating-surface edge (surface.css:928) | All use a 1px ring | Was decorative |
 | surface · shadow | **`--area-shadow-modal`**, the Elevation axis's modal role: `0 0 8` + `0 14 28` at twice the Elevation step in % (6% key at the default 3), the ambient half, dark doubled; transparent at step 0 (axes/elevation.ts); the Surface axis's `shadow-edge` is listed first (surface.css:935) | The topmost surface, over Popover and Menu's float (elevation-2026-10-14); Surface axis (owner, 2026-10-14) | Was `shadow-2` (1–2px). A Surface axis role since audit S10. References lift less (ChatGPT 4/8, Primer 6/18), but one lift for every floating surface |
 | scrim | **`scrim`**: #00000022 (13.3%) in light, #00000080 in dark, no blur (aliases.ts:155) | ChatGPT 13.3%; shadcn 10% | Was 65% with a 2px blur. Dark value not measured |
 | close · control | **32px ghost neutral Button** (md), Area `dismiss` glyph (`primitives.tsx:1699`) | ChatGPT 32, Primer 32; shadcn 28 | Was a bespoke 28px button whose foreground changed on hover (against the fixed-foreground rule). The written exception to the rectangular-surface close (ghost sm, 28), which Popover, Toast and Alert use (audit S9, owner) |
-| close · position | **8 from the top and 8 from the side**; icon on the 16 inset both ways | shadcn 8/8, Primer 8/8 (half the inset); ChatGPT 12/12 | Was 16/16 (box on the inset, icon at 22) |
-| title · alignment | line centred on the close (header top = (16 − 18) / 2, the title's own line; it read a fixed 24 until 2026-11-06, 2 off the 22 title) | Popover rule: header top = (icon − title leading) / 2 | Was trimmed to its cap on the inset, so the close's centre sat 7 below the title's |
-| title · without close | cap on the 16 inset (`text-box: trim-start`) | Popover | — |
+| close · position | a corner control beside a title (DESIGN_SYSTEM.md, the one named exception): centred on the title's cap, round((1cap − 30) / 2) above and below, so 6 from the top at type 12 and 13 Default (4 at type 16); its glyph on the 16 side column (10 / 9 / 8 from the side at type 12 / 13 / 16); its corner from the nearer distance, 16 − 6 = 10 at Corner 10, 0 at Sharp, 14 at Pill | Plan B6.5 (VN6) | Was 8 / 8 with the title's line centred on it |
+| title · alignment | cap on the 16 inset with or without a close (`text-box: trim-start cap alphabetic`; trim-both when it ends the header) | Plan B6.5: one text grid | It was untrimmed beside a close (cap ~18.8) and trimmed without (16): a 2.8 jump |
+| description | muted, ends on its baseline when it closes the header (`text-box: trim-end`) | Plan B6.5 | Was untrimmed |
+| footer · pair and width | soft neutral Cancel with a solid action (or soft danger); text Buttons at least 2.25 × their height (68 on a 30 Button; popup.css) | Plan B6.5 (VN5, RD11) | The demos' Cancel was ghost (ink 0.452) and "OK" stood narrower than "Cancel" |
+| body · scroller | a Scroll area (plan B6.6), so its bar is every list's; `data-scroll-more` draws the header's rule over the footer while there is more below | Plan B6.6 (VN15) | It used the platform's bar and clipped mid-line with no cue |
 | title · type | **the text's size, strong**: `text-base` 13/18 500, default ink (2026-11-06 balance pass) | Cursor's confirm (12/500 over 12), its settings rows (13 over 13); DESIGN_SYSTEM.md "Text pairs" | ChatGPT 16/24 (600), shadcn 16. Pass 2 (owner): 20/28 regular was too big, 1.4×; `title-xs` 16/22 over 13 was 1.23× after the 2026-11-02 ramp |
 | title → description | **one step (4) off**: baseline to cap **12.8**, beside the description's own 8.8 | Card, Popover, Alert, Toast (Text pairs); Cursor's confirm 4 | Pass 0: 8 (both trimmed); pass 1: 15; 2026-10-22: 12 (16 over 14); 2026-11-02 to 11-06: 10.0 (16 over 13); 2026-11-06 first pass: 8.8, joined |
-| surface · radius | **16** at the default and compact: the surface corner plus 4 (`radius-container` + 4, never more than twice the surface corner, so square with a square surface; Pill 28) (surface.css:917) | Concentric with the corner close at the default (8 + 8); ChatGPT 16; owner 2026-10-03 (one corner setting) | Pass 1: 12, not concentric (12 − 8 = 4 ≠ 8). Away from the default the close keeps the control step and is no longer concentric |
+| surface · radius | **16** at the default and compact: the floating corner, `radius-container` (square with a square surface; 24 at Pill) (dialog.css) | Plan A2.3, owner 2026-11-11: every floating and modal surface takes the one container corner | Was the container plus 4, 20 at the default (owner 2026-10-03). The close is a corner control (inset.css, plan B4.2): md, its glyph on the inset, 9 from the outer edge, corner 16 − 9 = 7 (it kept its own 8) |
 | footer | actions end-aligned on the 16 inset, `ui-cluster` apart, wrapping; under 480px wide they stretch (surface.css:1001-1011) | shadcn 16, Primer 16 | ChatGPT 12/12 corner |
 | title element | `h2` | Popover, shadcn `DialogTitle` | Was a `div` |
 
@@ -154,6 +156,8 @@ over `--area-duration-base` (210), `--area-ease-out`, and the scrim fades alongs
 `overlay` and `display` transitions (`allow-discrete`). Motion 0 sets
 the duration to 0, so it is instant, and `prefers-reduced-motion` drops the scale as well
 (`surface.css:870-905`). Was instant.
+
+**State hooks (manifest).** `open` is the modal dialog's own `[open]` (`stateAttributes: { open: "open" }`), read by the entry and exit in `surface.css`.
 
 ## Visual pass
 
@@ -259,6 +263,7 @@ Open questions: none new.
 - 2026-10-05 · Confirm dialog needs `role="alertdialog"` on the native modal → Dialog passes a `role` prop to its `<dialog>` (inline: the surface); attribute order unchanged (dialog tests).
 - 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → enter on `moderate` (200, was 150), exit one step faster on `base`; scrim on the same clocks; rests at `scale: none` and on a whole-pixel centre (lead: Confirm dialog rested at 334.5 × 328.07) (`surface.css`).
 - 2026-10-14 · owner: "continue working on the next axis" → Surface is one number, the frame's width: `1` (Default) or `0` (Borderless) (was `outlined` / `borderless`; axes/surface.ts). At 0 the dialog lists the Surface axis's `shadow-edge` first in its box-shadow, ChatGPT's frameless-menu edge (`0 0 1px` black 62%, and in dark an inset `0 0 1px` white 20%; captured 2026-10-13), so it keeps an edge at Elevation 0 and in dark, where it had none. Owner approved ("go with your recs"), review https://claude.ai/artifact/L4TCF2W5zcjvBK7xZmaDBN (docs/research/surface-2026-10-14.md).
+- 2026-11-11 · system evaluation F5 · the manifest declares `open` on the native `[open]` (`stateAttributes`); no paint changed.
 
 ## Review note, 2026-10-22 (round 68)
 
@@ -310,3 +315,30 @@ Open questions: none new.
   rule), primer.md (width and height scale), internal.md (Dialog had none of Drawer's `size`). The owner took every
   recommendation ("Take all recs", 2026-11-07).
 - **Verdict:** awaiting the owner.
+- 2026-11-11 · system evaluation A2.3 · Dialog drops its + 4: corner radius-container, 20 → 16 at the default (Confirm dialog with it). The close goes from 3 to 1 off concentric. dialog.css; cohesion.test.mjs.
+
+## Review note, 2026-11-11 (motion, plan A5)
+
+- **What changed:** the modal enters on `duration-base` (210; it was `moderate`, 280) and leaves on `fast` (140; it was `base`), the exit and the scrim's on `ease-exit` (A5.1).
+- **Why:** the system evaluation's motion items (docs/research/system-evaluation-2026-11-11, section 5, A5), owner-approved
+  2026-11-11; the rules are in docs/MOTION.md (Tokens, Roles, Recipes) and kept by cohesion.test.mjs and
+  tests/behaviour/suites/motion.test.mjs. The motion tables above are history; these values are current.
+
+### 2026-11-11 · Ink, dark and colour (system plan, Phase 1)
+
+- **What changed:** In dark it paints the floating ground (`bg-float`, plan A7.2): a step above the layers under it, #0c0c0c on the near-black page at the defaults (was `bg-surface`, the page's own #020202); light is unchanged. Its dark edge is one line (plan A7.1): the frame takes the dark rim's strength (16% at Shadow 8) and the rim is no longer drawn outside it, where it had made a two-tone 2px edge.
+- **Why:** docs/research/system-evaluation-2026-11-11 (README §5); the owner took every recommendation on 2026-11-11.
+- **Verdict:** awaiting the owner.
+- 2026-11-14 · system evaluation B6.1–B6.6 · the frame and shadow stack are the one floating surface's (popup.css; `shadow-modal`, a material's layers first); the block gap is `min(inset-surface-md, 16)` (Comfortable 18 → 16); `--area-dialog-inline-size` sets the default width; the title's cap sits on the inset with or without a close, the closing line ends on its baseline and the close centres on the cap (it sat 8 / 8, now 6 from the top); footer text Buttons are at least 2.25 × their height and the demos pair a soft neutral Cancel; the body is a Scroll area, and a rule shows over the footer while it can scroll further (reopens "Excluded: a divided footer" for that one case, owner glance requested).
+
+## Shared bars and corners (plan B4), 2026-11-14
+
+- B4.2: the close is a corner control (inset.css): its glyph on the 16 inset, its plate 9 from the outer side, its corner the dialog's less that, 7 at the defaults (it kept the md control's 8; 11 when the corner was 20). Its top is the title group's (plan B6.5, 2026-11-14: centred on the title's cap), 6 from the outer top at the defaults, so it is not equidistant there: listed for the conductor.
+- 2026-11-14 · system evaluation B6.5 (correction) · the close stays where the corner-control rule puts it (equidistant from top and side) and the title follows it: its cap's centre on the close's centre line, rounded to a whole pixel (cap top 19 at type 13, 20 at 12 and 16, against the 16 inset); the first pass had moved the close to the title's cap (6 from the top). Pinned by `tests/behaviour/suites/wrap.test.mjs` and `popups.test.mjs`.
+- 2026-11-14 · system evaluation B6.5 (final) · the conductor's interim ruling (title on an equidistant close, cap 19–20) is reversed: the title's cap stays on the inset and the close follows it (centred on the cap, glyph on the column), written as the one named exception to the corner control, whose corner now comes from the nearer distance (`--_cc-near`, inset.css). Pinned by `bars.test.mjs`, `popups.test.mjs` and `tests/behaviour/suites/wrap.test.mjs` (type 12/13/16, every density, Corner 0/10/Pill).
+
+### 2026-11-14 · Shared parts, leftovers (system plan, Phase 2, wave 3)
+
+- The examples' and the API demo's Cancel is the pair's soft neutral (stroke groups, analytics, the display demo); a test now reads every Dialog, Drawer and Popover footer in the app's sources for it.
+- Why: docs/research/system-evaluation-2026-11-11 (plan B6.1, B6.5, B8.2, B2.2; README §5, phase2/leftovers.md); the owner took every recommendation on 2026-11-11. Fix the rule, not the instance.
+- Verdict: awaiting the owner.

@@ -129,3 +129,5 @@
 .studio-settings__rows { overflow: clip; }
 /* No results: one muted line where the results would be, at the nav's text inset. */
 .studio-settings__none { margin: 0; padding-inline: var(--area-space-8); color: var(--area-fg-muted); font-size: var(--area-text-base-size); line-height: var(--area-text-base-leading); }
+/* Coding apps: a tool's own name, in the code face at the wells' size, muted, never broken mid-name. */
+.studio-settings__tool { color: var(--area-fg-muted); font-family: var(--area-font-mono); font-size: var(--area-text-sm-size); line-height: var(--area-text-sm-leading); white-space: nowrap; }

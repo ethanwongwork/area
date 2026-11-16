@@ -9,10 +9,11 @@ export interface ScrollToLatestProps extends HTMLAttributes<HTMLDivElement> {
   scrollRef: RefObject<HTMLElement | null>;
   /** Show once the reader is this far (px) from the end. */
   threshold?: number;
+  /** The button's accessible name. */
   label?: string;
   /** Where keyboard focus goes after scrolling (the composer); defaults to the conversation. */
   focusRef?: RefObject<HTMLElement | null>;
-  /** Props and ref for the Button; `ref` and the rest land on the wrapper (audit S17, G-24). */
+  /** Props and a ref for the Button; `ref` and the rest land on the wrapper. */
   buttonProps?: Omit<ButtonProps, "icon" | "iconOnly" | "variant" | "tone" | "pill"> & { ref?: Ref<HTMLButtonElement> };
 }
 

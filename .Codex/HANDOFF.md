@@ -1,6 +1,202 @@
 # Handoff
 
-## Current state (2026-11-08)
+## Current state (2026-11-14)
+- **System evaluation, worktree `design-system-audit-6f0eac` (2026-11-11; research and plan only, nothing built, uncommitted).**
+  Owner: evaluate "all components as a whole design system" in every detail, research other products deeply, then "come
+  up with a plan". Fourteen cited reports in `docs/research/system-evaluation-2026-11-11/` (five source audits, five
+  reference studies, four reviews of all 125 families as rendered light and dark, plus the capture method); `README.md`
+  there is the evaluation and the plan (145 items A–F in phases 0–5, 451 findings placed, coverage table), `plan.json`
+  the same as data, `page.json` its review-page copy with no reference names. Review page
+  https://claude.ai/artifact/44oLG9TkPg6TnirwEWouns: 25 owner decisions, 104 fixes (45 quick wins), 16 capabilities;
+  picks in `verdicts` (doc id = item id with `.` as `-`; empty at publish). Phase 0 starts by merging
+  `electron-app-audit-cleanup-35275b` (heading weight 600, title-xl, light Layer contrast 50, Link as button). The
+  rendered capture set lived in the session scratchpad and is gone; `rendered-method.md` says how to remake it (plan item
+  F1 brings it into the repo as a check). Not verified: hover, focus and pressed paint; live products beyond six.
+  **Phase 0 built (2026-11-11, uncommitted; owner took every recommendation, all 145 picks in the artifact).** F1 rendered check
+  (scripts/rendered, `npm run check:rendered`: 125 families light and dark at true scale, 53 known failures, all text
+  0.6 px off centre, each tied to B2.2; snapshots for header bars, marks, corners, the dark floating edge), F2 behaviour
+  harness (tests/behaviour, `npm run test:behaviour`: 187 tests in headless Edge with real input, 48 gaps marked against
+  plan items; it corrected the audit: Combobox required does block, Radio group required never blocks, Time field and
+  Calendar submit while disabled), F3.1–F3.3 (tile names, gallery/fit.ts fit and true height, demos; Input group and
+  vertical Slider minimums; Panel tiles renamed properties / code-inspector), F4 (REVIEW_REASONS, shown under Status), F5
+  (apps/desktop/scripts/api-rows.mjs generates the API tab from the manifest and prop JSDoc; unions typed from the
+  manifest; no reference names in prop docs, tested; 41 of 48 React-versus-manifest mismatches closed, 7 left with
+  reasons), F6 (stale comments and docs; check:docs asserts counts and writes the Strokes table with `-- --write`), F7
+  (a Specs tab measured live per family, src/specs-tab.tsx; token usage and rules in tokens.json;
+  docs/CONTRAST_PAIRINGS.md), F8 (packages/styles/scripts/vocabulary.mjs and its lint: 74 deviations each with the plan
+  item that migrates it; nothing renamed), F9 (one CSS and one React file per family: 129 and 150 files; exports
+  identical; area.css not byte-identical, same rules, two harmless moves; rendered snapshots unchanged). Every check
+  passed on the final tree: build, typecheck, tokens, contracts, lint:manifest, React, desktop 108, output, consumer,
+  docs, app-css, playgrounds, behaviour, rendered. Electron relaunched from this worktree (the two other sessions'
+  windows were quit). Not done: F0 (merge electron-app-audit-cleanup-35275b once committed, then recapture at light
+  Layers 50), F3.4 (demo copy and a media set: needs the owner on photos), F10 (later), F7's `area check` / `area mcp`
+  reading token usage. Open for the owner: Specs beside Spec as tab names; tokens.json +440 kB in the app bundle; five
+  vocabulary questions (heading vs title, expandedIds vs openIds, identifiers as title, Panel bar vs header, cancelled);
+  component fixes parked for Phase 4 (Chart last tick, Turn notice width, Design card held fit, Tree view guides, a
+  disabled Mention has no look). Phase 1 follows.
+  **Main merged in and Phase 1 built (2026-11-11, uncommitted).** origin/main through #222 (the app audit's heading weight,
+  title-xl, light Layer contrast 50, Link as button; #220; #221) was brought in under the Phase 0 work with a tagged
+  stash (F0 done). The repo sits in an iCloud-synced folder that makes "X 2.ext" copies when many processes write: sweep
+  with `git ls-files --others --exclude-standard | grep -E " [0-9]+(\.[a-z.]+)?$"` before building; copies moved to
+  the session scratchpad. Phase 1 (plan items A1–A11), six workers, every check green on the final tree (tokens 43,733,
+  React 816, desktop 146, behaviour 351, rendered: 48 known cap-centring for B2.2, 1 known dark-edge sample): spacing
+  (gap-row on ui-gap-step, gap-section and inset-page tokens, menu rows 8 with labels at 32 / lists from 160, rows on
+  the height ladder, whole-pixel insets), corners (radius-step = radius-control-md; Card min(container, 0.6 × inset) =
+  10 / 8 / 12; Dialog, Drawer, Design card, Asset card 16; floating lists 12 with rows 8; Table and Plan steps 16; the
+  Corner setting now says "10px on a 32px control"; 35 → 32 distinct corners; a radius lint), type (text-xs for marks
+  only; joined lines at the name's size, muted; item names 500; Page header md 26/30/600 and lg 32/40/600; tabular
+  figures; Tag 11 at every density; text-xs-code-leading; --area-underline-offset; chart ticks sans), ink and dark (dark
+  washes 8 / 14%; bg-float lifts dark floating surfaces one step with one edge, asserted by the rendered check; dark
+  muted #b9b9b9; fg-subtle, fg-disabled, fg-placeholder derived; card media plate; Alert title in default ink), motion
+  (duration-quick, ease-effects, ease-exit; menus 140, dialog 210 / 140, palette 140; list highlight instant;
+  data-opened-by="keyboard" from overlay.ts; press on the plate; Speed now means a dialog's open), focus and targets
+  (the ring off a solid fill, Contrast More 3px, forced-colours coverage, one shared hit target 24 / 44; focus and
+  motion suites in tests/behaviour). About 110 families In review with reasons. Review page (artifact J2qDDqMxy8v2empnncmVNG, picks in `verdicts`):
+  docs/research/system-evaluation-2026-11-11/phase1-review/ (ten owner questions, ids q-…). Not done: the third ink is
+  not distinct (dark APCA Lc 60 floor binds: owner question q-floor); secondary / tertiary rename; Tabs status mark;
+  Number field steppers and Split button trigger under 24; 44 touch targets where neighbours abut; A9.6 regular-weight
+  trial needs a new setting; F3.4 demo media; F10. Captures: .cache/rendered/before-phase1 and after-phase1. Next:
+  Phase 2 (shared parts), after the owner's picks on the Phase 1 page.
+  **Phase 2 built (2026-11-14): all three waves, every check green.** Wave 2: one field shell (input.css; steppers and the
+  Split button trigger own 24 with no overlap; selectable Table rows on the height ladder), two header bars and one
+  corner-control rule (inset.css; a close beside a title centres on the title's cap with its glyph on the side column,
+  the title always on the inset: the one named exception), one floating surface (popup.css: frame, shadow stack, corner
+  table in DESIGN_SYSTEM "Overlays"; Alert and Toast actions wrap, text never cut), twins on one track and a density
+  ratchet (density.test.mjs). Wave 3: open / pressed / hover-reveal paint (touch always shows revealed parts), selection
+  (selection.css, literal fills to roles, state-paint.test.mjs), disabled and read-only one way (read-only = one fill
+  step deeper), leftovers (one floating shadow for Toolbar / Selection bar / Titlebar, pills exactly radius-full, density
+  ratchet 88 → 10). Cap-centring known failures 48 → 13 (all marks: the whole-pixel baseline rule and the centring rule
+  conflict, an owner question). Reports: docs/research/system-evaluation-2026-11-11/phase2/. Owner questions for the
+  Phase 2 review page: mark baseline vs centre; pressed floor above hover (1.009:1 when Hover and Pressed fill steps are
+  set equal at light Layers 100); thin read-only cue (1.02:1 dark Layers 100); on-toggles now press (reverses audit
+  A-13); the footer rule while a body scrolls (reverses dialog.md's exclusion); Board icon gaps 6 → 8 and five other
+  fixes that move the default; Badge inverse; a selection-solid-active role. Next: the Phase 2 review page, then Phase 3.
+  **Phase 2 wave 1 built (2026-11-14, uncommitted).** The owner took every Phase 1 recommendation (verdicts on artifact
+  J2qDDqMxy8v2empnncmVNG; the five questions with no marked recommendation took the first option, which keeps what was
+  built, and adds the Regular weight trial). Wave 1, four workers, reports in
+  docs/research/system-evaluation-2026-11-11/phase2/ (frame, rows, marks, weight): one frame recipe in surface.css for 19
+  families (corner roles block / card / around, inset ladder, nested floor; chat card corner = medium control corner +
+  bar inset = 16 at the defaults, so Composer and Approval 19 → 16; Card follows Corner above 10); one row table and one
+  text-centring model in inset.css (cap slot, line slot, text box; known cap-centring failures 48 → 34, the rest are
+  fields and a few leftovers); one mark recipe in inset.css (14 / 18 / 22 at every density; chips square at Corner 0);
+  a Regular weight setting (axes/regular-weight.ts, 400–470 step 10, default 400, Inspector › Size). Every check green
+  on the combined tree after two fixes: Switch's own target property renamed --_target so the shared hit-target rule is
+  the only --_hit, and a cohesion test's backtracking pattern replaced by a linear walk. Snapshots corners and
+  header-bars updated for the intended moves. Wave 2 (field shell B3 with the centring model and the steppers, header
+  bars B4, popup surfaces B6, twins and density B8 with the leftovers) and wave 3 (state paint B7) follow, then
+  origin/main is merged in (it moved: experiments and typefaces only) and the Phase 2 review page is built. The session
+  scratchpad is wiped when the app restarts: the worker brief is rewritten from this entry and AGENTS.md.
+- **Area Serif 0.66: vertices one construction (`parts.vertices`: flat outside 0.42 stems, point inside; w's and M's sharp points were 0.65's uncross). Optical fit pass (`tools/fit/fit.py`): 22 letters' sides (`spacing.OPTICAL`), capitals 13 a side looser, kerning rebuilt from measurement (`fit_kerning.json`, 789 values; 0.38's carry-over had left fo 86 tight, Gw 96 loose), MIN_GAP 13. Regenerate the kerning after any bearing change (skill `area-serif-construction`, Fit). Open: figures' fit, spurs' corners (owner's call). Page republished as 0.66.**
+- **Area Serif 0.65: one construction per part. `typefaces/area-serif/parts.py` builds the b d p q bowl, every join of a curve to a stem (a point on the stem's edge, neck 32 on branches and 54 on run-ins, one leaving angle), spurs, u from n's arch, a's lower stroke; it runs in `qa.py`. w's crossed peak fixed (`pathlint.crossings` is an ERROR now, `clean.uncross`); eng and mu rebuilt from n and u; stray segments dropped. New skill `area-serif-construction` (part table, thick-to-thin ladder, research). Open: germandbls and the hooked Extended-B letters still on old joins; u's level head serifs (owner's call); capital and figure bowls not in the system; not seen in the app. Page republished as 0.65.**
+- **Area Serif 0.64: every thick/thin transition scanned (`tools/joins/swell.py`: 0 bumps); n h m one arch (`balance.same_arches`), stems 78 end to end on b d f h i l q (`even_stems`). Left as the owner's: u's joins, t's top. Page republished as 0.64.**
+- **Area Serif 0.63: a is option C (owner's pick, `balance.A_OPTION`), and the arc into its drop is fitted to c's swell (`tools/joins/arc_profile.py`). Page republished as 0.63.**
+- **Area Serif 0.62: round ends on y, g's ear and a's drop (`joins.round_ends2`), e's counter corner squared.**
+- **Area Serif 0.60 and 0.61: v w x y serif lengths on leaning strokes (`balance.lean_serifs`; closed 0.90, open 0.58 stems), s's lower bowl, a's bowl bottom; the owner's W/X serif picture was the proof tool's grid fitting, proofs now by `tools/joins/plain.py`. Then 0.61: w widened to Georgia Pro's width (`widen_w`). Open: the owner's pick among a's options A B C (`docs/research/serif-typeface-2026-11-10/img/a-options-0.62.png`; build with AREA_A=B or C, `balance.a_option`; the build carries A), g, y's end, s's top arc. Page republished as 0.61.**
+- **Area Serif 0.59: e and g lightened (`balance.e_g`; e +12% to +7% ink, g +19% to +15%; audit-0.58.md's last section). Page republished as 0.59.**
+- **Area Serif 0.58: e's bar junction and the full audit (same branch).** Owner asked for a deep serif,
+  height/width and thick/thin ink audit. Evidence and tables: `docs/research/serif-typeface-2026-11-10/audit-0.58.md`;
+  tools `tools/joins/audit_*.py`. Fixes in `typefaces/area-serif/balance.py` (heights, bars, diagonals per stroke, arcs,
+  stems, descender feet), `joins.py` (e junction, barbs sized to the stem: 0.54's were sized to the cap height and made
+  C and S 10-14% heavy; head serif tips 30) and `clean.THIN_CAP` 0.525 (capital hairlines 51 to 47). QA passes; page
+  republished as 0.58. Open: the audit note's "Still off" list (g e a x y v s, Q, I, 7), proposals 2 and 6. Not seen in the app.
+- **Area Serif 0.50 to 0.57: flatter head serifs, C's lower end, diagonal joins, C and G toward Georgia Pro (same branch).** Owner took proposal 1: `joins.flatter_flags`, 15 to 8
+  degrees on b d h i j k l m n p r about the stem's top corner. Then 0.51: p's and r's head serif at n's height (`level_flags`; r's notch stays).
+  Then 0.52: C's lower end is a level cut 30 wide (`C_end`, proposal 3).
+  Then 0.53: diagonal joins' open side takes the bracket's shares
+  (`steep_diagonals`, 24 joins, handles only; the closed side keeps its fillet). Then 0.54 (owner's pictures over Georgia Pro): C G S
+  barbs lower (0.66) and wedge-shaped, G's bar and stem moved (-16, -22) as one piece (`G_lower`), k v w x y inside
+  joins one fillet (`even_fillets`). Then 0.55: Georgia Pro's notch and spur on the C G S barbs
+  (`barb_spurs`; owner chose it over a thinner tip). Then 0.56: lowercase s too (`s_spurs`). Then 0.57: figures surveyed, only the 7's beak (30) and the 5's round end
+  (88) changed (`figure_ends`). Page republished as 0.57. Open: proposals 2, 6; the 5's heel; G's chin (Georgia Pro's runs lower; not taken).
+- **Area Serif 0.49: steeper joins (branch `claude/variable-serif-typeface-7a7273`, 0.48's branch merged in).**
+  Owner: thins not too thin, curves into serifs and inside counters steeper, C and G tops toward the references, less
+  old style. `typefaces/area-serif/joins.py` runs after lightening: bracket handles 0.70 / 0.90 (`clean.BRACKET_SHARES`),
+  arm flares 1.5 H stems (E F L T Z) with a small corner where E's and L's lower arm leaves the stem (replaces the owner's
+  0.34 L corner; say so if asked), C G S barbs to 0.695 of the cap height and 42 wide, tails and beak ends 30 units.
+  Evidence, measurements and six open proposals (head serifs 15 to 8 degrees first): `docs/research/serif-typeface-2026-11-10/evaluation-0.49.md`;
+  scans in `tools/joins/`. QA passes; page republished as 0.49. The owner's screenshots never arrived: confirm the joins
+  meant. Not looked at in the app.
+- **Area Serif 0.48: Vietnamese (same branch).** Hook above, horn, Ơ ơ Ư ư and the 64 missing toned letters
+  (`charset.hook_above`, `horns`, `vietnamese`); shaperglot `vi_Latn` passes. Fixed 0.47's accented i's (kept the old
+  dotless i's width: `follow_rebuilt`), typed accents vs ready-made (`align_anchors`, 70 anchors), and ą ę į ų Ę ŀ
+  rebuilt from Area's letters. QA 21/21, 0 path errors, fontbakery 0 FAIL. Page republished as 0.48. Committed, not pushed.
+- **Area Serif 0.47: the full character set (branch `claude/focused-pare-265e4e`, on top of PR #224's 0.46).**
+  `typefaces/area-serif/charset.py` runs last in `normalize`: lightens the 163 punctuation, symbol and accent outlines
+  lighten had skipped; rebuilds from Area's finished letters ı ȷ, Đ đ Ħ ħ Ŧ ŧ Ł ł Ø ø Þ þ, ſ, æ œ Æ Œ, the f ligatures
+  (with carets), superiors, inferiors, ª º (fractions follow); hyphen and dashes at the minus's weight; one tabular
+  width for figures (`tnum`/`pnum`) and maths; new arrows, maths, primes, currencies, spaces, dashes and interface
+  symbols. 6 9 joins, 8's spine and X fixed in `clean.py`. `check.py` holds `charset.COVERAGE` (21 of 21); QA: 0 path
+  errors, fontbakery 0 FAIL / 1 WARN, evaluate jumps 27. Page republished as 0.47 with a Character set section; no
+  new owner saves were waiting. Inventory, gap list, measurements and what is not done (Vietnamese, Ŋ ŋ ĸ ß and
+  Extended-B / IPA still Libre Baskerville's, oldstyle figures, small caps, c_t s_t s_p; Vietnamese done in 0.48):
+  `docs/research/serif-typeface-2026-11-10/charset-0.47.md`. Committed, not pushed.
+- **Area Serif, an original variable UI serif (2026-11-10 to 12, branch `claude/variable-serif-typeface-df1f42`).**
+  Derived only from Libre Baskerville's points (OFL 1.1: Area Serif must stay OFL and never be named Libre
+  Baskerville); Georgia Pro and Serrif are measured, never traced, and renders of them are never committed. Code in
+  `typefaces/area-serif` (derive.py → normalize.py → owner_edits.json → build.py; `qa.py` = targets, pathlint, parts
+  audit, fontbakery; venv from requirements.txt), research and page tools in `docs/research/serif-typeface-2026-11-10`,
+  skill `area-type-design`. The owner reviews and drags points on ONE page, https://claude.ai/artifact/1QUvcPjfjjkxBLVTRcNrVC
+  (editor_page.py; bump BUILD and add a tools/changes.json entry every publish; saves in its db collection `edits`,
+  pulled with ArtifactData, lower and upper case into separate out_dirs). Built through 0.46, uncommitted (0.46: final pass: r's top one curve and end radius 50, one bracket curve on every head serif (`brackets_one`), redundant points removed (`tidy`), e eye corner; audit numbers in changes.json; 0.45: r's arm and end fitted to Serrif's measured profile (`clean.r_top_measured`, points never read), end 18 units further out; 0.44: r = option C drawn rounder by `clean.r_top_round` (quarter-ellipse arm, circle end radius 52), lighten leaves circle quarters alone; 0.43: 6 9 long strokes and 8 waist lighter (`figure_joins`); r options A-E on img/r-options-0.43.png, built with AREA_R_TOP / AREA_R_REACH / AREA_R_EAR / AREA_R_WIDER / AREA_R_FOOT, build carries A (foot 1.6) until the owner picks; 0.42: figures 1 and 4 stems to H's, 1 upright, 7 diagonal +4; 0.41: r's top from Libre Baskerville and wider, t taller with the owner's 0.40 save folded as `by_position_final`, ink balance: T stem 101 to 86, N M v w y diagonals and S spine down; 0.40: lighter stems 82 to 78, H 90 to 86, by `clean.lighten` on the finished outlines just before spacing (a lighter stem in derive.py breaks position-keyed rules and owner saves; derive still says 82/90); 0.39: round strokes' thick 1.12 to 1.05 stems, capitals 1.13 to 1.07, o contrast 2.00; stems 82 to 78 tried and taken back: the stem is baked into rules as positions (f hook, e bar); 0.38: thins evened downward to 0.52 (owner: thin the thicker parts; o contrast 2.14), s rebalanced, t taller, e toward Georgia Pro, r wider, and `spacing.py`: bearings follow Georgia Pro's fit plus an offset, LB kerning carried over, near-touches opened; 0.37 (superseded): one thin value, arches and open tops raised to the bowls' 0.65, capitals 0.63; 0.36: evenness pass against Georgia Pro in `clean.py`: exact lines, one shoulder on n h m, one thin value for arches and open tops, one bowl tension, upright barb faces; evidence `evaluation-0.36.md`; 0.35: S redrawn from Georgia Pro's measurements, longer cap beaks and barbs, n h m arch, e, the L save as `by_position_end`; 0.34: B's bowls and counters, E and F middle arm, A and e bars toward Georgia Pro; 0.33: Georgia Pro's widths by counter stretch `set_widths`, serifs 0.85 and tip 30,
+  one corner-rounding rule `soften_ends`, U's head serifs; the design's rules by part are in
+  `.claude/skills/area-type-design/references/area-serif-guidelines.md`; 0.31: the c's end; 0.32: the owner's set-wide evaluation and cleanup,
+  `docs/research/serif-typeface-2026-11-10/evaluation-0.32.md`: `harmonize` evens curvature at smooth nodes, figure
+  bowl weight bug fixed, e bar 0.55 stems, serifs 0.92 / caps 0.90, one bracket curve, round dots; `evaluate.py` is the
+  curve report). Never run `derive.derive()` alone before generating the page: it overwrites the build's UFO with
+  un-normalized points; run `build.py` last. Open: the owner's pick among the r iterations G-K on img/r-options-0.45.png (built with AREA_R_BALL / AREA_R_END_REACH / AREA_R_ARM_THICK / AREA_R_LEAVE / AREA_R_NOTCH / AREA_R_K / AREA_R_NECK_BACK / AREA_R_STYLE; the build is still 0.44) and verdict on 0.44 and the guidelines' open list; y and J ends stay
+  larger (1.27 stems, owner's edits); kerning, punctuation and the weight axis not started.
+- **Four products rebuilt from Area, worktree `electron-app-audit-cleanup-35275b` (2026-11-10, PR).** Owner asked for four
+  real products' main windows at real scale as a stress test. Built as Patterns: Chat assistant, Document workspace, Code
+  editor, Assistant with a document panel (`content/examples/product-*.tsx`, `styles/product-*.css`, layout CSS only, no
+  product names). Findings and the ranked gap list: `docs/research/product-recreations-2026-11-10/README.md` (flat
+  hierarchy: weight tops at 500, no size between 26 and 52; no region depth at Layer contrast 0; no reading face; no shell,
+  thread or account-row parts; rows stop at 24; no scroll edge). Seen at 100% in a hidden Electron window, light and dark;
+  not compared side by side with the products. Then (owner: "Hierarchy and depth", 2026-11-11) two additive type roles,
+  `weight-heading` 600 and `title-xl` (32/40 at 13), with their rules in DESIGN_SYSTEM.md; the screens' sidebars on the
+  recessed chrome ground and Layer contrast 50 on each screen's root (Area's default stays 0). Token tests 40,131, React
+  780, desktop 83 pass. Then (owner: "Yes, 50 in light") light Layer contrast's default is 50 and
+  dark stays 0 (`color/layers.ts` DEFAULT_LAYERS_LIGHT / _DARK; THEMING.md); the four screens follow the default. Two contrast
+  tests failed on the new darkest light ground (#f1f3f5, Cool's control hover) and were fixed at the source: series marks
+  are solved for it (pink and purple step one deeper in light) and the charts' danger red is #ff4849 (was #ff4a4b). Saved
+  systems keep their own stored value. Open: 600 for reply headings everywhere, a heading role in Message,
+  a chrome prop on Panel, dark region separation on a near-black page.
+- **App audit and cleanup, worktree `electron-app-audit-cleanup-35275b` (2026-11-10, PR).** Owner asked for an audit of
+  the system, customization, the project flow, Chat and the IA, and for bloat removed. Five read-only audits ran; their
+  findings and the open decisions are in the session's report (not yet a review page). Done here, the objective part:
+  removed `layer-map.tsx`, `page-colour.ts`, 79 lines of unused app CSS and 14 dead exports; code-block, composer,
+  custom-select and meter now show In review (they sat in neither status set); restore of a version or iteration drops
+  the logged changes it undid and the editor's stale undo steps; a removed layer or page takes its comments; the stage's
+  and the viewer's keys leave a focused control alone (Space, Enter, arrows, Tab on the design panel's tabs and header
+  buttons); ⌘K New theme adds the theme first; Recent names Labs › Chat; links leave the app only as http, https or
+  mailto; the reference library is read once, not per page; middle dots and "repository" out of the flow, design and
+  Chat copy. Checks: typecheck, desktop tests 83 (1 new), app-css, docs, playgrounds; seen in the browser preview light
+  and dark; Electron relaunched from this worktree, not driven. Then (owner: "Newest UI onto Area") the flow dock and Play
+  bar became Area's Toolbar on its surface (ToolButton shared from design-select), the flow node takes the Selected
+  stroke and focus ring settings (still a ring and an outline, so ports and lines hold), and the flow map's type and room
+  use the ramps; seen in the preview light and dark. Then (owner: "Yes, add it") Link took a button form,
+  `as="button"` (docs/specs/link.md, 2026-11-10; React 780 tests), used by the Components overview's family title and
+  Show all, the flow checks and Setup's notes; Link is still marked Complete (owner to say whether it reopens). Not done (need the owner or a visual pass): the flow
+  node on Card, the change-log row, the token reference chip and Setup's answer row (not link-shaped); flow links by node id; iterations storing each design once; chats closed
+  on reload; Chat's "not connected" state; output paths checked in main; apps/docs and docs/research slimming; labs;
+  one theme editor; workspace places in Home's tab.
+- **Desktop app: a project's own code, from chat to GitHub (2026-11-10 to 11, PR from branch
+  `claude/desktop-app-analysis-0523e3`).** The desktop app analysis's whole build order
+  (`docs/research/desktop-app-analysis-2026-11-10/README.md`, "Built", step by step; review page
+  https://claude.ai/artifact/KnodsVM8y8WTmkTUWbxz5d): a project folder where Chat works and chats are kept per project;
+  Changes (per file Keep or Undo, line comments); Preview with Choose; `preview.screenshot` and Settings › Coding apps;
+  `area://` links and Open in editor; tab activity marks, notices and ⌘K commands; the smoothness pass (far sections skip
+  layout, regions catch their own failure, panels slide); Versions (Save, Ask for review, Publish via git and `gh`);
+  Technical tools, off by default (Files, editor, terminal). Tested with stand-ins (`AREA_AGENT_SDK`, `AREA_GH`): no live
+  Claude reply in a project folder and no real GitHub review yet. Open items are in the README's "Not built" lines.
+- **Customization study (2026-11-10, merged 2026-11-11; a study, nothing built).** Research, measurements, scripts and
+  the proof-of-concept paint: `docs/research/customization-2026-11-10/`. Implementing session: start at its README's
+  "For the session that implements this" (the 48 current recommendations, build order, how material must be drawn,
+  what is not verified). Review page https://claude.ai/artifact/KYm9eaQ6TaDyKvAA8LpwiL; picks in `verdicts` were empty
+  at merge, so confirm the recommendations with the owner first. Headlines: settings offer far finer steps than show (2
+  to 5 clear levels on most scales); material becomes five registry levers (Curve, Edge light, Well depth, Glass, Glow)
+  with a fixed component by effect table; setup and chat share one `ask_design` question tool.
+
+## Earlier state (2026-11-08)
 - **Direct editing, worktree `design-direct-editing-b4f631` (PR, 2026-11-08; main through #216 merged in).** Owner: "fully editable vector
   figma code canvas (everything except an infinite canvas, each design is isolated to its own container only)". Research
   and ranked options: `docs/research/design-editing-2026-11-08/README.md` (three cited reading notes beside it); review page

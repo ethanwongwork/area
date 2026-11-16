@@ -1,0 +1,197 @@
+<meta charset="utf-8">
+<title>Sen Curves</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter+Tight:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+  /* Layout: the set is black and white. Each kanji large in a square shows its construction
+     in colour: the line's body as a pale tint with a hairline edge, its centre line and
+     on-curve points in blue (squares at corners and ends, circles where the curve runs
+     smooth), and handles in pink. */
+  :root {
+    --ground: #ffffff;
+    --ink: #000000;
+    --muted: #6e6e6e;
+    --rule: #e2e2e2;
+    --tint: #e8edff;
+    --edge: #9aabff;
+    --curve: #2448ff;
+    --handle: #ff2a7f;
+    --display: 'Instrument Serif', 'Times New Roman', serif;
+    --text: 'Inter Tight', system-ui, -apple-system, sans-serif;
+    --mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) { --ground: #000000; --ink: #ffffff; --muted: #8c8c8c; --rule: #262626; --tint: #0c1333; --edge: #3549b8; --curve: #6d87ff; --handle: #ff5ca0; color-scheme: dark; }
+  }
+  :root[data-theme="dark"] { --ground: #000000; --ink: #ffffff; --muted: #8c8c8c; --rule: #262626; --tint: #0c1333; --edge: #3549b8; --curve: #6d87ff; --handle: #ff5ca0; color-scheme: dark; }
+
+  * { box-sizing: border-box; }
+  body { background: var(--ground); color: var(--ink); font: 400 15px/1.55 var(--text); -webkit-font-smoothing: antialiased; }
+  .page {
+    max-width: 1320px; margin: 0 auto; display: grid; gap: 36px;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+    padding-block: 40px 72px;
+  }
+  .head { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px 48px; align-items: end; }
+  h1 { font: italic 400 clamp(44px, 6.4vw, 80px)/0.95 var(--display); margin: 0; text-wrap: balance; }
+  p { margin: 0; max-width: 62ch; }
+  .mono { font-family: var(--mono); font-size: 12px; font-variant-numeric: tabular-nums; }
+  .muted { color: var(--muted); }
+  svg { display: block; width: 100%; height: auto; aspect-ratio: 1; }
+
+  .set { display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); border-top: 1px solid var(--rule); border-left: 1px solid var(--rule); }
+  .set svg { border-right: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
+
+  .bar { display: flex; justify-content: space-between; align-items: center; gap: 12px 24px; flex-wrap: wrap; border-top: 1px solid var(--ink); padding-top: 12px; }
+  .key { display: flex; flex-wrap: wrap; gap: 6px 18px; }
+  .key span { display: inline-flex; align-items: center; gap: 7px; }
+  .toggle { font: 500 13px var(--text); color: var(--ink); background: var(--ground); border: 1px solid var(--ink); padding: 6px 12px; cursor: pointer; }
+  .toggle:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+
+  .wall { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px 24px; }
+  .glyph { margin: 0; display: grid; gap: 10px; min-width: 0; }
+  .glyph svg { border: 1px solid var(--rule); }
+  .glyph figcaption { display: flex; justify-content: space-between; gap: 6px 16px; flex-wrap: wrap; align-items: baseline; font-size: 13px; }
+  .glyph figcaption .name { display: flex; gap: 8px; align-items: baseline; }
+  .glyph figcaption b { font-weight: 600; font-size: 15px; }
+  .glyph figcaption i { font-family: var(--display); font-size: 18px; }
+  .solid-only .build { display: none; }
+  .solid-only .solid { display: inline; }
+  .solid { display: none; }
+
+  .notes { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px 40px; border-top: 1px solid var(--rule); padding-top: 22px; font-size: 13px; }
+  .notes p { max-width: none; }
+
+  @media (max-width: 900px) { .head, .notes { grid-template-columns: minmax(0, 1fr); } .set { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+  @media (max-width: 640px) { .wall { grid-template-columns: minmax(0, 1fr); } }
+</style>
+
+<main class="page">
+  <header class="head">
+    <div style="display:grid;gap:14px">
+      <div class="mono muted">Sen 線体 · curved cut · eight complex kanji · 2026-11-10</div>
+      <h1>Sen, one line through eight kanji</h1>
+    </div>
+    <p class="muted">One line of one width, flat ends and round corners, drawn through the centre of Noto Sans JP. Points sit only where they have to: at ends, at corners, and where a curve can't be one cubic. A straight run is a single line; handles lie along the line they continue, or level or upright.</p>
+  </header>
+
+  <div class="set" id="set"></div>
+
+  <div class="bar">
+    <div class="key mono muted" id="key"></div>
+    <button class="toggle" id="toggle" type="button" aria-pressed="true">Hide points and handles</button>
+  </div>
+
+  <div class="wall" id="wall"></div>
+
+  <footer class="notes">
+    <p><b>Skeletons.</b> Centre lines of Noto Sans JP Thin (SIL OFL 1.1), found by thinning its outlines at 2 units a pixel. Units are thousandths of the em.</p>
+    <p><b>Points.</b> Each stroke is smoothed (Gaussian, σ 10 units) and drawn with the fewest points that stay within 5 units of it: one curve first, then its straight runs as lines, then one more point at a time, placed where the stroke turns exactly level or upright when it does. Short hooks at free ends are cut.</p>
+    <p><b>Curves.</b> Hobby's method, as in METAFONT: through each smooth point the direction is solved so that curvature runs on unbroken, and handle lengths follow from the angles. A single curve between two set directions takes its handle lengths from the stroke, never reaching past where the two directions meet. No curve dips past its ends without a point there.</p>
+    <p><b>Corners.</b> Strokes meeting in an L become one path; each corner is a circular arc of radius 40 written as one cubic. Ends that meet another stroke stop on its centre line, so nothing opens at any weight.</p>
+  </footer>
+</main>
+
+<script>
+  const DATA = /*DATA*/ {};
+  const LIST = [
+    ['龍', 'ryū', 'dragon'], ['鶴', 'tsuru', 'crane'], ['霧', 'kiri', 'fog'], ['麗', 'rei', 'beautiful'],
+    ['響', 'hibiki', 'echo'], ['藍', 'ai', 'indigo'], ['鑑', 'kan', 'mirror, model'], ['驚', 'kyō', 'surprise'],
+  ];
+  const ONLY = new URLSearchParams(location.search).get('only');
+  if (ONLY) LIST.splice(0, LIST.length, ...LIST.filter(([c]) => ONLY.includes(c)));
+  const W = 46; // line width, units of the em
+  const R = 40; // corner radius
+
+  /*GEOMETRY*/
+
+  // ———————————————————————————— one glyph
+
+  function strokesOf(ch) {
+    let sts = DATA[ch].strokes.map((s) => ({ ...parse(s.d), joined: s.joined.slice() }));
+    sts = mergeCorners(sts);
+    return sts.map((st) => fillet(st, R));
+  }
+  const fmt = (q) => `${q[0].toFixed(1)} ${q[1].toFixed(1)}`;
+  function segsD(segs, closed) {
+    let d = `M${fmt(segs[0].p[0])}`;
+    for (const s of segs) d += s.c ? `C${fmt(s.p[1])} ${fmt(s.p[2])} ${fmt(s.p[3])}` : `L${fmt(s.p[1])}`;
+    return closed ? `${d}Z` : d;
+  }
+  /** The path for the outline's inside: free ends drawn back by the outline's own width. */
+  function innerD(st, e) {
+    if (st.closed) return segsD(st.segs, true);
+    let segs = st.segs.slice();
+    if (!st.joined[0] && segLen(segs[0]) > e * 2) segs[0] = trimStart(segs[0], e);
+    if (!st.joined[1] && segLen(segs.at(-1)) > e * 2) segs[segs.length - 1] = trimEnd(segs.at(-1), e);
+    return segsD(segs, false);
+  }
+
+  const PAD = 70, S = (1000 - 2 * PAD) / 1000;
+  const frame = (inner, label) => `<svg viewBox="0 0 1000 1000" role="img" aria-label="${label}"><rect width="1000" height="1000" fill="var(--ground)"/><g transform="translate(${PAD} ${PAD}) scale(${S})">${inner}</g></svg>`;
+  const lineAttrs = 'fill="none" stroke-linecap="butt" stroke-linejoin="miter" stroke-miterlimit="4"';
+
+  function solid(ch) {
+    const sts = strokesOf(ch);
+    return frame(`<g ${lineAttrs} stroke="var(--ink)" stroke-width="${W}">${sts.map((st) => `<path d="${segsD(st.segs, st.closed)}"/>`).join('')}</g>`, ch);
+  }
+
+  function build(ch) {
+    const sts = strokesOf(ch);
+    const e = 1.2 / S; // edge width, so it draws near 0.8 px at this size
+    let on = 0, off = 0;
+    let handles = '', offs = '', ons = '';
+    const hair = 'vector-effect="non-scaling-stroke"';
+    for (const st of sts) {
+      const segs = st.segs;
+      segs.forEach((s, i) => {
+        if (s.c) {
+          handles += `M${fmt(s.p[0])}L${fmt(s.p[1])}M${fmt(s.p[3])}L${fmt(s.p[2])}`;
+          offs += `<circle cx="${s.p[1][0].toFixed(1)}" cy="${s.p[1][1].toFixed(1)}" r="4.5"/><circle cx="${s.p[2][0].toFixed(1)}" cy="${s.p[2][1].toFixed(1)}" r="4.5"/>`;
+          off += 2;
+        }
+      });
+      // On-curve points: squares at ends and corners, circles where the line runs smooth.
+      const nodes = [segs[0].p[0], ...segs.map((s) => s.p.at(-1))];
+      const count = st.closed ? nodes.length - 1 : nodes.length;
+      for (let k = 0; k < count; k++) {
+        const q = nodes[k];
+        const before = k > 0 ? segs[k - 1] : st.closed ? segs.at(-1) : null;
+        const after = k < segs.length ? segs[k] : st.closed ? segs[0] : null;
+        const smooth = before && after && dot(endTan(before), startTan(after)) > Math.cos((3 * Math.PI) / 180);
+        ons += smooth ? `<circle cx="${q[0].toFixed(1)}" cy="${q[1].toFixed(1)}" r="5.5"/>` : `<rect x="${(q[0] - 5).toFixed(1)}" y="${(q[1] - 5).toFixed(1)}" width="10" height="10"/>`;
+        on++;
+      }
+    }
+    const outer = sts.map((st) => `<path d="${segsD(st.segs, st.closed)}"/>`).join('');
+    const inner = sts.map((st) => `<path d="${innerD(st, e)}"/>`).join('');
+    const art = `<g ${lineAttrs} stroke="var(--edge)" stroke-width="${W}">${outer}</g><g ${lineAttrs} stroke="var(--tint)" stroke-width="${W - 2 * e}">${inner}</g>`;
+    const solidArt = `<g ${lineAttrs} stroke="var(--ink)" stroke-width="${W}">${outer}</g>`;
+    const marks = `<g ${lineAttrs} stroke="var(--curve)" stroke-width="1" ${hair}>${outer}</g><path d="${handles}" fill="none" stroke="var(--handle)" stroke-width="0.75" ${hair}/><g fill="var(--handle)">${offs}</g><g fill="var(--curve)">${ons}</g>`;
+    return { svg: frame(`<g class="build">${art}${marks}</g><g class="solid">${solidArt}</g>`, `${ch} with its points and handles`), on, off, strokes: sts.length, curves: sts.reduce((t, st) => t + st.segs.filter((s) => s.c).length, 0), lines: sts.reduce((t, st) => t + st.segs.filter((s) => !s.c).length, 0) };
+  }
+
+  document.getElementById('set').innerHTML = LIST.map(([ch]) => solid(ch)).join('');
+  document.getElementById('wall').innerHTML = LIST.map(([ch, romaji, meaning]) => {
+    const b = build(ch);
+    return `<figure class="glyph">${b.svg}<figcaption><span class="name"><b lang="ja">${ch}</b><i>${romaji}</i><span class="muted">${meaning}</span></span><span class="mono muted">${b.strokes} paths · ${b.lines} lines · ${b.curves} curves · ${b.on} points · ${b.off} handles</span></figcaption></figure>`;
+  }).join('');
+
+  const key = (shape, label) => `<span><svg viewBox="0 0 20 20" style="width:14px;height:14px;aspect-ratio:auto">${shape}</svg>${label}</span>`;
+  document.getElementById('key').innerHTML = [
+    key('<rect x="6" y="6" width="8" height="8" fill="var(--curve)"/>', 'corner or end'),
+    key('<circle cx="10" cy="10" r="4.5" fill="var(--curve)"/>', 'smooth point'),
+    key('<path d="M2 18L14 6" stroke="var(--handle)" stroke-width="0.9"/><circle cx="14" cy="6" r="3.5" fill="var(--handle)"/>', 'handle'),
+  ].join('');
+
+  const wall = document.getElementById('wall');
+  const toggle = document.getElementById('toggle');
+  toggle.addEventListener('click', () => {
+    const show = wall.classList.toggle('solid-only');
+    toggle.setAttribute('aria-pressed', String(!show));
+    toggle.textContent = show ? 'Show points and handles' : 'Hide points and handles';
+  });
+</script>

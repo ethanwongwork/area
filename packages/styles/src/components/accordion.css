@@ -24,8 +24,8 @@
   .area-accordion-item[data-open] { --_rotate: var(--_rotate-open); }
   .area-accordion-item:last-child { --_rule-width: 0px; }
 
-  /* spec: the title's text role, md 16/24 (Notion), sm 14/20 (ChatGPT, shadcn); both step
-     down with the UI scale (compact 14/20 and 12/16). */
+  /* spec: the title's text role, md text-lg, sm text-base (measured at 16/24 and 14/20 at type 14's scale); at the
+     default type 13 md is 15/22 and sm 13/18, at every density (the type setting moves them, density does not). */
   .area-accordion-item--md { --_text: var(--area-text-lg-size); --_leading: var(--area-text-lg-leading); }
   .area-accordion-item--sm { --_text: var(--area-text-base-size); --_leading: var(--area-text-base-leading); }
 
@@ -56,7 +56,7 @@
        16/24, a 48 row (MUI 12 + 24 + 12; Google "People also ask" 52 and Notion's FAQ 56 sit above,
        Fluent large 44 below; Claude in Chrome audit 2026-10-07). Compact follows the line: 8, 10. */
     --_trigger-pad: calc(var(--_leading) / 2); /* spec */
-    --_trigger-gap: var(--area-space-16); /* spec: shadcn gap-4 */
+    --_trigger-gap: calc(var(--area-ui-cluster) * 2); /* spec: shadcn gap-4, 16 at the default; 2 × ui-cluster */
     --_weight: var(--area-weight-strong); /* spec: shadcn font-medium 500 */
     --_chevron-order: 1;
     --_rotate-closed: 0deg;
@@ -79,7 +79,7 @@
     margin: 0;
     padding: var(--_trigger-pad) 0;
     border: 0;
-    border-radius: var(--area-radius-small);
+    border-radius: var(--area-radius-row); /* a full-width row: its height's corner (plan A2.2) */
     background: none;
     color: inherit;
     font: inherit;
@@ -88,7 +88,7 @@
     cursor: pointer;
     user-select: none;
   }
-  .area-accordion-item__trigger:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); }
+  .area-accordion-item__trigger:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: calc(-1 * var(--area-focus-width)); } /* a row: inside, by its own width (plan A6.2) */
   .area-accordion-item__trigger:disabled { cursor: not-allowed; opacity: var(--area-opacity-disabled); }
 
   .area-accordion-item__label { flex: 1 1 auto; min-inline-size: 0; }
@@ -158,6 +158,10 @@
   }
 
   .area-accordion { display: flex; flex-direction: column; min-inline-size: 0; }
+  /* Plain items take the key-value rhythm, line + 8 (plan A1.5, 2026-11-11; DESIGN_SYSTEM.md, Text lists): the triggers'
+     2 pads plus 4 between them put the titles' lines 8 apart (their plates touched, lines 4 apart). Divided items keep
+     their rules and the trigger's own room. */
+  .area-accordion:not(:has(> .area-accordion-item--divided)) { gap: var(--area-space-4); }
 
   /* Every other disclosure body opens on the same recipe (owner 2026-10-26: the Slider's motion on every component;
      they snapped open and shut while Accordion and Code block eased): a Step's input and output, a Step group's steps

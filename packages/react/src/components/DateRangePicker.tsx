@@ -5,7 +5,7 @@ import type { ButtonHTMLAttributes, ReactNode, SyntheticEvent } from "react";
 import { datePickerVariants, cx, type VariantProps, MANIFESTS } from "../variants.ts";
 import { Calendar, type CalendarRange } from "./Calendar.tsx";
 import { Glyph } from "./Glyph.tsx";
-import { Popover } from "./primitives.tsx";
+import { Popover } from "./Popover.tsx";
 import { assignRef, useOpenState } from "./overlay.ts";
 import { resolveValidation, validationAttributes, type ValidationStatus } from "./validation.ts";
 
@@ -21,17 +21,23 @@ export interface DateRangePreset {
 export interface DateRangePickerProps extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, "value" | "defaultValue" | "onChange" | "type"> {
   /** The range (controlled); null for none. */
   value?: CalendarRange | null;
+  /** The range at first, uncontrolled; none by default. */
   defaultValue?: CalendarRange | null;
+  /** Called with the new range, or `null` when it is cleared, and the event behind it. */
   onValueChange?: (value: CalendarRange | null, event?: SyntheticEvent) => void;
-  /** Rows above the calendar that set a range at once (Notion's Today, Last 7 days, Last 30 days). */
+  /** Rows above the calendar that set a range at once ("Today", "Last 7 days", "Last 30 days"). */
   presets?: DateRangePreset[];
   /** Shown while no range is set. */
   placeholder?: ReactNode;
   /** A leading glyph in the field (a calendar). */
   icon?: ReactNode;
+  /** The field's treatment, as Date picker's: `outline` (default), `soft` or `ghost`. */
   variant?: Manifest["variant"];
+  /** The field's height and type, as Date picker's: `md` (default), `sm` or `lg`. */
   size?: Manifest["size"];
+  /** The field fills its container's width. */
   fullWidth?: boolean;
+  /** Paints the field as an error and sets `aria-invalid`; the same as `validationStatus="error"`. */
   invalid?: boolean;
   /** Semantic validation paint, as Input's: `error` (also `invalid`), `success` or `warning`. A Field passes its own. */
   validationStatus?: ValidationStatus;
@@ -43,11 +49,15 @@ export interface DateRangePickerProps extends Omit<ButtonHTMLAttributes<HTMLButt
   name?: string;
   /** Earliest and latest choosable dates, "YYYY-MM-DD". */
   min?: string;
+  /** The latest choosable date, "YYYY-MM-DD". */
   max?: string;
+  /** Dates that cannot be chosen, such as booked days: return `true` for a "YYYY-MM-DD" to disable it. */
   isDateUnavailable?: (date: string) => boolean;
   /** Today's date for the calendar's mark, "YYYY-MM-DD" (defaults to the clock). */
   today?: string;
+  /** The language and region the field and the calendar write dates in. */
   locale?: string;
+  /** The calendar's first weekday; 0 is Sunday. */
   firstDayOfWeek?: 0 | 1 | 2 | 3 | 4 | 5 | 6;
   /** One month, or two side by side for ranges across a month's end. */
   visibleMonths?: 1 | 2;
@@ -57,7 +67,9 @@ export interface DateRangePickerProps extends Omit<ButtonHTMLAttributes<HTMLButt
   clearable?: boolean;
   /** The panel is open (controlled); `defaultOpen` opens it at first. */
   open?: boolean;
+  /** Whether the panel starts open, uncontrolled. */
   defaultOpen?: boolean;
+  /** Called when the panel opens or closes. */
   onOpenChange?: (open: boolean) => void;
 }
 

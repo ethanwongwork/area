@@ -110,3 +110,9 @@ new tile shows the link blue.
 - **What changed:** The rule between items is the lightest grey, #f3 (was #e2).
 - **Why:** you asked for dividers only where they are needed and intended, and for the ones that stay to be very
   light. You approved each one on the dividers comparison page.
+
+### 2026-11-14 · Shared parts, leftovers (system plan, Phase 2, wave 3)
+
+- The mark between items is `ui-cluster` either side (6 / 8 / 10); the unmarked list's items are `2 × ui-cluster` apart (12 / 16 / 20). Values at type 13 Compact / Default / Comfortable; unchanged at the default.
+- Why: docs/research/system-evaluation-2026-11-11 (plan B6.1, B6.5, B8.2, B2.2; README §5, phase2/leftovers.md); the owner took every recommendation on 2026-11-11. Fix the rule, not the instance.
+- Verdict: awaiting the owner.

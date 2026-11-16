@@ -5,18 +5,25 @@ import { Button, type ButtonProps } from "./Button.tsx";
 import { Glyph } from "./Glyph.tsx";
 
 export interface ComposerProps extends Omit<HTMLAttributes<HTMLDivElement>, "onChange" | "onSubmit" | "defaultValue"> {
+  /** `inline` (default): the actions on the field's row. `stacked`: the field above a row of actions. */
   layout?: VariantProps<typeof MANIFESTS.composer>["layout"];
+  /** The draft text, controlled. */
   value?: string;
+  /** The draft text at first, uncontrolled. */
   defaultValue?: string;
-  /** The draft text, and the change event that produced it (audit C-7). */
+  /** Called with the draft text and the change event that produced it. */
   onValueChange?: (value: string, event: ChangeEvent<HTMLTextAreaElement>) => void;
+  /** Called with the trimmed draft when the send button or Enter sends it; an uncontrolled field then clears. */
   onSubmit?: (value: string) => void;
+  /** The field's placeholder. */
   placeholder?: string;
+  /** The field's accessible name. */
   label?: string;
+  /** Disables the field and every action. */
   disabled?: boolean;
   /**
-   * A reply is streaming: the field stays editable and focused so the next prompt can be
-   * drafted, Enter doesn't send, and send turns into Stop (ChatGPT's behaviour; audit S18).
+   * A reply is streaming: the field stays editable and focused so the next prompt can be drafted, Enter doesn't send,
+   * and send turns into Stop.
    */
   loading?: boolean;
   /** @deprecated Use `loading`. */
@@ -25,17 +32,22 @@ export interface ComposerProps extends Omit<HTMLAttributes<HTMLDivElement>, "onC
   onStop?: () => void;
   /**
    * While `loading`, Enter queues the draft instead of doing nothing: it is handed here and the field clears, and the
-   * button stays Stop (Cursor's queue, Claude Code's "Queue another message…").
+   * button stays Stop.
    */
   onQueue?: (value: string) => void;
   /** Names the Stop button. */
   stopLabel?: string;
+  /** The most characters the draft can hold. */
   maxLength?: number;
+  /** Buttons at the start: before the field in the inline layout, at the start of the actions row when stacked. */
   leadingActions?: ReactNode;
+  /** Buttons at the end, before the send button. */
   trailingActions?: ReactNode;
+  /** A mode or model control: before the trailing actions inline, after the leading ones when stacked. */
   mode?: ReactNode;
+  /** The send button's accessible name. */
   submitLabel?: string;
-  /** A round send button (ChatGPT's); the composer's corner follows it to a pill. */
+  /** A round send button; the composer's corner follows it to a pill. */
   submitPill?: boolean;
   /** Enter submits; Shift+Enter inserts a newline. Meta/Ctrl+Enter always submits. */
   submitOnEnter?: boolean;
@@ -47,11 +59,11 @@ export interface ComposerProps extends Omit<HTMLAttributes<HTMLDivElement>, "onC
   /** A ComposerMenu (the @ and / suggestions), drawn above the composer at its width. */
   menu?: ReactNode;
   /**
-   * A row above the shell, outside it: where the message runs (Cursor's "Code ▾  This Mac ▾"). With `footer`, the
-   * root becomes a group holding the rows around the shell; `className` and the rest land on the group.
+   * A row above the shell, outside it: where the message runs. With `footer`, the root becomes a group holding the
+   * rows around the shell; `className` and the rest land on the group.
    */
   header?: ReactNode;
-  /** A row under the shell, outside it: tools, a ComposerNote, the model (Claude's reply composer). */
+  /** A row under the shell, outside it: tools, a ComposerNote, the model. */
   footer?: ReactNode;
   /**
    * Files dropped on the composer or pasted into it. While files are dragged over, the shell takes File upload's
@@ -65,12 +77,17 @@ export interface ComposerProps extends Omit<HTMLAttributes<HTMLDivElement>, "onC
   expandable?: boolean;
   /** Whether the field is open to its container (controlled); pair with `onExpandedChange`. */
   expanded?: boolean;
+  /** Whether the field starts open to its container, uncontrolled. */
   defaultExpanded?: boolean;
+  /** Called when Expand, Collapse or Escape opens or closes the field. */
   onExpandedChange?: (expanded: boolean, event?: SyntheticEvent) => void;
   /** Name the control: "Expand" and "Collapse". */
   expandLabel?: string;
+  /** The Collapse control's name. */
   collapseLabel?: string;
+  /** More attributes for the textarea (`name`, `autoFocus`, `aria-describedby`). */
   inputProps?: Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, "value" | "defaultValue" | "onChange" | "onKeyDown" | "rows" | "disabled" | "placeholder" | "maxLength">;
+  /** Called on every key in the field before the composer's own handling; `preventDefault()` skips it. */
   onInputKeyDown?: (event: KeyboardEvent<HTMLTextAreaElement>) => void;
 }
 
@@ -260,7 +277,7 @@ export const ComposerAttach = forwardRef<HTMLButtonElement, ComposerAttachProps>
   </>;
 });
 
-/** A quiet line under the composer, in its footer ("Claude is AI and can make mistakes."). */
+/** A quiet line under the composer, in its footer ("Answers can contain mistakes."). */
 export const ComposerNote = forwardRef<HTMLParagraphElement, HTMLAttributes<HTMLParagraphElement>>(function ComposerNote(
   { className, ...rest }, ref,
 ) {

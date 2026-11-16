@@ -84,7 +84,7 @@ the value string. No steppers.
 | height, type | control-md (32, 14/20) at default density | System tiers | Figma's 24 and 11/16 are the compact-density target |
 | radius, border, soft hover | radius per tier as Input and Button: 6 sm, 8 md, 10 lg (`number-field.css:25`, `:36-38`); soft border on hover | Input; Figma adds the border on hover too | Was 8 at every size before audit S4 |
 | read-only | the variant's rest paint (no soft fill), no hover edge, default cursor (`number-field.css:43, :63`) | Audit B-9 B (owner), as Input | Was the soft fill |
-| disabled | field paint; a soft field stays edgeless; value, unit, scrub handle and steppers `fg-disabled` (`number-field.css:60-64, :113`) | Audit B-9, B-10, as Input | The unit, scrub and steppers kept their rest ink |
+| disabled | the field shell's disabled paint (input.css); a soft field stays edgeless; value, unit, scrub handle and steppers `fg-disabled`. Read-only: one fill step deeper, no steppers | Audit B-9, B-10; plan B7.8, B7.10 |
 | forced colours | `CanvasText` edge (soft too), `Highlight` focus ring, invalid dashed (`forced-colors.css`) | Audit B-11, as Input | Had no forced-colours rule |
 
 ## Pass 2: steppers and the outline shadow
@@ -208,6 +208,7 @@ Steppers press at `bg-component-pressed`, one step past selected (Notion presses
 - 2026-10-04 · pill shapes and list rows (owner) → `--area-pill-field` makes the field a pill, steppers concentric (`number-field.css`). `docs/research/radius-audit-2026-10-03.md`, "Pill shapes and list rows".
 - 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → motion pass: hover and focus edge and the focus halo appear at once and fade out on `fast`; tones land at once; the stepper plates gain the same in-at-once, out-on-fast fade (`number-field.css`). See "Motion and interaction, 2026-10-07".
 - 2026-10-15 · owner: "merge it, then continue working" → boundary sweep under increased contrast (CONTRAST.md: required boundaries target 3:1): the soft variant's resting edge is `input-edge-soft` (none at standard, the strong control edge at more), as Input's.
+- 2026-11-14 · plan B7.8, B7.10 → disabled and read-only are the field shell's disabled and read-only recipe (input.css): this family's own copies are removed. Read-only now rests one fill step deeper than editable (outline on the soft fill, soft on its hover step). Why: docs/research/system-evaluation-2026-11-11 (README §5, phase2/disabled.md); the owner took every recommendation on 2026-11-11.
 
 ## Review note, 2026-10-21
 
@@ -220,3 +221,20 @@ Steppers press at `bg-component-pressed`, one step past selected (Notion presses
 
 - **What changed:** The hover edge eases in on Feedback's hover clock, as Input's.
 - **Why:** One hover clock for every field. You asked for the Slider's motion and detail pass on every component; measured across all 118 families ([the pass](../research/interaction-pass-2026-10-26/README.md)).
+
+## Review note, 2026-11-11 (type rules, plan A9)
+
+- **What changed:** the control takes tabular figures, so a scrubbed value no longer jitters in width (plan A9.8, findings T9, RD13).
+- **Why:** the system evaluation's type rules (docs/research/system-evaluation-2026-11-11, section 5, A9), owner-approved
+  2026-11-11; the rules are in DESIGN_SYSTEM.md ("Ink and weight", "Size and shape", "Text pairs") and the type skill.
+
+## Review note, 2026-11-11 (focus and targets, plan A6, A11.2)
+
+- **What changed:** The steppers own the shared hit target on their height (A11.2); the two abut (16 apart at sm Compact), so neither can take 24 across without the other's: they need a visible change, an owner decision.
+- **Why:** the system evaluation's focus, forced colours and hit target items (docs/research/system-evaluation-2026-11-11, section 5), owner-approved 2026-11-11; the rules are in DESIGN_SYSTEM.md ("The focus ring", "Targets") and CONTRAST.md (Focus).
+
+### 2026-11-14 · One field shell (system plan, Phase 2, B3)
+
+- The one field shell replaces the family's copy. Steppers: a gap of max(0, 24 − step) between the two plates so their centres sit 24 apart and each owns a 24 target (owner, 2026-11-13): visible at small sizes, 2 at the default md, 6 Compact md, 8 Compact sm, 0 from a 32 field; split steppers take 24 across over the value. The unit is a cap slot and a lettered scrub a text box (both sat 0.62 / 0.12 high at type 13).
+- Why: docs/research/system-evaluation-2026-11-11 (B3.1, B3.2, B3.3, B2.2 in fields; README §5); the owner took every recommendation on 2026-11-11 and the 24 targets on 2026-11-13. B3.2: field text stays on Button's inset (Keep 10, the pick), so nothing moved.
+- Verdict: awaiting the owner.

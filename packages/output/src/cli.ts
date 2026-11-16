@@ -9,7 +9,7 @@
  *   area check [--diff <file>|-] [files…]
  *        checks a change (a unified diff, or whole files) against the system; exits 1 on findings
  *   area mcp
- *        the system's MCP server on stdio
+ *        the system's MCP server on stdio (its tools: packages/output/src/mcp.ts)
  *
  * Every command works in the current folder. The library is the Area checkout this command belongs to, or AREA_LIBRARY.
  */
@@ -78,7 +78,7 @@ async function main() {
       return;
     }
     case "mcp":
-      serve(dest, VERSION);
+      serve(dest, VERSION, { library: libraryRoot() });
       return;
     case "definition":
       process.stdout.write(canonical(readProjectDefinition(dest)));

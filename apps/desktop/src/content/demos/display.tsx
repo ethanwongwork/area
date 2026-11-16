@@ -184,7 +184,7 @@ export const DialogDefault = () => (
     description="Description"
     footer={
       <>
-        <Button variant="ghost">
+        <Button variant="soft" tone="neutral">
           Cancel
         </Button>
         <Button>

@@ -373,3 +373,18 @@ The scrim (the bar's fade) is removed with its part. `floating` (QuickTime's pan
   `radius-control-md` plus the Pills setting (`--area-pill-button`); the round play before the first play stays a circle
   (its shape role). In review.
 - **Verdict (rounded corners):** approved (owner, 2026-10-29, the Composer expansion review page); Complete.
+
+### 2026-11-13 · Frame recipe (system plan, Phase 2, B1.1)
+
+- The corner reads the frame recipe's block corner (`surface.css`), `radius-container`: no visual change.
+
+### 2026-11-14 · Shared parts, leftovers (system plan, Phase 2, wave 3)
+
+- The controls' gaps (rows, the time, the floating row, the bar's groups and transport, the volume range's end) are `ui-cluster` (6 / 8 / 10); the clock pill's side is the mark side rule on its height, `(control-md − 6) / 2` (10 / 12 / 14; 15 / 15 / 17 at type 16). Values at type 13 Compact / Default / Comfortable; unchanged at the default.
+- A pill is one value: while the Pills set rounds it, its corner is `radius-full` itself, `max(corner, flag × full)`, never the corner plus full (it computed 10003px at the default). Draws the same; the corners snapshot records 9999px.
+- Why: docs/research/system-evaluation-2026-11-11 (plan B6.1, B6.5, B8.2, B2.2; README §5, phase2/leftovers.md); the owner took every recommendation on 2026-11-11. Fix the rule, not the instance.
+- Verdict: awaiting the owner.
+
+## State paint (plan B7.2, B7.3), 2026-11-14
+
+- The start button presses to the glass at 20%, as the controls; an on control presses to 20% (was its 16%).

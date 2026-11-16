@@ -151,7 +151,8 @@ test('caption outside is a class; the frame draws the card and the head sits und
   assert.match(render(h(AssetCard, { name: 'David Tee', media: 'a.png', caption: 'outside' })), /area-asset-card--outside/);
   const { readFileSync } = await import('node:fs');
   const css = readFileSync(new URL('../../styles/src/components/asset-card.css', import.meta.url), 'utf8');
-  assert.match(css, /\.area-asset-card\.area-asset-card--outside \{[^}]*gap: var\(--area-space-4\);/);
+  // The item name's line 8 under the frame (plan B1.2, surface.css), the head row centring it.
+  assert.match(css, /\.area-asset-card\.area-asset-card--outside \{[^}]*gap: max\(0px, calc\(var\(--_fr-name-gap\) - \(var\(--area-control-sm\) - var\(--area-ui-leading\)\) \/ 2\)\);/);
   assert.match(css, /\.area-asset-card\.area-asset-card--outside > \.area-asset-card__frame \{[^}]*border-radius: var\(--_corner\);/);
   assert.match(css, /\.area-asset-card\.area-asset-card--outside > \.area-asset-card__head \{ order: 1;/);
   assert.doesNotMatch(css, /\.area-asset-card--contain \.area-asset-card__media > img \{[^}]*box-shadow/, 'no edge on a contained image');

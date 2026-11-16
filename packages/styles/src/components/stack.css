@@ -19,8 +19,9 @@
 
   .area-stack--related { --_stack-gap: var(--area-ui-cluster); }
   .area-stack--group { --_stack-gap: var(--area-gap-row); }
-  /* spec: twice the group gap (24, Compact 16); Area has no section token and this keeps the rhythm without one. */
-  .area-stack--section { --_stack-gap: calc(var(--area-gap-row) * 2); }
+  /* spec: the section space, gap-section: twice the group gap (24, 16 Compact, 32 Comfortable; plan A1.1 and A1.4,
+     2026-11-11: it was gap-row × 2, 20 at the default type 13, with no token of its own). */
+  .area-stack--section { --_stack-gap: var(--area-gap-section); }
 
   .area-stack--start { align-items: flex-start; }
   .area-stack--center { align-items: center; }

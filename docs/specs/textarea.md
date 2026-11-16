@@ -63,7 +63,7 @@ sm 7, lg as md.) Default height without rows: 4 × leading + 2 × block gutter +
 
 `node scripts/capture-compare.mjs --slots shell` (Area, trimmed; widths are the tile's). The
 readonly and error tiles match default except fill #f7 and border rgb(207, 3, 60); since audit B-9
-read-only keeps the default fill.
+read-only rests one fill step deeper than editable (plan B7.10).
 
 | slot · property | area · default | area · size-sm | area · size-lg | area · soft | area · disabled |
 |---|---|---|---|---|---|
@@ -98,7 +98,7 @@ The size tiles set `rows={3}` (`apps/desktop/src/content/demos/gallery.tsx:957-9
 | hover | border → `textarea-edge-hover` (#d4d4d4; soft: `textarea-edge`); ink fixed | `textarea.css:86-91` |
 | focus | border `field-focus-color` (focus colour) + `field-focus-halo-color` halo after the field lift, and the field focus outline at 0 offset | `textarea.css:93-100`; audit S1, as [input.md](input.md) |
 | read-only | the variant's rest paint (no soft fill), no hover edge, default cursor (`textarea.css:87, :131`) | Audit B-9 B (owner), as Input; `area--readonly` predates it |
-| disabled | field paint: `textarea-bg-disabled` #f7, `border-faint` (a soft field stays edgeless, `textarea.css:143`), `fg-disabled` ink, resize none; no opacity (`textarea.css:133-143`) | `area--disabled`; audit "Disabled" rule (confirmed, no change) |
+| disabled | the field shell's recipe (input.css): `textarea-bg-disabled` #f7, `border-faint` (a soft field stays edgeless), `fg-disabled` ink, resize none; no opacity. Read-only (`data-read-only`): one fill step deeper | plan B7.8, B7.10 |
 | invalid / success / warning | border and halo in the validation colour (`textarea.css:105-128`) | `area--error` rgb(207, 3, 60); `area--success`, `area--warning` |
 
 ## Behavior and accessibility
@@ -173,6 +173,7 @@ Crispness: shell, insets (already `round()`ed) and boxes measured on whole pixel
 - 2026-10-07 · owner: make interactions professional, intentional, subtle; components look pixelated → motion pass: hover and focus edge and the focus halo appear at once and fade out on `fast`; tones land at once (`textarea.css`). See "Motion and interaction, 2026-10-07".
 - 2026-10-15 · owner: "merge it, then continue working" → boundary sweep under increased contrast (CONTRAST.md: required boundaries target 3:1): the soft variant's resting edge is `textarea-edge-soft` (= `input-edge-soft`), as Input's.
 - 2026-10-18 · owner: "go with your recommendations … finalize the material, surface, stroke, elevation axis theming" → Edge and Depth (axes/depth.ts; docs/research/elevation-stroke-2026-10-18): the outline variant rests on `--_field-lift: var(--area-shadow-field)` and lists it before the focus halo, so the two crossfade; the soft variant's lift is transparent (flat, as Figma's). Field shadow is 0 by default, a transparent role: nothing changes until it is raised (Inspector → Edge and depth → Field shadow; owner, the same day: no named looks, nine individual controls). Under a Material the lift is listed beside the well (material.css).
+- 2026-11-14 · plan B7.8, B7.10 → disabled and read-only are the field shell's disabled and read-only recipe (input.css): this family's own copies are removed. Read-only now rests one fill step deeper than editable (outline on the soft fill, soft on its hover step). Textarea paints `data-read-only` from React; its manifest drops the native-attribute mapping. Why: docs/research/system-evaluation-2026-11-11 (README §5, phase2/disabled.md); the owner took every recommendation on 2026-11-11.
 
 ## Review note, 2026-10-26 (interaction pass)
 
@@ -184,3 +185,9 @@ Crispness: shell, insets (already `round()`ed) and boxes measured on whole pixel
 - **What changed:** `onValueChange(value, event)` beside native `onChange`, as Input's.
 - **Why:** forms.tsx:65-77. From the components audit's internal peer comparison (`docs/research/components-audit-2026-11-07/internal.md`); the owner took every recommendation ("Take all recs", 2026-11-07).
 - **Verdict:** awaiting the owner.
+
+### 2026-11-14 · One field shell (system plan, Phase 2, B3)
+
+- The one field shell replaces the family's copy (`--_field-pill: 0`: never round ends). The resize grip is drawn (`::-webkit-resizer`): two strokes in `input-chevron`, the first 2 past the inner corner's radius and the second 4 further, so both end on the straight edges inside the curve (it was the platform's grabber over the rounded corner, VA20). The grip's box is the platform's 15; above Corner 14 the second stroke falls outside it.
+- Why: docs/research/system-evaluation-2026-11-11 (B3.1, B3.2, B3.3, B2.2 in fields; README §5); the owner took every recommendation on 2026-11-11 and the 24 targets on 2026-11-13. B3.2: field text stays on Button's inset (Keep 10, the pick), so nothing moved.
+- Verdict: awaiting the owner.

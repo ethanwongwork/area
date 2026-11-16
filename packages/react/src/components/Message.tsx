@@ -4,14 +4,14 @@ import { messageVariants, type VariantProps, MANIFESTS } from "../variants.ts";
 import { useAnnouncement } from "./announce.ts";
 import { Button } from "./Button.tsx";
 import { Glyph } from "./Glyph.tsx";
-import { useLoadingDelay } from "./primitives.tsx";
+import { useLoadingDelay } from "./loading-delay.ts";
 
 export type MessageStatus = NonNullable<VariantProps<typeof MANIFESTS.message>["status"]>;
 
 export interface MessageProps extends Omit<HTMLAttributes<HTMLElement>, "role"> {
   /** Who wrote it: the person (a bubble at the end) or the assistant (prose across the column, default). */
   author?: VariantProps<typeof MANIFESTS.message>["author"];
-  /** Names the author for assistive tech ("You", "ChatGPT"). */
+  /** Names the author for assistive tech ("You", "Assistant"). */
   authorName?: string;
   /** A MessageActions row under the message. */
   actions?: ReactNode;

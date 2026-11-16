@@ -98,6 +98,8 @@
     inset-block-end: round(nearest, calc(var(--_size) * 0.07), 1px); /* spec: Finder's label 7% up */
     color: var(--_quiet);
     font-family: var(--area-font-sans);
+    /* Artwork, not text (plan A9.9): drawn to the folder's scale, so it may sit under the 10px floor. The Folder is an
+       image (role img, its own label names it) or aria-hidden, so the count is never read as text. */
     font-size: round(nearest, calc(var(--_size) * 0.13), 1px); /* spec: cap ≈ 9% of the box; 12 at 96, 8 at 64 */
     font-weight: var(--area-weight-regular);
     font-variant-numeric: tabular-nums;

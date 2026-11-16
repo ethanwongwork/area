@@ -1,0 +1,112 @@
+{
+ "rule": "marks",
+ "item": "B5.1",
+ "about": "Badge, Count, Tag and Kbd per size, wherever they appear: heights, text size / line, corners (B5.1 will tighten to 14 / 18 / 22)",
+ "values": {
+  "badge md": {
+   "height": [
+    18
+   ],
+   "text": [
+    "11/11",
+    "11/14"
+   ],
+   "corner": [
+    "4px",
+    "9999px"
+   ]
+  },
+  "kbd md": {
+   "height": [
+    14,
+    18
+   ],
+   "text": [
+    "11/14"
+   ],
+   "corner": [
+    "6px"
+   ]
+  },
+  "kbd sm": {
+   "height": [
+    14
+   ],
+   "text": [
+    "11/14"
+   ],
+   "corner": [
+    "6px"
+   ]
+  },
+  "badge sm": {
+   "height": [
+    14
+   ],
+   "text": [
+    "11/14"
+   ],
+   "corner": [
+    "9999px"
+   ]
+  },
+  "badge lg": {
+   "height": [
+    22
+   ],
+   "text": [
+    "13/18"
+   ],
+   "corner": [
+    "9999px"
+   ]
+  },
+  "tag md": {
+   "height": [
+    18
+   ],
+   "text": [
+    "11/14"
+   ],
+   "corner": [
+    "4px",
+    "6px"
+   ]
+  },
+  "count md": {
+   "height": [
+    18
+   ],
+   "text": [
+    "11/14"
+   ],
+   "corner": [
+    "4px",
+    "9999px"
+   ]
+  },
+  "count sm": {
+   "height": [
+    14
+   ],
+   "text": [
+    "11/14"
+   ],
+   "corner": [
+    "9999px"
+   ]
+  },
+  "tag lg": {
+   "height": [
+    22
+   ],
+   "text": [
+    "13/18"
+   ],
+   "corner": [
+    "4px",
+    "6px"
+   ]
+  }
+ }
+}

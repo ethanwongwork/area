@@ -10,6 +10,17 @@ Small labels, placeholders and code are normal text and must meet 4.5:1. Hover d
 change that classification. The token suite also retains a supplementary APCA floor in
 dark mode; APCA is not a WCAG conformance standard.
 
+**Three text inks, each 4.5:1** (plan A3, 2026-11-11). `fg-default`, `fg-muted` and `fg-subtle` (meta: a placeholder, a
+shortcut, a timestamp, line numbers) are all text, solved in the Layers model (`color/layers.ts`) on the grounds they sit
+on: muted on the deepest selected fill pressed by the press room and on the soft-mark plates, subtle on each layer, its
+rest fill and its hover fill (never a selected or pressed plate, where meta reads muted). The gate asserts each on the
+text surfaces, the floating ground and the hovered plates (`contrast/assertions.ts`), and the Layers gate on every ground,
+Layers step, tint and Text tint (`layer-checks.ts`). Dark muted is floored at #b9b9b9 (10.6:1 on the page), down from
+#c5c5c5 (12:1, only 1.49 off the default ink): the plan's 8:1 is under the dark APCA content floor (Lc 60) on the fills
+muted sits on, and the floor binds, so dark's default-to-muted step is 1.70 against light's 2.5 (`layers.test.ts`, "the
+ink ladder"). In dark at the defaults subtle is muted for the same reason. Disabled ink is exempt (WCAG 1.4.3) and held
+to 1.9:1.
+
 Tinted grays (Tint hue and strength, `axes/tint.ts`) keep these targets by construction: the inks are solved for
 lightness as if every colour were gray, and a tint changes a colour's luminance at the same lightness, so text moves 0.25
 × the tint's strength away from its ground (`INK_MARGIN`, color/layers.ts). Without it a 0.005 tint put muted text under
@@ -53,6 +64,11 @@ a theme is **below WCAG AA for those words**, by the owner's choice, for brighte
   edges, focus and indicators. All of those keep the targets above at every floor.
 - **More contrast wins.** Any raised Contrast, including the OS asking for more under System, puts every tone back at
   4.5, in the inks and in their darken.
+- **Dark vivid inks are as colourful as the gate allows** (plan A10.2, 2026-11-11): the status and label tones' vivid inks
+  (field and choice messages, a field's state edge, syntax) keep their rung's hue and take the most chroma sRGB holds at a
+  lightness that still clears 4.6:1 and APCA 61 on the code ground (`scale.ts` `luminousDarkVivid`). APCA's content floor
+  near black is what stops red: danger's vivid ink is #fe999e (chroma 0.12, was #feb0b3 at 0.09); success stays #02de68
+  (0.22). So danger is no longer pale beside success, but cannot match its chroma without leaving the floor.
 - **Where tone words show** (the stylesheets that read a floor tone's `fg-<tone>`, 2026-11-02): Surface's tone callouts,
   Link, Citation, Button's tone variants, Badge, Calendar, Tree view, File upload, Edit summary, Chip, Turn notice, Tag,
   Stepper, Step, Queue, Color, Box model, Board and Attachment. A theme that lowers the floor lowers it for all of them.
@@ -111,7 +127,10 @@ Edges are measured from the ground under them (2026-10-23; DESIGN_SYSTEM.md, Lay
 (light) or lighter than the raised layer (dark) moves every edge role, rails included, by its distance, mixed by
 (1 − the Contrast level), which is exact for an OKLab mix: each level still lands where it did, and at More every edge
 is the strong stroke, which is solved on the deepest ground already. `layers.test.ts` checks every edge's distance and the
-frame minimum on every ground, card tone and Layers step.
+frame minimum on every ground, card tone and Layers step. The floating ground (`bg-float`, a step above the layers in dark, plan A7.2)
+is one of those grounds: edges and fills in a menu or dialog step from it, and every ink is solved on its fills too.
+A floating surface draws one edge per side (plan A7.1): its frame, which in dark takes the dark rim's strength, and the
+rim only where no frame is; `check:rendered` asserts one luminance step across each dark floating edge.
 Rails are fills, not strokes: `fill-track` / `fill-track-hover` (Progress, Meter, Slider, the off Switch) keep their value
 at every level, since the fill or thumb on them is what has to read (under More the 3:1 rail left an accent fill 1.2:1).
 Switch outlines instead, as macOS does: its edge and an off thumb's ring take the strong stroke.
@@ -130,8 +149,26 @@ Use `focus-color`, `focus-width` and `focus-offset` for control focus and `focus
 Focus ring setting sets all three (`axes/states.ts`, 2026-10-21). Required focus geometry is independent of elevation.
 Editable fields use `field-focus-*` roles: at Hug (the default, ChatGPT's) a 2px ring on the field's edge; at Halo
 (audit S1, owner 2026-09-30) the 1px edge takes `focus-color` and a 2px halo of the same colour at 14%
-(`field-focus-halo-color`). Increased contrast always adds the 2px outline and widens the halo.
+(`field-focus-halo-color`). Increased contrast always adds the outline (the 3px ring at More) and widens the halo.
 Composer keeps the quiet neutral edge (`composer-focus-color`). Invalid inputs retain their danger edge/context.
+
+**A ring never sits flush on a solid fill** (plan A6.1, 2026-11-11). At the shipped Selection the ring is the neutral
+solid, a solid Button's own fill, so a hugging ring read as the button growing 2px. A solid Button or Badge link places
+its ring at `focus-solid-offset`: off the fill by `focus-gap` at Hug, Halo, Gap and Bold, so the ground shows between
+them; under Inset it runs inside the fill one pixel in, in the fill's own ink (`focus-solid-inside` mixes the
+component's on-colour in), so it touches the fill on both sides at the on-colour's contrast. A checked Checkbox or
+Radio, an on Switch and other marks too small to hold a ring inside take `focus-gap` when filled. Every Focus ring
+option stays; only the placement on a solid fill changes. The ring then touches the ground or the fill's ink, never its
+own colour: at least 3:1 on both sides (`tests/behaviour/suites/focus.test.mjs` reads it in the browser).
+
+**Focus answers Contrast More** (plan A6.3): at More (the Contrast setting's top level, or the system's increased
+contrast preference) every ring is the Bold preset's 3px and stands off by `focus-gap`, whatever the Focus ring option;
+the levels below More keep the option's ring. `focus-width` and `focus-offset` are derived from the setting's leaves
+(`focus-ring-width`, `focus-ring-offset`) and Contrast in `emit/base.ts`, so every reader follows.
+
+**Where the ring sits** is one table (DESIGN_SYSTEM.md, "The focus ring"), held by `cohesion.test.mjs`: controls at
+`focus-offset`, containers and text at `focus-gap`, rows, tabs and cells inside by their own width, one indicator per
+row (a ring or a plate, never both).
 
 **The indicator rung** (owner, 2026-10-21: "the vibrant blue"). `focus-color` and `stroke-selected` are the accent's
 lightest step from 500 that keeps WCAG 3:1 and APCA 45 on every neutral ground and fill (page to pressed) and 3:1 on
@@ -143,7 +180,8 @@ page). ChatGPT's #3a83f7 is 3.64:1 on white but 2.94:1 on the light pressed fill
 **An inactive control keeps its focus indicator at full strength** (components audit V2, 2026-11-07): it is drawn as
 disabled by fading its parts, never the focusable element, since an opacity on the element fades its outline with it.
 Its words may sit at the disabled opacity (an inactive control, as WCAG 1.4.3 exempts), but its reason may not: the
-Tooltip's text, and a Menu row's note at the muted ink, keep 4.5:1.
+Tooltip's text, and a Menu row's note at the muted ink, keep 4.5:1. A Menu row's label takes that muted ink too, never
+lighter, so the reason is never stronger than the label (plan B7.12).
 
 Measure the actual painted opaque edge/outline against its ground. Measuring only the
 source color of a translucent halo is insufficient. Preserve focus and selected/invalid
@@ -154,6 +192,12 @@ state simultaneously. Do not remove a native outline without supplying a visible
 State is more than color. Use text, shape, icons and native/ARIA semantics as appropriate.
 Control marks must have real positioned dimensions; do not depend on shadows alone for
 selection. Foregrounds stay fixed on hover; disabled/read-only/loading remain distinct.
+Disabled text is exempt from the text target but must stay visible on every ground. A read-only value keeps 4.5:1, and
+a read-only field differs from the editable one by its fill (DESIGN_SYSTEM.md, "Disabled and read-only"). The behaviour
+suite `states` measures both on every ground, in light and dark, at Layer contrast 0 and 100, Edge contrast 0 and 8,
+Fields stroke 0 and 8, and at the tone settings' extremes. The lowest it measured on 2026-11-14 are: a disabled field's
+value 2.08:1, a toned disabled Button's label 1.93:1 (ghost discovery on the danger tint), a neutral dimmed label
+2.14:1, a read-only value 8.66:1, and the read-only fill 1.02:1 from the editable one.
 
 **The quieter selected plate has a floor** (components audit V15, 2026-11-07): a selected row in a list without focus
 steps back to the hover plate and never further, so its words keep the contrast asserted on `bg-component-hover`
@@ -168,7 +212,11 @@ Respect motion preferences without removing the meaning of loading/progress stat
 ## Verification
 
 Run `npm test` and `node packages/tokens/src/contrast/report.ts` for token/color/focus/state
-changes. Brand themes (`semantic/brand.ts`) can take any colour, so `contrast/brand.test.ts`
+changes. **Which inks meet 4.5:1 and 3:1 on which grounds** is [Contrast pairings](CONTRAST_PAIRINGS.md), generated
+from this suite's own model and measure at the shipped defaults, light and dark (`contrast/pairings.ts`; plan F7,
+2026-11-11). It reports, it does not grant: a supported pairing is an assertion in `contrast/assertions.ts`.
+`pairings.test.ts` fails when the table is stale; a token or curve change rewrites it with
+`node packages/tokens/src/contrast/pairings.ts --write`. Brand themes (`semantic/brand.ts`) can take any colour, so `contrast/brand.test.ts`
 samples them: the reference brands, edge colours (near grey, white, black, neon) and 500
 seeded brands over hue, chroma and lightness, every assertion plus `BRAND_ASSERTIONS` (the
 accent pairings on secondary and tertiary, each supporting tone's label, brand-surface text)

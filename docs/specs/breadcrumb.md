@@ -180,3 +180,12 @@ Links and the ellipsis press at `bg-component-pressed`, one step past selected (
 
 - **Approved** by the owner in chat: `nowrap` (one line in a bar of fixed height, the Canvas bar's trail; reopened
   2026-10-25). With the round 80 ellipsis approved 2026-10-28, Breadcrumb is Complete.
+
+## Review note, 2026-11-11 (focus and targets, plan A6, A11.2)
+
+- **What changed:** Links and the ellipsis own the shared hit target, 24 (44 tall under a coarse pointer) (A11.2).
+- **Why:** the system evaluation's focus, forced colours and hit target items (docs/research/system-evaluation-2026-11-11, section 5), owner-approved 2026-11-11; the rules are in DESIGN_SYSTEM.md ("The focus ring", "Targets") and CONTRAST.md (Focus).
+
+## State paint (plan B7.1), 2026-11-14
+
+- The ⋯ menu button holds the pressed plate while its menu is open (was the hover plate).

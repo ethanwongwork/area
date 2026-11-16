@@ -8,19 +8,25 @@ import { Glyph } from "./Glyph.tsx";
 type DescriptionListVariants = VariantProps<typeof MANIFESTS.descriptionList>;
 
 export interface DescriptionListProps extends HTMLAttributes<HTMLDListElement> {
-  /** `columns`: terms in a column with the values after them (Notion's page properties). `justified`: term at the start, value at the end (ChatGPT's settings rows). */
+  /**
+   * `columns`: the terms in a column with the values after them. `justified`: each term at the start and its value at
+   * the end.
+   */
   layout?: DescriptionListVariants["layout"];
   /** A rule between rows. */
   divided?: boolean;
-  /** Table's frame around the list. */
+  /** The frame: surface draws Table's frame around the list; plain (the default) draws none. */
+  variant?: DescriptionListVariants["variant"];
+  /** @deprecated Use `variant="surface"`. */
   framed?: boolean;
   /**
-   * Shows only the first rows, with a "Show N more" button after the list that reveals the rest (Notion's "N more
-   * properties"; docs/research/show-more-survey.md). Omit to show every row.
+   * Shows only the first rows, with a "Show N more" button after the list that reveals the rest. Omit to show every
+   * row.
    */
   visibleCount?: number;
   /** Controlled: every row shown. */
   expanded?: boolean;
+  /** Whether every row shows at first, uncontrolled. */
   defaultExpanded?: boolean;
   /** The new state and the press on Show more / Show less. */
   onExpandedChange?: (expanded: boolean, event: MouseEvent<HTMLButtonElement>) => void;
@@ -31,7 +37,7 @@ export interface DescriptionListProps extends HTMLAttributes<HTMLDListElement> {
 }
 
 export const DescriptionList = forwardRef<HTMLDListElement, DescriptionListProps>(function DescriptionList(
-  { layout, divided, framed, visibleCount, expanded: expandedProp, defaultExpanded = false, onExpandedChange,
+  { layout, divided, variant, framed, visibleCount, expanded: expandedProp, defaultExpanded = false, onExpandedChange,
     moreLabel = hidden => `Show ${hidden} more`, lessLabel = "Show less", id: idProp, className, children, ...rest },
   ref,
 ) {
@@ -42,7 +48,7 @@ export const DescriptionList = forwardRef<HTMLDListElement, DescriptionListProps
   const items = Children.toArray(children);
   const shown = visibleCount === undefined ? items.length : Math.floor(visibleCount);
   const hidden = Math.max(0, items.length - shown);
-  const classes = descriptionListVariants({ layout, divided, framed }, className);
+  const classes = descriptionListVariants({ layout, divided, variant: variant ?? (framed ? "surface" : undefined) }, className);
 
   if (!hidden) return <dl ref={ref} id={idProp} className={classes} {...rest}>{children}</dl>;
 

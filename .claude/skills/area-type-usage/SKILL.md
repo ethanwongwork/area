@@ -5,7 +5,7 @@ description: Chooses and checks the type style, ink, weight, line and spacing fo
 
 # Area type usage
 
-Area's type is one ramp, two inks, two weights and one rhythm. Every text in a component or a page takes a **role**,
+Area's type is one ramp, two inks, three weights (one table, § 4) and one rhythm. Every text in a component or a page takes a **role**,
 and the role decides all four. This skill is how to pick the role, put roles together, and prove the result.
 
 The rules come from measurement, not taste: Area's own census of both kits and the products' bundles
@@ -18,30 +18,40 @@ the procedure.
 
 | Token | Size / line | Prose line | Role | Never |
 |---|---|---|---|---|
-| `text-xs` | 11/14 | — | marks: a badge, a count, a key, a data label (axis, tick, legend) | a sentence, a description |
-| `text-sm` | 12/16 | 12/18 | secondary that stands apart: a caption, a note under a block, a timestamp, a lede; metadata on a row's line takes the row's 18 | default ink, 500 |
-| `text-base` | 13/18 | 13/20 | the UI line: every control, row, label, cell, card name, choice, an agent's work in a chat | — |
-| `text-lg` | 15/22 | 15/22 | reading: a reply, the person's bubble, a composer's field, a document, the feed's prose | inside a frame of UI |
-| `title-xs` | 16/22 | — | a heading over a page's block: a feed section, a page's or region's empty state, a reply's heading | a component's own title (Dialog, Card, Drawer: `text-base` 500), two in one view at the same level |
-| `title-sm` / `title-md` | 18/24 · 20/28 | — | a page or a panel's own title, once | inside a feed's section |
-| `title-lg` | 26/30 | — | a figure (a stat's value) | words |
+| `text-xs` | 11/14 | — | marks only (plan A9.2): Badge, Count, Tag, Kbd, Indicator, Citation, Avatar initials, a status letter, a data label (a tick, a legend, a chart's note, Box model), and code text in a small code block (11/16 on `text-xs-code-leading`) | a word that labels, explains, warns or locates: an error, a field's count, a slider's ends, a calendar's days, a panel's labels, a path, a key's hint |
+| `text-sm` | 12/16 | 12/18 | secondary **set apart** from what it explains: help, a count and messages under a control (Field, Meter), a caption under a block, a timestamp, a metadata line on its own, Empty state `sm`'s copy, Menu's descriptions (the one dense exception); metadata on a row's line takes the row's 18 | a line joined to a name (it takes the name's size); 500, except a label over a run of rows of its size (Panel `sm`'s section heading) |
+| `text-base` | 13/18 | 13/20 | the UI line: every control, row, label, cell, card name, choice, a joined line (a choice's, a Switch's, a setting's, a file's description), a lede, an agent's work in a chat | — |
+| `text-lg` | 15/22 | 15/22 | reading, only where prose is written (plan A9.12): a reply, the person's bubble, a composer's field, the palette's search field, options that become that prose (Prompt suggestions), a document, the feed's prose | any other operated part (a palette's step, a trigger, a row) |
+| `title-xs` | 16/22 | — | a heading over a page's block at 500: a section (Section heading), a feed section, a page's or region's empty state, a reply's h1–h3, Page header `sm`, Link groups' title | a component's own title (Dialog, Card, Drawer: `text-base` 500), two in one view at the same level |
+| `title-sm` / `title-md` | 18/24 · 20/28 | — | a modal's or a document's heading, at `weight-heading` | inside a feed's section |
+| `title-lg` | 26/30 | — | a page's own title (Page header `md`, the default) at `weight-heading`; a figure (a stat's value) at 400 | a section's or a card's title |
+| `title-xl` | 32/40 | — | a top-level page's or a document's own title, once per page (Page header `lg`), at `weight-heading` | a panel or dialog title |
 | display | 52 · 67 | — | specimens only (the type ramp, a tester) | UI |
 
-Tracking is the token's own (`--area-<role>-tracking`); never set letter-spacing by hand.
+A screen has three levels (plan A9.1): page > section > item, 26 / 16 / 13 at type 13 (Page header md, Section heading,
+a card's title), told apart by size and weight. Body text carries no tracking (plan A9.10: under 14 it added an invisible
+0.03–0.08px); titles and display tighten by their token (`--area-<role>-tracking`), which a part setting a title size
+sets beside it (a figure, a donut's centre); never set letter-spacing by hand. Every underline sits
+`--area-underline-offset` (0.08em) under its text. Code lines are `text-xs-code-leading` (the small step's line plus 2),
+and density never adds leading to text.
 
 ## 2. Pick the role: four questions, in order
 
 1. **Is it read or operated?** Read in sentences (a reply, prose, a doc) → `text-lg`. Operated or scanned (a row, a
    control, a label, a cell, a card name, a question's answers) → `text-base`.
-2. **Does it head a block?** Over a page's block → `title-xs` (a section in a feed, a reply's heading, a region's empty
-   state), standing one step (4) off any line under it. A component's own title (a Card, a Dialog, a Confirm dialog, a
-   Drawer, a Popover) and a name that starts a row are not headings: they stay `text-base`, 500. A surface's title
-   stands one step (4) off its copy; an item's name joins its line (DESIGN_SYSTEM.md, "Text pairs", 2026-11-06).
-3. **Does it explain something next to it?** A description, a header cell, an option's line, a group label → the **same
-   size** as what it explains, **muted**. Only text that stands apart (a caption under a block, a timestamp, a lede, a
-   step's time at the row's end) drops a size, to `text-sm`, and then it is muted too.
-4. **Is it a mark?** A badge, a count, a key, a data label → `text-xs`, in its component (Badge, Count, Kbd); never a
-   hand-set 11.
+2. **Does it head a block?** A page's own title → Page header (`title-lg`, `lg` `title-xl`, at 600). Over a page's block
+   → `title-xs` at 500 (a section, a reply's heading, a region's empty state), standing one step (4) off any line under
+   it. A component's own title (a Card, a Dialog, a Confirm dialog, a Drawer, a Popover) and a name that starts a row are
+   not headings: they stay `text-base`, 500. A surface's title stands one step (4) off its copy; an item's name joins its
+   line (DESIGN_SYSTEM.md, "Text pairs", 2026-11-06).
+3. **Does it explain something next to it?** A line joined to a name (a choice's, a Switch's, a setting's, a file's, a
+   card's description), a header cell, a group label → the **same size** as what it explains, **muted** (plan A9.3,
+   owner 2026-11-11). Only text set apart (help, a count or a message under a control, a caption under a block, a
+   timestamp, a metadata line on its own, a step's time at the row's end) drops a size, to `text-sm`, and then it is
+   muted too. Menu's descriptions are the one written exception: a dense menu steps them to `text-sm`.
+4. **Is it a mark?** A badge, a count, a key, a status letter, a data label → `text-xs`, in its component (Badge, Count,
+   Tag, Kbd); never a hand-set 11, and never a word that labels, explains, warns or locates (`cohesion.test.mjs` lists
+   the parts allowed it).
 
 If a text fits none of these, it is probably two texts (a label and a value) or the wrong component.
 
@@ -50,18 +60,36 @@ If a text fits none of these, it is probably two texts (a label and a value) or 
 - `fg-default`: what is read. `fg-muted`: what explains it. Those two carry all words.
 - `fg-quiet` is for ghost controls and icons; `fg-placeholder` and `fg-disabled` for fields and the off state.
 - Tone inks (`fg-success`, …) belong to Badge, status marks and diff counts, never a sentence.
-- **The smaller, the quieter**: 12 is always muted; 11 is a mark. Headings and titles are always default ink.
+- **The smaller, the quieter**: 12 is muted (Attachment's file name, in a 12 tile, is the one default-ink 12); 11 is a
+  mark. A title that names a surface or a page is default ink; a label over a run of rows is muted (§ 4).
+- **A label beside its value is muted 400 and the value leads in the default ink** (plan A9.13; Description list's terms
+  in every layout, a Field's horizontal label, a Panel row's label, a filter's "Label: value"). Layout moves a label, not
+  its role. A bar's name (Meter, Progress) is the UI line at 400 in the default ink, its value muted and tabular at the
+  row's end.
 - A colour in a scope (the cards' `CARD_SCOPE`, a dark frame) resolves the same token one step differently: use the
   token, never a measured colour.
 
 ## 4. Weight
 
-- Two weights in UI text: 400 (`weight-regular`) and 500 (`weight-strong`).
-- 500 is for: titles (`title-xs` and up), the name that starts a line (a person in an activity, the question in an
-  Approval, a timeline's actor), and controls (Button, Badge, Kbd draw their own).
-- **Weight rises only with the default ink.** Never 500 + muted in a composition (a group label is muted and regular).
-- **One property at a time.** A step down in hierarchy changes size, or ink, or weight: never smaller + muted + lighter
-  at once, never a bigger size and a heavier weight to say the same thing twice.
+One weight table (plan A9.5; DESIGN_SYSTEM.md, "Ink and weight"; the `typography.ts` header quotes it):
+
+| Weight | For |
+|---|---|
+| 400 `weight-regular` | everything read or operated: running text, descriptions, field labels, rows (Nav, Tree view, Menu items), a setting's or a choice's name, a step's title, a label beside a value, a bar's name, a figure |
+| 500 `weight-strong` | a surface's or a region's title (Card, Dialog, Popover, Toast, Alert, Panel bar, Calendar month, Section heading, Empty state, Link groups); `title-xs` headings (a reply's h1–h3); a label over a run of rows (§ 4 below); an item's name on a picture or file card (Card, Asset card, Design card, File tile, a File upload row, Asset row, Board card; owner 2026-11-11, B1.2); the name that starts an activity line (a person, Approval's question); labels on fills and marks (Button on every variant, Segmented, Badge, Kbd, Indicator, Avatar initials, Citation); the selected Tab |
+| 600 `weight-heading` | titles from `title-sm` up: a page's own title (Page header `md` and `lg`), a document's title and its `title-sm`+ headings. Never a row, label or control |
+
+- **Button labels are 500 on every variant** (owner 2026-10-08, kept 2026-11-11, plan A9.7): solid, soft, outline and
+  ghost alike, so neighbours never change weight.
+- **A label over a run of rows** (a menu group, a nav section, a list section, a shortcut group, an optgroup, a panel
+  section, a table group, a picker's saved colours) is the rows' size at 500 in the muted ink, a row tall (owner
+  2026-10-22, plan A9.4). A title that names a whole surface or region is default ink.
+- **Weight rises only with the default ink, with three written exceptions:** a control's labels keep one weight in every
+  state (Segmented, Pagination, the width Tabs reserve), so a set's options are 500 in the muted ink at rest; a mark draws
+  its own weight in its own ink (Kbd, Citation, the neutral Badge); and group labels are 500 muted.
+- **A step down never changes size, ink and weight at once**, and never a bigger size and a heavier weight to say the
+  same thing twice. A surface's title over its copy is told apart by weight and ink (500 default over 400 muted) at one
+  size; Confirm dialog's default-ink description is the written exception (a surface whose copy is its only body).
 
 ## 5. Lines
 
@@ -87,6 +115,8 @@ If a text fits none of these, it is probably two texts (a label and a value) or 
 | joined lines that are siblings (a name and its meta, two facts) | 2–4 | Cursor 1/2/4, Claude 4 |
 | a heading and its block | 16 (feed) · 12 (chat heading in a reply) | measured to the frame's edge or the first cap |
 | rows in a list or group | the row's own padding; a divider adds no space | Settings rows 42 / 60 |
+| items of a text list (links, references, footnotes) | line + 4: 4 apart (a 22 pitch at 13/18) | Link groups, Reference list (plan A1.5) |
+| rows of a key-value list | line + 8 | Description list's columns (26 at 13/18), plain Accordion items (30 at 15/22) (plan A1.5) |
 | blocks: paragraphs, cards, tables, trackers, a question | 16 (`text-lg-prose-gap`) in a reply and the feed · 12 between cards in a reply's frame | |
 | a caption under its card | 4 | the card, as picked |
 | a frame over its question (a visual question) | 8 | |
@@ -110,7 +140,11 @@ Gaps grow outward: never a larger gap inside a group than between groups. Text s
   never cut or broken inside a word.
 - **Names don't break inside words.** A picture's name, a tab, a chip: one line, an ellipsis if it must; running text
   wraps at words (`overflow-wrap: anywhere` only for paths and tokens).
-- **Numbers**: `tabular-nums` wherever they line up; data views set numbers in Geist Mono at `text-xs`, words in Geist.
+- **Numbers**: `tabular-nums` wherever a number changes in place, counts or sits in a column (plan A9.8: a numeric field
+  sets it on the control; Table sets it on every cell). **A figure** is the UI sans at 400, tabular: `title-lg` for a
+  primary figure (Card's value, Chart's number), `title-sm` with its tracking for a secondary one (a donut's centre).
+  Data labels (ticks, a legend, a chart's note) are the UI sans at `text-xs`, tabular, muted (owner 2026-11-11, A9.11);
+  mono only where characters align by column (code, hashes, a token's name).
 - **Icons** take the type's icon box (16 at 13, `--area-icon-sm`) beside `text-base`, `icon-xs` beside `text-sm`; a key
   square is `control-xs` when its rows carry descriptions (Approval).
 
@@ -145,7 +179,13 @@ The tables in `docs/PRODUCT_UI.md` list every role per kit; change them there, n
 
 - A plated "Default" Badge beside an answer's word: unbalanced, two rows tall → the same-size muted note (2026-11-04).
 - Data cards titled at the section title's size (Q-T1) → the name role, 13/500, through Card's title hook (applied).
-- An activity log's day label at 500 in the muted ink → regular.
+- An activity log's day label at 500 in the muted ink → regular; then group labels had three treatments, so the owner's
+  2026-10-22 group label (the rows' size, 500, muted) became the one rule (2026-11-11, A9.4).
+- Words at the mark size: a field's error and count, a slider's ends, the calendar's days and a panel's labels at 11
+  after the ramp gained `text-sm` (T1) → `text-sm`, and a test that lists the parts allowed `text-xs` (2026-11-11).
+- A Switch 13 over 12 beside a Setting row 13 over 13, the same setting → a joined line takes its name's size (A9.3).
+- Page titles at most 20/500, so a page barely outranked its sections (T16) → page > section > item, 26/600 > 16/500 >
+  13/500 (A9.1).
 - Four 96 picture cells at 456: "Workspac e" → two by two under 600, names on one line.
 - A section opening on a component's text sat 19–21 under its title, frames 16 (Q-T2) → read on its glyphs (applied).
 - Six type styles in one reply (h1–h4, quote, caption) → three: 16 headings, 15 text, 13 UI.

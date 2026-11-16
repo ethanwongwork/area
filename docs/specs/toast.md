@@ -216,3 +216,34 @@ Open questions:
 The Toaster's two hand-written regions (polite and assertive) are replaced by the shared announcer (`announce` / `useAnnouncement` (packages/react/src/components/announce.ts; DESIGN_SYSTEM.md, "Announcements")); `show`
 calls `announce(said, { politeness: tone === "danger" ? "assertive" : "polite" })`. A standalone Toast keeps its own
 `role` (its visible text is the message). No visible change.
+- 2026-11-11 · system evaluation A1.2 · stacked toasts are `ui-cluster` apart (8, Compact 6; was a fixed 8).
+
+## Review note, 2026-11-11 (motion, plan A5)
+
+- **What changed:** the exit (`data-leaving`) accelerates on `ease-exit` and its fade reads `fade-base`, so reduced motion keeps it (A5.1); the enter is unchanged.
+- **Why:** the system evaluation's motion items (docs/research/system-evaluation-2026-11-11, section 5, A5), owner-approved
+  2026-11-11; the rules are in docs/MOTION.md (Tokens, Roles, Recipes) and kept by cohesion.test.mjs and
+  tests/behaviour/suites/motion.test.mjs. The motion tables above are history; these values are current.
+
+### 2026-11-11 · Ink, dark and colour (system plan, Phase 1)
+
+- **What changed:** In dark it paints the floating ground (`bg-float`, plan A7.2): a step above the layers under it, #0c0c0c on the near-black page at the defaults (was `bg-surface`, the page's own #020202); light is unchanged. Its dark edge is one line (plan A7.1): the frame takes the dark rim's strength (16% at Shadow 8) and the rim is no longer drawn outside it, where it had made a two-tone 2px edge.
+- **Why:** docs/research/system-evaluation-2026-11-11 (README §5); the owner took every recommendation on 2026-11-11.
+- **Verdict:** awaiting the owner.
+
+## Shared parts (plan B2), 2026-11-13
+
+- **Leading icon (B2.4, G10).** The icon is a box one first line tall with the glyph centred in it (the box technique), instead of a `(line − icon) / 2` margin: the same pixels, one way.
+
+## Density (plan B8.2), 2026-11-14
+
+Space between pieces reads a density role (DESIGN_SYSTEM.md, Size and shape; `density.test.mjs`). Values at type 13
+Compact / Default / Comfortable; each is whole at type 12 to 16 and every density, and the default is unchanged unless said.
+
+- Checked, nothing moved: the stacked footer and the toaster's list were already `ui-cluster` (plan A1.2).
+- 2026-11-14 · system evaluation B6.1, B6.7 · the frame and shadow stack are the one floating surface's (popup.css); Alert now agrees with Toast on action placement (no width query), and `popups.test.mjs` pins their shared inset, icon box, gaps, title weight and bar corner. No visible change.
+
+## Shared bars and corners (plan B4), 2026-11-14
+
+- B4.2: the last control is a corner control: 5 from the top and the end at the defaults, its corner the toast's less 5 (5 in a one-line toast's 10, 11 in a titled toast's 16; it kept the small control's 6).
+- 2026-11-14 · system evaluation B6.7 (correction) · Toast is the same wrapping row as Alert: Undo stays beside the text while both fit and wraps below it, end-aligned and `ui-cluster` under the text, when they don't; the text never shrinks to make room and keeps the icon's line; the close sits out of the row in the top corner. Pinned by `tests/behaviour/suites/wrap.test.mjs`.

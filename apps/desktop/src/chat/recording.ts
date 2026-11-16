@@ -23,7 +23,8 @@ export type SdkMessage =
       | { type: "text"; text: string }
       | { type: "tool_use"; id: string; name: string; input: ToolInput }> } }
   | { type: "user"; message: { content: ReadonlyArray<{ type: "tool_result"; tool_use_id: string; content: string; is_error?: boolean }> } }
-  | { type: "result"; subtype: "success" | "error_during_execution"; duration_ms: number; /** Why it failed (the engine). */ error?: string };
+  | { type: "result"; subtype: "success" | "error_during_execution"; duration_ms: number; /** Why it failed (the engine). */ error?: string;
+      /** The agent's session (the engine), kept with the chat so it can go on later. */ session?: string };
 
 /** The SDK asked before a tool ran (`canUseTool`): what the Approval shows. */
 export interface PermissionRequest { type: "permission_request"; tool_use_id: string; tool_name: string; title: string; description: string; input: ToolInput }

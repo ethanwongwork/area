@@ -53,7 +53,6 @@
   /* spec: hover and focus lay Menu's row plate under the prompt; the ink stays fixed, as on
      every hovered control. */
   @media (hover: hover) { .area-prompt-suggestions__row:hover > .area-prompt-suggestions__item { background-color: var(--area-bg-component-hover); } }
-  .area-prompt-suggestions__item:focus-visible { background-color: var(--area-bg-component-hover); }
   /* Pressed takes the shared pressed plate, one step firmer (audit G-18). Read through the row, as
      the hover is, or the row's hover outranks it and the press never shows. */
   .area-prompt-suggestions__row > .area-prompt-suggestions__item:active { background-color: var(--area-bg-component-pressed); }
@@ -63,6 +62,7 @@
   @media (hover: hover) { .area-prompt-suggestions__row:hover > .area-prompt-suggestions__item { transition-duration: var(--area-hover-in); } }
   .area-prompt-suggestions__item:active { transition-duration: var(--area-press-in); }
   .area-prompt-suggestions__item:focus-visible { transition-duration: 0s; }
+  /* One indicator per row (plan A6.2): the inset ring alone, as Nav; the plate is hover's. */
   .area-prompt-suggestions__item:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: calc(var(--area-focus-width) * -1); }
   /* The icon sits in a control-sized square 8 in, so its centre lines up with the composer's
    * leading action above (both 24 from the edge). */
@@ -85,13 +85,15 @@
     inset-inline-end: var(--area-space-8);
     display: flex;
     align-items: center;
-    opacity: 0;
+  }
+  /* Hidden only where there is hover (plan B7.11): a touch screen always shows the dismiss. */
+  @media (hover: hover) {
+    .area-prompt-suggestions__dismiss { opacity: 0; }
+    .area-prompt-suggestions__row:hover > .area-prompt-suggestions__dismiss { opacity: 1; }
   }
   .area-prompt-suggestions__row:focus-within > .area-prompt-suggestions__dismiss { opacity: 1; }
-  @media (hover: hover) { .area-prompt-suggestions__row:hover > .area-prompt-suggestions__dismiss { opacity: 1; } }
   /* The row under it already shows the hover plate, so the dismiss hovers one step firmer. */
   .area-prompt-suggestions__dismiss .area-button { --_bg-hover: var(--area-bg-component-active); }
-  @media (hover: none) { .area-prompt-suggestions__dismiss { opacity: 1; } }
 
   /* --- Layouts ------------------------------------------------------------ */
   /* spec (spacing pass): list rows are 2 apart, Menu's rule, so neighbouring hover plates never touch. */
@@ -104,7 +106,7 @@
   /* Reveal-on-hover (audit F-38) follows the hover recipe (docs/MOTION.md): the dismiss appears with
      the row's plate, at once, and fades out over duration-fast, ease-out. Was a fade both ways,
      which showed the plate 100ms before its dismiss. */
-  .area-prompt-suggestions__dismiss { transition: opacity var(--area-fade-fast) var(--area-ease-out); }
+  .area-prompt-suggestions__dismiss { transition: opacity var(--area-fade-fast) var(--area-ease-effects); }
   .area-prompt-suggestions__row:focus-within > .area-prompt-suggestions__dismiss { transition-duration: 0s; }
   @media (hover: hover) { .area-prompt-suggestions__row:hover > .area-prompt-suggestions__dismiss { transition-duration: var(--area-hover-in); } }
 }

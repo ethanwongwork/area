@@ -132,3 +132,26 @@ concentric; at the default that is 4, Button's own corner at 20 (owner: "follow 
 - **Not measured here:** the reference's 120 tile is not used (see Decisions, kinds' size); the reference's pending
   skeleton is Area's `uploading` ring, the family word Governance lists for that activity.
 - **Verdict:** awaiting the owner.
+
+### 2026-11-11 · Ink, dark and colour (system plan, Phase 1)
+
+- **What changed:** The failure mark reads `fg-danger-mark` (plan A3.4, finding T10): a tone glyph takes the mark ink, a step brighter in light than the words' ink.
+- **Why:** docs/research/system-evaluation-2026-11-11 (README §5); the owner took every recommendation on 2026-11-11.
+- **Verdict:** awaiting the owner.
+
+## Corner and the frame recipe (plan B1.1 hand-over), 2026-11-14
+
+Attachment keeps its own corner: in a Composer, the Composer's action corner (every button's there, owner round 52:
+"follow the corner radius of buttons"); standing alone, the medium control's. The frame recipe's *nested* role floors at
+the row corner rather than the control corner, so it differs from a button's beside it in the Composer at some types;
+the attachment stands with the buttons it sits beside, so it stays on theirs.
+
+### 2026-11-14 · Shared parts, leftovers (system plan, Phase 2, wave 3)
+
+- The quote's rule-to-text gap is `ui-cluster` (6 / 8 / 10). Values at type 13 Compact / Default / Comfortable; unchanged at the default. Listed, not moved: the head's icon-to-name gap 6 (the row role, `ui-cluster`, is 8 at the default).
+- Why: docs/research/system-evaluation-2026-11-11 (plan B6.1, B6.5, B8.2, B2.2; README §5, phase2/leftovers.md); the owner took every recommendation on 2026-11-11. Fix the rule, not the instance.
+- Verdict: awaiting the owner.
+
+## State paint (plan B7.11), 2026-11-14
+
+- The remove hides only inside `@media (hover: hover)`; the `(hover: none)` rule is gone.

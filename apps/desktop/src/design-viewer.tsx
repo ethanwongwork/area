@@ -29,7 +29,8 @@
  * page scrolls down through it), ⇧1 and ⇧2.
  */
 import { useEffect, useLayoutEffect, useRef, useState, type PointerEvent as ReactPointerEvent, type ReactNode } from "react";
-import { Button, MenuItem, ZoomControl } from "@area/react";
+import { MenuItem, ZoomControl } from "@area/react";
+import { ChromeButton } from "./studio.tsx";
 import { ArrowLeftIcon, ChevronLeftIcon, ChevronRightIcon, MoonIcon, SunIcon, SunMoonIcon } from "@area/icons";
 import { useViewOption, ViewFilter } from "./view-controls.tsx";
 import { leaveFrom, morph, takeMorph } from "./morph.ts";
@@ -49,6 +50,8 @@ const STOPS = [0.1, 0.25, 0.33, 0.5, 0.75, 1, 1.5, 2, 3, 4, 8, 16, 32, 64];
 /** From this zoom a pixel grid shows over a design that asks for one (Figma's 800%). */
 const PIXEL_GRID = 8;
 /** What a key or a click must not take from a field or an open menu. */
+/** A focused control keeps its own keys (Space and Enter press it, arrows move within its group, Tab leaves it). */
+const CONTROL = "button, a[href], summary, [role=tab], [role=button], [role=menuitem], [role=option], [role=treeitem], [role=radio], [role=switch], [role=checkbox]";
 const TYPING = "input, textarea, select, [contenteditable], [role=combobox], [role=listbox], [role=menu], [role=slider]";
 
 export interface DesignViewerOptions {
@@ -231,6 +234,8 @@ export function useDesignViewer(options: DesignViewerOptions): DesignViewer {
       if (event.defaultPrevented || target?.closest?.(TYPING) || document.querySelector(":popover-open, dialog[open]")) return;
       if (event.metaKey || event.ctrlKey || event.altKey) return;
       const { zoomBy: by, setZoom: to, step: move, fitBy: fit } = latest.current;
+      // Space and the arrows belong to a focused control first: Space presses a button, arrows move along tabs or a tree.
+      if ((event.code === "Space" || event.key.startsWith("Arrow")) && target?.closest?.(CONTROL)) return;
       if (event.code === "Space") { event.preventDefault(); if (!spaceHeld.current) { spaceHeld.current = true; setPanning(now => now ?? "ready"); } return; }
       if (event.shiftKey && event.code === "Digit0") { event.preventDefault(); to(1); }
       else if (event.shiftKey && event.code === "Digit1") { event.preventDefault(); if (scroll === "page") fit("fit"); else to(null); }
@@ -273,7 +278,7 @@ export function useDesignViewer(options: DesignViewerOptions): DesignViewer {
   const swatch = (value: Ground) => <span className="studio-viewer__swatch" data-ground={value} aria-hidden="true" />;
   const lead = (
     <>
-      {back ? <Button variant="ghost" tone="neutral" size="sm" iconOnly icon={<ArrowLeftIcon />} aria-label={back.label} onClick={goBack} /> : null}
+      {back ? <ChromeButton label={back.label} icon={<ArrowLeftIcon />} onClick={() => goBack?.()} /> : null}
       {themed ? <ViewFilter label="Mode" align="start" value={mode} onChange={setMode}
         options={[{ value: "light", label: "Light", icon: <SunIcon /> }, { value: "dark", label: "Dark", icon: <MoonIcon /> }, { value: "both", label: "Light and dark", icon: <SunMoonIcon /> }]} /> : null}
       <ViewFilter label="Background" align="start" value={ground} onChange={setGround}
@@ -284,8 +289,8 @@ export function useDesignViewer(options: DesignViewerOptions): DesignViewer {
     <>
       {step && step.count > 1 ? <>
         <span className="studio-viewer__place">{step.index + 1} of {step.count}</span>
-        <Button variant="ghost" tone="neutral" size="sm" iconOnly icon={<ChevronLeftIcon />} aria-label={`Previous ${step.noun}`} onClick={() => step.onStep(-1)} />
-        <Button variant="ghost" tone="neutral" size="sm" iconOnly icon={<ChevronRightIcon />} aria-label={`Next ${step.noun}`} onClick={() => step.onStep(1)} />
+        <ChromeButton label={`Previous ${step.noun}`} icon={<ChevronLeftIcon />} onClick={() => step.onStep(-1)} />
+        <ChromeButton label={`Next ${step.noun}`} icon={<ChevronRightIcon />} onClick={() => step.onStep(1)} />
       </> : null}
       <ZoomControl stepper size="sm" aria-label="Zoom" value={scale} min={MIN} max={max} presets={[0.5, 1, 2].filter(stop => stop <= max)} stops={stops}
         shortcuts={{ zoomIn: "+", zoomOut: "−", zoomToFit: "⇧1", presets: { 1: "⇧0" } }}

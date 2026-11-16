@@ -173,3 +173,25 @@ Grid options press at `bg-component-pressed`, one step past selected (Notion pre
   is listed as a camelCase deviation (Governance § 4), and a `value` whose type follows a mode would loosen every
   single-select caller's types and the grids' props. GOVERNANCE.md § 4 now names `multiple` / `values` as the rule.
 - **Verdict:** awaiting the owner.
+- 2026-11-11 · system evaluation A2.1 · rows in a floating list take their height's corner (radius-list-row capped by radius-row, and radius-step is the real medium control's corner): rows 10 → 8 and the list 14 → 12 at the default Corner 10, the corner of a Nav row and a medium Button of the same 30. emit/base.ts; radius.test.ts.
+- 2026-11-11 · system evaluation B2.3 (owner) · options are Menu rows: icon-to-label gap `ui-cluster` (8, Compact 6), labels at 32 / 30.
+
+## Review note, 2026-11-11 (focus and targets, plan A6, A11.2)
+
+- **What changed:** Forced colours: a grid's selected item takes the system selection pair (A6.4, S18).
+- **Why:** the system evaluation's focus, forced colours and hit target items (docs/research/system-evaluation-2026-11-11, section 5), owner-approved 2026-11-11; the rules are in DESIGN_SYSTEM.md ("The focus ring", "Targets") and CONTRAST.md (Focus).
+
+## Review note, 2026-11-11 (motion, plan A5)
+
+- **What changed:** items, list and grid, rows land and leave at once, under the pointer and the keys alike: no transition on a row (A5.3; they faded in over `hover-in` and out over `fast`).
+- **Why:** the system evaluation's motion items (docs/research/system-evaluation-2026-11-11, section 5, A5), owner-approved
+  2026-11-11; the rules are in docs/MOTION.md (Tokens, Roles, Recipes) and kept by cohesion.test.mjs and
+  tests/behaviour/suites/motion.test.mjs. The motion tables above are history; these values are current.
+
+## Shared parts (plan B2), 2026-11-13
+
+- **Row table (B2.1).** Options are Menu rows: text-only options and section headings start on the glyph edge (8, was 10), icons muted.
+
+## Selection paint (plan B7.6), 2026-11-14
+
+- The grid keeps the selected plate (a grid of glyphs or words, the selected-edge rule's other half); File grid draws the edge.

@@ -63,7 +63,7 @@ editor inspector (Dev Mode, where code is shown, was not opened).
 ## Anatomy
 
 ```
-area   div.area-code-block  `stroke-width` `border-card` edge, corner concentric with the header's copy (11; sm 10, compact 9),
+area   div.area-code-block  `stroke-width` `border-card` edge, the chat card's corner (16 at the default, plan B1.3),
                             bg-code (white), overflow hidden
   header   min 32 (36 with the 28 copy), padding 4/12 (compact 4/8), gap `ui-cluster` (8, compact 6),
            no rule under it (2026-10-25); UI type
@@ -107,7 +107,7 @@ ground; batch 22 moved syntax to the 500 rungs, see Decisions). Tabs (`area--lan
 | block inset | 12, compact 8 (`code.css:163`) | Owner (prior: Area tokens, not Geist's 16) | — |
 | gutter | 32 (`code.css:166`) | Owner (prior) | — |
 | unnumbered · text inset | **12 start**, compact 8 (`code.css:288-291`) | Third pass: code starts where the header's filename and the numbers do | Was 0: hidden numbers left the code at the block's edge. Diff lines keep their marker column (`code.css:293-297`) |
-| shell radius / edge / ground | **the copy's corner + its inset + the border: 6 + 4 + 1 = 11** at both densities, times `radius-concentric` (square at Sharp), as the small size (owner, 2026-10-22: "the corner inset here is incorrect"; was `radius-container` 12 since radius audit D1, a corner 1 rounder than concentric with the copy). References put the corner on their inner controls: GitHub Docs (Primer) 6 with no header, Vercel Geist 8 around a 28 / radius 6 copy button, shadcn docs 18 around 28 / radius 8 buttons 8 in, ChatGPT 24 around 36 round buttons 7 in (measured 2026-10-02, computed style). Was Card md's 24 (audit G-27 A), which only fits ChatGPT's larger header; Card's edge, `border-card` (O5, 2026-10-12; was `light-dark(neutral-100, neutral-750)` #ee) (`code.css:210`), `bg-code`: the page white in light (dark: neutral 800) | Peers: Card media, Panel, Alert; owner 2026-09-28 (lighter ground, more vibrant syntax); audit S7a (owner 2026-09-30): a block standing alone takes Card's edge | Ground was #fafafa (neutral 25); edge was `border-decorative` #f3 |
+| shell radius / edge / ground | **the chat card's corner** (`surface.css`, plan B1.3, 2026-11-13): 16 at the default, the transcript's one card corner with Plan, Queue, Edit summary, Approval and the Composer; the copy keeps its own corner. Was the copy's corner + its inset + the border, 6 + 4 + 1 = 11 (owner, 2026-10-22), measured 13 beside Plan's 16 and the Composer's 19 (VS1). Card's edge, `border-card`, `bg-code`: the page white in light (dark: neutral 800) | Peers: the chat cards; audit S7a (owner 2026-09-30): a block standing alone takes Card's edge | Ground was #fafafa (neutral 25); edge was `border-decorative` #f3 |
 | header | min `control-md` 32, padding 4/12, compact 4/8 (`code.css:31-42`); the trailing action ends 4 from the edge (`code.css:46-48`) | Toolbar rhythm; equal insets (owner 2026-10-01) | — |
 | shell · stroke width | **`stroke-width`** (since the 2026-10-12 consistency pass): a standalone block with no shadow keeps its frame under Elevated, as Table and Composer; the small size's corner counts the same width | Strokes (DESIGN_SYSTEM.md) | Was `border-width` |
 | rules (flush top, toggle; the header's until 2026-10-25) | **`border-decorative`**, the block's own edge (owner, 2026-09-27: a divider is never darker than its container); was `border-divider` #e2e2e2 (`code.css:39, 230, 499`); since audit S7a they sit one step lighter than the #ee edge | Second pass: rules take the divider role; Figma #e6, ChatGPT #e6; Notion's rules are lighter, 7% (#f0) (`card/figma--file-card` footer rule) | Was `border-decorative` #f3f3f3; the shell edge stays decorative (a container seam) |
@@ -144,7 +144,7 @@ figma  div.codeWell         287 wide, 1px rgba(0,0,0,.1) ring (box-shadow), radi
 | header | 3 + Button sm (28) + 3 = 34 (+1 rule; compact 2 + 24 + 2), 12/16 UI, sides on the code column (8) | Figma's 32 heading row, 11/16 | the copy sits as far in as the floating one, so one corner serves both (owner, round 11) |
 | floating copy | centred on line 1: 8 + (18 − 28) / 2 = 3 from the top and the end; line 1 clears 3 + 28 + 8 | md's rule | — |
 | toggle | `control-sm` (28), 12/16 | md's toggle at the sm tier | — |
-| shell corner | the copy's radius + its inset + the border: 6 + 3 + 1 = **10** (compact 6 + 2 + 1 = 9); edge and ground as md | owner, round 11 ("inset corner radius for the copy button is not correct"): concentric with the copy | was `radius-container` 12, which left the copy's 6 corner 4 in under a 12 one |
+| shell corner | md's, the chat card's (16 at the default; plan B1.3); edge and ground as md | plan B1.3 | was the copy's radius + its inset + the border, 10 (compact 9; owner, round 11) |
 
 Area captures (`area--size-sm`, `area--size-sm-titled`) against `box-model/figma-dev--code-block`: code 12/18 in both,
 pre padding 8 / 8, numbers ending 17 from the shell's edge (1 + 28 − 12), code text 29 in (1 + 28; Figma 29), the
@@ -420,3 +420,35 @@ The copy result is said through the shared announcer (`announce` / `useAnnouncem
 
 `marks` takes `deleted` beside `added` (the shared change words (Governance § 4, "Change words"; `CHANGE_STATUSES`, `CHANGE_MARK` in packages/react/src/components/change-status.ts)); `removed` is a deprecated alias that renders `--deleted`. The
 stylesheet keeps `--removed` beside `--deleted`. No visible change.
+
+## Review note, 2026-11-11 (type rules, plan A9)
+
+- **What changed:** `sm` code lines take `text-xs-code-leading`, the small step's line plus 2 on the Type axis (11/16 at type 13 at every density); they were the fixed 18 less 2 per density step, 17 at the default, the system's only odd line (plan A9.9, finding T7). The `sm` header's words move from `text-xs` to `text-sm` (12/16) (plan A9.2). Its underline reads `underline-offset` (plan A9.10).
+- **Why:** the system evaluation's type rules (docs/research/system-evaluation-2026-11-11, section 5, A9), owner-approved
+  2026-11-11; the rules are in DESIGN_SYSTEM.md ("Ink and weight", "Size and shape", "Text pairs") and the type skill.
+
+### 2026-11-11 · Ink, dark and colour (system plan, Phase 1)
+
+- **What changed:** Line numbers read the subtle ink (`fg-subtle`, plan A3.2).
+- **Why:** docs/research/system-evaluation-2026-11-11 (README §5); the owner took every recommendation on 2026-11-11.
+- **Verdict:** awaiting the owner.
+
+### 2026-11-13 · One chat card (system plan, Phase 2, B1.3)
+
+- The corner is the chat card's at both sizes: 16 at the default (was 11 at md and 10 at sm by the source, rendered 13
+  and 11.5; VS1). The header copy keeps its own corner, no longer concentric with the frame's (5 in under 16).
+
+## Shared bars and corners (plan B4), 2026-11-14
+
+- B4.2: the copy (the last action) is a corner control: in the header 5 from the top and the end, its corner 16 − 5 = 11 at md; floating over the first line 9 in, 7; a small block's 3 in, 13. It kept the small control's 6 after the block moved to the chat card's 16 (wave 1). A flush block keeps its own corner.
+- B2.2 leftover: the language tabs' words are the Tabs `__text` part, on the one centring model (their cap sat 0.62 high).
+
+### 2026-11-14 · Shared parts, leftovers (system plan, Phase 2, wave 3)
+
+- The collapsed toggle sits `ui-cluster` above the block's end (6 / 8 / 10). Values at type 13 Compact / Default / Comfortable; unchanged at the default.
+- Why: docs/research/system-evaluation-2026-11-11 (plan B6.1, B6.5, B8.2, B2.2; README §5, phase2/leftovers.md); the owner took every recommendation on 2026-11-11. Fix the rule, not the instance.
+- Verdict: awaiting the owner.
+
+## Selection paint (plan B7.4), 2026-11-14
+
+- Changed lines read `bg-change-added` / `bg-change-deleted`, Diff's firmer plates (were the status surfaces); their inks darken 0.09 (measured 4.27:1 and 4.21:1 at 0.05).

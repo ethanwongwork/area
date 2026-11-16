@@ -91,7 +91,8 @@ export default {
       list: "The tablist: the row (or column) of tabs, with the optional track divider under it. It draws the selected indicator, the underline or the plate, which slides to the tab you choose; the underline lies on the track.",
       tab: "A button with no inline padding, so its label sits on the panel's edge; its indicator spans the whole tab, icon and count included. A plate tab takes a control's inset and corner instead.",
       panel: "The tabpanel for the selected tab; the others are hidden. It is focusable, so Tab reaches a panel with no controls, and shows a ring with room around its content when focused, as a focused tab rings its label.",
-      label: "The tab's text: muted at 400 until selected, then default ink at 500. A hidden strong copy holds the selected width, so the row never moves.",
+      label: "The tab's words and a hidden strong copy that holds the selected width, so the row never moves.",
+      text: "The visible words: muted at 400 until selected, then default ink at 500, their capitals centred on the tab.",
       icon: "An optional leading icon, hidden from assistive tech.",
       unseen: "A small dot after the label in the accent's indicator color, for a tab changed since it was last looked at; read as \"Unseen\".",
     },
@@ -336,7 +337,7 @@ export default {
       header: "Fixed above the rows with a rule under it: a heading (a string is set as a label) or a line about the list.",
       footer: "Fixed below the rows with a rule over it: an action row for the whole list, or a hint.",
       list: "With a header or footer, the rows between them; on an anchored menu it is the Scroll area, so only the rows scroll.",
-      empty: "The row shown when there are no rows, in the muted ink: emptyText, \"No items\" by default.",
+      empty: "The row shown when there are no rows, or nothing matches, in the muted ink: emptyText, \"No items\" by default. Every list built on Menu's rows (Combobox, Command palette, Composer menu, Custom select) shows this one line.",
       loading: "The row shown while the rows load: a small Spinner in the icon column and loadingText. It waits 300 ms first, keeping its place.",
       match: "The typed text inside a filtered row (Command palette, Combobox, Custom select's filter), in the strong weight and the row's own ink.",
     },
@@ -345,7 +346,7 @@ export default {
       disabled: "Dims, ignores the pointer and is skipped by the arrow keys and typeahead; native disabled.",
       highlighted: "The row a field-driven list points at (Combobox, Command palette) while focus stays in the field; it takes the hover plate.",
       selected: "The chosen value in a value picker such as Combobox, on a firmer plate. Menus of commands show a check instead.",
-      inactive: "Drawn as disabled, with no hover or press plate, but the arrows, typeahead and the pointer reach it; choosing it does nothing and leaves the menu open, and its note says why.",
+      inactive: "Dims as a whole: its words in the muted ink its note reads, its glyphs faded, no hover or press plate; the arrows, typeahead and the pointer reach it, choosing it does nothing and leaves the menu open, and its note says why.",
     },
     // Source: Overlays.tsx AnchoredMenu, primitives.tsx Menu and MenuSub.
     keyboard: [
@@ -432,9 +433,9 @@ export default {
     ],
     // Spec: Anatomy, List pass, Footer inset; command-palette.css.
     parts: {
-      root: "The palette surface: the search field, the list and the footer. Inline, it is a search landmark named by aria-label.",
+      root: "The palette surface, a modal's corner with the rows concentric inside it: the search field, the list and the footer; 600 wide, or --area-command-palette-inline-size. Inline, it is a search landmark named by aria-label.",
       modal: "The native modal dialog it opens in, near the top of the page over Dialog's scrim; a click on the scrim closes it.",
-      search: "The search row: the icon and the field.",
+      search: "The search row, the tool bar with its rule under it: the icon and the field.",
       "search-icon": "The leading search glyph, on the rows' icon column.",
       input: "The combobox field. Focus stays here while the arrow keys move the highlight in the list.",
       list: "The listbox of results; it scrolls inside itself and keeps the highlighted row in view.",
@@ -448,7 +449,6 @@ export default {
       step: "Inside a step, the names of the steps taken, muted, before the typed text.",
       body: "The results and the preview pane side by side, while some row has a preview.",
       preview: "The active row's preview beside the results, a region named Preview; it hides when the palette is under 640 wide.",
-      empty: "Shown when nothing matches: emptyText, \"No results\" by default.",
       footer: "Key hints under the list, with no rule above them, or your own footer; footer={false} removes it.",
       hint: "One static hint: a key and what it does (Move, Open, Close, or Back in a step); not a control.",
       keys: "The keycaps of one hint, 2 apart (↑ ↓).",
@@ -569,9 +569,10 @@ export default {
       ["Don't", "Put links, buttons or anything to act on in a Tooltip; it can't be focused."],
       ["Don't", "Hide information people need in a Tooltip: touch never opens it."],
     ],
-    // Manifest: no elements; spec: Anatomy.
+    // Manifest: text; spec: Anatomy.
     parts: {
       root: "The label surface on the side given (top by default), flipped when that side lacks room; arrow adds a small pointer at the trigger.",
+      text: "The words, wrapped by Tooltip, centred on the bubble beside a Kbd; a long one wraps onto more lines.",
     },
     states: {
       instant: "Opened within a moment of another tooltip closing: it shows without the delay or the fade.",
@@ -607,11 +608,11 @@ export default {
     ],
     // Spec: Anatomy, States; source: Toggletip.tsx.
     parts: {
-      root: "The small info or help button: the mark, a hover plate and, while pinned, a firmer one.",
+      root: "The small info or help button: the mark, a hover plate and, pressed or pinned, the pressed plate.",
       surface: "The note: a Tooltip surface that can sit inside a paragraph or a label, holding text and an optional link.",
     },
     states: {
-      expanded: "Pinned open by a press: the button keeps a firmer plate and the note stays until a second press, Escape, a press outside, or focus leaves both.",
+      expanded: "Pinned open by a press: the button holds its pressed plate, as every open trigger, and the note stays until a second press, Escape, a press outside, or focus leaves both.",
     },
     // Source: Overlays.tsx AnchoredToggletip, overlay.ts useHoverIntent; native button.
     keyboard: [
@@ -640,7 +641,8 @@ export default {
       ["Do", "Use open and onOpenChange to open it without a trigger, such as from a menu item."],
       ["Do", "Give it a title, which names it; without one, pass aria-label."],
       ["Do", "Put the actions in footer; they end-align and go full width on a narrow screen."],
-      ["Do", "Let long content scroll in the body, between a fixed header and footer; a rule shows under the header once it has scrolled."],
+      ["Do", "Pair a soft neutral Cancel with a solid action, or a soft danger one for an action that can't be undone."],
+      ["Do", "Let long content scroll in the body, between a fixed header and footer; a rule shows under the header once it has scrolled, and over the footer while there is more below."],
       ["Do", "Pick the size by content: sm for a short form, md (the default) for most, lg for a table or two columns, xl for settings with their own sidebar."],
       ["Do", "Set fullHeight when the content changes as people work in it (tabs, a search, steps), so the dialog doesn't jump."],
       ["Don't", "Turn off the close control on an ordinary dialog. A forced choice without one is Confirm dialog."],
@@ -649,14 +651,14 @@ export default {
     ],
     // Spec: Decisions; surface.css.
     parts: {
-      root: "The surface: one inset around and one gap between sections, its corner concentric with the close; 384, 480, 720 or 880 wide by size, never wider than the screen less 32.",
-      header: "Holds the heading and the close; the title centres on the close's line. Once the body has scrolled, a rule shows under it, edge to edge.",
+      root: "The surface: one inset around and the same or less between sections, the container corner; 384, 480, 720 or 880 wide by size (--area-dialog-inline-size sets the default), never wider than the screen less 32.",
+      header: "Holds the heading and the close; the close centres on the title's cap. Once the body has scrolled, a rule shows under it, edge to edge.",
       heading: "Groups the title and the description.",
       title: "The h2 that names the dialog.",
       description: "Muted text under the title that describes the dialog.",
-      dismiss: "The corner close: a ghost icon Button named by dismissLabel (\"Close dialog\"). It calls onDismiss, then closes the dialog.",
-      body: "Your content. It scrolls when the dialog runs out of room and leaves space for focus rings at its edges.",
-      footer: "The actions, end-aligned with no divider; full width on a narrow screen.",
+      dismiss: "The corner close: a ghost icon Button named by dismissLabel (\"Close dialog\"), its glyph on the inset and its corner the dialog's less its distance from the edge. It calls onDismiss, then closes the dialog.",
+      body: "Your content, in a Scroll area: it scrolls when the dialog runs out of room and leaves space for focus rings at its edges.",
+      footer: "The actions, end-aligned, each text button at least 2.25 times its height; full width on a narrow screen. A rule shows over it only while the body can scroll further.",
       modal: "The native dialog element around the surface, with the scrim behind it; a press that starts and ends on the scrim closes it.",
     },
     states: {

@@ -27,14 +27,20 @@
  *                           reply's heading, a modal title, a document's h1), in proportion to the base, whole pixels,
  *                           each role's leading at its ratio at 13 (owner, 2026-10-19: one ratio from 12 to 16, as Apple's
  *                           Dynamic Type scales every style); they were 15 / 19 / 22 / 30 at 13 until 2026-11-02
+ *   page title (title-xl)   2.5 times the base, 32/40 at 13: a document's own title, the one step between the interface
+ *                           titles and display (2026-11-11, the four product screens)
  *   display                 in proportion to the base, as before: 52 / 67 at 13
  *   prose leading           secondary and UI text that runs past two lines (a description, documentation): the first
  *                           value on the 2px leading ramp at or above 1.5 × the size, WCAG 1.4.8's line spacing (owner,
  *                           2026-10-30; docs/research/vertical-rhythm-2026-10-30): 12/18, 13/20, 14/22, 15/24, 16/24.
  *                           Its paragraph gap is about two-thirds of that line on the spacing ramp: 12, 16 or 20.
  *                           UI text keeps LEADING; reading text's prose line is its own line (above)
- *   tracking                small text loosens a hair (Geist is drawn for 0 at UI sizes and has no
- *                           optical-size axis): 10 +0.01em, 11 +0.0075, 12 +0.005, 13 +0.0025
+ *   tracking                none on the body steps (plan A9.10, 2026-11-11: no tracking below 14; the 0.03 to 0.08px it
+ *                           added at 10 to 13 was invisible and applied by few rules); titles and display tighten by
+ *                           their own token
+ *   code leading            code text's own line, the small step's line plus 2 (11/16 at 13: Code block sm, Diff), on
+ *                           the Type axis and never moved by density (plan A9.9)
+ *   underline offset        one offset under the text for every underline (Link, Mention, Chip, Code), 0.08em
  *   icon stroke             follows the text stem, 1.125px at 14
  *   check box / toggle      4 inside the UI line (never under 14); a toggle 4 taller than that
  *   icons                   the 16 slot, the 20 slot from 15 (owner, 2026-10-29: at 15 a 16 icon read 1.06× the cap
@@ -54,8 +60,8 @@ export type TypeSize = (typeof TYPE_SIZES)[number];
 
 /** Leading for each size: the default's ratio, on the 2px leading ramp. */
 export const LEADING: Record<number, number> = { 10: 14, 11: 14, 12: 16, 13: 18, 14: 20, 15: 22, 16: 24, 17: 26, 18: 28 };
-const TRACKING: Record<number, string> = { 10: "0.01em", 11: "0.0075em", 12: "0.005em", 13: "0.0025em" };
-const tracking = (size: number) => TRACKING[size] ?? "0em";
+/** Body text carries no tracking at any size (plan A9.10): below 14 Geist is drawn for 0, and 14 to 18 too. */
+const tracking = (_size: number) => "0em";
 const size = (px: number) => `var(--area-size-${px})`;
 const leading = (px: number) => `var(--area-leading-${LEADING[px]})`;
 /** Prose leading for a size: the first 2px step at or above 1.5 × the size (WCAG 1.4.8). */
@@ -84,15 +90,23 @@ export function typeSizeTokens(base: TypeSize): Record<string, string> {
     return [px, Math.round((px * leadingAt13) / at13 / 2) * 2] as const;
   };
   const titleXs = scaled13(16, 22), titleSm = scaled13(18, 24), titleMd = scaled13(20, 28), titleLg = scaled13(26, 30);
+  // A page's own title: 2.5 times the base, the ratio a document workspace draws its title at over its text (40 over 16),
+  // so 32/40 at 13. The step between the largest interface title (26) and display (52).
+  // On the size ramp's own steps (it has no 39), so 16 takes 40: 30/38, 32/40, 34/42, 37/46, 40/48.
+  const titleXl = ({ 12: [30, 38], 13: [32, 40], 14: [34, 42], 15: [37, 46], 16: [40, 48] } as const)[base];
   const display = { sm: scaled(56, 56), lg: scaled(72, 72) };
   return {
     ...GEIST_TOKENS,
+    // One offset under the text for every underline (Link, Mention, Chip, Code, Badge plain, Description list's more).
+    "underline-offset": "0.08em",
     "weight-icon": `${Number((1.125 * base / 14).toFixed(3))}px`,
     "text-xs-size": size(small), "text-xs-leading": leading(small), "text-xs-tracking": tracking(small),
     "text-base-size": size(base), "text-base-leading": leading(base), "text-base-tracking": tracking(base),
     "text-sm-size": size(secondary), "text-sm-leading": leading(secondary), "text-sm-tracking": tracking(secondary),
     // Reading text keeps one line, running or not: the UI ratio's (Claude's prose, 15/22 at 13).
     "text-lg-size": size(reading), "text-lg-leading": leading(reading), "text-lg-tracking": tracking(reading),
+    // Code text's line: the small step's line plus 2, 11/16 at 13 (plan A9.9). Text, not room, so density never moves it.
+    "text-xs-code-leading": `var(--area-leading-${LEADING[small]! + 2})`,
     "text-sm-prose-leading": `var(--area-leading-${proseLeading(secondary)})`,
     "text-base-prose-leading": `var(--area-leading-${proseLeading(base)})`, "text-base-prose-gap": `var(--area-space-${proseGap(base)})`,
     "text-lg-prose-leading": leading(reading), "text-lg-prose-gap": `var(--area-space-${proseGap(reading, LEADING[reading])})`,
@@ -100,6 +114,7 @@ export function typeSizeTokens(base: TypeSize): Record<string, string> {
     "title-sm-size": size(titleSm[0]), "title-sm-leading": `var(--area-leading-${titleSm[1]})`, "title-sm-tracking": "-0.01em",
     "title-md-size": size(titleMd[0]), "title-md-leading": `var(--area-leading-${titleMd[1]})`, "title-md-tracking": "-0.015em",
     "title-lg-size": size(titleLg[0]), "title-lg-leading": `var(--area-leading-${titleLg[1]})`, "title-lg-tracking": "-0.02em",
+    "title-xl-size": size(titleXl[0]), "title-xl-leading": `var(--area-leading-${titleXl[1]})`, "title-xl-tracking": "-0.025em",
     "display-sm-size": size(display.sm[0]!), "display-sm-leading": `var(--area-leading-${display.sm[1]})`, "display-sm-tracking": "-0.03em",
     "display-lg-size": size(display.lg[0]!), "display-lg-leading": `var(--area-leading-${display.lg[1]})`, "display-lg-tracking": "-0.03em",
     // The raw numbers emit/base.ts derives heights, marks and spacing from.
@@ -125,7 +140,7 @@ export const TYPE_AXIS: AxisDefinition = {
   label: "Type size",
   description: "The base interface text size, 12 to 16; every type role, mark and icon follows it.",
   defaultPreset: "13",
-  namespaces: ["--area-font-", "--area-text-", "--area-title-", "--area-display-", "--area-weight-", "--area-type-"],
+  namespaces: ["--area-font-", "--area-text-", "--area-title-", "--area-display-", "--area-weight-strong:", "--area-weight-heading:", "--area-weight-icon:", "--area-type-", "--area-underline-offset:"],
   presets: TYPE_SIZES.map(base => ({
     id: String(base),
     label: String(base),

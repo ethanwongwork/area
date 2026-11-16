@@ -262,3 +262,17 @@ Code block line numbers and toggle, Description list's "Show more", and the app'
 ### 2026-11-07 · Every hue's roles (components audit D5)
 
 The hued inks read the hue role table (`--area-hue-<hue>-<role>`, packages/tokens/src/semantic/hues.ts; DESIGN_SYSTEM.md, "Every hue has the same roles") (`hue-<hue>-text`), the same tone inks by name: no value changed.
+
+### 2026-11-10 · A button form (app audit)
+
+- **What changed:** `Link as="button"` renders a native `<button type="button">` with the link's classes, variant and ink. `external` and `newTabLabel` stay the anchor's. `.area-link` now clears a control's own box, type and alignment (`appearance`, `margin`, `padding`, `border`, `background`, `font`, `letter-spacing`, `text-align`), which changes nothing on an anchor, and `.area-link:disabled` takes the disabled ink with no underline.
+- **Why:** the app had six hand-built underlined buttons for places with no address (the rest of a family's tiles, a flow check's step, Setup's "Start from the defaults"), each with its own hover and focus ring. One of them was Link's standalone variant rewritten in app CSS. A link without an `href` is not focusable, and a made-up `href="#"` claims an address that does not exist, so the honest element is a button.
+- **Boundary kept:** a Link still goes somewhere or shows more; an action that changes something is a Button. No new variant, size or value: the form is the element only.
+- **Used by:** Components overview (family title, Show all), the flow checks, Setup's notes. Left hand-built: the token reference (a Code chip, not link-shaped) and Setup's answer row (a mark beside its text).
+- **Verification:** packages/react/tests/link.test.mjs (the button's markup, `type` always `button`, native props); seen in the app's Components overview and a flow's checks, light and dark.
+
+## Review note, 2026-11-11 (type rules, plan A9)
+
+- **What changed:** the underline reads `underline-offset` (0.08em), one token for every underline (plan A9.10); no visible change.
+- **Why:** the system evaluation's type rules (docs/research/system-evaluation-2026-11-11, section 5, A9), owner-approved
+  2026-11-11; the rules are in DESIGN_SYSTEM.md ("Ink and weight", "Size and shape", "Text pairs") and the type skill.

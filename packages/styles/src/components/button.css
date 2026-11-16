@@ -46,10 +46,18 @@
     --_surface: var(--area-bg-component);
     --_surface-hover: var(--area-bg-component-hover);
     --_surface-active: var(--area-bg-component-active);
+    /* A selected toggle's press (plan B7.2): the neutral pressed plate, one press room past the selected plate on every
+       ground (layers.css, "Pressed"). A tone has three tints, the selected one its firmest, and a wash past it took the
+       tone's words under 4.5:1 (4.10 in light), so a tone presses back to its hover tint, whose words are asserted. */
+    --_surface-pressed: var(--area-bg-component-pressed);
     --_line: var(--area-edge-control);
     --_line-hover: var(--area-edge-control-hover);
     --_tone-fg: var(--area-fg-default);
     --_on-solid: var(--area-fg-on-action);
+    /* 1 for a tone with a hue (every tone but neutral); a variant reads it as --_toned, which a neutral solid takes from
+       the Action setting, the accent when Action is Accent. Disabled reads it (below, plan B7.9). */
+    --_tone-hue: 0;
+    --_toned: var(--_tone-hue);
 
     /* Skin: what a variant resolves the tone into. */
     --_bg: transparent;
@@ -62,6 +70,9 @@
     /* An optional translucent layer over the fill on hover and press (neutral soft). */
     --_wash-hover: none;
     --_wash-active: none;
+    /* What a toned button is painted in when disabled: the variant's own neutral fill and edge (below). */
+    --_bg-off: var(--_bg);
+    --_border-off: var(--_border);
 
     display: inline-flex;
     align-items: center;
@@ -80,7 +91,7 @@
     /* Pill when the theme lists `button` in data-area-pills or the instance sets pill; `--rounded`
        forces the radius corner (axes/pills.ts). */
     --_button-pill: var(--area-pill-button);
-    --_shape: calc(min(var(--_radius), max(var(--area-radius-min), round(down, calc(var(--_height) * var(--area-radius-factor)), 2px))) + var(--_button-pill) * var(--area-radius-full));
+    --_shape: max(min(var(--_radius), max(var(--area-radius-min), round(down, calc(var(--_height) * var(--area-radius-factor)), 2px))), var(--_button-pill) * var(--area-radius-full)); /* a pill is radius-full, one value */
     border-radius: var(--_shape);
     /* Published under names a nested Kbd cannot shadow, so its corner can be concentric. */
     --_button-shape: var(--_shape);
@@ -160,10 +171,17 @@
   .area-button--lg { --_give: var(--area-feedback-scale-lg); }
   .area-button--full-width { --_give: var(--area-feedback-scale-wide); }
   .area-button:active:not(:disabled, [data-disabled], [data-loading], [data-inactive], :focus-visible, [aria-haspopup]) { scale: var(--_give); }
+  /* The plate gives, the label does not (plan A5.6, owner 2026-11-11; docs/MOTION.md, "Press"): the button's paint (fill,
+     edge, shadow) is its own box, so the box gives and its content takes the inverse scale on the same clocks, keeping
+     the label and icons at their size and on their pixels while the plate settles under them. Until 2026-11-11 the
+     whole control, label included, scaled to the give. */
+  :where(.area-button) > * { transition: scale var(--area-duration-fast) var(--area-ease-out); }
+  .area-button:active:not(:disabled, [data-disabled], [data-loading], [data-inactive], :focus-visible, [aria-haspopup]) > * { scale: calc(1 / var(--_give)); transition-duration: var(--area-press-in); }
 
-  /* A menu trigger keeps the pressed plate while its menu is open, as Model picker did alone
-     (audit G-12). A selected toggle keeps its own fill. */
-  .area-button[aria-haspopup="menu"][aria-expanded="true"]:not([data-selected]) {
+  /* Open (plan B7.1; DESIGN_SYSTEM.md, "Shared state paint", "Open"): a trigger whose popup shows (a menu, a popover, a
+     dialog, a list: any aria-haspopup) holds its pressed paint until it closes, so the press that opened it stays on the
+     control it came from; a selected toggle holds its own press (below). Until 2026-11-14 only a menu trigger did. */
+  .area-button[aria-expanded="true"]:is([aria-haspopup]:not([aria-haspopup="false"])):not(:disabled, [data-disabled], [data-loading], [data-inactive]) {
     background-color: var(--_bg-active);
     background-image: var(--_wash-active);
   }
@@ -186,26 +204,46 @@
     outline: var(--area-focus-width) solid var(--area-focus-color);
     outline-offset: var(--area-focus-offset);
   }
-
-  .area-button:disabled,
-  .area-button[data-disabled] {
-    cursor: not-allowed;
-    opacity: var(--area-opacity-disabled);
+  /* A solid fill never takes the ring flush on its edge (plan A6.1, CONTRAST.md): at the shipped Selection the ring is
+     the fill's own colour. It stands off by the gap, or under Inset runs inside one pixel in, in the label's ink. */
+  .area-button--solid:focus-visible {
+    outline-color: color-mix(in srgb, var(--area-focus-color), var(--_on-solid) calc(var(--area-focus-solid-inside) * 100%));
+    outline-offset: var(--area-focus-solid-offset);
   }
 
   /*
-   * Inactive (components audit V2, 2026-11-07): drawn as disabled, at the disabled opacity, but it keeps focus, so its
-   * focus ring must stay at full strength, and an opacity on the button would fade its outline too. The fill and edge are
-   * mixed toward transparent by the same amount instead, and the parts inside take the opacity: the same picture as
-   * disabled, with a ring that still clears 3:1. No hover or press paint, as disabled.
+   * Disabled, one way by tone (plan B7.8, B7.9; DESIGN_SYSTEM.md, "Disabled and read-only"). A neutral button dims to
+   * the disabled opacity as a whole, as every control does. A toned one (an accent or status hue, and a neutral solid
+   * when Action is Accent) would only dim to a lighter brand or danger button that still reads available, so it repaints
+   * instead: its fill to the variant's neutral fill (the soft fill on solid and soft, the surface on outline, none on
+   * ghost), its edge to the neutral one, its ink to fg-disabled, at full opacity. `--_toned` is 0 or 1, so one rule
+   * holds both: --_dim is the opacity (1 when toned), --_off-bg / --_off-border the paint.
+   */
+  .area-button:is(:disabled, [data-disabled], [data-inactive]) {
+    --_dim: calc(1 - (1 - var(--area-opacity-disabled)) * (1 - var(--_toned)));
+    --_off-bg: color-mix(in srgb, var(--_bg), var(--_bg-off) calc(var(--_toned) * 100%));
+    --_off-border: color-mix(in srgb, var(--_border), var(--_border-off) calc(var(--_toned) * 100%));
+    cursor: not-allowed;
+    background-image: none;
+    color: color-mix(in srgb, var(--_fg), var(--area-fg-disabled) calc(var(--_toned) * 100%));
+  }
+  .area-button:is(:disabled, [data-disabled]) {
+    opacity: var(--_dim);
+    background-color: var(--_off-bg);
+    border-color: var(--_off-border);
+  }
+
+  /*
+   * Inactive (components audit V2, 2026-11-07): drawn as disabled, but it keeps focus, so its focus ring must stay at
+   * full strength, and an opacity on the button would fade its outline too. The fill and edge are mixed toward
+   * transparent by the disabled opacity instead, and the parts inside take it: the same picture as disabled, with a ring
+   * that still clears 3:1. A toned one repaints as disabled does. No hover or press paint, as disabled.
    */
   .area-button[data-inactive] {
-    cursor: not-allowed;
-    background-color: color-mix(in srgb, var(--_bg) calc(var(--area-opacity-disabled) * 100%), transparent);
-    background-image: none;
-    border-color: color-mix(in srgb, var(--_border) calc(var(--area-opacity-disabled) * 100%), transparent);
+    background-color: color-mix(in srgb, var(--_off-bg) calc(var(--_dim) * 100%), transparent);
+    border-color: color-mix(in srgb, var(--_off-border) calc(var(--_dim) * 100%), transparent);
   }
-  .area-button[data-inactive] > * { opacity: var(--area-opacity-disabled); }
+  .area-button[data-inactive] > * { opacity: var(--_dim); }
 
   /* Loading stays at full ink and keeps focus (audit S18): it is aria-disabled, not :disabled. */
   .area-button[data-loading] {
@@ -253,6 +291,7 @@
     --_surface: var(--area-bg-component);
     --_surface-hover: var(--area-bg-component-hover);
     --_surface-active: var(--area-bg-component-active);
+    --_surface-pressed: var(--area-bg-component-pressed);
     /*
      * A step lighter than the control border, at rest and on hover alike.
      *
@@ -265,6 +304,7 @@
     --_line-hover: var(--area-edge-control-hover);
     --_tone-fg: var(--area-fg-default);
     --_on-solid: var(--area-fg-on-action);
+    --_tone-hue: 0;
   }
 
   /* Fixed blue. Informational, never the primary action. */
@@ -275,10 +315,12 @@
     --_surface: var(--area-info-surface);
     --_surface-hover: var(--area-info-surface-hover);
     --_surface-active: var(--area-info-surface-active);
+    --_surface-pressed: var(--_surface-hover); /* an on toggle's press: its tint a step back (plan B7.2) */
     --_line: var(--area-info-border);
     --_line-hover: var(--area-info-border-strong);
     --_tone-fg: var(--area-fg-info);
     --_on-solid: var(--area-fg-on-info);
+    --_tone-hue: 1;
   }
 
   .area-button--success {
@@ -288,10 +330,12 @@
     --_surface: var(--area-success-surface);
     --_surface-hover: var(--area-success-surface-hover);
     --_surface-active: var(--area-success-surface-active);
+    --_surface-pressed: var(--_surface-hover); /* an on toggle's press: its tint a step back (plan B7.2) */
     --_line: var(--area-success-border);
     --_line-hover: var(--area-success-border-strong);
     --_tone-fg: var(--area-fg-success);
     --_on-solid: var(--area-fg-on-success);
+    --_tone-hue: 1;
   }
 
   .area-button--warning {
@@ -301,10 +345,12 @@
     --_surface: var(--area-warning-surface);
     --_surface-hover: var(--area-warning-surface-hover);
     --_surface-active: var(--area-warning-surface-active);
+    --_surface-pressed: var(--_surface-hover); /* an on toggle's press: its tint a step back (plan B7.2) */
     --_line: var(--area-warning-border);
     --_line-hover: var(--area-warning-border-strong);
     --_tone-fg: var(--area-fg-warning);
     --_on-solid: var(--area-fg-on-warning);
+    --_tone-hue: 1;
   }
 
   .area-button--caution {
@@ -314,10 +360,12 @@
     --_surface: var(--area-caution-surface);
     --_surface-hover: var(--area-caution-surface-hover);
     --_surface-active: var(--area-caution-surface-active);
+    --_surface-pressed: var(--_surface-hover); /* an on toggle's press: its tint a step back (plan B7.2) */
     --_line: var(--area-caution-border);
     --_line-hover: var(--area-caution-border-strong);
     --_tone-fg: var(--area-fg-caution);
     --_on-solid: var(--area-fg-on-caution);
+    --_tone-hue: 1;
   }
 
   .area-button--danger {
@@ -327,10 +375,12 @@
     --_surface: var(--area-danger-surface);
     --_surface-hover: var(--area-danger-surface-hover);
     --_surface-active: var(--area-danger-surface-active);
+    --_surface-pressed: var(--_surface-hover); /* an on toggle's press: its tint a step back (plan B7.2) */
     --_line: var(--area-danger-border);
     --_line-hover: var(--area-danger-border-strong);
     --_tone-fg: var(--area-fg-danger);
     --_on-solid: var(--area-fg-on-danger);
+    --_tone-hue: 1;
   }
 
   /* Violet. Marks AI and newly-introduced surfaces. */
@@ -341,10 +391,12 @@
     --_surface: var(--area-discovery-surface);
     --_surface-hover: var(--area-discovery-surface-hover);
     --_surface-active: var(--area-discovery-surface-active);
+    --_surface-pressed: var(--_surface-hover); /* an on toggle's press: its tint a step back (plan B7.2) */
     --_line: var(--area-discovery-border);
     --_line-hover: var(--area-discovery-border-strong);
     --_tone-fg: var(--area-fg-discovery);
     --_on-solid: var(--area-fg-on-discovery);
+    --_tone-hue: 1;
   }
 
   /* --- Variants ------------------------------------------------------------- */
@@ -359,6 +411,8 @@
     --_bg-hover: var(--_solid-hover);
     --_bg-active: var(--_solid-active);
     --_fg: var(--_on-solid);
+    --_toned: max(var(--_tone-hue), var(--area-action-accent));
+    --_bg-off: var(--area-bg-component);
   }
 
   /*
@@ -386,6 +440,8 @@
        Contrast takes it on toward the 3:1 stroke as every edge. Was its fill a step darker, an edge nothing else used. */
     --_border: var(--area-edge-buttons);
     --_border-hover: var(--area-edge-buttons);
+    --_bg-off: var(--area-bg-component);
+    --_border-off: var(--area-edge-buttons);
   }
 
   /*
@@ -412,6 +468,7 @@
     --_fg: var(--_tone-fg);
     --_border: var(--_line);
     --_border-hover: var(--_line-hover);
+    --_border-off: var(--area-edge-control);
   }
 
   .area-button--ghost {
@@ -458,6 +515,7 @@
     --_bg-active: color-mix(in oklab, currentcolor 20%, transparent); /* pick */
     --_border: transparent;
     --_border-hover: transparent;
+    --_toned: 0; /* its ink is its parent's: disabled dims it */
     color: inherit; /* the ink the colour carries, set by its parent; the plates mix from it */
   }
 
@@ -473,15 +531,16 @@
 
   /*
    * A toggle that is currently on. Distinct from hover, and it persists: the selected plate
-   * stays under the pointer and while pressed, as a selected row does (cohesion audit), so
-   * hovering an on toggle never lightens it to the hover step.
+   * stays under the pointer, as a selected row does (cohesion audit), so hovering an on toggle
+   * never lightens it to the hover step. A press on it still shows (plan B7.2, 2026-11-14): the
+   * pressed plate one press room past selected, as every selected row presses; a tone's selected
+   * tint steps back to its hover tint. Until then pressing an on toggle showed nothing (audit A-13).
    */
   .area-button[data-selected] {
     --_bg: var(--_surface-active);
     --_bg-hover: var(--_surface-active);
-    --_bg-active: var(--_surface-active);
+    --_bg-active: var(--_surface-pressed);
     --_wash-hover: none;
-    /* Pressing an on toggle adds no wash either (audit A-13). */
     --_wash-active: none;
     --_fg: var(--_tone-fg);
   }
@@ -491,7 +550,8 @@
   .area-button--solid[data-selected] {
     --_bg: var(--_solid-hover);
     --_bg-hover: var(--_solid-hover);
-    --_bg-active: var(--_solid-hover);
+    --_bg-active: var(--_solid-active); /* a press, one step past the selected fill (plan B7.2) */
+    --_wash-active: none;
     --_fg: var(--_on-solid);
   }
 

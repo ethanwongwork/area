@@ -67,7 +67,8 @@ export const GalleryAlertBannerDismissible = () => {
     ? <Alert layout="banner" title="Title" actions={<Button size="sm">Action</Button>} onDismiss={() => setOpen(false)}>Body text</Alert>
     : <Button size="sm" onClick={() => setOpen(true)}>Show banner</Button>;
 };
-export const GalleryAlertMultiline = () => <Alert layout="multiline" icon={<InfoIcon />} title="Title">Body text that wraps onto a second line</Alert>;
+/* A fixed width, so the body wraps once at the default type (it shrink-wrapped to 100 and broke on every word). */
+export const GalleryAlertMultiline = () => <Alert layout="multiline" icon={<InfoIcon />} title="Title" style={{ inlineSize: "calc(var(--area-space-80) * 4)" }}>Body text that wraps onto a second line under the title, as a longer note does</Alert>;
 export const GalleryAlertDismissible = () => {
   const [visible, setVisible] = useState(true);
   return visible ? <Alert icon={<InfoIcon />} title="Title" onDismiss={() => setVisible(false)}>Body text</Alert> : <Button size="sm" variant="outline" onClick={() => setVisible(true)}>Show alert</Button>;
@@ -81,7 +82,8 @@ export const GalleryAvatarImage = () => <Avatar src="images/david-tee.jpg" fallb
 export const GalleryAvatarImageFallback = () => <Avatar src="images/avatar-missing.png" fallback="D" alt="David Tee" />;
 export const GalleryAvatarTwoInitials = () => <Avatar fallback="DT" alt="David Tee" />;
 export const GalleryAvatarIcon = () => <Avatar icon={<PersonIcon size={20} />} alt="David Tee" />;
-export const GalleryAvatarGroup = () => <AvatarGroup max={3} aria-label="David Tee and 4 teams"><Avatar src="images/david-tee.jpg" fallback="DT" alt="David Tee" /><Avatar shape="square" fallback="D" alt="Design team" /><Avatar shape="square" fallback="R" alt="Research team" /><Avatar shape="square" fallback="P" alt="Platform team" /><Avatar shape="square" fallback="S" alt="Support team" /></AvatarGroup>;
+/* One shape in a stack: circles throughout (it mixed David Tee's circle with square teams, which read as a broken stack). */
+export const GalleryAvatarGroup = () => <AvatarGroup max={3} aria-label="David Tee and 4 teams"><Avatar src="images/david-tee.jpg" fallback="DT" alt="David Tee" /><Avatar fallback="D" alt="Design team" /><Avatar fallback="R" alt="Research team" /><Avatar fallback="P" alt="Platform team" /><Avatar fallback="S" alt="Support team" /></AvatarGroup>;
 export const GalleryAvatarActive = () => <Avatar active fallback="D" alt="David Tee" />;
 export const GalleryAvatarAvailability = () => <IndicatorAnchor inset placement="bottom-end" overlap="circular" indicator={<Indicator status="available" size="sm" />}><Avatar fallback="D" role="img" aria-label="David Tee, available" /></IndicatorAnchor>;
 export const GalleryAvatarNotification = () => <IndicatorAnchor inset placement="top-end" overlap="circular" indicator={<Indicator count={2} />}><Avatar src="images/david-tee.jpg" fallback="D" alt="David Tee, 2 notifications" /></IndicatorAnchor>;
@@ -286,17 +288,19 @@ export const GalleryToolbarOverflow = () => {
   </div>;
 };
 /* floating: the hover action bar (components audit N14). Each row shows its own bar while hovered or holding focus; Tab
-   reaches a hidden bar, which shows as focus enters its row. */
+   reaches a hidden bar, which shows as focus enters its row. The tile shows the first row as it is while hovered (its bar
+   at full opacity) beside a row at rest, so no specimen is invisible (system evaluation F3.3): a bar hidden at rest is
+   what the second row would hold, and a tile never draws one. */
 export const GalleryToolbarFloating = () => (
   <div style={{ inlineSize: "calc(var(--area-space-96) * 3)", display: "grid", gap: "var(--area-space-8)" }}>
-    {["Item one", "Item two"].map(item => (
+    {["Item one", "Item two"].map((item, index) => (
       <div key={item} style={{ minBlockSize: "var(--area-space-40)", padding: "var(--area-space-10) var(--area-space-12)", boxSizing: "border-box",
         border: "var(--area-border-width) solid var(--area-edge-regions)", borderRadius: "var(--area-radius-container)" }}>
         {item}
-        <Toolbar floating size="sm" variant="surface" aria-label={`${item} actions`}>
+        {index === 0 ? <Toolbar floating size="sm" variant="surface" aria-label={`${item} actions`} style={{ opacity: 1 }}>
           <ToolbarItem><Button variant="ghost" icon={<OpenIcon />}>Open</Button></ToolbarItem>
           <ToolbarItem><Button variant="ghost" iconOnly icon={<CopyIcon />} aria-label="Copy" /></ToolbarItem>
-        </Toolbar>
+        </Toolbar> : null}
       </div>
     ))}
   </div>
@@ -541,8 +545,8 @@ export const GalleryCheckboxLeadingVisual = () => <Checkbox label="Label" leadin
    chosen card outlined). One layout per tile. */
 export const GalleryCheckboxCard = () => (
   <CheckboxGroup label="Label" style={{ inlineSize: "320px" }}>
-    <Checkbox variant="card" label="Item one" caption="Description" leadingVisual={<PersonIcon size={20} />} defaultChecked />
-    <Checkbox variant="card" label="Item two" caption="Description" leadingVisual={<DocumentIcon />} />
+    <Checkbox variant="surface" label="Item one" caption="Description" leadingVisual={<PersonIcon size={20} />} defaultChecked />
+    <Checkbox variant="surface" label="Item two" caption="Description" leadingVisual={<DocumentIcon />} />
   </CheckboxGroup>
 );
 export const GalleryCheckboxSoft = () => (
@@ -582,9 +586,9 @@ export const GalleryCheckboxCardMediaRow = () => (
 );
 export const GalleryCheckboxCardPreview = () => (
   <CheckboxGroup label="Label" style={{ inlineSize: "420px" }}>
-    <Checkbox variant="card" layout="preview" label="Option one" defaultChecked />
-    <Checkbox variant="card" layout="preview" label="Option two" />
-    <Checkbox variant="card" layout="preview" label="Option three" />
+    <Checkbox variant="surface" layout="preview" label="Option one" defaultChecked />
+    <Checkbox variant="surface" layout="preview" label="Option two" />
+    <Checkbox variant="surface" layout="preview" label="Option three" />
   </CheckboxGroup>
 );
 export const GalleryCheckboxThumbnail = () => (
@@ -596,18 +600,18 @@ export const GalleryCheckboxThumbnail = () => (
 );
 export const GalleryCheckboxCardTile = () => (
   <CheckboxGroup label="Label" style={{ inlineSize: "520px" }}>
-    <Checkbox variant="card" layout="tile" label="Colors" leadingVisual={<PaletteIcon size={20} />} defaultChecked />
-    <Checkbox variant="card" layout="tile" label="Corners" leadingVisual={<CornerIcon size={20} />} />
-    <Checkbox variant="card" layout="tile" label="Typography" leadingVisual={<TextIcon size={20} />} />
-    <Checkbox variant="card" layout="tile" label="Spacing" leadingVisual={<GridIcon size={20} />} />
-    <Checkbox variant="card" layout="tile" label="Layers" leadingVisual={<LayersIcon size={20} />} defaultChecked />
-    <Checkbox variant="card" layout="tile" label="Theming" leadingVisual={<SunIcon size={20} />} />
+    <Checkbox variant="surface" layout="tile" label="Colors" leadingVisual={<PaletteIcon size={20} />} defaultChecked />
+    <Checkbox variant="surface" layout="tile" label="Corners" leadingVisual={<CornerIcon size={20} />} />
+    <Checkbox variant="surface" layout="tile" label="Typography" leadingVisual={<TextIcon size={20} />} />
+    <Checkbox variant="surface" layout="tile" label="Spacing" leadingVisual={<GridIcon size={20} />} />
+    <Checkbox variant="surface" layout="tile" label="Layers" leadingVisual={<LayersIcon size={20} />} defaultChecked />
+    <Checkbox variant="surface" layout="tile" label="Theming" leadingVisual={<SunIcon size={20} />} />
   </CheckboxGroup>
 );
 export const GalleryCheckboxCardNeutral = () => (
   <SelectionNeutral><CheckboxGroup label="Label" style={{ inlineSize: "320px" }}>
-    <Checkbox variant="card" label="Item one" caption="Description" leadingVisual={<PersonIcon size={20} />} defaultChecked />
-    <Checkbox variant="card" label="Item two" caption="Description" leadingVisual={<DocumentIcon />} />
+    <Checkbox variant="surface" label="Item one" caption="Description" leadingVisual={<PersonIcon size={20} />} defaultChecked />
+    <Checkbox variant="surface" label="Item two" caption="Description" leadingVisual={<DocumentIcon />} />
   </CheckboxGroup></SelectionNeutral>
 );
 export const GalleryCheckboxInvalid = () => <Checkbox label="Label" invalid />;
@@ -854,23 +858,23 @@ export const CodeBlockFlush = () => <CodeBlock flush code={'export default value
 
 export const GalleryDialog = () => (
   <Dialog role="group" aria-modal={undefined} title="Title" description="Description"
-    footer={<><Button variant="ghost">Cancel</Button><Button>Action</Button></>} />
+    footer={<><Button variant="soft" tone="neutral">Cancel</Button><Button>Action</Button></>} />
 );
 export const GalleryDialogNoClose = () => <Dialog role="group" aria-modal={undefined} showCloseButton={false} title="Title" description="Description" footer={<Button>Action</Button>} />;
-export const GalleryDialogForm = () => <Dialog role="group" aria-modal={undefined} title="Title" description="Description" footer={<><Button variant="ghost">Cancel</Button><Button>Action</Button></>}><Field label="Label"><Input fullWidth placeholder="Placeholder" /></Field></Dialog>;
+export const GalleryDialogForm = () => <Dialog role="group" aria-modal={undefined} title="Title" description="Description" footer={<><Button variant="soft" tone="neutral">Cancel</Button><Button>Action</Button></>}><Field label="Label"><Input fullWidth placeholder="Placeholder" /></Field></Dialog>;
 export const GalleryDialogScrollable = () => <Dialog role="group" aria-modal={undefined} title="Title" description="Description" footer={<Button>Action</Button>} style={{ maxBlockSize: "calc(var(--area-space-96) * 3)" }}><div style={{ display: "grid", gap: "var(--area-space-12)" }}>{Array.from({ length: 8 }, (_, index) => <p key={index} style={{ margin: 0 }}>Body text {index + 1}</p>)}</div></Dialog>;
 /* Footer actions close the enclosing native dialog; an app would act first. */
 const closeDialog = (event: MouseEvent<HTMLButtonElement>) => event.currentTarget.closest("dialog")?.close();
 /* Modal: the trigger opens a native modal dialog; the close, Escape or a click on the scrim closes it. */
 export const GalleryDialogModal = () => (
   <Dialog trigger={<Button variant="outline" tone="neutral">Open dialog</Button>} title="Title" description="Description"
-    footer={<><Button variant="ghost" onClick={closeDialog}>Cancel</Button><Button onClick={closeDialog}>Action</Button></>}>Body text</Dialog>
+    footer={<><Button variant="soft" tone="neutral" onClick={closeDialog}>Cancel</Button><Button onClick={closeDialog}>Action</Button></>}>Body text</Dialog>
 );
 
 /* Sizes (components audit V1, 2026-11-07): one width per tile, inline, as the default tile. */
 const DialogAtSize = ({ size }: { size: "sm" | "md" | "lg" | "xl" }) => (
   <Dialog role="group" aria-modal={undefined} size={size} title="Title" description="Description"
-    footer={<><Button variant="ghost">Cancel</Button><Button>Action</Button></>} />
+    footer={<><Button variant="soft" tone="neutral">Cancel</Button><Button>Action</Button></>} />
 );
 export const GalleryDialogSm = () => <DialogAtSize size="sm" />;
 export const GalleryDialogMd = () => <DialogAtSize size="md" />;
@@ -879,7 +883,7 @@ export const GalleryDialogXl = () => <DialogAtSize size="xl" />;
 /* Full height: the tallest the screen allows, whatever the content, so it opens as a modal (a tile can't hold it). */
 export const GalleryDialogFullHeight = () => (
   <Dialog fullHeight trigger={<Button variant="outline" tone="neutral">Open dialog</Button>} title="Title" description="Description"
-    footer={<><Button variant="ghost" onClick={closeDialog}>Cancel</Button><Button onClick={closeDialog}>Action</Button></>}>Body text</Dialog>
+    footer={<><Button variant="soft" tone="neutral" onClick={closeDialog}>Cancel</Button><Button onClick={closeDialog}>Action</Button></>}>Body text</Dialog>
 );
 /* Scrolled: the body has moved, so the rule under the header shows. The tile scrolls its own body once, on mount. */
 export const GalleryDialogScrolled = () => {
@@ -936,7 +940,7 @@ const DateInput = ({ defaultValue, ...field }: { defaultValue: string } & Record
   </Popover>;
 };
 export const GalleryInputDate = () => <Field label="Date"><DateInput defaultValue="2026-09-23" /></Field>;
-export const GalleryInputPhone = () => <Field label="Phone"><Input type="tel" prefix="+1" defaultValue="1" autoComplete="tel" /></Field>;
+export const GalleryInputPhone = () => <Field label="Phone"><Input type="tel" prefix="+1" defaultValue="555 0100" autoComplete="tel" /></Field>;
 /* The reveal recipe is Password field's (docs/specs/password-field.md). */
 export const GalleryInputPassword = () => <Field label="Password"><PasswordField defaultValue="AreaDesign" /></Field>;
 /* Figma's collapsed "Selection colors" summary: 16px chips and a muted count. */
@@ -1262,8 +1266,13 @@ const personCard = <>
 </>;
 /* A div, not a p: the card holds blocks, and an HTML parser closes a <p> at the first block,
    so server HTML inside a paragraph would not match the React tree it hydrates. */
+/* The default tile shows the card as it opens under its link (a hover card is closed at rest, so its tile showed only the
+   link: system evaluation F3.3); the other tiles open on hover. */
 export const GalleryHoverCard = () => (
-  <div>Body text <HoverCard trigger={<Link href="#david">@david</Link>}>{personCard}</HoverCard></div>
+  <div style={{ display: "grid", justifyItems: "start", gap: "var(--area-space-8)" }}>
+    <div>Body text <Link href="#david">@david</Link></div>
+    <Popover role="dialog" aria-label="David Tee" className="area-hover-card">{personCard}</Popover>
+  </div>
 );
 export const GalleryHoverCardPage = () => (
   <div>Body text <HoverCard trigger={<Link href="#launch-plan">Link</Link>}>
@@ -1322,7 +1331,9 @@ const assistantActions = <MessageActions>
   {actionButton("Read aloud", <VolumeIcon />)}{actionButton("Regenerate", <RefreshIcon />)}{actionButton("More actions", <MoreHorizontalIcon />)}
 </MessageActions>;
 const userActions = <MessageActions>{actionButton("Copy message", <CopyIcon />)}{actionButton("Edit message", <PencilIcon />)}</MessageActions>;
-const conversation: CSSProperties = { display: "grid", gap: "var(--area-space-24)", inlineSize: "calc(var(--area-space-96) * 5)", maxInlineSize: "100%" };
+/* The conversation column keeps its 480 (it gave way to its content, so the assistant's turns sat centred at 221 and the
+   person's at the end of 480: never one column). The tile scales it whole. */
+const conversation: CSSProperties = { display: "grid", gap: "var(--area-space-24)", inlineSize: "calc(var(--area-space-96) * 5)" };
 export const GalleryMessage = () => (
   <div style={conversation}>
     <Message author="user" actions={userActions}>Body text</Message>
@@ -1363,7 +1374,7 @@ export const GalleryMessageGroup = () => (
   <div style={conversation}>
     <MessageGroup>
       <Message author="user">Body text</Message>
-      <Message author="user" status="error" onRetry={() => {}}>Body text that wraps onto a second line</Message>
+      <Message author="user" status="error" onRetry={() => {}}>Body text that wraps onto a second line, long enough to reach the bubble's width cap in its column</Message>
       <Message author="user" actions={userActions}>Body text</Message>
     </MessageGroup>
   </div>
@@ -1373,7 +1384,7 @@ export const GalleryMessageSplit = () => (
   <div style={conversation}>
     <Message author="user" split actions={userActions}>
       <span>Body text</span>
-      <span>Body text that wraps onto a second line, long enough to show the bubble's width cap</span>
+      <span>Body text that wraps onto a second line, long enough to show the bubble's width cap in its column</span>
     </Message>
   </div>
 );
@@ -1876,7 +1887,7 @@ export const GalleryPopoverTrigger = () => {
 export const GalleryPopover = () => (
   <Popover role="dialog">
     <PopoverHeader><PopoverTitle>Title</PopoverTitle><PopoverDescription>Description</PopoverDescription><PopoverClose /></PopoverHeader>
-    <PopoverFooter><PopoverStep current={1} total={3} /><Button size="sm" variant="outline">Secondary</Button><Button size="sm">Action</Button></PopoverFooter>
+    <PopoverFooter><PopoverStep current={1} total={3} /><Button size="sm" variant="soft" tone="neutral">Secondary</Button><Button size="sm">Action</Button></PopoverFooter>
   </Popover>
 );
 
@@ -1923,9 +1934,9 @@ export const GalleryProgressLarge = () => <Progress value={62} label="Large prog
 
 export const GalleryRadioCard = () => (
   <RadioGroup label="Label" name="gallery-radio-card" defaultValue="basic" style={{ inlineSize: "320px" }}>
-    <Radio variant="card" value="basic" label="Option one" caption="Description" leadingVisual={<PersonIcon size={20} />} />
-    <Radio variant="card" value="business" label="Option two" caption="Description" leadingVisual={<FolderIcon />} />
-    <Radio variant="card" value="enterprise" label="Option three" caption="Description" leadingVisual={<TokenIcon />} />
+    <Radio variant="surface" value="basic" label="Option one" caption="Description" leadingVisual={<PersonIcon size={20} />} />
+    <Radio variant="surface" value="business" label="Option two" caption="Description" leadingVisual={<FolderIcon />} />
+    <Radio variant="surface" value="enterprise" label="Option three" caption="Description" leadingVisual={<TokenIcon />} />
   </RadioGroup>
 );
 /* Soft option rows (owner 2026-10-25, Notion Calendar's settings options): a fill and no edge, the control first, what
@@ -1945,17 +1956,17 @@ export const GalleryRadioSoftCaption = () => (
 );
 export const GalleryRadioCardTile = () => (
   <RadioGroup label="Layout" name="gallery-radio-card-tile" defaultValue="grid" style={{ inlineSize: "520px" }}>
-    <Radio variant="card" layout="tile" value="list" label="List" leadingVisual={<ListIcon size={20} />} />
-    <Radio variant="card" layout="tile" value="grid" label="Grid" leadingVisual={<GridIcon size={20} />} />
-    <Radio variant="card" layout="tile" value="board" label="Board" leadingVisual={<KanbanIcon size={20} />} />
+    <Radio variant="surface" layout="tile" value="list" label="List" leadingVisual={<ListIcon size={20} />} />
+    <Radio variant="surface" layout="tile" value="grid" label="Grid" leadingVisual={<GridIcon size={20} />} />
+    <Radio variant="surface" layout="tile" value="board" label="Board" leadingVisual={<KanbanIcon size={20} />} />
   </RadioGroup>
 );
 /* Each option shown as what it does: a small window in its own theme, the label centred, the card the indicator. */
 export const GalleryRadioCardPreview = () => (
   <RadioGroup label="Label" name="gallery-radio-card-preview" defaultValue="light" style={{ inlineSize: "420px", "--area-choice-ratio": "16 / 10" } as CSSProperties}>
-    <Radio variant="card" layout="preview" value="light" label="Light" leadingVisual={<DemoImage />} />
-    <Radio variant="card" layout="preview" value="dark" label="Dark" leadingVisual={<DemoImage />} />
-    <Radio variant="card" layout="preview" value="system" label="System" leadingVisual={<DemoImage />} />
+    <Radio variant="surface" layout="preview" value="light" label="Light" leadingVisual={<DemoImage />} />
+    <Radio variant="surface" layout="preview" value="dark" label="Dark" leadingVisual={<DemoImage />} />
+    <Radio variant="surface" layout="preview" value="system" label="System" leadingVisual={<DemoImage />} />
   </RadioGroup>
 );
 /* The picture is the card, its name under it at the start (Settings › Appearance's Mode). */
@@ -1994,8 +2005,8 @@ export const GalleryRadioDisabled = () => <Radio name="gallery-radio-disabled" v
 export const GalleryRadioDisabledSelected = () => <Radio name="gallery-radio-disabled-selected" value="disabled" label="Label" disabled defaultChecked />;
 export const GalleryRadioCardNeutral = () => (
   <SelectionNeutral><RadioGroup label="Label" name="gallery-radio-card-neutral" defaultValue="one" style={{ inlineSize: "320px" }}>
-    <Radio variant="card" value="one" label="Option one" caption="Description" leadingVisual={<PersonIcon size={20} />} />
-    <Radio variant="card" value="two" label="Option two" caption="Description" leadingVisual={<FolderIcon />} />
+    <Radio variant="surface" value="one" label="Option one" caption="Description" leadingVisual={<PersonIcon size={20} />} />
+    <Radio variant="surface" value="two" label="Option two" caption="Description" leadingVisual={<FolderIcon />} />
   </RadioGroup></SelectionNeutral>
 );
 
@@ -2170,7 +2181,8 @@ export const GallerySliderNeutral = () => <SelectionNeutral><Slider aria-label="
 export const GallerySliderWithLabel = () => <Slider label="Label" labelPosition="top" defaultValue={50} readout={value => `${value}%`} />;
 export const GallerySliderSteps = () => <Slider aria-label="Label" min={0.5} max={2} step={0.25} defaultValue={1} readout={value => `${value}×`} />;
 export const GallerySliderStepMarks = () => <Slider aria-label="Label" min={0} max={5} step={1} defaultValue={1} stepMarks />;
-export const GallerySliderVertical = () => <Slider aria-label="Label" orientation="vertical" defaultValue={50} />;
+// A vertical slider's length is its own hook (slider.css): the gallery sets the fields' width to its card, never a length.
+export const GallerySliderVertical = () => <Slider aria-label="Label" orientation="vertical" defaultValue={50} style={{ "--area-slider-block-size": "16rem" } as CSSProperties} />;
 export const GallerySliderControlled = () => {
   const [value, setValue] = useState(40);
   return <Slider label="Label" labelPosition="top" value={value} onValueChange={setValue} readout={value => `${value}%`} />;
@@ -2311,7 +2323,7 @@ export const GalleryToastInfo = () => <Toast tone="info" icon={<InfoIcon />}>Bod
 export const GalleryToastWarning = () => <Toast tone="warning" icon={<WarningIcon />}>Body text</Toast>;
 export const GalleryToastDanger = () => <Toast tone="danger" icon={<WarningIcon />}>Body text</Toast>;
 export const GalleryToastTitle = () => <Toast tone="info" icon={<InfoIcon />} title="Title">Body text</Toast>;
-export const GalleryToastMultiline = () => <Toast tone="info" icon={<InfoIcon />} style={{ inlineSize: "calc(var(--area-space-96) * 2 + var(--area-space-48))" }}>Body text that wraps onto a second line</Toast>;
+export const GalleryToastMultiline = () => <Toast tone="info" icon={<InfoIcon />} style={{ inlineSize: "calc(var(--area-space-96) * 2 + var(--area-space-48))" }}>Body text that wraps onto a second line in the toast</Toast>;
 export const GalleryToastAction = () => {
   const [undone, setUndone] = useState(false);
   return <Toast icon={<CheckIcon />} tone="success" actions={!undone ? <Button size="sm" variant="outline" onClick={() => setUndone(true)}>Undo</Button> : undefined}>Body text</Toast>;

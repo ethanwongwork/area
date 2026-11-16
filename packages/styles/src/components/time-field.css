@@ -13,8 +13,6 @@
     inline-size: auto;
     cursor: text;
   }
-  .area-time-field[data-disabled] { cursor: not-allowed; }
-  .area-time-field[data-read-only] { cursor: default; }
 
   .area-time-field__segments {
     display: inline-flex;
@@ -49,7 +47,9 @@
     background-color: var(--area-selection-surface); /* spec: Editable text's editing surface (Figma rgb(242, 249, 255)) */
     color: var(--area-input-text);
   }
-  .area-time-field[data-disabled] .area-time-field__segment { color: var(--area-fg-disabled); }
+  /* A cell: the ring inside, by its own width (plan A6.2; the surface alone was no ring). */
+  .area-time-field__segment:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: calc(-1 * var(--area-focus-width)); }
+  /* Disabled: the segments take the field's disabled ink (input.css), a placeholder segment too. */
 
   /* The list's trigger is InputAction's box with the chevron. */
   .area-time-field__trigger {}

@@ -32,11 +32,11 @@ import { COMPONENT_PAGES } from "../content/pages.mjs";
 // @ts-expect-error — as above.
 import { DOCUMENTATION_GROUPS } from "../content/documentation.mjs";
 // @ts-expect-error — as above.
-import { componentStatus, DEPRECATED_COMPONENTS } from "../content/component-status.mjs";
+import { componentStatus, DEPRECATED_COMPONENTS, REVIEW_REASONS } from "../content/component-status.mjs";
 // @ts-expect-error — as above.
 import { componentSpecimens, demoWrapper } from "../content/specimens.mjs";
 // @ts-expect-error — as above.
-import { SPECIMEN_GROUPS, specimenGroup, specimenLabel, specimenName, specimenWords } from "../content/specimen-names.mjs";
+import { SPECIMEN_GROUPS, specimenGroup, specimenLabel, specimenName, specimenValue, specimenWords } from "../content/specimen-names.mjs";
 import { DEMOS } from "../content/registry.tsx";
 import { PLAYGROUNDS, configCode, initialConfig, renderConfig, sameConfig, tileConfig, type Config, type Playground, type PropValue } from "../content/playgrounds.tsx";
 import { derivedPlayground, drawsComponent, Overridden, overriddenCode, snippetConfig } from "../content/derived-props.tsx";
@@ -46,8 +46,9 @@ import { Facts } from "../facts.tsx";
 import { SpecimenBox } from "../specimen-box.tsx";
 import { CodeWell, longLines } from "../inspector.tsx";
 import { ApiTab, CodeTab, DocumentationTab, FAMILY_TAB_IDS, FAMILY_TABS, SpecTab, type FamilyInfo, type FamilyManifest, type FamilyTab } from "../family-tabs.tsx";
+import { SpecsTab } from "../specs-tab.tsx";
 import { appScale, feedScale, InheritedScaleContext } from "../app-scale.ts";
-import { CanvasSection, GALLERY_LOOK, StatusBadge, Tile, TileGrid, type CardLook, type OpenHow, FEED_TABLE, FeedCount } from "../tile.tsx";
+import { useNear, CanvasSection, GALLERY_LOOK, StatusBadge, Tile, TileGrid, type CardLook, type OpenHow, FEED_TABLE, FeedCount } from "../tile.tsx";
 
 /*
  * The Cards menu (owner, 2026-10-25: "there should just be 1 style of container, so the options for that menu should be
@@ -113,7 +114,7 @@ function tilesOf(family: Family): Tile[] {
     const name = specimenName(example, family.slug) as string;
     const group: string = !hasDefault && index === 0 ? "Default" : (example.group ?? specimenGroup(name, family.slug));
     // In words ("Outline, success"; owner pick r4-names, 2026-11-01); the id stays the tile's link.
-    const value: string = specimenWords(group === "Default" && !hasDefault ? name : specimenLabel(name, group));
+    const value: string = specimenValue(example, name, group, hasDefault);
     return { order: SPECIMEN_GROUPS.indexOf(group), tile: { id: example.id, name, group, value, label: group === "Default" ? value : `${group} / ${value}`, demo: example.demo, note: example.note ?? notes.get(example.demo) } };
   }).sort((a, b) => a.order - b.order).map(entry => entry.tile);
 }
@@ -277,6 +278,12 @@ function Overview({ groups, visit, open, onToggle, onOpen, zoom, look, waterfall
   );
 }
 
+/** A review date in the app's words (WRITING.md, Dates): "Nov 8", with the year only outside this one. */
+const reviewDay = (iso: string) => {
+  const day = new Date(`${iso}T12:00:00`);
+  return day.toLocaleDateString("en-US", { month: "short", day: "numeric", year: day.getFullYear() === new Date().getFullYear() ? undefined : "numeric" });
+};
+
 /** One family in the Overview: its name, status and tile count over one row of its tiles, or all of them in groups. */
 function FamilySection({ family, open, onToggle, visit, onOpen, zoom, look, waterfall, tiles, leftOut }: {
   family: Family; open: boolean; onToggle: () => void; visit?: string; onOpen: (key: string, from?: Element | null, how?: OpenHow) => void; zoom: string; look: CardLook; waterfall: boolean;
@@ -287,17 +294,9 @@ function FamilySection({ family, open, onToggle, visit, onOpen, zoom, look, wate
   const here = visitSlug === family.slug;
   const section = useRef<HTMLElement>(null);
   const body = useRef<HTMLDivElement>(null);
-  // Drawn once it nears the view, and kept; the family just left draws at once, so its tile can be found.
-  const [seen, setNear] = useState(false);
-  const near = seen || here;
-  useEffect(() => {
-    if (near || !section.current) return;
-    const root = section.current.closest(".studio-canvas__body");
-    const observer = new IntersectionObserver(entries => { if (entries.some(entry => entry.isIntersecting)) setNear(true); },
-      { root, rootMargin: "100% 0px" });
-    observer.observe(section.current);
-    return () => observer.disconnect();
-  }, [near]);
+  // Drawn once it nears the view, or ahead of it in idle time (tile.tsx useNear), and kept; the family just left draws
+  // at once, so its tile can be found.
+  const near = useNear(section, () => section.current?.closest(".studio-canvas__body") ?? null, "100% 0px", here);
   // A closed section shows as many cards as its row holds (one to four, by the Canvas's width and the zoom).
   const [columns, setColumns] = useState(4);
   useEffect(() => {
@@ -328,9 +327,10 @@ function FamilySection({ family, open, onToggle, visit, onOpen, zoom, look, wate
   const ghosts = (count: number) => Array.from({ length: count }, (_, index) => <div key={index} className="studio-overview__ghost" aria-hidden="true" />);
   const more = tiles.length > columns;
   return (
-    <section ref={section} className="studio-section" id={`family-${family.slug}`} aria-labelledby={`family-${family.slug}-title`}>
+    // Laid out only near the view (canvas.css .studio-section--far): a change anywhere laid every family out again.
+    <section ref={section} className="studio-section studio-section--far" id={`family-${family.slug}`} aria-labelledby={`family-${family.slug}-title`}>
       <SectionTitle id={`family-${family.slug}-title`}
-        title={<a href={hrefOf({ page: "components", item: family.slug })} className="studio-section__link" onClick={event => { event.preventDefault(); onOpen(`${family.slug}/${tiles[0]!.id}`); }}>{family.name}</a>}
+        title={<Link variant="standalone" href={hrefOf({ page: "components", item: family.slug })} onClick={event => { event.preventDefault(); onOpen(`${family.slug}/${tiles[0]!.id}`); }}>{family.name}</Link>}
         count={tiles.length} badge={<>
           <StatusBadge size="sm" status={STATUS_MARK[status]}>{STATUS_LABEL[status]}</StatusBadge>
           {leftOut() ? <> <StatusBadge size="sm" status="archived">Left out</StatusBadge></> : null}
@@ -348,9 +348,9 @@ function FamilySection({ family, open, onToggle, visit, onOpen, zoom, look, wate
       {more || open ? (
         // A text control in the title link's style, so its text starts on the cards' edge as the title does.
         <div className="studio-overview__more" {...feedScale()}>
-          <button type="button" className="studio-section__link studio-overview__toggle" aria-expanded={open} aria-controls={`family-${family.slug}`} onClick={onToggle}>
+          <Link as="button" variant="standalone" ink="muted" className="studio-overview__toggle" aria-expanded={open} aria-controls={`family-${family.slug}`} onClick={onToggle}>
             {open ? "Show one row" : `Show all ${tiles.length}`}
-          </button>
+          </Link>
         </div>
       ) : null}
     </section>
@@ -423,7 +423,8 @@ function FamilyPage({ family, tab, onTab, overview, onOpenFamily }: {
       <div className="studio-family-tabs__panel">
         {tab === "overview" ? overview
           : tab === "documentation" ? <DocumentationTab family={info} onOpenFamily={onOpenFamily} familyName={familyName} />
-          : tab === "api" ? <ApiTab family={info} />
+          : tab === "specs" ? <SpecsTab family={info} tiles={TILES.get(family.slug)!} renderDemo={demo => <Demo name={demo} />} />
+          : tab === "api" ? <ApiTab family={info} onOpenFamily={onOpenFamily} familyName={familyName} />
           : tab === "code" ? <CodeTab family={info} />
           : <SpecTab family={info} />}
       </div>
@@ -834,6 +835,8 @@ function FamilyDesign({ family, tile, pinned, onPin, onOpen }: {
 }) {
   const manifest = manifestOf(family);
   const status = statusOf(family);
+  // Why a family is In review, and since when (component-status.mjs, REVIEW_REASONS; system evaluation F4).
+  const review = status === "review" ? REVIEW_REASONS.get(family.slug) : undefined;
   return (
     // Open and Pin show on hover or focus; Pin stays while it is on (owner, 2026-10-30, "Section headings carry more").
     <PanelSection heading={tile ? "Tile" : "Family"} revealActions actions={
@@ -854,6 +857,8 @@ function FamilyDesign({ family, tile, pinned, onPin, onOpen }: {
         manifest && Object.keys(manifest.variants).length ? ["Variants", Object.entries(manifest.variants).map(([axis, values]) => `${axis} ${values.length}`).join(", ")] : null,
         manifest && Object.keys(manifest.defaults).length ? ["Defaults", Object.values(manifest.defaults).join(", ")] : null,
         ["Status", <StatusBadge size="sm" status={STATUS_MARK[status]}>{STATUS_LABEL[status]}</StatusBadge>],
+        review ? ["Since", reviewDay(review.date)] : null,
+        review ? ["Reason", review.reason] : null,
         ["Tiles", TILES.get(family.slug)!.length],
         ["Spec", <Link href={specUrl(family)} target="_blank" rel="noreferrer">{family.slug}.md</Link>],
       ]} note={tile ? tile.note : manifest?.description} />

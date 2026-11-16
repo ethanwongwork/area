@@ -1,9 +1,13 @@
 /** Surface gallery specimens: one variant per tile. docs/specs/surface.md. */
-import { Badge, Button, Card, CardContent, CardDescription, CardTitle, Field, Input, Panel, PanelSection, SectionHeading, Stack, Surface } from "@area/react";
+import { Badge, Button, Card, CardContent, CardDescription, CardTitle, Field, Input, Panel, PanelSection, Stack, Surface } from "@area/react";
 
+/* A Surface's title pair is Card's (plan B1.1): the title at the text's size, strong, its description joined under it. */
 const Body = () => (
   <Stack>
-    <SectionHeading level={3} title="Title" lede="Description of what this region holds." />
+    <CardContent>
+      <CardTitle>Title</CardTitle>
+      <CardDescription>Description of what this region holds.</CardDescription>
+    </CardContent>
     <Stack orientation="horizontal" gap="related"><Button size="sm" variant="outline" tone="neutral">Cancel</Button><Button size="sm">Save</Button></Stack>
   </Stack>
 );
@@ -39,7 +43,7 @@ export const GallerySurfaceForm = () => (
   </Surface>
 );
 
-/** In a Card: the Card publishes its media corner, so a Surface at its media inset is concentric with it (16 - 8 = 8). */
+/** In a Card: the Card publishes the frame recipe's nested corner, a row's 8 inside its 10 (its corner less its media inset, never under a row's). */
 export const GallerySurfaceInCard = () => (
   <Card style={{ inlineSize: 300 }}>
     <Surface variant="soft">
@@ -55,7 +59,7 @@ export const GallerySurfaceInCard = () => (
   </Card>
 );
 
-/** In a Panel: the Panel's corner less its inset is under the floor, so a Surface in it takes the floor corner. */
+/** In a Panel: the Panel's corner less its inset is under a row's corner, so a Surface in it takes a row's, 8. */
 export const GallerySurfaceInPanel = () => (
   <Panel size="md" title="Title">
     <PanelSection heading="Label">

@@ -28,7 +28,7 @@ Checkbox.
 | Axis | Value | Justification | Where it appears |
 |---|---|---|---|
 | size | md (default), lg (sm removed 2026-09-28); the box follows the type size (2026-10-14) | Label type follows the tier | Untitled sm 16 / md 20 |
-| variant | `card`: a contained, full-width option with the control at the end, as Checkbox's card (owner 2026-09-28) | Owner references (plan and registration pickers); shadcn Choice Card | gallery `card`, `card-tile` |
+| variant | `surface` (was `card`, still accepted): a contained, full-width option with the control at the end, as Checkbox's (owner 2026-09-28; the one frame prop, plan B1.1) | Owner references (plan and registration pickers); shadcn Choice Card | gallery `card`, `card-tile` |
 | layout (card) | row (default): visual, text and control on one line; tile: visual above the label, control in the top-end corner; preview: the visual centred as the option's own picture, the label centred under it, no control drawn, the card a soft ground (2026-10-21), its picture in an 8px mat with concentric corners (2026-10-26); thumbnail: the picture is the card (its frame the edge and the selected stroke) and the name sits 8 under it outside, at the start (2026-11-07); media: the picture in the same mat with the list row (control, label, meta) under it at the card's inset; media-row: the picture at the row's start (`--area-choice-media`, 32%), the row centred beside it (2026-10-26). Any `--area-choice-ratio`; a photo or video covers its frame, `auto` keeps a photo's own ratio. Read with a variant (card or soft) (forms.tsx:318) | Owner reference 1; the owner's Appearance picker; Radix RadioCards | gallery `card`, `card-tile`, `card-preview`, `thumbnail`, `media`, `media-row` |
 | variant | `soft` (2026-10-25): the card's shape and inset painted as a control fill (`bg-component`) with no edge, the hover fill under the pointer, the chosen one the control fill a step darker (`bg-component-active`) under the card's Selected tint layer; options in a group stretch and sit 4 apart (the selection surface was tried first: a heavy navy band in dark at Accent) | Owner: "build the filled option rows (control first, trailing value, selected fill)"; Notion Calendar's settings options (rows 4 apart, the chosen one darker), a proposal card's options | gallery `soft`, `soft-caption` |
 | layout | `list` (2026-10-25): the control first, then the text, then meta; read with either variant | Notion Calendar (radio first) | gallery `soft` |
@@ -110,7 +110,7 @@ Captures: `area--size-small`, `-medium`, `-large`, `area--selected`, `area--tone
 | checked | fill `selection-solid` at once; dot `scale` 0.6 → 1 + `opacity`, `fast` ease-out (Motion, 2026-10-07) | `area--selected` |
 | group invalid | unchecked edges `fg-danger-vivid`; the checked option `danger-solid` with `fg-on-danger` dot; message in danger ink | `area--invalid` |
 | group success / warning | `validation` with `validationStatus`: the message in `fg-success-vivid` / `fg-warning-vivid`; the options unchanged (2026-11-07, as Checkbox group) | Checkbox group |
-| group read-only | `data-read-only` on the fieldset and each option (`data-readonly` is the deprecated spelling, still painted); no press or hover edge; the chosen card keeps its rest edge | owner 2026-10-26; 2026-11-07 spelling |
+| group read-only | `data-read-only` on the fieldset and each option; no press or hover; the chosen card keeps its selected edge and tint and the control its dot (plan B7.10) | |
 | disabled | `opacity-disabled` (50%) | `area--disabled` |
 
 ## Behavior and accessibility
@@ -232,6 +232,7 @@ selection with a real keyboard.
 - 2026-10-12 · type size and density split (owner) → the radio shares Checkbox's box, `--area-mark-box` (14 / 14 / 16 / 18 / 20 for type 12–16; `choice.css`). `docs/research/ui-size-scale-2026-10-12.md`.
 - 2026-10-14 · all-axis audit → the box now follows the type size (`.area-radio--md` set a fixed 16, overriding the 2026-10-12 base rule); lg is four larger; the dot stays 6 / 8, centred on whole pixels → choice.css.
 - 2026-10-21 · owner's picks on the state page (https://claude.ai/artifact/3uKMHRhpWnPqNA6pK4WfD9) and "capture some of these options as options for the design system customization … keep my current selections as the default" → a chosen card's edge is Selected stroke's width (2) in the indicator rung, its 1px edge topped up by an inset ring, so nothing moves; this supersedes 2026-09-28's "darker, not thicker" (the owner picked ChatGPT's 2px tile). choice.css.
+- 2026-11-14 · plan B7.10 (S22) → read-only keeps every state's paint: a chosen card keeps its selected edge and tint (was dropped to the rest edge, the 2026-10-26 "plain answers" call, now superseded), the box keeps its checked fill; only hover, press and the give go, and the box hover rules exclude read-only. The deprecated `data-readonly` spelling is no longer painted. Why: docs/research/system-evaluation-2026-11-11 (README §5, phase2/disabled.md); the owner took every recommendation on 2026-11-11.
 
 ## Spacing audit (2026-10-17)
 
@@ -321,3 +322,45 @@ layout (not a change to `preview`, whose centred name inside a soft card the gal
   preview cards (`--area-choice-min`, `--area-choice-ratio`).
 
 Framed (owner 2026-11-07, "some margins/padding around it in the card, like a frame"): a drawn picture sits in a 12 mat (the card inset) of the frame's ground, the frame at the container corner, the picture concentric inside it with the options' edge; a photo or video still fills the frame.
+- 2026-11-11 · system evaluation A1.1, A11.1 · card and soft options: tile row gap and horizontal options 16 apart (was 14 at the default), the list card's control-to-text gap and the legend's gap `gap-row` 12 (was 10); Compact unchanged; a card's height rounds up to a whole pixel (calc-size), so stacked cards land on the grid (was 48.61).
+
+## Review note, 2026-11-11 (type rules, plan A9)
+
+- **What changed:** an option's description joins its title at the title's size in the muted ink (13/18 at md), and a group's description joins its legend the same way; a group's validation stays `text-sm` (plan A9.3, owner 2026-11-11). Rows with descriptions grow 2 per line.
+- **Why:** the system evaluation's type rules (docs/research/system-evaluation-2026-11-11, section 5, A9), owner-approved
+  2026-11-11; the rules are in DESIGN_SYSTEM.md ("Ink and weight", "Size and shape", "Text pairs") and the type skill.
+
+## Review note, 2026-11-11 (focus and targets, plan A6, A11.2)
+
+- **What changed:** Checked, the ring stands off by `focus-gap` (A6.1). The control owns the shared hit target, as Checkbox (A11.2).
+- **Why:** the system evaluation's focus, forced colours and hit target items (docs/research/system-evaluation-2026-11-11, section 5), owner-approved 2026-11-11; the rules are in DESIGN_SYSTEM.md ("The focus ring", "Targets") and CONTRAST.md (Focus).
+
+### 2026-11-13 · One frame prop (system plan, Phase 2, B1.1)
+
+- `variant="card"` became `variant="surface"`, the one frame prop (class `--surface`); `card` stays as a deprecated alias. No visual change.
+
+## Sizes beside Checkbox, Radio and Switch (plan B8.1), 2026-11-14
+
+The three choices share one box ladder (`mark-box`, then 4 and 8 more: 14 / 18 / 22 at type 13), matched by what the
+hand marks: a Switch's thumb is a Checkbox's and a Radio's box at the same size name (md 14, lg 18), its track the thumb
+plus its 2 inset round it. So Checkbox and Radio offer md and lg, and Switch sm, md and lg: Switch's sm is a 14 track
+(a 10 thumb) for a dense row; the choices' sm was removed on 2026-09-28, when it differed from md only by its label gap.
+In a dense row, a Checkbox md and a Switch sm stand one height (14). No size is added (COMPONENTS.md, Boundaries).
+
+## Option rows and the frame recipe (plan B1.1 hand-over), 2026-11-14
+
+A `surface` or `soft` option row keeps its own corner, the height ladder's corner on its one-line height capped at the
+container (`--_card-corner`, choice.css), not the frame recipe's *card* role (six tenths of the text inset). The owner's
+rule (DESIGN_SYSTEM.md, Radius, "Option rows are bars", 2026-10-30): a one-line option is a bar, reaching a pill only at
+Pill, as every control of its height; the card role would round a row by its inset instead of its height. Tile, preview
+and media options keep the container corner, the recipe's *block* value.
+
+### 2026-11-14 · Shared parts, leftovers (system plan, Phase 2, wave 3)
+
+- A choice's meta stands `gap-row` after its label (8 / 12 / 16); picture-to-name, card grids and surface options are `ui-cluster` apart (6 / 8 / 10). Values at type 13 Compact / Default / Comfortable; unchanged at the default.
+- Why: docs/research/system-evaluation-2026-11-11 (plan B6.1, B6.5, B8.2, B2.2; README §5, phase2/leftovers.md); the owner took every recommendation on 2026-11-11. Fix the rule, not the instance.
+- Verdict: awaiting the owner.
+
+## State paint (plan B7.2, B7.3), 2026-11-14
+
+- Soft rows press to `bg-component-pressed`, the checked row included.

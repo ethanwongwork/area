@@ -28,6 +28,7 @@ the unchanged runs between hunks. Not Code block's `marks` (one-sided, no number
 | file status | pending, kept, undone | Keep / Undo per file and all | Cursor review ("Keep All", "Undo All", per-file Keep / Undo); Codex Undo / Review |
 | file open | closed, open (diff) | the diff on demand | Cursor `EditToolCallView.js` chevron; Codex "Review" |
 | (Diff) line kind | added, deleted, context; fold (`removed`: deprecated alias of deleted, components audit D6) | — | Cursor `DefaultDiff.stylex.js`; Codex TUI diff_render |
+| (Diff) comment | off, on (`onComment`); notes under lines (`notes`) | a review: say something about one line | ChatGPT's review: a + on any line; Cursor's review comments |
 | row kind | file, design change | a designer judges the change, not the file | 2026-11-08 study: every reference names files with +N −N; Area's Design view already logs component, property, from and to |
 | code fold | none, Show code | files under the design rows | 2026-11-08 study (P2) |
 
@@ -71,6 +72,8 @@ area-diff                    mono, Code block sm's type; Code block's frame (car
   area-diff__lines           one grid: old number, new number, marker 8, text; gap 4
   area-diff__line            subgrid row; added / removed tint
   area-diff__fold            "12 unchanged lines", sans (Cursor's), muted on the recessed band, from where the numbers start
+  area-diff__comment         with onComment: a + (Glyph add, 12) at the line's start, a square of the line's height over the code ground; hover and focus only
+  area-diff__note            with notes: a row under its line, text-base sans on the diff's ground, a rule above and below, 4 by the diff's inline inset; as wide as the diff's view, held at its start
 ```
 
 ## Decisions
@@ -88,7 +91,7 @@ area-diff                    mono, Code block sm's type; Code block's frame (car
 | counts | +N `fg-change-added`, −N `fg-change-deleted` (the success and danger inks), tabular, 4 apart; read "N added", "N deleted" | cursor git added / removed, codex green / red | — |
 | diff type | text-xs on 18 (compact 16), mono; insets 8 (compact 6), number start 4, gap 4 | Code block sm (peer) | the Inspector's code well |
 | diff frame | border-card, radius-row (concentric with the list: 12 − 4), bg-code | Code block (peer) | round 49 |
-| diff tint, marker | success-surface / danger-surface; marker 8 wide in fg-success-vivid / fg-danger-vivid, strong | Code block's diff (peer) | one diff paint across Area (cleanup pass 2026-10-19; was Cursor's 3px strip) |
+| diff tint, marker | `bg-change-added` / `bg-change-deleted` (shared with Code block, plan B7.4); marker 8 wide in fg-success-vivid / fg-danger-vivid, strong | Code block's diff (peer) | one diff paint across Area (cleanup pass 2026-10-19; was Cursor's 3px strip) |
 | fold | the diff's size, sans, muted on bg-well; from the number start 4 to the diff's end inset | cursor collapsed regions 12px on bg-tertiary | round 49 |
 | kept / undone | counts muted; undone name struck through; the row says "Kept" / "Undone" | cursor Keep / Undo | — |
 
@@ -105,6 +108,11 @@ file ("Undo button.css"); Undo all and Keep all show only when the caller passes
 `section` named by its title. The diff is a focusable `figure` named by its `aria-label`, such as "Changes to <file>" (a sideways scroll needs the
 keyboard); added and deleted lines carry visually hidden "Added"
 / "Deleted" so the change is not colour alone. Long lines scroll sideways; the card never widens its column.
+
+With `onComment`, each line ends (in the DOM) with a button named by its line ("Comment on line 12", "Comment on deleted
+line 12", or the line's words when there are no numbers). The buttons are one Tab stop (the line last focused, the first
+until then); Up and Down move along the lines. Pressing one calls `onComment(line, { hunk, line })`; the caller draws
+what follows as a `notes` entry under that line.
 
 ## Peers and consistency
 
@@ -319,3 +327,50 @@ Not built: the optional before and after picture on a design row (proposed in P2
 the chat can show yet; the stage shows the after.
 
 Tile: Design changes (`GalleryEditSummaryDesign`). Checks: styles build parity, `npm run typecheck`, `check:docs`.
+
+## Comments on lines, 2026-11-10 (the Changes view; docs/research/desktop-app-analysis-2026-11-10, T3)
+
+What changed: Diff takes `onComment` and `notes`. With `onComment` each line gets a + button at its start: Glyph `add` at
+12 in a square of the line's height (18; compact 16), the hover fill over the code ground so the number under it doesn't
+show through, the row's floor corner, shown while its line is hovered or it has focus (a file row's Undo and Keep work
+the same way), always on touch, where it sits at the line's end. `notes` are rows under their lines: text-base in the
+interface sans on the diff's own ground (`bg-code`, inherited), a hairline (`edge-blocks`) above and below, 4 by the diff's inline inset, as wide as the
+diff's view (the Diff is an inline-size container) and sticky at its start. The content is the caller's.
+
+Why: the Changes view lets a person say something about one line and send it back to chat. The references that review
+an agent's changes put a + on the line (ChatGPT's review) rather than a separate comment form.
+
+Values: no new literal. The button's size is the diff's line height, its glyph `icon-xs`, its corner `radius-floor`,
+its fills `bg-component-hover` and `bg-component-pressed` over `bg-code`; the note uses text-base and space-4. Not
+measured from a capture: the references' + was read from their behaviour, not their CSS.
+
+Not built: a side by side layout. It needs about twice the Inspector's width to be read.
+
+Tile: Variant / diff, comment (`GalleryDiffComment`). Checks: `npm run typecheck`, `check:docs`, `check:playgrounds`.
+
+- 2026-11-11 · system evaluation B2.3 · a file row's gap is Menu's, `ui-cluster` (8, Compact 6; was `gap-row`).
+
+## Review note, 2026-11-11 (type rules, plan A9)
+
+- **What changed:** Diff's lines take Code block sm's `text-xs-code-leading` (11/16 at type 13 at every density); they were 17 (plan A9.9).
+- **Why:** the system evaluation's type rules (docs/research/system-evaluation-2026-11-11, section 5, A9), owner-approved
+  2026-11-11; the rules are in DESIGN_SYSTEM.md ("Ink and weight", "Size and shape", "Text pairs") and the type skill.
+
+### 2026-11-13 · One chat card (system plan, Phase 2, B1.3)
+
+- The frame is the chat card (`surface.css`): its corner (16 at the default, 14 at Compact), rows 4 from the outer edge
+  with the edge counted once, so the words and the head's title start 12 in (were 13), a one-row head, a strong title.
+- Edit summary's head is one row (30 at the default, was 34); its buttons centre in it.
+- Diff's corner takes the frame recipe's nested floor: 8 at the default (was the floor's 4, 16 − 12; VS1, VC19).
+
+## Shared bars and corners (plan B4), 2026-11-14
+
+- B4.2: the head's buttons and a file row's are corner controls: as far from the end as from the top, (row − control) / 2 (the end was floored at 4, which held only while the head was 34), concentric with the card (16 − 3 = 13 at the defaults, was 11) and with the row (8 − 2 = 6, was 4). B4.4: the head is the same row as the collapsible head, 30 at the defaults (34 before wave 1), without a chevron.
+
+## Selection paint (plan B7.4), 2026-11-14
+
+- Diff's changed lines read `bg-change-added` / `bg-change-deleted`, the pair Code block shares (same paint).
+
+## State paint (plan B7.11), 2026-11-14
+
+- File actions and the Diff's comment + hide only inside `@media (hover: hover)`; on touch the + sits at the line's end, shown.

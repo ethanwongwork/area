@@ -7,53 +7,47 @@
  * Popover with a plain Calendar inside it. docs/specs/date-picker.md.
  * ------------------------------------------------------------------------- */
 @layer area.components {
+  /* The trigger is the one field shell (input.css, "One field shell"): its tiers, edge, corner, fill, soft, focus and
+     status. Date picker reads Select's public seam (select-*). */
   .area-date-picker {
-    --_field-lift: var(--area-shadow-field); /* Field shadow (axes/depth.ts), transparent by default */
     --_bg: var(--area-select-bg);
     --_bg-hover: var(--_bg);
+    --_bg-pressed: var(--_bg); /* held and open: the rest fill on a field (input.css, "Press and open") */
     --_border: var(--area-select-edge);
     --_border-hover: var(--area-select-edge-hover);
-    --_border-focus: color-mix(in srgb, var(--_border), var(--area-field-focus-color) calc(var(--area-field-focus-recolor) * 100%)); /* the ring's colour only under Focus ring Halo (axes/states.ts) */
-    --_focus-outline: var(--area-field-focus-color);
-    --_focus-halo: var(--area-field-focus-halo-color);
+    --_ink: var(--area-select-text);
+    --_bg-disabled: var(--area-select-bg-disabled);
+    --_tone-invalid: var(--area-select-invalid-color);
+    --_tone-invalid-halo: var(--area-select-invalid-halo-color);
+    --_tone-success: var(--area-select-success-color);
+    --_tone-success-halo: var(--area-select-success-halo-color);
+    --_tone-warning: var(--area-select-warning-color);
+    --_tone-warning-halo: var(--area-select-warning-halo-color);
     --_trigger-width: var(--area-select-inline-size);
-    --_height: var(--area-control-md);
-    --_radius: var(--area-radius-control-md);
-    --_icon: var(--area-icon-md);
-    --_gap: var(--area-gap-md);
-    --_text: var(--area-control-md-text);
-    --_leading: var(--area-control-md-leading);
     display: inline-flex;
     vertical-align: middle;
     min-inline-size: 0;
     max-inline-size: 100%;
-  }
-  .area-date-picker--outline { --_bg: var(--area-select-bg); }
-  .area-date-picker--soft {
-    --_field-lift: 0 0 0 0 transparent;
-    --_bg: var(--area-input-bg-soft);
-    --_border: var(--area-input-edge-soft); /* none, or the strong edge under increased contrast */
-    --_border-hover: var(--area-input-edge);
   }
   /* Notion's property value: no chrome until hovered, as wide as its text (Custom select ghost). */
   .area-date-picker--ghost {
     --_field-lift: 0 0 0 0 transparent;
     --_bg: transparent;
     --_bg-hover: var(--area-bg-component-hover);
+    --_bg-pressed: var(--area-bg-component-pressed);
     --_border: transparent;
     --_border-hover: transparent;
+    --_bg-disabled: transparent;
+    --_border-disabled: transparent;
+    --_bg-read-only: var(--area-bg-component); /* one fill step deeper than none */
     --_trigger-width: auto;
   }
-  .area-date-picker--sm { --_height: var(--area-control-sm); --_radius: var(--area-radius-control-sm); --_gap: var(--area-gap-sm); --_icon: var(--area-icon-sm); --_text: var(--area-control-sm-text); --_leading: var(--area-control-sm-leading); }
-  .area-date-picker--md { --_height: var(--area-control-md); --_radius: var(--area-radius-control-md); --_gap: var(--area-gap-md); --_icon: var(--area-icon-md); --_text: var(--area-control-md-text); --_leading: var(--area-control-md-leading); }
-  .area-date-picker--lg { --_height: var(--area-control-lg); --_radius: var(--area-radius-control-lg); --_gap: var(--area-gap-lg); --_icon: var(--area-icon-lg); --_text: var(--area-control-lg-text); --_leading: var(--area-control-lg-leading); }
   .area-date-picker--full-width { display: flex; inline-size: 100%; }
   .area-date-picker--full-width > .area-date-picker__trigger { flex: 1; inline-size: auto; }
 
-  /* The field: Select's chrome and corner; sides from the inset contract (inset.css). */
+  /* The field: the one field shell; sides from the inset contract (inset.css). */
   .area-date-picker__trigger {
     appearance: none;
-    box-shadow: var(--_field-lift);
     box-sizing: border-box;
     display: inline-flex;
     align-items: center;
@@ -61,15 +55,7 @@
     inline-size: var(--_trigger-width);
     max-inline-size: 100%;
     min-inline-size: 0;
-    block-size: var(--_height);
     margin: 0;
-    border: var(--area-stroke-width) solid var(--_border);
-    border-radius: calc(min(var(--_radius), max(var(--area-radius-min), round(down, calc(var(--_height) * var(--area-radius-factor)), 2px))) + var(--area-pill-field) * var(--area-radius-full));
-    background-color: var(--_bg);
-    color: var(--area-select-text);
-    font: inherit;
-    font-size: var(--_text);
-    line-height: var(--_leading);
     text-align: start;
     cursor: pointer;
     outline: none;
@@ -80,56 +66,15 @@
     user-select: none;
   }
   @media (hover: hover) {
-    .area-date-picker__trigger:hover:not(:disabled, [aria-expanded="true"], [data-read-only]) {
-      border-color: var(--_border-hover);
-      background-color: var(--_bg-hover);
-    }
+    /* The shell sets the hover edge; a ghost trigger shows its plate. */
+    .area-date-picker__trigger:hover:not(:disabled, [aria-expanded="true"], [data-read-only], :active) { background-color: var(--_bg-hover); }
     .area-date-picker__trigger:hover { transition-duration: var(--area-hover-in); }
   }
-  .area-date-picker__trigger:is(:active, :focus-visible),
-  .area-date-picker[data-open] > .area-date-picker__trigger { transition-duration: 0s; }
-  .area-date-picker__trigger:focus-visible,
-  .area-date-picker[data-open] > .area-date-picker__trigger {
-    border-color: var(--_border-focus);
-  }
-  .area-date-picker__trigger:focus-visible {
-    box-shadow: var(--_field-lift), 0 0 0 var(--area-field-focus-halo-width) var(--_focus-halo);
-    outline: var(--area-field-focus-outline-width) solid var(--_focus-outline);
-    outline-offset: var(--area-focus-offset);
-  }
-  .area-date-picker--ghost[data-open] > .area-date-picker__trigger { border-color: transparent; background-color: var(--area-bg-component-active); }
-  .area-date-picker__trigger[aria-invalid="true"] {
-    --_border: var(--area-select-invalid-color);
-    --_border-hover: var(--area-select-invalid-color);
-    --_border-focus: var(--area-select-invalid-color);
-    --_focus-outline: var(--area-select-invalid-color);
-    --_focus-halo: var(--area-select-invalid-halo-color);
-  }
-  /* Success and warning, as Select's (components audit 2026-11-07, O1): a Field's status reaches every field. */
-  .area-date-picker__trigger[data-success] {
-    --_border: var(--area-select-success-color);
-    --_border-hover: var(--area-select-success-color);
-    --_border-focus: var(--area-select-success-color);
-    --_focus-outline: var(--area-select-success-color);
-    --_focus-halo: var(--area-select-success-halo-color);
-  }
-  .area-date-picker__trigger[data-warning] {
-    --_border: var(--area-select-warning-color);
-    --_border-hover: var(--area-select-warning-color);
-    --_border-focus: var(--area-select-warning-color);
-    --_focus-outline: var(--area-select-warning-color);
-    --_focus-halo: var(--area-select-warning-halo-color);
-  }
-  /* Read-only (O2): a date set elsewhere, shown at rest. Only disabled changes paint (Input's rule); the field keeps
-     its focus ring and doesn't answer the pointer. */
-  .area-date-picker__trigger[data-read-only] { cursor: default; }
-  .area-date-picker__trigger:disabled {
-    --_border: var(--area-border-faint);
-    background-color: var(--area-select-bg-disabled);
-    color: var(--area-fg-disabled);
-    cursor: not-allowed;
-  }
-  .area-date-picker--ghost > .area-date-picker__trigger:disabled { --_border: transparent; background-color: transparent; }
+  .area-date-picker__trigger:focus-visible { transition-duration: 0s; }
+  /* Held and open: the one open paint (input.css, "Press and open"; plan B7.1): the hover edge on a field, the pressed
+     plate on a ghost. Until 2026-11-14 an open field kept the focus edge, so under Focus ring Halo it read as focused. */
+  /* Read-only (O2) and disabled are the field shell's (input.css): read-only a date set elsewhere, one fill step deeper,
+     keeping its focus ring and answering no pointer; disabled the field's disabled paint, the icon included. */
   /* A leading calendar glyph in the field's icon ink, as InputGroup's. */
   .area-date-picker__icon {
     display: inline-grid;
@@ -140,16 +85,15 @@
     color: var(--area-input-icon);
   }
   .area-date-picker__icon > svg { inline-size: 100%; block-size: 100%; }
-  .area-date-picker__trigger:disabled .area-date-picker__icon { color: inherit; }
   .area-date-picker__value {
     flex: 1 1 auto;
     min-inline-size: 0;
+    font-variant-numeric: tabular-nums; /* plan A9.8: a numeric value */
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
   .area-date-picker__value[data-placeholder] { color: var(--area-input-placeholder); }
-  .area-date-picker__trigger:disabled .area-date-picker__value[data-placeholder] { color: inherit; }
 
   /*
    * The panel: a Popover. spec (notion--date-property-editor): the typed date sits in a small
@@ -158,7 +102,8 @@
    * spec (Chrome audit 2026-10-07, notion node 188-192): the Clear section sits at Menu's inset,
    * not the Popover's: Notion's row plate is 4 from the panel's sides and its rule 12 in. The
    * footer bleeds from the Popover's 12 (border included) to Menu's 4 on the sides and bottom,
-   * so the row, its corner (radius-list-row, concentric at 4) and Menu's own separator inset (8,
+   * so the row, its corner (radius-list-row, a row's own 8 at the default since plan A2.1: 4 in from the Popover's
+   * 16, concentric would be 12; it was 10) and Menu's own separator inset (8,
    * so 12 from the edge) are Menu's.
    */
   .area-date-picker__panel {

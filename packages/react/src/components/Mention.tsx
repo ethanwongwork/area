@@ -36,6 +36,7 @@ export interface MentionProps extends Omit<HTMLAttributes<HTMLElement>, "childre
   href?: string;
   /** Link attributes for an `href` mention. */
   target?: AnchorHTMLAttributes<HTMLAnchorElement>["target"];
+  /** The link's `rel`, for an `href` mention. */
   rel?: string;
   /** Makes it a button (a person's card, a date's picker) when there is no `href`. */
   onClick?: (event: MouseEvent<HTMLElement>) => void;

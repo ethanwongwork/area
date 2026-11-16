@@ -27,7 +27,7 @@ export const Nav = /* @__PURE__ */ forwardRef<HTMLElement, NavProps>(function Na
   return (
     <nav
       ref={ref}
-      className={navVariants({ orientation: orientation === "vertical" ? undefined : orientation, selection }, className)}
+      className={navVariants({ orientation, selection }, className)}
       {...rest}
     >
       {children}
@@ -38,7 +38,7 @@ export const Nav = /* @__PURE__ */ forwardRef<HTMLElement, NavProps>(function Na
 export interface NavGroupProps extends HTMLAttributes<HTMLDivElement> {
   /** The heading above the run. Omit for an unlabelled group. */
   label?: ReactNode;
-  /** An expandable item's children: the rows step in one Tree view level (audit D-20). */
+  /** An expandable item's children: the rows step in one Tree view level. */
   nested?: boolean;
   /**
    * A labelled group that folds: with `onOpenChange` or `defaultOpen`, the heading is a button that shows and hides the
@@ -46,7 +46,12 @@ export interface NavGroupProps extends HTMLAttributes<HTMLDivElement> {
    * open (`true`) or folded (`false`), as Panel section's and Accordion item's. Leave all three out for a fixed group.
    */
   open?: boolean;
+  /**
+   * Whether the group starts open, uncontrolled.
+   * @default true
+   */
   defaultOpen?: boolean;
+  /** Called when the group folds or opens. */
   onOpenChange?: (open: boolean) => void;
   /** Controls at the heading's end (a section's New), apart from the fold. */
   actions?: ReactNode;
@@ -103,15 +108,17 @@ export interface NavItemProps extends Omit<AnchorHTMLAttributes<HTMLAnchorElemen
   /** The actions show only while the row is hovered or holds focus (or a menu they opened is open), as Board's card
    * actions; a touch screen always shows them. */
   revealActions?: boolean;
+  /** The item cannot be opened; it leaves the Tab order. */
   disabled?: boolean;
   /**
-   * Can't be opened now, for a reason that will pass or that the person can change (components audit V2, 2026-11-07):
-   * drawn as disabled, but it keeps its Tab stop and the pointer, so it can say why in `inactiveText`. Following it does
-   * nothing (`aria-disabled`, no href). `disabled` is for a place that truly isn't there.
+   * Can't be opened now, for a reason that will pass or that the person can change: drawn as disabled, but it keeps
+   * its Tab stop and the pointer, so it can say why in `inactiveText`. Following it does nothing (`aria-disabled`, no
+   * href). `disabled` is for a place that truly isn't there.
    */
   inactive?: boolean;
   /** Why an inactive item can't be opened ("Upgrade to see insights"): a Tooltip on hover and focus, and its accessible description. */
   inactiveText?: ReactNode;
+  /** The item's name. */
   children?: ReactNode;
 }
 

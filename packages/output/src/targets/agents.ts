@@ -113,7 +113,7 @@ Settings: neutral ${setting("neutral")}, accent ${setting("accent")}${theme.acce
 
 ## Typography
 
-Text sizes come from the type setting (${setting("type")}): \`--area-text-<style>-size\`, \`-leading\` and \`-tracking\` for ${list(tokenNames(lib, /^--area-text-[a-z0-9]+-size$/).map(n => n.replace(/^--area-text-|-size$/g, "")))}. Weights: \`--area-weight-regular\`, \`--area-weight-strong\`. Fonts: \`--area-font-sans\`, \`--area-font-mono\`.
+Text sizes come from the type setting (${setting("type")}): \`--area-text-<style>-size\`, \`-leading\` and \`-tracking\` for ${list(tokenNames(lib, /^--area-text-[a-z0-9]+-size$/).map(n => n.replace(/^--area-text-|-size$/g, "")))}. Weights: \`--area-weight-regular\` (the regular-weight setting, ${setting("regular-weight", "400")}), \`--area-weight-strong\`, \`--area-weight-heading\`. Fonts: \`--area-font-sans\`, \`--area-font-mono\`.
 
 ## Layout
 

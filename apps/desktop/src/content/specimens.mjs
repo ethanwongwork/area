@@ -211,7 +211,7 @@ function gallerySpecimenTable() {
     code: COMPONENT_PAGES.find(page => page.slug === "code").examples,
     nav: [
       { id: "default", title: "Default", demo: "GalleryNav" },
-      { id: "sidebar", title: "Recipe / sidebar in context (ChatGPT)", demo: "GalleryNavSidebar", group: "Default" },
+      { id: "sidebar", title: "Recipe / sidebar in context", demo: "GalleryNavSidebar", group: "Default" },
       { id: "grouped", title: "Grouped", demo: "GalleryNavGrouped" },
       { id: "icons", title: "Icons", demo: "GalleryNavIcons" },
       { id: "counts", title: "Counts", demo: "GalleryNavCounts" },
@@ -462,7 +462,7 @@ function gallerySpecimenTable() {
       { id: "state-modified", title: "State / modified", demo: "GallerySettingRowModified" },
       { id: "state-disabled", title: "State / disabled", demo: "GallerySettingRowDisabled" },
       { id: "content-group", title: "Content / group", demo: "GallerySettingsGroup" },
-      { id: "content-framed-group", title: "Content / framed group", demo: "GallerySettingsGroupFramed" },
+      { id: "variant-surface", title: "Variant / surface", demo: "GallerySettingsGroupFramed" },
     ],
     "filter-bar": [
       { id: "default", title: "Default", demo: "GalleryFilterBar" },
@@ -697,7 +697,7 @@ function gallerySpecimenTable() {
       { id: "default", title: "Default", demo: "GalleryDescriptionList" },
       { id: "layout-justified", title: "Layout / justified", demo: "GalleryDescriptionListJustified" },
       { id: "variant-divided", title: "Variant / divided", demo: "GalleryDescriptionListDivided" },
-      { id: "variant-framed", title: "Variant / framed", demo: "GalleryDescriptionListFramed" },
+      { id: "variant-framed", title: "Variant / surface", demo: "GalleryDescriptionListFramed" },
       { id: "content-no-icons", title: "Content / no icons", demo: "GalleryDescriptionListNoIcons" },
       { id: "content-rich", title: "Content / rich values", demo: "GalleryDescriptionListRich" },
       { id: "behavior-show-more", title: "Behavior / show more", demo: "GalleryDescriptionListShowMore" },
@@ -753,6 +753,7 @@ function gallerySpecimenTable() {
       { id: "ink-brown", title: "Ink / brown", demo: "GalleryLinkBrown" },
       { id: "content-caption", title: "Content / caption", demo: "GalleryLinkCaption" },
       { id: "content-external", title: "Content / external", demo: "GalleryLinkExternal" },
+      { id: "content-button", title: "Content / as a button", demo: "GalleryLinkButton" },
       { id: "content-wrap", title: "Content / wrapping", demo: "GalleryLinkWrapped" },
     ],
     pagination: [
@@ -844,8 +845,8 @@ function gallerySpecimenTable() {
       { id: "behavior-reveal-actions", title: "Behavior / reveal actions", demo: "GalleryPanelRevealActions" },
       { id: "resizable", title: "Resizable / inspector", demo: "GalleryPanelResizable" },
       { id: "resizable-sidebar", title: "Resizable / sidebar", demo: "GalleryPanelResizableSidebar" },
-      { id: "figma", title: "Recipe / Figma properties panel", demo: "GalleryPanelFigma" },
-      { id: "dev-mode", title: "Recipe / Dev Mode inspector", demo: "GalleryPanelDevMode" },
+      { id: "properties", title: "Recipe / properties panel", demo: "GalleryPanelFigma" },
+      { id: "code-inspector", title: "Recipe / code inspector", demo: "GalleryPanelDevMode" },
     ],
     popover: [
       { id: "anchored", title: "Anchored to a trigger", demo: "GalleryPopoverTrigger" },
@@ -861,9 +862,9 @@ function gallerySpecimenTable() {
     ],
 
     indicator: [
-      ...["available", "away", "busy", "do-not-disturb", "blocked", "offline", "out-of-office", "unknown"].map(status => ({id: `presence-${status}`, title: `Presence / ${status}`, demo: `GalleryBadgePresence${titleCase(status).replaceAll("-", "")}`})),
+      ...["available", "away", "busy", "do-not-disturb", "blocked", "offline", "out-of-office", "unknown"].map(status => ({id: `presence-${status}`, title: `Presence / ${status.replaceAll("-", " ")}`, demo: `GalleryBadgePresence${titleCase(status).replaceAll("-", "")}`})),
       ...["sm", "md", "lg"].map(size => ({id: `presence-size-${size}`, title: `Presence size / ${size}`, demo: `GalleryBadgePresenceSize${titleCase(size)}`})),
-      ...["available", "away", "busy", "do-not-disturb", "offline"].map(status => ({id: `outside-${status}`, title: `Out of office / ${status}`, demo: `GalleryBadgePresenceOutside${titleCase(status).replaceAll("-", "")}`})),
+      ...["available", "away", "busy", "do-not-disturb", "offline"].map(status => ({id: `outside-${status}`, title: `Out of office / ${status.replaceAll("-", " ")}`, demo: `GalleryBadgePresenceOutside${titleCase(status).replaceAll("-", "")}`})),
       ...[0, 3, 24, 125].map(count => ({id: `count-${count}`, title: `Count / ${count}`, demo: `GalleryBadgeCount${count}`})),
       {id: "activity", title: "Activity dot", demo: "GalleryBadgeActivity"},
       {id: "processing", title: "Processing", demo: "GalleryBadgeProcessing"},
@@ -899,9 +900,9 @@ function gallerySpecimenTable() {
         title: `${titleCase(variant)} / ${titleCase(tone)}`,
         demo: `GalleryBadge${titleCase(variant)}${titleCase(tone)}`,
       }))),
-      { id: "leading-icon", title: "Leading Icon", demo: "BadgeLeadingIcon" },
-      { id: "trailing-icon", title: "Trailing Icon", demo: "BadgeTrailingIcon" },
-      { id: "icon-only", title: "Icon Only", demo: "BadgeIconOnly" },
+      { id: "leading-icon", title: "Leading icon", demo: "BadgeLeadingIcon" },
+      { id: "trailing-icon", title: "Trailing icon", demo: "BadgeTrailingIcon" },
+      { id: "icon-only", title: "Icon only", demo: "BadgeIconOnly" },
       { id: "dot-only", title: "Dot only", demo: "BadgeDotOnly" },
       ...["soft", "outline"].flatMap((variant) => badgeTones.map((tone) => ({
         id: `dot-${variant}-${tone}`,
@@ -1247,6 +1248,7 @@ function gallerySpecimenTable() {
       { id: "state-kept", title: "State / kept", demo: "GalleryEditSummaryKept" },
       { id: "state-undone", title: "State / undone", demo: "GalleryEditSummaryUndone" },
       { id: "variant-diff", title: "Variant / diff", demo: "GalleryDiff" },
+      { id: "variant-diff-comment", title: "Variant / diff, comment", demo: "GalleryDiffComment" },
     ],
     approval: [
       { id: "default", title: "Default", demo: "GalleryApproval" },
@@ -1529,7 +1531,8 @@ function gallerySpecimenTable() {
     ],
     switch: ["SwitchDefault", "SwitchSizeSm", "SwitchSizeMd", "SwitchSizeLg", "SwitchChecked", "SwitchRounded", "SwitchNeutral", "SwitchCustom", "SwitchLong", "SwitchHover", "SwitchActive", "SwitchFocus", "SwitchDisabled", "SwitchDisabledChecked", "SwitchReadOnly", "SwitchLoading", "SwitchLabelEnd", "SwitchLabelStart", "SwitchDescription", "SwitchHiddenLabel", "SwitchSettingsRow", "SwitchList"].map(name => ({
       id: name.slice(6).toLowerCase(),
-      title: name.slice(6).replace(/([a-z])([A-Z])/g, "$1 $2"),
+      // In sentence case ("Settings row"): a tile shows a title that is already words as written (specimen-names.mjs).
+      title: name.slice(6).replace(/([a-z])([A-Z])/g, "$1 $2").replace(/ (\w)/g, (_, letter) => ` ${letter.toLowerCase()}`),
       demo: name,
     })),
   };

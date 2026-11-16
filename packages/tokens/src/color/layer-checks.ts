@@ -47,12 +47,16 @@ export function problemsFor(theme: "light" | "dark", cast: Cast, share: number |
       const m = layerLightnessAt(theme, g, n, fills, cardTone), at = `${Number((g * 100).toFixed(2))}/${n}`;
       const memo = new Map<number, string>(), hx = (L: number) => { let x = memo.get(L); if (x === undefined) memo.set(L, x = layerHex(theme, L, cast)); return x; };
       const edge = hx(m.ink.edge), mm = MIN[theme];
-      for (const [name, ground] of [["page", m.page], ["raised", m.raised], ["recessed", m.recessed], ["card", m.card], ["tile", m.tile], ["well", m.well]] as const) {
+      for (const [name, ground] of [["page", m.page], ["raised", m.raised], ["recessed", m.recessed], ["card", m.card], ["tile", m.tile], ["well", m.well], ["float", m.float]] as const) {
         const [rest, hover, selected] = m.fill[name];
         for (const t of shares) {
           const ink = (L: number) => inkHex(theme, L, cast, t), body = ink(m.ink.body), muted = ink(m.ink.muted), text = shares.length > 1 ? `, text ${t}` : "";
           for (const [what, bg] of [[name, ground], [`${name} field`, rest], [`${name} hover`, hover], [`${name} selected`, selected]] as const)
             if (contrast(muted, hx(bg)) < 4.5) problems.push(`${at}: muted on ${what}${text}`);
+          // The subtle ink (meta, placeholders): text on each ground, its field and its hover fill, never a selected plate.
+          const subtle = ink(m.ink.subtle);
+          for (const [what, bg] of [[name, ground], [`${name} field`, rest], [`${name} hover`, hover]] as const)
+            if (contrast(subtle, hx(bg)) < 4.5) problems.push(`${at}: subtle on ${what}${text}`);
           // Soft Badge and Count: muted on the soft-mark plate (base.ts bg-mark) laid over the ground.
           if (contrast(muted, markOver(theme, hx(ground))) < 4.5) problems.push(`${at}: muted on a mark on ${name}${text}`);
           // An interactive soft Badge under the pointer (bg-mark-hover, 10.7% black) on the page and on layers.

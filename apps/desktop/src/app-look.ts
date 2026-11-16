@@ -44,8 +44,6 @@ export const APP_TYPES = ["12", "13", "14", "15", "16"] as const;
 
 export type AppPanels = "sectioned" | "floating";
 
-/** The look the app starts in: Area's chosen theme, as published. */
-export const followArea = (own: Record<string, string>): AppLook => ({ follow: true, system: AREA_ID, own });
 
 /** A saved look, each part kept only while it still makes sense: an unknown system falls back to Area's in `chromeOf`. */
 export function restoreAppLook(saved: unknown, defaults: Record<string, string>): AppLook {

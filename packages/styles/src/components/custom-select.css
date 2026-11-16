@@ -7,55 +7,46 @@
  * look exactly like a menu's and a Combobox's. docs/specs/custom-select.md.
  * ------------------------------------------------------------------------- */
 @layer area.components {
+  /* The trigger is the one field shell (input.css, "One field shell"): its tiers, edge, corner, fill, soft, focus and
+     status. Custom select reads Select's public seam (select-*), so the two sit side by side. */
   .area-custom-select {
-    --_field-lift: var(--area-shadow-field); /* Field shadow (axes/depth.ts), transparent by default */
-    /* Field chrome: the same roles as Select (navigation.css), so the two sit side by side. */
     --_bg: var(--area-select-bg);
     --_bg-hover: var(--_bg);
-    --_bg-open: var(--_bg);
+    --_bg-pressed: var(--_bg); /* held and open: the rest fill on a field (input.css, "Press and open") */
     --_border: var(--area-select-edge);
     --_border-hover: var(--area-select-edge-hover);
-    --_border-focus: color-mix(in srgb, var(--_border), var(--area-field-focus-color) calc(var(--area-field-focus-recolor) * 100%)); /* the ring's colour only under Focus ring Halo (axes/states.ts) */
-    --_focus-outline: var(--area-field-focus-color);
-    --_focus-halo: var(--area-field-focus-halo-color);
+    --_ink: var(--area-select-text);
+    --_bg-disabled: var(--area-select-bg-disabled);
+    --_tone-invalid: var(--area-select-invalid-color);
+    --_tone-invalid-halo: var(--area-select-invalid-halo-color);
+    --_tone-success: var(--area-select-success-color);
+    --_tone-success-halo: var(--area-select-success-halo-color);
+    --_tone-warning: var(--area-select-warning-color);
+    --_tone-warning-halo: var(--area-select-warning-halo-color);
     --_trigger-width: var(--area-select-inline-size);
-    --_height: var(--area-control-md);
-    --_radius: var(--area-radius-control-md);
-    --_icon: var(--area-icon-md);
-    --_gap: var(--area-gap-md);
-    --_text: var(--area-control-md-text);
-    --_leading: var(--area-control-md-leading);
     display: inline-flex;
     vertical-align: middle;
     min-inline-size: 0;
     max-inline-size: 100%;
   }
-  .area-custom-select--outline { --_bg: var(--area-select-bg); }
-  /* Soft matches Select, Input and NumberField soft, so an inspector holds one field style. */
-  .area-custom-select--soft {
-    --_field-lift: 0 0 0 0 transparent;
-    --_bg: var(--area-input-bg-soft);
-    --_border: var(--area-input-edge-soft); /* none, or the strong edge under increased contrast */
-    --_border-hover: var(--area-input-edge);
-  }
   /*
    * spec: Notion's inline select (Share popover access levels, captures/custom-select/
    * notion--*-trigger--rest--light): no fill or edge at rest, radius 6 at 28, text 8 in, a 16
    * chevron in a quieter ink at the end. Area paints it as a neutral ghost Button: the row hover
-   * plate under the pointer, the pressed plate while its list is open (button.css), and it is as
-   * wide as its value.
+   * plate under the pointer, the pressed plate held and while its list is open (input.css, "Press
+   * and open", as an open Button), and it is as wide as its value.
    */
   .area-custom-select--ghost {
     --_bg: transparent;
     --_bg-hover: var(--area-bg-component-hover);
-    --_bg-open: var(--area-bg-component-active);
+    --_bg-pressed: var(--area-bg-component-pressed);
     --_border: transparent;
     --_border-hover: transparent;
+    --_bg-disabled: transparent;
+    --_border-disabled: transparent;
+    --_bg-read-only: var(--area-bg-component); /* one fill step deeper than none */
     --_trigger-width: auto;
   }
-  .area-custom-select--sm { --_height: var(--area-control-sm); --_radius: var(--area-radius-control-sm); --_gap: var(--area-gap-sm); --_icon: var(--area-icon-sm); --_text: var(--area-control-sm-text); --_leading: var(--area-control-sm-leading); }
-  .area-custom-select--md { --_height: var(--area-control-md); --_radius: var(--area-radius-control-md); --_gap: var(--area-gap-md); --_icon: var(--area-icon-md); --_text: var(--area-control-md-text); --_leading: var(--area-control-md-leading); }
-  .area-custom-select--lg { --_height: var(--area-control-lg); --_radius: var(--area-radius-control-lg); --_gap: var(--area-gap-lg); --_icon: var(--area-icon-lg); --_text: var(--area-control-lg-text); --_leading: var(--area-control-lg-leading); }
   .area-custom-select--full-width { display: flex; inline-size: 100%; }
   .area-custom-select--full-width > .area-custom-select__trigger { flex: 1; inline-size: auto; }
 
@@ -70,18 +61,8 @@
     inline-size: var(--_trigger-width);
     max-inline-size: 100%;
     min-inline-size: 0;
-    block-size: var(--_height);
     margin: 0;
-    border: var(--area-stroke-width) solid var(--_border);
-    /* Select's corner: the tier's control radius, capped against its own height, or a pill. */
-    border-radius: calc(min(var(--_radius), max(var(--area-radius-min), round(down, calc(var(--_height) * var(--area-radius-factor)), 2px))) + var(--area-pill-field) * var(--area-radius-full));
-    background-color: var(--_bg);
-    color: var(--area-select-text);
-    font: inherit;
-    font-size: var(--_text);
-    line-height: var(--_leading);
     text-align: start;
-    box-shadow: var(--_field-lift);
     cursor: pointer;
     outline: none;
     /* Motion (docs/MOTION.md): colour leaves a state on fast ease-out and enters it at once
@@ -91,60 +72,17 @@
     user-select: none;
   }
   @media (hover: hover) {
-    .area-custom-select:not([data-open]) > .area-custom-select__trigger:hover:not(:disabled, [data-read-only]) {
-      border-color: var(--_border-hover);
-      background-color: var(--_bg-hover);
-    }
+    /* The shell sets the hover edge; a ghost trigger shows its plate. */
+    .area-custom-select:not([data-open]) > .area-custom-select__trigger:hover:not(:disabled, [data-read-only], :active) { background-color: var(--_bg-hover); }
     .area-custom-select__trigger:hover { transition-duration: var(--area-hover-in); }
   }
-  .area-custom-select__trigger:is(:active, :focus-visible),
-  .area-custom-select[data-open] > .area-custom-select__trigger { transition-duration: 0s; }
-  .area-custom-select__trigger:focus-visible {
-    border-color: var(--_border-focus);
-    box-shadow: var(--_field-lift), 0 0 0 var(--area-field-focus-halo-width) var(--_focus-halo);
-    outline: var(--area-field-focus-outline-width) solid var(--_focus-outline);
-    outline-offset: var(--area-focus-offset);
-  }
-  /* Open: the trigger holds its hover paint while its list shows (the hover edge on a field, the
-     pressed plate on a ghost); the focus ring stays a keyboard signal (:focus-visible above), as
-     Select's native trigger. spec: Notion's settings select keeps its hover plate and edge open,
-     ChatGPT's settings select keeps its edge (captures/custom-select/notion--settings-theme-
-     trigger--open--light, chatgpt--settings-language-trigger--open--light). */
-  .area-custom-select[data-open] > .area-custom-select__trigger { background-color: var(--_bg-open); }
-  .area-custom-select[data-open] > .area-custom-select__trigger:not(:focus-visible) { border-color: var(--_border-hover); }
-  .area-custom-select--ghost[data-open] > .area-custom-select__trigger { border-color: transparent; }
-  .area-custom-select__trigger[aria-invalid="true"] {
-    --_border: var(--area-select-invalid-color);
-    --_border-hover: var(--area-select-invalid-color);
-    --_border-focus: var(--area-select-invalid-color);
-    --_focus-outline: var(--area-select-invalid-color);
-    --_focus-halo: var(--area-select-invalid-halo-color);
-  }
-  /* Success and warning, as Select's (components audit 2026-11-07, O1): a Field's status reaches every field. */
-  .area-custom-select__trigger[data-success] {
-    --_border: var(--area-select-success-color);
-    --_border-hover: var(--area-select-success-color);
-    --_border-focus: var(--area-select-success-color);
-    --_focus-outline: var(--area-select-success-color);
-    --_focus-halo: var(--area-select-success-halo-color);
-  }
-  .area-custom-select__trigger[data-warning] {
-    --_border: var(--area-select-warning-color);
-    --_border-hover: var(--area-select-warning-color);
-    --_border-focus: var(--area-select-warning-color);
-    --_focus-outline: var(--area-select-warning-color);
-    --_focus-halo: var(--area-select-warning-halo-color);
-  }
-  /* Read-only (O2): a value set elsewhere, shown at rest. Only disabled changes paint (Input's rule); the trigger keeps
-     its focus ring and doesn't answer the pointer. */
-  .area-custom-select__trigger[data-read-only] { cursor: default; }
-  .area-custom-select__trigger:disabled {
-    --_border: var(--area-border-faint);
-    background-color: var(--area-select-bg-disabled);
-    color: var(--area-fg-disabled);
-    cursor: not-allowed;
-  }
-  .area-custom-select--ghost > .area-custom-select__trigger:disabled { --_border: transparent; background-color: transparent; }
+  .area-custom-select__trigger:focus-visible { transition-duration: 0s; }
+  /* Held and open: the one open paint (input.css, "Press and open"; plan B7.1): the hover edge on a field, the pressed
+     plate on a ghost, and the focus ring only for the keyboard, as Select's native trigger. spec: the measured settings
+     selects keep their edge open (captures/custom-select/notion--settings-theme-trigger--open--light,
+     chatgpt--settings-language-trigger--open--light). */
+  /* Read-only (O2) and disabled are the field shell's (input.css): read-only a value set elsewhere, one fill step deeper,
+     keeping its focus ring and answering no pointer; disabled the field's disabled paint, the chevron and icon included. */
 
   .area-custom-select__icon {
     display: inline-grid;
@@ -162,7 +100,6 @@
     white-space: nowrap;
   }
   .area-custom-select__value[data-placeholder] { color: var(--area-input-placeholder); }
-  .area-custom-select__trigger:disabled .area-custom-select__value[data-placeholder] { color: inherit; }
   /* The field's chevron ink (`input-chevron`, a step lighter than its icons; Q5, owner 2026-10-08),
      as Select's and Combobox's chevrons. */
   .area-custom-select__chevron {
@@ -175,21 +112,20 @@
     color: var(--area-input-chevron);
   }
   .area-custom-select__chevron > svg { inline-size: 100%; block-size: 100%; }
-  .area-custom-select__trigger:disabled .area-custom-select__chevron { color: inherit; }
 
   /* The list: Menu's surface and rows, placed by the shared overlay engine (Combobox's rules:
-     4 below, flips, at least the trigger's width and a menu's 224, 324 tall at most). */
+     4 below, flips, at least the trigger's width and a menu's 160, 324 tall at most). */
   .area-custom-select__listbox[popover] {
     overflow-y: auto;
     overscroll-behavior: contain;
     max-block-size: min(324px, var(--area-overlay-available-height, 50vh)); /* spec: combobox.md */
-    min-inline-size: max(var(--area-overlay-anchor-width, 0px), var(--area-menu-min-inline-size, calc(var(--area-space-96) * 2 + var(--area-space-32))));
+    min-inline-size: max(var(--area-overlay-anchor-width, 0px), var(--area-menu-min-inline-size, calc(var(--area-space-96) + var(--area-space-64))));
   }
   .area-custom-select__listbox:focus-visible { outline: none; }
   /* The chosen value shows the check alone, as Select and Combobox: every product list measured
      (Notion, ChatGPT) marks it so; the plate only means highlight (Q3, owner 2026-10-08; was the
      active plate and the check, audit S13 C). */
-  /* Unchosen, the check is Menu's small mark at rest (surface.css): it fades and grows in when chosen, rather than
+  /* Unchosen, the check is Menu's small mark at rest (menu.css): it fades and grows in when chosen, rather than
      popping (2026-10-26, the interaction pass; it was visibility: hidden). */
   .area-custom-select__option[aria-selected="false"] > .area-menu__check > svg { opacity: 0; scale: 0.6; /* spec: MOTION.md small mark */ }
   .area-custom-select__group { display: flex; flex-direction: column; gap: var(--area-ui-row-gap); }
@@ -262,7 +198,7 @@
     box-shadow: inset 0 0 0 var(--area-stroke-width) var(--area-border); /* Folder's edge */
     pointer-events: none;
   }
-  .area-custom-select__option[aria-selected="true"] > .area-custom-select__preview::after { box-shadow: inset 0 0 0 var(--area-selected-width) var(--area-stroke-selected); }
+  .area-custom-select__option[aria-selected="true"] > .area-custom-select__preview::after { box-shadow: var(--_selected-ring); } /* the selected edge's ring (selection.css, plan B7.6), over the picture */
   .area-custom-select--grid .area-custom-select__option > .area-menu__icon {
     justify-self: center;
     inline-size: var(--area-control-xs); /* a swatch's cell: List box's grid draws icons and swatches in a control-sized box */
@@ -273,8 +209,9 @@
     min-inline-size: 0;
     overflow: hidden;
     color: var(--area-fg-muted);
-    font-size: var(--area-text-sm-size);
-    line-height: var(--area-text-sm-leading);
+    /* The option's own size, muted (plan A9.3: a line joined to a name is the name's size). */
+    font-size: var(--area-ui-size);
+    line-height: var(--area-ui-leading);
     text-overflow: ellipsis;
     white-space: nowrap;
   }

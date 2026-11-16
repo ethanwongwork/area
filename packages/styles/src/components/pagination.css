@@ -57,20 +57,18 @@
   .area-pagination--compact {}
 
   /* A page number: a square at the tier's control height, Button's corner, the set's inks. */
+  /* The number is its own text box (inset.css, "One centring model"): a block trimmed to its cap and padded
+     (H − 1cap) / 2 above and below, so its cap sits on the square's centre (it centred the line box, 0.62 high). */
   .area-pagination__page {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
     box-sizing: border-box;
     min-inline-size: var(--_height);
     block-size: var(--_height);
     margin: 0;
-    padding-block: 0;
     padding-inline: var(--_page-inset);
     border: 0;
     /* Button's corner formula: capped against the tier's height, and a pill where the theme's
        pills list names `button`, so the numbers keep the shape of the steps beside them. */
-    border-radius: calc(min(var(--_radius), max(var(--area-radius-min), round(down, calc(var(--_height) * var(--area-radius-factor)), 2px))) + var(--area-pill-button) * var(--area-radius-full));
+    border-radius: max(min(var(--_radius), max(var(--area-radius-min), round(down, calc(var(--_height) * var(--area-radius-factor)), 2px))), var(--area-pill-button) * var(--area-radius-full)); /* a pill is radius-full, one value */
     background-color: transparent;
     color: var(--area-fg-muted);
     font-family: inherit;
@@ -100,6 +98,8 @@
     cursor: default;
     transition-duration: var(--area-hover-in);
   }
+  /* The current page presses too, one press room past its plate (plan B7.2): its rule above outranked the press. */
+  .area-pagination__page[aria-current="page"]:active { background-color: var(--area-bg-component-pressed); transition-duration: var(--area-press-in); }
   .area-pagination__page:focus-visible {
     outline: var(--area-focus-width) solid var(--area-focus-color);
     outline-offset: var(--area-focus-offset);
@@ -131,6 +131,9 @@
 
   /* Previous and Next point the way the text runs. */
   .area-pagination__step:dir(rtl) .area-button__icon > svg { scale: -1 1; }
+  /* One ink for the bar's inactive items (plan A3.3, finding VN12, 2026-11-11): Previous and Next are ghost Buttons, whose
+     quieter icon ink sat beside the pages' muted one; here they read muted, as the pages and the status do. */
+  .area-pagination .area-pagination__step.area-button { --_fg: var(--area-fg-muted); }
 
   @media (forced-colors: active) {
     .area-pagination__page[aria-current="page"] { forced-color-adjust: none; background-color: Highlight; color: HighlightText; }

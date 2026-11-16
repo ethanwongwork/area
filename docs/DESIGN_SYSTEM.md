@@ -95,7 +95,7 @@ them:
   Display P3's room. Series lightness moves every series along its family; `contrast/series.test.ts` holds the dataviz
   validator's thresholds at every value.
 - **Charts' status is its own trio**, `--area-data-success`, `--area-data-warning`, `--area-data-danger` (#5dce8e,
-  #ffcd53, #ff4a4b, the same in light and dark; data views round 14): trackers, uptime, CI runs. Yellow sits lighter
+  #ffcd53, #ff4849, the same in light and dark; data views round 14): trackers, uptime, CI runs. Yellow sits lighter
   than green so the two part for red-green colour blindness; red reads first. Text and controls keep the success,
   warning and danger roles.
 - **Status colours keep their hue.** Under Status colours Match they quiet to the Accent strength with the accent's own
@@ -181,15 +181,52 @@ neutral; Selection Accent puts the accent in state marks, selected edges and the
 
 **Ink and weight.**
 
-- Text has two levels, default (`fg-default`) and muted (`fg-muted`). Placeholder text
-  shares the muted rung (`fg-placeholder`). Disabled ink is for disabled text only.
-- Weight 400 is for running text, descriptions, field labels, rows and titles set larger
-  than body.
-- Weight 500 is for:
-  - surface titles at body size (Popover, Dialog, Toast, Alert, Card, Panel bar, Calendar
-    month, Nav group titles, Meter's name);
-  - labels on solid fills, tracks and static marks: solid Buttons, Segmented options, every
-    Badge, soft Count, Kbd, Indicator counts and Avatar initials.
+- Text has three inks (plan A3.2, owner 2026-11-11): default (`fg-default`) for what is read, muted (`fg-muted`) for
+  what explains (a description, a header cell, a group label), and subtle (`fg-subtle`) for meta that must sit quieter
+  than a description: a placeholder (`fg-placeholder` is the subtle ink), a menu's shortcut, a timestamp, an empty
+  value, line numbers; never a description. All three are text and keep 4.5:1 on every ground they sit on (and the
+  dark APCA content floor, Lc 60), so subtle is a narrow step: solved on the deepest ground's hover fill, it is a hair
+  off muted in light at Layer contrast 50 (#696969 against #646464), and in dark at the defaults the APCA floor leaves
+  no room under muted, so it is muted's #b9b9b9 there (a step appears on lighter dark grounds). Dark muted steps back
+  from #c5c5c5 (1.49 off the default ink) to #b9b9b9 (1.70), the darkest grey the APCA floor allows on the fills it
+  sits on (plan A3.1); light keeps its 2.5. Disabled ink (`fg-disabled`) is for disabled text only, a share of the way from its ground to muted, so
+  it follows the ground and the cast. An unselected option in any selection control and a bar's inactive items read
+  muted (plan A3.3); a ghost Button keeps its quieter ink only as a Button.
+- **Tone colours the mark, never the words** (plan A3.4): a status glyph reads `fg-<tone>-mark` (Alert, Toast, Turn
+  notice, Message, Attachment, File upload); a surface's title and link keep the default ink in every tone.
+- **One weight table** (plan A9.5, 2026-11-11; the type skill and the `typography.ts` header quote it):
+  - **Regular** (`weight-regular`, the Regular weight setting: 400 by default, 400 to 470; `axes/regular-weight.ts`) is
+    for everything read or operated: running text, descriptions, field
+    labels, rows (Nav, Tree view, Menu items), a setting's, a choice's or a step's name, a label beside
+    its value, a bar's name (Meter, Progress) and a figure (Card's value, Chart's number and centre).
+    Count's soft label is Regular.
+  - **500** (`weight-strong`) is for a surface's or a region's title (Popover, Dialog, Toast, Alert,
+    Card, Panel bar, Calendar month, Section heading, Empty state, Link groups) and `title-xs` headings
+    (a reply's h1 to h3); a label over a run of rows (below); an item's name on a picture or file card
+    (Card, Asset card, Design card, File tile, a File upload row, Asset row, Board card; owner,
+    2026-11-11, "500 in the default ink for every item name"); and labels on fills, tracks and static
+    marks: Buttons on every variant (owner 2026-10-08, kept 2026-11-11), Segmented options, every Badge,
+    Kbd, Citation, Indicator counts and Avatar initials; the selected Tab.
+  - **600** (`weight-heading`) is for titles from `title-sm` up: a page's own title (Page header `md`
+    and `lg`), a document's title and its larger headings. Never a row, a label or a control.
+- **A label over a run of rows** (a menu group, a nav section, a list section, a shortcut group, an
+  optgroup, a panel section, a table group, a picker's saved colours) is the rows' size at 500 in the
+  muted ink, a row tall (owner, 2026-10-22). A title that names a whole surface or region is default ink.
+- **A label beside its value is muted 400, and the value leads in the default ink** (plan A9.13):
+  Description list's terms in every layout, Field's horizontal label, a Panel row's label, a filter's
+  label. Layout moves a label, not its role. A bar's name is the UI line at 400 in the default ink, its
+  value muted and tabular at the row's end (Meter, Progress).
+- **Numbers that change in place, count or sit in a column take tabular figures** (plan A9.8): a numeric
+  field sets them on the control (Number field, Time field, Date picker, OTP, Color field), Table on every
+  cell, and Nav's, Tree view's and Menu's trailing counts, Timestamp, Slider's ends and the calendar's days
+  too. **A figure** is the UI sans at 400, tabular: `title-lg` for a primary figure (Card's value, Chart's
+  number), `title-sm` with its tracking for a secondary one (a donut's centre). A chart's ticks, legend and
+  notes are the UI sans at `text-xs`, tabular, muted (owner, 2026-11-11, plan A9.11); mono only where
+  characters align by column (code, hashes, a token's name). `cohesion.test.mjs` lists the parts.
+- **Weight rises only with the default ink, with three written exceptions** (T5): a control's labels
+  keep one weight in every state, so a set's options are 500 in the muted ink at rest (Segmented,
+  Pagination, the width Tabs reserve); a mark draws its own weight in its own ink (Kbd, Citation, the
+  neutral Badge); and group labels are 500 muted.
 - A label's weight never changes with state: a selected segment is 500 because every
   segment is. One written exception: a selected Tab is 500 over 400 at rest, with each tab's width
   reserved at 500 by a hidden copy, so the row never moves (owner 2026-10-21; Figma, Radix, Fluent,
@@ -223,6 +260,32 @@ cell) and for controls nested on a row. The pressed fill follows every ground an
 setting (`packages/styles/src/layers.css`), and always moves at least the press room past selected, on a sidebar too. How dark each plate is comes from the Fill settings (Hover, Selected,
 Pressed; [Theming](THEMING.md#settings), interaction states), each built on the one before so the order always holds.
 
+**Every state fill is a role** (plan B7.4, 2026-11-14; `state-paint.test.mjs` fails on a literal in a state rule). Two
+presses need their own role. On a control fill (Segmented's and soft Toggle group's options on their track, Board's add
+row) the press is `bg-pressed-track`: the pressed wash, capped where the muted label keeps 4.6:1 on that ground's
+control fill (`layers.css`, solved from the fill's lightness; 8.5% black on the page's control fill at the defaults).
+On a soft mark (Chip input) it is `bg-mark-pressed`, past `bg-mark-hover` by the Pressed fill's share. A changed line
+is `bg-change-added` / `bg-change-deleted` in Diff and Code block alike. A literal stays only where no theme role can
+hold (media chrome, colour gradients and the swatch palette's ring on arbitrary colours, a solid's dark press), and is
+marked `spec`.
+
+Three rules hold the table together (plan B7.1–B7.3, 2026-11-14; `cohesion.test.mjs` holds each):
+
+- **Every hover plate has a pressed plate** one step past it: `bg-component-hover` presses to `bg-component-pressed`,
+  `bg-hover` to `bg-pressed`, a glass or a band to its own firmer step. A control that answers the pointer with its
+  ink or its edge alone (Nav's row actions, a field) has no plate to press.
+- **Press shows on every item, selected and current included**: a click on the current page, the chosen value or an
+  on toggle is still a click. The selected plate presses to the pressed plate; an on toggle in a tone steps back to
+  its hover tint (a step past its firmest tint took the tone's words under 4.5:1); a chosen solid (a Calendar day, a solid toggle) presses a step past its hover, as every solid.
+- **Open is pressed** ("Open"): a trigger whose popup shows (`aria-expanded="true"` with any `aria-haspopup`, a
+  toggle tip that is pinned, a picker's `data-open`) holds its pressed paint until the popup closes, so the press that
+  opened it stays on the control it came from. A plate-shaped trigger (a Button, a ghost picker, Combobox's toggle,
+  Breadcrumb's ⋯) takes the pressed plate; a field-shaped one (Custom select, Date picker) keeps its fill with the
+  hover edge, and never the focus edge, which stays a keyboard signal; a trigger that answers with its ink (Nav's row
+  actions) keeps its pressed ink. Written once each: in `button.css` for every Button and in the field shell
+  (`input.css`, "Press and open") for the pickers. A submenu's row is a list's highlight, not a trigger's press: it
+  keeps the hover plate while its submenu shows.
+
 **Selection when the list isn't focused** (components audit V15, 2026-11-07; the code editor's inactive selection): a
 list with its own focus (List box, Tree view in navigation mode, a Table that holds a checkbox, link or focusable row)
 paints its selected rows on the selected fill only while focus is inside it (`:focus-within`); while focus is elsewhere
@@ -235,7 +298,9 @@ rule.
 
 **Inactive** (components audit V2, 2026-11-07; Button, Menu item, Nav item): drawn as disabled (its parts at
 `opacity-disabled`, no hover or press paint) but focusable and hoverable, with `aria-disabled` and its reason
-(`inactiveText`) as its description: a Tooltip on Button and Nav item, the note under a Menu row's label. The element
+(`inactiveText`) as its description: a Tooltip on Button and Nav item, the note under a Menu row's label. A Menu row
+dims as a whole (plan B7.12): its words take the muted ink its note reads, at full strength, and its glyphs take the
+opacity, so the note is never stronger than the label. The element
 itself never takes the opacity, so its focus indicator (Button's and Nav's ring, a Menu row's plate) stays at full
 strength. Which to use is [Writing › Disabled or inactive](WRITING.md#disabled-or-inactive).
 
@@ -253,28 +318,61 @@ own step.
   Selection role, the accent's indicator rung at Selection Accent and the neutral solid at Neutral (the default since 2026-10-25). Focus
   follows the same setting. No component picks its own selection or focus colour; the setting decides for all of them.
 - **A selected container** (Card, Asset card, a choice card, a containerless image) draws its edge inside at
-  `selected-width` (Selected stroke, 2px by default, ChatGPT's tile): its own line in `stroke-selected`, topped up by
+  `selected-width` (Selected stroke, 2px by default): its own line in `stroke-selected`, topped up by
   an inset ring of `selected-width` minus that line, so selecting never moves anything. Under it, `selected-tint`
   (Selected tint, none by default). This supersedes choice cards' "darker, not thicker" rule (2026-09-28).
+- **A chosen tile or swatch is drawn one way** (plan B7.6): a chosen cell in a grid of swatches or pictures (Color
+  swatch picker, File grid, Custom select's picture grid, Asset and Design card) draws the same selected edge, from one
+  recipe (`selection.css`: the part sets `--_selected-border`, its own line, and reads `--_selected-edge`, or
+  `--_selected-ring` for an overlay over a picture). The ring takes the part's corner, so it stays concentric at every
+  Corner. A grid of glyphs or words takes the plate (List box grid, Custom select's word grid); Alignment picker is a
+  glyph grid and its chosen cell shows the mark in `fg-selection`. The Color swatch palette (cells flush on arbitrary
+  colours) keeps its two-tone white and dark ring, the one line that reads on any colour. A chosen tile's focus ring
+  sits outside it, so focus and selection differ by placement at every Selection colour. Card and choice cards draw the
+  same arithmetic and move onto the recipe with their families.
+- **Selection is a scope for the inks inside a chosen row** (plan B7.13): under a selected or current row of Menu,
+  List box, Nav, Tree view and Table (each by its own state attribute) and any element marked `data-area-selected`,
+  the quiet ink (`fg-quiet`) points at the row's default ink, so a ghost action in the row stands at full strength
+  with its words, and no family writes a selected rule per part. Words keep `fg-default` and marks `fg-selection`: the
+  plate alone says which row is chosen.
 - **The focus ring** is `focus-width` in `focus-color`. Controls (a button, a chip, a field, a thumb) sit it at
   `focus-offset`; containers and text (a card, a tile, a toolbar, a link, a code line) at `focus-gap`, since a ring on
   their edge or their glyphs reads cramped. Rows, tabs and cells draw it inside, by their own width. Fields read the
   Focus ring setting's switches for their ring, edge recolour and halo. No component writes a literal offset or width.
+  Where it sits, by part (plan A6.2; `cohesion.test.mjs` holds it, and a new ring joins a row):
+
+  | Placement | Offset | Parts |
+  |---|---|---|
+  | Control | `focus-offset` | Button, Chip, Badge links and removes, Tag's remove, Toggletip, a field and its actions and steppers, Select and its pickers' triggers, Checkbox, Radio, Switch, Slider and Color picker thumbs, Segmented and Toggle group items, Pagination pages, Calendar days, Breadcrumb links (on their plate), Panel toggle, Chart |
+  | Solid fill | `focus-solid-offset` | a solid Button (Split button's, Composer's send) and a solid Badge link: off by the gap, or under Inset inside one pixel in, in the fill's ink. A checked Checkbox or Radio and an on Switch take `focus-gap` |
+  | Container or text | `focus-gap` | Card, Asset and Design cards, choice cards, Toolbar, Toaster, Table wrapper, Code block, Link, Mention, Citation, Abbreviation, Video player, Board card |
+  | Row, tab or cell | inside, by its own width | Nav, Tree view, Accordion, Step, Token row, Table rows, Plan and Queue heads, Edit summary, Approval options, Prompt suggestions, List box grid, Time field segments, Board's add row, Scroll area, Tabs (on a part) |
+  | Plate alone | none | Menu rows (active descendant) |
+
+  One indicator per row: a ring or a plate, never both. Within a setting a ghost or plain control may draw its ring
+  inside by its own edge, so it never overlaps a neighbour in a tight toolbar. A ring never sits flush on a solid fill of
+  its own colour, and under Contrast More every ring is 3px and off by the gap ([Contrast](CONTRAST.md#focus)).
 
 - **Solid fills** step one way: hover is further from the page, pressed one more
   (`--_solid-active` in `button.css`).
 - **Hover changes one thing:** the plate, the edge or the underline. Ink and opacity stay
   fixed. Pointer hover sits under `@media (hover: hover)` so a tap leaves no stuck plate.
-  Hover-to-reveal content (row actions, Card overlay, Message actions) stays unwrapped,
-  with a `hover: none` rule that shows it.
+- **Hover-revealed content hides only where there is hover** (plan B7.11, 2026-11-14): row actions, a Card's
+  overlay, Message's and Attachment's actions, a section's or a step's chevron, a drag handle. The rule that hides
+  it (`opacity: 0`) sits inside `@media (hover: hover)`, so a touch screen, which cannot hover, always shows it and
+  needs no rule of its own; focus inside the host shows it at once, and hidden it stays in the tab order (never
+  `display: none` or `visibility: hidden`). Until 2026-11-14 half the reveals hid everywhere and showed again under
+  a `hover: none` rule. `cohesion.test.mjs` and `tests/behaviour/suites/state.test.mjs` hold it.
 - **Text in controls is not selectable** (`user-select: none` on every control's base
   rule), so repeated clicks never paint a selection. Fields, links in prose and editable
   text stay selectable.
 - **Selected rows by job.**
   - Menus of commands and choices show a trailing check, and the plate is only the
     highlight. MenuItem takes `checked`, or `radio` for one of several.
-  - Value pickers (Select, Combobox) show the value with the active plate and the check.
-    `data-selected` is their hook.
+  - Value pickers (Select, Combobox, Custom select, List box) show the value with the active plate and the check in
+    `fg-selection` (plan B7.7, 2026-11-14; Select, Combobox and Custom select had shown the check alone since
+    custom-select.md Q3). `data-selected` is their hook; native Select's is `:checked`. The plate outranks the
+    highlight and gives way to the press.
 - **Off states.**
   - One off-track grey, `edge-control`, for the Switch track and the Slider and Progress
     rails.
@@ -290,9 +388,32 @@ own step.
   default ink.
 - **Raised thumbs.** The Segmented thumb is the white surface in light and
   `bg-component-active` in dark, where the surface rung sits below the groove.
-- **Disabled.** Controls, rows and pickers dim to 50% as a whole
-  (`--area-opacity-disabled`). Text fields keep full opacity and use their disabled field
-  paint, never both.
+- **Disabled and read-only** (plan B7.8, B7.9, B7.10; `states.test.mjs`, and the behaviour suite `states` measures
+  every ground and setting extreme). Disabled goes one way, by shape:
+  - **A field-shaped box** (anything drawing the field shell: Input and the fields built on it, Number field, Select,
+    Textarea, Custom select's and Date picker's triggers, Tag picker, OTP field) takes the shell's disabled paint
+    (input.css, "Disabled and read-only"): its family's disabled fill (the soft fill), the faint edge (none on soft and
+    ghost), and `fg-disabled` for the value and every part (icons, affixes, actions, unit, steppers, chevron,
+    placeholder). It is never dimmed by opacity. At Edge contrast 0 the fill alone carries it.
+  - **Everything else** dims by `opacity-disabled`: controls, rows, marks, cells and options. A Calendar day and a
+    Select option count here, and so does a tag inside a disabled Tag picker. A focusable cell (an unavailable day)
+    fades its parts, never itself, so its ring stays.
+  - **A toned Button repaints instead of dimming** (B7.9). This covers a hued tone, and a neutral solid when Action is
+    Accent. Dimmed, a blue or red button only reads as a lighter one that still looks available. Instead the fill goes
+    to the variant's neutral fill, the edge to the neutral edge and the ink to `fg-disabled`, at full opacity
+    (`--_toned`, button.css). A Split button pair dims once, and only when it is neutral.
+  - **A label outside the control and every description keep their inks.** Field's and Setting row's label step to
+    muted; a description is the reason and keeps 4.5:1.
+  - **Read-only is not disabled.** The value keeps the field's ink and the text target. Every state keeps its paint: a
+    checked box and a chosen card keep their selected edge and tint. It stays focusable and is announced
+    (`aria-readonly`, or native `readonly`), and it drops only the pointer's paint (hover, press, give) and the
+    cursor.
+  - **A read-only field takes one cue: its fill sits one step deeper than the editable rest.** An outline field goes
+    on the soft fill, a soft field on the soft fill's hover step, and a ghost trigger on the soft fill. The cue is a
+    fill, so it survives Edge contrast 0 and Fields stroke 0. The faint edge the plan named equals the control edge
+    since Phase 1. Measured: at least 1.02:1 from the editable fill on every declared ground; the thinnest is an
+    outline field on the recessed ground in dark at Layer contrast 100.
+  - **Forced colours:** disabled is GrayText; read-only keeps the system text colour.
 - **Loading is not disabled.** A loading Button stays focusable at full ink (`aria-busy`,
   `cursor: progress`) and ignores clicks. A loading Composer keeps its field editable and
   turns send into Stop.
@@ -305,13 +426,27 @@ own step.
 - **Close and dismiss.** One recipe per shape, always the Area `dismiss` glyph at fixed ink.
   - Rectangular surfaces (Popover, Toast, Alert) use a ghost small Button with its row
     plate. On a tinted ground it keeps the tone ink and hovers to 12% of it.
-  - Dialog's close is a 32px ghost Button.
+  - Dialog's close is a medium ghost Button (`control-md`: 30 at the default type 13, 26 at Compact).
   - Pills (Chip, Badge) use a concentric circle with a 12%-ink plate.
   - The API is `onDismiss` / `dismissLabel` everywhere.
 - **Fields.**
-  - Soft fields (Input, Textarea, Number field, Select, Input group) are flat: a fill, no
-    shadow.
+  - **One field shell** (plan B3.1, 2026-11-14; `input.css`, "One field shell"). Input, Number field, Input group,
+    Select, Textarea, Custom select's and Date picker's triggers, Tag picker's field and each OTP slot draw one shell, as
+    every list draws one row. A family sets inputs on its root (the tier `--_height`, `--_radius`, `--_icon`, `--_gap`,
+    `--_text`, `--_leading`; the paint `--_bg`, `--_border`, `--_border-hover`, `--_ink` from its own public seam
+    `input-*`, `select-*` or `textarea-*`; the soft paint; the status inks; `--_field-pill`) and the shell computes the
+    edge (`--_field-edge`: a state sets the variable, never `border-color`, so a seam or a nested field keeps its own),
+    the corner (`--_field-shape`, the ladder corner on the height plus the Pills flag; Textarea never pills), the fill
+    and lift, the tier's text, the focus ring, the status paint, and the disabled and read-only paint (plan B7.8, B7.10:
+    a family sets only `--_bg-disabled`, `--_border-disabled` and `--_bg-read-only` where its seam or variant differs).
+    `fields.test.mjs` fails a family that restates it.
+  - Soft fields are flat: a fill, no shadow, the Fields group's edge at rest and the control edge under the pointer.
   - Outline fields rest on the Field shadow setting, which is 0 by default.
+  - A group's seams are the field edge (`input-edge`), never a lighter line than the group's own.
+  - A label above its control sits `ui-stack` over it (Field, Slider's top label); a Panel caption sits the panel's
+    `ui-stack − 2`.
+  - Every field action that clears draws `dismiss`; `dismiss-circle` is a status mark. No part of a field is drawn by the
+    platform: Textarea's resize grip is two strokes in `input-chevron` kept inside the corner's curve.
   - One surface uses one field style: a Panel's rows are all soft.
 - **Keycaps** are filled, not drawn: `bg-component-active`, no visible edge, the 24px box's
   corner, muted ink at 500.
@@ -322,15 +457,29 @@ own step.
   - A keycap set inside a plate takes the plate's corner less its inset (Approval's number square: 4 in a 10 plate,
     6 in), so the two curves agree.
 - **List rows.**
-  - Every icon row puts its label on one 36px column (8 inset + 16 icon + `gap-row` 12):
-    Menu, Command palette, Combobox, Select options and Nav. Tree view keeps its own grid.
+  - Every icon row puts its label on one column, 8 inset + 16 icon + the row's icon-to-label gap `ui-cluster`: 32 at
+    the default type 13, 30 at the app's Compact, 34 at Comfortable (owner 2026-11-11, plan B2.3; it was `gap-row`, 34
+    and 36 at type 14). Menu, Command palette, Combobox, Custom select, Select options, List box, Nav and Tree view share
+    it, and Tree view's level step is its chevron plus the same gap (22 / 24 / 26), so a child's icon sits under its
+    parent's label.
+  - A floating list is at least 160 wide (`--area-menu-min-inline-size`; was 224), and a list opened from a field is
+    never narrower than the field.
   - Keyboard focus in menus is the plate alone (active descendant). Nav and Tree rows draw
     an inset ring.
   - A description sits in one of three ways, kept on purpose: under the label as a 12/16
     muted note (Menu), muted after the label (Command palette), or muted at the row's end
     (Combobox).
-  - A list with no matches shows one empty row everywhere: a muted line, a medium row
-    tall, at the text inset.
+  - A list's empty, loading and no-results line is one part everywhere, `.area-menu__empty`: a muted line a row
+    tall, its words on the glyph edge (plan B2.6; Combobox, Command palette, Composer menu and Custom select).
+  - **One row table** (plan B2.1, 2026-11-13; `inset.css`, "One row table"; `rows.test.mjs` holds it). Every list of
+    row plates (Menu and the lists on its rows, List box, Nav, Tree view, native Select's options) shares: the row
+    `ui-row`, plates `ui-row-gap` (1) apart by gap; the corner `radius-row` on a region, `radius-list-row` in a floating
+    list (the same unless the list's corner less its padding is smaller); one start column, the glyph edge
+    `ui-row-inset` (8), for icons, pictures, headings and text-only rows; the label at glyph edge + icon slot +
+    `ui-cluster`; row icons in `fg-muted` in every state, a danger row's in its red; a separator
+    `round(6 − ui-dense)` from the plates (5 / 6 / 7 at type 13) with its ends on the plates' edges; a group break
+    `gap-row`; a list with a picture reserves the picture's width in every row. At type 12 / 13 / 16 Default the
+    rows are 28 / 30 / 36 and the label column 30 / 32 / 38.
 - **Image corners** follow the image's size role.
   - An image that stands alone (Figure, an Asset card's image, a viewer) takes
     `radius-container`.
@@ -351,7 +500,7 @@ role ([research](research/elevation-2026-10-14.md)):
 | `shadow-field` | Outline fields and select triggers; outline and soft Buttons | Field shadow (0 by default) |
 | `shadow-tooltip` | Tooltip, Toggletip | Elevation |
 | `shadow-lift` | A linked Card or an app tile under the pointer | Hover lift |
-| `shadow-float` | Menu and everything that opens one, Popover and everything built on it, Select picker, Toast, Calendar and Color picker surfaces, floating Toolbar and Selection bar, Board card actions, Scroll to latest | Elevation |
+| `shadow-float` | Menu and everything that opens one, Popover and everything built on it, Select picker, Toast, Calendar and Color picker surfaces, floating Toolbar and Selection bar, Board card actions, Scroll to latest (one stack: Overlays, below) | Elevation |
 | `shadow-modal` | Dialog, Confirm dialog, Drawer, Command palette | Elevation, doubled |
 | `shadow-edge` | Listed first by every framed surface | Rest shadow (0 by default) |
 
@@ -368,15 +517,29 @@ role ([research](research/elevation-2026-10-14.md)):
   `box-shadow` list beside a component's own layers (the Board card's tone ring), and `none`
   would invalidate the whole list.
 - **Material paints never replace a shadow.** They fill `--_m-layers`, which a surface lists
-  first.
+  first. Every floating and modal surface draws one stack, `--_float-shadow` (layers, edge, role), from the shared
+  layer, and `material.css` lists every one (Overlays, below); Tooltip is the written exception.
 - **Contrast never strengthens a shadow.**
-- **The edge does the separating at every step.** `border-float` (#eeeeee in light, #4b4b4b
-  in dark) frames every floating surface: Popover, Menu, Dialog, Toast, Command palette, the
-  surface Calendar and Color picker, the floating Toolbar and Selection bar. A floating surface therefore stays
+- **The edge does the separating at every step.** The Floating stroke group (`edge-floating`,
+  5 by default: 12.5% of the text colour over the ground, light or dark; Strokes, below) frames
+  every floating surface: Popover, Menu, Dialog, Toast, Command palette, the surface Calendar and
+  Color picker, the floating Toolbar and Selection bar. Only a Material's frame reads
+  `border-float` (#eeeeee in light, #4b4b4b in dark). A floating surface therefore stays
   distinct over another surface where its shadow no longer reads.
+- **One edge per side, in each theme** (plan A7.1, 2026-11-11). In dark a role also draws a light rim, since a black
+  shadow has nothing to darken on near black; the floating and modal roles draw it only where no frame is (Stroke
+  width 0, or what a Hairline leaves), and the frame takes the rim's strength instead (the brighter of the group's
+  amount and the rim's, 16% at Shadow 8). Tooltip's role draws no rim: its inset line takes the strength. So a dark
+  menu's edge is one 1px line (`check:rendered`, `dark-floating-edge`, asserts one step), where it was a two-tone 2px
+  edge.
+- **In dark, floating and modal surfaces sit a step above what is under them** (plan A7.2, owner 2026-11-11): they paint
+  the floating ground, `bg-float`, the lightest layer under them (the raised layer or a Card's tone, at least L 0.12)
+  plus 0.036 (#0c0c0c on the near-black page at the defaults); the page never lightens. In light `bg-float` is the
+  raised layer, as before. It is a declared ground (`layers.css`), so rows, fields and edges in a menu step from it.
 - **Forced colours drop `box-shadow`.** `forced-colors.css` puts frames back at 1px and gives
   the floating Toolbar and Selection bar, whose edge is an inset shadow, an outline.
-- **The dark Tooltip** stays a dark annotation (#282828 with a 5% white inset edge).
+- **The dark Tooltip** stays a dark annotation (#282828 with a white inset edge, 5% or the tooltip role's rim
+  strength if more: 8% at Shadow 8).
 
 **Edge and Depth** are ten independent controls, with no named looks: Stroke width, Stroke,
 Rest shadow, Elevation (Floating), Resting lift, Field shadow, Shadow size, Softness, Light
@@ -418,37 +581,41 @@ stroke, mixed in sRGB, so a group keeps its distance on every ground, light or d
 the amounts as set), and Contrast takes every group the rest of the way to the 3:1 control stroke. Defaults are the
 owner's picks:
 
-| Group | Amount | Members |
-|---|---|---|
-| Cards | 4 (10%) | Card, Surface, Asset card, Attachment, Board card, Preview frame |
-| Blocks | 5 (12.5%) | Code block, Table's frame, Description list framed, Settings group framed, Plan, Queue, Edit summary |
-| Callouts | 4 | Alert |
-| Floating | 5 | Menu, Popover, Hover card, Toast, Dialog, Drawer, Command palette, Calendar and Color picker surfaces, the Select picker, floating Toolbar, Selection bar and Titlebar |
-| Regions | 3 (7.5%) | Panel, the Titlebar's rule |
-| Dividers | 3 | Separator, Menu, Nav, Toolbar and File upload separators, Table rows and column rules, Tabs track, Accordion, Description list divided, Settings group's rows, Link groups, Shortcut list, Inline list, Tree view guides, Timeline, Stepper and Step lines, Plan's rail, the Command palette's search rule, a flush Code block's rule |
-| Fields | 5 | Soft Input, Select, Custom select, Number field, Textarea, Date picker, Tag picker, OTP, Input group (`input-edge-soft`) |
-| Buttons | 3 | Soft Button, soft Button group, soft Split button, soft Toggle group, the Segmented track |
-| Options | 4 | Choice cards and soft choice rows (Radio, Checkbox) |
-| Tracks | 3 | Slider rail, Switch's off track, Progress, Meter (a segmented Meter has none) |
-| Tags | 3 | Soft Badge, soft Count, Tag, Kbd |
-| Media | 2 (5%) | Avatar, swatch rings (`token-swatch-ring`), Asset card's inner frame and group cells |
+<!-- strokes:begin (generated by `npm run check:docs -w @area/desktop -- --write` from axes/stroke-groups.ts and packages/styles/src) -->
+| Group | Amount | What it draws | Read in |
+|---|---|---|---|
+| Cards | 4 (10%) | The frame round cards, asset cards, file tiles, attachments, board cards and surfaces | `approval.css`, `asset-card.css`, `attachment.css`, `card.css`, `design-card.css`, `preview-frame.css`, `surface.css` |
+| Blocks | 5 (12.5%) | The frame round code blocks, tables and preview frames in a page | `code-block.css`, `description-list.css`, `edit-summary.css`, `plan.css`, `queue.css`, `setting-row.css`, `table.css` |
+| Callouts | 4 (10%) | The frame round an alert or notice in the flow | `alert.css` |
+| Floating | 5 (12.5%) | The rim of menus, popovers, hover cards, toasts, dialogs, drawers and pickers | `popover.css`, `popup.css` |
+| Regions | 3 (7.5%) | The seams between panels and the app's regions | `panel.css`, `splitter.css`, `titlebar.css` |
+| Dividers | 4 (10%) | The rules between rows and sections: separators, table, list and accordion rows | `accordion.css`, `attachment.css`, `chart.css`, `code-block.css`, `command-palette.css`, `description-list.css`, `dialog.css`, `file-upload.css`, `inline-list.css`, `link-groups.css`, `menu.css`, `nav.css`, `overlay.css`, `plan.css`, `separator.css`, `setting-row.css`, `shortcut-list.css`, `step.css`, `table.css`, `tabs.css`, `timeline.css`, `toolbar.css`, `tree-view.css`, `turn-notice.css` |
+| Fields | 5 (12.5%) | The edge of soft fields: inputs, selects, number fields, text areas, pickers | `approval.css`, `input.css` |
+| Buttons | 3 (7.5%) | The edge of soft buttons, button groups, toggle groups and the Segmented track | `button-group.css`, `button.css`, `segmented.css`, `split-button.css` |
+| Options | 4 (10%) | The edge of soft choice rows and choice cards | `choice.css` |
+| Tracks | 3 (7.5%) | The edge of slider, switch, progress and meter troughs | `progress.css`, `slider.css`, `switch.css` |
+| Tags | 4 (10%) | The edge of soft badges, counts, tags and keys | `badge.css`, `count.css`, `kbd.css`, `mention.css`, `tag.css` |
+| Media | 2 (5%) | A hairline round avatars, swatches and pictures | `asset-card.css`, `avatar.css` |
+<!-- strokes:end -->
 
 Fixed, in no group: outline Button, Badge and Chip, outline fields, solid fills, ghost and toolbar buttons, rows, unchecked
 Checkbox and Radio boxes, focus rings, selected edges, field state and disabled edges, inline Code, Composer. A soft Code
-block stays fill only. Width still follows the job (above); a group sets only colour. The rungs below remain for the
-roles outside the groups.
+block stays fill only. Width still follows the job (above); a group sets only colour. The rungs below remain only for
+what no group covers (read from `packages/styles/src`, 2026-11-11).
 
 **Colour, lightest to firmest (the rungs outside the groups):**
 
 | Role | Light | For |
 |---|---|---|
-| `border-decorative` | #f3 | Every divider by default: Separator, Menu, Toolbar and Nav separators, Inline list's rule, File upload's separator, Shortcut list's divided rows, the Command palette's search rule; edges of filled shapes |
-| `border-float` | #ee (dark #4b) | Every floating frame |
-| `border-card` | #ee | Standalone surfaces: Card, Composer, Code block |
-| `border-divider`, `edge-control` | #e2 | Lines that carry data (Table rows) and opt-in dividers that ask for weight (Accordion divided, Link groups divided, Description list divided); control and field edges; off tracks; the Table frame and Asset card's inner frame |
-| `edge-control-hover` | #d4 | Control edges on hover. At rest: Checkbox and Radio, Tree view's check, Slider and Color picker thumbs, Calendar tiles |
-| `edge-control-strong` | #b4 | A Checkbox, Radio or selected Chip under the pointer |
-| `stroke-control` | #83 | Calendar's today ring, Breadcrumb separators |
+| `border-decorative` | #f3 | Input group's frame and seams |
+| `border-float` | #ee (dark #4b) | A Material's frame (`material.css`); floating frames read the Floating group |
+| `border-card` | #ee | Board card's ring under increased contrast |
+| `border-divider`, `edge-control` | #e2 | `border-divider`: Chart's baseline, Token row's code edge, the Tabs track (beside `edge-dividers`), a containerless Asset card's frame. `edge-control`: control and field edges, off tracks, Box model's border box |
+| `border-faint` | #e2 | Disabled field edges (Input, Textarea, Number field, Select, Custom select, Date picker, Tag picker, OTP field, Composer, Input group) |
+| `border-subtle` | #d4 | Box model's margin line |
+| `edge-control-hover` | #d4 | Control edges on hover. At rest: Checkbox and Radio, Tree view's check, Slider and Color picker thumbs, Calendar tiles and its today ring |
+| `edge-control-strong` | #b4 | A Checkbox, Radio, Slider thumb or selected Chip under the pointer |
+| `stroke-control` | #83 | Breadcrumb separators; Switch's thumb ring under increased contrast |
 
 - **A rule inside a container is never darker than the container's edge.** The exception is
   seams inside joined controls (soft Button group, Split button): they are control edges and
@@ -467,9 +634,9 @@ roles outside the groups.
   - a footer sits as far under the last row as above the edge (Command palette: 12 and 12);
   - rows without rules take the plain UI row; the extra room ruled rows carry is for the rule (Shortcut list: 32, 36
     divided).
-- **A divider is the lightest line**, `border-decorative`, unless it carries data or is an
-  opt-in that asks for weight (owner: "dividers that are inset to have a very light subtle
-  stroke by default"). Increased contrast still firms every line. Was: a standalone divider
+- **A divider is the lightest line**, the Dividers group (`edge-dividers`, 3 by default: 7.5% of
+  the text colour), unless it carries data or is an opt-in that asks for weight (owner: "dividers
+  that are inset to have a very light subtle stroke by default"). Increased contrast still firms every line. Was: a standalone divider
   sat a step darker than a seam. Enforced by `cohesion.test.mjs` ("dividers only where
   intended").
 - **Control and state edges read the `edge-*` roles**, which strengthen under increased
@@ -492,19 +659,76 @@ and the default density (28 Compact, 36 Comfortable). Read the ramps in `axes/de
 and `emit/base.ts`; never copy a table into a component
 ([research](research/ui-size-scale-2026-10-12.md)).
 
+- **The ladder stays derived** (owner, 2026-11-11, plan A8.1). At the default type 13 the controls are
+  22 / 26 / 30 / 38 / 46 with rows 30; at the app's Compact 20 / 24 / 26 / 34 / 42 with rows 28. Heights are never
+  snapped to a 4px ladder and the default density stays 32; a height stays the line plus twice its room, so cap
+  centring stays exact.
+- **Rows and composites are on the ladder** (plan A8.2). A height is a ladder token (`control-*`, `ui-row`) or a ladder
+  token plus whole room steps (`+ ui-stack`, `+ 4` for a cell around a control), never a `+ 2px` literal: Calendar's
+  day is `control-md` and its cell 4 more, Description list's rows and Board's add row are `ui-row`, Shortcut list's
+  ruled rows `ui-row + ui-stack`, Token row `control-xs`. A selectable Table row (one holding a selection Checkbox) is a row of
+  controls: sm `control-sm`, md `control-lg`, lg `control-xl`, the rule counted inside (md 34 / 38 / 42 at type 13); a
+  plain Table row stays its text row, line + 2 × cell inset + the rule.
+- **Gaps read whole steps; only insets keep the half step** (plan A1.1, 2026-11-11). A gap (the space between two
+  siblings) reads `ui-gap-step`: `ui-stack`, `ui-cluster`, `gap-row`, `gap-section` or `N − 4 × ui-gap-step`, so at
+  every type and density it lands on the 2px ladder (2 · 4 · 6 · 8 · 12 · 16 · 24). An inset (an edge to the content)
+  keeps the half step `ui-dense` (Card's 7 media inset, the surface insets 10 / 14 at type 13). At type 13: `gap-row`
+  8 / 12 / 16 at Compact / Default / Comfortable (it was 10 at the default). `cohesion.test.mjs` fails a gap that reads
+  `ui-dense`.
+- **Space between pieces reads a density role** (plan B8.2, 2026-11-14). A gap, padding or margin between two pieces
+  of UI (and a private property named for one) reads `ui-stack`, `ui-cluster`, `gap-row`, `gap-section`,
+  `inset-surface-*`, `inset-page`, the height ladder or a term built on them (`2 × ui-cluster`, `N − 4 × ui-gap-step`),
+  so it moves with its peers at every type and density. A fixed value is only a mark, a hit area, a platform constant
+  or a measured media size, and its line says "at every density"; joins of 2 and 4 (a joined set, a line's actions, a
+  text pair) are fixed by rule. `packages/react/tests/density.test.mjs` reads the sources: the families moved are
+  clean, the rest wait on a ratchet that may only fall, and it pins every moved value whole at type 12 to 16 and each
+  density, unchanged at the default.
+- **Three sibling-gap roles** (plan A1.2): a joined set (segments, row actions, a chip's parts) 2; actions in a header
+  or a line of text 4; independent controls (a footer's buttons, a toolbar's, a page header's actions, stacked toasts)
+  `ui-cluster` (6 / 8 / 10). Inside a mark, gaps are 2 or 4.
+- **Section and page spaces are roles** (plan A1.4): `gap-section` is a section's space, two groups apart (24, Compact
+  16; Stack's `section`), and `inset-page` the page's edge to its sections (32, Compact 24, Comfortable 40; the feed's
+  margin). Neither is a new value: each names what Stack and the feed computed.
+- **A container spaces its children by its gap** (plan A1.3). A pair that joins is its own group with its own gap
+  (Dialog's heading grid), never a margin that undoes the parent's gap (`calc(4px − gap)`). `cohesion.test.mjs` lists
+  the compensations still waiting for a group in React (Card's title join and its carousel under a header) and fails a
+  new one.
+- **Two text-list rhythms** (plan A1.5): a text list (links, references, footnotes) is its line + 4 apart (Link groups,
+  Reference list: 22 at 13/18); a key-value list its line + 8 (Description list's columns: 26; plain Accordion items, 30
+  at 15/22). Rows that are controls use the row ladder.
+
 - **The type ramp** is Cursor's with Claude's reading step (owner, 2026-11-02: "make sure the type ramp is updated to
   match what cursor does", read from Cursor's bundle, `docs/research/type-presentation-2026-11-01`; then, beside Claude
   Code's chat, reading text "15/22 like Claude"). At type 13, four body steps and four titles:
-  `text-xs` 11/14 (badges, counts, keys), `text-sm` 12/16 (secondary: a description, metadata, help, a hint, a lede,
-  a caption, a timestamp), `text-base` 13/18 (every control, row, label and cell; the UI line), `text-lg` 15/22 (reading
-  text: a chat turn, a document, the feed's prose, a component's documentation; Claude's prose step), then `title-xs` 16/22, `title-sm`
-  18/24, `title-md` 20/28, `title-lg` 26/30, and display 52 / 67. Each moves with the Type setting (12 to 16): small
+  `text-xs` 11/14 (marks only: badges, counts, tags, keys, status letters, a chart's data labels, code in a small code
+  block; plan A9.2: never a word that labels, explains, warns or locates), `text-sm` 12/16 (secondary set apart from what
+  it explains: help, a count and messages under a control, a caption, a timestamp, a metadata line on its own),
+  `text-base` 13/18 (every control, row, label and cell, and a line joined to a name; the UI line), `text-lg` 15/22
+  (reading text, only where prose is written: a chat turn, a composer's field, a document, the feed's prose, a
+  component's documentation; Claude's prose step), then `title-xs` 16/22, `title-sm`
+  18/24, `title-md` 20/28, `title-lg` 26/30, `title-xl` 32/40, and display 52 / 67. Body text carries no tracking
+  (plan A9.10); titles tighten by their own token. Code lines take `text-xs-code-leading`, the small step's line plus 2
+  (11/16 at 13), which density never moves; every underline sits `underline-offset` (0.08em) under its text. Each moves with the Type setting (12 to 16): small
   the base less 2 (never under 10), secondary the base less 1, reading the base plus 2, titles in proportion
   (`axes/type-size.ts`, [type spec](specs/typography.md)). Before 2026-11-02 the base was `text-sm` and reading `text-md`
   (15/22 at 13, prose 24), with titles 15 / 19 / 22 / 30 and no secondary step; reading was Cursor's 14/22 for a day. A surface's own body (a
   Card's, a Dialog's or a Popover's description) is UI text, not secondary. So is an agent's work in a turn (owner,
   2026-11-02, "do the trackers need to be smaller?"): Step, Reasoning, Plan, Edit summary, Approval and Turn notice read
   at `text-base`, one size with ink for hierarchy, under the turn's `text-lg` prose (Cursor's cards 13 under a 14 reply).
+- **A page has a title of its own, and its headings a weight of their own** (2026-11-11, the four product screens,
+  `docs/research/product-recreations-2026-11-10`). `title-xl` is 2.5 times the base, 32/40 at 13 (30/38 to 40/48 across
+  Type 12 to 16): a document's own title, the one step between the interface titles (26) and display (52).
+  `weight-heading` is 600: titles from `title-sm` up, a page's own title and a document's title and headings, where
+  `weight-strong` (500) sits too close to body text to read as a level. `title-xs` headings, labels, titles of surfaces
+  and controls keep strong. A screen has three levels (plan A9.1): page > section > item, told apart by size and weight:
+  Page header `md` `title-lg` 26/600 (`lg` `title-xl` 32/600), Section heading `title-xs` 16/500, a card's title 13/500
+  at type 13; a reply's h1 to h3 are `title-xs` at 500 (Message).
+- **A region reads as a region by its ground, and Layer contrast sets how far** (the same study). A product's sidebar or
+  side bar is its chrome: mark the docked Panel `data-area-chrome` and `data-area-ground="recessed"` and name its fill
+  (`--area-chrome-fill: var(--area-bg-subtle)`), as the Area app does. At Layer contrast 0 it is the page's color and only
+  the seam separates it; from about 30 it reads as a tone in light, and 50 is the light default (since 2026-11-11). Dark
+  stays 0: a near-black page leaves a tone step almost no room. A screen that wants
+  the sidebar set apart sets Layer contrast, never a color of its own.
 - **Text that opens or closes a block is read on its glyphs** (owner, 2026-11-04, Q-T2; `docs/research/kit-type-2026-11-04`):
   a gap above a block is measured to its first cap, below it to its last baseline, as to a frame's edge. Flowing text
   trims its first and last lines (`text-box`: Card, Message's reply, the feed's prose); a component whose first line is
@@ -530,13 +754,17 @@ and `emit/base.ts`; never copy a table into a component
     `docs/research/title-balance-2026-11-06`): 13/18 over 13/18 at type 13, told apart by weight (500) and ink (default
     over muted), never by size, and its copy stands **one step (4) off** it: 12.8 baseline to cap beside the copy's own
     8.8 (11.7 over a 12/16 line). Card, Dialog, Confirm dialog, Drawer, Popover, Alert, Toast, Approval and Empty state
-    `sm` follow it (Cursor's confirm: its title 4 over its message). Joined on the copy's line (the pass's first try) the
+    `sm` follow it (Cursor's confirm: its title 4 over its message). Confirm dialog's default-ink description is the one
+    written exception: a surface whose copy is its only body. Joined on the copy's line (the pass's first try) the
     title read as the paragraph's first line (owner: "the space between the title and the copy still doesnt look right");
     before that, a 16 title over 13 text (1.23×, after the 2026-11-02 ramp moved title-xs from 15 to 16) joined at 10.0;
   - **an item's name and its line join** with no gap between the line boxes: a choice's, a group legend's and Switch's
-    description, File tile's meta, a File upload row's size line, a Stepper step's description. The line reads as the
-    name's second line: 8.8 baseline to cap at 13/18, 7.7 for a 12/16 line beside its own 7.4 (they sat 2 apart until
-    2026-11-06);
+    description, File tile's meta, a File upload row's size line, a Stepper step's description. **A joined line is the
+    name's size in the muted ink** (owner, 2026-11-11, plan A9.3: a Switch read 13 over 12 beside a Setting row's 13 over
+    13), so it reads as the name's second line: 8.8 baseline to cap at 13/18 (they sat 2 apart until 2026-11-06).
+    `text-sm` is for text set apart from what it explains (help, a count and messages under a control, a caption, a
+    timestamp, a metadata line on its own, Empty state `sm`'s copy); Menu's descriptions are its one written exception, a
+    dense menu's 12 under 13;
   - **a heading over its text** (a title that heads a page or a region rather than names a component: Empty state `md`,
     Section heading, the app's section titles) takes a title step (`title-xs` and up) and the same step (4) off: 14.0
     baseline to cap over 13/18 text (Cursor's settings header: 17/21, 4, 13/18);
@@ -545,15 +773,17 @@ and `emit/base.ts`; never copy a table into a component
   - a label above its one control: `ui-stack` (6), Field's gap, so the label's baseline sits 11 above the control's edge;
   - a text group (a title or legend, with or without its description) above a **set** it introduces (options, rows,
     links, a list) stands one step further from it than the set's items stand from each other, on Area's ladder
-    2 · 4 · 6 · 8 · 12 · 16 · 24: options 8 apart take 12 (`gap-row`, Stack's group), links 4 apart take 8. So the space inside the text group < the space between items < the space from the text to
+    2 · 4 · 6 · 8 · 12 · 16 · 24 at every type and density (gaps read whole steps, below): options 8 apart take
+    `gap-row` (Stack's group; 12, 8 at Compact), links 4 apart take 8. So the space inside the text group < the space between items < the space from the text to
     the items, and the heading reads as belonging to everything below it, not only the first item. Panel's heading is
     itself a row with Figma's 8 above and below, so it keeps its row rhythm;
   - a label beside its value: the label column is as wide as the longest label (shared by the rows, up to 40%), and
-    the value starts `gap-row` (12) after it. A fixed column is for editable property rows only (Description list's
+    the value starts `gap-row` (12 at the default, 8 at Compact) after it. A fixed column is for editable property rows only (Description list's
     `columns`, Notion's properties);
   - a text group to the block after it (a list, actions, a footer): the container's block gap (Card's 12).
-  Weight and ink follow the part, not the family: a title that names a surface or heads a section is strong (500); the name
-  of an item or control (a choice, a step, a row, a file) is regular (400); supporting lines are muted and regular.
+  Weight and ink follow the part, not the family (Ink and weight, the weight table): a title that names a surface or
+  heads a section is strong (500); the name of an item on a picture or file card is strong (500, owner 2026-11-11); the
+  name of a control or a row (a choice, a step, a setting) is regular (400); supporting lines are muted and regular.
   A joined pair is never tighter than the lines inside it: at 13/18 over 13/18 the join is 8.8 baseline to cap (Section
   heading 8, with its trimmed boxes), the same as the lede's own lines, so the title reads as the pair's first line.
 - **Text that flows** (owner, 2026-10-30; `docs/research/vertical-rhythm-2026-10-30`). Prose is spaced by the same
@@ -577,13 +807,15 @@ and `emit/base.ts`; never copy a table into a component
     component inside keeps its own type. Test: `cohesion.test.mjs` ("a host's text rules leave components alone").
 - **Shared controls use the same tier's icon, text and gap tokens.**
 - **Icon-to-label gap:**
-  - 6 at sm, md and lg; 4 at xs and compact;
-  - list rows use `gap-row` 12;
+  - 6 at sm, md and lg; 4 at xs, and at sm and md in Compact (lg keeps 6);
+  - list rows use `ui-cluster` (6 / 8 / 10 at Compact / Default / Comfortable; owner 2026-11-11, plan B2.3), one
+    value for Menu, Nav, Tree view, the palette and every picker's options;
   - hosts (Button group, Toolbar) never re-tier a child's gap, and layout spacing never
     reads the gap tokens.
-- **Text-label marks** (Badge, Count, Tag, Kbd) use `mark-label-sm/md/lg`, derived from the
-  small text line.
-- **Fixed marks** (Presence, the Indicator count, Color swatch) use `mark-sm/md/lg`
+- **Text-label marks** (Badge, Count, Tag, Kbd, Citation's pill, the Indicator count) use `mark-label-sm/md/lg`: the
+  small text line plus 0, 4 and 8, 14 / 18 / 22 at type 13, the same at every density, so every size is distinct at
+  every density (plan B5.1). See "One mark".
+- **Fixed marks** (Presence, Color swatch) use `mark-sm/md/lg`
   (16 / 20 / 24), which hold under every density. Dense products shrink controls, not marks.
 - **A mark in an icon slot stands in for a glyph** and keeps to the icon keylines: a Color
   swatch in a menu row's or Custom select's icon box is the box less 2 (14 in 16, Figma's
@@ -600,9 +832,22 @@ and `emit/base.ts`; never copy a table into a component
 - **Pointer targets are separate from visible glyphs.** A compact choice control can use
   its label as the hit area without enlarging the glyph. Contained controls share their
   width token alone and inside a Field. Full width is explicit.
+- **Targets** (plan A11.2; WCAG 2.5.8). Every interactive part under 24 on either axis owns one shared invisible
+  target (inset.css): a box centred on it of max(its size, 24) on each axis, 44 under a coarse pointer, as Badge's and
+  Tag's removes first did. Nothing visible moves. A target never takes a neighbour's: toward a neighbour target the
+  axis keeps the part's own size or splits the gap. So a field's action, a chip's remove and breadcrumb parts are 24
+  across and grow only in height under touch; joined items (Segmented, soft Toggle group, Split button's trigger,
+  Number field's steppers) keep their width; Nav row actions 2 apart split the gap (a lone one takes 24); Steps in a
+  group split their 4; Checkbox and Radio controls are 24 tall, 44 across under touch. Two pairs sat too close to give
+  each 24 without a visible change, and take the derived one (owner, 2026-11-13): Number field's abutting steppers sit
+  with their centres the target floor apart (a gap of 24 − (H − 8): 2 at the default md, 6 Compact md, 8 Compact sm,
+  0 from a 32 field), each 24 across; Split button's trigger, which abuts its action, is never narrower than 24. Rows, grids, Button, Tabs, Calendar and Pagination keep their own size under touch; 44 there needs the touch
+  size or more space. `tests/behaviour/suites/hit.test.mjs` probes every family at Compact, fine and coarse.
 
-**Radius is one setting**: 0 (Sharp), 2, 4, 6, 8, 10 (default since 2026-10-25; was 8), 12, 14 or pill, the medium
-Button's corner ([audit](research/radius-audit-2026-10-03.md)).
+**Radius is one setting**: 0 (Sharp), 2, 4, 6, 8, 10 (default since 2026-10-25; was 8), 12, 14 or pill, the corner
+of a 32 control ([audit](research/radius-audit-2026-10-03.md)). At the default type 13 the medium control is 30 and
+draws 8 at Corner 10; that corner, the real medium control's at the current type and density, is `radius-step`
+(plan A2.1, 2026-11-11), and every full-width row takes its own height's corner, as a Button of that height.
 
 - **Shapes on the height ladder** take `max(radius-min, round(down, height × radius-factor, 2px))`:
   - the setting × height ÷ 32, in even pixels, never under 2;
@@ -610,38 +855,53 @@ Button's corner ([audit](research/radius-audit-2026-10-03.md)).
   - Sharp is square and Pill is round.
 - **Controls read `radius-control-*`.** A component with its own height writes the same
   expression on it.
-- **Surfaces** use the container ladder (0, 2, 4, 8, 12, 16, 20, 24; 24 at Pill), 12 by
-  default.
-  - Card is the surface plus its inset less 4; Dialog is the surface plus 4.
-  - Neither is ever rounder than the surface corner.
+- **Surfaces** use the container ladder (0, 2, 4, 8, 12, 16, 20, 24; 24 at Pill), `radius-container`, 16 at the
+  default Corner 10 (12 at Corner 8). Floating surfaces (Popover, Panel, Menu's frame) and modal ones (Dialog, Confirm
+  dialog, Drawer) take it as it is.
   - Surface corners cap at 1.5 × the surface inset.
+  - **A resting card never out-rounds a floating surface** (plan A2.3, owner 2026-11-11): Card and Surface are
+    min(`radius-container`, 0.6 × their text inset at Corner 10, moving with the setting, rounded down to even pixels),
+    10 at md, 8 at sm and 12 at lg at the default (18, 14 and 22 insets). Asset card and Design card take
+    `radius-container`.
+  - **Blocks share one corner**, `radius-container`: Table, Description list framed, Plan's steps box, a Figure's or
+    Video player's picture, Panel, Calendar and Color picker. The chat cards (Plan, Queue, Edit summary, Approval,
+    Composer, Code block, the person's bubble) share theirs (Frames, below).
 - **A shell holding a control is concentric with it:** the control's corner plus its
   distance from the edge, scaled by `radius-concentric` (0 at Sharp). This covers Composer,
   Message, Prompt suggestions, Toolbar and the Segmented track. A button set into a corner
-  takes that corner less its inset.
+  takes that corner less its distance from the edges (Bars and corner controls, below).
 - **A picture in a choice card is one of two kinds** (owner 2026-10-26, Radio and Checkbox `preview`, `media`,
   `media-row`). A picture with its own ground (a screen, a photo) fills the picture slot, 8px inside the card's edge,
   its corner the card's less the 8 (6 clear inside a chosen card's 2px stroke, which is drawn inside). An illustration with no ground (a window, a component) has no frame: the card's
   inset on its outer sides, the card's content after it at that same inset, its size what the card leaves.
 - **Nested radius** is `max(min(radius-floor, own corner), outer − inset)`, where
   `radius-floor` is min(4, setting). Only Sharp is square anywhere. Insets are the padding;
-  a surface's 1px border is left out.
+  a surface's 1px border is left out (a floating list's padding is counted inside its edge, plan B6.4; Overlays, below). A **frame nested in a frame** stops at a row's corner instead (Frames, below).
   Composed screens get it from **Surface**: each Surface's corner is the parent Surface's
-  corner less that Surface's inset, floored, as Card's media takes Card's corner less its inset; its layer steps from its parent (`surface`
+  corner less that Surface's inset, never under a row's, while Card's picture takes Card's corner less its inset, floored; its layer steps from its parent (`surface`
   raised, `soft` recessed), with one edge per boundary. **Stack** spaces children by role
   (related, group, section) and never wider than the inset of the Surface it sits in
   ([Surface](specs/surface.md), [Stack](specs/stack.md)).
 - **Rows in floating lists** (Menu, Context menu, Command palette) use
-  `radius-list-row`: the surface less its inset, no rounder than a medium Button, and a pill
-  only at Pill. The list uses `radius-list` (rows + inset). Standalone rows (Nav, Tree view)
+  `radius-list-row`: the surface less its inset, no rounder than `radius-row`, so a full-width row takes its height's
+  corner in a list or out of one (plan A2.1): a 30 row is 8 at the default in a menu, a Nav and a medium Button
+  alike, and a pill only at Pill. The list uses `radius-list` (rows + its 4 padding, 12 at the default; the overlay
+  corner equation, Overlays below). Accordion's trigger,
+  Step's row and Description list's "more" are rows too. Standalone rows (Nav, Tree view)
   use `radius-row`.
 - **A list opened from a field** (Select, Custom select, Combobox, Tag picker) takes the field's
   corner: its rows are the field's corner (short of a pill before Pill), the list 4 rounder, or
   the rows' own corner more below 4, so it reads as the field's own list and goes square with it
-  (owner 2026-10-23; Notion: field 6, menu 10, rows 6). It re-points `radius-list-row` and
-  `radius-list` on the list (`surface.css`, `navigation.css`).
+  (owner 2026-10-23; Notion: field 6, menu 10, rows 6). It re-points `radius-list-row` on the list, and the list's
+  corner follows by the overlay corner equation (`popup.css`; Overlays, below).
 - **Bars and keycaps.** A one-line bar (Alert banner, Toast) and Tooltip take the large
-  control corner. Multiline ones are surfaces. Kbd is a 24px box's corner at every size.
+  control corner. Multiline ones are surfaces. Kbd takes its own height times the factor to the nearest pixel (6 on
+  an 18 or 20, 5 on a 16 at the default; owner, round 75), 2 short of a pill until Pill; Stepper's marker, Kbd's md
+  keycap, takes the same on its own height.
+- **Only public roles.** A component's corner reads `radius-control-*`, `-container`, `-row`, `-list(-row)`,
+  `-small`, `-full`, `-floor`, `-min`, or the shared corner expression on its own height; never `radius-surface`, the
+  setting's step, a px literal or a rounding of its own (`cohesion.test.mjs` lists the few corners with a reason of
+  their own).
 - **Option rows are bars.** A Radio or Checkbox `card` or `soft` option in the row or list layout takes the
   ladder's corner for its one-line height (inset and edge twice, plus the control's box), never rounder than a
   surface, and a pill only at Pill: a 34 row is 10 at corner 10, 12 at 12 (owner 2026-10-30; it took the surface
@@ -650,8 +910,9 @@ Button's corner ([audit](research/radius-audit-2026-10-03.md)).
 - **Pills are a set** (`data-area-pills`), not a radius.
   - By default Badge, Chip, Count, Switch and Avatar are pills, and Button, fields and
     Segmented follow the radius.
-  - A component adds `--area-pill-<id> × radius-full` to its corner, so concentric parts
-    follow.
+  - A component's corner is `max(corner, --area-pill-<id> × radius-full)`: while the set lists it, a pill is
+    `radius-full` itself, one value, never the corner plus full (2026-11-14). A corner derived from it (a thumb, a
+    swatch) lists the flag again, so it is a pill too. `twins.test.mjs` fails a corner that adds the flag × full.
   - Instance props override the set (`pill`; Avatar `shape`).
 - **Identity shapes are always round:** radios, slider thumbs, Progress, presence and
   indicator dots.
@@ -702,6 +963,156 @@ Button's corner ([audit](research/radius-audit-2026-10-03.md)).
 - Dark mode is near-black by default: the page is #020202, cards #121212 and sidebars
   #0b0b0b.
 
+### Frames
+
+One frame recipe (`packages/styles/src/components/surface.css`, plan B1.1–B1.4, 2026-11-13). Every card-like frame
+(Card, Surface, Asset card, Design card, Figure's and Video player's pictures, Table, Description list, Board column,
+Panel, Calendar, Color picker and the chat cards) reads it, so a frame added later lands on the same geometry at every
+Type, Density and Corner. A family sets only its inputs (`--_fr-inset`, its text inset from the outer edge with the
+edge counted once; `--_fr-mat`, where its parts sit; `--_fr-held`, the corner of what it holds) and reads the outputs.
+
+- **The inset ladder**, Card's and Surface's: text inset sm 14 · md 18 · lg 22, media mat 5 · 7 · 10, gap between blocks
+  12 · 16 · 20 at the default type 13 (each its type-14 value less the Compact difference times `ui-dense`).
+- **Three corner roles.** *block*: `radius-container`, a region, a block or a picture standing alone. *card*: a resting
+  card that holds text at its inset, 0.6 × the inset at Corner 10 and moving with the setting, capped at the container.
+  *around*: a frame drawn around what it holds, the held corner plus the mat (concentric), capped at the container.
+- **Chat cards** (plan B1.3) are one card: the around corner over the medium control at the bar inset, 16 at the
+  default (14 at Compact and type 12, 0 at Sharp); a card of rows holds them 4 from its outer edge so their words and
+  the head's title start 12 in; the head is one row (`ui-row`) and the title is the text's size, strong, default ink.
+- **Nested frames** take max(min(`radius-row`, outer), outer − mat), to even pixels: a Surface in a Card, a Panel or
+  a Surface is a row's 8 at the default, never the floor's 4 (VC19), never rounder than the frame round it. A picture
+  in a frame stays concentric to `radius-floor` (Card's picture keeps its 4).
+- **The title pair** is the text's size, strong, over its description in the muted ink, 4 apart: Card's parts, which a
+  Surface uses too.
+- **The item name** (plan B1.2) of what a picture card shows (Card's title, Asset card's, Design card's, File tile's, a
+  Board card's) is one part: the text's size, strong, default ink. Under a picture with no frame round both, its line
+  sits 8 below the picture and starts on its edge; inside a frame it sits on the frame's text inset. A caption is not
+  a name: Figure's stays the small text, muted.
+- **A text-only Card's bottom** (plan B1.4): the line that ends the card ends on its baseline less a fixed 2 allowance,
+  16 from the edge at md against the cap 18 from the top; a group's last line keeps its descent.
+- **One frame prop**, `variant`: `surface` (the frame), `soft` (a fill, no edge), `plain` (no paint). Description list's
+  `framed`, Settings group's `framed` and Checkbox's and Radio's `card` are deprecated aliases of `surface`. Asset card's
+  `container` stays its own prop: it names what the card is made of (a frame in a card, one surface, no card), not its
+  paint (asset-card.md). Toolbar, Attachment and one-line option rows keep their own corners, each for a stated reason
+  (their specs: a pill bar, a button's corner, a bar's ladder corner).
+- **Content kind is `kind`**, not `layout` (Asset card, Design card; `layout` stays a deprecated alias on Design card).
+
+### Bars and corner controls
+
+Four shared parts in `packages/styles/src/inset.css` (plan B4.1–B4.4, 2026-11-14). A family sets only their inputs;
+`packages/react/tests/bars.test.mjs` resolves each at every Type, Density and Corner and fails a family that restates one.
+
+- **Two header bars**, each built from the control it holds, plus the width of the rule it draws (0 when it draws
+  none), so the room round its controls is the same with or without the rule:
+  - *region bar*: the small control with 7 above and below, `control-sm + 14`: 38 · 40 · 44 at type 13 Compact ·
+    Default · Comfortable (38 at type 12, 46 at type 16). A region's own header: a window bar, a small Titlebar, a
+    Board column's header, a Color picker's header.
+  - *tool bar*: the medium control with the cluster space above and below, `control-md + 2 × ui-cluster`: 38 · 46 · 54
+    (36 · 40 · 40 at type 12, 56 · 56 · 64 at type 16). A surface's working bar: Panel's md bar, a md Titlebar, the
+    Command palette's search (and its rule), a Toolbar surface (md).
+  A small Panel keeps its own bar, the small row with `ui-stack` round it and a rule's room (33 · 39 · 47). A Menu's
+  header and footer are not bars: they are regions of the list and hold rows at its inset. Under a Panel's bar the
+  first section's heading takes no air above it.
+- **A corner control** (a close, a dismiss, the last end action, a row's actions, a calendar's steps, a code block's
+  copy) sits evenly in its corner, as far from the side as from the top, and is concentric with the corner it sits in:
+  `min(H / 2, max(min(radius-floor, own), corner − distance × concentric))`, a Pills flag keeping it round and Corner
+  Pill keeping every control's round corner. The surface publishes its corner (`--_cc-corner`) and its inset
+  (`--_cc-inset`); a ghost close puts its glyph on the inset, so its plate stands out by (H − icon) / 2; a bar of fixed
+  height states where it puts the control (`--_cc-at`). A square surface (a side Drawer, a flush Panel, Alert or Code
+  block) leaves the control its own corner. At the defaults: a bare Popover close 7 in, 9;
+  Toast's and Alert's end control 5 in, 5 in a one-line 10 and 11 in a titled 16; Calendar's steps 10 in, 6; a Queue
+  or Edit summary row's actions 2 in, 6 in 8; Edit summary's head 3 in, 13; Panel's bar action 9 in (medium) or 11
+  (small), 7 or 5; Color picker's header control 8 in, 8; Code block's copy 5 in, 11 (floating 9 in, 7).
+- **One named exception: a corner control beside a title** (Dialog's and Drawer's close, a titled Popover's close; plan
+  B6.5, 2026-11-14). The title's cap sits on the surface inset with or without the control, one text grid on every
+  surface, so the control follows the title: centred vertically on the title's cap ((1cap − H) / 2 above and below, whole
+  pixels) and its glyph on the side column (the edge ghost rule). It is not equidistant, and its corner is taken from the
+  nearer of its two distances (`--_cc-near`), so it stays concentric where it is closest, never past H / 2. Dialog's close
+  at Default: 6 from the top and 10 / 9 / 8 from the side at type 12 / 13 / 16 (4 from the top at 16), corner 10 / 10 /
+  12 in 16 at Corner 10, 0 at Sharp, 14 / 14 / 18 at Pill. A titled Popover's close: 4 from the top (2 at type 16), 8 /
+  7 / 6 from the side, corner 12 / 12 / 14 in 16. Placing the title on an equidistant close's centre instead put the cap
+  3–4 below the inset at every density and moved it as the close came and went (tried and reversed 2026-11-14).
+- **Edge ghost buttons.** A ghost Button at a column's or a surface's edge shows no plate at rest, so it pulls out by
+  its gutter until what is seen sits on the column: an icon-only one by (H − icon) / 2 (7 for the md 30), a labelled one
+  by its text side. A soft, solid or outline Button keeps its plate on the column. `align="start" | "end"` applies it;
+  Card's header action and Message's actions use it.
+- **One collapsible head** for the chat cards that fold (Plan, Queue): a row tall, the title the text's size, strong,
+  default ink, cut short; the chevron 4 after the title (as Step's and Reasoning's lines); a count or status at the end
+  in the small muted text. Edit summary's and Approval's heads are the same row without a chevron.
+
+### Overlays
+
+Every floating and modal surface is one recipe in the shared layer (`popup.css`, plan B6, 2026-11-14): its frame, its
+shadow stack, its corner from what it holds, its padding and its block gap. A family sets only its inputs (private
+properties: `--_elevation`, `--_block-inset`, `--_list-pad`) and never restates the frame or a lift; `popups.test.mjs`
+fails one that does.
+
+- **One frame and one shadow stack.** The frame is one edge (the Floating group's `edge-floating`), the floating ground
+  (`bg-float`) and the default ink. The stack is `--_float-shadow`: a material's layers, the Rest shadow's edge
+  (`shadow-edge`), then the role, `shadow-float`, or `shadow-modal` over a scrim (Dialog, Confirm dialog, Drawer,
+  Command palette). Every term is a setting's, so Elevation, the shadow controls, the material and the theme move every
+  surface together. The surfaces: Menu and every list opened from a control or a field, Context menu, Popover and
+  everything built on it (Hover card, the Date picker and Filter bar popovers), Toast, Dialog, Drawer, Command palette,
+  the surface Calendar and Color picker, Select's native picker, and Scroll to latest (a floating Button: the stack
+  alone). The floating bars (Toolbar's surface, the floating Selection bar and Titlebar) take the same stack and ground
+  with the same edge drawn inside (`--_float-frame`, an inset ring, so a bar's inset counts no border). `material.css` lists every one in its overlays group, the glass over `bg-float`. **Tooltip is the written
+  exception**: an inverse annotation on its own role (`shadow-tooltip`), its edge an inset line, no material.
+- **Overlay corners: one equation.** A surface that holds rows is its rows' corner plus the padding they sit in:
+  `corner = row + (pad − max(0, 4 − row)) × radius-concentric` (below a 4 corner it adds the rows' own corner, so it
+  stays at most twice them). Which side is given depends on the role:
+
+  | Role | Surfaces | Given | Follows |
+  |---|---|---|---|
+  | List | Menu, Context menu, Combobox, Custom select, Tag picker, Select's picker, a menu opened from a control (Calendar's caption, Zoom control) | the padding, 4 | the corner, `radius-list` (rows + 4) |
+  | Modal holding a list | Command palette | the corner, `radius-container` | the padding, container − rows, never under 4 |
+  | Panel | Popover, Hover card, the surface Calendar and Color picker, a titled Toast | the corner, `radius-container` | free content at the inset |
+  | Modal | Dialog, Confirm dialog, Drawer | the corner, `radius-container` | free content at the inset |
+  | Bar | a one-line Toast or Alert | `radius-control-lg` | the controls at the bar's corner inset |
+
+  A field's list takes the field's corner for its rows, and its own corner follows by the same equation. The table at
+  type 13 (rows / list / palette padding / palette / panel):
+
+  | | Corner 0 | Corner 10 | Corner 14 | Pill |
+  |---|---|---|---|---|
+  | Compact (28) | 0 / 0 / 4 / 0 / 0 | 8 / 12 / 8 / 16 / 16 | 12 / 16 / 6 / 18 / 18 | 14 / 18 / 4 / 18 / 18 |
+  | Default (32) | 0 / 0 / 4 / 0 / 0 | 8 / 12 / 8 / 16 / 16 | 12 / 16 / 8 / 20 / 20 | 15 / 19 / 5 / 20 / 20 |
+  | Comfortable (36) | 0 / 0 / 4 / 0 / 0 | 10 / 14 / 6 / 16 / 16 | 14 / 18 / 10 / 24 / 24 | 17 / 21 / 7 / 24 / 24 |
+
+  Every value is a whole pixel at type 12 to 16 and every density (`AREA_OVERLAY_TABLE=1 node --test
+  packages/react/tests/popups.test.mjs` prints the sweep). A list is rounder than the container only at Corner 2 (4
+  round 2 rows, the container 2). Overlays expose their widths: `--area-popover-inline-size`, `--area-dialog-inline-size`
+  (the default size; a size class still sets its own), `--area-confirm-dialog-inline-size`, `--area-drawer-inline-size`,
+  `--area-command-palette-inline-size`, `--area-toast-inline-size`, `--area-menu-min-inline-size`.
+- **A floating list's padding is counted inside its edge** (plan B6.4, owner 2026-11-13: kept and written). Menu, Context
+  menu, Command palette's list, Select's picker and the field lists pad 4 inside their 1px edge (rows 5 from the outer
+  edge at the default stroke), and the corner adds the padding alone, so it stays even at every stroke width (counting
+  the edge made it 7). Every other surface counts its edge once in its inset: Popover 12, Dialog and Drawer 16, Toast 10
+  from the outer edge.
+- **A surface's block gap never exceeds its inset** (plan B6.2): header, body and footer stand `min(inset-surface-md,
+  the surface's own inset)` apart: Popover 12 at every density, Dialog and Drawer 16 (12 at Compact). A scrolled body's
+  rule sits in the middle of that gap.
+- **Overlay footers** (plan B6.5): every footer pairs a soft neutral secondary (Cancel) with a solid primary, or a soft
+  danger for an action that cannot be undone. A footer's text Buttons are at least 2.25 × their height (68 on a 30
+  Button, rounded up to a whole pixel), so OK is never narrower than Cancel beside it. Approval's way on (Back, Skip,
+  Continue) is the same pair in a chat card and takes the same minimum. `popups.test.mjs` reads every Dialog, Drawer and
+  Popover footer in the app's sources for a Cancel that is not soft neutral.
+- **A title's cap sits on the inset, with or without a close** (plan B6.5): Dialog and Drawer 16, Popover 12, one text
+  grid on every surface; the close beside it centres on the cap with its glyph on the side column (Bars and corner
+  controls, "a corner control beside a title"). The group's last line ends on its baseline. The description is muted; Confirm dialog's default-ink description is the written
+  exception (its only body).
+- **Scrollers** (plan B6.6): every scrolling region is a Scroll area (menus, field lists, the palette's list, Dialog's
+  and Drawer's bodies, Panel's body) or, where it scrolls itself (Textarea, Code block, a Table's wrapper, the palette's
+  preview, Select's native picker), a thin native bar in the same thumb (18% of the default ink). Inside a rounded
+  frame the overlay bar's ends stand in by the corner less its 2 side inset (14 at a 16 corner), so a thumb is never cut
+  by the curve. A body that can scroll further marks `data-scroll-more`, and Dialog and Drawer draw the scrolled rule over
+  their footer while it is set, the mirror of the header's.
+- **Alert and Toast agree** (plan B6.7): one inset (the sm surface inset, the icon as far from the top as from the side),
+  one icon box, `ui-cluster` between icon, text and actions, the title strong in the default ink, `radius-control-lg` on
+  one line and the container corner when titled, and one action placement: a wrapping row in which the text asks for its
+  whole line beside the icon, so the actions wrap to a second row (end-aligned, `ui-cluster` under the text) only when
+  the text no longer fits beside them, and the text is never cut to make room. The close sits out of the row in the top
+  corner. No width query moves anything (`tests/behaviour/suites/wrap.test.mjs`).
+
 ## Optical insets
 
 `packages/styles/src/inset.css` is the shared implementation.
@@ -713,18 +1124,38 @@ Button's corner ([audit](research/radius-audit-2026-10-03.md)).
 - **Outer inset is `(H − B) / 2`** for backplate height H and edge-item reference height B.
   CSS padding subtracts the border once. Calculate leading and trailing ends separately:
   `outer inset = border + shell padding + slot inset`.
+- **Every derived inset lands on a whole pixel** (plan A11.1, 2026-11-11): it goes through `round(nearest, …, 1px)`,
+  so text starts on the pixel grid (10, not 10.38, for a cap-centred side in a 30 row). A cap-centred slot joins
+  inset.css's list, or rounds as it does; a content-sized card whose trimmed text sums to a fraction rounds its height up
+  (`calc-size(auto, round(up, size, 1px))`, as Dialog and the choice cards). `cohesion.test.mjs` fails a padding that
+  reads `1cap` outside `round()`. A cap centred vertically in a row stays on its exact centre: the vertical cap rule
+  (0.1 px) outranks the grid there.
+- **Glyphs draw at native sizes** (plan A11.3): a glyph's box reads an `icon-*` token or a native size (16, 20, 24, 32;
+  the 12 and 10 cuts), and a figure that scales its glyph snaps to the nearest one (File page's 32 at 96, was 30).
 - **Nested boxes own their insets.** Swatches, dots, avatars and nested controls use their
   own boxes. A parent reserves an action button's box, and that button owns its icon inset.
   Never size the action to its icon.
 - **Multiline content aligns to the first line.** An icon gets equal top and leading insets
-  and room below; never centre it against the whole paragraph.
+  and room below; never centre it against the whole paragraph. A leading glyph sits in a box one first line tall,
+  `align-self: flex-start`, the glyph centred in it (the box technique; plan B2.4): Menu's two-line rows, Alert, Toast,
+  Card's list, Board, Plan, Queue, Accordion, Attachment. A picker row's trailing check stays centred on the row.
+- **One centring model for one line of text** (plan B2.2, 2026-11-13; `inset.css`, "One centring model"). A one-line
+  label or value in a control, row or tab centres its cap: (H − 1cap) / 2 from each edge, the vertical twin of the
+  side rule. The text part is trimmed to cap and baseline in one of three forms: a cap slot in a centred row (0.25em
+  of paint room), a line slot in a content-sized plate (its line given back, `(1lh − 1cap) / 2`, so the plate keeps its
+  height: Tooltip, a Setting row's one line, Panel's row label) or a text box that is its own box (a page number). Trim
+  does nothing on a flex or grid container, so a label that stacks parts trims an inner text part (Tabs' `__text`).
+  Untrimmed, a centred line box puts the cap 0.26 / 0.62 / 0.03 / 0.33 / 0.68 high at type 12 to 16. A control in a row
+  keeps the row's height and centre: its target grows by an out-of-flow hit area, never by layout (Switch, a
+  label-less Checkbox; plan B2.5).
 - **Matching tiers.** Use matching tier icon, text and gap tokens. Menu, Nav and message
   content use medium UI type; supporting text uses at least small UI type.
 - **Marks on one line** (owner, 2026-11-07). A Count and a Badge of the same size share one
   height (`mark-label-*`), one text size (`control-xs`), one shape (both on the Pills list by
   default, or neither) and one text side: `(H − 6) / 2` from the outer edge, edge counted
   once, 4 / 6 / 8 at 14 / 18 / 22 (about 0.3 of the height, as GitLab's and Fluent's pills and
-  Area's Tag). They differ only in paint (a status carries its tone, a count stays neutral),
+  Area's Tag). Tag and Kbd take the same mark text at every size and density (owner, 2026-11-11, plans B5.2 and A9.9:
+  a mark's text follows its size prop, never density). They differ only in paint (a status carries its tone, a count stays neutral),
   weight (status 500, count 400) and the status mark. A one-character count drops its sides,
   so it is a circle as a pill. Count, Badge and Tag centre their cap on one whole-pixel
   baseline, `edge + round((H − 2 · edge + 1cap) / 2)` from the plate's top, so marks of one
@@ -732,6 +1163,28 @@ Button's corner ([audit](research/radius-audit-2026-10-03.md)).
   2026-11-07; Tag dropped the optical lift that Citation keeps for lowercase site names). In a heading or a name, every mark is centred on the label's
   cap and follows what precedes it by one space and 2 (the app's `.studio-count`).
   `cohesion.test.mjs` guards it; docs/research/count-badge-2026-11-07 has the survey.
+- **One mark** (plan B5.1, B5.2, B5.3, 2026-11-13). Badge, Count, Tag, Kbd, Citation's pill and Indicator's count are
+  one recipe (inset.css, "One mark"). A family sets its rung (`--_mark-height`), the border it really draws
+  (`--_mark-border`) and its corner role; the recipe gives the rest:
+  - height: the mark ladder, 14 / 18 / 22 at type 13 (16 / 20 / 24 at 14, 18 / 22 / 26 at 15, 20 / 24 / 28 at 16; 14 /
+    18 / 22 at 12), at every density;
+  - text: text-xs on sm and md (10 / 11 / 12 / 13 / 14 at types 12 to 16), the UI text on lg, never moved by density
+    (Tag md is 11/14 like Badge, owner 2026-11-11);
+  - side: (H − 6) / 2 from the outer edge, the edge counted once (4 / 6 / 8 at type 13); a one-character count drops its
+    sides, a circle;
+  - baseline: `edge + round((H − 2 · edge + 1cap) / 2)` from the plate's top, and a dot or icon centres on that cap;
+  - corner: the pill role for status and counts (Badge, Count by their Pills flags; Citation and Indicator's count
+    always), `radius-full` itself (one value, never full plus a corner; 2026-11-14), otherwise the Corner setting's
+    corner for H; the chip role for objects (Tag, Kbd, inline Code, Stepper's marker), the small corner, at most H / 2.
+    At Corner 0 chips are square and pills stay pills while the Pills set lists them;
+  - internal gaps 2 at sm and 4 above; a translucent fill (`bg-mark`) where it has a plate; Badge and Kbd at 500,
+    Count, Indicator's count and Tag at 400.
+  An inline chip (inline Code, a soft Mention) never exceeds its line: its block padding is (1lh − content) / 2 less its
+  border, 0.55 at 13/18, so its plate is the line box. `cohesion.test.mjs` ("one mark") pins the recipe.
+- **One track** (plan B8.1, 2026-11-14). Segmented and soft Toggle group are one track (`segmented.css`, "One track"),
+  as Button group shares Button's: a family sets its tier's height and corner; the recipe gives the 2 inset and gap (at
+  every density), the corner (a pill at Pills `segmented`), the edge (`border-width`, the Buttons group), the thumb's
+  height and concentric corner and the raised option's paint. `twins.test.mjs` fails a twin that restates a term.
 - **Framework-free markup uses the same slots as React.** Native editable controls keep
   browser editing metrics.
 
@@ -772,7 +1225,9 @@ How the files fit together is in [Architecture](ARCHITECTURE.md). The rules:
 - **Naming.**
   - Blocks are `.area-badge`, parts `.area-badge__dot`, modifiers `.area-badge--outline`.
   - CSS modifiers are kebab-case and React booleans camelCase (`fullWidth`).
-  - Axis names and values follow [Governance › One vocabulary](GOVERNANCE.md#4-one-vocabulary).
+  - Axis names and values follow [Governance › One vocabulary](GOVERNANCE.md#4-one-vocabulary), and so do parts,
+    slots, states and props: one name per job, read by `lint:manifest` and `test:contracts` from
+    `packages/styles/scripts/vocabulary.mjs`.
   - Values don't repeat the axis name.
   - A modifier may keep a prefix only to avoid a collision on the same block.
 - **Two written exceptions to the manifest.**
@@ -795,8 +1250,9 @@ How the files fit together is in [Architecture](ARCHITECTURE.md). The rules:
   - On/off is `checked` (`onCheckedChange`) or `selected` (`onSelectedChange`).
   - An overlay is `open` / `defaultOpen` / `onOpenChange`, and so is any list or menu a field or button opens; a close
     is `onDismiss` / `dismissLabel`.
-  - Read-only is `readOnly`, painted `data-read-only` and announced `aria-readonly` where the role takes it: rest paint,
-    no hover or press, a default cursor. A control without a native read-only (a checkbox, a button that opens a
+  - Read-only is `readOnly`, painted `data-read-only` (Textarea too) and announced `aria-readonly` where the role
+    takes it. It keeps every state's paint, a field adds its one cue (Disabled and read-only), and there is no hover
+    or press and a default cursor. A control without a native read-only (a checkbox, a button that opens a
     picker) blocks the change itself (components audit 2026-11-07, O2).
   - Validation is `invalid` / `validationStatus` (`error`, `success`, `warning`) on every field, and a Field's status
     reaches its control through `data-validation-status`: the success and warning edges are Input's (O1).

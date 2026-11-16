@@ -99,9 +99,11 @@ Area md (captures): field 88 × 32 at "9:30 AM", segments 20 tall, 2 padding eit
 | empty segment | "––" in the placeholder ink | React Aria |
 | invalid | Input's invalid edge; `aria-invalid` on the segments | peer Input |
 | success / warning | Input's success and warning edges on the shell, from `validationStatus` or a Field's status (2026-11-07) | peer Input |
-| disabled | segments out of the Tab order, disabled ink, no list | React Aria |
-| read-only | segments focusable, not editable; no list | React Aria |
+| disabled | segments out of the Tab order, disabled ink, no list; the manifest's `disabled` state, `data-disabled` on the field | React Aria |
+| read-only | segments focusable, not editable; no list; the manifest's `read-only` state, `data-read-only` on the field | React Aria |
 | list open | Menu; the chosen row checked | ChatGPT |
+
+**State hooks (manifest).** Besides `disabled` and `read-only`, `invalid` is Input's on the same element (`aria-invalid`) and `open` its list's, a Menu (`:popover-open`), both declared with `statesFrom`.
 
 ## Behavior and accessibility
 
@@ -151,6 +153,8 @@ reserves two digits, which pushed "9" away from its colon; the list now centres 
   Spectrum 2 and React Aria pad each segment 2, which reads as a slight space; Area's own list rows in this field read
   "9:00 AM". Recommendation: keep "9:30" so the typed time and its list rows match.
 - 2026-10-13 · owner, in chat: "okay agree" → "9:30" kept; approved → Complete.
+- 2026-11-11 · system evaluation F5 · the manifest declares `invalid` (Input's) and `open` (its Menu's) with `statesFrom`; no paint changed.
+- 2026-11-14 · plan B7.8, B7.10 → disabled and read-only are the field shell's disabled and read-only recipe (input.css): this family's own copies are removed. Read-only now rests one fill step deeper than editable (outline on the soft fill, soft on its hover step). Its manifest takes disabled and read-only from Input. Why: docs/research/system-evaluation-2026-11-11 (README §5, phase2/disabled.md); the owner took every recommendation on 2026-11-11.
 
 ## Review note, 2026-10-22 (round 69)
 
@@ -166,3 +170,16 @@ reserves two digits, which pushed "9" away from its colon; the list now centres 
 - **What changed:** `validationStatus` and a Field's status paint the shell as Input's; `open` / `defaultOpen` / `onOpenChange` control the list of times; `onValueChange(value, event)` passes the key or click.
 - **Why:** Time field mapped a Field's `error` and dropped success and warning (TimeField.tsx:82); its list had no open-state API, while every overlay has the trio (Governance § 4). From the components audit's internal peer comparison (`docs/research/components-audit-2026-11-07/internal.md`); the owner took every recommendation ("Take all recs", 2026-11-07).
 - **Verdict:** awaiting the owner.
+
+- 2026-11-11 · System evaluation F5: the manifest lists the `disabled` and `read-only` states the field already paints (`data-disabled`, `data-read-only`); invalid stays Input's paint on the same element. No visual change.
+
+## Review note, 2026-11-11 (focus and targets, plan A6, A11.2)
+
+- **What changed:** A focused segment draws the inset ring over its editing surface (A6.2, S12; it had no ring).
+- **Why:** the system evaluation's focus, forced colours and hit target items (docs/research/system-evaluation-2026-11-11, section 5), owner-approved 2026-11-11; the rules are in DESIGN_SYSTEM.md ("The focus ring", "Targets") and CONTRAST.md (Focus).
+
+### 2026-11-14 · One field shell (system plan, Phase 2, B3)
+
+- Segments and separators are line slots on the centring model (they sat 0.62 high at type 13); the editing plate keeps its line height.
+- Why: docs/research/system-evaluation-2026-11-11 (B3.1, B3.2, B3.3, B2.2 in fields; README §5); the owner took every recommendation on 2026-11-11 and the 24 targets on 2026-11-13. B3.2: field text stays on Button's inset (Keep 10, the pick), so nothing moved.
+- Verdict: awaiting the owner.

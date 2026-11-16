@@ -15,7 +15,7 @@ export interface EmptyStateProps extends Omit<HTMLAttributes<HTMLDivElement>, "t
   icon?: ReactNode;
   /** The ways to fill the region: one or two Buttons, or a Link. */
   actions?: ReactNode;
-  /** `md` for a page or main region (ChatGPT); `sm` inside a panel, list or popover (Notion). */
+  /** `md` (default) for a page or main region; `sm` inside a panel, list or popover. */
   size?: EmptyStateVariants["size"];
   /** The title's element: a heading at the page's next level, or `p` where a heading would break the outline. */
   titleAs?: "h2" | "h3" | "h4" | "h5" | "h6" | "p";

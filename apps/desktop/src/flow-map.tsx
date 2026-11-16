@@ -20,7 +20,7 @@
  * card's morph), and Back, Esc or ⌘↑ brings the map back with the step chosen.
  */
 import { useLayoutEffect, useMemo, useRef, useState, type KeyboardEvent, type ReactNode } from "react";
-import { Badge, Button, Textarea, ZoomControl } from "@area/react";
+import { Badge, Button, Textarea, Toolbar, ToolbarSeparator, ZoomControl, Link } from "@area/react";
 import { PlayIcon, StopIcon } from "@area/icons";
 import { checkFlow, FLOW_CHECK_TITLES, type Flow, type FlowCheck, type FlowStep } from "./flow.ts";
 import { openDesign, useCardArrival } from "./morph.ts";
@@ -217,7 +217,7 @@ export function FlowMap({ page, flow, chosen, onChoose, onOpen, onPlay, picture,
     watch.observe(el);
     return () => watch.disconnect();
   }, []);
-  const nameOf = (id: string) => { const step = flow.byId.get(id); if (!step) return "a removed layer"; return step.role === "state" ? `${flow.byId.get(step.of!)?.layer.name ?? ""} · ${step.layer.state}` : `${step.number} ${step.layer.name}`; };
+  const nameOf = (id: string) => { const step = flow.byId.get(id); if (!step) return "a removed layer"; return step.role === "state" ? `${flow.byId.get(step.of!)?.layer.name ?? ""}, ${step.layer.state}` : `${step.number} ${step.layer.name}`; };
   const layout = useMemo(() => layoutFlow(flow, nameOf), [flow]); // eslint-disable-line react-hooks/exhaustive-deps
   const fitHeight = box.h ? Math.min(1, (box.h - DOCK_ROOM) / layout.height) : 1;
   const fitAll = box.w ? Math.min(fitHeight, box.w / layout.width) : 1;
@@ -283,10 +283,12 @@ export function FlowMap({ page, flow, chosen, onChoose, onOpen, onPlay, picture,
           </div>
         </div>
       </div>
-      <div className="studio-flow__dock" role="toolbar" aria-label="Flow">
-        <ZoomControl size="sm" value={Math.round(k * 100) / 100} min={ZOOM_MIN} max={ZOOM_MAX} onValueChange={next => setZoom(next)} onZoomToFit={() => setZoom("all")} />
-        <span className="studio-flow__dock-rule" aria-hidden="true" />
-        <Button size="sm" variant="ghost" tone="neutral" icon={<PlayIcon />} onClick={onPlay}>Play</Button>
+      <div className="studio-flow__dock">
+        <Toolbar variant="surface" size="sm" aria-label="Flow">
+          <ZoomControl size="sm" value={Math.round(k * 100) / 100} min={ZOOM_MIN} max={ZOOM_MAX} onValueChange={next => setZoom(next)} onZoomToFit={() => setZoom("all")} data-area-toolbar-item="" tabIndex={-1} />
+          <ToolbarSeparator />
+          <Button size="sm" variant="ghost" tone="neutral" icon={<PlayIcon />} onClick={onPlay} data-area-toolbar-item="" tabIndex={-1}>Play</Button>
+        </Toolbar>
       </div>
     </div>
   );
@@ -297,7 +299,7 @@ function FlowNode({ node, flow, chosen, picture, source, linked, onChoose, onOpe
   linked: (id: string) => boolean; onChoose: () => void; onOpen: () => void;
 }) {
   const { step } = node;
-  const title = step.role === "state" ? `${flow.byId.get(step.of!)?.layer.name ?? ""} · ${step.layer.state ?? "State"}` : step.layer.name;
+  const title = step.role === "state" ? `${flow.byId.get(step.of!)?.layer.name ?? ""}, ${step.layer.state ?? "State"}` : step.layer.name;
   const kind = step.role === "state" ? "State" : step.role === "branch" ? `Branch ${step.number}` : `Step ${step.number}`;
   const role = step.role === "state" ? step.layer.state ?? "State" : step.role === "branch" ? "Off the path" : "On the path";
   const open = () => { openDesign(`layer:${step.layer.id}`); onOpen(); };
@@ -354,7 +356,7 @@ export function FlowChecks({ checks, onOpen }: { checks: readonly FlowCheck[]; o
       {checks.map(check => (
         <li key={`${check.kind}:${check.layer}`}>
           <Badge size="sm" variant="soft" tone="warning">{FLOW_CHECK_TITLES[check.kind]}</Badge>
-          {onOpen ? <button type="button" className="studio-flow-checks__what" onClick={() => onOpen(check.layer)}>{check.what}</button> : <span>{check.what}</span>}
+          {onOpen ? <Link as="button" variant="standalone" className="studio-flow-checks__what" onClick={() => onOpen(check.layer)}>{check.what}</Link> : <span>{check.what}</span>}
           <span className="studio-muted">{check.detail}</span>
         </li>
       ))}
