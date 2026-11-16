@@ -49,6 +49,21 @@
     "text": "The hook above (on Ả ẩ ỉ ở and 23 more) is now built in the weights as a curl and a stem that overlap, as the struck letters are: its small eye keeps its width and the curl grows outward, so the capital form no longer crosses itself from 550 in the Bold. In the Bold, @'s top crotch no longer rises above its stem (a nub), and C's lower barb no longer thins where it meets the bowl (the tapering rule had lengthened one handle there). The weight checks now compare a stroke with the same place in the Regular, which showed that C, Q, s and the capital ogonek never thinned (it was where the check's sampling fell) and found other places that do thin in the Bold: the ring of ® by R's leg, @'s a, K with hook, ₵, and the footless 1's flag. The second check reads straight strokes again (dashes, arrows, maths signs, v, w had gone unread). The Regular is unchanged."
    },
    {
+    "glyphs": "Your point A",
+    "chars": "jyɡ",
+    "text": "The tails of j and y (and ȷ, ŋ, the fj ligatures, and g.ss02, which is built from j) are now built again in the Light and the Bold instead of being stretched by the weight engine. The ball is the same part as the round ends of a c f r 2 3 5 6 9: the Regular's ball scaled evenly (1.40 at the Bold, 0.85 at the Light), so it stays round; the Bold j's ball had come out 61 by 49 units, pinched. The tail between the stem and the ball is solved again by the Regular's own rule, so its curvature only rises toward the ball. Where two curves meet in the masters' tails and loops they now meet at one curvature (the Bold g's loop was 1.87 times, j 1.80, the alternate a 1.76, the tailed l 1.91), never at the stroke's expense. The curvature check now runs on the Light and Bold masters too."
+   },
+   {
+    "glyphs": "Your point B",
+    "chars": "ɡ",
+    "text": "The single-storey g's tail is back to 0.80's proportions: the ball's top 0.138 of the x-height under the baseline (72 units, as 0.80; 0.81 had raised it to 16), the tail ending where both had it, with 0.81's smooth half-ellipse kept (no curvature fault in any master). The white between the ball and the bowl keeps its law at the Bold."
+   },
+   {
+    "glyphs": "Your point C",
+    "chars": "xXvwz9",
+    "text": "A new check measures, for every letter and figure from 300 to 700, how far its top half's ink drifts sideways against its bottom half, the drift of its centre, the stress angle of each counter and whether both sides of a round thicken alike, against Georgia Pro and Source Serif 4. The x leaned most: its thick diagonal turned 6 degrees flatter at the Bold (the references turn at most 2) and the x grew 24% wider (references 5 to 16%). A thick diagonal that crosses another now keeps the Regular's slant within the references' change, so the x at the Bold leans like theirs and is 8% wider. The 9's lower right (and the 6's upper left, the same drawing turned) is steeper than both references in the Regular already (19 degrees against 24 to 26 from its widest point down), because its tail's lowest point sits too far right for the 9's narrow width; that is a drawing decision left to you, not changed."
+   },
+   {
     "glyphs": "Open",
     "chars": "",
     "text": "Not finished. Hooks ending in a ball (ⱳ ƴ Ƙ Ⱳ Ƴ ɲ ƒ, and j and eng) thin a little faster than the stems in the Light; they need a construction of their own, not built. @ in the Light: its a's stem thickens slightly (95 against 92); a fix tried this round ran the counter into the bowl and was not kept. Places that thin in the Bold, found by the same-place check and not yet fixed: ®'s ring by R's leg, @'s a, K with hook, ₵, t with retroflex hook, the footless 1's flag. ⌦ ⌫ ✓ thin faster than other signs in the Light. Junction places in Ə ɂ & $ ð œ and ɽ's ball are still flagged by the second check. Ⱥ and the T with a diagonal stroke wait for your decision (figure 9)."

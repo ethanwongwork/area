@@ -418,3 +418,30 @@ Not done, and why:
   retune: handle lengths), at 102 (the crotch; its mid master too), the two hooks above (new structure), and three
   composites whose stacked marks moved with the hook (uni1EA8, uni1EC2, uni1ED4); 8 kerning keys. Light master: the
   two hooks above; 8 kerning keys.
+
+## Owner round (15 November 2026)
+
+The owner's three points after looking at 0.81, worked before the axis list. Figures (`build/figures/081/`):
+`15-tails-combs.png` (A), `15-gss02.png` (B), `15-lean-waterfall.png` (C).
+
+| # | Point | Cause | Rule | Where | Before > after |
+|---|---|---|---|---|---|
+| 45 | A. Tails of j, y (and g.ss02) not smooth in the Bold; y's ball pinched | The masters' tails were the engine's point moves. It read the ball's box from the neck to the left side (83 by 48 on j) as a round end's (88 by 44) and grew it 1.42 across and 1.14 up: the Bold j's ball 61 by 49, the Light's 36 by 40; the tail then met the ball at up to 1.80 times its curvature. `curvecheck.py` ran on the Regular only | In every master a tail into a ball is built again: the ball is the round ends' part (the Regular's ball scaled by `bold.BALL`'s law about its centre: 1.40 Bold, 0.85 Light, as a c f r 2 3 5 6 9 measure on those masters), centred where the engine put it; the tail between the straight edge and the ball solved by `round_tail` on the master's points (before the tapers, so the taper law holds along it). Then, after the splices, every part curvecheck reads meets at one curvature at each smooth node (`loops.even_nodes`: the node's handles along their own lines, inside the triangle, no new fault of the part, and never a place across the stroke thinner by over half the JND). `curvecheck.py` now runs on the Light and Bold UFOs in qa.py | `loops.tail_kind`, `master_ball`, `round_tail(master=)`, `even_nodes`; `bold.bold_font`; `qa.py` | Bold: j 1.80 > 1.03, y 1.54 and a flat place > 1.17, g.ss02 1.34 and a 49% valley > 1.08; Light: j, y, g.ss02 pass (1.05, 1.06, 1.01); Bold ball round (j 61 by 49 > 60 by 60). Carried to jdotless, eng, f_j, f_f_j (j's tail within a unit) |
+| 46 | B. g.ss02's tail too long and too high | 0.81's form A raised the ball to 0.030 x-height under the baseline (top at -16) to make the half-ellipse tighten evenly | Form D: 0.80's proportions on A's construction: ball top 0.138 x-height under the baseline (0.80's; the references' mean), the tail's end where both had it (`G_TAIL_END`); the half-ellipse and its solved handles kept; the lowest point half way to the tail's end (at 0.80's 0.518 share the quarters meet at 1.23 Regular, 1.77 Bold) | `charset.G_TAIL_FORMS["D"]`, `G_TAIL_FORM` | ball top (Light / Regular / Bold): 0.80 -75 / -72 / -62; tip -21 / -16 / -18; now -77 / -72 / -63. Tail end x 66 throughout. Lowest point x 302 (0.80: 283). curvecheck clean in all three masters. The Regular's only outline change this round; six collision kerns (g.ss02 or ɡ before j, ĵ, ȷ) 57 > 71 |
+| 47 | C. Letters lean or lose balance as weight rises | Measured by a new audit, `audit_lean.py` (every letter, figure, a.ss03, g.ss02 at 300 to 700 on the variable font; references Georgia Pro Light/Regular/Bold and Source Serif 4 at 300/400/700, all read at 1000 units, numbers only): the ink's centre in the top half against the bottom half (lean), the ink against the advance (centre), each counter's thin-to-thin axis (stress) and its two sides' growth. x leaned most: -0.123 of its height at 700 against the references' -0.037 to -0.018. Its thick diagonal turned 36.4 > 42.7 degrees at the Bold (Georgia Pro +1.0, Source Serif 4 -2.2): the anchors the x knot map placed pulled the thick stroke's foot out (top end -1, foot +131 units), and the x grew 24% wider (references 5 to 16%) | A thick diagonal crossing another (an edge cut in two) keeps the Regular's lean within the references' change, 0.038 rad (`LEAN_KEEP_THICK`); every other stroke keeps 0.2. Tried on every thick diagonal first: v w V W leaned less (w -0.038 > -0.011) but W's middle stroke thinned 41 > 27 at 700, v V x gained an inflection in a bracket at 437 and R's leg ran into the ring of ®: not kept | `bold.slant_lines`; `audit_lean.py` | x lean 700 -0.123 > -0.043 (refs -0.037 to -0.018), 300 +0.042 > +0.002; x Bold advance 687 > 596 (+8% on the Regular's, refs +5 to +16%) |
+
+Not done in point C, and why (the audit's remaining flags against both references, lean at 700): s -0.066 (refs -0.014 to
++0.024), G -0.056, S -0.051, X -0.048 (its strokes are not read as crossing), z +0.048, e +0.039, g -0.039, w -0.037,
+a +0.033, c +0.028; the figures within 0.015. Not diagnosed further this round. The 9 (and the 6, the same drawing
+turned): in the Regular already its lower right is steeper than both references (the chord from the widest point to
+0.15 of the height from the end leans 19.2 degrees; Georgia Pro 24.5, Source Serif 4 25.8; at 700 22.1 against 27.4
+and 29.2), because the quarter from its right extreme to its lowest point is tall and narrow (309 by 385, run over rise
+0.80; the references 0.92 to 0.94): the 9 is narrow (ink 0.69 of its height; Georgia Pro 0.86, Source Serif 4 0.62)
+and its lowest point sits right of where the references put it. Moving it to the references' share would run the
+tail into its ball unless the ball moves or the 9 widens: a drawing decision for the owner; no Regular figure changed.
+The 5 reads less steep than both references by the same chord (20.7 against 17.4 to 18.6); its look of leaning is not
+this measure. The stress and side-growth readings are noisy at junctions (counters cut by bars and tails); they are
+written to `build/weight/audit-lean.txt` but not used to judge.
+
+Other changes this round: `.venv/bin` scripts pointed at a removed worktree's Python (qa.py's fontTools and fontbakery
+steps failed with "No such file"); their first lines now name this worktree's interpreter (not tracked).

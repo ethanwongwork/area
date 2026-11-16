@@ -538,7 +538,11 @@ LEAN_KEEP = 0.2                 # radians: a slanted stroke whose anchors would 
 # strokes meet at a vertex, keeping the lean pressed the vertices (W's middle stroke 41 > 27 at 700, an inflection in
 # v's and V's brackets at 437, R's leg into the ring of the registered sign), so those keep LEAN_KEEP.
 # tools: audit_lean.py, build/scratch4/ang.py (numbers only).
-LEAN_KEEP_THICK = 0.038
+# NOT IN USE (None): kept on the x it left an inflection in both brackets of the thick stroke's top-left and
+# bottom-right serifs between the masters (x at 315, 323, 443, 454; audit_bold --sweep at 325): serif_on_slant places
+# the bracket's far end from the x knot map, not from the kept edge, so the Bold's bracket end stood 22 units left of
+# the edge's line where the Regular's stands 10 right of it. The rule needs the serif placed from the kept edge first.
+LEAN_KEEP_THICK = None          # tried: 0.038
 
 
 def slant_lines(strokes, pos, adj, flats, v, pinned=()):
@@ -578,7 +582,8 @@ def slant_lines(strokes, pos, adj, flats, v, pinned=()):
             if fit_m:
                 m, c = float(sol[0]), float(sol[1])
                 crossed = len(st["L"]) > 1 or len(st["R"]) > 1    # an edge cut in two: a stroke crossing another
-                if abs(math.atan(m) - math.atan(st["m"])) > (LEAN_KEEP_THICK if st["t"] >= 64 and crossed else LEAN_KEEP):
+                keep_ = LEAN_KEEP_THICK if (st["t"] >= 64 and crossed and LEAN_KEEP_THICK) else LEAN_KEEP
+                if abs(math.atan(m) - math.atan(st["m"])) > keep_:
                     # the ends that stay do not fix a lean this far
                     fit_m, m = False, st["m"]                       # from the Regular's (12 degrees): keep its lean
             else:
@@ -3197,7 +3202,11 @@ def bold_font(reg, stem=STEM, **over):
     # Light's j fell to 0.65 of 400 by the stem, 42 against 65); before the splices (g.ss02 takes this master's j).
     import loops as _LOOPS
     tails_ = []
-    for g in reg:
+    # Towards the Bold only: towards the Light the engine's tail keeps the Regular's curvature (curvecheck passes on
+    # the Light's j, y, g.ss02 as the engine draws them) and the taper law holds it; solved again there, the Light j
+    # fell to 0.665 of 400 beside the stem (audit_rays' floor 0.684), and the ball alone left the neck's handles
+    # 5.6 degrees off one line.
+    for g in (reg if v["f"] > 0 else []):
         if not g.contours or g.components or g.name in struck or g.name in signs or g.name not in font:
             continue
         cs = glyph_contours(font[g.name])

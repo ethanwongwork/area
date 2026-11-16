@@ -16,6 +16,9 @@ from PIL import Image
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 TITLES = [
+    ("15-gss02.png", "Your point B: g.ss02 at 300, 400, 550, 700: 0.80, the 0.81 tip, this round (the ball back to 0.80's height)"),
+    ("15-tails-combs.png", "Your point A: j, y, g.ss02 in the Light and Bold masters, curvature combs, before over after"),
+    ("15-lean-waterfall.png", "Your point C: the named letters at 300 to 700, before (grey) under after (red outline)"),
     ("1-g-before-after.png", "g: 0.80 over 0.81 (the loop rebuilt)"),
     ("1-gss02-before-after.png", "g.ss02: 0.80 over 0.81 (the half-ellipse tail)"),
     ("2-jy-before-after.png", "j and y: one tail family"),
