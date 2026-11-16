@@ -3875,6 +3875,73 @@ def bold_font(reg, stem=STEM, **over):
                 c.points = [Point(x, y, t, smooth=s_) for x, y, t, s_ in P]
             kept.append(f"{g.name} {log_}")
     notes.append(f"white between parts: {len(kept)} glyphs ({'; '.join(kept)})")
+    # axis round 2: a curve keeps its shape on its own chord. Where the master's thinnest stroke (audit_axis's reading,
+    # at the same place on the Regular) falls under its floor, the engine's knot maps have bent a curve that runs
+    # between two parts that move apart (ʈ's ear from the stem's corner to its tip: the handle by the stem rode the
+    # stem's knot 63 right, the other the tip's 41 left, and the ear thinned 41 > 39 at the Bold). Each curve of the
+    # glyph is tried as its Regular shape on the master's chord (both handles turned and scaled with the chord: a
+    # similarity), one at a time, and the one that best lifts the thinnest place is kept, when it does and no curve
+    # gains a turn
+    import audit_axis as _AA
+    import axis_exact as _AX
+    chorded = []
+    tip_ = 30 * v["tip"]
+    lighter_ = v["f"] < 0
+
+    def _margin(rc, C):
+        ip = _AA.flat(C)
+        pl = []
+        th = _AA.thinnest(ip, points=_AA.points_of(C), at=pl)
+        if th is None:
+            return None
+        rp = _AA.flat(rc)
+        here = _AA.place_reading(rp, pl[0]) if pl else None
+        ref = here if here is not None else _AA.thinnest(rp, points=_AA.points_of(rc))
+        if ref is None:
+            return None
+        floor = min(ref, tip_) if not lighter_ else min(ref, 30) * tip_ / 30
+        return th - (floor - 1.0)
+    for g in reg:
+        # (not where a mid master stands between: the curve changed at the master alone dipped between them, @ 30 > 18)
+        if not g.contours or g.components or g.name in struck or g.name not in font or g.name in layer:
+            continue
+        rc = glyph_contours(g)
+        cs = glyph_contours(font[g.name])
+        if [len(P) for P in rc] != [len(P) for P in cs]:
+            continue
+        m0 = _margin(rc, cs)
+        if m0 is None or m0 >= 0:
+            continue
+        turns0_ = len(_AX.turns(rc, rc, cs, 12, 20))
+        best_ = None
+        for ci, P in enumerate(rc):
+            n = len(P)
+            for i in range(n):
+                if P[i][2] is None or P[(i + 1) % n][2] is not None or P[(i + 3) % n][2] != "curve":
+                    continue
+                a_, b_ = complex(*P[i][:2]), complex(*P[(i + 3) % n][:2])
+                ma, mb = complex(*cs[ci][i][:2]), complex(*cs[ci][(i + 3) % n][:2])
+                if abs(b_ - a_) < 30:
+                    continue
+                z = (mb - ma) / (b_ - a_)
+                C = [list(Q) for Q in cs]
+                Q = [list(q) for q in C[ci]]
+                for h in ((i + 1) % n, (i + 2) % n):
+                    p = ma + z * (complex(*P[h][:2]) - a_)
+                    Q[h][0], Q[h][1] = round(p.real), round(p.imag)
+                C[ci] = [tuple(q) for q in Q]
+                m1 = _margin(rc, C)
+                if m1 is not None and m1 > m0 + 0.5 and (best_ is None or m1 > best_[0]) \
+                        and len(_AX.turns(rc, rc, C, 12, 20)) <= turns0_:
+                    best_ = (m1, ci, i, C)
+        if best_ is None:
+            continue
+        m1, ci, i, C = best_
+        for c_, P in zip(font[g.name].contours, C):
+            c_.points = [Point(x, y, t, smooth=s_) for x, y, t, s_ in P]
+        chorded.append(f"{g.name} curve {ci}:{i} ({m0:+.1f} > {m1:+.1f})")
+        resided.add(g.name)
+    notes.append(f"curves kept on their chord: {len(chorded)} ({'; '.join(chorded)})")
     for g in reg:                                              # 0.81: last, a symmetric sign made so again
         if g.contours and not g.components and g.name in font and g.name not in struck:
             cs = glyph_contours(font[g.name])
