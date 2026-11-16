@@ -418,9 +418,10 @@ def _thinnest(inner, outer):
     return min(min(math.dist(p, q) for q in pout) for p in pin)
 
 
-def round_tail(font, name, kind=None):
+def round_tail(font, name, kind=None, master=False):
     """j's or y's tail by the rule above; the ball (neck, top, left side) is the letter's own and does not move.
-    kind: whose reach share the tail takes ("j" or "y"; by default the glyph's name)."""
+    kind: whose reach share the tail takes ("j" or "y"; by default the glyph's name). master: a weight master's
+    tail (the handle into the neck kept on the ball's line in whole units; the Regular keeps its own rounding)."""
     from ufoLib2.objects import Point
     g = font[name]
     oc = max(g.contours, key=lambda c: len(c.points))
@@ -471,6 +472,9 @@ def round_tail(font, name, kind=None):
     # line by 4.4 degrees on the Bold y): of the four nearest whole points, the one nearest that line
     h_ = (iBi + 2) % n
     ex = i2[2]
+    if not master:
+        return (f"{name}: tail rebuilt (lowest point {P[iB].x}, {P[iB].y}; inside's {P[iBi].x}; thinnest "
+                f"{_thinnest([i1, i2], [o2[::-1], o1[::-1]]):.0f}, was {thin0:.0f}; residual outside {vo:.3f}, inside {vi:.3f})")
     P[h_].x, P[h_].y = min(((fx(ex[0]), fy(ex[1])) for fx in (math.floor, math.ceil) for fy in (math.floor, math.ceil)),
                            key=lambda q: (abs((q[0] - N[0]) * e_in[1] - (q[1] - N[1]) * e_in[0]), math.dist(q, ex)))
     return (f"{name}: tail rebuilt (lowest point {P[iB].x}, {P[iB].y}; inside's {P[iBi].x}; thinnest "

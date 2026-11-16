@@ -3255,7 +3255,7 @@ def bold_font(reg, stem=STEM, **over):
                 continue
             M_ = _LOOPS.master_ball(R_, cs[ci], 1 + (BALL - 1) * v["f"])
             font[g.name].contours[ci].points = [Point(x, y, t, smooth=s_) for x, y, t, s_ in M_]
-            tails_.append(_LOOPS.round_tail(font, g.name, kind_).replace(": tail rebuilt", f" ({kind_}'s tail)"))
+            tails_.append(_LOOPS.round_tail(font, g.name, kind_, master=True).replace(": tail rebuilt", f" ({kind_}'s tail)"))
             resided.add(g.name)
     notes.append(f"tails into a ball: {len(tails_)} ({'; '.join(tails_)})")
     # 0.81 (integration): a glyph whose outline a later rule changed (arm crotches, necks, tapers) takes its sides

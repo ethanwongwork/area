@@ -63,18 +63,18 @@ def grid(rows, weights, out, box=(-60, -260, 760, 760), s=0.17, title=""):
     """rows: [(label, [(vf path, style)])]; style 'fill' grey ink, 'line' red outline, 'ink' black ink."""
     x0, y0, x1, y1 = box
     cw, ch = (x1 - x0) * s, (y1 - y0) * s
-    surf = skia.Surface(int(140 + cw * len(weights)), int(40 + ch * len(rows)))
+    surf = skia.Surface(int(140 + cw * len(weights)), int(52 + ch * len(rows)))
     c = surf.getCanvas()
     c.clear(skia.ColorWHITE)
-    c.drawString(title, 8, 22, LABEL, skia.Paint(Color=skia.ColorBLACK))
+    c.drawString(title, 8, 18, LABEL, skia.Paint(Color=skia.ColorBLACK))
     cache = {}
     for k, w in enumerate(weights):
-        c.drawString(str(w), 140 + k * cw + cw / 2 - 12, 22, LABEL, skia.Paint(Color=skia.ColorSetARGB(255, 90, 90, 90)))
+        c.drawString(str(w), 140 + k * cw + cw / 2 - 12, 40, LABEL, skia.Paint(Color=skia.ColorSetARGB(255, 90, 90, 90)))
     for r, (label, layers) in enumerate(rows):
-        c.drawString(label, 8, 40 + r * ch + ch / 2, LABEL, skia.Paint(Color=skia.ColorBLACK))
+        c.drawString(label, 8, 52 + r * ch + ch / 2, LABEL, skia.Paint(Color=skia.ColorBLACK))
         for k, w in enumerate(weights):
             c.save()
-            c.translate(140 + k * cw - x0 * s, 40 + r * ch + y1 * s)
+            c.translate(140 + k * cw - x0 * s, 52 + r * ch + y1 * s)
             c.scale(s, -s)
             for yy in (0, 520):
                 c.drawLine(x0, yy, x1, yy, skia.Paint(Color=skia.ColorSetARGB(50, 0, 0, 255), StrokeWidth=1 / s))
@@ -102,8 +102,8 @@ def main(before, after, out_dir, v080=None):
     parts = []
     for style in ("Light", "Bold"):
         o = os.path.join(out_dir, f"_combs-{style}.png")
-        subprocess.run([PY, combs, o, "j", "y", "g.ss02", "g", "--ufo", os.path.join(after, f"AreaSerif-{style}.ufo"),
-                        "--before", os.path.join(before, f"AreaSerif-{style}.ufo"), "--y", "-300,140", "--s", "0.5"], check=True, cwd=SERIF)
+        subprocess.run([PY, combs, o, "j", "y", "g.ss02", "--ufo", os.path.join(after, f"AreaSerif-{style}.ufo"),
+                        "--before", os.path.join(before, f"AreaSerif-{style}.ufo"), "--y", "-300,140", "--s", "0.6"], check=True, cwd=SERIF)
         parts.append(o)
     from PIL import Image
     ims = [Image.open(p) for p in parts]
@@ -112,6 +112,13 @@ def main(before, after, out_dir, v080=None):
     x = 0
     for i in ims:
         im.paste(i, (x, 0))
+        x += i.width + 10
+    from PIL import ImageDraw, ImageFont
+    d = ImageDraw.Draw(im)
+    f_ = ImageFont.truetype("/System/Library/Fonts/Helvetica.ttc", 28)
+    x = 0
+    for st, i in zip(("Light master", "Bold master"), ims):
+        d.text((x + i.width // 2 - 80, 4), st, fill="black", font=f_)
         x += i.width + 10
     im.save(os.path.join(out_dir, "15-tails-combs.png"))
     for p in parts:

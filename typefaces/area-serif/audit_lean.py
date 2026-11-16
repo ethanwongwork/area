@@ -64,6 +64,8 @@ def raster(tt, name):
     gs = tt.getGlyphSet()
     rec = DecomposingRecordingPen(gs)
     gs[name].draw(rec)
+    k = 1000 / tt["head"].unitsPerEm                       # every face read at 1000 units (Georgia Pro has 2048)
+    rec.value = [(op, tuple((x * k, y * k) for x, y in a)) for op, a in rec.value]
     p = skia.Path()
     for op, a in rec.value:
         if op == "moveTo":
@@ -89,7 +91,7 @@ def raster(tt, name):
     c.scale(1, -1)
     c.drawPath(p, skia.Paint(Color=skia.ColorWHITE, AntiAlias=False))
     img = surf.makeImageSnapshot().toarray()[:, :, 0] > 127
-    return img[::-1, :], gs[name].width          # row 0 is y = -PAD
+    return img[::-1, :], gs[name].width * k      # row 0 is y = -PAD
 
 
 def counters(mask):
