@@ -394,7 +394,7 @@ DIAG_INWARD = 0.25
 # centrelines, so each opening between them gives up half of what the two gain across: 0.5. The references' x and X
 # measured 400 to 700 at 0.22 and 0.78 of the height: Source Serif 4 0.39 to 0.48, Georgia Pro 0.10 to 0.20 (Georgia
 # flattens its strokes instead and widens the x 16%, Source 5%). The audit's opening target follows this rule.
-DIAG_INWARD_CROSS = 0.5
+DIAG_INWARD_CROSS = 0.39
 # The flat where two slanted strokes meet outside (v's foot, A's head) is parts.VERTEX of its class's stem in the
 # Regular (0.42: 33 and 36). The Bold keeps that rule on its own stems: 59 and 62. (The references' Bold flats
 # are 0.57 and 0.39 of their stems on v, 0.54 and 0.54 on V; their Regulars 0.44 and 0.50.)
@@ -517,9 +517,13 @@ def slant_strokes(dg):
     out = list(strokes.values())
     # owner round 3: two straight diagonals that cut each other's edges in two (x, X) cross; a straight stroke cut by
     # a curve (the ampersand's arm) or by a bar is not this part
-    split = [st for st in out if len(st["L"]) > 1 or len(st["R"]) > 1]
-    for st in out:
-        st["cross"] = len(split) >= 2 and st in split
+    # a stroke both of whose edges are cut in two by strokes of the other lean that share its corners is crossed
+    # through (x's thick stroke; A's legs are cut by the bar on one edge only, X's strokes are drawn whole)
+    nodes_of = [({q for e in st["L"] + st["R"] for q in e}) for st in out]
+    for k, st in enumerate(out):
+        part = [j for j, o in enumerate(out) if o is not st and nodes_of[k] & nodes_of[j] and o["m"] * st["m"] < 0]
+        st["cross"] = len(st["L"]) > 1 and len(st["R"]) > 1 and bool(part)
+        st["crossers"] = part if st["cross"] else []
     return out
 
 
@@ -564,6 +568,14 @@ LEAN_KEEP = 0.2                 # radians: a slanted stroke whose anchors would 
 # the constraint sets: at 0.25 the x's openings came out 193 and 166 against 219.5 and 196.5, at 0.5 182 and 154
 # against 197.9 and 174.9. The opening has to be constrained on the lines, not the knots, before the angle can be
 # kept; off until then.
+# Owner round 4: tried with the crossing's openings set where they are measured (crossing_openings). Infeasible
+# under the round's constraints: each end of the x carries two openings, between its bracket and the thick stroke's
+# (137..378, 184..402) and between its serif's end and the thick stroke's (181..334, 228..359); moving that end moves
+# both alike. Their Regular difference is 88 and 87 and the rule's targets keep it (207.4 - 119.4, 184.4 - 97.4); with
+# the thick angle kept and the brackets drawn from its edge the Bold's difference is 66 and 62, so whichever opening
+# is met the other misses by 22 to 25 (bracket-level 185 and 159 against 207.4 and 184.4 with the serif-level ones
+# met; serif-level 122 against 97.4 with the bracket-level met). Only the bracket's offset from the edge or the
+# serif's reach could separate them, and both are fixed rules. Off.
 LEAN_KEEP_THICK = None          # tried: 0.038
 LEAN_ALL = False
 BRACKET_FROM_EDGE = False
@@ -696,6 +708,114 @@ def serif_on_slant(strokes, adj, contours, X, Y, moved_to, v):
                     for w_ in [o] + beyond:
                         cur = moved_to.get(w_, (X.get(w_[0], w_[0]), Y.get(w_[1], w_[1])))
                         moved_to[w_] = (cur[0] + dx, cur[1])
+
+
+CROSS_DEBUG = False
+
+
+def crossing_openings(strokes, adj, X, Y, moved_to, opens, v):
+    """Owner round 4: two straight diagonals that cross (x) keep the thick stroke's angle; the openings between their
+    ends are then set where they are measured, between the placed nodes (the parts audit's place), not on the x
+    knots: the thin stroke's two ends move apart, its top end out by what the top opening lacks and its bottom end
+    out by what the bottom one lacks, each end (its serif and bracket) as one piece; the thin stroke's edges are
+    lines through their moved ends, widened by the cosine of its new lean so it keeps its thickness across itself,
+    and the corners where they meet the thick stroke's edges are those lines' meeting points. Unknowns: the thin
+    stroke's angle and so the advance; knowns: both thicknesses, the thick stroke's angle, the opening targets
+    (DIAG_INWARD_CROSS of the two strokes' gain), the serif rules."""
+    thick = [st for st in strokes if st.get("cross") and st["t"] >= 64]
+    if len(thick) != 1:
+        return
+    tk = thick[0]
+    parts = [strokes[j] for j in tk["crossers"] if strokes[j]["t"] < 64]
+    if not parts:
+        return
+    tn = {"L": [e for p_ in parts for e in p_["L"]], "R": [e for p_ in parts for e in p_["R"]],
+          "m": sum(p_["m"] for p_ in parts) / len(parts), "t": sum(p_["t"] for p_ in parts) / len(parts)}
+    at = lambda q: moved_to.get(q, (X[q[0]], Y[q[1]]))     # noqa: E731
+    tn_nodes = {q for e in tn["L"] + tn["R"] for q in e}
+    tk_nodes = {q for e in tk["L"] + tk["R"] for q in e}
+    corners = tn_nodes & tk_nodes                            # where the thin stroke's edges meet the thick's
+    ends = {}
+    for side, es in (("L", tn["L"]), ("R", tn["R"])):
+        qs = sorted({q for e in es for q in e} - corners, key=lambda q: q[1])
+        ends[side] = (qs[0], qs[-1])                          # (bottom end, top end) of that edge
+
+    def cluster(a, b, up):
+        """The nodes of one end of the thin stroke: from its left edge's end round to its right edge's end the way
+        that does not run along the stroke (its serif and brackets)."""
+        out, q = [a], a
+        for _ in range(60):
+            pv, pl_, nx, nl = adj[q]
+            cand = [o for o in (pv, nx) if o not in out and o not in corners and o not in tn_nodes - {b}]
+            cand = [o for o in cand if o == b or (o[1] >= min(a[1], b[1]) - 1 if up else o[1] <= max(a[1], b[1]) + 1)]
+            if not cand:
+                break
+            q = cand[0]
+            out.append(q)
+            if q == b:
+                break
+        return out if out[-1] == b else None
+    top = cluster(ends["L"][1], ends["R"][1], True)
+    bot = cluster(ends["L"][0], ends["R"][0], False)
+    if CROSS_DEBUG:
+        print("crossing clusters", top, bot)
+    if not top or not bot:
+        return
+    # the openings: each between a node of the thin stroke's end and one of the thick stroke's (the targets' knots)
+    def opening_at(cl):
+        for a_, b_, want in opens:
+            qa = [q for q in adj if q[0] == a_]
+            qb = [q for q in adj if q[0] == b_]
+            ina = [q for q in qa if q in cl]
+            inb = [q for q in qb if q in cl]
+            if ina or inb:
+                mine, other = (ina, qb) if ina else (inb, qa)
+                o = min(other, key=lambda q: abs(q[1] - mine[0][1]))
+                now = abs(at(mine[0])[0] - at(o)[0])
+                return want - now, (1 if ina == [] else -1)
+        return None
+    o_top, o_bot = opening_at(top), opening_at(bot)
+    if CROSS_DEBUG:
+        print("crossing openings short by", o_top, o_bot)
+    if o_top is None or o_bot is None:
+        return
+    # the thin stroke's top end is to the right (x) or left: it moves away from the thick stroke's end beside it
+    sx_top = 1 if at(ends["R"][1])[0] > at(ends["L"][0])[0] else -1
+    d_top = max(0.0, o_top[0]) * sx_top
+    d_bot = -max(0.0, o_bot[0]) * sx_top
+    for cl, d in ((top, d_top), (bot, d_bot)):
+        for q in cl:
+            x_, y_ = at(q)
+            moved_to[q] = (round(x_ + d), y_)
+    # the thin stroke's edges through their moved ends, its level width grown by its new lean so its thickness holds
+    def line(a, b):
+        (x0, y0), (x1, y1) = at(a), at(b)
+        m = (x1 - x0) / (y1 - y0)
+        return m, x0 - m * y0
+    mL, cL = line(*ends["L"])
+    mR, cR = line(*ends["R"])
+    m0 = (mL + mR) / 2
+    m_old = tn["m"]
+    grow = math.sqrt(1 + m0 * m0) / math.sqrt(1 + m_old * m_old)     # level width over thickness, new over old
+    yc = (at(ends["L"][0])[1] + at(ends["L"][1])[1]) / 2
+    wl = (mR * yc + cR) - (mL * yc + cL)
+    extra = wl * (grow - 1) / 2
+    cL, cR = cL - extra * (1 if wl > 0 else -1), cR + extra * (1 if wl > 0 else -1)
+    lines_k = [line(*sorted({q for e in es for q in e}, key=lambda q: q[1])[::len(sorted({q for e in es for q in e})) - 1])
+               for es in (tk["L"], tk["R"])]
+    for q in corners:
+        on_l = any(q in e for e in tn["L"])
+        mt, ct = (mL, cL) if on_l else (mR, cR)
+        on_kl = any(q in e for e in tk["L"])
+        mk, ck = lines_k[0] if on_kl else lines_k[1]
+        if abs(mt - mk) < 1e-9:
+            continue
+        y_ = (ck - ct) / (mt - mk)
+        moved_to[q] = (round(mt * y_ + ct), round(y_))
+    for side, (mt, ct) in (("L", (mL, cL)), ("R", (mR, cR))):      # the edges' ends onto the widened lines
+        for q in ends[side]:
+            x_, y_ = at(q)
+            moved_to[q] = (round(mt * y_ + ct), y_)
 
 
 def slant_place(strokes, pos, adj, pinned=(), handles=None):
@@ -1665,6 +1785,8 @@ def bold(contours, width, v, name="", hints=None):
         placed.update(fork)
         moved_to = {q: (round(x), round(y)) for q, (x, y) in placed.items()}
         serif_on_slant(strokes, adj, contours, X, Y, moved_to, v)
+        if LEAN_KEEP_THICK and any(st.get("cross") for st in strokes):
+            crossing_openings(strokes, adj, X, Y, moved_to, extra_open, v)
     lsb, rsb = xk[0], width - xk[-1]
     all_x = [q[0] for P in contours for q in P if q[2] is not None]
     lsb, rsb = min(all_x), width - max(all_x)
