@@ -217,6 +217,12 @@ def one_stroke(found, reach=20):
         for o in keys[i + 1:]:
             if o in drop:
                 continue
+            ak, ao = found[k].get("at"), found[o].get("at")
+            if ak and ao and (ak[1] < ao[0] - reach or ao[1] < ak[0] - reach):
+                # owner round 6: readings far apart in height are two strokes sharing an edge's knot, not one read
+                # twice (the 9's ball, its left side on the bowl's left extreme, took the bowl's stroke 57..149 and
+                # the bowl's left side grew by the ball's 1.40, not the round strokes' 1.78)
+                continue
             if k[0] == o[0] and 0 < abs(k[1] - o[1]) <= reach:
                 drop.add(o)
                 keep.append(tuple(sorted((k[1], o[1]))))
@@ -1678,8 +1684,13 @@ def bold(contours, width, v, name="", hints=None):
     xs, xg = read_axis(pl, xk, 1, yk[0], yk[-1])
     ys, yg = read_axis(pl, yk, 0, xk[0], xk[-1])
     caps = end_caps(body)
+    ball_pairs_ = {(ax_, lo_, hi_) for ax_, lo_, hi_, o_, lo2_, hi2_ in balls(body)}     # (axis as read, lo, hi)
     for axis, found, knots_ in ((1, ys, yk), (0, xs, xk)):
         for a, b in extreme_pairs(body, pl, axis):
+            if (axis, a, b) in ball_pairs_:
+                # owner round 6: a ball's two sides are the ball's, not a stroke read a unit off (the 9's ball, its
+                # left side on the bowl's left extreme, took the bowl's stroke 57..149 as its own 57..145)
+                continue
             if not any(abs(k[0] - a) <= 8 and abs(k[1] - b) <= 8 for k in found):
                 found[(a, b)] = {"run": 0, "at": None, "straight": (False, False), "off": 0, "pair": True}
             else:                                              # the scan found it a unit off: the extremes are the edges
