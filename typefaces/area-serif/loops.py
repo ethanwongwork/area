@@ -418,8 +418,9 @@ def _thinnest(inner, outer):
     return min(min(math.dist(p, q) for q in pout) for p in pin)
 
 
-def round_tail(font, name):
-    """j's or y's tail by the rule above; the ball (neck, top, left side) is the letter's own and does not move."""
+def round_tail(font, name, kind=None):
+    """j's or y's tail by the rule above; the ball (neck, top, left side) is the letter's own and does not move.
+    kind: whose reach share the tail takes ("j" or "y"; by default the glyph's name)."""
     from ufoLib2.objects import Point
     g = font[name]
     oc = max(g.contours, key=lambda c: len(c.points))
@@ -439,7 +440,7 @@ def round_tail(font, name):
     C, N = xy(iC), xy(iN)
     # where the straight edge meets the descender zone's top, for the reach (tail_profile's stem_r at -0.05 x-height)
     edge = _ray_y(xy(iD), d_out, -26)[0]
-    Bx = round(edge - TAIL_LOW[name] * (edge - C[0]))
+    Bx = round(edge - TAIL_LOW[kind or name] * (edge - C[0]))
     Bix = P[iBi].x                                         # the inside's lowest point stays (it sets the stroke there)
     ball_k = _k((xy(iC - 3), xy(iC - 2), xy(iC - 1), C), 1.0)
     after = xy((iN + 1) % n)
@@ -466,8 +467,101 @@ def round_tail(font, name):
             (iC + 1) % n: o2[2], (iC + 2) % n: o2[1], iB: o1[3], (iB + 1) % n: o1[2], (iB + 2) % n: o1[1], iD: o1[0]}
     for i, p in want.items():
         P[i].x, P[i].y = R(p)
+    # the handle into the neck in whole units on the ball's own line there (rounding a short handle turned it off the
+    # line by 4.4 degrees on the Bold y): of the four nearest whole points, the one nearest that line
+    h_ = (iBi + 2) % n
+    ex = i2[2]
+    P[h_].x, P[h_].y = min(((fx(ex[0]), fy(ex[1])) for fx in (math.floor, math.ceil) for fy in (math.floor, math.ceil)),
+                           key=lambda q: (abs((q[0] - N[0]) * e_in[1] - (q[1] - N[1]) * e_in[0]), math.dist(q, ex)))
     return (f"{name}: tail rebuilt (lowest point {P[iB].x}, {P[iB].y}; inside's {P[iBi].x}; thinnest "
             f"{_thinnest([i1, i2], [o2[::-1], o1[::-1]]):.0f}, was {thin0:.0f}; residual outside {vo:.3f}, inside {vi:.3f})")
+
+
+# ------------------------------------------------------------------------------------------- the tail in every master
+# 0.81 (owner, 15 November, on the Bold: "the tails are not smooth and the tips are not consistent with the other
+# tails"; j and y lumpy, y's ball pinched). The masters' tails were the engine's point moves: it read the ball's box
+# from the neck to the left side (83 by 48 on j) as a round end's (88 by 44) and grew it 1.42 across and 1.14 up, so
+# the Bold's ball was 61 by 49 (the Light's 36 by 40) and the tail met it at 1.80 times its curvature (curvecheck on
+# the Bold: j 1.80, y 1.54 and a flat place; g.ss02, spliced from j, 1.34 and a 49% valley). The rule, in every master:
+#  1. the ball is the round ends' part: the Regular's ball (neck, top, left side and the handles between) scaled by
+#     the round ends' own law (bold.BALL: 1 + 0.40 f, as a c f r 2 3 5 6 9 take it, 1.40 at the Bold and 0.85 at the
+#     Light, measured on those masters) about its centre (the top's x, the left side's height), centred where the
+#     engine put it: a similarity, so its shape is the Regular's at every weight;
+#  2. the tail between the straight edge and the ball is solved again by round_tail on the master's own edges, ball
+#     and depth (the Regular's rule: curvature only rising toward the ball, equal across the lowest point).
+# The Regular is unchanged (at f 0 the ball's scale is 1 and its centre its own; round_tail is the Regular's rule).
+
+def tail_kind(reg_font, P):
+    """Whose tail a Regular contour carries, if any: "j" or "y" when its ball and lowest point are j's or y's,
+    point for point (within a unit) up to a move (j, jdotless, eng, f_j, f_f_j; y). Else None."""
+    def sig(Q):
+        n = len(Q)
+        on = [i for i, q in enumerate(Q) if q[2]]
+        if len(on) < 7:
+            return None
+        iB = min(on, key=lambda i: (Q[i][1], Q[i][0]))
+        iN = (iB - 9) % n
+        if any(Q[(iN + k) % n][2] != ("curve" if k % 3 == 0 else None) for k in range(10)):
+            return None
+        return [(Q[(iN + k) % n][0] - Q[iN][0], Q[(iN + k) % n][1] - Q[iN][1]) for k in range(10)]
+    s = sig(P)
+    if s is None:
+        return None
+    for kind in ("j", "y"):
+        oc = max(reg_font[kind].contours, key=lambda c: len(c.points))
+        t = sig([(q.x, q.y, q.type, q.smooth) for q in oc.points])
+        if t and all(abs(a[0] - b[0]) <= 1 and abs(a[1] - b[1]) <= 1 for a, b in zip(s, t)):   # within a unit: jdotless,
+            return kind                                                                    # eng, f_j's neck is 22, j's 23
+    return None
+
+
+def master_ball(R, M, ratio):
+    """Rule 1 above on one contour: R the Regular's points, M the master's [(x, y, type, smooth)]; returns M with the
+    ball (neck to left side, seven points) the Regular's scaled by ratio about its centre, centred as the master's."""
+    n = len(R)
+    on = [i for i, q in enumerate(R) if q[2]]
+    iB = min(on, key=lambda i: (R[i][1], R[i][0]))
+    iC, iT, iN = (iB - 3) % n, (iB - 6) % n, (iB - 9) % n
+    cR = (R[iT][0], R[iC][1])
+    cM = (M[iT][0], M[iC][1])
+    exact = {}
+    for k in range(7):
+        i = (iN + k) % n
+        exact[i] = (cM[0] + ratio * (R[i][0] - cR[0]), cM[1] + ratio * (R[i][1] - cR[1]))
+    # whole units: each handle rounded up or down along its own line (level or upright at the top and the side), the
+    # choice whose neck curve keeps the Regular's curvature profile nearest and whose quarter from the top to the side
+    # is roundest (its curvature's largest over its least; rounding alone made y's ball quarter fall and rise 11 to
+    # 12% at the Bold and the Light, past curvecheck's flat place, where the Regular's is 8%)
+    import itertools
+    hs = [(iN + k) % n for k in (1, 2, 4, 5)]
+    base = {i: (round(x), round(y)) for i, (x, y) in exact.items()}
+
+    def prof(Q, a):
+        s = ("C", tuple(Q[(a + k) % n][:2] for k in range(4)), 0, 0)
+        ks = [abs(K.curvature(s, t / 16)) for t in range(17)]
+        m = max(ks) or 1e-9
+        return [k_ / m for k_ in ks]
+    ref = [prof(R, iN), prof(R, iT)]
+    best = None
+    for pick in itertools.product((math.floor, math.ceil), repeat=8):
+        cand = dict(base)
+        for k, i in enumerate(hs):
+            own = (iT if i in ((iT - 1) % n, (iT + 1) % n) else iC if i == (iC - 1) % n else iN)
+            xy = []
+            for ax in (0, 1):
+                if R[i][ax] == R[own][ax] and own != iN:      # level or upright with its node: stays so
+                    xy.append(cand[own][ax])
+                elif abs(exact[i][ax] - round(exact[i][ax])) > 1e-9:
+                    xy.append(pick[2 * k + ax](exact[i][ax]))
+                else:
+                    xy.append(round(exact[i][ax]))
+            cand[i] = tuple(xy)
+        Q = [cand.get(i, M[i][:2]) + tuple(M[i][2:]) for i in range(n)]
+        err = sum((a - b) ** 2 for a, b in zip(ref[0], prof(Q, iN))) + (max(prof(Q, iT)) / max(min(prof(Q, iT)), 1e-9))
+        err += sum(math.dist(cand[i], exact[i]) for i in hs) * 1e-6
+        if best is None or err < best[0]:
+            best = (err, Q)
+    return best[1]
 
 
 # ------------------------------------------------------------------------------------------- the a's exit
@@ -512,3 +606,156 @@ def a_exit(font, name="a"):
         P[(iB + k) % n].x, P[(iB + k) % n].y = int(round(q[0])), int(round(q[1]))
     ks = [abs(_k(c, i / 8)) for i in range(9)]
     return f"{name}: exit radius {', '.join(str(round(1 / k)) for k in ks[::2])} (lowest point to cut end)"
+
+
+# ------------------------------------------------------------------------------------------- curvature at a node
+# 0.81 (owner, 15 November): in the masters the descender's curves met at up to 1.87 times their curvature (the Bold
+# g's loop at its left side, the Bold j where its tail meets its ball, a.ss03 1.76, l.ss04 1.91), where the Regular,
+# whose handles were solved for it, keeps under curvecheck.RATIO. The rule the Regular's loops and tails were built
+# by (two curves at a smooth node meet at one curvature), applied in every master to the parts curvecheck reads: at
+# each smooth node whose two curves meet at more than RATIO, the node's two handles change length, along their own
+# line (nodes and tangents stay), so the two end curvatures meet at their geometric mean. A curve's end curvature is
+# 2/3 of its far handle's distance from the tangent over the near handle's length squared, so each length is solved
+# directly; a few rounds settle the far ends. A length moves within 0.5 to 2.5 of its own and stays inside its
+# curve's triangle; a change is kept only where the node's ratio falls and the part gains no other fault (a flat, an
+# inflection, a turn of the handles).
+
+def even_nodes(P, yr, rounds=8, target=None):
+    """P: [(x, y, type, smooth)]; yr: curvecheck's region. Returns (new P, [(node, ratio before, after)])."""
+    target = target or K.RATIO
+    P = [tuple(q) for q in P]
+    P_in = list(P)
+    n = len(P)
+    first = {}
+    log = {}
+
+    def near(i, side):
+        return (i + side) % n
+
+    for _ in range(rounds):
+        changed = False
+        for i, xy, g1, ka, kb, ratio, flip, kinds in K.nodes(P, yr):
+            if kinds != "CC" or ratio is None or flip or ratio <= target - 0.05:
+                continue
+            first.setdefault(i, ratio)
+            want = math.sqrt(abs(ka) * abs(kb))
+            new = list(P)
+            for side in (-1, 1):
+                h = near(i, side)                      # the node's handle on this side
+                far = near(i, 2 * side)                # the curve's other handle
+                if P[h][2] is not None or P[far][2] is not None:
+                    break
+                L = math.dist(P[h][:2], P[i][:2])
+                if L < 1:
+                    break
+                u = ((P[h][0] - P[i][0]) / L, (P[h][1] - P[i][1]) / L)
+                # the far handle's distance from the tangent line through the node
+                dist = abs((P[far][0] - P[i][0]) * u[1] - (P[far][1] - P[i][1]) * u[0])
+                L2 = math.sqrt(2 / 3 * dist / want) if want > 1e-9 else L
+                L2 = min(max(L2, 0.5 * L), 2.5 * L)
+                # inside the triangle: never past where the node's tangent meets the far end's (construction rule)
+                end = near(i, 3 * side)
+                w_ = (P[far][0] - P[end][0], P[far][1] - P[end][1])
+                den = u[0] * w_[1] - u[1] * w_[0]
+                if abs(den) > 1e-9:
+                    tmax = ((P[end][0] - P[i][0]) * w_[1] - (P[end][1] - P[i][1]) * w_[0]) / den
+                    if tmax > 0:
+                        L2 = min(L2, 0.95 * tmax)
+                new[h] = (P[i][0] + u[0] * L2, P[i][1] + u[1] * L2) + tuple(P[h][2:])
+            else:
+                # kept only where the part's own faults (curvecheck) do not grow: a ball's neck turns the other way
+                # by design and is left as it is
+                def others(Q):                         # the part's faults other than a curvature ratio at a node
+                    return {b_ for b_ in K.report("", [Q], yr)[0] if "x across it" not in b_}
+
+                r0_ = {j: r for j, *_x, r, f_, k_ in K.nodes(P, yr) if k_ == "CC" and r is not None}
+
+                def ok(Q):
+                    r_ = {j: r for j, *_x, r, f_, k_ in K.nodes(Q, yr) if k_ == "CC" and r is not None}
+                    worse = any(r_[j] > max(r0_.get(j, 0), target) + 1e-6 for j in r_ if j != i)
+                    return (not worse and others(Q) <= others(P) and r_.get(i, 9e9) < ratio
+                            and len(K.report("", [Q], yr)[0]) <= len(K.report("", [P], yr)[0])), r_.get(i, 9e9)
+                good, _r = ok(new)
+                if not good:
+                    # the curves' far handles too, along their own lines (a short curve whose tight bend sat at the
+                    # node keeps it inside when only the near handle grows: the Bold l.ss04's inner curve, radius 6)
+                    best = None
+                    fars = [near(i, -2), near(i, 2)]
+                    for sa in (0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2, 1.35, 1.5):
+                        for sb in (0.6, 0.7, 0.8, 0.9, 1.0, 1.1, 1.2, 1.35, 1.5):
+                            Q = list(new)
+                            for f_i, sc in zip(fars, (sa, sb)):
+                                o_ = near(i, -3 if f_i == near(i, -2) else 3)     # the far handle's own node
+                                Q[f_i] = (P[o_][0] + (P[f_i][0] - P[o_][0]) * sc, P[o_][1] + (P[f_i][1] - P[o_][1]) * sc) + tuple(P[f_i][2:])
+                            g_, r_ = ok(Q)
+                            if g_ and (best is None or (r_, abs(sa - 1) + abs(sb - 1)) < best[0]):
+                                best = ((r_, abs(sa - 1) + abs(sb - 1)), Q)
+                    if best is not None:
+                        new, good = best[1], True
+                if good:
+                    P = new
+                    changed = True
+        if not changed:
+            break
+    # a smooth node whose handles stand off one line (curvecheck's G1): a curve's handle turned onto the straight it
+    # leaves, two curves' handles onto their mean direction, lengths kept (the Light g's link, 6.3 degrees)
+    for i, xy, g1, ka, kb, ratio, flip, kinds in K.nodes(P, yr):
+        if g1 <= K.G1:
+            continue
+        a_, b_ = near(i, -1), near(i, 1)
+        La, Lb = math.dist(P[a_][:2], P[i][:2]), math.dist(P[b_][:2], P[i][:2])
+        if La < 1 or Lb < 1:
+            continue
+        ua = ((P[i][0] - P[a_][0]) / La, (P[i][1] - P[a_][1]) / La)       # along the outline at the node
+        ub = ((P[b_][0] - P[i][0]) / Lb, (P[b_][1] - P[i][1]) / Lb)
+        if kinds == "LC":
+            d = ua
+        elif kinds == "CL":
+            d = ub
+        else:
+            d = (ua[0] + ub[0], ua[1] + ub[1])
+        dl = math.hypot(*d)
+        d = (d[0] / dl, d[1] / dl)
+        Q = list(P)
+        if kinds != "LC":
+            Q[a_] = (P[i][0] - d[0] * La, P[i][1] - d[1] * La) + tuple(P[a_][2:])
+        if kinds != "CL":
+            Q[b_] = (P[i][0] + d[0] * Lb, P[i][1] + d[1] * Lb) + tuple(P[b_][2:])
+        if {x for x in K.report("", [Q], yr)[0] if "degrees off" not in x} <= set(K.report("", [P], yr)[0]):
+            P = Q
+    # a curve that leaves a straight at more than curvecheck's EASE of its tightest: its handle at the join grows along
+    # the straight (its end curvature falls as the square of that length), the least that brings it under
+    for i, _xy, e in K.eases(P, yr):
+        if e <= K.EASE:
+            continue
+        for side in (-1, 1):
+            h = near(i, side)
+            if P[h][2] is not None:
+                continue
+            L = math.dist(P[h][:2], P[i][:2])
+            if L < 1:
+                continue
+            u = ((P[h][0] - P[i][0]) / L, (P[h][1] - P[i][1]) / L)
+            far, end = near(i, 2 * side), near(i, 3 * side)
+            done_ = False
+            for sc, sf in sorted(((a_, b_) for a_ in (1.05, 1.1, 1.15, 1.2, 1.3, 1.4, 1.5, 1.65, 1.8)
+                                  for b_ in (1.0, 0.9, 1.1, 0.8, 1.2, 0.7, 1.3, 0.6, 1.45)),
+                                 key=lambda z: abs(z[0] - 1) + abs(z[1] - 1)):
+                if done_ or P[far][2] is not None:
+                    break
+                Q = list(P)
+                Q[h] = (P[i][0] + u[0] * L * sc, P[i][1] + u[1] * L * sc) + tuple(P[h][2:])
+                Q[far] = (P[end][0] + (P[far][0] - P[end][0]) * sf, P[end][1] + (P[far][1] - P[end][1]) * sf) + tuple(P[far][2:])
+                e2 = {j: x for j, _q, x in K.eases(Q, yr)}.get(i, 9)
+                kinds_ = lambda Z: {b_.split(":")[0] + (" ratio" if "x across" in b_ else b_.split(":")[1][:14])   # noqa: E731
+                                    for b_ in K.report("", [Z], yr)[0]}
+                r_q = {j: r for j, *_x, r, f_, k_ in K.nodes(Q, yr) if k_ == "CC" and r is not None}
+                r_p = {j: r for j, *_x, r, f_, k_ in K.nodes(P, yr) if k_ == "CC" and r is not None}
+                if e2 <= K.EASE and kinds_(Q) <= kinds_(P) and all(r_q[j] <= max(r_p.get(j, 0), target) + 1e-6 for j in r_q):
+                    P = Q
+                    done_ = True
+    P = [(int(round(q[0])), int(round(q[1]))) + tuple(q[2:]) for q in P]
+    if len(K.report("", [P], yr)[0]) > len(K.report("", [P_in], yr)[0]):
+        return [tuple(q) for q in P_in], []                # whole units undid it: the master's own points
+    after = {i: r for i, xy, g1, ka, kb, r, flip, kinds in K.nodes(P, yr) if kinds == "CC" and r is not None}
+    return P, [(i, round(r0, 2), round(after.get(i, 0), 2)) for i, r0 in first.items()]

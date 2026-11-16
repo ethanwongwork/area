@@ -83,6 +83,12 @@ def main():
                                            ufoLib2.Font.open(os.path.join(HERE, "build", "AreaSerif-Light.ufo")))
             print("\n== light side bearings (bold.check_light_bearings)\n" + (f"{len(miss)} sides off: {miss[:12]}" if miss else "every named side as light_bearings.json sets it"))
             results.append(("light side bearings (light_bearings.json, one path)", not miss))
+        for style in ("Light", "Bold"):                        # 0.81 (owner): the tails and loops in every master
+            mp = os.path.join(HERE, "build", f"AreaSerif-{style}.ufo")
+            if os.path.exists(mp):
+                code, out = run(f"curves, {style}", [PY, "curvecheck.py", mp])
+                print("\n".join(l for l in out.splitlines() if not l.startswith("    ") or "known" not in l))
+                results.append((f"curve continuity in the {style} master", code == 0))
         code, out = run("axis", [PY, "audit_bold.py", "--sweep"])
         print(out)
         results.append(("weight axis (the same audit every 25 units)", code == 0))

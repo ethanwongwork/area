@@ -880,8 +880,16 @@ G_TAIL_FORMS = {
     "A": dict(ball=0.030, end=G_TAIL_END, low="mid", thick=1.15, rise="ball"),
     "B": dict(ball=0.080, end=1.000, low="mid", thick=1.15, rise="ball"),
     "C": dict(ball=0.100, end=G_TAIL_END, low=0.470, thick=G_TAIL_THICK),
+    # 0.81 (owner, 15 November, on "A": "0.80's tail is preferred: 0.81's is too long and too high, the ball rises too
+    # far toward the bowl"). 0.80's proportions on A's construction: the ball's top back to 0.80's 0.138 of the
+    # x-height under the baseline (the references' mean, above; the Bold by the same 0.026 change as before), the
+    # tail's end where both had it (G_TAIL_END); A's half-ellipse and its solved handles kept, so the tail stays
+    # curvature-continuous (curvecheck.py: Regular worst ratio 1.03, valley 10%). The lowest point stays half way to
+    # the tail's end: at 0.80's share (G_TAIL_LOW) the half-ellipse's two quarters meet at 1.23 in the Regular and
+    # 1.77 in the Bold.
+    "D": dict(ball=G_BALL_TOP_080, end=G_TAIL_END, low="mid", thick=1.15, rise="ball"),
 }
-G_TAIL_FORM = "A"
+G_TAIL_FORM = "D"
 
 
 def _pts(c):

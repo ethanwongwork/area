@@ -3224,6 +3224,29 @@ def bold_font(reg, stem=STEM, **over):
             slanted.append(f"{g.name} {log_}")
             resided.add(g.name)
     notes.append(f"slanted stems: {len(slanted)} glyphs ({'; '.join(slanted)})")
+    # 0.81 (owner, 15 November): a tail into a ball (j's and y's, wherever they recur) is built again in this master:
+    # the ball is the round ends' part (the Regular's ball scaled by the ball law about its centre), the tail between
+    # the straight edge and the ball solved by the Regular's own rule (loops.master_ball, round_tail). The engine had
+    # read the ball's box neck-to-side as a round end's and the Bold's j ball came out 61 by 49, its tail meeting it
+    # at 1.80 times its curvature. After the tapers (their handle retunes would undo the solve); before the splices
+    # (g.ss02 takes this master's j).
+    import loops as _LOOPS
+    tails_ = []
+    for g in reg:
+        if not g.contours or g.components or g.name in struck or g.name in signs or g.name not in font:
+            continue
+        cs = glyph_contours(font[g.name])
+        if [len(P) for P in cs] != [len(c.points) for c in g.contours]:
+            continue
+        for ci, R_ in enumerate(glyph_contours(g)):
+            kind_ = _LOOPS.tail_kind(reg, R_)
+            if not kind_ or max(range(len(cs)), key=lambda k: len(cs[k])) != ci:   # round_tail reads the longest
+                continue
+            M_ = _LOOPS.master_ball(R_, cs[ci], 1 + (BALL - 1) * v["f"])
+            font[g.name].contours[ci].points = [Point(x, y, t, smooth=s_) for x, y, t, s_ in M_]
+            tails_.append(_LOOPS.round_tail(font, g.name, kind_).replace(": tail rebuilt", f" ({kind_}'s tail)"))
+            resided.add(g.name)
+    notes.append(f"tails into a ball: {len(tails_)} ({'; '.join(tails_)})")
     # 0.81 (integration): a glyph whose outline a later rule changed (arm crotches, necks, tapers) takes its sides
     # again, as the engine set them: the Regular's plus the measured change (S's left side was 1.1 off in the Light)
     for name in sorted(resided):
@@ -3470,6 +3493,29 @@ def bold_font(reg, stem=STEM, **over):
                 c.points = [Point(x, y, t, smooth=s_) for x, y, t, s_ in P]
                 mg.contours.append(c)
             notes.append(f"g.ss02: a master at weight {MID_WEIGHT}, spliced from q's and j's")
+    # 0.81 (owner, 15 November), after the splices: the parts curvecheck reads (the descender's loop and tails, the a's and l's
+    # alternates, every j or y tail) meet at one curvature at each smooth node in this master as in the Regular
+    # (loops.even_nodes: the node's two handle lengths, nodes and tangents kept, no new fault of the part's)
+    import curvecheck as _CC
+    regions_ = {k: (tuple(r[1]) + (tuple(r[2]) if len(r) > 2 else ())) for k, r in _CC.REGIONS.items()}
+    for g in reg:
+        if g.name in regions_ or not g.contours or g.components:
+            continue
+        kinds_ = {_LOOPS.tail_kind(reg, R_) for R_ in glyph_contours(g)} - {None}
+        if kinds_:
+            regions_[g.name] = regions_[sorted(kinds_)[0]]
+    evened = []
+    for name, yr_ in regions_.items():
+        for f_ in (font, layer):
+            if name not in f_ or name not in reg or name in struck:
+                continue
+            for c in f_[name].contours:
+                P_ = [(q.x, q.y, q.type, q.smooth) for q in c.points]
+                M_, lg = _LOOPS.even_nodes(P_, yr_)
+                if M_ != P_:
+                    c.points = [Point(x, y, t, smooth=s_) for x, y, t, s_ in M_]
+                    evened.append(f"{name}{' (mid)' if f_ is layer else ''} {lg}")
+    notes.append(f"curvature at nodes: {len(evened)} contours ({'; '.join(evened)})")
     # 0.79: an f ligature's sides are its letters' (0.78: every one 4 wider on the left than f, ff 22 on the right)
     def _sides(f_, n):
         xs = [q.x for c in f_[n].contours for q in c.points]
