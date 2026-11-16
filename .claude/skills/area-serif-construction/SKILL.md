@@ -247,6 +247,9 @@ masters match point for point and every weight between them is sound. Read `bold
   into the link, limit 0.45). Owner round 6: the Light g passes (the link's node slides along its straight); the 9
   and 6 drift cured (a ball's sides are not a stroke read far from the ball's height). Left: G X z a g w lean past the
   references (triaged, no covering rule), the axis list, the terminal table's neck and exit angle.
+  Owner round 7: builds are repeatable; signs capped by the white law move when a HOLE_LETTERS letter changes (the law's
+  counter median). The IPA hooks' balls are drawn tilted 28 to 30 units across the axis and are not read as balls
+  (`bold.balls` accepts 6): a tilted-ball reading is the next step for them.
 
 ## What is still outside the system
 

@@ -636,3 +636,35 @@ light, sweep, parts, interpolation, kerning, charset and fontbakery pass. Regula
 (Light), 9 and 6 (and their superiors and inferiors), g.ss02 in the Bold (24 units, the splice's ball white), and 1 to 4
 units in the asterisk, daggers, quotes and servicemark (their reach solved by halving against n's ink). Figure
 `20-waterfall.png`: the whole lowercase, capitals and figures, the 0.81 tip above the final, at 300, 400, 550, 700.
+
+## Owner round 7 (16 November 2026)
+
+**Repeatable build.** Two builds of the masters from the same Regular (`build/scratch4/run.py` into `build/det1` and
+`build/det2`) are identical: 0 glyphs differ in the Light, the Bold or the Bold's mid master, 0 kerning keys. The 1 to
+4 units the asterisk, daggers, quotes and servicemark moved between rounds are not chance: they follow the white law
+(`white.Law`), whose counter ratio is the median over HOLE_LETTERS (a b d e g o p q A B D O P R 4 6 8 9 0) of the Bold's
+counters against the Regular's. When round 6 changed the 9 and the 6, it moved 0.86308 > 0.83736, and the signs the law
+caps (the asterisk's arms 499 > 495, the double quote 424 > 422, the daggers by 2 to 3) followed. Rounds 3 to 5 left it
+at 0.86308 and those glyphs did not move. A law read on the letters is the design; nothing was changed.
+
+**Kerning refit.** It ran in each round (fit_kerning.json's per-master table changed every time). Against round 3's
+table: the Bold's pairs with x changed 25 (26 > 11 fitted pairs), s 23, S 31, c 4, e 3; the Light's x 1, s 1, S 1, c 0,
+e 0. 6 and 9 have no fitted pairs (figures are kerned only by the collision pass). audit_kern passes at all 17 weights.
+
+**The axis list.** Nothing landed; each with the number that blocks it:
+- Bold thin: Khook 700 (49 > 38, tip 41), the arm at the leg's junction; cedi 700 (47 > 39), where the stroke crosses
+  the C; registered 600 to 700 (40 > 32), the ring by R's leg; at 675 to 700 (41 > 35, 34); tretroflexhook 700 (41 >
+  39); one.ss01 650 to 700 (43 > 36), its flag's underside following the stem's knots; ogonek and ogonekcomb 675 (22 >
+  21, 1.0 past the unit's tolerance). Light: yhook 300 (44 > 21) at the hook's junction. Not diagnosed further.
+- IPA hooks with a ball (audit_rays at 300 against 400: Ƙ 0.588, Ⱳ 0.646, Ƴ 0.603, ⱳ 0.642, ƴ 0.638, ɲ 0.619, ƒ 0.577;
+  floor 0.684): their balls are drawn turned off upright, the diameter's two ends 28 to 30 units apart across the axis
+  (Ƙ 30, Ⱳ 28, Ƴ 30, ⱳ 29, ƴ 29; ƒ 14 and 18), where the engine reads a ball only within 6 (`bold.balls`); so neither the
+  ball law nor the j/y ball construction reaches them, and the place that thins is the neck before the ball (Ƙ at 600,
+  647), which the taper places' moves cannot reach without a turn. ɲ's ball is read (tilt 1); its tail is not j's
+  (`tail_kind` finds none). Blocked by a reading of tilted balls, not written.
+- Junction rays: Ə (bar into bowl, 67 > 48 from 400 to 700 at (410, 224)); ɂ (97 > 61 at (224, 254)); & (49 > 31 at
+  (594, 349)); ® (39 > 32 at (760, 309)); $ (Light 50.9 < 55.3); ð (Light 50.4 < 53.1); œ (Light 58.2 < 65.7); ɽ
+  (4 to 5 units at 475 and 675); ⌦ ⌫ (0.606 at 300) and ✓ (0.666); @ in the Light (0.667 at (641, 143)). None was
+  drawn and measured a second way this round; no reading rule was changed.
+
+Figure `21-axis.png`: those glyphs at 300, 400, 550, 700 on the final build. qa.py: as round 6 (`build/qa-081.log`).
