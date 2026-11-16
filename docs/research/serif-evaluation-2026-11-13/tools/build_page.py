@@ -27,6 +27,13 @@ EXTRA_GLYPHS = ["OE", "fl", "c_t"]
 PREV = os.environ.get("EVAL_PREV66", "")     # build 0.66, "before" for the findings of 0.67 to 0.70 (its build/ folder)
 # later findings name their own before-build ("prev": "0.70"): EVAL_PREVS="0.70=<build folder>,0.71=<build folder>"
 PREVS = dict(p.split("=", 1) for p in os.environ.get("EVAL_PREVS", "").split(",") if "=" in p)
+# 0.81 (owner round): a before-build whose folder is gone (0.70 to 0.76 lived in the removed area-serif-071 worktree) is
+# dropped by name, so its findings show the current build alone instead of the page failing to build
+MISSING_PREVS = sorted(k for k, v in PREVS.items() if not os.path.exists(os.path.join(v, "AreaSerif-Regular.ufo")))
+PREVS = {k: v for k, v in PREVS.items() if k not in MISSING_PREVS}
+if PREV and not os.path.exists(os.path.join(PREV, "AreaSerif-Regular.ufo")):
+    MISSING_PREVS.insert(0, "0.66")
+    PREV = ""
 UNICODES = (list(range(0x20, 0x7F)) + list(range(0xA0, 0x180)) + [0x2013, 0x2014, 0x2018, 0x2019, 0x201C, 0x201D, 0x2026, 0x2022,
             0x2020, 0x2021, 0x20AC, 0x1EAA, 0x1EB4, 0x1EB5, 0x20B8, 0x21EA, 0x220F, 0x1EE2, 0x1EA2, 0x2116, 0x20A6, 0x1EA1, 0x1EC7, 0x2122, 0x2153, 0x2154, 0x215B, 0x215C, 0x215D, 0x215E, 0x2044, 0x1EA7, 0x1EA5, 0x1EA3, 0x1ED3, 0x1EC1, 0x1EA6, 0x1ED2, 0x1ECF, 0x1EE7])
 
@@ -89,6 +96,8 @@ def main():
         b64 = woff2_b64(TTFont(os.path.join(PREV, "AreaSerif-Regular.ttf")))
         css.append(f'@font-face{{font-family:"Area Serif Before";src:url(data:font/woff2;base64,{b64}) format("woff2");font-display:block}}')
     prev_ufos = {}
+    if MISSING_PREVS:
+        print("before-builds not on this machine, their findings drawn without a before:", ", ".join(MISSING_PREVS))
     for label, folder in PREVS.items():
         prev_ufos[label] = ufoLib2.Font.open(os.path.join(folder, "AreaSerif-Regular.ufo"))
         b64 = woff2_b64(TTFont(os.path.join(folder, "AreaSerif-Regular.ttf")))

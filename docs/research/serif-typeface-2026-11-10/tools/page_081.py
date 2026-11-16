@@ -16,9 +16,6 @@ from PIL import Image
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 TITLES = [
-    ("15-gss02.png", "Your point B: g.ss02 at 300, 400, 550, 700: 0.80, the 0.81 tip, this round (the ball back to 0.80's height)"),
-    ("15-tails-combs.png", "Your point A: j, y, g.ss02 in the Light and Bold masters, curvature combs, before over after"),
-    ("15-lean-waterfall.png", "Your point C: the named letters at 300 to 700, before (grey) under after (red outline)"),
     ("1-g-before-after.png", "g: 0.80 over 0.81 (the loop rebuilt)"),
     ("1-gss02-before-after.png", "g.ss02: 0.80 over 0.81 (the half-ellipse tail)"),
     ("2-jy-before-after.png", "j and y: one tail family"),
@@ -60,6 +57,32 @@ def img_tag(path, width=1400):
     return f'<img alt="" loading="lazy" style="max-width:100%;height:auto;display:block;border:1px solid #ddd" src="data:image/jpeg;base64,{b64}">'
 
 
+# 0.81 (owner round, 15 November): the owner's three points first, each figure open under a two-line caption: what
+# changed, then what is still open
+OWNER = [
+    ("15-gss02.png", "Point B, the single-storey g: its tail is back to 0.80's proportions (the ball's top 72 units under the "
+     "baseline again, where 0.81 had raised it to 16), on 0.81's smooth arc, at every weight.",
+     "Open: nothing; the lowest point stays half way to the tail's end (19 units right of 0.80's) so the arc stays smooth."),
+    ("15-tails-combs.png", "Point A, the tails of j, y and g.ss02 in the Light and Bold masters, with curvature combs, before "
+     "over after: in the Bold the ball is the round ends' ball scaled evenly (round, no longer pinched) and the tail is "
+     "solved again, so its curvature rises smoothly into the ball.",
+     "Open: the Light's tails stay as the engine drew them (they were already smooth); the default g's loop, a.ss03 and "
+     "the tailed l still meet unevenly in the masters."),
+    ("15-lean-waterfall.png", "Point C, the named letters from 300 to 700, before (grey) under after (red): a new check "
+     "now measures how each letter's top drifts against its bottom as the weight rises, against Georgia Pro and Source Serif 4.",
+     "Open: no lean is fixed yet (x worst, then s z G S X e g w a c); the 9 and 6 are not changed yet (their lower right, "
+     "upper left, is steeper than both references in the Regular)."),
+]
+
+
+def owner_section(figdir):
+    figs = "".join(f"<figure style='margin:18px 0'><figcaption style='font:15px/1.45 system-ui;margin:0 0 6px'>"
+                   f"<div style='font-weight:600'>{html.escape(a)}</div><div>{html.escape(b)}</div></figcaption>"
+                   f"{img_tag(os.path.join(figdir, f))}</figure>"
+                   for f, a, b in OWNER if os.path.exists(os.path.join(figdir, f)))
+    return (f"<h2 style='font-size:22px'>Your three points (owner round, 15 November)</h2>{figs}") if figs else ""
+
+
 def section(figdir):
     entry = next(e for e in json.load(open(os.path.join(HERE, "changes.json"))) if e["build"] == "0.81")
     items = "".join(f"<li><b>{html.escape(i['glyphs'])}</b>. {html.escape(i['text'])}</li>" for i in entry["items"])
@@ -67,7 +90,7 @@ def section(figdir):
                    f"{html.escape(t)}</figcaption>{img_tag(os.path.join(figdir, f))}</figure>"
                    for f, t in TITLES if os.path.exists(os.path.join(figdir, f)))
     return (f"<section id='changed-081' style='max-width:1400px;margin:0 auto;padding:16px;font:15px/1.5 system-ui;"
-            f"color:inherit'><h2 style='font-size:22px'>What changed in 0.81 ({html.escape(entry['date'])})</h2>"
+            f"color:inherit'>{owner_section(figdir)}<h2 style='font-size:22px'>What changed in 0.81 ({html.escape(entry['date'])})</h2>"
             f"<ul style='padding-left:20px'>{items}</ul><details><summary style='cursor:pointer;font-weight:600'>"
             f"The figures ({sum(1 for f, _ in TITLES if os.path.exists(os.path.join(figdir, f)))})</summary>{figs}"
             f"</details></section>")
