@@ -542,7 +542,8 @@ LEAN_KEEP = 0.2                 # radians: a slanted stroke whose anchors would 
 # bottom-right serifs between the masters (x at 315, 323, 443, 454; audit_bold --sweep at 325): serif_on_slant places
 # the bracket's far end from the x knot map, not from the kept edge, so the Bold's bracket end stood 22 units left of
 # the edge's line where the Regular's stands 10 right of it. The rule needs the serif placed from the kept edge first.
-LEAN_KEEP_THICK = None          # tried: 0.038
+LEAN_KEEP_THICK = 0.038
+LEAN_ALL = False
 
 
 def slant_lines(strokes, pos, adj, flats, v, pinned=()):
@@ -582,7 +583,7 @@ def slant_lines(strokes, pos, adj, flats, v, pinned=()):
             if fit_m:
                 m, c = float(sol[0]), float(sol[1])
                 crossed = len(st["L"]) > 1 or len(st["R"]) > 1    # an edge cut in two: a stroke crossing another
-                keep_ = LEAN_KEEP_THICK if (st["t"] >= 64 and crossed and LEAN_KEEP_THICK) else LEAN_KEEP
+                keep_ = LEAN_KEEP_THICK if (st["t"] >= 64 and (crossed or LEAN_ALL) and LEAN_KEEP_THICK) else LEAN_KEEP
                 if abs(math.atan(m) - math.atan(st["m"])) > keep_:
                     # the ends that stay do not fix a lean this far
                     fit_m, m = False, st["m"]                       # from the Regular's (12 degrees): keep its lean
@@ -623,9 +624,37 @@ def serif_on_slant(strokes, adj, contours, X, Y, moved_to, v):
                         continue
                     ci, k, on = nodes_of[o]
                     P = contours[ci]
-                    i = on[k]
-                    h = P[(i + 1) % len(P)] if step == -1 else P[i - 1]    # o's handle towards the bracket
-                    if h[2] is not None or h[1] != o[1]:
+                    # 0.81 (owner round): a bracket drawn as two curves (x's: from the edge up to an upright tangent,
+                    # then round into the level underside) is one construction too: the node where it leaves the
+                    # underside is found up to two nodes on, and the node between moves with the serif. Without it
+                    # x's bracket end stayed on the knot map while its edge kept its lean, and the bracket turned
+                    mids = []
+                    for _hop in range(2):
+                        i = on[k]
+                        h = P[(i + 1) % len(P)] if step == -1 else P[i - 1]    # o's handle towards the bracket
+                        if h[2] is None and h[1] == o[1]:
+                            break
+                        nxt_ = P[on[(k + step) % len(on)]]
+                        if P[i][2] is None or nxt_[2] != "curve" and step == 1 or P[i][2] != "curve" and step == -1:
+                            o = None
+                            break
+                        mids.append(o)
+                        k = (k + step) % len(on)
+                        o = P[on[k]][:2]
+                    else:
+                        o = None
+                    if mids:
+                        # the node between keeps its offset from the edge's line, the Regular's times the foot rule
+                        # (the bracket's lower curve is the stroke's; its upper curve and the serif stay as placed)
+                        mq = mids[0]
+                        off_r = mq[0] - (x0 + (mq[1] - y0) * mr)
+                        yb = moved_to.get(mq, (0, Y.get(mq[1], mq[1])))[1]
+                        want = m * yb + c + off_r * v["foot"]
+                        now = moved_to.get(mq, (X.get(mq[0], mq[0]), yb))[0]
+                        if round(want - now):
+                            moved_to[mq] = (now + round(want - now), yb)
+                        continue
+                    if o is None:
                         continue                                # the bracket does not leave a level underside
                     vr = x0 + (o[1] - y0) * mr                  # where the edge's line crosses that level
                     beyond = [P[on[(k + step * j) % len(on)]][:2] for j in range(1, 7)]
@@ -3533,23 +3562,19 @@ def bold_font(reg, stem=STEM, **over):
         for f_ in (font, layer):
             if name not in f_ or name not in reg or name in struck:
                 continue
-            for ci, c in enumerate(f_[name].contours):
-                P_ = [(q.x, q.y, q.type, q.smooth) for q in c.points]
-                M_, lg = _LOOPS.even_nodes(P_, yr_)
-                if M_ == P_:
-                    continue
-                # never at the stroke's cost: no place across the stroke (white.taper_readings, audit_rays' ray)
-                # thinner by more than half the weight JND (the Bold a.ss03 exit read 43.7 > 41.3 at 700 at 0.962)
-                all0 = [[(q.x, q.y, q.type, q.smooth) for q in c_.points] for c_ in f_[name].contours]
-                all1 = [M_ if k == ci else P for k, P in enumerate(all0)]
-                t0, e0, _w = WHITE.taper_readings(all0)
-                t1, e1, _w = WHITE.taper_readings(all1)
-                ok_ = ~np.isnan(t0) & ~np.isnan(t1) & (e0 == e1)
-                if (t1[ok_] < t0[ok_] * 0.985 - 0.5).any():          # half the JND: between masters it is the JND
-                    evened.append(f"{name}{' (mid)' if f_ is layer else ''} kept (a place would thin)")
-                    continue
-                c.points = [Point(x, y, t, smooth=s_) for x, y, t, s_ in M_]
-                evened.append(f"{name}{' (mid)' if f_ is layer else ''} {lg}")
+            all0 = [[(q.x, q.y, q.type, q.smooth) for q in c_.points] for c_ in f_[name].contours]
+            nb0 = len(_CC.report(name, all0, yr_)[0])
+            if not nb0:
+                continue
+            # the part solved with its other edge (loops.even_part): never at the stroke's cost, no place across
+            # the stroke thinner by more than half the weight JND
+            new_, nb1, thin_ = _LOOPS.even_part(all0, yr_)
+            if thin_ or nb1 >= nb0:
+                evened.append(f"{name}{' (mid)' if f_ is layer else ''} kept ({nb0} faults; {nb1} {'thinning' if thin_ else 'left'})")
+                continue
+            for c_, P in zip(f_[name].contours, new_):
+                c_.points = [Point(x, y, t, smooth=s_) for x, y, t, s_ in P]
+            evened.append(f"{name}{' (mid)' if f_ is layer else ''} {nb0} > {nb1} faults")
     notes.append(f"curvature at nodes: {len(evened)} contours ({'; '.join(evened)})")
     # 0.79: an f ligature's sides are its letters' (0.78: every one 4 wider on the left than f, ff 22 on the right)
     def _sides(f_, n):

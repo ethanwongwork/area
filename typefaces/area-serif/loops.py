@@ -763,3 +763,27 @@ def even_nodes(P, yr, rounds=8, target=None):
         return [tuple(q) for q in P_in], []                # whole units undid it: the master's own points
     after = {i: r for i, xy, g1, ka, kb, r, flip, kinds in K.nodes(P, yr) if kinds == "CC" and r is not None}
     return P, [(i, round(r0, 2), round(after.get(i, 0), 2)) for i, r0 in first.items()]
+
+
+def even_part(contours, yr, rounds=6):
+    """0.81 (owner round 2): a part whose nodes cannot meet at one curvature without thinning the stroke (the Bold g's
+    loop 1.87, a.ss03 1.76, l.ss04 1.91 and 6.05: even_nodes alone thinned a place across the stroke by 2 to 11%) is
+    solved with its other edge: each round evens the nodes, then the curves on both sides of every place now thinner
+    than it was take back its thickness by their handle lengths (white.keep_taper with the part's own thickness as the
+    law: nodes and tangents stay, no curve gains a turn). Returns (contours, faults after, thinned) of the best round."""
+    import white as WHITE
+    t0, e0, _w = WHITE.taper_readings(contours)
+    cur = [list(P) for P in contours]
+    best = None
+    for r in range(rounds):
+        cur = [even_nodes(P, yr)[0] for P in cur]
+        cur, _log = WHITE.keep_taper(contours, cur, [(1e6, 1.0), (0, 1.0)], tol=0.5, nodes=False)
+        t, e, _w = WHITE.taper_readings(cur)
+        ok = ~np.isnan(t0) & ~np.isnan(t) & (e0 == e)
+        thin = bool((t[ok] < t0[ok] * 0.985 - 0.5).any())
+        nb = len(K.report("", cur, yr)[0])
+        if best is None or (thin, nb) < (best[2], best[1]):
+            best = ([list(P) for P in cur], nb, thin)
+        if nb == 0 and not thin:
+            break
+    return best
