@@ -80,6 +80,21 @@
         "experiments"
       ],
       "port": 5190
+    },
+    {
+      "name": "experiments-grid",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "run",
+        "dev",
+        "--prefix",
+        "experiments",
+        "--",
+        "--port",
+        "5191",
+        "--strictPort"
+      ],
+      "port": 5191
     }
   ]
 }
