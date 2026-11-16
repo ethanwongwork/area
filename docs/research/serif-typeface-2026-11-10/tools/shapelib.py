@@ -8,6 +8,7 @@ never stored: keep the output in typefaces/area-serif/build/.
 import io
 import os
 import sys
+import weakref
 
 import uharfbuzz as hb
 from PIL import Image, ImageChops, ImageDraw, ImageFont
@@ -20,11 +21,15 @@ _hb = {}
 
 
 def hbfont(tt):
-    if id(tt) not in _hb:
+    """The HarfBuzz font for a TTFont. Cached per live object: an id() alone is reused once a temporary TTFont
+    (an instance made per row) is freed, and the next font then shaped with the freed font's glyph order (0.81's
+    5-signs-struck.png drew 0.81 rows with 0.80's HarfBuzz face). The cache keeps a weak reference and checks it."""
+    hit = _hb.get(id(tt))
+    if hit is None or hit[0]() is not tt:
         buf = io.BytesIO()
         tt.save(buf)
-        _hb[id(tt)] = hb.Font(hb.Face(buf.getvalue()))
-    return _hb[id(tt)]
+        _hb[id(tt)] = hit = (weakref.ref(tt), hb.Font(hb.Face(buf.getvalue())))
+    return hit[1]
 
 
 def layout(tt, text, feats=None):

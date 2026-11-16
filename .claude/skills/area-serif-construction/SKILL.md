@@ -94,6 +94,34 @@ the fastest change (under 0.5 units of thickness per unit travelled on a branch,
 | Sign from a letter | The finished letter and a stroke of the case's hairline (47, 43) | $ ¢ ¥ ĸ, ₩ ₽ ₺ ₫ | `charset.letter_signs`, `kra`, `currencies` | `audit_charset` letter signs |
 | Mirrored pair | The left form turned over, point for point | ) ] } » › > | `charset.mirrors` | `audit_charset` mirrors |
 | Bracket test | A curve meeting a diagonal across a corner over 60 degrees is not its bracket | every serif on a diagonal; the ampersand's arm | `derive.BRACKET_MAX_TURN` | `audit_charset` ampersand |
+| g's lower loop | Quarters at the bowl's tensions (0.57 out, 0.61 in); each lowest point where b/a^2 is equal on its two quarters; extremes' heights at the references' share of the counter (left 0.495, right 0.57); the left side meets the link as a branch (neck 32) in a notch and a crotch; curves off the link's straights tighten steadily (curvature at the straight at most 0.35 of the curve's tightest); every smooth node's handle solved for equal curvature | g | `loops.g_loop` (in normalize after even) | `curvecheck.py`, `audit_charset` (`audit_081`) |
+| Tail off a stem (g.ss02) | A half-ellipse: both edges leave the stem at the ball's height, the lowest point half way to the tail's end, the stroke 1.15 hairlines there; the curve from the lowest point to the ball solved so curvature only rises toward the ball and meets the ball's; ball 0.138 x-height under the baseline, 0.80's height, by the owner's choice (form D; 0.81's form A had 0.030; forms in `G_TAIL_FORMS`) | g.ss02 | `charset.single_g_points`, `_round_tail` | `curvecheck.py` (tail valley), `audit_charset` |
+| Tails of j and y, the a's exit (0.81) | g.ss02's tail rule on each: from the straight edge (stem, thin diagonal) round the lowest point to the ball, curvature only rising toward the ball and equal across the lowest point; ball, depth, stroke and reach kept; lowest point at the references' share of the reach (j 0.673, y 0.681). The a's exit: its two handles solved the same way, its ends fixed | j y a (and ȷ ĵ ij fj ffj eng ý..., a.ss03 ª ⱥ) | `loops.round_tail`, `loops.a_exit` | `curvecheck.py` |
+| Alternates (0.81) | ɑ: the b d p q bowl narrowed across the counter to the references' advance (0.945 n), q's spur, a's exit; tailed l: t's hook on l's stem; zeros: the zero's hairline slash inside the oval, a dot of the side stroke's width; barred 7 z: a level bar of the class hairline, half the top arm | a.ss03 l.ss04 zero.zero zero.ss05 seven.ss06 z.ss06 and families | `alternates.py` | `audit_charset` (`audit_081`), `curvecheck.py` |
+| Along a tapering stroke (0.81) | Each place keeps its ladder law's share of the Regular's thickness there: the stem's ratio at a stem, the hairline's at a hairline, the tip's at an end, interpolated by the Regular thickness between (one continuous law); Light everywhere, Bold where the engine read a place thinner than the Regular. Handle lengths first; towards the Light a place still short by more than 3% of its law (the JND) moves its places: the smooth nodes of its curve and of the curve its ray ends on, each rigidly with its handles (a node with level handles moves level only), and a straight cut end under 30 grows along itself; corners never. No new turn or crossing, no place past its law | tails, hooks, flags, terminals (j y eng f r a c e ƒ, the hooked letters) | `white.keep_taper`, `taper_law`, `_taper_places` | `audit_rays.py`; `tools/taper_plot.py` |
+| Slanted stem with one straight side (0.81, close) | A stroke whose one side is a line 5 to 35 degrees off upright and whose other side is a curve's upright extreme facing it across the ink is a stroke: its level width at the extreme takes `x_target`; the extreme moves level and every point of its contour between it and the contour's far extreme by its share of the move (the engine's knot map corrected at the knot a line lacks). Towards the Bold only: towards the Light the map ran the counter into the a's top crotch, which it does not carry | the a of @ | `white.slanted_stems`, `keep_slanted_stems` | `audit_axis.py` thin |
+| A star's reach (0.81, close) | Towards the Bold a star's arms reach the least that brings its ink gain over n's to the references' least (Georgia Pro 0.819), within the references' span changes (at most 1.092); the outer part of each arm, from its innermost smooth node out, is its Regular scaled about the tip and carried out whole (a similarity: no curve turns); the junction scales by f, the part between takes up the length. f stays capped by the white law | asterisk (Bold reach 1.065, f 1.197) | `arms.INK_GAIN`, `REACH_MAX`, `Arm.along`; `bold.bold_font` | `audit_axis.py` turns, symmetry |
+| Neck at any crotch (0.81) | The nearest approach across the ink at a branch, whatever its sides; a straight-sided crotch slides along its straight side to the neck (as `parts.solve`); a Regular neck under the tip is no branch | every crotch (Light) | `white.keep_necks` | `audit_axis.py` thin; `audit_bold.py 55` |
+| Mirrored pair (masters, 0.81) | The right-hand form is the master's left-hand form turned over, point for point | `charset.MIRRORS` (with ⇤ ⇥, ⌫ ⌦) | `bold.mirror_pairs`, `turn_over` | `audit_axis.py` mirror |
+| Inflection at a node (0.81) | A curve's end bends the Regular's way at an S's node or out of a straight: its far handle slides along itself until it does | c_t, section | `bold.inflection_nodes` | `audit_axis.py` turns |
+| White inside one contour (0.81) | g.ss02's ball keeps the white law under the bowl; its rise stops where the law holds | g.ss02 | `charset.single_g_points(least_white)`, `ball_white` | build notes |
+| Struck stroke's end (0.81) | A stroke whose side would lie on its letter's edge ends where that edge begins (no seam) | Ɍ (Light) | `overlap.inset_ends` | `audit_axis.py` seam |
+| A curl on a stem (0.81, last) | In the variable font's masters the hook above is two parts overlapping, as the struck letters are: the curl (from the stem's right edge round the eye to the eye's foot, closed by a line inside the stem) and the stem (a stroke, `move_stroke`, its top the eye's foot). Towards the Bold the eye is the Regular's about its centre times the white law's least over its width, centred where the engine put it; the slot to the stem gives way into the stem by at most its gain. The static Regular keeps the one merged outline | hookabovecomb, hookabovecomb.case (and every composite carrying them) | `overlap.curl_master`, `curl_parts`, `vf_source`; `bold.bold_font` | `audit_axis.py` crossings, turns |
+| A tail into a ball in the Bold (0.81, owner) | The ball is the round ends' part: the Regular's ball (neck, top, side and the handles between) scaled by the ball law (`bold.BALL`, 1 + 0.40 f: 1.40 at the Bold, as a c f r 2 3 5 6 9 take it; the Light keeps the engine's tail, which passes) about its centre, centred where the engine put it; the tail between the straight edge and the ball solved again by `round_tail` on the master's own points. Then every part curvecheck reads meets at one curvature at each smooth node (`loops.even_nodes`: node handles along their lines, inside the triangle, no new fault) | j y jdotless eng f_j f_f_j (g.ss02 spliced from the master's j); g a.ss03 l.ss04 | `loops.tail_kind`, `master_ball`, `round_tail`, `even_nodes`; `bold.bold_font` | `curvecheck.py` on the Light and Bold UFOs (qa.py) |
+| Lean along the axis (0.81, owner; check only) | No rule yet. `audit_lean.py --refs` measures each letter's top-half ink against its bottom half from 300 to 700 against Georgia Pro and Source Serif 4. A thick crossing diagonal keeping the Regular's lean (`bold.LEAN_KEEP_THICK`, None) fixed x's lean but bent its serif brackets between masters: place the serif from the kept edge first | x (worst: -0.123 at 700, refs -0.037 to -0.018), s z G S X e g w a c | `bold.slant_lines` | `audit_lean.py --refs` |
+| 9 and 6, the long stroke's quarter (0.81, owner) | The 9's lowest point (and the tail's inside) left until the quarter from the right extreme down is 0.90 as wide as tall; the ball left until it stands on the bowl's left extreme; the extreme's downward handle until the edge leans 23.5 degrees; one curvature at each node. The 6 is the 9 turned half round | 9 6 (their superiors, inferiors, ∂) | `clean.nine_six` | `audit_lean.py`, curvecheck on the figure |
+| 5's upright stroke (0.81, owner) | Turned about its middle height to the references' mean lean, 5.35 degrees | 5 (and its forms) | `clean.five_stem` | `audit_lean.py`; build/scratch4/five.py measures |
+| A part solved with its other edge (0.81, owner) | In a master, where a part's nodes cannot meet at one curvature without thinning, even the nodes, then the curves either side of every thinned place take its thickness back by handle lengths (keep_taper at the part's own thickness) | g a.ss03 l.ss04 and the tails (masters) | `loops.even_part` | curvecheck on the masters |
+| A crossing's openings (0.81, owner round 5) | Two straight diagonals that cross (x): the thick one keeps the Regular's angle; each end keeps its serif-end opening on the white law's share; the bracket-level opening is the serif-end target plus the bracket rule's separation (one end cannot carry two openings once the angle is kept); brackets from the kept edge | x | `bold.crossing_openings`, `LEAN_KEEP_THICK`, `BRACKET_FROM_EDGE`, `slant_strokes` (cross) | `audit_bold` (derived target), `audit_lean.py` |
+| An S's two bowls (0.81, owner round 5) | The top bowl keeps its width's share of the bottom bowl's: the top terminal moves level | S s | `bold.s_terminal`, `S_SHAPES` | `audit_lean.py`, quarter shares |
+| Open tail (0.81, owner round 5) | A lower stroke from a round stroke to a terminal grows by the mean of the round stroke's and the tip's ratios | c e | `bold.open_tail`, `HINTS` | references' 1.58 to 1.75 |
+| g's loop in a master (0.81, owner round 5) | Its extremes from the centreline by the taper law, the link's curve by the Regular's shares, solved with its other edge | g (Light) | `loops.g_loop_master` | curvecheck on the Light |
+| A ball at any tilt (0.81, axis round) | A ball is read by what makes it one, not by its alignment: three nodes joined by two curves, the chord between the outer two 70 to 130 long and within 25 degrees of an axis, the arc's far point 0.40 to 0.70 of the chord out and within 0.12 of its middle, ink all along the chord; one reading per ball (the rounder of two arcs). Then the ball law (1 + 0.40 f) reaches it in both masters, as the upright balls. Letters only (signs and accents keep their own laws) | Ƙ Ⱳ Ƴ ⱳ ƴ ƒ and 22 more hooks and tails with a ball (Ƈ Ɠ Ƒ Ɲ Ɋ Ɽ Ʈ Ɂ ɂ ʔ ʕ ƈ ɠ ʃ ɽ ʋ Ɛ ɔ Ɔ ß ʼ, s_p) | `bold.tilted_balls`, `balls(tilted=True)` in `bold.bold` | `audit_rays.py` every 25 units; `audit_axis.py`; curvecheck on both masters |
+| A node joining a straight to a curve (0.81, axis round 2) | In the Light, where a place on the curve falls under the stem's ratio less the JND, the smooth node between the straight and the curve travels along its own straight, its handle rescaled by the chord, the far handle shortened until no turn; not on a curve that ends on a corner (a bracket) | ƴ ɲ ʈ (Light; read as audit_rays reads, a slide at most 1.5 times the Regular's stroke) | `white._straight_nodes` in `keep_taper` | `audit_axis.py`, `audit_rays.py` |
+| A curve on its chord (0.81, axis round 2) | Where a master's thinnest stroke falls under its floor, a curve is put back to its Regular shape on the master's chord (a similarity) when that lifts the thinnest place without a turn; not where a mid master stands between | ʈ (Bold) | `bold_font` (after the white between parts) | `audit_axis.py` thin |
+| A sign's slanted strokes in the Light (0.81, axis round 2) | Towards the Light every slanted stroke of a sign takes the sign law (1 + 0.37 f), as its plain strokes do; towards the Bold the sign law holds only at the plain stroke's 50 to 55 | ⌦ ⌫ ✓ and 22 more signs | `bold.diag_target` | `audit_rays.py` |
+| A letter in a ring (0.81, axis round 3) | A glyph whose ring is ©'s point for point takes ©'s ring in each master; the letter inside keeps the Regular's offset from the counter's centre and is scaled about its centre until its white to the counter is the Regular's times the counter's change | ® | `bold_font` (after the curves on their chord) | `audit_axis.py`, `audit_rays.py` |
+| A cut end towards the Bold (0.81, axis round 3) | Towards the Bold a stroke's straight cut end (under 30, between two corners) grows along itself by the tip's law where the place reads thinner than the Regular; no other node moves | ſp ſt ƭ ™ | `white.keep_taper(cuts=True)`, `_taper_places(cut_only)` | `audit_axis.py` |
 | Heights | x 520, cap 712, ascender 780; overshoot 530 / -10 lowercase, 721 / -9 capitals and figures | all | `balance.heights` | `audit_serifs` 4, `check.py` |
 
 A part not in this table has no rule yet. Add the row when you write the rule.
@@ -155,6 +183,10 @@ Fit is measured, like shapes (`tools/fit/fit.py`, numbers only from the referenc
   `normalize`: families, then the collision pass over every glyph of `charset.COVERAGE`. `audit_charset.py` fails
   on a family member outside its letter's class and on any pair closer than 10.
 - Ink never closer than `MIN_GAP` 13. Proof words with `tools/joins/plain.py` (HarfBuzz kerning).
+- **A word space is fit too** (0.81, close). fit.py's pair measure reads only rows where both glyphs have ink, so a
+  descender running under the space before it is never seen. The least white across "x␣j" (HarfBuzz, every a to z)
+  was 63 under the nearer reference's at 400: space before j's class is kerned by that median
+  (`spacing.SPACE_BEFORE`). Measure a word space this way after any change to a descender's reach.
 
 ## When a corner is rounded
 
@@ -189,9 +221,65 @@ masters match point for point and every weight between them is sound. Read `bold
 - **What cannot be read is named** in `bold.HINTS` with its reason (e's bar; s's turns). Keep it short.
 - **A glyph that is not a sound second master falls back** (upright parts only, then the Regular's outline) and
   says so in `build/bold-notes.txt`. A fallback is a debt: list it in the build's changes.
-- **Known debts** (0.80): Ⱥ ₡ † ⌘ on a fallback in the Bold, ₡ and the diagonal arrows in the Light; `audit_axis.py` fails (Bold side inflection 18 glyphs, crossing 18, thin 30; Light side 5, 5, 18);
-  wedge accents' thin ends 1 to 5 under the Regular's; Bold kerning not fitted afresh; no part audit for marks,
-  signs and composites; the Bold's plain signs are light.
+- **Known debts** (0.81, last round; was the close round's list): kerning per master is done (`spacing.kern_master`,
+  refit with `AREA_KERN_FIT=1`); fallbacks none. Closed this round: the hook above's crossing (a curl and a stem,
+  `overlap.curl_master`), @'s nub at the Bold (`bold._fillet`), C's barb (`keep_taper`'s guard); C, Cbar, Q, s and the
+  capital ogonek were the reading's sampling, not thinning (`audit_axis.place_reading`). Left: `audit_axis.py` Bold
+  thin where the same-place reading finds it (® ring by R's leg 40 > 32, @ 41 > 34, Khook 49 > 38, cedi 47 > 39,
+  tretroflexhook 41 > 39, ogonek and ogonekcomb 1.0 under at 675, one.ss01's flag 43 > 36); Light yhook (a junction
+  reading, 44 > 21); the hooks with a ball at 300 (whook yhook Ƙ Ⱳ Ƴ ⱳ ƴ ɲ ƒ, j, eng: no construction; their rays
+  flags stand); @ in the Light (slanted stem held to the Bold: its whole left side must move by one map, not written;
+  95 > 92); `audit_rays.py` flags at junctions (Ə ɂ & ® $ œ ð) and ɽ's ball, none by the white law's design, and ⌦ ⌫ ✓
+  at 300 (0.60 of 400 against the sign law's 0.764), found once lines were read again; hookabovecomb.case keeps no
+  ray place; Astroke and Tdiagonalstroke held for the owner (`audit_axis.AWAITING`); "x␣j" with v, w, y before the
+  space 64 looser than Georgia Pro (one key per space); no part audit for marks, signs and composites.
+  Owner round (15 November): curvecheck now reads the Light and Bold masters and fails on faults the engine left
+  where even_nodes would thin a place (Light g's loop 1.37, 1.42, a G1 6.3 degrees and an ease 0.56; Bold g 1.87,
+  a.ss03 1.76, l.ss04 1.91 and 6.05); the x leans at the Bold (-0.123 of its height, refs to -0.037) until its serifs
+  are placed from a kept edge; s z G S X e g w a c lean past both references (`audit_lean.py`); the 9 and 6 long
+  stroke steeper than both references in the Regular: redrawn in owner round 2 (`clean.nine_six`). Owner round 2 left:
+  the Light g's loop (every solve thins it); the x's lean (the kept-lean and bracket rules work on the x but miss x's
+  opening targets and thin the ampersand's crossing: `LEAN_KEEP_THICK`, `BRACKET_FROM_EDGE` off); s z G S X e g w a c
+  lean past both references; s's turns grow 2.3 times (stems 1.8). Owner round 3: y's ball on the round ends' radius
+  (44); the Bold's diagonal letters measured against n and H and the references (only x outside: 1.134 against 0.997 to
+  1.032): x's opening must be constrained where it is measured (across the ink, not on knots) before its angle can be
+  kept; s's barbs are not read as strokes (grow 1.05, references 1.27 to 1.53); T's arm reads as a curved level stroke
+  (1.24, capitals' arms 1.33); the Light g's loop needs a centreline construction. Owner round 4: s fixed (turns by
+  the round strokes' ratio, barbs read: `HINTS["s"]`); x infeasible as asked: each end's bracket-level and serif-level
+  openings move together, Regular difference 88/87, Bold geometry 66/62 with the angle kept; one of the two whites
+  must be chosen; S (lean drift -0.050, band -0.027 to +0.002) and c's lower stroke (grows 1.24, references 1.58 to
+  1.75) open. Owner round 5: x landed (serif-end opening kept; Bold advance 0.983 of n's growth, the one target short);
+  S (s_terminal), c and e (open_tail) landed; the Light g's loop from its centreline: one fault left (an ease of 0.49
+  into the link, limit 0.45). Owner round 6: the Light g passes (the link's node slides along its straight); the 9
+  and 6 drift cured (a ball's sides are not a stroke read far from the ball's height). Left: G X z a g w lean past the
+  references (triaged, no covering rule), the axis list, the terminal table's neck and exit angle.
+  Owner round 7: builds are repeatable; signs capped by the white law move when a HOLE_LETTERS letter changes (the law's
+  counter median). The IPA hooks' balls are drawn tilted 28 to 30 units across the axis and are not read as balls
+  (`bold.balls` accepts 6): a tilted-ball reading is the next step for them.
+  Axis round: the tilted-ball reading landed (`bold.tilted_balls`; Ƙ Ⱳ Ƴ ⱳ ƴ ƒ pass audit_rays every 25 units, Khook's
+  Bold thin cured; 21 more hooks and tails with a ball follow the ball law, ß among them); `audit_axis` reads a point
+  drawn with a flat as a point (ⱳ's apex). Left: ɲ at 300 0.619 of 400 (its tail is not j's point for point; j's
+  rule on it and a slide along straights in keep_taper both tried and reverted); yhook Light 44 > 15 at 300 (its
+  descender ball now grows by the ball law; the tail's inner node between a straight and a curve is moved by no
+  Light rule); ʕ's bowl stroke into the stem thins 94.8 > 78.9 (newly kept by audit_rays; it thinned to 69.1 before);
+  tretroflexhook 41 > 39; one.ss01's flag (no flag rule for the figure; its underside handle rides the stem's knots
+  28 left); cedi (to be struck it needs a letter: its C matches neither Area's c nor C, the owner's choice); ogonek
+  1 unit; ® ring by R's leg; @ at the Bold and Light; the junction places Ə ɂ & ® $ ð œ and ⌦ ⌫ ✓, each measured a
+  second way (a disc tangent at the place agrees with the ray: the ink really thins; no part rule yet).
+  Axis round 2: yhook (Light), ɲ, ʈ, ⌦ ⌫ ✓ landed (rows above); `curvecheck.py --hooks` reads the hooks' balls and
+  necks in every master (the Regular's own drawings carry 41 faults; the masters' own faults left: Light 6, Bold 15,
+  where even_part cannot clear them without thinning). Left: one.ss01's flag (a crotch rule in the Bold; its tip
+  wants 51.7 at the Bold and stays 40); ogonek 1 unit; ® (its R to be fitted to the ring's inner white); @; ₵ (the
+  owner's choice, figure 23-cedi); the round strokes entering a junction (Ə ð ʕ ɂ œ & $ ®): no rule yet. ʋ's counter
+  straight is 124 shorter in the Light by the straight-node rule: a visible change to look at.
+  Axis round 3 (the last before the owner's review): ® cured (a letter in a ring); ʋ back to round 1 (the slide now
+  reads as audit_rays reads and reaches at most 1.5 strokes); cut ends grow towards the Bold. Open, honestly: the round
+  stroke into a junction (Ə ð ʕ ɂ œ & $: thins towards the Bold, thickens towards the Light; its places sit where the
+  white ends, inside the junction zones the taper stations leave out; no rule); @ (its a is one contour with its
+  ring); the ogonek (0.95 units, under the Bold taper rule's one-unit mask; its cut grown by the tip's law cures it in a
+  trial); one.ss01 (its thin place is across the flag, not at the crotch; keep_necks towards the Bold reaches only < >);
+  ₵ (the owner's choice); the hooks' curvature faults even_part cannot clear (Light 6, Bold 15) and the Regular's own 41
+  (first drawings; comb sheets 24-hook-combs-*).
 
 ## What is still outside the system
 
@@ -252,3 +340,43 @@ Say this in every report until it is closed:
   j's hook with points slid (0.79) and read flat; as four quarter turns between measured places (0.80) it is round.
   Quarter turns take their handles at 0.55 of their side.
 - **One sign, one form.** The dollar is the ball-end drawing; do not rebuild it from S and a stroke.
+
+## Curvature, measured (0.81)
+
+- **A smooth curve is judged by its comb, not its tangents.** `curvecheck.py` reads curvature along a part: the ratio
+  across each smooth node (under 1.25), the step where a curve leaves a straight (under 0.45 of the curve's tightest),
+  a flat place inside a curve, and along a tail any fall-and-rise over 30%. A ball's neck, where the curve turns the
+  other way, is not a jump. `tools/combs.py` draws the combs; look at them before and after any curve rule.
+- **A part that overlaps itself to make a join is a fault waiting to show**: 0.80's g loop ran its hook into the link
+  and left a white sliver in the variable font at 550 and 700. Draw the join as one outline with its crotch.
+- **When handles cannot reach a smooth curve, move the places, not the tension**: g.ss02's tail could not tighten
+  evenly into a ball at 0.138; at 0.100 it does with ordinary handles.
+
+## Reading a stroke (0.81, close)
+
+- **Across the stroke, never along a scan line.** `audit_axis.thinnest` reads a span that is a stroke as the
+  shortest cut through its middle, turned up to 60 degrees, ending on two edges that face each other within 40
+  degrees; a span no such cut crosses is no stroke (a horn's tip). A level or upright cut through a slanted tail reads w / cos(slant), and changes when the slant does (the
+  comma accent below a capital: 43.0 > 39.9 upright, its stroke across itself kept). Changing a reading changes many
+  numbers (410 of 978 glyph-sides' Regular readings moved by over 0.5): rerun the whole audit and list every glyph
+  whose result changed, both ways.
+- **An end is not a stroke.** A cut or a ray within half its own length of a stroke's cut end (an outward turn of
+  60 degrees within 12 units of outline: a terminal's corners, soft or sharp) reads how the end is cut
+  (`audit_rays.end_corners`, `END_ZONE`); the pointed-end rule (under 60 degrees) still holds.
+- **A junction drawn soft is a junction** (a concave turn of 90 degrees within 12 units), and **a ray across one
+  stroke comes back**: from where it leaves, a ray along that edge's normal lands within half its length of where it
+  started; one that crossed a junction with smooth sides does not (`audit_rays.RECIPROCAL`).
+- **The same place on both masters** (0.81, last round). `audit_axis` thin compares the instance's thinnest cut with
+  the Regular's cut between the same two edges at the same shares (`place_reading`), not with the Regular's thinnest
+  anywhere: by a cut end the least reading sits at the end zone's edge and moves with the scan lines' phase (Q's tail
+  22.6 > 19.8 > 23.6 at 400, 425, 450; at every fixed distance from its end it thickens). End corners are found on
+  the outline cut every unit (`END_STEP`), not on the flattening's vertices. A line is cut at the same parameters as a
+  curve in `audit_rays` (a straight stroke's only places were its corners: 58 glyphs went unread).
+- **A point drawn with a flat is a point** (0.81, axis round). `audit_axis.points_of` takes a straight under 30 units
+  between two corners, its two neighbouring straights meeting under 60 degrees with the ink between them (a vertex's
+  outside flat, a spur's or a guillemet's tip), as a pointed end at the flat's middle. ⱳ's middle apex read 19.6
+  across its two outsides 16 units under its flat at 300, a cut across a vertex that a scan line found or missed by
+  where it met a node (the two sides meet at 40 degrees, FACE_DEG's margin). 26 glyphs gain such a point; on the round
+  7 masters no result changed.
+- These are reading rules, not tolerances: each was checked on the glyph that raised it by drawing the ray or cut
+  (`build/figures/081/`), and the places they leave out are counted in the audit's own summary line.

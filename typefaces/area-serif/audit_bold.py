@@ -54,7 +54,7 @@ def instance(rc, bc, v, t):
     """The glyph that far from the Regular towards the Bold: straight between the two, or through its master at
     bold.MID_WEIGHT where it has one."""
     lerp = lambda A, C, u: [[(p[0] + (q[0] - p[0]) * u, p[1] + (q[1] - p[1]) * u, p[2], p[3]) for p, q in zip(P, Q)] for P, Q in zip(A, C)]   # noqa: E731
-    mc = B.mid_master(rc, bc, v)
+    mc = B.mid_master(rc, bc, v) if v["f"] > 0 else None    # the Light has no sparse master
     if mc is None:
         return lerp(rc, bc, t)
     tm = (dict(B.axis_map(v["stem"]))[B.MID_WEIGHT] - B.REG_STEM) / (v["stem"] - B.REG_STEM)
@@ -192,13 +192,15 @@ def audit(reg, name, v, t=1.0):
 
 
 def sweep(stem=B.STEM, names=None):
-    """Every 25 units of weight: the same audit on the instance there, against the targets for its own stem."""
+    """Every 25 units of weight: the same audit on the instance there, against the targets for its own stem. 0.81:
+    the Light side too, 375 down to 300 (towards the Light master at bold.LIGHT_STEM)."""
     names = names or list(string.ascii_lowercase + string.ascii_uppercase) + FIGURES
     reg = ufoLib2.Font.open("build/AreaSerif-Regular.ufo")
-    v = B.vector(stem)
     fail = 0
-    for w, st in B.axis_map(stem, range(400, 701, 25)):
-        t = (st - B.REG_STEM) / (stem - B.REG_STEM)
+    stops = [(w, st, B.vector(B.LIGHT_STEM)) for w, st in B.axis_map(stem, (375, 350, 325))]
+    stops += [(w, st, B.vector(stem)) for w, st in B.axis_map(stem, range(400, 701, 25))]
+    for w, st, v in stops:
+        t = (st - B.REG_STEM) / (v["stem"] - B.REG_STEM)
         rows, bad, unsound = [], [], 0
         for n in names:
             r, b = audit(reg, n, v, t)

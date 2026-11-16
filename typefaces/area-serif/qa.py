@@ -6,7 +6,9 @@ Runs, in order, and reports each validator's own outcome (a run that finishes is
   3. pathlint.py                   outline quality on the sources, winding on the built font
   3b. audit_parts.py               one value per shared part (stems, flags, feet, balls, arches, counters)
   3c. parts.py                     one construction per join and bowl: necks, pointed crotches, b d p q, u from n
+  3c2. curvecheck.py               curvature continuity along g's loop, the tails of g.ss02 j y, a.ss03 and l.ss04
   3d. audit_charset.py             beyond a-z A-Z 0-9: mark placement, plain strokes, signs from letters, mirrors
+  3e. audit_kern.py                (0.81) every pair's least white at 300 350 400 550 700, against the weight's floor
   4. fontbakery check-universal    font engineering (names, tables, metrics, glyphs, features)
   5. diffenator2 diff (--diff)     before/after renders and table diffs against build/previous/
 Proof sheets (proof.py, overlay.py) are separate: they are for eyes, not exit codes.
@@ -38,6 +40,7 @@ def run(label, cmd):
 
 def main():
     results = []
+    awaiting = []
     if "--skip-build" not in sys.argv:
         code, out = run("build", [PY, "build.py"])
         print(out.splitlines()[-1] if out else "")
@@ -58,6 +61,9 @@ def main():
     code, out = run("joins", [PY, "parts.py"])
     print("\n".join(l for l in out.splitlines() if l.startswith(("ERROR", "parts:"))))
     results.append(("joins and bowls (one construction per part)", code == 0))
+    code, out = run("curves", [PY, "curvecheck.py"])           # 0.81: descender loops and tails, the new a and l
+    print("\n".join(l for l in out.splitlines() if not l.startswith("    ") or "known" not in l))
+    results.append(("curve continuity (descender loops and tails, a.ss03, l.ss04)", code == 0))
     code, out = run("evenness", [PY, "even.py"])
     print("\n".join(out.splitlines()[-4:]))
     results.append(("evenness (a stroke's thickness round each counter)", code == 0))
@@ -72,15 +78,39 @@ def main():
             print("\n".join(out.splitlines()[:2] + [l for l in out.splitlines() if l.startswith("  ")][:20]))
             results.append(("light audit (each part on its target, letters and figures)", code == 0))
             code, out = run("bold again (leaves build/weight/audit-bold.txt as the Bold's)", [PY, "audit_bold.py"])
+            import ufoLib2                                     # 0.81: the Light's sides are light_bearings.json's
+            miss = _B.check_light_bearings(ufoLib2.Font.open(os.path.join(HERE, "build", "AreaSerif-Regular.ufo")),
+                                           ufoLib2.Font.open(os.path.join(HERE, "build", "AreaSerif-Light.ufo")))
+            print("\n== light side bearings (bold.check_light_bearings)\n" + (f"{len(miss)} sides off: {miss[:12]}" if miss else "every named side as light_bearings.json sets it"))
+            results.append(("light side bearings (light_bearings.json, one path)", not miss))
+        for style in ("Light", "Bold"):                        # 0.81 (owner): the tails and loops in every master
+            mp = os.path.join(HERE, "build", f"AreaSerif-{style}.ufo")
+            if os.path.exists(mp):
+                code, out = run(f"curves, {style}", [PY, "curvecheck.py", mp])
+                print("\n".join(l for l in out.splitlines() if not l.startswith("    ") or "known" not in l))
+                results.append((f"curve continuity in the {style} master", code == 0))
+                # axis round 2: the hooks and tails ending in a tilted ball, their ball and neck
+                code, out = run(f"curves of the hooks with a ball, {style}", [PY, "curvecheck.py", mp, "--hooks"])
+                print("\n".join(l for l in out.splitlines() if "(drawn)" not in l))
+                results.append((f"curve continuity of the hooks with a ball in the {style} master", code == 0))
         code, out = run("axis", [PY, "audit_bold.py", "--sweep"])
         print(out)
         results.append(("weight axis (the same audit every 25 units)", code == 0))
         code, out = run("axis, every glyph", [PY, "audit_axis.py"])
         print(out)
         results.append(("weight axis, all glyphs (moved, turns, crossings, thin, monotone, composites)", code == 0))
+        held = [l.strip() for l in out.splitlines() if l.strip().startswith("AWAITING")]
+        if held:                                               # 0.81: the one expected failure, said every run
+            awaiting.extend(held)
+        code, out = run("axis, second method (rays across the stroke on the variable font's instances)", [PY, "audit_rays.py"])
+        print(out[-3000:])
+        results.append(("weight axis, second method (audit_rays: stroke across itself at 300 to 700)", code == 0))
         code, out = run("interpolation", [os.path.join(BIN, "fonttools"), "varLib.interpolatable", "--kinkiness", "1.0", vf])
         print(out[:2000] or "nothing reported")
         results.append(("variable font (fontTools interpolatable, kinkiness 1.0)", code == 0 and not out.strip()))
+        code, out = run("kerning along the axis (audit_kern: least white of every pair at 300 350 400 550 700)", [PY, "audit_kern.py", vf])
+        print(out)
+        results.append(("kerning along the axis (no pair under the weight's floor)", code == 0))
     code, out = run("charset", [PY, "audit_charset.py"])
     print("\n".join(l for l in out.splitlines() if l.startswith(("ERROR", "charset audit"))))
     results.append(("character set (marks, signs, mirrors)", code == 0))
@@ -114,6 +144,8 @@ def main():
     print("\n== summary")
     for name, ok in results:
         print(f"{'pass' if ok else 'FAIL'}  {name}")
+    for line in awaiting:                                      # failing, held apart by name: not a pass
+        print(f"HELD  {line[len('AWAITING'):].strip()}")
     sys.exit(0 if all(ok for _, ok in results) else 1)
 
 

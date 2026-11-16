@@ -727,7 +727,9 @@ def e_junction(font):
 # ear a flat-topped end 40 by 61 on a waved underside; a's drop turned back on itself on its right side (out to 142,
 # in to 135). All three are now circles, drawn as c's is: nodes at the side, tip and side, handles 0.55 of the
 # radius, one curve away on each side.
-END_RADIUS2 = {"a": 44, "g": 46, "y": 48}     # c f j: 44. g's ear and y's tail a little larger, as they were
+END_RADIUS2 = {"a": 44, "g": 46, "y": 44}     # c f j: 44. g's ear a little larger, as it was
+# 0.81 (owner round 3): y's ball on the round ends' 44 (was 48, "as it was"): its diameter over the stem was 1.23 in
+# the Regular (0.96 Bold, 1.49 Light) where the round ends and j's are 1.10 to 1.13 (0.86 to 0.88, 1.35 to 1.36)
 K2 = 0.55
 
 

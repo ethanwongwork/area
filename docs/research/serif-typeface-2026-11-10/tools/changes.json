@@ -1,5 +1,121 @@
 [
  {
+  "build": "0.81",
+  "date": "2026-11-15",
+  "items": [
+   {
+    "glyphs": "g",
+    "chars": "g",
+    "text": "The default g's lower loop is rebuilt, as you asked me to confirm. You were right: in 0.80 its left side was a nearly straight stroke ending in a knob that overlapped the link, and in the variable font the overlap left a white sliver at 550 and 700. Now the loop is four quarters at the bowl's tensions, its left side meets the link as a branch (the same 32-unit neck as every other branch), and its counter is a contour of its own. Curvature runs smoothly round it (worst ratio across a node 1.13, was 1.56)."
+   },
+   {
+    "glyphs": "g.ss02 j y a",
+    "chars": "gjya",
+    "text": "One tail family. The single-storey g's tail is a half-ellipse: both edges leave the stem at the ball's height, the lowest point half way to the tail's end, the ball 0.030 of the x-height under the baseline. j's and y's tails and the a's curled exit now follow the same rule: from the stem round the lowest point to the ball the curve only tightens, and it is equal on both sides of the lowest point. In the Bold the g's ball rises only as far as the white between it and the bowl keeps the white law (it fell to 38 units at 700; now 52)."
+   },
+   {
+    "glyphs": "Alternates",
+    "chars": "al07z",
+    "text": "The alternates are in the font, each in its own stylistic set: footless 1 (ss01), single-storey g (ss02), single-storey a with its 31 accented forms (ss03; four constructions were drawn and the one whose width is the references' share of n was chosen), tailed l (ss04), slashed zero (zero), dotted zero (ss05), barred 7 and z (ss06). They exist at every weight."
+   },
+   {
+    "glyphs": "Struck glyphs",
+    "chars": "ȺŁØĐ₩",
+    "text": "Letters with a stroke through them (Ł Ø Đ Ħ Ⱥ ₩ ₦ and 52 others) are, in the variable font, the letter plus the stroke as two overlapping shapes, so nothing has to be re-cut between weights. The static Regular is unchanged. Where a stroke would lie exactly along the letter's own edge (Ɍ in the Light, for 74 units) it now stops where that edge begins, so no seam can show. Ⱥ and the T with a diagonal stroke still fill their small pocket of white at the Bold: that is your decision (figure 9: keep the honest overlap, or cut the stroke inside the letter)."
+   },
+   {
+    "glyphs": "Signs",
+    "chars": "*†‡!\"",
+    "text": "Signs made of arms (asterisk, daggers, exclamation, straight quotes) are now each arm's centre line with its width profile, thickened by one number per weight, and drawn symmetric from one half. The asterisk no longer looks nearly Regular in Bold text: its arms reach a little further at the Bold (6.5% longer, inside the references' own range of 1.7% to 9.2%), so the white between its balls allows them their weight. Its ink now gains 0.82 of n's gain, as Georgia Pro's does (0.819; Source Serif 4 0.898, Literata 0.935; it was 0.74). The longer arm no longer bends its curves: the outer part of each arm, from its first smooth node out to its tip, moves out whole. The Light's asterisk is 1.7% shorter, as the references' are, and unchanged."
+   },
+   {
+    "glyphs": "Weight axis",
+    "chars": "anHRg",
+    "text": "The weight axis is now checked exactly over the whole range, not at 25-unit stops, and a second method measures every stroke across itself on the variable font. New rules from what they found: along a tapering stroke (a tail, a hook, a flag) each place keeps the share of its thickness its kind keeps (a stem's place the stem's, a hairline's place the hairline's, in between in proportion), so eng's tail no longer thins faster than its stem; a crotch with one straight side keeps its neck towards the Light; a mirrored pair (⇤ ⇥) is one drawing at every weight; an S's turn drawn at a node stays at that node. White between two parts is held like a counter. 434 of 434 parts are on target at the Light and the Bold."
+   },
+   {
+    "glyphs": "Kerning",
+    "chars": "AVTo",
+    "text": "Kerning is fitted per weight. Each master's pairs come from its own outlines by one rule measured on Georgia Pro and Serrif: a pair's white scales with the control white (nn, HH) of that weight. Then each is compared with the references at the same weight and opened where two letters come too close. AV goes -83 / -79 / -93 at 300 / 400 / 700 where it was -79 at every weight. The Regular's own pairs were measured again on the new letters: 772 of 4,796 measured pairs moved, most by a unit; the largest (15 to 19) are r before round letters, capitals and punctuation: r's outline has not changed since 0.80, but measured afresh it stood 8 or more units looser than both references beside those letters, so the fit brought it in. Why the stored values missed this is not known."
+   },
+   {
+    "glyphs": "Close round",
+    "chars": "@*j,",
+    "text": "@ in the Bold: its a has a slanted stem (one side straight, the other the counter's edge), which the weight engine did not read as a stroke, so the stem stayed as thin as the Regular's while the counter slid into the bowl's lower stroke (29 down to 17 units at 550). The stem now thickens like every stem and the bowl stays open (at least 33 units from 550 to 700). A word space before j read tight because j's tail runs under it (the white across 's j' was 252 units where Georgia Pro has 322); the space before j is now kerned by the measured shortfall (s j 302 at 400), the only change to the Regular. The weight checks now measure a stroke across itself rather than along a level or upright line (the comma below a capital passes: it never thinned), and no longer read a terminal's cut end or a junction as a stroke. The figure of signs and struck glyphs showed some glyphs as other glyphs; that was the figure tool, not the font, and it is fixed."
+   },
+   {
+    "glyphs": "Last round",
+    "chars": "C̉Ả@",
+    "text": "The hook above (on Ả ẩ ỉ ở and 23 more) is now built in the weights as a curl and a stem that overlap, as the struck letters are: its small eye keeps its width and the curl grows outward, so the capital form no longer crosses itself from 550 in the Bold. In the Bold, @'s top crotch no longer rises above its stem (a nub), and C's lower barb no longer thins where it meets the bowl (the tapering rule had lengthened one handle there). The weight checks now compare a stroke with the same place in the Regular, which showed that C, Q, s and the capital ogonek never thinned (it was where the check's sampling fell) and found other places that do thin in the Bold: the ring of ® by R's leg, @'s a, K with hook, ₵, and the footless 1's flag. The second check reads straight strokes again (dashes, arrows, maths signs, v, w had gone unread). The Regular is unchanged."
+   },
+   {
+    "glyphs": "Your point A",
+    "chars": "jyɡ",
+    "text": "The tails of j and y (and ȷ, ŋ, the fj ligatures, and g.ss02, which is built from j) are now built again in the Bold instead of being stretched by the weight engine (the Light's were already smooth and stay). The ball is the same part as the round ends of a c f r 2 3 5 6 9: the Regular's ball scaled evenly (1.40 at the Bold), so it stays round; the Bold j's ball had come out 61 by 49 units, pinched. The tail between the stem and the ball is solved again by the Regular's own rule, so its curvature only rises toward the ball. Where two curves meet in the masters' tails and loops they now meet at one curvature (the Bold g's loop was 1.87 times, j 1.80, the alternate a 1.76, the tailed l 1.91), never at the stroke's expense. The curvature check now runs on the Light and Bold masters too."
+   },
+   {
+    "glyphs": "Your point B",
+    "chars": "ɡ",
+    "text": "The single-storey g's tail is back to 0.80's proportions: the ball's top 0.138 of the x-height under the baseline (72 units, as 0.80; 0.81 had raised it to 16), the tail ending where both had it, with 0.81's smooth half-ellipse kept (no curvature fault in any master). The white between the ball and the bowl keeps its law at the Bold."
+   },
+   {
+    "glyphs": "Your point C",
+    "chars": "xXvwz9",
+    "text": "A new check measures, for every letter and figure from 300 to 700, how far its top half's ink drifts sideways against its bottom half, the drift of its centre, the stress angle of each counter and whether both sides of a round thicken alike, against Georgia Pro and Source Serif 4. The x leaned most: its thick diagonal turned 6 degrees flatter at the Bold (the references turn at most 2) and the x grew 24% wider (references 5 to 16%). Keeping the thick diagonal's slant fixes the lean (-0.123 to -0.043 of its height, the references -0.037 to -0.018) but bent the x's serif brackets between the weights, because the serifs are placed separately from the stroke; it is not in this build and needs the serifs placed from the stroke first. The 9's lower right (and the 6's upper left, the same drawing turned) is steeper than both references in the Regular already (19 degrees against 24 to 26 from its widest point down), because its tail's lowest point sits too far right for the 9's narrow width; that is a drawing decision left to you, not changed."
+   },
+   {
+    "glyphs": "Owner round 2",
+    "chars": "965x",
+    "text": "The 9's lower right is fuller: its lowest point moved left and its ball sits under the bowl's left side, so the right edge leans 24 degrees as in Georgia Pro and Source Serif 4 instead of 18; the 6 is the same drawing turned. The 5's upright stroke stands straighter (5 degrees, was 9.5), which is what read as italic; its bowl was already in line with the references. In the Bold the default g's loop, the alternate a and the tailed l now meet at one curvature without thinning. A fix for the x's lean at the Bold worked on the x but narrowed its openings and thinned the ampersand, so it is not in this build. A table of how each part thickens shows balls, necks, serif tips and stems growing evenly; s's turns, g's ear, the x's and w's thick strokes and Z's level strokes grow faster than their kind."
+   },
+   {
+    "glyphs": "Owner round 3",
+    "chars": "xy",
+    "text": "Measured whether the Bold's diagonal letters grow too wide: against the growth of n and H, only the x stands outside Georgia Pro and Source Serif 4 (13% wider than its class grows, where the references are within 3%); v w y z V W X Y Z K A M grow as the references' do and their strokes turn by under 3 degrees. Fixing the x needs its openings measured where the eye reads them, which the next round takes up. The y's ball is now the same size as the other round ends (it was a little larger), in every weight. Each weight's kerning was fitted again to the references at that weight."
+   },
+   {
+    "glyphs": "Owner round 4",
+    "chars": "sx",
+    "text": "The s at the heavier weights no longer leans: its two curved turns now thicken in proportion as the o's sides do (they had grown 2.3 times where the references' grow 1.6 to 2.0), and its two barbs thicken as the C's, S's and G's do (they had barely grown). At the Bold the s is lighter and 32 units narrower. The x's lean is still not fixed: keeping its thick stroke's slant leaves each end of the x with two whites, at the bracket and at the serif's end, that cannot both keep their widths under the bracket and serif rules; that needs a decision on which one the x keeps. The capital S, the c's lower right and the Light g's loop are still open."
+   },
+   {
+    "glyphs": "Owner round 5",
+    "chars": "xScegg",
+    "text": "The x no longer leans at the Bold: its thick stroke keeps the Regular's slant (it had turned 6 degrees flatter), each of its ends keeps the white between its serif and the other stroke, and it is 91 units narrower at the Bold. The capital S keeps its upper bowl as wide, against the lower one, as at the Regular. The lower strokes of c and e now thicken as the references' do (they had stayed hairline-thin), so the c no longer looks light at its lower right. In the Light, the g's lower loop is built from its centre line and is now smooth except where its right side runs into the link."
+   },
+   {
+    "glyphs": "Owner round 6",
+    "chars": "g96",
+    "text": "The Light g is now smooth all the way round its lower loop: where the loop runs into its link, the link's end moved 4 units so the curve eases in. The 9 and the 6 no longer shift their weight as they get bolder: the side of the bowl had been growing like the ball instead of like a round stroke, a reading mistake from the last round's redrawing, now corrected. Figure 20 shows every letter and figure before your rounds and now, at four weights."
+   },
+   {
+    "glyphs": "Owner round 7",
+    "chars": "*\"",
+    "text": "No glyph changed. Checked that the build is repeatable: two builds from the same drawings come out identical. The small moves of the asterisk, daggers and quotes between rounds follow the white-space rule, which reads the letters' counters, so they shift a unit or so when a letter such as the 9 changes. Each weight's kerning was confirmed fitted again for the changed letters (x, s, S, c, e)."
+   },
+   {
+    "glyphs": "Axis round",
+    "chars": "ƘƳⱲⱳƴƒ",
+    "text": "The hooks that end in a ball (K, Y, W, w and y with a hook, and the florin) now keep their ball round and full at every weight: their balls are drawn turned a little off upright, and the weight engine now recognises a ball at any angle, so it grows and shrinks them as it does every other ball. In the Light their necks no longer thin faster than the stems; in the Bold the K with a hook no longer thins where its arm meets the leg. The same reading reaches 22 other letters whose hooks or tails end in a ball (ß among them), whose balls now follow the same rule. Figure 22 shows them before and after at four weights."
+   },
+   {
+    "glyphs": "Axis round 2",
+    "chars": "ƴɲʈ⌦⌫✓",
+    "text": "In the Light, the y with a hook no longer pinches where its tail leaves the thin stroke, and the n with a left hook no longer thins at the bottom of its stem: where a straight edge runs into a curve, the point between them now slides along the straight to keep the stroke at its weight. The t with a retroflex hook keeps the shape of its top-left ear at the Bold. The keyboard signs ⌦ and ⌫ and the check mark ✓ no longer go thinner than other signs in the Light: every slanted stroke of a sign now lightens the way its straight strokes do, which makes 22 other signs a touch heavier at the lightest weight only (< > × √ and others). The hooks' balls and necks are now checked for smooth curvature in every weight. The cedi waits for your choice: figure 23 shows both options."
+   },
+   {
+    "glyphs": "Axis round 3",
+    "chars": "®ʋ",
+    "text": "The registered sign keeps its ring as round and even as the copyright sign's at every weight: its R is now placed and sized inside the ring the way the other ring signs are, so it no longer pushes the ring thin at the Bold. The v with a hook in the Light is back to its earlier shape (last round's change made its counter's straight side much shorter). A few stroke ends (the long-s ligatures, t with hook, the trademark) grow slightly at the Bold so their ends keep their weight. Figure 24 shows them, and two sheets show the remaining curvature faults in the hooks for you to look at."
+   },
+   {
+    "glyphs": "Open",
+    "chars": "",
+    "text": "Not finished. G, X, z, a, g and w still lean a little further than the references at the Bold. The x at the Bold is slightly narrower than the n's growth would ask. Places that thin in the Bold: @'s a, the footless 1's flag, the ogonek by under a unit; ₵ waits for your choice (figure 23: keep its drawn C, or build it from Area's C). Where a round stroke runs into a junction (Ə ð œ & $ ɂ ʕ) the stroke thins at the Bold or thickens at the Light; no rule yet. Some hooks with a ball still have small curvature bumps (comb sheets in figure 24). Ⱥ and the T with a diagonal stroke wait for your decision (figure 9)."
+   }
+  ]
+ },
+ {
   "build": "0.80",
   "date": "2026-11-14",
   "items": [

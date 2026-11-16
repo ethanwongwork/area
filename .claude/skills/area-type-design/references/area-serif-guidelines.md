@@ -463,3 +463,23 @@ Open after 0.80: `audit_axis.py` (Bold side as 0.79; Light side: an inflection o
 thinning faster than a tip in 18); no real Bold for Ⱥ † ₡ ⌘, no real Light for ₡, the four diagonal arrows and
 commaturnedabovecomb; kerning at Light and Bold not fitted; the Light between 300 and 400 not audited part by part;
 g.ss02 before j touches.
+
+## Build 0.81 (the owner's notes on 0.80, three branches merged, 15 November 2026)
+
+| Part | Rule | Where |
+|---|---|---|
+| g's loop | Quarters at the bowl's tensions (0.57 out, 0.61 in); lowest points where b/a² is equal on both quarters; extremes at the references' share of the counter (left 0.495, right 0.57); the left side a branch into the link (neck 32); the counter its own contour | `loops.g_loop`; check `curvecheck.py` |
+| The tail family | g.ss02's half-ellipse (ball 0.030 x-height under the baseline, lowest point half way to the tail's end, 1.15 hairlines there); j and y on the same rule with their own reach (lowest point j 0.673, y 0.681 of it); the a's exit's two handles solved the same way | `loops.round_tail`, `loops.a_exit`, `charset.single_g_points` |
+| Alternates | a.ss03 (bowl narrowed to the references' 0.945 n, q's spur, a's exit) and its 31 accents, U+0251; l.ss04 (t's hook at 0.770 of its reach); zero (slashed), ss05 (dotted), ss06 (barred 7 and z); U+0261 from g.ss02. An alternate differs in form | `alternates.py`; check `audit_charset` (`audit_081`) |
+| Struck glyphs | The letter's own contours plus each stroke overlapping, in the variable font; the static Regular keeps the merged outline. A stroke whose side would lie on its letter's edge ends where that edge begins | `overlap.py`; checks `audit_axis.py` (crossings by union topology, seam) |
+| Axis audit | Exact over whole master pairs (Light-Regular, Regular-550, 550-Bold): Bernstein turns, self-contact, counter area, drift; symmetric signs and mirrored pairs by their points; a second method on the variable font's instances (`audit_rays.py`) | `axis_exact.py`, `audit_axis.py` |
+| Sign arms | Centreline times width profile, one f per sign: (stem ratio)^0.77, capped by the white law between arms; the asterisk's arms reach as the references' do (Bold 1.047, Light 0.983) only where no curve turns: the Light takes 0.983, the Bold stays at 1 (open: the Bold asterisk is light) | `arms.py` (`REACH`) |
+| White law | A narrow white between parts is a counter: least = max(white x counter ratio, min(white, floor)) (counter 0.837 Bold, 1.055 Light; floor 30.3, 32.4); held side by side, stacked, between marks, and inside one contour for g.ss02's ball | `white.py`, `bold.keep_apart`, `charset.single_g_points` |
+| Necks and tapers | A neck at any crotch keeps the hairline's share towards the Light (a straight-sided crotch slides on its straight side); along a tapering stroke each place keeps its ladder law's share (stem 0.705, hairline 0.847, tip 0.767 at 300; interpolated by the Regular thickness) | `white.keep_necks`, `white.keep_taper` |
+| Turns | No curve gains an inflection anywhere between two masters (exact test in the guard); an S's inflection at a node stays at the node | `bold.fix_turns(exact)`, `bold.inflection_nodes` |
+| Mirrored pairs | The right-hand form is the left-hand form turned over in every master | `bold.mirror_pairs` |
+| Kerning per master | k_M = s_M (N_R + k_R) - N_M (s: the master's control white over the Regular's), then the same-weight fit against Georgia Pro Light/Bold and Serrif 300/700, then collisions at the master's floor (MIN_GAP x s); the Light's bearings from light_bearings.json through bold.bearing_change | `spacing.kern_master`, `build.kern_masters`; check `audit_kern.py` |
+
+Open after 0.81: Astroke and Tdiagonalstroke wait for the owner's pick (honest overlap or stump form,
+`img/081/stump-struck.png`); `at`, `hookabovecomb.case`, `commaaccentcomb.case` and `ogonekcomb.case` in the Bold; the second method's remaining flags
+(`axis-0.81.md`, integration round).

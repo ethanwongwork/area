@@ -1184,13 +1184,20 @@ def normalize(font):
     print("clean: joins to straights", CLEAN.true_joins(font, HARMONIZE_SET))   # 0.68
     print("clean: 5", CLEAN.five_heel(font))                             # 0.69
     print("clean: 5", CLEAN.five_bowl(font))                             # 0.79: the bowl's lowest and widest points
+    print("clean: 5", CLEAN.five_stem(font))                             # 0.81 (owner): the upright stroke's lean
+    print("clean: 9 and 6", CLEAN.nine_six(font))                        # 0.81 (owner): the long stroke's lower quarter
     print("balance: capital serifs", BALANCE.cap_serifs(font))           # 0.70: 77 on every upright stem
     print("balance: zero", BALANCE.zero_weight(font))                    # 0.70: sides 87
     print("clean: S curves", CLEAN.even_s(font, HARMONIZE_SET))          # 0.70: 3's hook
     print("clean: curve joins", CLEAN.true_curves(font, HARMONIZE_SET))  # 0.70: u's tail, y's tail
     print("even: thickness round the counters", EVEN.run(font))         # 0.77: before the letters are copied into others
+    import loops as LOOPS
+    print("loops:", LOOPS.g_loop(font))                                  # 0.81: g's lower loop, one construction
     nodes = CLEAN.add_nodes(font, HARMONIZE_SET)                         # 0.69: extremes and inflections get a node
     print(f"clean: nodes added {len(nodes)}", nodes)
+    # 0.81 round 3: j's and y's tails by g.ss02's rule, the a's exit (after the node rule: they read the extremes)
+    if os.environ.get("AREA_081_TAILS", "1") != "0":     # 0: the comparison build without them
+        print("loops:", LOOPS.round_tail(font, "j"), LOOPS.round_tail(font, "y"), LOOPS.a_exit(font))
     delta, moved, opened = SPACING.run(font)          # last: it reads the finished outlines
     CLEAN.owner_final(font, json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "owner_edits.json"))))
     print(f"spacing: {len(delta)} letters re-spaced, {moved} kerning pairs carried over, {len(opened)} near-touches opened")
@@ -1199,12 +1206,17 @@ def normalize(font):
     print(f"charset: lightened {n_light} more glyphs; tabular figures {tab}")
     print("clean: flags' undersides", CLEAN.flag_unders(font))            # 0.80: n's and k's, one curve as i's
     print("charset: single-storey g", CHARSET.single_g(font))    # 0.77: g.ss02, from q and j
+    import alternates as ALTERNATES                   # 0.81: the other alternates and their families, from finished parts
+    alt_rep, alt_subs = ALTERNATES.run(font)
+    print("alternates:", alt_rep)
     print("balance: descender feet", BALANCE.desc_feet(font))
     print("clean: uncrossed", CLEAN.uncross(font))        # 0.65: every glyph, last of all
     # a base drawing whose path laps over itself, and (0.70) every letter with a stroke or bar drawn across it: merged
     # here, in the source. Left to the TrueType build's overlap removal, a stroke that meets the letter within a unit
     # of a node left a crossing (Astroke, 0.69) or a 19-unit scrap (Estroke, 0.70) whenever the letter changed.
     import re
+    import overlap as OVERLAP                         # 0.81: each struck glyph's letter and strokes, before the merge
+    struck_parts = OVERLAP.source_struck(font)
     struck = [g.name for g in font if g.components and g.contours and re.search(r"(stroke|bar|middletilde)$", g.name)]
     for name in ["Eopen"] + sorted(struck):
         CHARSET.put(font, name, CHARSET.glyph_path(font, name), font[name].width)
@@ -1225,14 +1237,30 @@ def normalize(font):
     CHARSET.cap_strokes(font)                         # 0.75: and the signs' strokes, read at the nodes just added
     soft = CHARSET.soft_ends(font)                    # 0.79: plain strokes end on the letters' radius
     print(f"charset: plain stroke ends rounded on {len(soft)} glyphs, {sum(soft.values())} ends")
+    import arms as ARMS                               # 0.81 round 3: a sign of arms has each arm drawn once
+    signs = ARMS.regular(font)
+    stars = [n for n in signs if len(font[n].contours) == 1 and len(ARMS.crotches(
+        [(q.x, q.y, q.type, q.smooth) for q in font[n].contours[0].points])) >= 5]
+    if stars:                                         # a turned arm takes a node at each of its own extremes
+        CLEAN.add_nodes(font, stars)
+        CLEAN.true_curves(font, stars, max_deg=9)
+    print(f"arms: {len(signs)} signs drawn from one half or one arm", sorted(signs))
     CHARSET.turned_pairs(font)                        # 0.74: after the node rules, the turned glyphs once more
     CHARSET.mirrors(font)
     joined, promoted, copied, opened_all = SPACING.finish(font, CHARSET.COVERAGE)   # 0.73: beyond the core
+    alts = sorted({b for pairs in alt_subs.values() for _a, b in pairs} | {"g.ss02", "one.ss01"} | ({"uni0261"} & set(font.keys())))
+    order = font.lib.get("public.glyphOrder", [])
+    font.lib["public.glyphOrder"] = order + [n for n in alts if n not in order]
+    alt_open = ALTERNATES.kern_and_open(font, alts, CHARSET.COVERAGE)    # 0.81: no alternate closer than MIN_GAP
+    print(f"alternates: {len(alt_open)} pairs opened", alt_open[:60])
     print(f"spacing: {joined} accented letters join their letter's kerning class, {promoted} values moved to a class, "
           f"{copied} copied to a family; {len(opened_all)} near-touches opened in the whole set")
     import collections as _c
     print("spacing: opened, by first glyph", _c.Counter(o[0] for o in opened_all).most_common(40))
     print("spacing: opened, by second glyph", _c.Counter(o[1] for o in opened_all).most_common(40))
+    dev = OVERLAP.build_layer(font, struck_parts, CHARSET.STRUCK)   # 0.81: the variable font's overlapping forms
+    print(f"overlap: {len(dev)} struck glyphs as letter and strokes; merged ink apart by at most "
+          f"{max(dev.values()) if dev else 0} units", sorted(dev.items(), key=lambda kv: -kv[1])[:12])
     for g in font:                           # derive.py's bracket marks were for this build only
         for c in g.contours:
             for p in c.points:

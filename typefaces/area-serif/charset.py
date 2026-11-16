@@ -19,6 +19,7 @@ punctuation, symbols and marks missed `clean.lighten`. This module runs last, on
 Proportions of new and rebuilt parts are measured on Georgia Pro and Serrif (`docs/research/serif-typeface-
 2026-11-10/charset-0.47.md`), in Area's own stems; nothing is read from their outlines but numbers. Every outline
 here is Area's own: its letters' points, or geometry written below."""
+import itertools
 import math
 
 import pathops
@@ -131,6 +132,10 @@ def bounds(p):
 
 
 SCRAP = 150             # square units
+# 0.81: a glyph made of a finished letter and strokes across it is one merged outline in the static Regular, and the
+# letter's own contours plus each stroke as its own overlapping contour in the variable font's masters (overlap.py),
+# so no corner where a stroke's edge meets the letter's has to travel between the masters. name: (letter, [Paths]).
+STRUCK = {}
 REBUILT, COMPOSED = set(), set()     # glyphs this module draws or composes (see follow_rebuilt)
 
 
@@ -413,6 +418,7 @@ def bars(font, m):
         else:
             st = stems[which]
             x0, x1 = st[0] - left * S, st[1] + right * S
+        STRUCK[name] = (base, [rect(x0, band(y, w)[0], x1, band(y, w)[1])])
         p = union(b, rect(x0, band(y, w)[0], x1, band(y, w)[1]))
         put(font, name, p, font[base].width)
     if "Eth" in font and font["Eth"].components:
@@ -426,6 +432,7 @@ def bars(font, m):
         st = [s for s in scan_h(b, y) if s[1] - s[0] < S * 1.4][0]
         cx = (st[0] + st[1]) / 2
         d = run * S
+        STRUCK[name] = (base, [bar((cx - d, y - d * rise), (cx + d, y + d * rise), w)])
         p = union(b, bar((cx - d, y - d * rise), (cx + d, y + d * rise), w))
         put(font, name, p, font[base].width)
     for name, (base, past, inset) in O_SLASH.items():
@@ -433,6 +440,7 @@ def bars(font, m):
         x0, y0, x1, y1 = bounds(b)
         w = (m.cap_bar if base.isupper() else m.low_bar)
         h = y1 - y0
+        STRUCK[name] = (base, [bar((x0 + inset * (x1 - x0), y0 - past * h), (x1 - inset * (x1 - x0), y1 + past * h), w)])
         p = union(b, bar((x0 + inset * (x1 - x0), y0 - past * h), (x1 - inset * (x1 - x0), y1 + past * h), w))
         put(font, name, p, font[base].width)
 
@@ -834,15 +842,54 @@ G_TAIL_LOW = 0.518
 #   the ball's top under the baseline, of the x-height: 0.121, 0.158, 0.134                 mean 0.138
 #   the tail's thickness at its lowest point, of the round letters' hairline: 0.97, 1.00, 0.92   mean 0.963
 # The ball itself is still j's, moved whole.
-G_BALL_TOP = 0.138
+G_BALL_TOP_080 = 0.138
 G_TAIL_THICK = 0.963
 G_ROUND = 0.55
-# Along the weight axis (Source Serif 4 and Literata at 700, stems 159): the ball's top rises to 0.120, 0.120 of
-# the x-height under the baseline and the lowest point moves to 0.565, 0.554 of the bowl's width (mean 0.560), so
-# the inside of a heavier tail stays a round quarter. Both go with the stem, in a line from the Regular's values.
-G_BALL_TOP_BOLD = 0.120
+# 0.81 (owner, 2026-11-14, on 0.80's: "smoothing out and rounding out the arc on the descender").
+# What was wrong, measured (curvecheck.py, tools/combs.py): the four quarters met at the lowest points with the
+# curvature jumping 1.45 times outside and 1.38 inside, and the bottom was the flattest place on the tail: outside,
+# radius 218 where it left the stem, 402 just left of the lowest point, then 65 at the ball. A round tail tightens
+# from the stem to the ball and never opens out on the way. Two things change, both by rule:
+#  1. The handles of the four curves are solved, not set to one share: inside and outside, from the stem's edge to
+#     the ball, the curvature never falls (no flat), it is the same on both sides of the lowest point, and it
+#     arrives at the ball at the ball's own curvature (`_round_tail`). Each handle stays within G_TENSION of its
+#     side, inside the triangle.
+#  2. The ball sits higher, 0.100 of the x-height under the baseline (0.80: 0.138). A tail that runs 217 units left
+#     of its lowest point and rises only 118 to a ball at 0.138 cannot tighten evenly in one curve: its radius has to
+#     go from about 400 to 45 in a quarter. At 0.100 the outside's radius stays between 216 and 273 from the stem
+#     to past the lowest point, then tightens into the ball. The references by the same measure
+#     (tools/tail_profile.py, top of the ball 0.07 x-height in from the tail's end): Serrif 0.023, Source Serif 4
+#     0.164, Literata 0.144, mean 0.110; 0.100 is inside their range.
+G_BALL_TOP = 0.100
+G_TENSION = (0.30, 0.72)
+# Along the weight axis (Source Serif 4 and Literata at 700, stems 159): the lowest point moves to 0.565, 0.554 of
+# the bowl's width (mean 0.560), so the inside of a heavier tail stays a round quarter; the ball rises by the
+# references' own change from 400 to 700 (Source Serif 4 0.158 to 0.120, Literata 0.134 to 0.120, mean 0.026 of
+# the x-height), taken from the Regular's height. Both go with the stem, in a line from the Regular's values.
+G_BALL_TOP_BOLD = G_BALL_TOP - 0.026
 G_TAIL_LOW_BOLD = 0.560
 G_STEMS = (78, 140)                # the Regular's and the Bold's lowercase stems, where the two pairs of values hold
+# 0.81, round 2: three tails drawn by the same rules for the owner (img/081/gss02-variants.png), one in the font.
+#   ball      the ball's top under the baseline, of the x-height
+#   end       the tail's left end, of the bowl's width left of the stem's right edge
+#   low       the lowest point, of the bowl's width left of the stem's right edge
+#   thick     the stroke at the lowest point, of the round letters' hairline
+G_TAIL_FORMS = {
+    "080": dict(ball=0.138, end=G_TAIL_END, low=G_TAIL_LOW, thick=G_TAIL_THICK),
+    "081": dict(ball=0.100, end=G_TAIL_END, low=G_TAIL_LOW, thick=G_TAIL_THICK),
+    "A": dict(ball=0.030, end=G_TAIL_END, low="mid", thick=1.15, rise="ball"),
+    "B": dict(ball=0.080, end=1.000, low="mid", thick=1.15, rise="ball"),
+    "C": dict(ball=0.100, end=G_TAIL_END, low=0.470, thick=G_TAIL_THICK),
+    # 0.81 (owner, 15 November, on "A": "0.80's tail is preferred: 0.81's is too long and too high, the ball rises too
+    # far toward the bowl"). 0.80's proportions on A's construction: the ball's top back to 0.80's 0.138 of the
+    # x-height under the baseline (the references' mean, above; the Bold by the same 0.026 change as before), the
+    # tail's end where both had it (G_TAIL_END); A's half-ellipse and its solved handles kept, so the tail stays
+    # curvature-continuous (curvecheck.py: Regular worst ratio 1.03, valley 10%). The lowest point stays half way to
+    # the tail's end: at 0.80's share (G_TAIL_LOW) the half-ellipse's two quarters meet at 1.23 in the Regular and
+    # 1.77 in the Bold.
+    "D": dict(ball=G_BALL_TOP_080, end=G_TAIL_END, low="mid", thick=1.15, rise="ball"),
+}
+G_TAIL_FORM = "D"
 
 
 def _pts(c):
@@ -862,8 +909,96 @@ def o_hair(contours):
     return lows[1] - lows[0]
 
 
-def single_g_points(q_outer, q_counter, j_body, hair):
-    """The single-storey g's two contours from q's and j's point lists [(x, y, type, smooth)]."""
+def _curv(c, t):
+    """Signed curvature of the cubic c = (p0, p1, p2, p3) at t."""
+    u = 1 - t
+    d1 = [3 * u * u * (c[1][i] - c[0][i]) + 6 * u * t * (c[2][i] - c[1][i]) + 3 * t * t * (c[3][i] - c[2][i]) for i in (0, 1)]
+    d2 = [6 * u * (c[2][i] - 2 * c[1][i] + c[0][i]) + 6 * t * (c[3][i] - 2 * c[2][i] + c[1][i]) for i in (0, 1)]
+    v = (d1[0] ** 2 + d1[1] ** 2) ** 1.5
+    return (d1[0] * d2[1] - d1[1] * d2[0]) / v if v > 1e-9 else 0.0
+
+
+def _round_tail(top, low, end, end_dir, end_k, inner):
+    """Handle shares for a tail's two curves, from the stem's edge (top, its tangent straight down) round the lowest
+    point (low, level) to end (the ball's side, outside; the neck, inside), arriving along end_dir (upward for the
+    ball's side; the ball's own direction at the neck). The first curve is a quarter circle (its box is square, see
+    single_g_points; both handles KAPPA). Returns ((top's, low's) of the first curve, (low's, end's) of the
+    second): the second curve's shares, within G_TENSION, for which the curvature from top to end never falls (a
+    tail tightens into its ball and never opens out), is equal on both sides of the lowest point, and meets end_k
+    at the end (outside: the ball's curvature; inside, the neck, left free). A grid, then finer steps about the
+    best: the same numbers give the same handles."""
+    lo, hi = G_TENSION
+
+    def curves(t):
+        a, b, c, d = t
+        c1 = (top[:2], (top[0], top[1] - a * (top[1] - low[1])), (low[0] + b * (top[0] - low[0]), low[1]), low[:2])
+        if inner:
+            r = d * (end[1] - low[1])
+            p2 = (end[0] + end_dir[0] * r, end[1] + end_dir[1] * r)
+        else:
+            p2 = (end[0], end[1] - d * (end[1] - low[1]))
+        c2 = (low[:2], (low[0] - c * (low[0] - end[0]), low[1]), p2, end[:2])
+        return c1, c2
+
+    def score(t):
+        c1, c2 = curves((KAPPA, KAPPA) + tuple(t))
+        ks = [abs(_curv(c1, i / 12)) for i in range(13)] + [abs(_curv(c2, i / 12)) for i in range(1, 13)]
+        fall = sum(max(0.0, (a_ - b_) / a_) for a_, b_ in zip(ks, ks[1:]) if a_ > 1e-9)
+        jump = abs(math.log(max(abs(_curv(c1, 1.0)), 1e-9) / max(abs(_curv(c2, 0.0)), 1e-9)))
+        arrive = 0.0 if inner else 0.5 * abs(math.log(max(ks[-1], 1e-9) / max(abs(end_k), 1e-9)))
+        return fall + jump + arrive
+
+    grid = [lo + i * (hi - lo) / 16 for i in range(17)]
+    best = min(((score(t), t) for t in itertools.product(grid, repeat=2)))
+    step = (hi - lo) / 16
+    while step > 0.004:
+        improved = True
+        while improved:
+            improved = False
+            for i in range(2):
+                for dv in (-step, step):
+                    t = list(best[1])
+                    t[i] = min(hi, max(lo, t[i] + dv))
+                    sc = score(tuple(t))
+                    if sc < best[0] - 1e-9:
+                        best, improved = (sc, tuple(t)), True
+        step /= 2
+    return (KAPPA, KAPPA), best[1]
+
+
+def single_g_points(q_outer, q_counter, j_body, hair, form=None, least_white=None):
+    """The single-storey g's two contours from q's and j's point lists [(x, y, type, smooth)]. least_white (0.81, a
+    master's white law): the ball rises towards the Bold by the references' change only as far as the white between
+    it and the bowl above it, inside the one contour, keeps that much (ball_white); short of it, the ball stays
+    lower by as little as holds it (steps of 0.001 of the x-height)."""
+    pts = _single_g_points(q_outer, q_counter, j_body, hair, form)
+    if least_white is None:
+        return pts
+    k = 0
+    while ball_white(pts[0]) < least_white - 0.5 and k < 300:
+        k += 1
+        pts = _single_g_points(q_outer, q_counter, j_body, hair, form, lower=0.001 * k)
+    return pts
+
+
+def ball_white(outer, parts=None):
+    """g.ss02's white between the tail's ball and the bowl above it, inside its one outer contour: the nearest
+    approach between the ball's outline and the bowl's (q's upper part). parts: (first ball point, last ball point,
+    first bowl point, last bowl point) in the contour; by default as _single_g_points lays them out."""
+    import numpy as np
+    import white as WHITE
+    b0, b1, u0, u1 = parts or _BALL_PARTS[len(outer)]
+    D = WHITE._dense(outer, 1.0)
+    ball = np.array([d[:2] for d in D if b0 <= d[2] < b1])
+    bowl = np.array([d[:2] for d in D if u0 <= d[2] < u1])
+    d = np.hypot(ball[:, None, 0] - bowl[None, :, 0], ball[:, None, 1] - bowl[None, :, 1])
+    return float(d.min())
+
+
+_BALL_PARTS = {}
+
+
+def _single_g_points(q_outer, q_counter, j_body, hair, form=None, lower=0.0):
     # q: the stem's right edge is the upright line that reaches the x-height; the crotch is where the bowl's lower
     # stroke meets the stem's left edge
     n = len(q_outer)
@@ -895,64 +1030,78 @@ def single_g_points(q_outer, q_counter, j_body, hair):
     # the ball, whole: its left side to the tail's end, its top to its height under the baseline
     ball = [list(p) for p in tail[neck:left + 1]]
     tw = ((stem_r - stem_l) - G_STEMS[0]) / (G_STEMS[1] - G_STEMS[0])
-    ball_top = G_BALL_TOP + tw * (G_BALL_TOP_BOLD - G_BALL_TOP)
-    tail_low = G_TAIL_LOW + tw * (G_TAIL_LOW_BOLD - G_TAIL_LOW)
-    bx = round(stem_r - G_TAIL_END * bowl_w) - tail[left][0]
+    F = G_TAIL_FORMS[form or G_TAIL_FORM]
+    ball_top = F["ball"] + tw * (G_BALL_TOP_BOLD - G_BALL_TOP) + lower
+    tail_low = (F["low"] if F["low"] != "mid" else 0) + tw * (G_TAIL_LOW_BOLD - G_TAIL_LOW)
+    bx = round(stem_r - F["end"] * bowl_w) - tail[left][0]
     by = round(-ball_top * xh) - tail[on[3]][1]
     for p in ball:
         p[0] += bx
         p[1] += by
     nk, lf = ball[0], ball[-1]
     low_x = round(stem_r - tail_low * bowl_w)
-    in_y = depth + round(G_TAIL_THICK * hair)
-    K = G_ROUND
-
-    def arc(p0, p1, upright_first):
-        """Two handles of a quarter turn from p0 to p1, each K of its side of the box."""
-        if upright_first:
-            return [(p0[0], round(p0[1] + K * (p1[1] - p0[1])), None, False),
-                    (round(p1[0] + K * (p0[0] - p1[0])), p1[1], None, False)]
-        return [(round(p0[0] + K * (p1[0] - p0[0])), p0[1], None, False),
-                (p1[0], round(p1[1] + K * (p0[1] - p1[1])), None, False)]
-
+    if F["low"] == "mid":                                  # the lowest point half way between the stem and the tail's end
+        low_x = round((stem_r + lf[0]) / 2 - tail_low * bowl_w)
+    in_y = depth + round(F["thick"] * hair)
     # into the neck along the ball's own direction there, so the join is smooth
     after = ball[1]
     vx, vy = nk[0] - after[0], nk[1] - after[1]
     ln = math.hypot(vx, vy)
-    reach = K * (nk[1] - in_y)
     in_low = (low_x, in_y, "curve", True)
     out_low = (low_x, depth, "curve", True)
-    tail = ([tuple(start)] + arc(start, in_low, True) + [in_low,
-            (round(low_x + K * (nk[0] - low_x)), in_y, None, False),
-            (round(nk[0] + vx / ln * reach), round(nk[1] + vy / ln * reach), None, False)]
-            + [tuple(p) for p in ball] + arc(lf, out_low, True) + [out_low] + arc(out_low, end, False) + [tuple(end)])
+    # the turn off the stem is a quarter circle on both edges: each edge's straight run ends one quarter's width
+    # above its lowest point (0.80 ended both where j's do, so the outside's box was 255 wide and 235 tall and its
+    # bottom the flattest place on the tail)
+    if F.get("rise") == "ball":                            # a half-ellipse: the turn off the stem as tall as the rise
+        end = (end[0], lf[1], "curve", end[3])            # to the ball, both edges leaving the stem at one height
+        start = (start[0], lf[1], "line", start[3])
+    else:
+        start = (start[0], in_y + (start[0] - low_x), "line", start[3])
+        end = (end[0], depth + (end[0] - low_x), "curve", end[3])
+    ball_k = _curv((ball[-4][:2], ball[-3][:2], ball[-2][:2], ball[-1][:2]), 1.0)      # the ball at its left side
+    neck_k = _curv((nk[:2], ball[1][:2], ball[2][:2], ball[3][:2]), 0.0)            # and where the inside meets it
+    (t1, t2), (t3, t4) = _round_tail(start, in_low, nk, (vx / ln, vy / ln), neck_k, True)
+    i1 = [(start[0], round(start[1] - t1 * (start[1] - in_y)), None, False),
+          (round(low_x + t2 * (start[0] - low_x)), in_y, None, False)]
+    reach = t4 * (nk[1] - in_y)
+    i2 = [(round(low_x - t3 * (low_x - nk[0])), in_y, None, False),
+          (round(nk[0] + vx / ln * reach), round(nk[1] + vy / ln * reach), None, False)]
+    (u1, u2), (u3, u4) = _round_tail(end, out_low, lf, (0.0, 1.0), ball_k, False)
+    o1 = [(lf[0], round(lf[1] - u4 * (lf[1] - depth)), None, False),
+          (round(low_x - u3 * (low_x - lf[0])), depth, None, False)]
+    o2 = [(round(low_x + u2 * (end[0] - low_x)), depth, None, False),
+          (end[0], round(end[1] - u1 * (end[1] - depth)), None, False)]
+    tail = ([tuple(start)] + i1 + [in_low] + i2 + [tuple(p) for p in ball] + o1 + [out_low] + o2 + [tuple(end)])
     outer = [tuple(p) for p in tail[1:]] + upper + [tuple(tail[0])]
+    b0 = 5                                                  # tail[1:]: i1 (2), in_low, i2 (2), then the ball
+    _BALL_PARTS[len(outer)] = (b0, b0 + len(ball) - 1, len(tail) - 1, len(tail) - 1 + len(upper) - 1)
     # contour order: ... tail's last point (the right edge's foot, a curve's end), q's stem top (line), q's bowl,
     # the crotch, then the tail's first point (line, down the left edge)
     return [outer, list(q_counter)]
 
 
-def single_g(font, layer=None):
-    """g.ss02 from this font's q and j (see above). Returns its box. It keeps q's advance and kerns as q does."""
+def single_g(font, layer=None, form=None, name="g.ss02", least_white=None):
+    """g.ss02 from this font's q and j (see above). Returns its box. It keeps q's advance and kerns as q does.
+    form: a key of G_TAIL_FORMS (default G_TAIL_FORM); name: the glyph to write (the variants' sheet uses others)."""
     from ufoLib2.objects import Contour, Point
     src = layer if layer is not None else font
     q, j = src["q"], src["j"]
     q_outer = max(q.contours, key=lambda c: len(c.points))
     q_counter = min(q.contours, key=lambda c: len(c.points))
     j_body = max(j.contours, key=lambda c: len(c.points))       # j without its dot
-    g = src["g.ss02"] if "g.ss02" in src else src.newGlyph("g.ss02")
+    g = src[name] if name in src else src.newGlyph(name)
     g.clearContours()
     hair = o_hair([_pts(c) for c in src["o"].contours])
-    for pts in single_g_points(_pts(q_outer), _pts(q_counter), _pts(j_body), hair):
+    for pts in single_g_points(_pts(q_outer), _pts(q_counter), _pts(j_body), hair, form, least_white):
         c = Contour()
         c.points = [Point(x, y, t, smooth=s) for x, y, t, s in pts]
         g.contours.append(c)
     g.width = q.width
     g.unicodes = []
-    for name, members in font.groups.items():
-        if name.startswith("public.kern") and "q" in members and "g.ss02" not in members:
-            members.append("g.ss02")
-    return bounds(gp(src, "g.ss02")) if layer is None else None
+    for gname, members in font.groups.items():
+        if gname.startswith("public.kern") and "q" in members and name not in members:
+            members.append(name)
+    return bounds(gp(src, name)) if layer is None else None
 
 
 def spine_across(path):
@@ -1087,8 +1236,12 @@ def maths(font, m, adv):
     H = gp(font, "H")
     hs = scan_h(H, 200)
     keep = op(H, rect(hs[0][1], 150, hs[1][0], 600), pathops.PathOp.DIFFERENCE)     # no crossbar
-    keep = op(keep, rect(-100, CAP_HEIGHT - 60, 2000, 1000), pathops.PathOp.DIFFERENCE)   # no head serifs
-    top_bar = rect(hs[0][0] - 0.7 * m.cap_stem, CAP_HEIGHT - m.cap_bar * 1.15, hs[1][1] + 0.7 * m.cap_stem, CAP_HEIGHT)
+    # 0.81 round 3: the stems run 2 units into the bar, so the two are one outline (they were cut at 60 under the
+    # cap height, 4 short of the bar's underside: a 4-unit sliver of white that closed at 675). Georgia Pro draws
+    # its product as one contour, Source Serif 4 as stems overlapping the bar: the parts touch.
+    bar_lo = CAP_HEIGHT - m.cap_bar * 1.15
+    keep = op(keep, rect(-100, bar_lo + 2, 2000, 1000), pathops.PathOp.DIFFERENCE)   # no head serifs
+    top_bar = rect(hs[0][0] - 0.7 * m.cap_stem, bar_lo, hs[1][1] + 0.7 * m.cap_stem, CAP_HEIGHT)
     Pi = union(keep, top_bar)
     pb = bounds(Pi)                                    # 0.74: narrowed between its stems (it was scaled: stems 74)
     put(font, "product", narrow(Pi, hs[0][1] + 90, round(0.14 * (pb[2] - pb[0]))), 0, [0x220F], lsb=30, rsb=30)
@@ -1157,6 +1310,7 @@ def currencies(font, m):
     # ruble: P with a second bar across its stem below the bowl
     P = gp(font, "P")
     ps = _stem_x(P, 200)
+    STRUCK["uni20BD"] = ("P", [rect(ps[0] - 0.9 * S, 0.24 * CAP_HEIGHT - cb / 2, ps[1] + 1.7 * S, 0.24 * CAP_HEIGHT + cb / 2)])
     put(font, "uni20BD", union(P, rect(ps[0] - 0.9 * S, 0.24 * CAP_HEIGHT - cb / 2, ps[1] + 1.7 * S,
                                        0.24 * CAP_HEIGHT + cb / 2)), font["P"].width, [0x20BD])
     # lira (Turkish): L's stem crossed by two rising bars, as the sign is drawn
@@ -1165,16 +1319,21 @@ def currencies(font, m):
     cx = (ls[0] + ls[1]) / 2
     bars2 = union(bar((cx - 1.0 * S, 0.36 * CAP_HEIGHT), (cx + 1.6 * S, 0.50 * CAP_HEIGHT), cb),
                   bar((cx - 1.0 * S, 0.52 * CAP_HEIGHT), (cx + 1.6 * S, 0.66 * CAP_HEIGHT), cb))
+    STRUCK["uni20BA"] = ("L", [bar((cx - 1.0 * S, 0.36 * CAP_HEIGHT), (cx + 1.6 * S, 0.50 * CAP_HEIGHT), cb),
+                               bar((cx - 1.0 * S, 0.52 * CAP_HEIGHT), (cx + 1.6 * S, 0.66 * CAP_HEIGHT), cb)])
     put(font, "uni20BA", union(L, bars2), font["L"].width, [0x20BA])
     # won: W with two level bars across
     W = gp(font, "W")
     x0, _, x1, _ = bounds(W)
+    STRUCK["uni20A9"] = ("W", [rect(x0 - 10, 0.42 * CAP_HEIGHT - cb / 2, x1 + 10, 0.42 * CAP_HEIGHT + cb / 2),
+                               rect(x0 - 10, 0.62 * CAP_HEIGHT - cb / 2, x1 + 10, 0.62 * CAP_HEIGHT + cb / 2)])
     put(font, "uni20A9", union(W, rect(x0 - 10, 0.42 * CAP_HEIGHT - cb / 2, x1 + 10, 0.42 * CAP_HEIGHT + cb / 2),
                                rect(x0 - 10, 0.62 * CAP_HEIGHT - cb / 2, x1 + 10, 0.62 * CAP_HEIGHT + cb / 2)),
         font["W"].width, [0x20A9])
     # dong: d-bar over a bar under the baseline
     db = gp(font, "dcroat")
     x0, _, x1, _ = bounds(db)
+    STRUCK["dong"] = ("dcroat", [rect(x0 + 20, -150 - lb, x1 - 20, -150)])
     put(font, "dong", union(db, rect(x0 + 20, -150 - lb, x1 - 20, -150)), font["d"].width, [0x20AB])
     # rupee: a level top bar, a second bar under it, and the bowl's stroke turning into a long diagonal leg
     r = m.cap_bar
@@ -1890,6 +2049,7 @@ def letter_signs(font, m):
     cb = bounds(c)
     xc = cb[0] + (cb[2] - cb[0]) * ((st[0] + st[1]) / 2 - ob[0]) / (ob[2] - ob[0])
     sx = band(xc, STROKE_LOW)
+    STRUCK["cent"] = ("c", [rect(sx[0], cb[1] + (ob[1] - old_bot), sx[1], cb[3] + (ob[3] - old_top))])
     p = union(c, rect(sx[0], cb[1] + (ob[1] - old_bot), sx[1], cb[3] + (ob[3] - old_top)))
     w0 = font["cent"].width
     put(font, "cent", p, 0, lsb=ob[0], rsb=w0 - ob[2])
@@ -1911,6 +2071,7 @@ def letter_signs(font, m):
         bars_ = [rect(cx - half, band((a + b) / 2, m.cap_bar)[0], cx + half, band((a + b) / 2, m.cap_bar)[1])
                  for a, b in ((ys[0], ys[1]), (ys[2], ys[3]))]
         w0 = g.width
+        STRUCK["yen"] = ("Y", list(bars_))
         put(font, "yen", union(Y, *bars_), 0, lsb=ob[0], rsb=w0 - ob[2])
         done.append(f"yen: Y + bars {ys[1] - ys[0]:.0f}>{m.cap_bar:.0f}")
     else:
@@ -1921,19 +2082,22 @@ def letter_signs(font, m):
 # A right-hand bracket is its left-hand one turned over. Each pair had drifted by a unit or two through lightening
 # and rounding (bracket stems 73 and 74, braces 233 and 234 wide, 4 to 62 points apart).
 MIRRORS = [("parenleft", "parenright"), ("bracketleft", "bracketright"), ("braceleft", "braceright"),
-           (0x00AB, 0x00BB), (0x2039, 0x203A), ("less", "greater")]
+           (0x00AB, 0x00BB), (0x2039, 0x203A), ("less", "greater"),
+           (0x21E4, 0x21E5), (0x232B, 0x2326)]     # 0.81: the tab arrows and the erase keys, one drawing each
 
 
 def _name(font, key):
     if isinstance(key, str):
         return key
-    return next(g.name for g in font if key in g.unicodes)
+    return next((g.name for g in font if key in g.unicodes), None)
 
 
 def mirrors(font):
     done = []
     for a, b in MIRRORS:
         a, b = _name(font, a), _name(font, b)
+        if a not in font or b not in font:                 # not drawn yet (the keys come later in charset)
+            continue
         ga, gb_ = font[a], font[b]
         if ga.components or gb_.components:
             continue
@@ -2491,11 +2655,14 @@ def letter_currencies(font, m):
         return band(y * CAP_HEIGHT, cb)
     N = gp(font, "N")
     x0, _, x1, _ = bounds(N)
+    STRUCK["uni20A6"] = ("N", [rect(x0 - 10, lev(0.42)[0], x1 + 10, lev(0.42)[1]), rect(x0 - 10, lev(0.59)[0], x1 + 10, lev(0.59)[1])])
     done("uni20A6", 0x20A6, union(N, rect(x0 - 10, lev(0.42)[0], x1 + 10, lev(0.42)[1]),       # 0.426, 0.418
                                   rect(x0 - 10, lev(0.59)[0], x1 + 10, lev(0.59)[1])), "N")    # 0.595, 0.582
     P = gp(font, "P")
     ps = _stem_x(P, 200)
     px1 = bounds(P)[2]
+    STRUCK["uni20B1"] = ("P", [rect(ps[0] - 0.9 * S, lev(0.62)[0], px1 + 0.25 * S, lev(0.62)[1]),
+                               rect(ps[0] - 0.9 * S, lev(0.78)[0], px1 + 0.25 * S, lev(0.78)[1])])
     done("uni20B1", 0x20B1, union(P, rect(ps[0] - 0.9 * S, lev(0.62)[0], px1 + 0.25 * S, lev(0.62)[1]),   # 0.588, 0.645
                                   rect(ps[0] - 0.9 * S, lev(0.78)[0], px1 + 0.25 * S, lev(0.78)[1])), "P")  # 0.756, 0.810
     T = gp(font, "T")
@@ -2508,18 +2675,23 @@ def letter_currencies(font, m):
     out = round(0.155 * CAP_HEIGHT)                                                  # 0.14 / 0.13 and 0.18 / 0.18
     xs = (round(bs[1] + 0.35 * S), round(bs[1] + 1.75 * S))
     stubs = [rect(x, -out, x + hair, 20) for x in xs] + [rect(x, CAP_HEIGHT - 20, x + hair, CAP_HEIGHT + out) for x in xs]
+    STRUCK["uni20BF"] = ("B", list(stubs))
     done("uni20BF", 0x20BF, union(B, *stubs), "B")
     K = gp(font, "K")
     ks = _stem_x(K, 200)
+    STRUCK["uni20AD"] = ("K", [rect(ks[0] - 0.9 * S, lev(0.51)[0], ks[1] + 2.4 * S, lev(0.51)[1])])
     done("uni20AD", 0x20AD, union(K, rect(ks[0] - 0.9 * S, lev(0.51)[0], ks[1] + 2.4 * S, lev(0.51)[1])), "K")   # Georgia Pro 0.510
     ts = _stem_x(T, 200)
     cx = (ts[0] + ts[1]) / 2
+    STRUCK["uni20AE"] = ("T", [bar((cx - 1.3 * S, 0.30 * CAP_HEIGHT), (cx + 1.3 * S, 0.44 * CAP_HEIGHT), cb),
+                               bar((cx - 1.3 * S, 0.46 * CAP_HEIGHT), (cx + 1.3 * S, 0.60 * CAP_HEIGHT), cb)])
     done("uni20AE", 0x20AE, union(T, bar((cx - 1.3 * S, 0.30 * CAP_HEIGHT), (cx + 1.3 * S, 0.44 * CAP_HEIGHT), cb),
                                   bar((cx - 1.3 * S, 0.46 * CAP_HEIGHT), (cx + 1.3 * S, 0.60 * CAP_HEIGHT), cb)), "T")
     out = round(0.14 * CAP_HEIGHT)                                                   # Georgia Pro 0.16 below, 0.12 above
     G = gp(font, "G")
     gb = bounds(G)
     gx = band(gb[0] + 0.50 * (gb[2] - gb[0]), hair)
+    STRUCK["uni20B2"] = ("G", [rect(gx[0], -out, gx[1], CAP_HEIGHT + out)])
     done("uni20B2", 0x20B2, union(G, rect(gx[0], -out, gx[1], CAP_HEIGHT + out)), "G")
     C_ = gp(font, "C")
     c0 = bounds(C_)
@@ -2527,7 +2699,9 @@ def letter_currencies(font, m):
     lean = 0.16 * CAP_HEIGHT
     strokes = [bar((ccx + dx - lean / 2, -out - 40), (ccx + dx + lean / 2, CAP_HEIGHT + out + 40), hair) for dx in (-0.55 * S, 0.55 * S)]
     p = union(C_, *strokes)
-    p = op(p, union(rect(-500, -500, 3000, -out), rect(-500, CAP_HEIGHT + out, 3000, 3000)), pathops.PathOp.DIFFERENCE)
+    clip = union(rect(-500, -500, 3000, -out), rect(-500, CAP_HEIGHT + out, 3000, 3000))
+    STRUCK["uni20A1"] = ("C", [op(s_, clip, pathops.PathOp.DIFFERENCE) for s_ in strokes])
+    p = op(p, clip, pathops.PathOp.DIFFERENCE)
     done("uni20A1", 0x20A1, p, "C")
     return made
 
