@@ -3261,7 +3261,10 @@ def bold_font(reg, stem=STEM, **over):
     # the Light's j, y, g.ss02 as the engine draws them) and the taper law holds it; solved again there, the Light j
     # fell to 0.665 of 400 beside the stem (audit_rays' floor 0.684), and the ball alone left the neck's handles
     # 5.6 degrees off one line.
-    for g in (reg if v["f"] > 0 else []):
+    # Owner round 3: towards the Light a tail the engine left uneven (curvecheck faults in its tail region: the Light
+    # y once its Regular ball was the round ends') is rebuilt too; one it left smooth stays the engine's
+    import curvecheck as _CC0
+    for g in reg:
         if not g.contours or g.components or g.name in struck or g.name in signs or g.name not in font:
             continue
         cs = glyph_contours(font[g.name])
@@ -3270,6 +3273,8 @@ def bold_font(reg, stem=STEM, **over):
         for ci, R_ in enumerate(glyph_contours(g)):
             kind_ = _LOOPS.tail_kind(reg, R_)
             if not kind_ or max(range(len(cs)), key=lambda k: len(cs[k])) != ci:   # round_tail reads the longest
+                continue
+            if v["f"] < 0 and not _CC0.report(kind_, [cs[ci]], tuple(_CC0.REGIONS[kind_][1]))[0]:
                 continue
             M_ = _LOOPS.master_ball(R_, cs[ci], 1 + (BALL - 1) * v["f"])
             font[g.name].contours[ci].points = [Point(x, y, t, smooth=s_) for x, y, t, s_ in M_]

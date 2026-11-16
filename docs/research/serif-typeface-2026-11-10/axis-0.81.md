@@ -508,3 +508,65 @@ a ball, Bold same-place flags, @ in the Light, ⌦ ⌫ ✓, ɽ, junction rays) w
 - The Regular against the owner round's build: five (the stroke, 15 units), nine and six (72, 73), their superiors and
   inferiors (as derived), partialdiff (73, drawn from the 6), the fractions that carry them (advances by 1 to 8); 15
   kerning keys. Advances of 5, 6, 9 unchanged.
+
+## Owner round 3 (15 November 2026)
+
+The conductor read the Bold line "fghrstvxyz FGYZBCD 0123456789" beside Source Serif 4 as diagonal letters too wide and
+too flat. Measured first (numbers only; `17-advance.png`, `build/weight/stage2/advrel.txt`): the advance's growth 400 to
+700 over its class's upright (n for lowercase, H for capitals), Area / Georgia Pro / Source Serif 4:
+
+| glyph | Area | Georgia Pro | Source Serif 4 |
+|---|---|---|---|
+| v | 0.998 | 0.977 | 1.027 |
+| w | 1.013 | 1.003 | 1.016 |
+| x | **1.134** | 0.997 | 1.032 |
+| y | 0.991 | 0.978 | 1.026 |
+| z | 1.010 | 1.013 | 1.001 |
+| k | 0.993 | 1.009 | 1.075 |
+| V | 1.005 | 1.020 | 1.010 |
+| W | 0.997 | 1.030 | 1.050 |
+| X | 1.006 | 1.017 | 1.040 |
+| Y | 1.014 | 1.062 | 1.017 |
+| Z | 1.041 | 1.021 | 1.052 |
+| K | 0.987 | 1.051 | 1.075 |
+| A | 1.005 | 1.008 | 1.047 |
+| M | 0.985 | 0.985 | 1.023 |
+| N | 0.948 | 0.976 | 1.020 |
+| 7 | 0.942 | 0.990 | 1.066 |
+
+(The uprights themselves: n 1.098 / 1.168 / 1.017, H 1.070 / 1.120 / 0.971.) Only the x stands outside both references
+(its thick stroke turns 36.4 > 42.7 degrees; Georgia Pro +1.0, Source -2.2); v w y z V W X Y Z K A M sit inside or at the
+edge of the band, their angles within 2.7 degrees (references to 3.1). The Light: every diagonal letter within 2% of its
+class's upright (x 0.949 against n's 0.963). So no width rule for the class was written: the measurement does not ask for
+one, and a single class factor would move twelve letters to correct one.
+
+The x (item 1, held): keeping its thick stroke's angle needs its openings constrained where they are measured. The
+engine sets an opening's width on the x knots and then puts the stroke's edges on lines, so the white measured across
+the ink is not the knots' gap: with the angle kept the openings came out 193 and 166 against the rule's 219.5 and 196.5
+(at DIAG_INWARD 0.25), 182 and 154 against 197.9 and 174.9 at 0.5 (the geometric share, Source Serif 4's 0.39 to 0.48,
+Georgia Pro's 0.10 to 0.20). The rule is left off (`LEAN_KEEP_THICK` None) with the cause written beside it; crossing
+strokes are now recognised (`slant_strokes`: two straight diagonals that cut each other's edges, so the ampersand's
+curved crossing is not one).
+
+Level strokes (item 1f): z's and E F L Z's are each on their kind: capitals' arms 1.33 at the Bold and 0.79 at the Light
+(E F L Z alike), lowercase hairlines 1.24 and 0.85 (z). The thickening table's band mixed the two kinds. The one outlier
+found is T's arm, read as a curved level stroke (1.24, not the arms' 1.33): listed.
+
+Round open letters (item 2), split into quarters (share of the ink, 400 > 700): s's top-right quarter falls 0.19 > 0.15
+(Georgia Pro 0.20 > 0.20, Source 0.19 > 0.20), the bottom-right and top-left grow; S the same (0.20 > 0.17); c's bottom
+right 0.16 > 0.13 (both references hold); G as Georgia Pro. Part by part: s's barbs grow 1.05 (top) and 1.21 (bottom)
+where Georgia Pro's grow 1.29 and 1.27, Source's 1.53 and 1.48 (C's, S's, G's barbs grow 1.27 to 1.31, in band): s's
+barb is not read as a stroke (34 units at its cut, its inside edge slanting). Read as one (a hint, 34 > 45 at the Bold)
+s's lean moved only -0.065 > -0.060; its turns on the round strokes' gain moved it -0.065 > -0.049; references -0.014 to
++0.024. Neither is enough; neither is in the build.
+
+9 and 6 (item 3): the 9's top-left quarter falls 0.27 > 0.24 and its top right grows 0.25 > 0.28 (references hold); the
+long stroke grows faster than the bowl's left side. Not fixed. 4 8 K a: not decomposed.
+
+y's ball (item 5): `joins.END_RADIUS2["y"]` 48 > 44, the round ends' radius (its diameter over the stem 1.23 > 1.13 in the
+Regular). The Bold's tail solve then slid the inside up the thin diagonal past the crotch (a turn at 519, a crossing at
+624): in a master the inside's straight edge may run no more than 10 units on towards the crotch (`round_tail(master)`).
+Regular: y and ystroke change (8 units).
+
+Not done: the Light g (item 4: the centreline construction was not written), the neck and exit-angle columns of the
+terminal table, the axis list (item 6).
