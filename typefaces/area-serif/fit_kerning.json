@@ -5294,7 +5294,7 @@
 [
 "Q",
 "public.kern2.KERN_j_2ND",
--94
+-95
 ],
 [
 "Q",
@@ -5445,6 +5445,11 @@
 "parenleft",
 "public.kern2.KERN_j_2ND",
 -66
+],
+[
+"parenleft",
+"public.kern2.KERN_y",
+8
 ],
 [
 "parenright",
@@ -6194,7 +6199,7 @@
 [
 "public.kern1.KERN_O_1ST",
 "public.kern2.KERN_g",
--9
+-10
 ],
 [
 "public.kern1.KERN_O_1ST",
@@ -6638,6 +6643,11 @@
 ],
 [
 "public.kern1.KERN_Y",
+"public.kern2.KERN_g",
+-8
+],
+[
+"public.kern1.KERN_Y",
 "public.kern2.KERN_quotesingle",
 15
 ],
@@ -6783,8 +6793,8 @@
 ],
 [
 "public.kern1.KERN_b_1ST",
-"public.kern2.KERN_y",
--5
+"public.kern2.KERN_j_2ND",
+5
 ],
 [
 "public.kern1.KERN_c_1ST",
@@ -6834,7 +6844,7 @@
 [
 "public.kern1.KERN_colon",
 "public.kern2.KERN_g",
-5
+4
 ],
 [
 "public.kern1.KERN_colon",
@@ -6889,7 +6899,7 @@
 [
 "public.kern1.KERN_e_1ST",
 "public.kern2.KERN_g",
-10
+11
 ],
 [
 "public.kern1.KERN_f_1ST",
@@ -6974,7 +6984,7 @@
 [
 "public.kern1.KERN_g",
 "public.kern2.KERN_g",
--12
+-11
 ],
 [
 "public.kern1.KERN_g",
@@ -7068,6 +7078,11 @@
 ],
 [
 "public.kern1.KERN_j_1ST",
+"public.kern2.KERN_g",
+-9
+],
+[
+"public.kern1.KERN_j_1ST",
 "public.kern2.KERN_i_2ND",
 8
 ],
@@ -7105,11 +7120,6 @@
 "public.kern1.KERN_k_1ST",
 "public.kern2.KERN_d_2ND",
 10
-],
-[
-"public.kern1.KERN_k_1ST",
-"public.kern2.KERN_g",
--9
 ],
 [
 "public.kern1.KERN_k_1ST",
@@ -7764,7 +7774,7 @@
 [
 "q",
 "public.kern2.KERN_g",
--9
+-10
 ],
 [
 "q",

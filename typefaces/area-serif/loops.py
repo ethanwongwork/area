@@ -452,13 +452,17 @@ def round_tail(font, name, kind=None, master=False):
     old_out = [tuple((P[(iC + k) % n].x, P[(iC + k) % n].y) for k in range(4)),
                tuple((P[(iB + k) % n].x, P[(iB + k) % n].y) for k in range(4))]
     thin0 = _thinnest(old_in, old_out)
+    # in a weight master the inside's straight edge may not run on towards the crotch more than 10 units past where the master ended it:
+    # free, the Bold y's inside slid up its thin diagonal past the crotch once its ball was the round ends' (owner
+    # round 3: a turn at 519 and a crossing at 624); the outside stays free (j's needs it)
+    s_rng = (-10, 60) if master else (-60, 60)
     (o1, o2), vo = _solve_tail(xy(iD), d_out, 0.0, (-60, 60), (Bx, depth), C, (0.0, 1.0), ball_k)
     # the inside's lowest point: where it was or toward the outside's move, by steps of 4: the smoothest inside
     # (least residual) of those that keep the stroke's thinnest at 0.80's or at the references' least, whichever is less
     cands = []
     lo = min(Bix, Bix + (Bx - P[iB].x))
     for x_try in sorted({Bix, *range(int(lo), int(Bix) + 1, 4)}, reverse=True):
-        (c1, c2), v_ = _solve_tail(xy(iDi), d_in, 0.0, (-60, 60), (x_try, in_y), N, e_in, None)
+        (c1, c2), v_ = _solve_tail(xy(iDi), d_in, 0.0, s_rng, (x_try, in_y), N, e_in, None)
         th = _thinnest([c1, c2], [o2[::-1], o1[::-1]])
         cands.append((th < min(thin0 - 1, TAIL_THIN * 43), v_, x_try, c1, c2))
     _bad, vi, _x, i1, i2 = min(cands, key=lambda c: (c[0], c[1]))       # the smoothest that keeps the stroke
