@@ -112,6 +112,10 @@ the fastest change (under 0.5 units of thickness per unit travelled on a branch,
 | 9 and 6, the long stroke's quarter (0.81, owner) | The 9's lowest point (and the tail's inside) left until the quarter from the right extreme down is 0.90 as wide as tall; the ball left until it stands on the bowl's left extreme; the extreme's downward handle until the edge leans 23.5 degrees; one curvature at each node. The 6 is the 9 turned half round | 9 6 (their superiors, inferiors, ∂) | `clean.nine_six` | `audit_lean.py`, curvecheck on the figure |
 | 5's upright stroke (0.81, owner) | Turned about its middle height to the references' mean lean, 5.35 degrees | 5 (and its forms) | `clean.five_stem` | `audit_lean.py`; build/scratch4/five.py measures |
 | A part solved with its other edge (0.81, owner) | In a master, where a part's nodes cannot meet at one curvature without thinning, even the nodes, then the curves either side of every thinned place take its thickness back by handle lengths (keep_taper at the part's own thickness) | g a.ss03 l.ss04 and the tails (masters) | `loops.even_part` | curvecheck on the masters |
+| A crossing's openings (0.81, owner round 5) | Two straight diagonals that cross (x): the thick one keeps the Regular's angle; each end keeps its serif-end opening on the white law's share; the bracket-level opening is the serif-end target plus the bracket rule's separation (one end cannot carry two openings once the angle is kept); brackets from the kept edge | x | `bold.crossing_openings`, `LEAN_KEEP_THICK`, `BRACKET_FROM_EDGE`, `slant_strokes` (cross) | `audit_bold` (derived target), `audit_lean.py` |
+| An S's two bowls (0.81, owner round 5) | The top bowl keeps its width's share of the bottom bowl's: the top terminal moves level | S s | `bold.s_terminal`, `S_SHAPES` | `audit_lean.py`, quarter shares |
+| Open tail (0.81, owner round 5) | A lower stroke from a round stroke to a terminal grows by the mean of the round stroke's and the tip's ratios | c e | `bold.open_tail`, `HINTS` | references' 1.58 to 1.75 |
+| g's loop in a master (0.81, owner round 5) | Its extremes from the centreline by the taper law, the link's curve by the Regular's shares, solved with its other edge | g (Light) | `loops.g_loop_master` | curvecheck on the Light |
 | Heights | x 520, cap 712, ascender 780; overshoot 530 / -10 lowercase, 721 / -9 capitals and figures | all | `balance.heights` | `audit_serifs` 4, `check.py` |
 
 A part not in this table has no rule yet. Add the row when you write the rule.
@@ -238,7 +242,9 @@ masters match point for point and every weight between them is sound. Read `bold
   the round strokes' ratio, barbs read: `HINTS["s"]`); x infeasible as asked: each end's bracket-level and serif-level
   openings move together, Regular difference 88/87, Bold geometry 66/62 with the angle kept; one of the two whites
   must be chosen; S (lean drift -0.050, band -0.027 to +0.002) and c's lower stroke (grows 1.24, references 1.58 to
-  1.75) open.
+  1.75) open. Owner round 5: x landed (serif-end opening kept; Bold advance 0.983 of n's growth, the one target short);
+  S (s_terminal), c and e (open_tail) landed; the Light g's loop from its centreline: one fault left (an ease of 0.49
+  into the link, limit 0.45).
 
 ## What is still outside the system
 

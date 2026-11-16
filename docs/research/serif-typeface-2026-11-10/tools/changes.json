@@ -79,9 +79,14 @@
     "text": "The s at the heavier weights no longer leans: its two curved turns now thicken in proportion as the o's sides do (they had grown 2.3 times where the references' grow 1.6 to 2.0), and its two barbs thicken as the C's, S's and G's do (they had barely grown). At the Bold the s is lighter and 32 units narrower. The x's lean is still not fixed: keeping its thick stroke's slant leaves each end of the x with two whites, at the bracket and at the serif's end, that cannot both keep their widths under the bracket and serif rules; that needs a decision on which one the x keeps. The capital S, the c's lower right and the Light g's loop are still open."
    },
    {
+    "glyphs": "Owner round 5",
+    "chars": "xScegg",
+    "text": "The x no longer leans at the Bold: its thick stroke keeps the Regular's slant (it had turned 6 degrees flatter), each of its ends keeps the white between its serif and the other stroke, and it is 91 units narrower at the Bold. The capital S keeps its upper bowl as wide, against the lower one, as at the Regular. The lower strokes of c and e now thicken as the references' do (they had stayed hairline-thin), so the c no longer looks light at its lower right. In the Light, the g's lower loop is built from its centre line and is now smooth except where its right side runs into the link."
+   },
+   {
     "glyphs": "Open",
     "chars": "",
-    "text": "Not finished. In the Light the default g's loop still meets at uneven curvature (smoothing it would thin the stroke). The x and s, z, G, S, X, e, g, w, a, c lean further than Georgia Pro and Source Serif 4 as the weight rises (the x most). The x, s, z, G, S, X, e, g, w, a and c still lean further than both references at the Bold. Hooks ending in a ball (ⱳ ƴ Ƙ Ⱳ Ƴ ɲ ƒ, and j and eng) thin a little faster than the stems in the Light; they need a construction of their own, not built. @ in the Light: its a's stem thickens slightly (95 against 92); a fix tried this round ran the counter into the bowl and was not kept. Places that thin in the Bold, found by the same-place check and not yet fixed: ®'s ring by R's leg, @'s a, K with hook, ₵, t with retroflex hook, the footless 1's flag. ⌦ ⌫ ✓ thin faster than other signs in the Light. Junction places in Ə ɂ & $ ð œ and ɽ's ball are still flagged by the second check. Ⱥ and the T with a diagonal stroke wait for your decision (figure 9)."
+    "text": "Not finished. In the Light, where the g's loop runs into its link the curve starts a little sharply. The x at the Bold is slightly narrower than the n's growth would ask. Places that thin in the Bold (found by the same-place check): ®'s ring by R's leg, @'s a, K with hook, ₵, t with retroflex hook, the footless 1's flag; ⌦ ⌫ ✓ thin faster than other signs in the Light; junction places in Ə ɂ & $ ð œ and ɽ's ball are still flagged by the second check; the hooks ending in a ball (ⱳ ƴ Ƙ Ⱳ Ƴ ɲ ƒ) thin a little faster than the stems in the Light. Ⱥ and the T with a diagonal stroke wait for your decision (figure 9)."
    }
   ]
  },
