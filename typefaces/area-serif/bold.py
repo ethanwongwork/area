@@ -619,6 +619,13 @@ def slant_lines(strokes, pos, adj, flats, v, pinned=()):
             strong = rows
             fit_m = max(r[2] for r in rows) - min(r[2] for r in rows) >= 40 and not any(r[3] >= 1.0 for r in rows)
         m = st["m"]
+        if v.get("arm_turn") is not None and not st.get("cross"):
+            # owner round 8: an arm of a letter drawn as four arms meeting at a crossing (X) turns about the
+            # crossing (its corners there), every arm the same way by the turn bold_font solves (cross_ends), so
+            # the top ends move one way and the bottom ends the other and the openings between them stay
+            crn = [(s_, x_, y_, 1.0) for s_, x_, y_, w_ in rows if w_ == 0.01]
+            if crn:
+                rows, fit_m, m = crn, False, math.tan(math.atan(st["m"]) + v["arm_turn"])
         slope = lambda es: sum((e[1][0] - e[0][0]) / (e[1][1] - e[0][1]) for e in es) / len(es)   # noqa: E731
         taper = slope(st["R"]) - slope(st["L"])                # the Regular's stroke may widen along its length (k's
         ends = [[pos[q][1] for e in es for q in e] for es in (st["L"], st["R"])]   # leg, 61 to 87): the Bold keeps
@@ -789,6 +796,212 @@ def c_terminals(R, N):
     db = round(gap) + dt
     out = [_J.move_terminal(_J.move_terminal(N[0], "top", dt), "bottom", db) if (dt or db) else N[0]]
     return out, (dt, db)
+
+
+CROSS_ENDS = ("x", "X")
+def end_tips(contours):
+    """The outermost on-curve x of the top and bottom 40% of a glyph: (top left, top right, bottom left, bottom right),
+    as build/weightscale/balance.py reads a glyph's ends."""
+    pts = [q for P in contours for q in P if q[2] is not None]
+    ys = [q[1] for q in pts]
+    y0, y1 = min(ys), max(ys)
+    top = [q[0] for q in pts if q[1] >= y0 + 0.6 * (y1 - y0)]
+    bot = [q[0] for q in pts if q[1] <= y0 + 0.4 * (y1 - y0)]
+    return min(top), max(top), min(bot), max(bot)
+
+
+def end_growth(R, N):
+    """Each end's outward growth from the Regular, about the centre of the four ends (so a shift of the whole glyph
+    in its advance does not count): (top left, top right, bottom left, bottom right)."""
+    r, n = end_tips(R), end_tips(N)
+    cr, cn = sum(r) / 4, sum(n) / 4
+    return tuple(s * ((b - cn) - (a - cr)) for s, a, b in zip((-1, 1, -1, 1), r, n))
+
+
+def _cross_frame(P):
+    """A one-contour letter of two straight strokes crossing (x): its four crossing corners, the four edge lines
+    (each with its end node on either side of the crossing) and the four arms (the runs between the corners)."""
+    n = len(P)
+    on = [i for i, q in enumerate(P) if q[2] is not None]
+    ys = [P[i][1] for i in on]
+    y0, y1 = min(ys), max(ys)
+    nxt = {i: on[(k + 1) % len(on)] for k, i in enumerate(on)}
+    prv = {i: on[k - 1] for k, i in enumerate(on)}
+
+    def slanted(a, b):
+        return (b - a) % n == 1 and abs(P[b][1] - P[a][1]) >= 30 and abs(P[b][0] - P[a][0]) >= 12
+    corners = [i for i in on if slanted(prv[i], i) and slanted(i, nxt[i]) and y0 + 0.3 * (y1 - y0) < P[i][1] < y0 + 0.7 * (y1 - y0)]
+    if len(corners) != 4:
+        return None
+    ends = {e: c for c in corners for e in (prv[c], nxt[c])}
+    lines = []
+    for e, c in ends.items():
+        dx, dy = P[c][0] - P[e][0], P[c][1] - P[e][1]
+        L = math.hypot(dx, dy)
+        best = None
+        for f, c2 in ends.items():
+            if c2 == c or f == e:
+                continue
+            off = abs((P[f][0] - P[e][0]) * dy - (P[f][1] - P[e][1]) * dx) / L
+            along = ((P[f][0] - P[e][0]) * dx + (P[f][1] - P[e][1]) * dy) / L
+            if along > L and (best is None or off < best[0]):
+                best = (off, f)
+        if best and best[0] < 6 and {e, best[1]} not in [set(l_) for l_ in lines]:
+            lines.append((e, best[1]))
+    if len(lines) != 4:
+        return None
+    arms = []
+    for c in corners:
+        c2 = next(k for k in sorted(corners, key=lambda k: (k - c) % n) if k != c)
+        arms.append([(c + d) % n for d in range(1, (c2 - c) % n)])
+    yc = sum(P[c][1] for c in corners) / 4
+    return corners, lines, arms, yc
+
+
+def cross_shear(R, N, s):
+    """x in a master: the two top arms move level by +s and the two bottom arms by -s, each whole (serif, bracket and
+    the stroke's end), so both strokes turn about the crossing the same way and the openings between the ends stay;
+    each stroke's two edges then come back to the engine's thickness across (half the difference each, its end nodes
+    with their handles), and the crossing's corners are where the edge lines meet."""
+    fr = _cross_frame(R[0])
+    if not fr:
+        return None
+    corners, lines, arms, yc = fr
+    P = [list(q) for q in N[0]]
+    n = len(P)
+    top = [a for a in arms if sum(N[0][i][1] for i in a) / len(a) > yc]
+    for a in arms:
+        for i in a:
+            P[i][0] += s if a in top else -s
+
+    def line(e, f, Q):
+        m = (Q[f][0] - Q[e][0]) / (Q[f][1] - Q[e][1])
+        return m, Q[e][0] - m * Q[e][1]
+    strokes = {}
+    for e, f in lines:
+        m0, _ = line(e, f, N[0])
+        strokes.setdefault(m0 > 0, []).append((e, f))
+    for pair in strokes.values():
+        if len(pair) != 2:
+            return None
+        (m0a, c0a), (m0b, c0b) = line(*pair[0], N[0]), line(*pair[1], N[0])
+        (m1a, c1a), (m1b, c1b) = line(*pair[0], P), line(*pair[1], P)
+        t0 = abs((m0b * yc + c0b) - (m0a * yc + c0a)) / math.sqrt(1 + ((m0a + m0b) / 2) ** 2)
+        t1 = abs((m1b * yc + c1b) - (m1a * yc + c1a)) / math.sqrt(1 + ((m1a + m1b) / 2) ** 2)
+        d = (t1 - t0) / 2 * math.sqrt(1 + ((m1a + m1b) / 2) ** 2)
+        a_left = (m1a * yc + c1a) < (m1b * yc + c1b)
+        for (e, f), sgn in ((pair[0], 1 if a_left else -1), (pair[1], -1 if a_left else 1)):
+            for k in (e, f):
+                for j in (k, (k - 1) % n, (k + 1) % n):
+                    if j == k or N[0][j][2] is None:
+                        P[j][0] += sgn * d
+    L = {}
+    for e, f in lines:
+        L[e] = L[f] = line(e, f, P)
+    for e, (m_, c_) in L.items():                              # the bracket leaves the edge along it, as it did
+        for j in ((e - 1) % n, (e + 1) % n):
+            if P[j][2] is None:
+                r_ = math.hypot(P[j][0] - P[e][0], P[j][1] - P[e][1])
+                sy = 1 if P[j][1] >= P[e][1] else -1
+                k_ = math.sqrt(1 + m_ * m_)
+                P[j][0], P[j][1] = P[e][0] + sy * r_ * m_ / k_, P[e][1] + sy * r_ / k_
+    for c in corners:
+        n_ = len(P)
+        a, b = (c - 1) % n_, (c + 1) % n_
+        (ma, ca), (mb, cb) = L[a], L[b]
+        y = (cb - ca) / (ma - mb)
+        P[c][0], P[c][1] = ma * y + ca, y
+    Q = [[round(q[0]), round(q[1])] + list(q[2:]) for q in P]
+    for e, f in lines:                                         # on whole units the bracket's handle again on its edge
+        for k in (e, f):
+            c = next(c_ for c_ in corners if k in ((c_ - 1) % n, (c_ + 1) % n))
+            ux, uy = Q[k][0] - Q[c][0], Q[k][1] - Q[c][1]
+            L_ = math.hypot(ux, uy)
+            for j in ((k - 1) % n, (k + 1) % n):
+                if Q[j][2] is None and j != c:
+                    r_ = math.hypot(Q[j][0] - Q[k][0], Q[j][1] - Q[k][1])
+                    best = min(((Q[k][0] + ux / L_ * r_ + dx_, Q[k][1] + uy / L_ * r_ + dy_)
+                                for dx_ in (-1, 0, 1) for dy_ in (-1, 0, 1)),
+                               key=lambda h: abs(math.atan2(round(h[1]) - Q[k][1], round(h[0]) - Q[k][0]) - math.atan2(uy, ux)))
+                    Q[j][0], Q[j][1] = round(best[0]), round(best[1])
+    return [[tuple(q) for q in Q]]
+
+
+def cross_ends(g, v, out, w, rep):
+    """Owner round 8, item 3 ("the top left and bottom right ends get longer and causes visual imbalance"). Towards
+    the Bold the x's and X's thick stroke grows more across than the thin one, and each end's serif hangs off its
+    stroke's outer edge, so the thick stroke's two ends (top left, bottom right) reached 20 to 25 units further out
+    than the thin one's at 700, where the seven references stay within -6 to +4 (build/weightscale). The ends grow
+    alike when the letter turns about its crossing, both strokes the same way, so the openings between the ends stay:
+      x (two whole strokes crossing, `crossing_openings`): after the engine, the two top arms move level one way and
+        the two bottom arms the other, each whole (`cross_shear`); each stroke's edges come back to the engine's
+        thickness and the crossing's corners are where the edge lines meet. Turning the thick stroke inside the engine
+        was tried and refused: the serif-end openings are held on the knots, so the thick stroke's inner bracket ran
+        back under its serif (an S in the bracket at 700).
+      X (four arms meeting at the crossing, each a stroke of its own): every arm turns the same way about its corners at
+        the crossing (`arm_turn` in slant_lines), solved by halving.
+    The four ends' mean growth and the openings stay the engine's. Kept only if the master is sound and nothing falls
+    back. Returns (out, width, report, note)."""
+    R = glyph_contours(g)
+
+    def run(**kw):
+        o_, w_, r_ = glyph_bold(g, dict(v, **kw))
+        gr_ = end_growth(R, o_)
+        return o_, w_, r_, gr_, (gr_[0] + gr_[3] - gr_[1] - gr_[2]) / 2
+
+    g0 = end_growth(R, out)
+    e0 = (g0[0] + g0[3] - g0[1] - g0[2]) / 2
+    mean0 = sum(g0) / 4
+    if abs(e0) <= 2 or rep.get("fallback"):
+        return out, w, rep, f"left (thick ends {e0:+.1f} past the thin)"
+
+    def solve(key, lo, hi, **kw):
+        """The turn in [lo, hi] at which the thick and thin ends grow alike (e crosses 0), by halving."""
+        a, b = run(**{key: lo}, **kw), run(**{key: hi}, **kw)
+        if a[4] * b[4] > 0:
+            return None
+        for _ in range(14):
+            mid = (lo + hi) / 2
+            m_ = run(**{key: mid}, **kw)
+            if (m_[4] > 0) == (a[4] > 0):
+                lo, a = mid, m_
+            else:
+                hi, b = mid, m_
+        best = min((a, lo), (b, hi), key=lambda z: abs(z[0][4]))
+        return best[0] + (best[1],)
+    if _cross_frame(R[0]) if len(R) == 1 else None:
+        # the shear that brings the thick and the thin ends together (e falls 2 units per unit of shear), then the
+        # nearest whole shear that leaves a sound master
+        tries = []
+        s0 = e0 / 2
+        for ds in (0, 1, -1, 2, -2):
+            M_ = cross_shear(R, out, round(s0) + ds)
+            if M_ is None:
+                continue
+            gr_ = end_growth(R, M_)
+            e_ = (gr_[0] + gr_[3] - gr_[1] - gr_[2]) / 2
+            tries.append((bool(sound(R, M_)), abs(e_), round(s0) + ds, M_, gr_, e_))
+        if not tries:
+            return out, w, rep, "not a crossing of two strokes; left"
+        bad_, _a, sh_, o_, gr_, e_ = min(tries, key=lambda z: (z[0], z[1]))
+        if bad_:
+            return out, w, rep, f"no shear near {s0:+.1f} is sound; left"
+        xs0, xs1 = [q[0] for q in out[0] if q[2] is not None], [q[0] for q in o_[0] if q[2] is not None]
+        dl_ = min(xs1) - min(xs0)                                # the left side bearing stays, the advance follows
+        o_ = [[(q[0] - dl_,) + tuple(q[1:]) for q in P_] for P_ in o_]
+        w_ = w - (max(xs0) - min(xs0)) + (max(xs1) - min(xs1))
+        r_ = rep
+        kw_ = f"top arms {sh_:+d}, bottom arms {-sh_:+d}"
+    else:
+        r_ = solve("arm_turn", -0.02, 0.06)
+        if r_ is None:
+            return out, w, rep, "no turn balances it; left"
+        o_, w_, r_, gr_, e_, t_ = r_
+        kw_ = f"arms turned {math.degrees(t_):.2f} degrees about the crossing"
+    if sound(R, o_) or r_.get("fallback"):
+        return out, w, rep, f"{kw_}: not sound ({(sound(R, o_) or [r_.get('fallback')])[0]}); left"
+    return o_, w_, r_, (f"{kw_}; ends TL TR BL BR {', '.join(f'{x:+.1f}' for x in g0)} > "
+                        f"{', '.join(f'{x:+.1f}' for x in gr_)} (mean {mean0:+.1f} > {sum(gr_) / 4:+.1f})")
 
 
 def crossing_openings(strokes, adj, X, Y, moved_to, opens, v):
@@ -3326,6 +3539,9 @@ def bold_font(reg, stem=STEM, **over):
         if not g.contours:
             continue
         out, w, rep = glyph_bold(g, v)
+        if g.name in CROSS_ENDS and g.name not in signs and v["f"] > 0:   # owner round 8: x X, the four ends alike
+            out, w, rep, ce_ = cross_ends(g, v, out, w, rep)
+            notes.append(f"{g.name}: crossing ends {ce_}")
         out, rep = kin_parts(reg, g, out, rep, v)              # 0.81: a comma wherever it recurs
         if g.name in signs:                                    # each arm its centreline and width profile times f
             if law is None:
