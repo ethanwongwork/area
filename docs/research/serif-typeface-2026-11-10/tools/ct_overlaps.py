@@ -30,8 +30,11 @@ def main():
     os.makedirs(out, exist_ok=True)
     vf = os.path.join(S, "build", "AreaSerif[wght].ttf")
     names = sorted(OV.struck_names(ufoLib2.Font.open(os.path.join(S, "build", "AreaSerif-Regular.ufo"))))
+    if os.environ.get("AREA_CT_NAMES"):                       # 0.81 (owner round): any glyphs, by the font's names
+        names = os.environ["AREA_CT_NAMES"].split(",")
+    weights = tuple(int(w) for w in os.environ.get("AREA_CT_WEIGHTS", "300,400,700").split(","))
     rows = []
-    for w in (300, 400, 700):
+    for w in weights:
         f = instantiateVariableFont(TTFont(vf), {"wght": w})
         removeOverlaps(f)
         flat = os.path.join(out, f"flat-{w}.ttf")
@@ -51,7 +54,7 @@ def main():
         fh.writelines(f"{n}\t{w}\t{px}\t{l}\t{d}\n" for n, w, px, l, d in rows)
     worst_l = max(rows, key=lambda r: r[3])
     worst_d = max(rows, key=lambda r: r[4])
-    print(f"CoreText, {len(names)} struck glyphs x 3 weights x 3 sizes: lighter at most {worst_l[3]}/255 ({worst_l[:3]}), "
+    print(f"CoreText, {len(names)} glyphs x {len(weights)} weights x 3 sizes: lighter at most {worst_l[3]}/255 ({worst_l[:3]}), "
           f"darker at most {worst_d[4]}/255 ({worst_d[:3]})")
     print("over 16 lighter:", sorted({(r[0], r[1], r[2]) for r in rows if r[3] > 16})[:40])
 

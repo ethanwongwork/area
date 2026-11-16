@@ -528,6 +528,16 @@ def _held(q, adj, pinned):
     return pl_ and nl and q[1] in pinned and pv[1] != q[1] and nx[1] != q[1]
 
 
+LEAN_KEEP = 0.2                 # radians: a slanted stroke whose anchors would turn it further keeps the Regular's lean
+# 0.81 (owner, 15 November: letters "start to lean as weight rises"). A thick diagonal keeps its lean within the
+# references' own change from Regular to Bold: x's thick stroke 33.8 > 34.8 degrees (Georgia Pro), 34.4 > 32.2
+# (Source Serif 4), at most 2.2 degrees (0.038 rad); Area's turned 36.4 > 42.7 as the anchors placed by the x knot map
+# pulled its foot out, and the x leaned (top half's ink centre against the bottom's, -0.124 of its height from 400 to
+# 700; the references -0.018 and -0.037). Thin diagonals turn more in the references (Georgia Pro's x 5.1 degrees)
+# and keep LEAN_KEEP. tools: audit_lean.py, build/scratch4/ang.py (numbers only).
+LEAN_KEEP_THICK = 0.038
+
+
 def slant_lines(strokes, pos, adj, flats, v, pinned=()):
     """Each stroke's two edge lines in the Bold. pos: where the upright solve put every node. Anchors are the ends
     that stay: a node where the edge runs into a curve (a serif's bracket) and a flat's end; where a stroke has none
@@ -564,7 +574,8 @@ def slant_lines(strokes, pos, adj, flats, v, pinned=()):
             sol = np.linalg.lstsq(np.array(A), np.array(bvec), rcond=None)[0]
             if fit_m:
                 m, c = float(sol[0]), float(sol[1])
-                if abs(math.atan(m) - math.atan(st["m"])) > 0.2:    # the ends that stay do not fix a lean this far
+                if abs(math.atan(m) - math.atan(st["m"])) > (LEAN_KEEP_THICK if st["t"] >= 64 else LEAN_KEEP):
+                    # the ends that stay do not fix a lean this far
                     fit_m, m = False, st["m"]                       # from the Regular's (12 degrees): keep its lean
             else:
                 c = float(sol[0])
