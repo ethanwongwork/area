@@ -423,7 +423,10 @@ def diag_target(t, v):
     f = v["f"]
     if v.get("sub") == "small sign":
         return t * sign_ratio(v)
-    if v.get("sub") == "sign" and 50 <= t <= 55:
+    if v.get("sub") == "sign" and (50 <= t <= 55 or f < 0):
+        # axis round 2: towards the Light every slanted stroke of a sign takes the sign law, as its plain strokes do
+        # (✓'s 66-unit stroke was read as a letter's thick diagonal, which loses a fixed 22 units: 0.666 of 400 at
+        # 300; ⌦ and ⌫ 0.606, against the stem's 0.705)
         return t * (1 + (SIGN - 1) * f)
     if t >= 64:
         return t + (DIAG["thick_lc"] if t < 80 else DIAG["thick_cap"]) * f
