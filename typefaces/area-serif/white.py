@@ -764,7 +764,7 @@ def taper_law(th_r, laws):
     return np.interp(th_r, xs, ys)
 
 
-def taper_readings(contours, n_seg=6):
+def taper_readings(contours, n_seg=6, close=False):
     """Across-the-stroke length at every station (audit_rays' ray, its junction and facing filters, and its rule that
     a ray longer than twice the glyph's mean stroke runs along a stroke): (lengths, far edge ids, where). 0.81 (close):
     read as the integration round read (audit_rays.rays(close=False)): the audit's new end zones and return ray
@@ -772,7 +772,7 @@ def taper_readings(contours, n_seg=6):
     then dipped between their mid master and the Bold, 37 > 35 at 675)."""
     import audit_rays as AR
     polys, where = _stations(contours, n_seg)
-    th, eid = AR.rays(polys, close=False)              # 0.81 (close): the integration round's reading
+    th, eid = AR.rays(polys, close=close)              # 0.81 (close): the integration round's reading
     ms = AR.mean_stroke(polys)
     th = np.where(th <= 2 * ms, th, np.nan)
     return th, eid, where
@@ -890,7 +890,10 @@ def _straight_nodes(R, N, seg_of, eR, turns0, thR, stem_ratio):
     crossing. Never within 4 units of the straight's other end, nor past half the curve's chord.
     Returns contours and [(contour, node, slide, worst before, worst after)]."""
     import axis_exact as X
-    thN = taper_readings(N)[0]
+    # axis round 3: read as audit_rays reads (its end zones, soft crotches and return ray): round 2 read as the taper
+    # law does and slid ʋ's counter node 124 up its straight for places the audit does not take for a stroke
+    thR = taper_readings(R, close=True)[0]
+    thN = taper_readings(N, close=True)[0]
     want = thR * stem_ratio                                    # no part thins faster than the stem (audit_rays' law)
     bad = np.where(~np.isnan(thR) & (np.nan_to_num(thN, nan=1e9) < want * (1 - NODE_JND) - 1.0))[0]
     if not len(bad):
@@ -951,14 +954,18 @@ def _straight_nodes(R, N, seg_of, eR, turns0, thR, stem_ratio):
         def worst(M):
             # a place whose ray no longer leaves (nan) counts as not held; one leaving through the next piece of the
             # same edge (the node moved along it) is read as it is
-            th_ = taper_readings(M)[0][ks]
+            th_ = taper_readings(M, close=True)[0][ks]
             w_ = np.nan_to_num(want[ks], nan=1e9)
             return float(np.max(np.where(np.isnan(th_), 1.0, (w_ - th_) / w_)))
         w0 = worst(N)
         if w0 <= NODE_JND:
             continue                                           # held already (by an earlier slide)
         best = None
-        for s in sorted(range(-int(chord * 0.5), int(min(L_ - 4, chord)) + 1, 2), key=abs):
+        # axis round 3: a slide no longer than 1.5 times the Regular's stroke at the places it holds (SLIDE_REACH): ʋ's
+        # counter node went 124 up its 277-unit straight for a place 5.5% under the stem's law, a long move for a
+        # small gain, and its counter's straight side read much shorter than the Regular's
+        reach = SLIDE_REACH * float(np.nanmax(thR[ks]))
+        for s in sorted(range(-int(min(chord * 0.5, reach)), int(min(L_ - 4, chord, reach)) + 1, 2), key=abs):
             if s == 0:
                 continue
             M = moved(s)
@@ -977,6 +984,7 @@ def _straight_nodes(R, N, seg_of, eR, turns0, thR, stem_ratio):
     return N, log
 
 
+SLIDE_REACH = 1.5          # axis round 3: a straight-node slide reaches at most this many times the Regular's stroke
 NODE_JND = 0.03            # a place left short of its law by more than this share of it (the just-noticeable
                            # difference in weight, audit_rays' JND) after the handles moves its nodes
 
