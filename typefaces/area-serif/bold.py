@@ -390,6 +390,11 @@ def y_target(t, straight, v):
 # The opening between two slanted strokes gives up a share of what the two gain across: Georgia Pro 0.09, 0.16,
 # 0.01, 0.03 (it widens the letter instead); Serrif 0.38, 0.39, 0.53, 0.43. Mean of the eight.
 DIAG_INWARD = 0.25
+# Owner round 3: two straight diagonals that cross and keep the Regular's angle (LEAN_KEEP_THICK) thicken about their
+# centrelines, so each opening between them gives up half of what the two gain across: 0.5. The references' x and X
+# measured 400 to 700 at 0.22 and 0.78 of the height: Source Serif 4 0.39 to 0.48, Georgia Pro 0.10 to 0.20 (Georgia
+# flattens its strokes instead and widens the x 16%, Source 5%). The audit's opening target follows this rule.
+DIAG_INWARD_CROSS = 0.5
 # The flat where two slanted strokes meet outside (v's foot, A's head) is parts.VERTEX of its class's stem in the
 # Regular (0.42: 33 and 36). The Bold keeps that rule on its own stems: 59 and 62. (The references' Bold flats
 # are 0.57 and 0.39 of their stems on v, 0.54 and 0.54 on V; their Regulars 0.44 and 0.50.)
@@ -509,7 +514,13 @@ def slant_strokes(dg):
         st["t"] = sum(st["ts"]) / len(st["ts"])
         es = st["L"] + st["R"]
         st["m"] = sum((e[1][0] - e[0][0]) / (e[1][1] - e[0][1]) for e in es) / len(es)
-    return list(strokes.values())
+    out = list(strokes.values())
+    # owner round 3: two straight diagonals that cut each other's edges in two (x, X) cross; a straight stroke cut by
+    # a curve (the ampersand's arm) or by a bar is not this part
+    split = [st for st in out if len(st["L"]) > 1 or len(st["R"]) > 1]
+    for st in out:
+        st["cross"] = len(split) >= 2 and st in split
+    return out
 
 
 def _outer_flat(q, nx, adj, polys_):
@@ -547,6 +558,12 @@ LEAN_KEEP = 0.2                 # radians: a slanted stroke whose anchors would 
 # audit targets (x's openings 193 and 166 against 219.5 and 196.5; v's and w's serif uprights 52 and 50 against 54 and
 # 53; y's and Y's openings by 5 and 2) and the ampersand's crossing stroke fell 52 > 15 at 700. Both stay off until the
 # opening rule and the ampersand's crossing take the kept edge too.
+# Owner round 3: tried on crossing straight diagonals only (st["cross"]: x, X), with their openings by
+# DIAG_INWARD_CROSS and the two-curve bracket from the kept edge. The engine places a slanted stroke's knots by the
+# x map and its edges by lines afterwards, so an opening measured across the ink (audit_bold) is not the knots' gap
+# the constraint sets: at 0.25 the x's openings came out 193 and 166 against 219.5 and 196.5, at 0.5 182 and 154
+# against 197.9 and 174.9. The opening has to be constrained on the lines, not the knots, before the angle can be
+# kept; off until then.
 LEAN_KEEP_THICK = None          # tried: 0.038
 LEAN_ALL = False
 BRACKET_FROM_EDGE = False
@@ -588,7 +605,7 @@ def slant_lines(strokes, pos, adj, flats, v, pinned=()):
             sol = np.linalg.lstsq(np.array(A), np.array(bvec), rcond=None)[0]
             if fit_m:
                 m, c = float(sol[0]), float(sol[1])
-                crossed = len(st["L"]) > 1 or len(st["R"]) > 1    # an edge cut in two: a stroke crossing another
+                crossed = st.get("cross")                       # two straight diagonals crossing (x, X)
                 keep_ = LEAN_KEEP_THICK if (st["t"] >= 64 and (crossed or LEAN_ALL) and LEAN_KEEP_THICK) else LEAN_KEEP
                 if abs(math.atan(m) - math.atan(st["m"])) > keep_:
                     # the ends that stay do not fix a lean this far
@@ -649,7 +666,7 @@ def serif_on_slant(strokes, adj, contours, X, Y, moved_to, v):
                         o = P[on[k]][:2]
                     else:
                         o = None
-                    if mids and not BRACKET_FROM_EDGE:
+                    if mids and not (BRACKET_FROM_EDGE and st.get("cross")):
                         continue
                     if mids:
                         # the node between keeps its offset from the edge's line, the Regular's times the foot rule
@@ -1544,7 +1561,8 @@ def bold(contours, width, v, name="", hints=None):
         lean = lambda st: math.sqrt(1 + st["m"] ** 2)          # noqa: E731
         hg = [(diag_target(st["t"], v) - st["t"]) * lean(st) for st in strokes]
         thick, thin = [g for g, st in zip(hg, strokes) if st["t"] >= 64], [g for g, st in zip(hg, strokes) if st["t"] < 64]
-        lose = DIAG_INWARD * (sum(thick) / max(1, len(thick)) + sum(thin) / max(1, len(thin)))
+        share_ = DIAG_INWARD_CROSS if (LEAN_KEEP_THICK and any(st.get("cross") for st in strokes)) else DIAG_INWARD
+        lose = share_ * (sum(thick) / max(1, len(thick)) + sum(thin) / max(1, len(thin)))
         edges = {k for key in xs for k in key if 35 <= key[1] - key[0] <= 130}
         for (a, b) in xg:                                      # the opening between two slanted strokes (v's top,
             if a not in edges and b not in edges and b - a >= 60:   # A's foot) gives up a share of what they gain
