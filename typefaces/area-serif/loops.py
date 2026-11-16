@@ -881,8 +881,13 @@ def g_loop_master(R, N, laws, yr, rounds=6):
         t, e, _w = WHITE.taper_readings(C)
         ok = ~np.isnan(t0) & ~np.isnan(t) & (e0 == e)
         return int(((t < want * 0.97) & ok).sum())
-    best = (nb, short(M), 0.0, M)
-    if nb:
+    import axis_exact as X_
+    turns0 = len(X_.turns(R, R, N))
+
+    def turns(C):                                                    # no curve may gain a turn on the way
+        return max(0, len(X_.turns(R, R, C)) - turns0)
+    best = (nb + 10 * turns(M), short(M), 0.0, M)
+    if best[0]:
         for s1 in np.arange(0.6, 1.61, 0.05):
             for s2 in np.arange(0.8, 2.21, 0.05):
                 T = [list(C) for C in M]
@@ -893,7 +898,10 @@ def g_loop_master(R, N, laws, yr, rounds=6):
                 f = len(K.report("", T, yr)[0])
                 if f > best[0]:
                     continue
+                f += 10 * turns(T)
+                if f > best[0]:
+                    continue
                 key = (f, short(T), abs(s1 - 1) + abs(s2 - 1))
                 if key < best[:3]:
                     best = key + (T,)
-    return best[3], before, best[0], best[1]
+    return best[3], before, best[0], best[1]          # faults (a gained turn counts ten), places short
