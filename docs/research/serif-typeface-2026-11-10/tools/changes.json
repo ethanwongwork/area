@@ -94,9 +94,14 @@
     "text": "No glyph changed. Checked that the build is repeatable: two builds from the same drawings come out identical. The small moves of the asterisk, daggers and quotes between rounds follow the white-space rule, which reads the letters' counters, so they shift a unit or so when a letter such as the 9 changes. Each weight's kerning was confirmed fitted again for the changed letters (x, s, S, c, e)."
    },
    {
+    "glyphs": "Axis round",
+    "chars": "ƘƳⱲⱳƴƒ",
+    "text": "The hooks that end in a ball (K, Y, W, w and y with a hook, and the florin) now keep their ball round and full at every weight: their balls are drawn turned a little off upright, and the weight engine now recognises a ball at any angle, so it grows and shrinks them as it does every other ball. In the Light their necks no longer thin faster than the stems; in the Bold the K with a hook no longer thins where its arm meets the leg. The same reading reaches 22 other letters whose hooks or tails end in a ball (ß among them), whose balls now follow the same rule. Figure 22 shows them before and after at four weights."
+   },
+   {
     "glyphs": "Open",
     "chars": "",
-    "text": "Not finished. G, X, z, a, g and w still lean a little further than the references at the Bold. The x at the Bold is slightly narrower than the n's growth would ask. Places that thin in the Bold (found by the same-place check): ®'s ring by R's leg, @'s a, K with hook, ₵, t with retroflex hook, the footless 1's flag; ⌦ ⌫ ✓ thin faster than other signs in the Light; junction places in Ə ɂ & $ ð œ and ɽ's ball are still flagged by the second check; the hooks ending in a ball (ⱳ ƴ Ƙ Ⱳ Ƴ ɲ ƒ) thin a little faster than the stems in the Light. Ⱥ and the T with a diagonal stroke wait for your decision (figure 9)."
+    "text": "Not finished. G, X, z, a, g and w still lean a little further than the references at the Bold. The x at the Bold is slightly narrower than the n's growth would ask. Places that thin in the Bold (found by the same-place check): ®'s ring by R's leg, @'s a, ₵ (it waits for your choice: build it from Area's c or C), t with retroflex hook, the footless 1's flag, the ogonek by a unit; in the Light the y with a hook's tail and the n with a left hook; ⌦ ⌫ ✓ thin faster than other signs in the Light; junction places in Ə ð œ & $ ® ɂ and ʕ's bowl are still flagged by the second check, each measured a second way and really thinning. Ⱥ and the T with a diagonal stroke wait for your decision (figure 9)."
    }
   ]
  },

@@ -668,3 +668,40 @@ e 0. 6 and 9 have no fitted pairs (figures are kerned only by the collision pass
   drawn and measured a second way this round; no reading rule was changed.
 
 Figure `21-axis.png`: those glyphs at 300, 400, 550, 700 on the final build. qa.py: as round 6 (`build/qa-081.log`).
+
+## Axis round (16 November 2026)
+
+The axis list of round 7, worked in its order. The Regular is unchanged (0 glyphs differ in the Regular UFO).
+
+| # | Item | Rule | Before > after |
+|---|---|---|---|
+| 62 | A. Tilted balls (Ƙ Ⱳ Ƴ ⱳ ƴ ƒ) | A ball at any tilt (`bold.tilted_balls`, `balls(tilted=True)` in the engine, letters only): three nodes joined by two curves, the chord between the outer two 70 to 130 long (`TILT_D_MIN`: the smallest ball the upright reading finds on a full-size letter, eopen's 71; x's and Y's bracket rounds, 56 to 61, are not balls) and within 25 degrees of an axis, the arc's far point 0.40 to 0.70 of the chord out and within 0.12 of its middle, ink all along the chord (the outside of a curved stroke is a half round too, but its chord crosses the counter); one reading per ball. The engine's existing ball spans then apply the ball law (1 + 0.40 f) in both masters. Counted before building: 30 balls on 28 glyphs | audit_rays at 300 (ratio to 400, floor 0.684): Ƙ 0.588 > 0.807, Ⱳ 0.646 > 0.814, Ƴ 0.603 > 0.820, ⱳ 0.642 > 0.819, ƴ 0.638 > 0.824, ƒ 0.577 > 0.734; each read a second way (largest disc tangent at the place, rasterised at 4 px a unit): Ƙ 38.5/64.5 > 52.0/64.0. All six pass audit_rays at every 25 units from 300 to 700. curvecheck clean in both masters |
+| 62a | ɲ | Not j's part point for point (ball 93 across where j's is 83; `tail_kind`'s signature differs by up to 21 units). Tried: j's tail kind given to every tail with round_tail's structure, upright straights, the lowercase stem and j's depth (ɲ and ɠ): ɲ's Light failure moved to the outside by the stem (0.669 at (190, -64)), round_tail's inside residual 23 (j's 0.000), and ɠ's Light tail fell to 18 across where it was 38. Tried: letting a smooth node between a straight and a curve slide along its straight in `keep_taper`'s place moves: ɲ unchanged, 93 Light glyphs moved (g by 25). Both reverted | blocked: 32.3 at 300 where 400 has 52.2 at (105, -138), 0.619 against 0.684 |
+| 63 | B. Khook (Bold), tretroflexhook, yhook (Light) | No new rule: item A's reading | Khook at 700: 49 > 38 fails > passes. tretroflexhook (ʈ, no ball read) 41 > 39 at 700, unchanged. yhook Light at 300: 44 > 21 became 44 > 15: its descender's ball (read now, 107 across) grows by the ball law in the Light where the engine had shrunk it as a stroke, and the tail's inner straight's lower node (260, -50; a smooth node between a straight and a curve) is moved by no Light rule while the outside straight moves 29 left: the tail between them falls to 15. keep_taper moves only two-handled nodes; the slide above took it to 18 only |
+| 64 | Reading: a point drawn with a flat (`audit_axis.points_of`) | A straight under 30 units between two corners whose neighbouring straights meet under 60 degrees with the ink between them is a pointed end at its middle (a vertex's outside flat, a spur's or guillemet's tip). Found when item A's build moved ⱳ's middle apex a unit: a level cut 16 units under its 8-unit flat, across the two outsides, read 19.6 at 300; on the round 7 masters the same cut was missed because the scan line met a node exactly. 26 glyphs gain such a point; on the round 7 masters no audit_axis result changed (16 thin rows before and after) | ⱳ Light thin 31 > 20: fails > passes |
+| 65 | C. one.ss01, cedi, ogonek, registered, at | None landed | see below |
+| 66 | D. junction readings | Each place drawn and measured a second way: the ink really thins (the disc tangent at the place agrees with the ray within 1.5 units at every weight, @ at 700 within 9). No reading rule changed for them; no part rule written | see below |
+
+C, each with its number (audit_axis's thinnest cut at 700 against the Regular at the same place, `thinat.py` reading):
+- one.ss01: 43.2 > 36.3, across the flag near its tip ((101, 604) to (85, 636)). The engine maps the flag's underside handle (104, 604) to (76, 593), 28 left, by the stem's knots, where the tip moves 5 and the stem's edge 18: the underside rises into the flag. The figure 1's flag has no part rule in the masters, and keep_taper towards the Bold moves handle lengths only (0.6 to 1.6). Blocked: no flag construction for the figure.
+- cedi: 46.5 > 39.4 where the stroke crosses the C ((241, 547) to (243, 596)). Built as overlapping parts it needs a letter (`overlap.build_layer` takes the letter's own contours from a glyph); cedi's C is Libre Baskerville's own drawing, 416 wide from 91 to 602, which is neither Area's c (0 to 530) nor C (cap 721), and no glyph may be scaled to make another. Choosing c or C changes the Regular's design: left for the owner.
+- ogonek, ogonekcomb: 19.7 > 18.7 at 700 (22 > 21 rounded, at 675), its top cut at (177, 1) to (177, 21). Not attempted beyond the reading.
+- registered: 40.5 > 31.9, the ring by R's leg ((760, 307) to (795, 286)): the ring's inside right extreme is pushed out and down where R's leg foot comes near it at the Bold. A ring is a ring (no rule keeps it so against keep_apart). Not attempted.
+- at: 40.6 > 34.2 at 700 ((493, 108) to (442, 124)); in the Light 47.4 where 400 has 71.1 at (641, 143) (0.667). Not attempted.
+
+D, measured a second way (`second.py`: the ray, and the largest disc tangent at the place on the instance rasterised at 4 px a unit; these glyphs, but ɂ and ɽ, are unchanged this round; rays at 300 400 500 600 700):
+- Ə (410, 224): 79.0/80.0, 67.0/68.0, 62.0/63.0, 56.0/57.0, 48.0/49.0: the place slides 40 units along the bar towards the bowl as the weight rises and the ink there thins.
+- ɂ (224, 254): 116.4, 97.2, 88.8, 76.7, 61.2 before; 107.3, 97.2, 88.1 (550), 74.3 (700) after item A (its ball now read): better, still failing at the default stops; at every 25 units it passes.
+- & (594, 349): 57.8, 48.8, 42.9, 37.6, 30.8 (disc 57.5 to 31.0). ® (760, 309): 32.6, 40.3, 38.8, 35.1, 32.3. $ (207, 4): 59.7, 50.9, 50.8, 52.9, 57.3. ð (279, 697): 54.9, 50.4, 51.7, 54.0, 56.5. œ (542, 452): 73.1, 58.2, 70.5, 78.1, 76.4. ⌦ (539, 432): 33.8, 55.8, 71.8, 89.9, 113.4 (⌫ its mirror). ✓ (341, 400): 43.7, 65.6, 82.0, 100.8, 124.2. @ (510, 170): 47.5, 32.3, 34.2, 35.2, 36.1.
+- ɽ: passes after item A (its ball now read).
+- New on the list: ʕ, thinner at 600 than at 500 (91.7 > 86.5 at (135, 492)), the bowl's lower stroke into the stem. The place was not kept on the round 7 build; there it thinned further (94.8 > 69.1 from 400 to 700, against 94.8 > 78.9 now). A part with no rule (an extended letter's first drawing).
+
+Every glyph that changed (Light and Bold masters; the Regular none): Ƙ Ⱳ Ƴ ⱳ ƴ ƒ, and through the same part Ƈ Ɛ Ƒ Ɠ Ɂ Ɲ Ɔ Ɋ Ɽ Ʈ ƈ ʃ ß ɠ ʔ ʕ ɂ ɔ ɽ s_p ʋ (21; their ball now follows the ball law; ʼ is read but does not move). Advances changed on most of them (Bold up to +62 on ƒ, Light up to -24).
+
+Final (`build/qa-081.log`, one clean `qa.py` build; the per-master kerning refit, `AREA_KERN_FIT=1 build.py`, left
+fit_kerning.json unchanged): audit_axis Bold 7 thin (at, cedi, ogonek, ogonekcomb, one.ss01, registered,
+tretroflexhook; Khook cured), Light 1 (yhook, 44 > 15); audit_rays 13 glyphs (Ə ð ʕ ɂ ɲ œ @ & ® $ ⌦ ⌫ ✓; Ƙ Ⱳ Ƴ ⱳ ƴ ƒ ɽ
+off the list, ʕ on), 474 glyphs and 27,270 places (27,276 before: the moved hooks' places). Every other check passes,
+the curvature checks on both masters included. At every 25 units from 300 to 700: audit_rays 10 glyphs (Ə ɲ œ @ & ® $
+⌦ ⌫ ✓; 27,118 places), audit_kern passes. Figure `22-axis.png`; pages regenerated with an "Axis round" section on
+top (checked at 1024 and 390 px: no broken image, no horizontal scroll on the evaluation page).

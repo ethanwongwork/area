@@ -59,6 +59,18 @@ def img_tag(path, width=1400):
 
 # 0.81 (owner round, 15 November): the owner's three points first, each figure open under a two-line caption: what
 # changed, then what is still open
+AXIS = [
+    ("22-axis.png", "Axis round: the hooks that end in a ball (K, Y, W, w and y with a hook, and the florin), then other letters "
+     "whose hooks or tails end in a ball, at 300, 400, 550 and 700, before (round 7) over after. Their balls are drawn turned a "
+     "little off upright; the weight engine now recognises a ball at any angle, so they grow and shrink as every other ball "
+     "does: in the Light the neck before the ball keeps 0.81 of its 400 thickness where it kept 0.59, and the Bold K with a "
+     "hook no longer thins where its arm meets the leg.",
+     "Open: the n with a left hook still thins in the Light (0.62 of 400); the y with a hook's tail thins more in the Light "
+     "(15 units, was 21) now that its ball keeps its size; ʕ's bowl stroke into its stem thins at the Bold (newly caught); "
+     "₵ waits for your choice of letter (Area's c or C); the 1's flag, ®, @, the ogonek and the junction places are "
+     "measured, not fixed."),
+]
+
 STAGE7 = [
     ("21-axis.png", "Owner round 7: the glyphs the weight checks still flag, at 300, 400, 550 and 700, large (none changed this "
      "round). The build is repeatable: two builds from the same inputs come out identical, outlines and kerning; the small "
@@ -146,6 +158,15 @@ OWNER = [
 ]
 
 
+def axis_section(figdir):
+    figs = "".join(f"<figure style='margin:18px 0'><figcaption style='font:15px/1.45 system-ui;margin:0 0 6px'>"
+                   f"<div style='font-weight:600'>{html.escape(a)}</div><div>{html.escape(b)}</div></figcaption>"
+                   f"{img_tag(os.path.join(figdir, f))}</figure>"
+                   for f, a, b in AXIS if os.path.exists(os.path.join(figdir, f)))
+    # non-ASCII as character references: the evaluation page is a fragment with no charset of its own
+    return (f"<h2 style='font-size:22px'>Axis round: balls at any angle</h2>{figs}").encode("ascii", "xmlcharrefreplace").decode() if figs else ""
+
+
 def stage7_section(figdir):
     figs = "".join(f"<figure style='margin:18px 0'><figcaption style='font:15px/1.45 system-ui;margin:0 0 6px'>"
                    f"<div style='font-weight:600'>{html.escape(a)}</div><div>{html.escape(b)}</div></figcaption>"
@@ -209,7 +230,7 @@ def section(figdir):
                    f"{html.escape(t)}</figcaption>{img_tag(os.path.join(figdir, f))}</figure>"
                    for f, t in TITLES if os.path.exists(os.path.join(figdir, f)))
     return (f"<section id='changed-081' style='max-width:1400px;margin:0 auto;padding:16px;font:15px/1.5 system-ui;"
-            f"color:inherit'>{stage7_section(figdir)}{stage6_section(figdir)}{stage5_section(figdir)}{stage4_section(figdir)}{stage3_section(figdir)}{stage2_section(figdir)}{owner_section(figdir)}<h2 style='font-size:22px'>What changed in 0.81 ({html.escape(entry['date'])})</h2>"
+            f"color:inherit'>{axis_section(figdir)}{stage7_section(figdir)}{stage6_section(figdir)}{stage5_section(figdir)}{stage4_section(figdir)}{stage3_section(figdir)}{stage2_section(figdir)}{owner_section(figdir)}<h2 style='font-size:22px'>What changed in 0.81 ({html.escape(entry['date'])})</h2>"
             f"<ul style='padding-left:20px'>{items}</ul><details><summary style='cursor:pointer;font-weight:600'>"
             f"The figures ({sum(1 for f, _ in TITLES if os.path.exists(os.path.join(figdir, f)))})</summary>{figs}"
             f"</details></section>")

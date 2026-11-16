@@ -116,6 +116,7 @@ the fastest change (under 0.5 units of thickness per unit travelled on a branch,
 | An S's two bowls (0.81, owner round 5) | The top bowl keeps its width's share of the bottom bowl's: the top terminal moves level | S s | `bold.s_terminal`, `S_SHAPES` | `audit_lean.py`, quarter shares |
 | Open tail (0.81, owner round 5) | A lower stroke from a round stroke to a terminal grows by the mean of the round stroke's and the tip's ratios | c e | `bold.open_tail`, `HINTS` | references' 1.58 to 1.75 |
 | g's loop in a master (0.81, owner round 5) | Its extremes from the centreline by the taper law, the link's curve by the Regular's shares, solved with its other edge | g (Light) | `loops.g_loop_master` | curvecheck on the Light |
+| A ball at any tilt (0.81, axis round) | A ball is read by what makes it one, not by its alignment: three nodes joined by two curves, the chord between the outer two 70 to 130 long and within 25 degrees of an axis, the arc's far point 0.40 to 0.70 of the chord out and within 0.12 of its middle, ink all along the chord; one reading per ball (the rounder of two arcs). Then the ball law (1 + 0.40 f) reaches it in both masters, as the upright balls. Letters only (signs and accents keep their own laws) | Ƙ Ⱳ Ƴ ⱳ ƴ ƒ and 22 more hooks and tails with a ball (Ƈ Ɠ Ƒ Ɲ Ɋ Ɽ Ʈ Ɂ ɂ ʔ ʕ ƈ ɠ ʃ ɽ ʋ Ɛ ɔ Ɔ ß ʼ, s_p) | `bold.tilted_balls`, `balls(tilted=True)` in `bold.bold` | `audit_rays.py` every 25 units; `audit_axis.py`; curvecheck on both masters |
 | Heights | x 520, cap 712, ascender 780; overshoot 530 / -10 lowercase, 721 / -9 capitals and figures | all | `balance.heights` | `audit_serifs` 4, `check.py` |
 
 A part not in this table has no rule yet. Add the row when you write the rule.
@@ -250,6 +251,16 @@ masters match point for point and every weight between them is sound. Read `bold
   Owner round 7: builds are repeatable; signs capped by the white law move when a HOLE_LETTERS letter changes (the law's
   counter median). The IPA hooks' balls are drawn tilted 28 to 30 units across the axis and are not read as balls
   (`bold.balls` accepts 6): a tilted-ball reading is the next step for them.
+  Axis round: the tilted-ball reading landed (`bold.tilted_balls`; Ƙ Ⱳ Ƴ ⱳ ƴ ƒ pass audit_rays every 25 units, Khook's
+  Bold thin cured; 21 more hooks and tails with a ball follow the ball law, ß among them); `audit_axis` reads a point
+  drawn with a flat as a point (ⱳ's apex). Left: ɲ at 300 0.619 of 400 (its tail is not j's point for point; j's
+  rule on it and a slide along straights in keep_taper both tried and reverted); yhook Light 44 > 15 at 300 (its
+  descender ball now grows by the ball law; the tail's inner node between a straight and a curve is moved by no
+  Light rule); ʕ's bowl stroke into the stem thins 94.8 > 78.9 (newly kept by audit_rays; it thinned to 69.1 before);
+  tretroflexhook 41 > 39; one.ss01's flag (no flag rule for the figure; its underside handle rides the stem's knots
+  28 left); cedi (to be struck it needs a letter: its C matches neither Area's c nor C, the owner's choice); ogonek
+  1 unit; ® ring by R's leg; @ at the Bold and Light; the junction places Ə ɂ & ® $ ð œ and ⌦ ⌫ ✓, each measured a
+  second way (a disc tangent at the place agrees with the ray: the ink really thins; no part rule yet).
 
 ## What is still outside the system
 
@@ -342,5 +353,11 @@ Say this in every report until it is closed:
   22.6 > 19.8 > 23.6 at 400, 425, 450; at every fixed distance from its end it thickens). End corners are found on
   the outline cut every unit (`END_STEP`), not on the flattening's vertices. A line is cut at the same parameters as a
   curve in `audit_rays` (a straight stroke's only places were its corners: 58 glyphs went unread).
+- **A point drawn with a flat is a point** (0.81, axis round). `audit_axis.points_of` takes a straight under 30 units
+  between two corners, its two neighbouring straights meeting under 60 degrees with the ink between them (a vertex's
+  outside flat, a spur's or a guillemet's tip), as a pointed end at the flat's middle. ⱳ's middle apex read 19.6
+  across its two outsides 16 units under its flat at 300, a cut across a vertex that a scan line found or missed by
+  where it met a node (the two sides meet at 40 degrees, FACE_DEG's margin). 26 glyphs gain such a point; on the round
+  7 masters no result changed.
 - These are reading rules, not tolerances: each was checked on the glyph that raised it by drawing the ray or cut
   (`build/figures/081/`), and the places they leave out are counted in the audit's own summary line.
