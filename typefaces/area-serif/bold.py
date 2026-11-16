@@ -400,7 +400,13 @@ DIAG_INWARD = 0.25
 # centrelines, so each opening between them gives up half of what the two gain across: 0.5. The references' x and X
 # measured 400 to 700 at 0.22 and 0.78 of the height: Source Serif 4 0.39 to 0.48, Georgia Pro 0.10 to 0.20 (Georgia
 # flattens its strokes instead and widens the x 16%, Source 5%). The audit's opening target follows this rule.
-DIAG_INWARD_CROSS = 0.39
+DIAG_INWARD_CROSS = DIAG_INWARD    # owner round 5: the face's own share (the white law's 0.25) on the serif-end
+#                                    openings; at 0.39 the x leaned -0.054 at 700, at 0.25 -0.045 (references -0.037
+#                                    to -0.018), the audits passing at both
+# Owner round 5: a crossed thick stroke turns this far from the Regular's angle where its ends pull it (radians; the
+# references' x turns +1.0 and -2.2 degrees, Area's engine 6.3)
+CROSS_TURN = 0.0                   # tried 0.006 (x's advance 0.990 of n's growth, lean -0.048) and 0.038 (1.134,
+#                                    -0.080): turning the thick stroke widens the x and leans it; kept at the Regular's
 # The flat where two slanted strokes meet outside (v's foot, A's head) is parts.VERTEX of its class's stem in the
 # Regular (0.42: 33 and 36). The Bold keeps that rule on its own stems: 59 and 62. (The references' Bold flats
 # are 0.57 and 0.39 of their stems on v, 0.54 and 0.54 on V; their Regulars 0.44 and 0.50.)
@@ -582,9 +588,10 @@ LEAN_KEEP = 0.2                 # radians: a slanted stroke whose anchors would 
 # is met the other misses by 22 to 25 (bracket-level 185 and 159 against 207.4 and 184.4 with the serif-level ones
 # met; serif-level 122 against 97.4 with the bracket-level met). Only the bracket's offset from the edge or the
 # serif's reach could separate them, and both are fixed rules. Off.
-LEAN_KEEP_THICK = None          # tried: 0.038
+# Owner round 5: on, the crossing keeping its serif-end openings (crossing_openings)
+LEAN_KEEP_THICK = 0.038
 LEAN_ALL = False
-BRACKET_FROM_EDGE = False
+BRACKET_FROM_EDGE = True
 
 
 def slant_lines(strokes, pos, adj, flats, v, pinned=()):
@@ -627,7 +634,13 @@ def slant_lines(strokes, pos, adj, flats, v, pinned=()):
                 keep_ = LEAN_KEEP_THICK if (st["t"] >= 64 and (crossed or LEAN_ALL) and LEAN_KEEP_THICK) else LEAN_KEEP
                 if abs(math.atan(m) - math.atan(st["m"])) > keep_:
                     # the ends that stay do not fix a lean this far
-                    fit_m, m = False, st["m"]                       # from the Regular's (12 degrees): keep its lean
+                    if keep_ == LEAN_KEEP_THICK and CROSS_TURN:
+                        # owner round 5: a crossed stroke turns the way its ends pull, up to the references' change
+                        # (the advance then grows as n's does: x 1.080 > 1.12 against n's 1.098)
+                        a0 = math.atan(st["m"])
+                        fit_m, m = False, math.tan(a0 + math.copysign(CROSS_TURN, math.atan(m) - a0))
+                    else:
+                        fit_m, m = False, st["m"]                   # from the Regular's (12 degrees): keep its lean
             else:
                 c = float(sol[0])
         hw = want * math.sqrt(1 + m * m) / 2
@@ -730,11 +743,11 @@ def crossing_openings(strokes, adj, X, Y, moved_to, opens, v):
     (DIAG_INWARD_CROSS of the two strokes' gain), the serif rules."""
     thick = [st for st in strokes if st.get("cross") and st["t"] >= 64]
     if len(thick) != 1:
-        return
+        return {}
     tk = thick[0]
     parts = [strokes[j] for j in tk["crossers"] if strokes[j]["t"] < 64]
     if not parts:
-        return
+        return {}
     tn = {"L": [e for p_ in parts for e in p_["L"]], "R": [e for p_ in parts for e in p_["R"]],
           "m": sum(p_["m"] for p_ in parts) / len(parts), "t": sum(p_["t"] for p_ in parts) / len(parts)}
     at = lambda q: moved_to.get(q, (X[q[0]], Y[q[1]]))     # noqa: E731
@@ -766,9 +779,14 @@ def crossing_openings(strokes, adj, X, Y, moved_to, opens, v):
     if CROSS_DEBUG:
         print("crossing clusters", top, bot)
     if not top or not bot:
-        return
-    # the openings: each between a node of the thin stroke's end and one of the thick stroke's (the targets' knots)
-    def opening_at(cl):
+        return {}
+    # the openings: each between a node of the thin stroke's end and one of the thick stroke's (the targets' knots).
+    # Owner round 5 (the conductor's decision, reversible): an end of a crossing keeps its SERIF-END opening, the
+    # narrowest white there and the first to clog; the opening at the bracket follows from the kept angle and the
+    # bracket rule (one end cannot carry two independent openings once the angle is kept: their Regular difference
+    # 88 and 87 becomes 66 and 62 at the Bold), so its target is the serif-end target plus that separation
+    def openings_of(cl):
+        found = []
         for a_, b_, want in opens:
             qa = [q for q in adj if q[0] == a_]
             qb = [q for q in adj if q[0] == b_]
@@ -776,15 +794,19 @@ def crossing_openings(strokes, adj, X, Y, moved_to, opens, v):
             inb = [q for q in qb if q in cl]
             if ina or inb:
                 mine, other = (ina, qb) if ina else (inb, qa)
-                o = min(other, key=lambda q: abs(q[1] - mine[0][1]))
-                now = abs(at(mine[0])[0] - at(o)[0])
-                return want - now, (1 if ina == [] else -1)
-        return None
-    o_top, o_bot = opening_at(top), opening_at(bot)
+                found.append((want, a_, b_, mine[0], other))
+        return sorted(found, key=lambda f: f[0])
+
+    def now_of(f):
+        o = min(f[4], key=lambda q: abs(q[1] - f[3][1]))
+        return abs(at(f[3])[0] - at(o)[0])
+    op_top, op_bot = openings_of(top), openings_of(bot)
+    if not op_top or not op_bot:
+        return {}
+    o_top = (op_top[0][0] - now_of(op_top[0]), 1)
+    o_bot = (op_bot[0][0] - now_of(op_bot[0]), -1)
     if CROSS_DEBUG:
         print("crossing openings short by", o_top, o_bot)
-    if o_top is None or o_bot is None:
-        return
     # the thin stroke's top end is to the right (x) or left: it moves away from the thick stroke's end beside it
     sx_top = 1 if at(ends["R"][1])[0] > at(ends["L"][0])[0] else -1
     d_top = max(0.0, o_top[0]) * sx_top
@@ -801,12 +823,12 @@ def crossing_openings(strokes, adj, X, Y, moved_to, opens, v):
     mL, cL = line(*ends["L"])
     mR, cR = line(*ends["R"])
     m0 = (mL + mR) / 2
-    m_old = tn["m"]
-    grow = math.sqrt(1 + m0 * m0) / math.sqrt(1 + m_old * m_old)     # level width over thickness, new over old
+    want_t = sum(p_.get("want", diag_target(p_["t"], v)) for p_ in parts) / len(parts)
     yc = (at(ends["L"][0])[1] + at(ends["L"][1])[1]) / 2
     wl = (mR * yc + cR) - (mL * yc + cL)
-    extra = wl * (grow - 1) / 2
-    cL, cR = cL - extra * (1 if wl > 0 else -1), cR + extra * (1 if wl > 0 else -1)
+    wl_new = math.copysign(want_t * math.sqrt(1 + m0 * m0), wl)        # its thickness across itself, on target
+    extra = (wl_new - wl) / 2
+    cL, cR = cL - extra, cR + extra
     lines_k = [line(*sorted({q for e in es for q in e}, key=lambda q: q[1])[::len(sorted({q for e in es for q in e})) - 1])
                for es in (tk["L"], tk["R"])]
     for q in corners:
@@ -822,6 +844,12 @@ def crossing_openings(strokes, adj, X, Y, moved_to, opens, v):
         for q in ends[side]:
             x_, y_ = at(q)
             moved_to[q] = (round(mt * y_ + ct), y_)
+    derived = {}
+    for ops in (op_top, op_bot):                                     # the bracket-level opening: the serif-end
+        if len(ops) > 1:                                             # target plus the separation the rules give
+            sep = now_of(ops[1]) - now_of(ops[0])
+            derived[(ops[1][1], ops[1][2])] = ops[0][0] + sep
+    return derived
 
 
 def slant_place(strokes, pos, adj, pinned=(), handles=None):
@@ -1796,7 +1824,9 @@ def bold(contours, width, v, name="", hints=None):
         moved_to = {q: (round(x), round(y)) for q, (x, y) in placed.items()}
         serif_on_slant(strokes, adj, contours, X, Y, moved_to, v)
         if LEAN_KEEP_THICK and any(st.get("cross") for st in strokes):
-            crossing_openings(strokes, adj, X, Y, moved_to, extra_open, v)
+            derived_ = crossing_openings(strokes, adj, X, Y, moved_to, extra_open, v)
+            rx = [r[:3] + (round(derived_[(r[0], r[1])], 1),) + r[4:] if r[-1] == "opening" and (r[0], r[1]) in derived_
+                  else r for r in rx]
     lsb, rsb = xk[0], width - xk[-1]
     all_x = [q[0] for P in contours for q in P if q[2] is not None]
     lsb, rsb = min(all_x), width - max(all_x)
