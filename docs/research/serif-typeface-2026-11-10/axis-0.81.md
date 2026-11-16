@@ -832,3 +832,8 @@ Kerning: only keys with the z and Z families (Light 132, Bold 130). Checks again
 27,240 places); audit_lean 50 > 48 flags: z's lean at 700 (+0.048, references +0.008 to +0.025) and the z and Z centre
 flags at 300 cured; one new: Z at 700 now leans +0.009 against the references' +0.019 to +0.040 (it leaned more before
 and passed). Figures: `item4-z-Z.png`, `item4-derived.png`.
+
+Kerning, once at the end of items 2 to 4 (`AREA_KERN_FIT=1 build.py`): the per-master fit table changed only in pairs
+with a C, c, x, X, z or Z class or glyph on one side (Light 25 pairs, 206 > 220 fitted; Bold 115, 555 > 521).
+`audit_kern.py` passes at 300, 350, 400, 550, 700 and at every 25 units from 300 to 700 (`build/owner8/kern*.txt`).
+Pages not rebuilt.
