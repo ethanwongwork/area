@@ -3,6 +3,7 @@ import type { HTMLAttributes, ReactElement, Ref } from "react";
 import { popoverVariants, type VariantProps, MANIFESTS } from "../variants.ts";
 import { assignRef, useAnchoredPosition, useHoverIntent, useOpenState, type OverlayAlign } from "./overlay.ts";
 import { OVERLAY_PADDING, POPOVER_OFFSET } from "./Overlays.tsx";
+import { HOVER_CARD } from "./timing.ts";
 
 const useIsoLayoutEffect = typeof window === "undefined" ? useEffect : useLayoutEffect;
 
@@ -44,13 +45,13 @@ export interface HoverCardProps extends HTMLAttributes<HTMLDivElement> {
  * link is followed instead).
  */
 export const HoverCard = forwardRef<HTMLDivElement, HoverCardProps>(function HoverCard(
-  { trigger, side = "bottom", align = "start", offset = POPOVER_OFFSET, delay, openDelay, closeDelay = 300, openOnFocus = true, open: openProp, defaultOpen, onOpenChange, className, children, ...rest }, ref,
+  { trigger, side = "bottom", align = "start", offset = POPOVER_OFFSET, delay, openDelay, closeDelay = HOVER_CARD.close, openOnFocus = true, open: openProp, defaultOpen, onOpenChange, className, children, ...rest }, ref,
 ) {
   const id = useId();
   const cardId = `${id}-hover-card`;
   const surface = useRef<HTMLDivElement | null>(null);
   const anchor = useRef<HTMLElement | null>(null);
-  const openDelayMs = delay ?? openDelay ?? 700;
+  const openDelayMs = delay ?? openDelay ?? HOVER_CARD.delay;
   const [open, setOpenState] = useOpenState(openProp, defaultOpen, onOpenChange);
   // Report changes only: a blur or a leave while closed is not a close.
   const current = useRef(open);
@@ -66,8 +67,17 @@ export const HoverCard = forwardRef<HTMLDivElement, HoverCardProps>(function Hov
     if (!element || typeof element.showPopover !== "function") return;
     const shown = element.matches(":popover-open");
     if (open && !shown) element.showPopover();
-    if (!open && shown) element.hidePopover();
+    if (!open && shown) {
+      // Closing with focus inside (Escape from a link in the card) returns focus to the trigger without reopening it
+      // (plan C5.5).
+      const inside = element.contains(document.activeElement);
+      element.hidePopover();
+      if (inside) { returning.current = true; anchor.current?.focus(); returning.current = false; }
+    }
   }, [open]);
+  // Focus leaving both the trigger and the card closes it; Tab from the trigger into the card's first link doesn't.
+  const returning = useRef(false);
+  const leaves = (next: EventTarget | null) => !(next instanceof Node && (surface.current?.contains(next) || anchor.current?.contains(next)));
   // Popover's engine and gap (audit S16, E-5): flips and shifts, reports its side for the motion
   // origin. spec: the card starts at the link's start rather than centring on it (GitHub's card
   // starts 20 before its link), so a card for a link near the page edge stays on the page.
@@ -83,12 +93,13 @@ export const HoverCard = forwardRef<HTMLDivElement, HoverCardProps>(function Hov
       ref: (element: HTMLElement | null) => { anchor.current = element; assignRef(theirRef as never, element); },
       onPointerEnter: (event: { pointerType: string }) => { triggerProps.onPointerEnter?.(event); if (hovers(event)) show(); },
       onPointerLeave: (event: { pointerType: string }) => { triggerProps.onPointerLeave?.(event); if (hovers(event)) hide(); },
-      onFocus: (event: { currentTarget: Element }) => { triggerProps.onFocus?.(event); if (openOnFocus) focused(event); },
-      onBlur: (event: unknown) => { triggerProps.onBlur?.(event); hide(0); },
+      onFocus: (event: { currentTarget: Element }) => { triggerProps.onFocus?.(event); if (openOnFocus && !returning.current) focused(event); },
+      onBlur: (event: { relatedTarget: EventTarget | null }) => { triggerProps.onBlur?.(event); if (leaves(event.relatedTarget)) hide(0); },
     })}
     <div ref={setRef} id={cardId} popover="manual" {...rest}
       className={popoverVariants({ side }, ["area-hover-card", className].filter(Boolean).join(" "))}
-      onPointerEnter={() => clear()} onPointerLeave={event => { if (hovers(event)) hide(); }}>
+      onPointerEnter={() => clear()} onPointerLeave={event => { if (hovers(event)) hide(); }}
+      onBlur={event => { if (leaves(event.relatedTarget)) hide(0); }}>
       {children}
     </div>
   </>;

@@ -5,6 +5,8 @@ import type { InputHTMLAttributes, PointerEvent as ReactPointerEvent, KeyboardEv
 import { numberFieldVariants, type VariantProps, MANIFESTS } from "../variants.ts";
 import { calculateNumber, clampNumber, steppedNumber } from "./number-math.ts";
 import { Glyph } from "./Glyph.tsx";
+import { PRESS_REPEAT } from "./timing.ts";
+import { composing } from "./composing.ts";
 
 export interface NumberFieldProps extends Omit<InputHTMLAttributes<HTMLInputElement>, "type" | "size" | "value" | "defaultValue" | "onChange" | "step" | "min" | "max"> {
   /** The number, controlled; `null` for an empty field. */
@@ -132,7 +134,7 @@ export const NumberField = forwardRef<HTMLInputElement, NumberFieldProps>(functi
   };
   const handleKeyDown = (event: ReactKeyboardEvent<HTMLInputElement>) => {
     // Keys while an input method is composing belong to the composition (audit B-13).
-    if (!disabledState && !event.defaultPrevented && !event.nativeEvent.isComposing && event.keyCode !== 229) {
+    if (!disabledState && !event.defaultPrevented && !composing(event)) {
       const multiplier = event.shiftKey ? 10 : event.altKey ? 0.1 : 1;
       if (event.key === "ArrowUp" || event.key === "ArrowDown") {
         event.preventDefault();
@@ -206,8 +208,8 @@ export const NumberField = forwardRef<HTMLInputElement, NumberFieldProps>(functi
     // A bound disables the button mid-press, so it never sees pointerup; the window does.
     window.addEventListener("pointerup", stopRepeat, { once: true });
     stepRef.current(delta, event);
-    const tick = (wait: number) => { repeat.current = setTimeout(() => { stepRef.current(delta); tick(60); }, wait); };
-    tick(400);
+    const tick = (wait: number) => { repeat.current = setTimeout(() => { stepRef.current(delta); tick(PRESS_REPEAT.interval); }, wait); };
+    tick(PRESS_REPEAT.delay);
   };
   useEffect(() => stopRepeat, []);
 

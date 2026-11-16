@@ -4,6 +4,7 @@
 // DESIGN_SYSTEM.md, "Announcements".
 
 import { useEffect, useRef } from "react";
+import { ANNOUNCE } from "./timing.ts";
 
 export type AnnouncePoliteness = "polite" | "assertive";
 
@@ -13,9 +14,9 @@ export interface AnnounceOptions {
 }
 
 /** The pause between clearing a region and writing it, so a repeated message is announced again (ms). */
-export const ANNOUNCE_DELAY_MS = 100;
+export const ANNOUNCE_DELAY_MS = ANNOUNCE.delay;
 /** How long a message stays in the region before it is cleared, so it isn't found later while reading the page (ms). */
-export const ANNOUNCE_CLEAR_MS = 7000;
+export const ANNOUNCE_CLEAR_MS = ANNOUNCE.clear;
 
 interface Regions {
   root: HTMLElement;

@@ -8,6 +8,7 @@ import { resolveValidation, validationAttributes, type ValidationStatus } from "
 import { ScrollArea } from "./ScrollArea.tsx";
 import { announce } from "./announce.ts";
 import { MENU_OFFSET, OVERLAY_PADDING } from "./Overlays.tsx";
+import { composing } from "./composing.ts";
 /** The empty collection, one reference so effects keyed on it stay still. */
 const NO_ITEMS: never[] = [];
 
@@ -175,9 +176,31 @@ export const TagPicker = forwardRef<HTMLInputElement, TagPickerProps>(function T
   };
   const close = () => { setOpen(false); setActive(-1); setText(""); };
 
+  // Tags are one stop with the field (plan C2.3, ref-behaviour 2.21): their remove buttons leave the Tab order and are
+  // reached with ← from the start of the field; ← and → move between them, → past the last returns to the field,
+  // Backspace or Delete removes the focused tag and focus goes to its neighbour (else the field).
+  const fieldRef = useRef<HTMLDivElement | null>(null);
+  const tagButtons = () => Array.from(fieldRef.current?.querySelectorAll<HTMLButtonElement>(".area-tag__dismiss") ?? []);
+  useLayoutEffect(() => { for (const button of tagButtons()) button.tabIndex = -1; });
+  const handleTagKeys = (event: KeyboardEvent<HTMLDivElement>) => {
+    const buttons = tagButtons();
+    const at = buttons.indexOf(event.target as HTMLButtonElement);
+    if (at < 0) return;
+    if (event.key === "ArrowLeft") { event.preventDefault(); buttons[Math.max(0, at - 1)]?.focus(); }
+    else if (event.key === "ArrowRight") { event.preventDefault(); (buttons[at + 1] ?? inputRef.current)?.focus(); }
+    else if ((event.key === "Backspace" || event.key === "Delete") && !readOnly) {
+      event.preventDefault();
+      const item = chosen[at];
+      if (item === undefined) return;
+      const neighbour = event.key === "Backspace" ? at - 1 : at;
+      remove(item, event);
+      requestAnimationFrame(() => (tagButtons()[Math.max(0, neighbour)] ?? inputRef.current)?.focus());
+    }
+  };
+
   const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
     onKeyDown?.(event);
-    if (event.defaultPrevented || event.nativeEvent.isComposing || event.keyCode === 229) return;
+    if (event.defaultPrevented || composing(event)) return;
     switch (event.key) {
       case "ArrowDown":
         event.preventDefault();
@@ -196,6 +219,14 @@ export const TagPicker = forwardRef<HTMLInputElement, TagPickerProps>(function T
       case "Backspace":
         if (!text && chosen.length && !readOnly) { event.preventDefault(); remove(chosen[chosen.length - 1]!, event); }
         break;
+      case "ArrowLeft": {
+        const input = event.currentTarget;
+        if (input.selectionStart === 0 && input.selectionEnd === 0 && chosen.length && !readOnly && !disabled) {
+          const last = tagButtons().at(-1);
+          if (last) { event.preventDefault(); last.focus(); }
+        }
+        break;
+      }
     }
   };
 
@@ -211,14 +242,14 @@ export const TagPicker = forwardRef<HTMLInputElement, TagPickerProps>(function T
   const hintText = hint === undefined ? (onCreate ? "Select a tag or create one" : "Select tags") : hint;
 
   return <div ref={rootRef} className={tagPickerVariants({ variant, size, fullWidth }, className)} style={style} data-open={open ? "" : undefined}>
-    <div className="area-tag-picker__field" data-disabled={disabled ? "" : undefined} aria-invalid={status === "error" || undefined}
+    <div ref={fieldRef} onKeyDown={handleTagKeys} className="area-tag-picker__field" data-disabled={disabled ? "" : undefined} aria-invalid={status === "error" || undefined}
       {...validationAttributes(status)} data-read-only={readOnly ? "" : undefined}
       onPointerDown={event => { if (event.target === event.currentTarget) { event.preventDefault(); inputRef.current?.focus(); openList(); } }}>
       {chosen.map(item => {
         const option = byValue(item);
         const tagLabel = option?.label ?? item;
         return <Tag key={item} size={tagSize} color={option?.color} tone={option?.tone} disabled={disabled}
-          {...(disabled || readOnly ? {} : { onRemove: () => { remove(item); inputRef.current?.focus(); }, removeLabel: `Remove ${tagLabel}` })}>
+          {...(disabled || readOnly ? {} : { onDismiss: () => { remove(item); inputRef.current?.focus(); }, dismissLabel: `Remove ${tagLabel}` })}>
           {tagLabel}
         </Tag>;
       })}

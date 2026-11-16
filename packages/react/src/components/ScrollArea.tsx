@@ -3,6 +3,7 @@
 import { forwardRef, useCallback, useEffect, useImperativeHandle, useRef } from "react";
 import type { HTMLAttributes, PointerEvent as ReactPointerEvent, Ref } from "react";
 import { scrollAreaVariants, type VariantProps, MANIFESTS } from "../variants.ts";
+import { SCROLLBAR_HIDE } from "./timing.ts";
 
 type ScrollAreaVariants = VariantProps<typeof MANIFESTS.scrollArea>;
 type Axis = "vertical" | "horizontal";
@@ -22,7 +23,7 @@ export interface ScrollAreaProps extends HTMLAttributes<HTMLDivElement> {
 const MIN_THUMB = 18;
 
 export const ScrollArea = forwardRef<HTMLDivElement, ScrollAreaProps>(function ScrollArea(
-  { type, scrollHideDelay = 600, viewportRef, viewportProps, className, children, ...rest },
+  { type, scrollHideDelay = SCROLLBAR_HIDE, viewportRef, viewportProps, className, children, ...rest },
   ref,
 ) {
   const rootRef = useRef<HTMLDivElement>(null);

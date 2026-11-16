@@ -2,7 +2,7 @@
 // scroll-into-view, and a Command palette for the IME guard. window.__log records choices and commands.
 import { useState } from "react";
 import { createRoot } from "react-dom/client";
-import { Button, ListBox, ListBoxItem, CustomSelect, Combobox, CommandPalette } from "@area/react";
+import { Button, ListBox, ListBoxItem, CustomSelect, Combobox, CommandPalette, TagPicker } from "@area/react";
 import "@area/styles/area.css";
 
 window.__log = [];
@@ -31,7 +31,9 @@ function App() {
       <CustomSelect id="cs-long" aria-label="Long select" items={opts(LONG)} placeholder="Choose" />
       <Combobox id="cb" aria-label="Paint" items={[...opts(COLORS), { value: "nihongo", label: "にほんご" }]} onValueChange={v => window.__log.push("cb:" + v)} />
       <Combobox id="cb-long" aria-label="Long combobox" items={opts(LONG)} />
+      <TagPicker id="tp" aria-label="Labels" items={opts(COLORS)} defaultValue={["red", "blue", "green"]} />
     </div>
+    <Button id="after-tp">After tags</Button>
     <Button id="open-palette" onClick={() => setPalette(true)}>Commands</Button>
     <CommandPalette open={palette} onOpenChange={setPalette} label="Commands" items={[
       { id: "export", label: "Export", onSelect: () => window.__log.push("cmd:export") },

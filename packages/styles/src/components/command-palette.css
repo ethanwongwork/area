@@ -17,6 +17,8 @@
     overflow: visible;
   }
   .area-command-palette__modal::backdrop { background: var(--area-scrim); /* Dialog's scrim */ }
+  /* The page behind doesn't scroll while it is open, as Dialog's (plan C5.3; the gutter is kept in modal.ts). */
+  html:has(.area-command-palette__modal:modal) { overflow: hidden; }
   /* Enter and exit are Dialog's, from its rule (dialog.css, `:is(.area-dialog__modal, .area-command-palette__modal)`;
      docs/MOTION.md, "Dialog, command palette, confirm dialog"): the fade and the overlay scale from the centre, moderate
      in and base out. */

@@ -117,7 +117,10 @@ more.
 the listbox is `aria-multiselectable`, options carry `aria-selected`. Typing filters (case-insensitive
 contains) and highlights the first row; ↑/↓ move (wrapping, disabled rows skipped); Enter adds or
 removes the highlighted tag and keeps the list open, clearing a search; Backspace in an empty
-field removes the last tag; Escape closes; blur closes and clears the text. Each change is
+field removes the last tag; Escape closes; blur closes and clears the text. The tags' × buttons are out of the Tab
+order (one stop with the field, plan C2.3): ← at the start of the field focuses the last tag's ×, ← and → move
+between tags, → past the last returns to the field, and Backspace or Delete removes the focused tag and moves focus to
+its neighbour. Each change is
 announced through the shared announcer ("work added", "Ideas removed"). Each tag's × is a button named
 "Remove <tag>". A pointer press on the field's empty space focuses the input and opens the list.
 The input's `aria-label` also names the listbox. Choosing the create row calls `onCreate(text)`; the
@@ -273,3 +276,6 @@ The hidden status span is replaced by `announce` (`announce` / `useAnnouncement`
 - Listed, not moved: the Create row's gap 6 (the row role is 8 at the default).
 - Why: docs/research/system-evaluation-2026-11-11 (plan B6.1, B6.5, B8.2, B2.2; README §5, phase2/leftovers.md); the owner took every recommendation on 2026-11-11. Fix the rule, not the instance.
 - Verdict: awaiting the owner.
+
+## Behaviour engine (plan C2.3), 2026-11-15
+- Tags reached with ← from the empty field, not Tab; Backspace / Delete on a focused tag removes it; Tag's `onDismiss` / `dismissLabel` replace the deprecated `onRemove` / `removeLabel`.

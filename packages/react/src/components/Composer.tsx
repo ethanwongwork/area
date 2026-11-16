@@ -3,6 +3,7 @@ import type { ChangeEvent, ClipboardEvent, DragEvent, HTMLAttributes, KeyboardEv
 import { composerGroupVariants, composerVariants, cx, type VariantProps, MANIFESTS } from "../variants.ts";
 import { Button, type ButtonProps } from "./Button.tsx";
 import { Glyph } from "./Glyph.tsx";
+import { composing } from "./composing.ts";
 
 export interface ComposerProps extends Omit<HTMLAttributes<HTMLDivElement>, "onChange" | "onSubmit" | "defaultValue"> {
   /** `inline` (default): the actions on the field's row. `stacked`: the field above a row of actions. */
@@ -187,7 +188,7 @@ export const Composer = forwardRef<HTMLTextAreaElement, ComposerProps>(function 
     if (event.key === "Escape" && expanded) { event.preventDefault(); setExpanded(false, event); return; }
     // Safari can deliver the Enter that commits an IME candidate after compositionend, with
     // isComposing false but keyCode 229 (audit G-15).
-    if (event.key !== "Enter" || event.nativeEvent.isComposing || event.keyCode === 229 || event.shiftKey) return;
+    if (event.key !== "Enter" || composing(event) || event.shiftKey) return;
     if (!submitOnEnter && !event.metaKey && !event.ctrlKey) return;
     event.preventDefault();
     submit();

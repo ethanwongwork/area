@@ -29,10 +29,9 @@ async function openBy(page, fam, how = "click") {
   must(await modalOpen(page), `${fam} opened`);
 }
 
-behaviour("modal", ({ it, gap }) => {
+behaviour("modal", ({ it }) => {
   for (const [fam, { first }] of Object.entries(FAMILIES)) {
-    const test = fam === "dialog" || fam === "drawer" ? (n, f) => gap("C5.3", n, f) : it;
-    test(`${fam}: a keyboard open puts focus on ${first.role} "${first.name}", never the close button (I15)`, async page => {
+    it(`${fam}: a keyboard open puts focus on ${first.role} "${first.name}", never the close button (I15)`, async page => {
       await openBy(page, fam, "keys");
       await page.step("initial focus", async () => assert.deepEqual(await page.focusedNode(), first));
     });
@@ -57,18 +56,18 @@ behaviour("modal", ({ it, gap }) => {
       });
     });
 
-    const backdrop = fam === "confirm" ? "as built (C5.4 decides)" : "";
-    it(`${fam}: a press on the backdrop closes it ${backdrop}`.trim(), async page => {
+    // Confirm dialog is a forced choice: its backdrop does nothing (owner, plan C5.4).
+    const closes = fam !== "confirm";
+    it(`${fam}: a press on the backdrop ${closes ? "closes it" : "leaves it open (C5.4)"}`, async page => {
       await openBy(page, fam);
       const p = await backdropPoint(page);
       await page.step(`press the backdrop at ${p.x},${p.y}`, async () => {
         await page.click(p); await page.settle();
-        assert.equal(await modalOpen(page), false);
+        assert.equal(await modalOpen(page), !closes);
       });
     });
 
-    const dragTest = fam === "palette" ? (n, f) => gap("C5.3", n, f) : it;
-    dragTest(`${fam}: a press that starts inside and is released on the backdrop doesn't close it (I14)`, async page => {
+    it(`${fam}: a press that starts inside and is released on the backdrop doesn't close it (I14)`, async page => {
       await openBy(page, fam);
       const inside = await page.eval(() => { const el = document.querySelector("dialog:modal input, dialog:modal button:not([aria-label])"); const b = el.getBoundingClientRect(); return { x: b.x + b.width / 2, y: b.y + b.height / 2 }; });
       const p = await backdropPoint(page);
@@ -78,8 +77,7 @@ behaviour("modal", ({ it, gap }) => {
       });
     });
 
-    const lockTest = fam === "palette" ? (n, f) => gap("C5.3", n, f) : it;
-    lockTest(`${fam}: the page behind doesn't scroll while it is open`, async page => {
+    it(`${fam}: the page behind doesn't scroll while it is open`, async page => {
       await openBy(page, fam);
       const p = await backdropPoint(page);
       await page.step("wheel over the backdrop", async () => {
@@ -89,21 +87,22 @@ behaviour("modal", ({ it, gap }) => {
       });
     });
 
-    gap("C5.3", `${fam}: opening it doesn't shift the page by the scrollbar's width (I14)`, async page => {
-      const before = await page.eval(() => document.documentElement.clientWidth);
-      must(before < (await page.eval(() => innerWidth)), "the page shows a classic scrollbar");
+    it(`${fam}: opening it doesn't shift the page by the scrollbar's width (I14)`, async page => {
+      // What the person sees: the page's content keeps its place and width when the bar goes away.
+      const content = () => page.eval(() => { const b = document.querySelector("#root > *").getBoundingClientRect(); return { x: b.x, width: b.width }; });
+      must(await page.eval(() => document.documentElement.clientWidth < innerWidth), "the page shows a classic scrollbar");
+      const before = await content();
       await openBy(page, fam);
-      await page.step("page width with the modal open", async () => {
-        const after = await page.eval(() => document.documentElement.clientWidth);
+      await page.step("the content with the modal open", async () => {
         const locked = await page.eval(() => getComputedStyle(document.documentElement).overflowY === "hidden" || getComputedStyle(document.body).overflowY === "hidden");
         assert.ok(locked, "the page isn't locked at all");
-        assert.equal(after, before, "the page width changed");
+        assert.deepEqual(await content(), before, "the content moved or changed width");
       });
     });
   }
 
   for (const fam of ["dialog", "drawer"]) {
-    gap("C5.1", `${fam}: a toast raised while it is open is on top and its action can be pressed (I3)`, async page => {
+    it( `${fam}: a toast raised while it is open is on top and its action can be pressed (I3)`, async page => {
       await openBy(page, fam);
       await page.click(`#${fam}-toast`); await page.settle();
       must(await page.eval(() => !!document.querySelector("#undo")), "the toast rendered");

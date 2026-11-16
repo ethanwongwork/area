@@ -7,6 +7,8 @@ import { ScrollArea } from "./ScrollArea.tsx";
 import { announce } from "./announce.ts";
 import { highlightMatch } from "./highlight.tsx";
 import { Kbd } from "./Kbd.tsx";
+import { composing } from "./composing.ts";
+import { anotherModalOpen, lockPageScroll, useBackdropDismiss } from "./modal.ts";
 
 export interface CommandItem {
   id: string;
@@ -125,6 +127,10 @@ export const CommandPalette = forwardRef<HTMLDivElement, CommandPaletteProps>(fu
     if (openProp === undefined) setOwnOpen(next);
     onOpenChange?.(next);
   };
+  const setOpenRef = useRef(setOpen);
+  setOpenRef.current = setOpen;
+  // A press closes only when it began on the backdrop: a selection dragged out of the field doesn't (plan C5.3).
+  const backdrop = useBackdropDismiss(() => setOpen(false));
   const setQuery = (next: string) => {
     if (queryProp === undefined) setOwnQuery(next);
     onQueryChange?.(next);
@@ -159,6 +165,7 @@ export const CommandPalette = forwardRef<HTMLDivElement, CommandPaletteProps>(fu
     if (inline) return;
     const dialog = dialogRef.current;
     if (!dialog || typeof dialog.showModal !== "function") return;
+    const release = open ? lockPageScroll() : undefined; // before showModal(), as Dialog's
     if (open && !dialog.open) { dialog.showModal(); inputRef.current?.focus(); }
     if (!open && dialog.open) dialog.close();
     if (!open && present) {
@@ -166,17 +173,30 @@ export const CommandPalette = forwardRef<HTMLDivElement, CommandPaletteProps>(fu
       if (typeof dialog.getAnimations !== "function") done();
       else Promise.all(dialog.getAnimations().map(animation => animation.finished)).then(done, done);
     }
+    return release;
   }, [open, inline]);
+  // Whether a key event is the palette's hotkey ("mod+k": Cmd on Apple platforms, Ctrl elsewhere).
+  const isHotkey = (event: { key: string; metaKey: boolean; ctrlKey: boolean }) => {
+    if (!hotkey) return false;
+    const [mod, key] = hotkey.toLowerCase().split("+");
+    const modifier = mod === "mod" ? (isApple() ? event.metaKey : event.ctrlKey) : mod === "ctrl" ? event.ctrlKey : mod === "meta" ? event.metaKey : false;
+    return modifier && event.key.toLowerCase() === key;
+  };
+  const isHotkeyRef = useRef(isHotkey);
+  isHotkeyRef.current = isHotkey;
   useEffect(() => {
     if (!hotkey || inline) return;
-    const [mod, key] = hotkey.toLowerCase().split("+");
+    // Subscribed once per hotkey (plan C5.3): it reads the open state from a ref, ignores a held key's repeats, and
+    // waits while another modal is open, so it never opens a second modal over the first.
     const onKey = (event: globalThis.KeyboardEvent) => {
-      const modifier = mod === "mod" ? (isApple() ? event.metaKey : event.ctrlKey) : mod === "ctrl" ? event.ctrlKey : mod === "meta" ? event.metaKey : false;
-      if (modifier && event.key.toLowerCase() === key) { event.preventDefault(); setOpen(!open); }
+      if (!isHotkeyRef.current(event) || event.repeat || composing(event)) return;
+      if (!openNow.current && anotherModalOpen(dialogRef.current)) return;
+      event.preventDefault();
+      setOpenRef.current(!openNow.current);
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  });
+  }, [hotkey, inline]);
   useEffect(() => {
     if (current < 0) return;
     scrollOptionIntoList(listRef.current, listRef.current?.querySelector<HTMLElement>(`[data-index="${current}"]`));
@@ -203,11 +223,16 @@ export const CommandPalette = forwardRef<HTMLDivElement, CommandPaletteProps>(fu
     else if (!inline) setOpen(false);
   };
   const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === "ArrowDown") { event.preventDefault(); setActive(next(current, 1)); }
-    else if (event.key === "ArrowUp") { event.preventDefault(); setActive(next(current < 0 ? 0 : current, -1)); }
+    // Ctrl+N / Ctrl+P and Ctrl+J / Ctrl+K move too, as in the desktop editors' quick open (plan C2.3).
+    // The hotkey wins where they meet (Ctrl+K elsewhere than Apple platforms closes the palette).
+    const ctrlOnly = event.ctrlKey && !event.metaKey && !event.altKey && !event.shiftKey && !isHotkey(event.nativeEvent);
+    const down = event.key === "ArrowDown" || (ctrlOnly && (event.key === "n" || event.key === "j"));
+    const up = event.key === "ArrowUp" || (ctrlOnly && (event.key === "p" || event.key === "k"));
+    if (down) { event.preventDefault(); setActive(next(current, 1)); }
+    else if (up) { event.preventDefault(); setActive(next(current < 0 ? 0 : current, -1)); }
     else if (event.key === "Home" && event.ctrlKey) { event.preventDefault(); setActive(next(-1, 1)); }
     else if (event.key === "End" && event.ctrlKey) { event.preventDefault(); setActive(next(rows.length, -1)); }
-    else if (event.key === "Enter") { event.preventDefault(); run(rows[current]); }
+    else if (event.key === "Enter") { if (composing(event)) return; event.preventDefault(); run(rows[current]); }
     else if (event.key === "Backspace" && !query && trail.length && !event.repeat) { event.preventDefault(); back(); }
     else if (event.key === "Escape" && (!inline || trail.length)) { event.preventDefault(); escape(); }
   };
@@ -291,7 +316,7 @@ export const CommandPalette = forwardRef<HTMLDivElement, CommandPaletteProps>(fu
   if (inline) return surface;
   return <dialog ref={dialogRef} className="area-command-palette__modal" aria-label={label}
     onCancel={event => { event.preventDefault(); escape(); }}
-    onClick={event => { if (event.target === event.currentTarget) setOpen(false); }}>
+    {...backdrop}>
     {open ? (frozen.current = surface) : present ? frozen.current : null}
   </dialog>;
 });

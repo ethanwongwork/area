@@ -471,6 +471,8 @@ export default {
       ["Down or Up", "Opens the list, or moves the highlight; it wraps and skips disabled rows."],
       ["Enter", "Adds or removes the highlighted tag, or creates one, and keeps the list open; a search is cleared."],
       ["Backspace", "In an empty field, removes the last tag."],
+      ["Left or Right", "From the start of the field, Left focuses the last tag; Left and Right move between tags, and Right past the last returns to the field."],
+      ["Backspace or Delete", "On a focused tag, removes it; focus goes to its neighbour."],
       ["Escape", "Closes the list and clears the text."],
     ],
     aria: [

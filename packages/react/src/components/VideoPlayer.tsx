@@ -10,6 +10,7 @@ import { Kbd } from "./Kbd.tsx";
 import { Tooltip } from "./Tooltip.tsx";
 import { Button } from "./Button.tsx";
 import { assignRef } from "./overlay.ts";
+import { MEDIA_IDLE } from "./timing.ts";
 
 type VideoPlayerVariants = VariantProps<typeof MANIFESTS.videoPlayer>;
 
@@ -30,7 +31,7 @@ export interface VideoPlayerProps extends Omit<VideoHTMLAttributes<HTMLVideoElem
 }
 
 /* spec: idle hide after 2000 ms while playing (Plyr, Video.js, Vidstack, Media Chrome). */
-const IDLE = 2000;
+const IDLE = MEDIA_IDLE;
 
 const clock = (seconds: number) => {
   if (!Number.isFinite(seconds)) seconds = 0;

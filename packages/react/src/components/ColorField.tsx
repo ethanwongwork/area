@@ -5,6 +5,7 @@ import { Input, type InputProps } from "./Input.tsx";
 import { InputGroup } from "./InputGroup.tsx";
 import { NumberField } from "./NumberField.tsx";
 import { ColorSwatch } from "./ColorSwatch.tsx";
+import { composing } from "./composing.ts";
 
 /** Canonical 6- or 8-digit hex; short forms and an omitted hash are accepted. */
 export function normalizeHexColor(input: string): string | null {
@@ -64,7 +65,7 @@ export const ColorField = forwardRef<HTMLInputElement, ColorFieldProps>(function
 
   function handleKeyDown(event: KeyboardEvent<HTMLInputElement>) {
     onKeyDown?.(event);
-    if (event.defaultPrevented) return;
+    if (event.defaultPrevented || composing(event)) return;
     if (event.key === "Enter") { commit(event); event.preventDefault(); }
     if (event.key === "Escape") { setDraft(displayHex(committed)); event.preventDefault(); }
   }

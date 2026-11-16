@@ -148,6 +148,28 @@ pressing a key: it appears at its size and only fades (`data-opened-by`, above),
 animation. Interrupted transitions reverse from where they are (CSS transitions do; avoid
 keyframe animations for state that can flip back mid-way).
 
+## Timing
+
+Waits, windows and thresholds are not durations: they live in `packages/react/src/components/timing.ts` (plan C6),
+and components import them, never a literal (`cohesion.test.mjs`, "timings come from timing.ts").
+
+| Constant | Value | Used by |
+|---|---|---|
+| `TOOLTIP` | 300 to open, instant for 300 after another closes, 0 to close | Tooltip, Toggletip (owner 2026-11-11, plan C5.6) |
+| `HOVER_CARD` | 700 to open, 300 to close | Hover card |
+| `SUBMENU` | 100 rest, 300 grace | Menu's submenus (plan C1.1, not built yet) |
+| `TYPEAHEAD` | 1000 reset | Menu, List box, Tree view, Custom select (one window) |
+| `LONG_PRESS` | 500 | touch long press |
+| `PRESS_REPEAT` | 400, then every 60 | Number field steppers |
+| `DRAG_THRESHOLD` | 5 px or 200 ms | press-drag-release pickers (plan C1.2) |
+| `TOAST` | 5000 | Toaster's default |
+| `LOADING` | 300 short, 1000 long, 400 minimum visible | `useLoadingDelay` (the minimum is not applied yet) |
+| `SCROLLBAR_HIDE` | 600 | Scroll area |
+| `MEDIA_IDLE` | 2000 | Video player controls |
+| `APPEAR_GUARD` | 500 | Approval ignores presses just after it appears |
+| `ANNOUNCE` | 100 pause, 7000 clear | the shared announcer |
+| `COPY_FEEDBACK` | 2000 | Copy button |
+
 ## Crispness
 
 Previews shrink a component whole: the gallery's tiles (fit.ts) and Language's drawings are laid out at 1x and
