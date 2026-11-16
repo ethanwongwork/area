@@ -542,8 +542,14 @@ LEAN_KEEP = 0.2                 # radians: a slanted stroke whose anchors would 
 # bottom-right serifs between the masters (x at 315, 323, 443, 454; audit_bold --sweep at 325): serif_on_slant places
 # the bracket's far end from the x knot map, not from the kept edge, so the Bold's bracket end stood 22 units left of
 # the edge's line where the Regular's stands 10 right of it. The rule needs the serif placed from the kept edge first.
-LEAN_KEEP_THICK = 0.038
+# Owner round 2: with the two-curve bracket placed from the kept edge (BRACKET_FROM_EDGE) the x's brackets no longer
+# turn, and its lean at 700 came inside the references' band (-0.123 > -0.045), but the full build then missed parts
+# audit targets (x's openings 193 and 166 against 219.5 and 196.5; v's and w's serif uprights 52 and 50 against 54 and
+# 53; y's and Y's openings by 5 and 2) and the ampersand's crossing stroke fell 52 > 15 at 700. Both stay off until the
+# opening rule and the ampersand's crossing take the kept edge too.
+LEAN_KEEP_THICK = None          # tried: 0.038
 LEAN_ALL = False
+BRACKET_FROM_EDGE = False
 
 
 def slant_lines(strokes, pos, adj, flats, v, pinned=()):
@@ -643,6 +649,8 @@ def serif_on_slant(strokes, adj, contours, X, Y, moved_to, v):
                         o = P[on[k]][:2]
                     else:
                         o = None
+                    if mids and not BRACKET_FROM_EDGE:
+                        continue
                     if mids:
                         # the node between keeps its offset from the edge's line, the Regular's times the foot rule
                         # (the bracket's lower curve is the stroke's; its upper curve and the serif stay as placed)
