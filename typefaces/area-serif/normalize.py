@@ -1184,6 +1184,8 @@ def normalize(font):
     print("clean: joins to straights", CLEAN.true_joins(font, HARMONIZE_SET))   # 0.68
     print("clean: 5", CLEAN.five_heel(font))                             # 0.69
     print("clean: 5", CLEAN.five_bowl(font))                             # 0.79: the bowl's lowest and widest points
+    print("clean: 5", CLEAN.five_stem(font))                             # 0.81 (owner): the upright stroke's lean
+    print("clean: 9 and 6", CLEAN.nine_six(font))                        # 0.81 (owner): the long stroke's lower quarter
     print("balance: capital serifs", BALANCE.cap_serifs(font))           # 0.70: 77 on every upright stem
     print("balance: zero", BALANCE.zero_weight(font))                    # 0.70: sides 87
     print("clean: S curves", CLEAN.even_s(font, HARMONIZE_SET))          # 0.70: 3's hook

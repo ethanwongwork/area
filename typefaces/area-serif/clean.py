@@ -1475,3 +1475,162 @@ def flag_unders(font, apply=True):
                     c.points = [p for p in P if not any(p is d for d in drop)]
                 break
     return found
+
+
+# 0.81 (owner, 15 November: the 9 "doesn't look balanced at all weights ... the bottom right part is too steep and
+# makes it look slightly italicized"). Measured (numbers only, docs/.../axis-0.81.md): the quarter from the 9's right
+# extreme down to its lowest point was 309 wide by 409 tall (0.76; Georgia Pro 0.94, Source Serif 4 0.92), and the
+# right edge from its widest point down to 0.15 of the height leaned 17.6 degrees (Georgia Pro 24.5, Source Serif 4
+# 25.8). The rule (the owner's decision on those numbers): the 9's advance stays; its lowest point (and the tail's
+# inside with it, so the stroke under the bowl keeps its thickness) moves left until the quarter is NINE_QUARTER as
+# wide as tall; the ball moves left with it until its left side stands on the bowl's left extreme; the extreme's
+# downward handle shortens until that edge leans NINE_LEAN; then the tail's nodes meet at one curvature
+# (loops.even_nodes). The 6 is the 9 turned half round (point for point, as it was drawn), so it takes the same
+# rule turned.
+NINE_QUARTER = 0.90
+NINE_LEAN = 23.5
+
+
+def _turn(P, sx, sy):
+    for p in P:
+        p.x, p.y = sx - p.x, sy - p.y
+
+
+def _edge_lean(P, rt, lo, height):
+    n = len(P)
+    a, b, c, d = [(P[j].x, P[j].y) for j in (rt, (rt - 1) % n, (rt - 2) % n, lo)]
+    y15 = min(p.y for p in P) + 0.15 * height
+    best = None
+    for k in range(401):
+        t = k / 400
+        u = 1 - t
+        x = u ** 3 * a[0] + 3 * u * u * t * b[0] + 3 * u * t * t * c[0] + t ** 3 * d[0]
+        y = u ** 3 * a[1] + 3 * u * u * t * b[1] + 3 * u * t * t * c[1] + t ** 3 * d[1]
+        if best is None or abs(y - y15) < abs(best[1] - y15):
+            best = (x, y)
+    return math.degrees(math.atan2(a[0] - best[0], a[1] - best[1]))
+
+
+def nine_tail_contour(P):
+    """The rule above on the 9's outer contour (ufoLib2 points, the tail at the bottom right to bottom left)."""
+    import loops as LOOPS
+    n = len(P)
+    on = [i for i, p in enumerate(P) if p.type]
+    lo = min(on, key=lambda i: (P[i].y, P[i].x))
+    rt = max(on, key=lambda i: P[i].x)
+    level = [i for i in on if P[(i - 1) % n].type is None and P[(i + 1) % n].type is None
+             and P[(i - 1) % n].y == P[i].y == P[(i + 1) % n].y]
+    ilo = min((i for i in level if P[lo].y + 10 < P[i].y < P[rt].y - 100), key=lambda i: P[i].y)
+    k0 = on.index(ilo)
+    ball = [on[(k0 + j) % len(on)] for j in (1, 2, 3)]
+    height = max(p.y for p in P) - min(p.y for p in P)
+    before = (P[lo].x, _edge_lean(P, rt, lo, height))
+    dx = round(P[rt].x - NINE_QUARTER * (P[rt].y - P[lo].y)) - P[lo].x
+    dxb = min(P[i].x for i in on) - min(P[i].x for i in ball)
+    moved = set()
+    for b in ball:
+        moved |= {b, (b - 1) % n, (b + 1) % n}
+    for i in moved:
+        P[i].x += dxb
+    _slide(P, lo, 0, P[lo].x + dx)
+    _slide(P, ilo, 0, P[ilo].x + dx)
+    h = (rt - 1) % n
+    L0 = P[rt].y - P[h].y
+    base = [(p.x, p.y, p.type, p.smooth) for p in P]
+
+    def trial(sc):                                          # the handle, then one curvature at every node
+        pts = list(base)
+        pts[h] = (pts[h][0], round(pts[rt][1] - L0 * sc)) + pts[h][2:]
+        Q, log_ = LOOPS.even_nodes(pts, (-1000, 2000))
+
+        class _V:
+            def __init__(s, q):
+                s.x, s.y = q[0], q[1]
+        return Q, log_, _edge_lean([_V(q) for q in Q], rt, lo, height)
+    lo_s, hi_s = 0.4, 1.0
+    for _ in range(20):                                     # the shorter the handle, the more the edge leans
+        mid = (lo_s + hi_s) / 2
+        if trial(mid)[2] > NINE_LEAN:
+            lo_s = mid
+        else:
+            hi_s = mid
+    Q, log, lean = trial((lo_s + hi_s) / 2)
+    for p, q in zip(P, Q):
+        p.x, p.y = q[0], q[1]
+    return before, (P[lo].x, round(lean, 1)), dxb, log
+
+
+def nine_six(font):
+    out = []
+    for name, turned in (("nine", False), ("six", True)):
+        g = font[name]
+        c = g.contours[0]
+        sx, sy = g.width + 1, 712                            # the 6 is the 9 turned about the middle of its box
+        if turned:
+            _turn(c.points, sx, sy)
+        was, now, dxb, log = nine_tail_contour(c.points)
+        if turned:
+            _turn(c.points, sx, sy)
+        out.append(f"{name}: lowest point {was[0]} > {now[0]}, edge lean {was[1]:.1f} > {now[1]} degrees, ball {dxb:+d}")
+    return out
+
+
+# 0.81 (owner, 15 November: the 5's "bottom right part is too steep and makes it look slightly italicized"). The
+# lean the eye reads is the 5's upright stroke: measured at 400 on the left edge between 0.66 and 0.90 of the height it
+# leans 9.5 degrees (Georgia Pro 6.7, Source Serif 4 4.0); the bowl's widest point (0.328 of the height; 0.342, 0.325),
+# its overhang past the flag (0.040 of the width; 0.046, 0.043) and its lowest point (0.451; 0.444, 0.447) are inside
+# the references'. The rule: the stroke turns about the middle of its height to the references' mean lean, FIVE_LEAN;
+# each of its nodes moves level by its height's share, the foot's knot and the bowl's join with the node they hang on
+# (each with its handles), the flag's two corners with the top. Nothing else moves.
+FIVE_LEAN = 5.35
+
+
+def five_stem(font):
+    g = font["five"]
+    P = g.contours[0].points
+    n = len(P)
+    lines = [(i, (i + 1) % n) for i in range(n) if P[i].type and P[(i + 1) % n].type == "line"
+             and abs(P[(i + 1) % n].y - P[i].y) > 150 and abs(P[(i + 1) % n].x - P[i].x) > 10]
+    if len(lines) != 2:
+        return [f"5 stem: {len(lines)} slanted edges; skipped"]
+    ends = sorted({k for e in lines for k in e}, key=lambda k: P[k].y)
+    y_lo, y_hi = P[ends[0]].y, P[ends[-1]].y
+    a, b = lines[0]
+    lean0 = math.degrees(math.atan2(abs(P[b].x - P[a].x), abs(P[b].y - P[a].y)))
+    dtan = math.tan(math.radians(lean0)) - math.tan(math.radians(FIVE_LEAN))
+    ym = (y_lo + y_hi) / 2
+    moves = {}
+    for k in ends:
+        d = round(-(P[k].y - ym) * dtan)
+        group = {k}
+        for s_ in (-1, 1):                                 # its handles; a node whose handle is a curve's
+            j = (k + s_) % n
+            if P[j].type is None:
+                group.add(j)
+        if k == ends[0]:                                   # the foot's knot at and below the lowest end, to where
+            j = (k + 1) % n                                # the bowl's curve leaves it (with that node's handle)
+            last = None
+            while P[j].y <= P[k].y + 5 and j != k:
+                group.add(j)
+                if P[j].type:
+                    last = j
+                j = (j + 1) % n
+            if last is not None and P[(last + 1) % n].type is None:
+                group.add((last + 1) % n)
+        for i in group:
+            moves.setdefault(i, d)
+    for i, d in moves.items():
+        P[i].x += d
+    for a_, b_ in lines:                                   # a curve off the turned line takes the line's direction
+        for k, o in ((a_, b_), (b_, a_)):                  # (a curve into a straight: its handle on the line)
+            for s_ in (-1, 1):
+                j = (k + s_) % n
+                if j == o or P[j].type is not None or not P[k].smooth:
+                    continue
+                L = math.hypot(P[j].x - P[k].x, P[j].y - P[k].y)
+                ux, uy = P[k].x - P[o].x, P[k].y - P[o].y
+                ul = math.hypot(ux, uy)
+                P[j].x, P[j].y = round(P[k].x + ux / ul * L), round(P[k].y + uy / ul * L)
+    a, b = lines[0]
+    lean1 = math.degrees(math.atan2(abs(P[b].x - P[a].x), abs(P[b].y - P[a].y)))
+    return [f"5 stem: lean {lean0:.1f} > {lean1:.1f} degrees ({len(moves)} points)"]
