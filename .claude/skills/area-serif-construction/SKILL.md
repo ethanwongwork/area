@@ -244,7 +244,9 @@ masters match point for point and every weight between them is sound. Read `bold
   must be chosen; S (lean drift -0.050, band -0.027 to +0.002) and c's lower stroke (grows 1.24, references 1.58 to
   1.75) open. Owner round 5: x landed (serif-end opening kept; Bold advance 0.983 of n's growth, the one target short);
   S (s_terminal), c and e (open_tail) landed; the Light g's loop from its centreline: one fault left (an ease of 0.49
-  into the link, limit 0.45).
+  into the link, limit 0.45). Owner round 6: the Light g passes (the link's node slides along its straight); the 9
+  and 6 drift cured (a ball's sides are not a stroke read far from the ball's height). Left: G X z a g w lean past the
+  references (triaged, no covering rule), the axis list, the terminal table's neck and exit angle.
 
 ## What is still outside the system
 

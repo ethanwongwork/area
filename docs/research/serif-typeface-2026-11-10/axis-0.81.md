@@ -604,3 +604,35 @@ Regular unchanged against round 3; masters: s and its accented forms. Figure `18
 Final (`build/qa-081.log`, per-master kerning refit): as round 4 (the Light curvature check fails on g's one node;
 audit_axis Bold 8 thin, Light 1; audit_rays the same 18 glyphs, 27,636 places); bold, light, sweep, parts and
 interpolation pass. Regular unchanged against round 4. Figures `19-lines.png`, `19-g-light.png`.
+
+## Owner round 6 (15 November 2026)
+
+| # | Item | Rule | Before > after |
+|---|---|---|---|
+| 60 | Light g, the link node | `loops.g_loop_master`: when the loop's right side cannot ease into the link inside its triangle, the link's node slides along the link's straight (the least slide, 2 to 40 units, with the curve's two handles, that clears curvecheck, gains no turn between the masters and leaves no place short of its law). The Regular is not touched | the Light g: ease 0.49 > clean (a 4-unit slide, handles 0.85 and 1.1); "curve continuity in the Light master" passes |
+| 61 | 9 and 6 drift | Cause found: round 2 put the 9's ball's left side on the bowl's left extreme (the 6's turned), so the reading of the extremes' pair renamed the bowl's stroke (57..149, read at 452 to 492) as the ball's sides (57..145, at 87 to 136): the bowl's side grew by the ball's 1.40 instead of the round strokes' 1.78. A stroke read far from a ball's height (more than 20 units outside it) is no longer taken for that ball's sides (`bold.bold`, `far_from_ball`). Only the 9 and 6 (and their small forms) change | lean drift 400 to 700: 9 +0.026 > +0.011 (references -0.009 to +0.001), 6 +0.026 > +0.011 (-0.006 to +0.007); quarters within 0.02 (9's top left 0.27 > 0.27; 6's 0.24 > 0.22) |
+
+Triage of the lean outliers at 700 (drift 400 to 700, Area against Georgia Pro / Source Serif 4; "drawn" when the
+Regular's own lean is outside both):
+- 2: -0.006 (-0.006 / +0.006): inside. 7: -0.001 (-0.036 / -0.001): inside. C: +0.007 (-0.018 / +0.005): at the edge.
+- G: -0.057 (-0.034 / -0.008): grown; the top terminal's quarter loses as S's did, but G is not an S (s_terminal does not
+  cover it). Listed.
+- X: -0.048 (-0.027 / -0.024): grown; X is drawn as four whole strokes, not two crossing ones, so the crossing rule does
+  not see it. Listed.
+- z: +0.047 (+0.025 / +0.008), and drawn (+0.065 at 400; +0.042, +0.015): its diagonal. Listed.
+- a: +0.033 (-0.010 / -0.002), drawn (0.000 at 400; +0.039, +0.026). g: -0.040 (-0.003 / +0.008), drawn (+0.030 at
+  400; -0.012, +0.005). w: -0.037 (-0.021 / -0.003): its thick diagonals (keeping their lean thinned W's middle
+  stroke, round 2). Listed.
+- K: -0.013 (-0.030 / -0.026), 4: -0.013 (+0.013 / +0.008), 5: 0.000 (+0.029 / +0.011), 8: +0.011 (-0.008 / -0.006):
+  drift a little against the references' direction. Listed.
+None is a part an existing rule covers; no new one-off rule was written.
+
+Not done: the axis list (Bold same-place thin, the IPA hooks with a ball, the junction rays, ⌦ ⌫ ✓, ɽ, @ in the Light)
+and the terminal table's neck and exit-angle columns.
+
+Final (`build/qa-081.log`, kerning refit): both master curvature checks pass. audit_axis Bold 8 thin (Khook, at, cedi,
+ogonek, ogonekcomb, one.ss01, registered, tretroflexhook), Light 1 (yhook); audit_rays 18 glyphs, 27,276 places; bold,
+light, sweep, parts, interpolation, kerning, charset and fontbakery pass. Regular unchanged against round 5. Masters: g
+(Light), 9 and 6 (and their superiors and inferiors), g.ss02 in the Bold (24 units, the splice's ball white), and 1 to 4
+units in the asterisk, daggers, quotes and servicemark (their reach solved by halving against n's ink). Figure
+`20-waterfall.png`: the whole lowercase, capitals and figures, the 0.81 tip above the final, at 300, 400, 550, 700.

@@ -59,6 +59,15 @@ def img_tag(path, width=1400):
 
 # 0.81 (owner round, 15 November): the owner's three points first, each figure open under a two-line caption: what
 # changed, then what is still open
+STAGE6 = [
+    ("20-waterfall.png", "Owner round 6, every change of these rounds in one place: the lowercase, the capitals and the figures at "
+     "300, 400, 550 and 700, the 0.81 build before your rounds (above) and now (below). This round: the Light g's loop "
+     "eases into its link (the Light now passes the curvature check), and the 9's and 6's bowl side thickens as a round "
+     "stroke again (their drift from 400 to 700 is now +0.012, was +0.026).",
+     "Open: G, X, a, g, w, z lean further than the references at 700 (G and X by about 0.02, z 0.022, a 0.035, g 0.032, w "
+     "0.016); 4, 5, 8 and K drift a little the other way; none is covered by a rule already in the engine."),
+]
+
 STAGE5 = [
     ("19-lines.png", "Owner round 5: the x, the S family, c and e, before then after at 300, 400, 550, 700. The x keeps its thick "
      "stroke's slant (it turns 0.2 degrees, was 6.3) and no longer leans at the Bold (-0.044 of its height from 400, "
@@ -127,6 +136,14 @@ OWNER = [
 ]
 
 
+def stage6_section(figdir):
+    figs = "".join(f"<figure style='margin:18px 0'><figcaption style='font:15px/1.45 system-ui;margin:0 0 6px'>"
+                   f"<div style='font-weight:600'>{html.escape(a)}</div><div>{html.escape(b)}</div></figcaption>"
+                   f"{img_tag(os.path.join(figdir, f))}</figure>"
+                   for f, a, b in STAGE6 if os.path.exists(os.path.join(figdir, f)))
+    return (f"<h2 style='font-size:22px'>Owner round 6: the Light g, the 9 and 6; everything changed, at a glance</h2>{figs}") if figs else ""
+
+
 def stage5_section(figdir):
     figs = "".join(f"<figure style='margin:18px 0'><figcaption style='font:15px/1.45 system-ui;margin:0 0 6px'>"
                    f"<div style='font-weight:600'>{html.escape(a)}</div><div>{html.escape(b)}</div></figcaption>"
@@ -174,7 +191,7 @@ def section(figdir):
                    f"{html.escape(t)}</figcaption>{img_tag(os.path.join(figdir, f))}</figure>"
                    for f, t in TITLES if os.path.exists(os.path.join(figdir, f)))
     return (f"<section id='changed-081' style='max-width:1400px;margin:0 auto;padding:16px;font:15px/1.5 system-ui;"
-            f"color:inherit'>{stage5_section(figdir)}{stage4_section(figdir)}{stage3_section(figdir)}{stage2_section(figdir)}{owner_section(figdir)}<h2 style='font-size:22px'>What changed in 0.81 ({html.escape(entry['date'])})</h2>"
+            f"color:inherit'>{stage6_section(figdir)}{stage5_section(figdir)}{stage4_section(figdir)}{stage3_section(figdir)}{stage2_section(figdir)}{owner_section(figdir)}<h2 style='font-size:22px'>What changed in 0.81 ({html.escape(entry['date'])})</h2>"
             f"<ul style='padding-left:20px'>{items}</ul><details><summary style='cursor:pointer;font-weight:600'>"
             f"The figures ({sum(1 for f, _ in TITLES if os.path.exists(os.path.join(figdir, f)))})</summary>{figs}"
             f"</details></section>")
