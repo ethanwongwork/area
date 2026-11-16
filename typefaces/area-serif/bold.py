@@ -732,6 +732,44 @@ def serif_on_slant(strokes, adj, contours, X, Y, moved_to, v):
 CROSS_DEBUG = False
 
 
+S_SHAPES = ("S", "s")
+
+
+def _bowl_extents(contours):
+    pl = polys(contours)
+    ys = [q[1] for P in contours for q in P if q[2] is not None]
+    y0, y1 = min(ys), max(ys)
+    H = y1 - y0
+
+    def ext(a, b):
+        lo, hi = 1e9, -1e9
+        for k in range(1, 40):
+            y = y0 + (a + (b - a) * k / 40) * H
+            for l_, h_ in scan(pl, y, 1):
+                lo, hi = min(lo, l_), max(hi, h_)
+        return lo, hi
+    return ext(0.55, 1.0), ext(0.0, 0.45), y0, H
+
+
+def s_terminal(R, N):
+    """The S's top terminal moved level so its top bowl keeps the Regular's share of the bottom bowl's width."""
+    (rt, rb, _y, _h), (nt, nb, y0, H) = _bowl_extents(R), _bowl_extents(N)
+    ratio = (rt[1] - rt[0]) / (rb[1] - rb[0])
+    d = round(ratio * (nb[1] - nb[0]) + nt[0] - nt[1])
+    if not d:
+        return N, 0
+    xr = max(q[0] for P in N for q in P if q[1] >= y0 + 0.55 * H)
+    out = []
+    for P in N:
+        n = len(P)
+        sel = set()
+        for i, q in enumerate(P):
+            if q[2] is not None and q[1] >= y0 + 0.62 * H and q[0] >= xr - 60:
+                sel |= {i, (i - 1) % n, (i + 1) % n}
+        out.append([(q[0] + d, q[1]) + tuple(q[2:]) if i in sel else q for i, q in enumerate(P)])
+    return out, d
+
+
 def crossing_openings(strokes, adj, X, Y, moved_to, opens, v):
     """Owner round 4: two straight diagonals that cross (x) keep the thick stroke's angle; the openings between their
     ends are then set where they are measured, between the placed nodes (the parts audit's place), not on the x
@@ -1576,10 +1614,23 @@ def mid_master(reg, new, v, pinned=None):
     return [[(round(x), round(y), t, s_) for x, y, t, s_ in P] for P in M]
 
 
+def open_tail(t, v):
+    """A curved level stroke from a round stroke out to a terminal: the mean of the round stroke's growth (146 / 82)
+    and the terminal tip's (TIP), on f (a thick part's share) towards the Bold and the Light alike."""
+    r = ((ROUND_STROKE + THICK["round"]) / ROUND_STROKE + TIP) / 2
+    return t * (1 + (r - 1) * v["f"])
+
+
 HINTS = {
     # e: the bar keeps its upper edge (the eye gives up only the hairline's gain: Georgia Pro 0.98, Serrif 0.90 of
     # its height) and thickens downward, 41 to 49 (1.02, 1.36)
-    "e": {"y": [(279, 320, lambda v: 41 + 8 * v["ft"], "bar")], "ypin": [320]},
+    "e": {"y": [(279, 320, lambda v: 41 + 8 * v["ft"], "bar"), (-10, 43, lambda v: open_tail(53, v), "open tail")],
+          "ypin": [320]},
+    # c, e (owner round 5): the lower stroke running from the round stroke out to the terminal is no hairline: it
+    # grows as the taper between the two, the round stroke's ratio at its root and the terminal's (the tip's) at its
+    # end, read at its middle (open_tail). It grew 1.24 (the hairlines') where Georgia Pro's grows 1.58 and Source
+    # Serif 4's 1.75 at the same place, and c's bottom-right quarter lost ink 0.157 > 0.128
+    "c": {"y": [(-10, 46, lambda v: open_tail(56, v), "open tail")]},
     # s: its barbs (34 at the cut, the inside edge slanting, so the scan reads no stroke there) grow as C's, S's and
     # G's barbs do, by the thin upright rule (owner round 4: they grew 1.05 and 1.21 where the references' grow 1.27
     # to 1.53; with the turns on the round strokes' ratio the s's top-right quarter holds its share within 0.02)
@@ -3443,6 +3494,26 @@ def bold_font(reg, stem=STEM, **over):
             tails_.append(_LOOPS.round_tail(font, g.name, kind_, master=True).replace(": tail rebuilt", f" ({kind_}'s tail)"))
             resided.add(g.name)
     notes.append(f"tails into a ball: {len(tails_)} ({'; '.join(tails_)})")
+    # owner round 5: an S's top bowl keeps its width's share of the bottom bowl's (S_SHAPES). At the Bold the top
+    # terminal stayed while the bowls grew: S's top bowl went 0.904 > 0.869 of the bottom's, s's 0.923 > 0.868
+    # (Georgia Pro 0.899 > 0.902, Source Serif 4 0.900 > 0.914), its terminal 0.934 > 0.863 of the width across
+    # (0.939 > 0.933, 0.930 > 0.939), and the top-right quarter lost ink (S 0.198 > 0.174, s 0.187 > 0.171). The
+    # top terminal (its nodes in the top 38% within 60 of the top part's right extreme, with their handles) moves
+    # level by what restores the Regular's ratio.
+    shaped = []
+    for name in S_SHAPES:
+        if name not in reg or name not in font or name in struck:
+            continue
+        R_, N_ = glyph_contours(reg[name]), glyph_contours(font[name])
+        if [len(P) for P in R_] != [len(P) for P in N_]:
+            continue
+        M_, d_ = s_terminal(R_, N_)
+        if d_:
+            for c, P in zip(font[name].contours, M_):
+                c.points = [Point(x, y, t, smooth=s_) for x, y, t, s_ in P]
+            shaped.append(f"{name} {d_:+d}")
+            resided.add(name)
+    notes.append(f"S bowls: {', '.join(shaped)}")
     # 0.81 (integration): along a tapering stroke (a tail, a hook, a flag, a terminal) each place keeps its own
     # law's share of the Regular's thickness there, read off the ladder by what it is: a stem's place the stem's
     # ratio, a hairline's the hairline's, a serif tip's or an end's the tip's, in between interpolated
@@ -3769,6 +3840,30 @@ def bold_font(reg, stem=STEM, **over):
                 c_.points = [Point(x, y, t, smooth=s_) for x, y, t, s_ in P]
             evened.append(f"{name}{' (mid)' if f_ is layer else ''} {nb0} > {nb1} faults")
     notes.append(f"curvature at nodes: {len(evened)} contours ({'; '.join(evened)})")
+    # owner round 5: g's loop in a master whose loop curvecheck faults (the Light's): built from its centreline
+    # (loops.g_loop_master); kept only when its faults fall and no place falls short of its law that the engine's did
+    # not
+    if "g" in font and "g" in reg and "g" not in struck:
+        Rg, Ng = glyph_contours(reg["g"]), glyph_contours(font["g"])
+        yr_g = tuple(_CC.REGIONS["g"][1])
+        if _CC.report("g", Ng, yr_g)[0]:
+            laws_g = [(REG_STEM, stem / REG_STEM), (LC_HAIR, 1 + (HAIR_RATIO - 1) * v["ft"]), (30, v["tip"])]
+            got_ = _LOOPS.g_loop_master(Rg, Ng, laws_g, yr_g)
+            if got_ is not None:
+                Mg, f0, f1, sh_ = got_
+                import white as _W2
+                t0_, e0_, _w = _W2.taper_readings(Rg)
+                want_ = t0_ * _W2.taper_law(t0_, laws_g)
+                tn_, en_, _w = _W2.taper_readings(Ng)
+                eng_short = int(((tn_ < want_ * 0.97) & ~np.isnan(t0_) & ~np.isnan(tn_) & (e0_ == en_)).sum())
+                if f1 < f0 and sh_ <= eng_short:
+                    for c, P in zip(font["g"].contours, Mg):
+                        c.points = [Point(x, y, t, smooth=s_) for x, y, t, s_ in P]
+                    if "g" in layer:
+                        del layer["g"]
+                    notes.append(f"g's loop from its centreline: {f0} > {f1} faults, {sh_} places short of their law (the engine's {eng_short})")
+                else:
+                    notes.append(f"g's loop from its centreline: kept the engine's ({f0} > {f1} faults, {sh_} short, engine {eng_short})")
     # 0.79: an f ligature's sides are its letters' (0.78: every one 4 wider on the left than f, ff 22 on the right)
     def _sides(f_, n):
         xs = [q.x for c in f_[n].contours for q in c.points]

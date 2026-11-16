@@ -791,3 +791,109 @@ def even_part(contours, yr, rounds=6):
         if nb == 0 and not thin:
             break
     return best
+
+
+# ------------------------------------------------------------------------------------------- g's loop in a master
+# 0.81 (owner round 5; the owner twice: "the g is not smooth"). The Light's loop kept four curvature faults that no
+# solve of its handles could clear without thinning it: its thickness was the engine's, its path the Regular's. Built
+# from its centreline instead: each extreme of the loop's outside (left, bottom, right) and of its counter moves, with
+# its handles, towards the centre of the stroke it bounds by (1 - law) of half the Regular's thickness there (the
+# taper law: the stroke at the extreme takes its ladder share, stem-like sides 0.705 and the hairline bottom 0.847 at
+# 300), the whole loop carried by the engine's mean move of those six nodes. Then the curve from the loop's right side
+# into the link keeps the Regular's handle shares (scaled by its chord), the counter's handle off the link's straight
+# lies on that straight, the part is solved with its other edge (even_part), and the two handles of the curve into
+# the link take the least change that clears curvecheck without a place falling short of its law.
+
+def g_loop_master(R, N, laws, yr, rounds=6):
+    """R, N: g's contours in the Regular and a master. Returns (contours, faults before, faults after) or None."""
+    import white as WHITE
+    if len(R) != 3 or [len(P) for P in R] != [len(P) for P in N]:
+        return None
+    outer = max(range(3), key=lambda k: len(R[k]))
+    holes = [k for k in range(3) if k != outer]
+    hole = min(holes, key=lambda k: min(q[1] for q in R[k]))            # the loop's counter: the lower hole
+
+    def extremes(P):
+        on = [i for i, q in enumerate(P) if q[2] and q[1] < 0]
+        if len(on) < 3:
+            return None
+        return [min(on, key=lambda i: P[i][0]), min(on, key=lambda i: P[i][1]), max(on, key=lambda i: P[i][0])]
+    eo, eh = extremes(R[outer]), extremes(R[hole])
+    if not eo or not eh:
+        return None
+    before = len(K.report("", N, yr)[0])
+    dense = lambda P: np.array([d[:2] for d in WHITE._dense(P, 1.0)])   # noqa: E731
+    D = {outer: dense(R[hole]), hole: dense(R[outer])}
+    allh = [i for i, q in enumerate(R[hole]) if q[2]]                   # the loop's outside extremes and its
+    shift = np.mean([np.array(N[c][i][:2], float) - np.array(R[c][i][:2], float)    # whole counter
+                     for c, ix in ((outer, eo), (hole, allh)) for i in ix], axis=0)
+    M = [list(P) for P in N]
+    for c, ix in ((outer, eo), (hole, eh)):
+        P = R[c]
+        n = len(P)
+        for i in ix:
+            p = np.array(P[i][:2], float)
+            d = np.hypot(*(D[c] - p).T)
+            j = int(d.argmin())
+            w = float(d[j])
+            u = (D[c][j] - p) / w
+            phi = float(WHITE.taper_law(np.array([w]), laws)[0])
+            mv = shift + u * (1 - phi) * w / 2
+            for k in (i, (i - 1) % n, (i + 1) % n):
+                if k == i or P[k][2] is None:
+                    M[c][k] = (round(P[k][0] + mv[0]), round(P[k][1] + mv[1])) + tuple(P[k][2:])
+    # the curve from the right extreme on to the next node (towards the link): the Regular's handle shares
+    P, Q = R[outer], M[outer]
+    n = len(P)
+    i0 = eo[2]
+    on = [i for i, q in enumerate(P) if q[2]]
+    i3 = on[(on.index(i0) + 1) % len(on)]
+    if P[i3][1] < P[i0][1]:                                           # the contour runs the other way
+        i3 = on[(on.index(i0) - 1) % len(on)]
+    step = 1 if (i3 - i0) % n == 3 else -1
+    h_a, h_b = (i0 + step) % n, (i3 - step) % n
+
+    def share(Q_, s1=1.0, s2=1.0):
+        k = math.dist(Q_[i0][:2], Q_[i3][:2]) / max(1e-9, math.dist(P[i0][:2], P[i3][:2]))
+        for h, o, sc in ((h_a, i0, s1), (h_b, i3, s2)):
+            L = math.dist(P[h][:2], P[o][:2]) * k * sc
+            d = np.array(Q_[h][:2], float) - np.array(Q_[o][:2], float)
+            d /= max(1e-9, np.linalg.norm(d))
+            Q_[h] = (round(Q_[o][0] + d[0] * L), round(Q_[o][1] + d[1] * L)) + tuple(Q_[h][2:])
+    share(Q)
+    # the counter's straight (the link's underside) and the curve off its end: the handle on the line
+    H = M[hole]
+    m = len(H)
+    for i, q in enumerate(H):
+        if q[2] == "line" and H[(i + 1) % m][2] is None:
+            a = np.array(H[(i - 1) % m][:2], float)
+            b = np.array(q[:2], float)
+            if np.linalg.norm(b - a) < 1:
+                continue
+            u = (b - a) / np.linalg.norm(b - a)
+            L = math.dist(H[(i + 1) % m][:2], q[:2])
+            H[(i + 1) % m] = (round(b[0] + u[0] * L), round(b[1] + u[1] * L)) + tuple(H[(i + 1) % m][2:])
+    M, nb, thin = even_part(M, yr, rounds)
+    t0, e0, _w = WHITE.taper_readings(R)
+    want = t0 * WHITE.taper_law(t0, laws)
+
+    def short(C):
+        t, e, _w = WHITE.taper_readings(C)
+        ok = ~np.isnan(t0) & ~np.isnan(t) & (e0 == e)
+        return int(((t < want * 0.97) & ok).sum())
+    best = (nb, short(M), 0.0, M)
+    if nb:
+        for s1 in np.arange(0.6, 1.61, 0.05):
+            for s2 in np.arange(0.8, 2.21, 0.05):
+                T = [list(C) for C in M]
+                Qt = T[outer]
+                for h, o, sc in ((h_a, i0, s1), (h_b, i3, s2)):
+                    d = np.array(M[outer][h][:2], float) - np.array(M[outer][o][:2], float)
+                    Qt[h] = (round(M[outer][o][0] + d[0] * sc), round(M[outer][o][1] + d[1] * sc)) + tuple(Qt[h][2:])
+                f = len(K.report("", T, yr)[0])
+                if f > best[0]:
+                    continue
+                key = (f, short(T), abs(s1 - 1) + abs(s2 - 1))
+                if key < best[:3]:
+                    best = key + (T,)
+    return best[3], before, best[0], best[1]
