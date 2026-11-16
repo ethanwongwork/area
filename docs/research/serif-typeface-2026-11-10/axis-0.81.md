@@ -570,3 +570,11 @@ Regular: y and ystroke change (8 units).
 
 Not done: the Light g (item 4: the centreline construction was not written), the neck and exit-angle columns of the
 terminal table, the axis list (item 6).
+
+### Final (`build/qa-081.log`, owner round 3)
+
+- qa.py as owner round 2 (Bold curvature passes; the Light g fails; audit_axis Bold 8 thin, Light 1; audit_rays the same
+  18 glyphs, 27,608 places). The per-master kerning refit ran (`AREA_KERN_FIT=1`, fit_kerning.json); audit_kern passes
+  at all 17 weights 300 to 700 (`build/weight/stage3/kern-every25.log`).
+- Regular against round 2: y and ystroke (the ball, 8 units). Figures: `17-advance.png`, `17-lean.png` (img/081);
+  `17-lines.png` (with the reference faces drawn, in build/figures/081 only).

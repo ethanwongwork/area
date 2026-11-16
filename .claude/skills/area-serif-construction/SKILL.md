@@ -230,7 +230,11 @@ masters match point for point and every weight between them is sound. Read `bold
   stroke steeper than both references in the Regular: redrawn in owner round 2 (`clean.nine_six`). Owner round 2 left:
   the Light g's loop (every solve thins it); the x's lean (the kept-lean and bracket rules work on the x but miss x's
   opening targets and thin the ampersand's crossing: `LEAN_KEEP_THICK`, `BRACKET_FROM_EDGE` off); s z G S X e g w a c
-  lean past both references; s's turns grow 2.3 times (stems 1.8); y's ball 96 where j's and the round ends' are 86 to 88.
+  lean past both references; s's turns grow 2.3 times (stems 1.8). Owner round 3: y's ball on the round ends' radius
+  (44); the Bold's diagonal letters measured against n and H and the references (only x outside: 1.134 against 0.997 to
+  1.032): x's opening must be constrained where it is measured (across the ink, not on knots) before its angle can be
+  kept; s's barbs are not read as strokes (grow 1.05, references 1.27 to 1.53); T's arm reads as a curved level stroke
+  (1.24, capitals' arms 1.33); the Light g's loop needs a centreline construction.
 
 ## What is still outside the system
 

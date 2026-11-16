@@ -59,6 +59,16 @@ def img_tag(path, width=1400):
 
 # 0.81 (owner round, 15 November): the owner's three points first, each figure open under a two-line caption: what
 # changed, then what is still open
+STAGE3 = [
+    ("17-advance.png", "Owner round 3, are the Bold's diagonal letters too wide? Each letter's advance growth from 400 to 700 "
+     "over its class's upright (n, H), against Georgia Pro and Source Serif 4 (grey band): only the x stands outside "
+     "(1.134 against 0.997 to 1.032); v w y z V W X Y Z K A M sit in or at the band.",
+     "Open: the x. Keeping its thick stroke's angle needs its openings set where they are measured; not in this build."),
+    ("17-lean.png", "Owner round 3, lean at 700 against the references' band, on this build.",
+     "Open: x s z G S X e g w a c, and the 9 and 6's slight drift; the round letters' parts were measured (s's barbs grow "
+     "1.05 where the references' grow 1.27 to 1.53) but no fix moved them into the band."),
+]
+
 STAGE2 = [
     ("16-figures.png", "Owner round 2, the 9 and the 6: the 9's lower right is fuller (its quarter 0.90 as wide as tall, was 0.76; "
      "its right edge leans 23.6 degrees, was 17.6; references 24.5 to 25.8), its ball under the bowl's left side; the 6 is the "
@@ -96,6 +106,14 @@ OWNER = [
 ]
 
 
+def stage3_section(figdir):
+    figs = "".join(f"<figure style='margin:18px 0'><figcaption style='font:15px/1.45 system-ui;margin:0 0 6px'>"
+                   f"<div style='font-weight:600'>{html.escape(a)}</div><div>{html.escape(b)}</div></figcaption>"
+                   f"{img_tag(os.path.join(figdir, f))}</figure>"
+                   for f, a, b in STAGE3 if os.path.exists(os.path.join(figdir, f)))
+    return (f"<h2 style='font-size:22px'>Owner round 3: the Bold's diagonal letters, measured</h2>{figs}") if figs else ""
+
+
 def stage2_section(figdir):
     figs = "".join(f"<figure style='margin:18px 0'><figcaption style='font:15px/1.45 system-ui;margin:0 0 6px'>"
                    f"<div style='font-weight:600'>{html.escape(a)}</div><div>{html.escape(b)}</div></figcaption>"
@@ -119,7 +137,7 @@ def section(figdir):
                    f"{html.escape(t)}</figcaption>{img_tag(os.path.join(figdir, f))}</figure>"
                    for f, t in TITLES if os.path.exists(os.path.join(figdir, f)))
     return (f"<section id='changed-081' style='max-width:1400px;margin:0 auto;padding:16px;font:15px/1.5 system-ui;"
-            f"color:inherit'>{stage2_section(figdir)}{owner_section(figdir)}<h2 style='font-size:22px'>What changed in 0.81 ({html.escape(entry['date'])})</h2>"
+            f"color:inherit'>{stage3_section(figdir)}{stage2_section(figdir)}{owner_section(figdir)}<h2 style='font-size:22px'>What changed in 0.81 ({html.escape(entry['date'])})</h2>"
             f"<ul style='padding-left:20px'>{items}</ul><details><summary style='cursor:pointer;font-weight:600'>"
             f"The figures ({sum(1 for f, _ in TITLES if os.path.exists(os.path.join(figdir, f)))})</summary>{figs}"
             f"</details></section>")
