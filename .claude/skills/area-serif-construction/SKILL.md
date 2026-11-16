@@ -117,9 +117,11 @@ the fastest change (under 0.5 units of thickness per unit travelled on a branch,
 | Open tail (0.81, owner round 5) | A lower stroke from a round stroke to a terminal grows by the mean of the round stroke's and the tip's ratios | c e | `bold.open_tail`, `HINTS` | references' 1.58 to 1.75 |
 | g's loop in a master (0.81, owner round 5) | Its extremes from the centreline by the taper law, the link's curve by the Regular's shares, solved with its other edge | g (Light) | `loops.g_loop_master` | curvecheck on the Light |
 | A ball at any tilt (0.81, axis round) | A ball is read by what makes it one, not by its alignment: three nodes joined by two curves, the chord between the outer two 70 to 130 long and within 25 degrees of an axis, the arc's far point 0.40 to 0.70 of the chord out and within 0.12 of its middle, ink all along the chord; one reading per ball (the rounder of two arcs). Then the ball law (1 + 0.40 f) reaches it in both masters, as the upright balls. Letters only (signs and accents keep their own laws) | Ƙ Ⱳ Ƴ ⱳ ƴ ƒ and 22 more hooks and tails with a ball (Ƈ Ɠ Ƒ Ɲ Ɋ Ɽ Ʈ Ɂ ɂ ʔ ʕ ƈ ɠ ʃ ɽ ʋ Ɛ ɔ Ɔ ß ʼ, s_p) | `bold.tilted_balls`, `balls(tilted=True)` in `bold.bold` | `audit_rays.py` every 25 units; `audit_axis.py`; curvecheck on both masters |
-| A node joining a straight to a curve (0.81, axis round 2) | In the Light, where a place on the curve falls under the stem's ratio less the JND, the smooth node between the straight and the curve travels along its own straight, its handle rescaled by the chord, the far handle shortened until no turn; not on a curve that ends on a corner (a bracket) | ƴ ɲ ʈ ʋ R Ꞌ ꞌ (Light) | `white._straight_nodes` in `keep_taper` | `audit_axis.py`, `audit_rays.py` |
+| A node joining a straight to a curve (0.81, axis round 2) | In the Light, where a place on the curve falls under the stem's ratio less the JND, the smooth node between the straight and the curve travels along its own straight, its handle rescaled by the chord, the far handle shortened until no turn; not on a curve that ends on a corner (a bracket) | ƴ ɲ ʈ (Light; read as audit_rays reads, a slide at most 1.5 times the Regular's stroke) | `white._straight_nodes` in `keep_taper` | `audit_axis.py`, `audit_rays.py` |
 | A curve on its chord (0.81, axis round 2) | Where a master's thinnest stroke falls under its floor, a curve is put back to its Regular shape on the master's chord (a similarity) when that lifts the thinnest place without a turn; not where a mid master stands between | ʈ (Bold) | `bold_font` (after the white between parts) | `audit_axis.py` thin |
 | A sign's slanted strokes in the Light (0.81, axis round 2) | Towards the Light every slanted stroke of a sign takes the sign law (1 + 0.37 f), as its plain strokes do; towards the Bold the sign law holds only at the plain stroke's 50 to 55 | ⌦ ⌫ ✓ and 22 more signs | `bold.diag_target` | `audit_rays.py` |
+| A letter in a ring (0.81, axis round 3) | A glyph whose ring is ©'s point for point takes ©'s ring in each master; the letter inside keeps the Regular's offset from the counter's centre and is scaled about its centre until its white to the counter is the Regular's times the counter's change | ® | `bold_font` (after the curves on their chord) | `audit_axis.py`, `audit_rays.py` |
+| A cut end towards the Bold (0.81, axis round 3) | Towards the Bold a stroke's straight cut end (under 30, between two corners) grows along itself by the tip's law where the place reads thinner than the Regular; no other node moves | ſp ſt ƭ ™ | `white.keep_taper(cuts=True)`, `_taper_places(cut_only)` | `audit_axis.py` |
 | Heights | x 520, cap 712, ascender 780; overshoot 530 / -10 lowercase, 721 / -9 capitals and figures | all | `balance.heights` | `audit_serifs` 4, `check.py` |
 
 A part not in this table has no rule yet. Add the row when you write the rule.
@@ -270,6 +272,14 @@ masters match point for point and every weight between them is sound. Read `bold
   wants 51.7 at the Bold and stays 40); ogonek 1 unit; ® (its R to be fitted to the ring's inner white); @; ₵ (the
   owner's choice, figure 23-cedi); the round strokes entering a junction (Ə ð ʕ ɂ œ & $ ®): no rule yet. ʋ's counter
   straight is 124 shorter in the Light by the straight-node rule: a visible change to look at.
+  Axis round 3 (the last before the owner's review): ® cured (a letter in a ring); ʋ back to round 1 (the slide now
+  reads as audit_rays reads and reaches at most 1.5 strokes); cut ends grow towards the Bold. Open, honestly: the round
+  stroke into a junction (Ə ð ʕ ɂ œ & $: thins towards the Bold, thickens towards the Light; its places sit where the
+  white ends, inside the junction zones the taper stations leave out; no rule); @ (its a is one contour with its
+  ring); the ogonek (0.95 units, under the Bold taper rule's one-unit mask; its cut grown by the tip's law cures it in a
+  trial); one.ss01 (its thin place is across the flag, not at the crotch; keep_necks towards the Bold reaches only < >);
+  ₵ (the owner's choice); the hooks' curvature faults even_part cannot clear (Light 6, Bold 15) and the Regular's own 41
+  (first drawings; comb sheets 24-hook-combs-*).
 
 ## What is still outside the system
 

@@ -59,6 +59,20 @@ def img_tag(path, width=1400):
 
 # 0.81 (owner round, 15 November): the owner's three points first, each figure open under a two-line caption: what
 # changed, then what is still open
+AXIS3 = [
+    ("24-axis.png", "Axis round 3, before (round 2) over after at 300, 400, 550 and 700: the registered sign keeps an even ring (its R "
+     "is placed and sized inside it as the other ring signs are); the v with a hook is back to its earlier shape; the long-s "
+     "ligatures, t with hook and the trademark keep their stroke ends' weight at the Bold.",
+     "Open: where a round stroke runs into a junction (Ə ð œ & $ ɂ ʕ); @'s a; the footless 1's flag; the ogonek by under a "
+     "unit; ₵ waits for your choice."),
+    ("24-hook-combs-masters.png", "The hooks' remaining curvature bumps in the Light (top) and the Bold (below), each over the "
+     "Regular, with curvature combs: where the comb's edge steps, the curve's bend changes at a node.",
+     "These are what the evening rule could not smooth without thinning the stroke."),
+    ("24-hook-combs-regular.png", "The ten worst curvature faults in the hooks' own drawings (the Regular), for you to look at: "
+     "Ⱳ, ʔ, ⱳ, ƴ, ƒ, Ɽ, Ʈ, ɔ, Ɔ, Ƒ.",
+     "Nothing is changed in the Regular until you say."),
+]
+
 AXIS2 = [
     ("23-axis.png", "Axis round 2, before (round 1) over after at 300, 400, 550 and 700. Letters: the y with a hook no longer pinches "
      "where its tail leaves the thin stroke in the Light, the n with a left hook keeps its tail's weight by the stem, the t "
@@ -171,6 +185,14 @@ OWNER = [
 ]
 
 
+def axis3_section(figdir):
+    figs = "".join(f"<figure style='margin:18px 0'><figcaption style='font:15px/1.45 system-ui;margin:0 0 6px'>"
+                   f"<div style='font-weight:600'>{html.escape(a)}</div><div>{html.escape(b)}</div></figcaption>"
+                   f"{img_tag(os.path.join(figdir, f))}</figure>"
+                   for f, a, b in AXIS3 if os.path.exists(os.path.join(figdir, f)))
+    return (f"<h2 style='font-size:22px'>Axis round 3: before your review</h2>{figs}") if figs else ""
+
+
 def axis2_section(figdir):
     figs = "".join(f"<figure style='margin:18px 0'><figcaption style='font:15px/1.45 system-ui;margin:0 0 6px'>"
                    f"<div style='font-weight:600'>{html.escape(a)}</div><div>{html.escape(b)}</div></figcaption>"
@@ -251,7 +273,7 @@ def section(figdir):
                    f"{html.escape(t)}</figcaption>{img_tag(os.path.join(figdir, f))}</figure>"
                    for f, t in TITLES if os.path.exists(os.path.join(figdir, f)))
     return (f"<section id='changed-081' style='max-width:1400px;margin:0 auto;padding:16px;font:15px/1.5 system-ui;"
-            f"color:inherit'>{axis2_section(figdir)}{axis_section(figdir)}{stage7_section(figdir)}{stage6_section(figdir)}{stage5_section(figdir)}{stage4_section(figdir)}{stage3_section(figdir)}{stage2_section(figdir)}{owner_section(figdir)}<h2 style='font-size:22px'>What changed in 0.81 ({html.escape(entry['date'])})</h2>"
+            f"color:inherit'>{axis3_section(figdir)}{axis2_section(figdir)}{axis_section(figdir)}{stage7_section(figdir)}{stage6_section(figdir)}{stage5_section(figdir)}{stage4_section(figdir)}{stage3_section(figdir)}{stage2_section(figdir)}{owner_section(figdir)}<h2 style='font-size:22px'>What changed in 0.81 ({html.escape(entry['date'])})</h2>"
             f"<ul style='padding-left:20px'>{items}</ul><details><summary style='cursor:pointer;font-weight:600'>"
             f"The figures ({sum(1 for f, _ in TITLES if os.path.exists(os.path.join(figdir, f)))})</summary>{figs}"
             f"</details></section>")
