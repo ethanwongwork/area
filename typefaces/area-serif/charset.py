@@ -888,8 +888,21 @@ G_TAIL_FORMS = {
     # the tail's end: at 0.80's share (G_TAIL_LOW) the half-ellipse's two quarters meet at 1.23 in the Regular and
     # 1.77 in the Bold.
     "D": dict(ball=G_BALL_TOP_080, end=G_TAIL_END, low="mid", thick=1.15, rise="ball"),
+    # 0.82 (owner round 8, 16 November, comparing 0.80, the 0.81 tip and form D at 300 400 550 700: "the g from 0.80
+    # is the best one. the new single story g is not smooth at all on the bottom right curve"). Form D's outside ran
+    # straight down the stem to the ball's height (-115) and then turned in a quarter 158 wide and 69 tall: a flat
+    # run and a tight corner. 0.80's construction is restored whole (`_tail_080`): four quarter turns between five
+    # places, each handle G_ROUND (0.55) of its side; the outside leaves the stem at the baseline (`leave`, 0.80's j
+    # as drawn: its outer stem edge ended 2 units up in the Regular and the Light, 3 in the Bold), so the lower right
+    # is one quarter 255 wide and 235 tall; the inside leaves where j's inner stem edge ends; the lowest point at
+    # 0.518 of the bowl's width (0.560 at the Bold stem); the ball's top 0.138 of the x-height under the baseline
+    # (0.120 at the Bold stem), all as 0.80 had them. The ball is j's ball as the weight engine reads it (0.80's path:
+    # in a master bold.bold_font passes this master's j from before the 0.81 tail rebuild). By the owner's choice
+    # over curvecheck, which reads 1.38 to 1.65 at its nodes (curvecheck.EXPECTED).
+    "E": dict(construction="080", ball=G_BALL_TOP_080, ball_bold=0.120, end=G_TAIL_END, low=G_TAIL_LOW,
+              low_bold=G_TAIL_LOW_BOLD, thick=G_TAIL_THICK, leave=2),
 }
-G_TAIL_FORM = "D"
+G_TAIL_FORM = "E"
 
 
 def _pts(c):
@@ -966,18 +979,19 @@ def _round_tail(top, low, end, end_dir, end_k, inner):
     return (KAPPA, KAPPA), best[1]
 
 
-def single_g_points(q_outer, q_counter, j_body, hair, form=None, least_white=None):
+def single_g_points(q_outer, q_counter, j_body, hair, form=None, least_white=None, ball_from=None):
     """The single-storey g's two contours from q's and j's point lists [(x, y, type, smooth)]. least_white (0.81, a
     master's white law): the ball rises towards the Bold by the references' change only as far as the white between
     it and the bowl above it, inside the one contour, keeps that much (ball_white); short of it, the ball stays
-    lower by as little as holds it (steps of 0.001 of the x-height)."""
-    pts = _single_g_points(q_outer, q_counter, j_body, hair, form)
+    lower by as little as holds it (steps of 0.001 of the x-height). ball_from (0.82, form E): another reading of
+    the same j (a master's j before its tail was built again) whose ball's shape the tail takes."""
+    pts = _single_g_points(q_outer, q_counter, j_body, hair, form, ball_from=ball_from)
     if least_white is None:
         return pts
     k = 0
     while ball_white(pts[0]) < least_white - 0.5 and k < 300:
         k += 1
-        pts = _single_g_points(q_outer, q_counter, j_body, hair, form, lower=0.001 * k)
+        pts = _single_g_points(q_outer, q_counter, j_body, hair, form, lower=0.001 * k, ball_from=ball_from)
     return pts
 
 
@@ -998,7 +1012,7 @@ def ball_white(outer, parts=None):
 _BALL_PARTS = {}
 
 
-def _single_g_points(q_outer, q_counter, j_body, hair, form=None, lower=0.0):
+def _single_g_points(q_outer, q_counter, j_body, hair, form=None, lower=0.0, ball_from=None):
     # q: the stem's right edge is the upright line that reaches the x-height; the crotch is where the bowl's lower
     # stroke meets the stem's left edge
     n = len(q_outer)
@@ -1031,6 +1045,20 @@ def _single_g_points(q_outer, q_counter, j_body, hair, form=None, lower=0.0):
     ball = [list(p) for p in tail[neck:left + 1]]
     tw = ((stem_r - stem_l) - G_STEMS[0]) / (G_STEMS[1] - G_STEMS[0])
     F = G_TAIL_FORMS[form or G_TAIL_FORM]
+    if F.get("construction") == "080":
+        if ball_from is not None:                     # the ball's shape from another reading of this master's j
+            m2 = len(ball_from)
+            jr2 = _edge_top(ball_from)
+            s2 = next(i for i in range(jr2, jr2 + m2) if ball_from[i % m2][2] == "line" and ball_from[i % m2][1] < 0
+                      and ball_from[(i - 1) % m2][0] == ball_from[i % m2][0])
+            tb = [list(ball_from[i % m2]) for i in range(s2, jr2 + m2)]
+            assert len(tb) == len(tail) and [bool(p[2]) for p in tb] == [bool(p[2]) for p in tail], "j's two readings differ"
+            for k in range(neck, left + 1):
+                tail[k] = [tail[neck][0] + tb[k][0] - tb[neck][0], tail[neck][1] + tb[k][1] - tb[neck][1]] + list(tb[k][2:])
+        tail = _tail_080(F, tail, on, stem_r, bowl_w, xh, depth, hair, tw, lower)
+        outer = [tuple(p) for p in tail[1:]] + upper + [tuple(tail[0])]
+        _BALL_PARTS[len(outer)] = (5, 11, len(tail) - 1, len(tail) - 1 + len(upper) - 1)
+        return [outer, list(q_counter)]
     ball_top = F["ball"] + tw * (G_BALL_TOP_BOLD - G_BALL_TOP) + lower
     tail_low = (F["low"] if F["low"] != "mid" else 0) + tw * (G_TAIL_LOW_BOLD - G_TAIL_LOW)
     bx = round(stem_r - F["end"] * bowl_w) - tail[left][0]
@@ -1080,7 +1108,46 @@ def _single_g_points(q_outer, q_counter, j_body, hair, form=None, lower=0.0):
     return [outer, list(q_counter)]
 
 
-def single_g(font, layer=None, form=None, name="g.ss02", least_white=None):
+def _tail_080(F, tail, on, stem_r, bowl_w, xh, depth, hair, tw, lower=0.0):
+    """0.80's tail (form E, restored in owner round 8): j's tail points (stem's left edge round the ball to the
+    right edge's foot, moved to q's stem) re-placed as 0.80's charset.single_g_points placed them: the ball whole,
+    four quarter turns between five places, each handle G_ROUND of its side of the quarter's box."""
+    start, neck, left = list(tail[0]), on[2], on[4]
+    end = list(tail[-1])
+    end[1] = F["leave"]                          # the outside leaves the stem where 0.80's j's did
+    ball = [list(p) for p in tail[neck:left + 1]]
+    ball_top = F["ball"] + tw * (F["ball_bold"] - F["ball"]) + lower
+    tail_low = F["low"] + tw * (F["low_bold"] - F["low"])
+    bx = round(stem_r - F["end"] * bowl_w) - tail[left][0]
+    by = round(-ball_top * xh) - tail[on[3]][1]
+    for p in ball:
+        p[0] += bx
+        p[1] += by
+    nk, lf = ball[0], ball[-1]
+    low_x = round(stem_r - tail_low * bowl_w)
+    in_y = depth + round(F["thick"] * hair)
+    K = G_ROUND
+
+    def arc(p0, p1, upright_first):
+        if upright_first:
+            return [(p0[0], round(p0[1] + K * (p1[1] - p0[1])), None, False),
+                    (round(p1[0] + K * (p0[0] - p1[0])), p1[1], None, False)]
+        return [(round(p0[0] + K * (p1[0] - p0[0])), p0[1], None, False),
+                (p1[0], round(p1[1] + K * (p0[1] - p1[1])), None, False)]
+
+    after = ball[1]                              # into the neck along the ball's own direction there
+    vx, vy = nk[0] - after[0], nk[1] - after[1]
+    ln = math.hypot(vx, vy)
+    reach = K * (nk[1] - in_y)
+    in_low = (low_x, in_y, "curve", True)
+    out_low = (low_x, depth, "curve", True)
+    return ([tuple(start)] + arc(start, in_low, True) + [in_low,
+            (round(low_x + K * (nk[0] - low_x)), in_y, None, False),
+            (round(nk[0] + vx / ln * reach), round(nk[1] + vy / ln * reach), None, False)]
+            + [tuple(p) for p in ball] + arc(lf, out_low, True) + [out_low] + arc(out_low, end, False) + [tuple(end)])
+
+
+def single_g(font, layer=None, form=None, name="g.ss02", least_white=None, ball_from=None):
     """g.ss02 from this font's q and j (see above). Returns its box. It keeps q's advance and kerns as q does.
     form: a key of G_TAIL_FORMS (default G_TAIL_FORM); name: the glyph to write (the variants' sheet uses others)."""
     from ufoLib2.objects import Contour, Point
@@ -1092,7 +1159,7 @@ def single_g(font, layer=None, form=None, name="g.ss02", least_white=None):
     g = src[name] if name in src else src.newGlyph(name)
     g.clearContours()
     hair = o_hair([_pts(c) for c in src["o"].contours])
-    for pts in single_g_points(_pts(q_outer), _pts(q_counter), _pts(j_body), hair, form, least_white):
+    for pts in single_g_points(_pts(q_outer), _pts(q_counter), _pts(j_body), hair, form, least_white, ball_from):
         c = Contour()
         c.points = [Point(x, y, t, smooth=s) for x, y, t, s in pts]
         g.contours.append(c)

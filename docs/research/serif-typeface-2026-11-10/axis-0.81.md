@@ -749,3 +749,30 @@ every 25 units. The hooks' curvature check still fails on the faults even_part c
 sheets `24-hook-combs-masters.png`, the Regular's ten worst `24-hook-combs-regular.png`). Figure `24-axis.png`; both base
 pages rebuilt on this build with the 0.81 sections ("Axis round 3" on top), checked at 1024 and 390 px: no broken image,
 no horizontal scroll on the evaluation page, UTF-8.
+
+## Owner round 8 (16 November 2026)
+
+The owner compared g.ss02 in 0.80, the 0.81 tip before the owner round and the round 7 build at 300, 400, 550, 700:
+"the g from 0.80 is the best one. the new single story g is not smooth at all on the bottom right curve." Item 1 only:
+g.ss02. The build before this change is saved as `build/snap081` (fonts and master UFOs).
+
+| # | Item | Cause | Rule | Before > after |
+|---|---|---|---|---|
+| 80 | g.ss02's tail back to 0.80's | Form D (owner round, #46) kept 0.80's ball height on 0.81's half-ellipse: both stem edges ran straight down to the ball's height (-115 in the Regular) and the outside then turned in one quarter 158 wide and 69 tall. Along the outside from the stem the radius went 64, 87, 136, 188, 262, 351, 428, 495 (a tight corner, then a flat run into the lowest point, which sat at x 302). 0.80's outside leaves the stem at the baseline and turns in one quarter 255 wide and 235 tall, radius 207 to 290 all the way (read on the variable font at 400) | 0.80's construction restored as form E (`charset.G_TAIL_FORMS["E"]`, `_tail_080`): four quarter turns between five places, each handle 0.55 of its side; the outside leaves the stem 2 units above the baseline (0.80's j as drawn; j's own tail rule has since moved j's to 11), the inside where j's inner stem edge ends; lowest point 0.518 of the bowl's width (0.560 at the Bold stem), ball top 0.138 x-height under the baseline (0.120 at the Bold stem). The ball is j's: in the Regular and Light j's ball is 0.80's point for point; in a master `bold.bold_font` now passes the master's j as the engine read it, before the 0.81 tail rebuild (the Bold engine's j ball is 0.80's Bold j ball point for point, so 0.80's path is reproduced, not copied). The white law between ball and bowl still holds the Bold ball (1 unit lower than 0.80's). The masters' curvature evening (`loops.even_part`) leaves g.ss02 alone (`bold.G_OWNER_SHAPE`). The bowl and stem stay today's (q's) | tail against 0.80, variable font, greatest distance between the outlines anywhere on the tail: 300 1.0, 400 0.0, 550 0.4, 700 1.0 units (point for point on the masters: Light 1, the whole tail a unit left with today's Light stem; Regular 0; Bold 1, the ball by the white law and the outer foot 2 against 3). Against the round 7 build the tail moves up to 38, 40, 44, 49 units at 300, 400, 550, 700 |
+| 81 | ɡ (U+0261, g.ss02 as a component) | Its master advance was the composites pass's reading of g.ss02's ink, taken before the splice: Light 606, Bold 689 against g.ss02's 603 and 688, and it moved with the tail (610 and 678 in the first build of #80) | After the splice a glyph that is g.ss02 alone takes the spliced g.ss02's advance (`bold.bold_font`) | Light 606 > 603, Bold 689 > 688 (now g.ss02's); the Regular 628 unchanged |
+
+Curvature (curvecheck), honestly: 0.80's tail reads as 0.80 did. Regular: the ball's left side 1.42, the outside's lowest
+point 1.45, the inside's 1.38 (limit 1.25); Light 1.45, 1.65, 1.30; Bold the ball's left side 1.65 and a 49% valley on the
+inside into the ball (the engine's ball, 0.80's). The outside's lower-right quarter itself has no fault: its radius runs
+207 to 290 with no jump. The faults are where the quarters meet at the lowest points (the bottom-left quarter is flatter,
+radius 401 against 277) and at the ball. They are listed in `curvecheck.EXPECTED` as the owner's choice, so the check
+still prints them and fails on anything new. audit_axis: unchanged (the same 27 lines as round 7's build; g.ss02 and ɡ
+not flagged). audit_rays on g.ss02 and ɡ every 50 units 300 to 700: ok (254 places). audit_charset: 0 errors (form E,
+ball top 0.138, tail end 0.959).
+
+Every glyph that moved, against `build/snap081` (all three masters, the Bold's mid layer, the Regular TTF, the variable
+font at 300, 400, 550, 700): g.ss02 and ɡ (uni0261) only; ɡ's advance as #81, no other advance. Kerning: only the
+collision keys before j: g.ss02 / ɡ with j, ĵ, ȷ 71 > 37 (Regular), 72 / 69 > 37 (Light), 95 / 74 > 67 / 42 (Bold, ĵ ȷ
+85 / 64 > 57 / 32), and the Bold's g.ss02 florin 16 > none: the 0.80 tail reaches less far under the j. No kerning refit
+was needed. Figures (`build/owner8/`): `new-over-080.png` (0.82 filled, 0.80 red), `new-over-081.png` (0.82 filled, round
+7 red), `before-081-over-080.png`; numbers in `new-over-080.txt`, `diff-vs-081.txt`. Pages not rebuilt.

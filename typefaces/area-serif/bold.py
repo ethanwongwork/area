@@ -33,6 +33,9 @@ INWARD = dict(straight=0.34, round=0.53)   # of the ink gained, the share the co
 BEARING = 0.80                             # side bearings (n: Georgia Pro 0.71, Serrif 0.90)
 DOT = 1.51                                 # i's dot; its centre holds
 DOT_ALONE = dict(mark=1.38, point=1.47)     # a dieresis's dots (Georgia Pro 1.34, Serrif 1.42); the period (1.43, 1.52)
+# owner round 8 (0.82): parts whose shape is the owner's pick over curvecheck; the masters' curvature evening
+# (loops.even_part) leaves them as built (g.ss02: 0.80's tail, charset form E)
+G_OWNER_SHAPE = {"g.ss02"}
 BALL = 1.40                                # a ball terminal's width (a 1.43, c 1.49, f 1.34, r 1.29: the two's mean)
 SPINE = 58                                 # the spine of s and S across itself (84 > 142, 95 > 154: 1.70 and 1.61)
 # A round stroke thinner than a stem gains a multiple of what the o's round stroke gains (bold_diag.py, level cut at
@@ -3608,6 +3611,7 @@ def bold_font(reg, stem=STEM, **over):
     # Owner round 3: towards the Light a tail the engine left uneven (curvecheck faults in its tail region: the Light
     # y once its Regular ball was the round ends') is rebuilt too; one it left smooth stays the engine's
     import curvecheck as _CC0
+    j_engine = None
     for g in reg:
         if not g.contours or g.components or g.name in struck or g.name in signs or g.name not in font:
             continue
@@ -3620,6 +3624,8 @@ def bold_font(reg, stem=STEM, **over):
                 continue
             if v["f"] < 0 and not _CC0.report(kind_, [cs[ci]], tuple(_CC0.REGIONS[kind_][1]))[0]:
                 continue
+            if g.name == "j":                     # owner round 8: g.ss02 takes its ball from j as the engine read it
+                j_engine = cs[ci]
             M_ = _LOOPS.master_ball(R_, cs[ci], 1 + (BALL - 1) * v["f"])
             font[g.name].contours[ci].points = [Point(x, y, t, smooth=s_) for x, y, t, s_ in M_]
             tails_.append(_LOOPS.round_tail(font, g.name, kind_, master=True).replace(": tail rebuilt", f" ({kind_}'s tail)"))
@@ -4045,7 +4051,9 @@ def bold_font(reg, stem=STEM, **over):
         # keeps the white law's least towards the Bold (charset.ball_white; 62 at 400 fell to 38 at 700, law 52)
         w0_ = CHARSET.ball_white(CHARSET._pts(reg["g.ss02"].contours[0]))
         least_g = law.least(w0_) if v["f"] > 0 else None
-        CHARSET.single_g(font, least_white=least_g)
+        # owner round 8: 0.80's tail (charset form E) takes its ball from this master's j as the engine read it,
+        # before the 0.81 tail rebuild above (0.80's path: the Bold j's ball then was the engine's, and so was the g's)
+        CHARSET.single_g(font, least_white=least_g, ball_from=j_engine)
         reports["g.ss02"] = {"x": [], "y": [], "necks": [], "spliced": "q and j"}
         if "g.ss02" in layer:
             del layer["g.ss02"]
@@ -4067,6 +4075,14 @@ def bold_font(reg, stem=STEM, **over):
                 c.points = [Point(x, y, t, smooth=s_) for x, y, t, s_ in P]
                 mg.contours.append(c)
             notes.append(f"g.ss02: a master at weight {MID_WEIGHT}, spliced from q's and j's")
+        # owner round 8: a glyph that is g.ss02 alone (ɡ, U+0261) takes the spliced g.ss02's advance. The composites'
+        # pass ran before the splice and gave it the engine's reading of g.ss02's ink (Light 606, Bold 689 against
+        # g.ss02's 603 and 688), which moved whenever the tail did
+        for g in reg:
+            if (not g.contours and len(g.components) == 1 and g.components[0].baseGlyph == "g.ss02"
+                    and tuple(g.components[0].transformation) == (1, 0, 0, 1, 0, 0) and g.width == reg["g.ss02"].width
+                    and g.name in font):
+                font[g.name].width = font["g.ss02"].width
     # 0.81 (owner, 15 November), after the splices: the parts curvecheck reads (the descender's loop and tails, the a's and l's
     # alternates, every j or y tail) meet at one curvature at each smooth node in this master as in the Regular
     # (loops.even_nodes: the node's two handle lengths, nodes and tangents kept, no new fault of the part's)
@@ -4080,6 +4096,8 @@ def bold_font(reg, stem=STEM, **over):
             regions_[g.name] = regions_[sorted(kinds_)[0]]
     evened = []
     for name, yr_ in regions_.items():
+        if name in G_OWNER_SHAPE:                 # owner round 8: 0.80's shape, by the owner's eye over curvecheck
+            continue
         for f_ in (font, layer):
             if name not in f_ or name not in reg or name in struck:
                 continue

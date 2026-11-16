@@ -603,7 +603,8 @@ def audit_081(font, bad, notes, bold=None, light=None):
         foot = [p for p in P if p[2] and p[0] == stem_r and -200 < p[1] < 80]
         lowx = next(p[0] for p in P if p[2] and p[1] == depth)
         ball_l = min((p for p in P if p[2] and p[1] < 0), key=lambda p: p[0])
-        want_y = ball_l[1] if F.get("rise") == "ball" else depth + stem_r - lowx
+        want_y = (F["leave"] if "leave" in F else ball_l[1] if F.get("rise") == "ball"
+                  else depth + stem_r - lowx)                  # form E (0.80's, owner round 8): at the baseline
         if not foot or abs(min(f[1] for f in foot) - want_y) > 1:
             bad.append(f"g.ss02: its outside does not leave the stem at {want_y}")
         ball_top = max(p[1] for p in P if p[2] and p[1] < 0 and p[0] < lowx - 100)
