@@ -534,7 +534,10 @@ LEAN_KEEP = 0.2                 # radians: a slanted stroke whose anchors would 
 # (Source Serif 4), at most 2.2 degrees (0.038 rad); Area's turned 36.4 > 42.7 as the anchors placed by the x knot map
 # pulled its foot out, and the x leaned (top half's ink centre against the bottom's, -0.124 of its height from 400 to
 # 700; the references -0.018 and -0.037). Thin diagonals turn more in the references (Georgia Pro's x 5.1 degrees)
-# and keep LEAN_KEEP. tools: audit_lean.py, build/scratch4/ang.py (numbers only).
+# and keep LEAN_KEEP. Crossing strokes only (x X, whose edges the other stroke cuts in two): on v w V W, whose thick
+# strokes meet at a vertex, keeping the lean pressed the vertices (W's middle stroke 41 > 27 at 700, an inflection in
+# v's and V's brackets at 437, R's leg into the ring of the registered sign), so those keep LEAN_KEEP.
+# tools: audit_lean.py, build/scratch4/ang.py (numbers only).
 LEAN_KEEP_THICK = 0.038
 
 
@@ -574,7 +577,8 @@ def slant_lines(strokes, pos, adj, flats, v, pinned=()):
             sol = np.linalg.lstsq(np.array(A), np.array(bvec), rcond=None)[0]
             if fit_m:
                 m, c = float(sol[0]), float(sol[1])
-                if abs(math.atan(m) - math.atan(st["m"])) > (LEAN_KEEP_THICK if st["t"] >= 64 else LEAN_KEEP):
+                crossed = len(st["L"]) > 1 or len(st["R"]) > 1    # an edge cut in two: a stroke crossing another
+                if abs(math.atan(m) - math.atan(st["m"])) > (LEAN_KEEP_THICK if st["t"] >= 64 and crossed else LEAN_KEEP):
                     # the ends that stay do not fix a lean this far
                     fit_m, m = False, st["m"]                       # from the Regular's (12 degrees): keep its lean
             else:
@@ -3185,6 +3189,29 @@ def bold_font(reg, stem=STEM, **over):
                 necked.append(f"{g.name} {log_}")
                 resided.add(g.name)
         notes.append(f"necks between curves: {len(necked)} glyphs ({'; '.join(necked)})")
+    # 0.81 (owner, 15 November): a tail into a ball (j's and y's, wherever they recur) is built again in this master:
+    # the ball is the round ends' part (the Regular's ball scaled by the ball law about its centre), the tail between
+    # the straight edge and the ball solved by the Regular's own rule (loops.master_ball, round_tail). The engine had
+    # read the ball's box neck-to-side as a round end's and the Bold's j ball came out 61 by 49, its tail meeting it
+    # at 1.80 times its curvature. Before the tapers, so the taper law holds along the rebuilt tail (after them, the
+    # Light's j fell to 0.65 of 400 by the stem, 42 against 65); before the splices (g.ss02 takes this master's j).
+    import loops as _LOOPS
+    tails_ = []
+    for g in reg:
+        if not g.contours or g.components or g.name in struck or g.name in signs or g.name not in font:
+            continue
+        cs = glyph_contours(font[g.name])
+        if [len(P) for P in cs] != [len(c.points) for c in g.contours]:
+            continue
+        for ci, R_ in enumerate(glyph_contours(g)):
+            kind_ = _LOOPS.tail_kind(reg, R_)
+            if not kind_ or max(range(len(cs)), key=lambda k: len(cs[k])) != ci:   # round_tail reads the longest
+                continue
+            M_ = _LOOPS.master_ball(R_, cs[ci], 1 + (BALL - 1) * v["f"])
+            font[g.name].contours[ci].points = [Point(x, y, t, smooth=s_) for x, y, t, s_ in M_]
+            tails_.append(_LOOPS.round_tail(font, g.name, kind_, master=True).replace(": tail rebuilt", f" ({kind_}'s tail)"))
+            resided.add(g.name)
+    notes.append(f"tails into a ball: {len(tails_)} ({'; '.join(tails_)})")
     # 0.81 (integration): along a tapering stroke (a tail, a hook, a flag, a terminal) each place keeps its own
     # law's share of the Regular's thickness there, read off the ladder by what it is: a stem's place the stem's
     # ratio, a hairline's the hairline's, a serif tip's or an end's the tip's, in between interpolated
@@ -3235,29 +3262,6 @@ def bold_font(reg, stem=STEM, **over):
             slanted.append(f"{g.name} {log_}")
             resided.add(g.name)
     notes.append(f"slanted stems: {len(slanted)} glyphs ({'; '.join(slanted)})")
-    # 0.81 (owner, 15 November): a tail into a ball (j's and y's, wherever they recur) is built again in this master:
-    # the ball is the round ends' part (the Regular's ball scaled by the ball law about its centre), the tail between
-    # the straight edge and the ball solved by the Regular's own rule (loops.master_ball, round_tail). The engine had
-    # read the ball's box neck-to-side as a round end's and the Bold's j ball came out 61 by 49, its tail meeting it
-    # at 1.80 times its curvature. After the tapers (their handle retunes would undo the solve); before the splices
-    # (g.ss02 takes this master's j).
-    import loops as _LOOPS
-    tails_ = []
-    for g in reg:
-        if not g.contours or g.components or g.name in struck or g.name in signs or g.name not in font:
-            continue
-        cs = glyph_contours(font[g.name])
-        if [len(P) for P in cs] != [len(c.points) for c in g.contours]:
-            continue
-        for ci, R_ in enumerate(glyph_contours(g)):
-            kind_ = _LOOPS.tail_kind(reg, R_)
-            if not kind_ or max(range(len(cs)), key=lambda k: len(cs[k])) != ci:   # round_tail reads the longest
-                continue
-            M_ = _LOOPS.master_ball(R_, cs[ci], 1 + (BALL - 1) * v["f"])
-            font[g.name].contours[ci].points = [Point(x, y, t, smooth=s_) for x, y, t, s_ in M_]
-            tails_.append(_LOOPS.round_tail(font, g.name, kind_, master=True).replace(": tail rebuilt", f" ({kind_}'s tail)"))
-            resided.add(g.name)
-    notes.append(f"tails into a ball: {len(tails_)} ({'; '.join(tails_)})")
     # 0.81 (integration): a glyph whose outline a later rule changed (arm crotches, necks, tapers) takes its sides
     # again, as the engine set them: the Regular's plus the measured change (S's left side was 1.1 off in the Light)
     for name in sorted(resided):
@@ -3520,12 +3524,23 @@ def bold_font(reg, stem=STEM, **over):
         for f_ in (font, layer):
             if name not in f_ or name not in reg or name in struck:
                 continue
-            for c in f_[name].contours:
+            for ci, c in enumerate(f_[name].contours):
                 P_ = [(q.x, q.y, q.type, q.smooth) for q in c.points]
                 M_, lg = _LOOPS.even_nodes(P_, yr_)
-                if M_ != P_:
-                    c.points = [Point(x, y, t, smooth=s_) for x, y, t, s_ in M_]
-                    evened.append(f"{name}{' (mid)' if f_ is layer else ''} {lg}")
+                if M_ == P_:
+                    continue
+                # never at the stroke's cost: no place across the stroke (white.taper_readings, audit_rays' ray)
+                # thinner by more than half the weight JND (the Bold a.ss03 exit read 43.7 > 41.3 at 700 at 0.962)
+                all0 = [[(q.x, q.y, q.type, q.smooth) for q in c_.points] for c_ in f_[name].contours]
+                all1 = [M_ if k == ci else P for k, P in enumerate(all0)]
+                t0, e0, _w = WHITE.taper_readings(all0)
+                t1, e1, _w = WHITE.taper_readings(all1)
+                ok_ = ~np.isnan(t0) & ~np.isnan(t1) & (e0 == e1)
+                if (t1[ok_] < t0[ok_] * 0.985 - 0.5).any():          # half the JND: between masters it is the JND
+                    evened.append(f"{name}{' (mid)' if f_ is layer else ''} kept (a place would thin)")
+                    continue
+                c.points = [Point(x, y, t, smooth=s_) for x, y, t, s_ in M_]
+                evened.append(f"{name}{' (mid)' if f_ is layer else ''} {lg}")
     notes.append(f"curvature at nodes: {len(evened)} contours ({'; '.join(evened)})")
     # 0.79: an f ligature's sides are its letters' (0.78: every one 4 wider on the left than f, ff 22 on the right)
     def _sides(f_, n):
