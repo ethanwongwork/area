@@ -40,6 +40,7 @@ SPINE = 58                                 # the spine of s and S across itself 
 # the turns reach the o's weight (188 and 200 beside 191; 177 and 182 beside 180). The sides of g's loop: Georgia
 # Pro 0.91 and 1.00, Serrif 0.55 and 1.74, mean 1.05.
 SUB_ROUND = dict(turn=1.26, loop=1.05)
+ROUND_STROKE = 82                          # the lowercase round stroke at its widest (o's sides), the THICK["round"] base
 LEVEL_THICK = 1.57                         # g's loop at its top, 81 > 127 (Georgia Pro 1.38, Serrif 1.75); Q's tail by the same
 # Signs (bold_signs.py). A sign's own stroke (Area 52: hyphen, dashes, plus, equals, slash, bar; 54 on less-than):
 # hyphen 1.39 and 1.44, dashes 1.28 and 1.44, plus 1.28 to 1.42, equals 1.29 and 1.43, slash 1.37 and 1.37, bar 1.35
@@ -342,6 +343,11 @@ def x_target(t, straight, v):
         return t * v["stem"] / REG_STEM
     if t >= 76 or (straight and t >= 64):
         return t + thick_gain(t, straight, v)
+    if t >= 56 and not straight and v.get("sub") == "turn":
+        # owner round 4: an S-turn lighter than a round stroke grows by the round strokes' ratio (82 > 146), not by
+        # 1.26 of their amount: s's turns 62 > 143 (2.31) where Georgia Pro's grow 1.97 and Source Serif 4's 1.62 at
+        # 0.75 of the height, and the top-right quarter of the s lost ink share 0.19 > 0.15 (references hold 0.20)
+        return t * (1 + THICK["round"] / ROUND_STROKE * v["f"])
     if t >= 56 and not straight:
         return t + SUB_ROUND[v.get("sub", "loop")] * THICK["round"] * v["f"]
     if t >= 35:
@@ -1546,7 +1552,11 @@ HINTS = {
     # e: the bar keeps its upper edge (the eye gives up only the hairline's gain: Georgia Pro 0.98, Serrif 0.90 of
     # its height) and thickens downward, 41 to 49 (1.02, 1.36)
     "e": {"y": [(279, 320, lambda v: 41 + 8 * v["ft"], "bar")], "ypin": [320]},
-    "s": {"sub": "turn"},
+    # s: its barbs (34 at the cut, the inside edge slanting, so the scan reads no stroke there) grow as C's, S's and
+    # G's barbs do, by the thin upright rule (owner round 4: they grew 1.05 and 1.21 where the references' grow 1.27
+    # to 1.53; with the turns on the round strokes' ratio the s's top-right quarter holds its share within 0.02)
+    "s": {"sub": "turn", "x": [(370, 404, lambda v: 34 * (1 + (THIN_UPRIGHT - 1) * v["ft"]), "barb"),
+                               (47, 81, lambda v: 34 * (1 + (THIN_UPRIGHT - 1) * v["ft"]), "barb")]},
 }
 _UNUSED = {}                        # glyph: {"x": [(a, b, target or None, kind)], "y": [...], "ypin": [y]}  (see families)
 
