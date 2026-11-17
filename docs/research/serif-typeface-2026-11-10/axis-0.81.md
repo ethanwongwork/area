@@ -1075,3 +1075,11 @@ references' ears are not balls of Area's size. LR at 700 -0.21 is still outside 
 the link's turn still grow 2.0 times where the stem grows 1.8. TB at 300 +0.15 and at 700 -0.09 just outside. Looked at
 (`item14-g.png`): the loop now stands under the bowl at 300, 550 and 700 as in the Regular; the ear is shorter at 700 and
 its neck tighter; the link's turn at the left still grows heavier than the rest.
+
+Kerning, once at the end of items 12 to 14 (`AREA_KERN_FIT=1 build.py`; the advances of 7, S, s, 3, g and their families
+changed): the fit pairs are unchanged; the per-master table changed only in pairs with an S, s, g (or their classes) on
+one side (Light 220 > 217 fitted, 15 changed; Bold 521 > 512, 57 changed; nothing outside those families). The masters'
+fonts are otherwise byte-identical to item 14's build. `audit_kern.py` passes at 300, 350, 400, 550, 700 and at every 25
+units from 300 to 700 (`build/owner8/kern-082f*.txt`; least 7.9 at 700, idieresis Itilde, as before). The final build is
+saved as `build/snap082f`; `build/owner8/compare-082f.txt` holds part B's readings for 2 5 7 3 S s g on it against the
+seven references. Pages not rebuilt.
