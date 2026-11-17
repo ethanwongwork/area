@@ -4,17 +4,27 @@
 // and a recording show the same frame at the same moment. Engine: engine.js; rings, motions
 // and the WebGL renderer: rings.js.
 import { shell } from '../../src/shell.js';
+import { exportable } from '../../src/export.js';
 import { parse } from 'opentype.js';
 import fontUrl from '@fontsource/instrument-serif/files/instrument-serif-latin-400-normal.woff?url';
-import { COMP, GAP_PX, GROUND, MOTIONS, SWELL, layoutOf, makeRenderer, useFont } from './rings.js';
+import { COMP, GAP_PX, GROUND, LOOP, MOTIONS, SNAP_LOOPED, SWELL, layoutOf, makeRenderer, useFont } from './rings.js';
 
 const { gui, thumb, panel, reduced } = shell('eddy', { viewer: true });
 panel.ground(GROUND);
 
 useFont(parse(await (await fetch(fontUrl)).arrayBuffer()));
 
-const state = { motion: 'snap' };
+// The view comes from the URL (?motion=surge); the panel writes it back.
+const q = new URLSearchParams(location.search);
+const PANEL_MOTIONS = ['snap', 'surge', 'drift'];
+const state = { motion: MOTIONS.some((m) => m.id === q.get('motion')) ? q.get('motion') : 'snap' };
 const mOf = (id) => MOTIONS.find((m) => m.id === id);
+function remember() {
+  const url = new URL(location.href);
+  url.search = '';
+  if (state.motion !== 'snap') url.searchParams.set('motion', state.motion);
+  history.replaceState(null, '', url);
+}
 
 // ── The live piece ──
 const stage = document.getElementById('stage');
@@ -83,11 +93,17 @@ const download = (blob, name) => {
   setTimeout(() => URL.revokeObjectURL(a.href), 4000);
 };
 let X = null;
-function frameAt(t, px, shutter, most) {
+function frameAt(t, px, shutter, most, motion = mOf(state.motion)) {
   X ??= makeRenderer(document.createElement('canvas'));
-  X.draw(mOf(state.motion), t, px, true, shutter, most);
+  X.draw(motion, t, px, true, shutter, most);
   return X.gl.canvas;
 }
+// Drift and snap loops in 8 s (rings.js, SNAP_LOOPED); the other motions turn one way only,
+// too slowly to come round in 8 s, so they export as stills. The loop is read well after its
+// start (t + 10 loops), so no shutter is ever cut short at 0 and frame 0 is drawn like the rest.
+const looping = () => state.motion === 'snap';
+const loopFrame = (t, px, fps = 60, most = 40) =>
+  looping() ? frameAt(t + 10 * LOOP, px, 1 / fps / 2, most, SNAP_LOOPED) : frameAt(t, px, 1 / fps / 2, most);
 
 const EXPORT = 2160;
 function still() {
@@ -97,7 +113,7 @@ function still() {
   return new Promise((r) => c.toBlob(r, 'image/png'));
 }
 
-/** Eight seconds from the start at 1080 px, 60 fps, each frame drawn at its own moment. */
+/** The 8 second loop at 1080 px, 60 fps, each frame drawn at its own moment. */
 async function exportVideo() {
   const c = document.createElement('canvas');
   c.width = c.height = 1080;
@@ -114,7 +130,7 @@ async function exportVideo() {
   rec.start();
   const t0 = performance.now();
   for (let n = 0; n < fps * seconds; n++) {
-    x.drawImage(frameAt(n / fps, 1080, 1 / fps / 2, 40), 0, 0);
+    x.drawImage(loopFrame(n / fps, 1080, fps), 0, 0);
     track.requestFrame();
     const due = t0 + ((n + 1) * 1000) / fps;
     await new Promise((r) => setTimeout(r, Math.max(0, due - performance.now())));
@@ -128,10 +144,10 @@ const caption = () =>
   [
     'Lines of On Growth and Form in round rings, drifting, with bursts.',
     '',
-    'Six rings of type, each tall at one end and small at the other, turn without stopping. Every second or so a few of them snap round and swap their tall end, and the view zooms with them.',
+    'Six rings of type, each tall at one end and small at the other, turn about one centre without stopping, inner rings faster, alternate rings the other way. Every second or so one to three of them snap round, often swapping their tall end, and the view zooms in or out with them. The set shows the eight second loop, one snap caught mid-blur, and the letters up close.',
     '',
     'Type: Instrument Serif by @instrument',
-    'Text: D’Arcy Wentworth Thompson, On Growth and Form (1917)',
+    'Copy: D’Arcy Wentworth Thompson, On Growth and Form (1917)',
     'Made with: opentype.js, WebGL',
   ].join('\n');
 
@@ -145,20 +161,35 @@ panel.share({
 panel.controls(
   [
     {
-      key: 'motion', label: 'Motion', value: state.motion,
+      key: 'motion', label: 'Motion', value: PANEL_MOTIONS.includes(state.motion) ? state.motion : 'snap',
       options: [{ value: 'snap', label: 'Snap' }, { value: 'surge', label: 'Surge' }, { value: 'drift', label: 'Drift only' }],
     },
     { label: 'Play or pause (space)', action: togglePlay },
   ],
   (key, value) => {
     state[key] = value;
+    remember();
     describe();
     if (!playing) draw();
   },
 );
 
 // G: every motion from the study, for work on the piece.
-gui.add(state, 'motion', MOTIONS.map((m) => m.id)).name('Motion').onChange(() => { panel.set('motion', state.motion); describe(); if (!playing) draw(); });
+gui.add(state, 'motion', MOTIONS.map((m) => m.id)).name('Motion').onChange(() => { panel.set('motion', state.motion); remember(); describe(); if (!playing) draw(); });
 
 // For scripts/record.mjs: the canvas and a way to start it.
 window.__eddy = { canvas, play: () => setPlaying(true), render: (id, t, px, shutter = 1 / 120) => R.draw(mOf(id), t, px, true, shutter, 40) };
+
+// For scripts/export-set.mjs: drift and snap as its 8 second loop, the other motions as stills.
+exportable({
+  get loop() {
+    return looping() ? LOOP : 0;
+  },
+  fps: 60,
+  render(t, size) {
+    const c = document.createElement('canvas');
+    c.width = c.height = size;
+    c.getContext('2d').drawImage(loopFrame(t, size), 0, 0);
+    return c;
+  },
+});

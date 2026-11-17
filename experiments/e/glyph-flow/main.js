@@ -8,6 +8,7 @@ import { random } from '../../src/glyphs.js';
 import { fonts, getFont } from './fonts.js';
 import { flow, GROUNDS } from './flow.js';
 import registry from '../../experiments.json';
+import { exportable } from '../../src/export.js';
 
 const entry = registry.find((e) => e.slug === 'glyph-flow');
 const { gui, thumb, panel, reduced } = shell('glyph-flow', { viewer: true });
@@ -214,7 +215,7 @@ async function exportVideo() {
   const chunks = [];
   rec.ondataavailable = (e) => e.data.size && chunks.push(e.data);
   const done = new Promise((r) => (rec.onstop = r));
-  const frames = 64;
+  const frames = base.loop; // one whole loop
   rec.start();
   const start = performance.now();
   for (let n = 0; n < frames; n++) {
@@ -233,7 +234,7 @@ const caption = () =>
   [
     'Hiragana, katakana and Latin glyphs, set as one block of type.',
     '',
-    'A noise field is cut into organic shapes. As each line is set, the shape under it picks a repeated glyph, a letter’s accents or the copy. Sections meet at a single word space. The set varies the scale, the type size and the script.',
+    'A noise field is cut into organic shapes, and as each line is set the shape under it picks a repeated glyph, a letter’s accents or the copy, so sections meet at a single word space. In stop motion the map drifts and comes home while the glyphs boil. The set varies the scale, the type size, the script, the ground and the turbulence.',
     '',
     'Type: PP Kyoto by @pangrampangram',
     'Copy: Joseph Moxon, Mechanick Exercises on the Whole Art of Printing (1683)',
@@ -270,6 +271,26 @@ panel.controls(
     }
   },
 );
+
+// For scripts/export-set.mjs: the view in the URL at t seconds, drawn at 1080 logical px and
+// scaled, so every size sets the same lines. One loop is `loop` frames at 8 a second.
+getFont(fontName).then((font) => {
+  gf = font;
+  exportable({
+    get loop() {
+      return state.motion === 'still' ? 0 : base.loop / base.fps;
+    },
+    fps: base.fps,
+    render(t, size) {
+      const c = document.createElement('canvas');
+      c.width = c.height = size;
+      const x = c.getContext('2d');
+      x.setTransform(size / 1080, 0, 0, size / 1080, 0, 0);
+      drawView(x, 1080, viewOf(state.view === 'all' ? 'hero' : state.view), gf, Math.round(t * base.fps));
+      return c;
+    },
+  });
+});
 
 // G: try another map in the current view.
 gui.add({ shuffle: () => ((state.seed = Math.floor(Math.random() * 999) + 1), render()) }, 'shuffle').name('Another map (this view)');

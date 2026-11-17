@@ -32,7 +32,7 @@ export function shell(slug, { viewer = false } = {}) {
   gui.hide();
 
   let panel = null;
-  if (viewer && !thumb) panel = buildViewer(entry, number);
+  if (viewer && !thumb) panel = buildViewer(entry, number, slug);
   else if (!thumb) buildBar(entry, number);
 
   addEventListener('keydown', (e) => {
@@ -69,7 +69,7 @@ function buildBar(entry, number) {
   }
 }
 
-function buildViewer(entry, number) {
+function buildViewer(entry, number, slug) {
   document.documentElement.classList.add('is-viewer');
   document.body.classList.add('ui');
   const stage = document.getElementById('stage');
@@ -83,7 +83,12 @@ function buildViewer(entry, number) {
   const listed = registry.filter((e) => !e.draft && Number.isInteger(e.number));
   head.innerHTML = `<nav class="ui-filters" aria-label="Gallery">${filtersHTML(kindsPresent(listed), '../../#')}</nav>`;
   head.querySelector(`[data-kind="${entry.kind}"]`)?.setAttribute('aria-current', 'true');
-  view.append(head, stage);
+  // The piece fills the first screen; its views sit below it, and the column scrolls.
+  const main = document.createElement('div');
+  main.className = 'x-main';
+  main.append(stage);
+  view.append(head, main);
+  buildViews(main, slug);
 
   const aside = document.createElement('aside');
   aside.className = 'x-panel';
@@ -164,6 +169,7 @@ function buildViewer(entry, number) {
       const exp = block.querySelector('.x-p-export');
       const copy = block.querySelector('.x-p-copy');
       block.hidden = false;
+      window.__caption = caption; // for scripts/export-set.mjs
       const refresh = () => (text.textContent = caption());
       refresh();
       exp.textContent = `Export image${note ? `, ${note}` : ''}`;
@@ -212,6 +218,59 @@ function buildViewer(entry, number) {
       view.style.setProperty('--x-ground', color);
     },
   };
+}
+
+/**
+ * The piece's views, below it: public/views/<slug>/views.json lists them (made by
+ * scripts/export-set.mjs with a still of each). A card opens its view live; a close-up,
+ * which the page can't show live, opens its still full size.
+ */
+async function buildViews(main, slug) {
+  let set;
+  try {
+    const r = await fetch(`../../views/${slug}/views.json`);
+    if (!r.ok) return;
+    set = await r.json();
+  } catch {
+    return;
+  }
+  if (!set.views?.length) return;
+  const here = new URLSearchParams(location.search);
+  const isHere = (v) => {
+    const p = v.params ?? {};
+    const keys = new Set([...Object.keys(p), ...[...here.keys()].filter((k) => k !== 'thumb')]);
+    return !v.zoom && [...keys].every((k) => String(p[k] ?? '') === (here.get(k) ?? ''));
+  };
+  const sec = document.createElement('section');
+  sec.className = 'x-views';
+  sec.setAttribute('aria-label', 'Views');
+  sec.innerHTML = `<h2 class="x-views-head">Views</h2><ol class="x-views-grid"></ol>`;
+  const grid = sec.querySelector('ol');
+  for (const v of set.views) {
+    const li = document.createElement('li');
+    const href = `?${new URLSearchParams(v.params ?? {})}`;
+    li.innerHTML = `<a class="x-view-card" href="${v.zoom ? `../../views/${slug}/${v.id}-large.jpg` : href}">
+        <img src="../../views/${slug}/${v.id}.jpg" alt="" loading="lazy" width="720" height="720">
+        <span class="x-view-name"></span><span class="x-view-note"></span></a>`;
+    li.querySelector('.x-view-name').textContent = v.label + (v.video ? ', moving' : '');
+    li.querySelector('.x-view-note').textContent = v.note ?? '';
+    const a = li.querySelector('a');
+    if (isHere(v)) a.setAttribute('aria-current', 'true');
+    if (v.zoom)
+      a.addEventListener('click', (e) => {
+        e.preventDefault();
+        const box = document.createElement('dialog');
+        box.className = 'x-view-box';
+        box.innerHTML = `<img src="${a.href}" alt="${v.label}"><button type="button">Close</button>`;
+        box.querySelector('button').onclick = () => box.close();
+        box.addEventListener('close', () => box.remove());
+        box.addEventListener('click', (ev) => ev.target === box && box.close());
+        document.body.append(box);
+        box.showModal();
+      });
+    grid.append(li);
+  }
+  main.append(sec);
 }
 
 /** Resolves once the fonts the page asks for are ready (canvas text needs this). */

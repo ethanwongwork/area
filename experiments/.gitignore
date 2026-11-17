@@ -5,3 +5,6 @@ fonts/trial/*
 !fonts/trial/README.md
 recordings/
 drafts/
+
+exports/
+experiments-for-posting-*.zip

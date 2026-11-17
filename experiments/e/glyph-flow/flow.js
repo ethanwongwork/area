@@ -69,6 +69,7 @@ export const flow = {
     boil: 'on',
     fps: 8,
     hold: 2,
+    loop: 64, // frames in one loop: 8 s at 8 fps
     drift: 0.01,
     size: 0.019,
     leading: 1.04,
@@ -98,6 +99,10 @@ export const flow = {
   },
 
   draw({ ctx, W, H, gf, rng, noise, p, t = 0 }) {
+    // Every motion repeats after `loop` frames: the drift closes into a circle and each roll
+    // (boil, turbulence) runs on a beat that divides the loop, so frame `loop` is frame 0.
+    const L = Math.max(1, Math.round(Number(p.loop) || 64));
+    t = ((Math.round(t) % L) + L) % L;
     const mo = p.motion ?? 'still';
     const all = mo === 'everything';
     const on = (m) => all || mo === m;
@@ -109,14 +114,19 @@ export const flow = {
 
     // ── The map of shapes ──
     // Built once at t = 0 (it decides what every shape holds, so the still never changes),
-    // and again each frame when the map drifts.
+    // and again each frame when the map drifts. The drift runs round a closed circle in the
+    // noise at `drift` per frame, so the map is home again after one loop; the shapes' seeds
+    // circle too, at the speed they used to wander, starting from where they sit.
     const rw = 240;
+    const SX = (0.04 * 3 * (Number(p.drift) || 0.01) * L) / (2 * Math.PI);
+    const SY = (0.04 * 2.3 * (Number(p.drift) || 0.01) * L) / (2 * Math.PI);
     const cs = W / rw;
     const rh = Math.ceil(H / cs);
     const a = rng.range(0.15, 0.85) * Math.PI;
     const [dx, dy] = [Math.cos(a), Math.sin(a)];
     const seeds0 = Array.from({ length: p.cells }, () => [rng() * W, rng() * H]);
-    const buildMap = (T) => {
+    const buildMap = (D) => {
+      const [ta, tb, th] = D ?? [0, 0, 0];
       const field = new Float32Array(rw * rh);
       for (let j = 0; j < rh; j++) {
         for (let i = 0; i < rw; i++) {
@@ -124,15 +134,15 @@ export const flow = {
           const y = j / rw;
           const u = x * p.scale;
           const v = y * p.scale;
-          const wx = fbm(noise, u + 3.1 + T, v + 1.7 + T * 0.7, 2);
-          const wy = fbm(noise, u - 2.3 - T * 0.6, v + 5.1 + T, 2);
+          const wx = fbm(noise, u + 3.1 + ta, v + 1.7 + tb, 2);
+          const wy = fbm(noise, u - 2.3 - tb, v + 5.1 + ta, 2);
           field[j * rw + i] = fbm(noise, u + p.warp * wx, v + p.warp * wy, 3) + 0.5 * p.sweep * (x * dx + y * dy);
         }
       }
       let lo = Infinity;
       let hi = -Infinity;
       for (const v of field) [lo, hi] = [Math.min(lo, v), Math.max(hi, v)];
-      const seeds = seeds0.map(([sx, sy], k) => [sx + Math.cos(T * 3 + k) * W * 0.04 * Math.min(1, T * 20), sy + Math.sin(T * 2.3 + k * 1.7) * W * 0.04 * Math.min(1, T * 20)]);
+      const seeds = seeds0.map(([sx, sy], k) => [sx + (Math.cos(th + k) - Math.cos(k)) * W * SX, sy + (Math.sin(th + k * 1.7) - Math.sin(k * 1.7)) * W * SY]);
       const lab = new Int32Array(rw * rh);
       const area = new Map();
       const cent = new Map();
@@ -159,9 +169,10 @@ export const flow = {
       for (const [id, c] of cent) cent.set(id, [c[0] / area.get(id), c[1] / area.get(id)]);
       return { lab, area, cent };
     };
-    const base = buildMap(0);
-    const T = on('drift') ? t * (Number(p.drift) || 0.01) : 0;
-    const now = T ? buildMap(T) : base;
+    const base = buildMap(null);
+    const th = (2 * Math.PI * t) / L;
+    const rad = ((Number(p.drift) || 0.01) * L) / (2 * Math.PI);
+    const now = on('drift') && t ? buildMap([rad * Math.sin(th), rad * (1 - Math.cos(th)), th]) : base;
     const { lab: lab0, area, cent } = base;
     const lab = now.lab;
     const cellAt = (x, y) => lab[Math.min(rh - 1, Math.max(0, Math.floor(y / cs))) * rw + Math.min(rw - 1, Math.max(0, Math.floor(x / cs)))];
@@ -292,9 +303,10 @@ export const flow = {
       // Thin to every other glyph, then every third (small sections go entirely), then back.
       return u < 2 ? 1 : u < 5 ? (small ? 3 : 2) : u < 7 ? 1 : 0;
     };
-    // Turbulence (drift): white space opens at random. Every few frames each pattern section
+    // Turbulence (drift): white space opens at random. Once a second each pattern section
     // rolls whether it thins (random glyphs drop) or goes; single glyphs drop too. The copy
-    // only loses the odd glyph, and t = 0 is always whole.
+    // only loses the odd glyph. The first roll of each loop is always whole, so t = 0 (the
+    // still) is whole and the loop's seam holds whole for a second rather than flickering.
     const TURB = [
       { thin: 0, gone: 0, glyph: 0 },
       { thin: 0.1, gone: 0.03, glyph: 0.01 },
@@ -306,15 +318,18 @@ export const flow = {
       h = Math.imul(h ^ (h >>> 13), 0x27d4eb2d);
       return ((h ^ (h >>> 16)) >>> 0) / 4294967296;
     };
-    const turbulent = !all && t > 0 && TURB.thin + TURB.glyph > 0;
+    const turbulent = !all && TURB.thin + TURB.glyph > 0;
+    const gw = Math.floor(t / 8); // single glyphs roll together, once a second
     const stir = (id, n) => {
       if (!turbulent) return true;
-      if (id === TEXT) return hash(n, Math.floor(t / 6)) >= TURB.glyph * 0.4;
-      const w = Math.floor((t + (beat(id) % 8)) / 8); // each section rolls on its own beat, once a second
-      const r = hash(beat(id), w);
-      if (r < TURB.gone) return false;
-      if (r < TURB.gone + TURB.thin && hash(n, w) < 0.55) return false;
-      return hash(n, Math.floor(t / 6)) >= TURB.glyph;
+      if (id === TEXT) return !gw || hash(n, gw) >= TURB.glyph * 0.4;
+      const w = Math.floor(((t + (beat(id) % 8)) % L) / 8); // each section rolls on its own beat, once a second
+      if (w) {
+        const r = hash(beat(id), w);
+        if (r < TURB.gone) return false;
+        if (r < TURB.gone + TURB.thin && hash(n, w) < 0.55) return false;
+      }
+      return !gw || hash(n, gw) >= TURB.glyph;
     };
     const shown = (id, i = 0, n = i) => {
       if (!stir(id, n)) return false;
@@ -331,7 +346,7 @@ export const flow = {
       return false;
     };
     // Boil: every glyph sits a fraction off, re-placed every second frame.
-    const boil = p.boil === 'on' && t > 0; // the still (t = 0) sits exactly
+    const boil = p.boil === 'on' && t >= 2; // the still (t = 0, and its held frame) sits exactly
     const jitter = (n) => {
       let h = (n ^ Math.imul(Math.floor(t / 2) + 1, 0x9e3779b1)) >>> 0;
       h = Math.imul(h ^ (h >>> 15), 0x2c1b3c6d) >>> 0;

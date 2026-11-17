@@ -6,6 +6,7 @@ import { create } from 'fontkit';
 import flexUrl from '@fontsource-variable/roboto-flex/files/roboto-flex-latin-full-normal.woff2?url';
 import { shell } from '../../src/shell.js';
 import { trialFiles } from '../../src/glyphs.js';
+import { exportable } from '../../src/export.js';
 
 const { thumb, panel, reduced } = shell('torus-numbers', { viewer: true });
 
@@ -85,14 +86,26 @@ const INKS = warm(ROWS), GROUND = '#ffffff', DIGIT = '#000000';
 const PAD = 0.19, GAP = 0.026; // hairline gaps, about a fifth of the digits' horizontal bars
 const BEAT = 1.1; // seconds per beat at row speed 1×
 const ROLL_MOVE = 0.56, DIGIT_MOVE = 0.45; // share of a beat spent moving
-const TURN = 48, BOTH_YAW = 48, BOTH_PITCH = 72; // seconds per full turn at turn speed 1×
-const SPIN = 0.25; // squares a second round the torus's own axis while turning 360
+// Seconds per full turn at turn speed 1×. Every period is a whole number of BEAT / 6, so the motion
+// loops: ten beats bring every row and digit back (11 s at row speed 1×), a sideways or over turn is
+// four of those (44 s), and 360's yaw, pitch and spin (two laps of the squares) all meet in 132 s.
+const TURN = 44, BOTH_YAW = 44, BOTH_PITCH = 66;
+const SPIN = 32 / 132; // squares a second round the torus's own axis while turning 360
 const SETTLE = 1.1; // seconds to ease back to rest
 
 // One size for every orientation: fit the bounding sphere, so the torus never pumps as it turns.
 const RHO = R + r, K = ((SIDE / 2 - MARGIN) * Math.sqrt(D * D - RHO * RHO)) / RHO, CX = SIDE / 2, CY = SIDE / 2;
 
-const state = { digits: 'odometer', turn: 'sideways', turnSpeed: '1', rowSpeed: '1' };
+// The open choices, read from the URL (?digits=wave&turn=over&turnSpeed=2&rowSpeed=3) and written back.
+const DEFAULTS = { digits: 'odometer', turn: 'sideways', turnSpeed: '1', rowSpeed: '1' };
+const CHOICES = { digits: ['odometer', 'wave', 'cascade', 'flip'], turn: ['sideways', 'over', '360', 'off'], turnSpeed: ['0.5', '1', '2', '4'], rowSpeed: ['0.5', '1', '2', '3'] };
+const query = new URLSearchParams(location.search);
+const state = Object.fromEntries(Object.entries(DEFAULTS).map(([k, v]) => [k, CHOICES[k].includes(query.get(k)) ? query.get(k) : v]));
+function remember() {
+  const url = new URL(location.href);
+  for (const k of Object.keys(DEFAULTS)) state[k] === DEFAULTS[k] ? url.searchParams.delete(k) : url.searchParams.set(k, state[k]);
+  history.replaceState(null, '', url);
+}
 const st = { beat: 0, yaw: 0, pitch: 0, spin: 0 };
 let GLYPH = null;
 
@@ -201,6 +214,8 @@ function render(ctx, s) {
       ctx.fillStyle = ctx.strokeStyle = ink;
       ctx.lineWidth = 0.8;
       for (let e = 0; e < STRIPS; e++) { quad(u0, du, v0 + (e * dv) / STRIPS, dv / STRIPS); ctx.fill(); ctx.stroke(); }
+      // and across, so a fold running either way round the tube is filled to the outline
+      for (let e = 0; e < STRIPS; e++) { quad(u0 + (e * du) / STRIPS, du / STRIPS, v0, dv); ctx.fill(); ctx.stroke(); }
     };
     if (c.facing < 0) { strips(); continue; }
 
@@ -269,6 +284,22 @@ function step(dt) {
   if (state.turn === 'over') st.pitch += k / TURN;
   if (state.turn === '360') { st.yaw += k / BOTH_YAW; st.pitch += k / BOTH_PITCH; st.spin += (k / (2 * Math.PI)) * SPIN; }
 }
+// The same motion in closed form, turning from rest at full speed: the piece at `t` seconds.
+function pose(t) {
+  const a = 2 * Math.PI * +state.turnSpeed * t, s = { beat: (t * +state.rowSpeed) / BEAT, yaw: 0, pitch: 0, spin: 0 };
+  if (state.turn === 'sideways') s.spin = (a / TURN) * COLS / (2 * Math.PI);
+  if (state.turn === 'over') s.pitch = a / TURN;
+  if (state.turn === '360') { s.yaw = a / BOTH_YAW; s.pitch = a / BOTH_PITCH; s.spin = (a / (2 * Math.PI)) * SPIN; }
+  return s;
+}
+// One loop: the least common multiple of the rows' ten beats and the turn's period, in units of BEAT / 6.
+function loopSeconds() {
+  const unit = BEAT / 6, gcd = (a, b) => (b ? gcd(b, a % b) : a), lcm = (a, b) => (a / gcd(a, b)) * b;
+  let n = Math.round((10 * BEAT) / +state.rowSpeed / unit);
+  if (state.turn === 'sideways' || state.turn === 'over') n = lcm(n, Math.round(TURN / +state.turnSpeed / unit));
+  if (state.turn === '360') n = lcm(n, Math.round(lcm(BOTH_YAW, BOTH_PITCH) / +state.turnSpeed / unit));
+  return n * unit;
+}
 
 // ── Page ──
 const stage = document.getElementById('stage');
@@ -298,7 +329,21 @@ function loop(now) {
 }
 
 GLYPH = await loadDigits();
-panel.details([['Typeface', GLYPH.name], ['Grid', `${ROWS} rows of ${COLS} squares`]]);
+const details = () => panel.details([['Typeface', GLYPH.name], ['Grid', `${ROWS} rows of ${COLS} squares`], ['One loop', `${+loopSeconds().toFixed(2)} s`]]);
+details();
+// Exports draw the closed-form motion, so every loop closes exactly.
+exportable({
+  get loop() { return loopSeconds(); },
+  fps: 60,
+  render(t, size) {
+    const c = document.createElement('canvas');
+    c.width = c.height = size;
+    const x = c.getContext('2d');
+    x.setTransform(size / SIDE, 0, 0, size / SIDE, 0, 0);
+    render(x, pose(t));
+    return c;
+  },
+});
 draw();
 if (thumb) document.documentElement.dataset.rendered = String(Date.now());
 else requestAnimationFrame(loop);
@@ -321,12 +366,12 @@ function still() {
 }
 panel.share({
   caption: () => [
-    'Squares on a torus, counting.',
+    'Squares on a turning torus, each counting 0 to 9',
     '',
-    'A grid of squares wrapped onto a horn torus, one warm colour a row. Every square counts 0 to 9 and round again while the rows roll up the tube a square a beat and the torus turns; each digit’s outline is warped through the surface.',
+    'A grid of squares, ten rows of sixteen, is wrapped onto a horn torus, one warm color a row. Every square counts 0 to 9 while the rows roll up the tube a square a beat, and each digit’s outline is warped through the surface point by point. The set varies how the digits change (in step, in a wave, at random, flipping) and how the torus turns: sideways, end over end, both at once, or not at all.',
     '',
-    GLYPH.name.startsWith('PP') ? 'Type: PP Neue Corp by @pangrampangram' : 'Type: Roboto Flex',
-    'Made with: Canvas 2D',
+    GLYPH.name.startsWith('PP') ? 'Type: PP Neue Corp by @pangrampangram' : 'Type: Roboto Flex by @googlefonts',
+    'Made with: fontkit, Canvas 2D',
   ].join('\n'),
   note: `${EXPORT} px png, the frame on screen`,
   exportImage: async () => ({ blob: await still(), name: `torus-numbers-${state.digits}.png` }),
@@ -344,6 +389,8 @@ const controls = panel.controls(
     if (key === 'motion') { playing = value === 'play'; return; }
     state[key] = value;
     if (key === 'turn') { if (value === '360') ramp = 0; else toRest(); }
+    remember();
+    details();
     draw();
   },
 );

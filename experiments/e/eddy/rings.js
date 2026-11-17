@@ -107,18 +107,83 @@ const SURGES = schedule(29, [1.0, 1.8], (rnd, k) => ({ d: 1.4 + rnd() * 0.8, amt
 function zoomAt(events, ease, t) { let z = 1; for (const b of events.beats) { if (b.s > t) break; z = b.from + (b.to - b.from) * ease(span(t, b.s, b.zd)); } return z; }
 // A ring on a drift, with its accents: extra turn eased by `ease`, and at a flip its tall end
 // passes through a tall middle to the other end, eased the same way.
-function accented(k, t, events, ease, drift) {
+function accented(k, t, events, ease, drift, cycle = { breathe: 9, shift: 13 }) {
   // Flips add up: a ring picked again before its last flip lands carries on from where it is.
   const q = base(); let extra = 0, f = 0;
   for (const e of events[k]) { if (e.s > t) break; const x = ease(span(t, e.s, e.d)); extra += e.amt * x; if (e.flip) f += x; }
   const flips = Math.floor(f + 1e-9), flipE = f - flips;
   const from = flips % 2 ? [0, 0, 1, 0] : [1, 0, 0, 0], to = flips % 2 ? [1, 0, 0, 0] : [0, 0, 1, 0], mid = [0, 1, 0, 0];
   const wEnd = flipE <= 0 ? from : flipE < 0.5 ? mixW(from, mid, flipE * 2) : mixW(mid, to, flipE * 2 - 1);
-  const breathe = 0.3 * (0.5 + 0.5 * Math.sin((t / 9) * 2 * Math.PI + k * 1.3));
+  const breathe = 0.3 * (0.5 + 0.5 * Math.sin((t / cycle.breathe) * 2 * Math.PI + k * 1.3));
   q.w = mixW(wEnd, mid, breathe * (1 - bell(flipE)));
-  q.angle = (dir(k) * drift(k) * t + extra) * DEG; q.shift = 0.2 * Math.sin((t / 13) * 2 * Math.PI + k);
+  q.angle = (dir(k) * drift(k) * t + extra) * DEG; q.shift = 0.2 * Math.sin((t / cycle.shift) * 2 * Math.PI + k);
   return q;
 }
+// ── The 8 second loop, for exports ──
+// The same drift and snaps, written as one 8 second cycle that closes: eight beats whose gaps
+// (0.7 to 1.5 s) add up to exactly 8 s, the zoom back where it began, every ring an even
+// number of flips, and each ring's snaps scaled (by 0.75 to 1.33) and pointed with or against
+// its drift so that drift and snaps together turn it a whole number of turns. Breath and shade
+// run on 8 s too. Seed 19660 is the one whose snaps needed the least scaling (search: every
+// seed to 20000). The cycle is laid four times over; a moment t is read in the third, so every
+// ring has its full history and t and t + 8 are the same moment exactly.
+export const LOOP = 8;
+const DRIFT = (k) => 7.5 - 0.8 * k;
+function loopSchedule(seed) {
+  let s = seed >>> 0; const rnd = () => { s += 0x6D2B79F5; let x = Math.imul(s ^ s >>> 15, 1 | s); x ^= x + Math.imul(x ^ x >>> 7, 61 | x); return ((x ^ x >>> 14) >>> 0) / 4294967296; };
+  const gaps = []; let sum = 0;
+  while (sum < LOOP + 1.5) { const g = 0.7 + rnd() * 0.8; gaps.push(g); sum += g; }
+  let n = 0, acc = 0, best = Infinity;
+  gaps.forEach((g, i) => { acc += g; if ((i + 1) % 2 === 0 && Math.abs(Math.log(LOOP / acc)) < best) { best = Math.abs(Math.log(LOOP / acc)); n = i + 1; } });
+  const sc = LOOP / gaps.slice(0, n).reduce((a, b) => a + b, 0);
+  const ev = Array.from({ length: 6 }, () => []), beats = [];
+  let t = 0.5;
+  for (const g of gaps.slice(0, n)) {
+    const m = rnd() < 0.5 ? 1 : rnd() < 0.7 ? 2 : 3, k0 = Math.floor(rnd() * 6); let end = t;
+    for (let i = 0; i < m; i++) {
+      const k = (k0 + i) % 6, e = { s: t + i * (0.1 + rnd() * 0.08), d: 0.6 + rnd() * 0.35, amt: arcDeg(0.22 + rnd() * 0.26, k) * (rnd() < 0.75 ? dir(k) : -dir(k)), flip: rnd() < 0.6 };
+      ev[k].push(e); end = Math.max(end, e.s + e.d);
+    }
+    beats.push({ s: t, d: end - t });
+    t += g * sc;
+  }
+  // Close each ring: an even number of flips, and a whole number of turns over the cycle.
+  ev.forEach((list, k) => {
+    if (list.filter((e) => e.flip).length % 2) { const e = list.find((x) => !x.flip) ?? list[0]; e.flip = !e.flip; }
+    const D = dir(k) * DRIFT(k) * LOOP; let fit = null;
+    for (let mask = 0; mask < 1 << list.length; mask++) {
+      const A = list.reduce((a, e, i) => a + Math.abs(e.amt) * dir(k) * ((mask >> i) & 1 ? -1 : 1), 0), fwd = list.length - [...list.keys()].filter((i) => (mask >> i) & 1).length;
+      for (let turns = -4; turns <= 4; turns++) { const f = (360 * turns - D) / A, c = Math.abs(Math.log(f)) + (fwd ? 0 : 0.05); if (f > 0 && (!fit || c < fit.c)) fit = { f, mask, c }; }
+    }
+    list.forEach((e, i) => (e.amt = Math.abs(e.amt) * fit.f * dir(k) * ((fit.mask >> i) & 1 ? -1 : 1)));
+  });
+  // The zoom alternates in and out from 1 and lands back on 1 at the last beat (an out move).
+  let z = 1; const r2 = (() => { let s2 = (seed * 7919) >>> 0; return () => { s2 += 0x6D2B79F5; let x = Math.imul(s2 ^ s2 >>> 15, 1 | s2); x ^= x + Math.imul(x ^ x >>> 7, 61 | x); return ((x ^ x >>> 14) >>> 0) / 4294967296; }; })();
+  beats.forEach((b, i) => { b.from = z; z = i === beats.length - 1 ? 1 : z > 1.2 ? 0.78 + r2() * 0.32 : 1.3 + r2() * 0.6; b.to = z; });
+  // Lay the cycle four times over.
+  const out = Array.from({ length: 6 }, () => []); out.beats = [];
+  for (let c = 0; c < 4; c++) {
+    ev.forEach((list, k) => list.forEach((e) => out[k].push({ ...e, s: e.s + c * LOOP })));
+    beats.forEach((b) => out.beats.push({ ...b, s: b.s + c * LOOP }));
+  }
+  out.forEach((list) => list.sort((a, b) => a.s - b.s));
+  out.beats.forEach((b, i) => { const next = out.beats[i + 1]; b.zd = Math.min(0.6, (next ? next.s - b.s : 9) - 0.05); });
+  return out;
+}
+const SNAP_LOOP = loopSchedule(19660);
+// t read in the third cycle; the wrap sits half a frame (at 60 fps) after each whole loop, so
+// no frame's shutter spans it.
+const WRAP = 1 / 120;
+const inLoop = (t) => 2 * LOOP + WRAP + ((((t - WRAP) % LOOP) + LOOP) % LOOP);
+/** Drift and snap as one seamless 8 second loop: the piece at t + 8 is the piece at t. */
+export const SNAP_LOOPED = {
+  id: 'snap', period: LOOP,
+  pose: (k, t) => accented(k, inLoop(t), SNAP_LOOP, expo, DRIFT, { breathe: LOOP, shift: LOOP }),
+  camera: (t) => zoomAt(SNAP_LOOP, expo, inLoop(t)),
+};
+/** The loop's beats in its first cycle, for picking moments. */
+export const LOOP_BEATS = SNAP_LOOP.beats.filter((b) => b.s < LOOP).map((b) => ({ s: b.s, d: b.d, from: b.from, to: b.to }));
+
 const MOTIONS = [
   { id: 'snap', label: 'Drift and snap', note: 'The rings never stop drifting. Every 0.7 to 1.5 seconds, one to three neighbouring rings snap round a fifth to half of the square’s width along their length in under a second, eased in and out very sharply (exponential), often flipping their tall end as they go, then fall back into the drift. Every beat the view zooms too, in and out by turns (out to 0.78 times, in as far as 1.9), in 0.6 seconds with the same sharp easing, so the snap and the zoom land together.', period: 24,
     pose: (k, t) => accented(k, t, SNAPS, expo, (k) => 7.5 - 0.8 * k), camera: (t) => zoomAt(SNAPS, expo, t) },

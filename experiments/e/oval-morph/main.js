@@ -3,6 +3,7 @@
 // its new size and angle along the stroke, and the next glyph starts the moment the last
 // oval lands. Cells come pre-sampled from scripts/oval-morph-cells.mjs.
 import { shell } from '../../src/shell.js';
+import { exportable } from '../../src/export.js';
 import G from './cells.json';
 
 const { gui, thumb, panel, reduced } = shell('oval-morph', { viewer: true });
@@ -42,7 +43,21 @@ const SPRINGS = { springy: { z: 0.44, w: 25 }, firm: { z: 0.8, w: 30 } };
 // How long a spring takes to come within 4% of rest.
 const settle = ({ z, w }) => Math.log(25 / Math.sqrt(1 - z * z)) / (z * w);
 
-const state = { motion: 'ripple', change: 'grow', bounce: 'springy', weight: 'bold', ground: 'blue' };
+// The view comes from the URL (?motion=sweep&change=flip&weight=light&ground=pure&from=14);
+// the panel writes its choices back. `from` is the glyph the loop starts on, 1 to 40.
+const q = new URLSearchParams(location.search);
+const CHOICES = { motion: ['ripple', 'sweep', 'together'], change: ['grow', 'flip', 'turn'], weight: ['bold', 'light'], ground: Object.keys(GROUNDS) };
+const DEFAULTS = { motion: 'ripple', change: 'grow', weight: 'bold', ground: 'blue' };
+const state = { ...DEFAULTS, bounce: 'springy' };
+for (const k in CHOICES) if (CHOICES[k].includes(q.get(k))) state[k] = q.get(k);
+const FROM = Math.max(0, Math.min(G.seq.length - 1, (Number.parseInt(q.get('from'), 10) || 1) - 1));
+function remember() {
+  const url = new URL(location.href);
+  url.search = '';
+  for (const k in DEFAULTS) if (state[k] !== DEFAULTS[k]) url.searchParams.set(k, state[k]);
+  if (FROM) url.searchParams.set('from', FROM + 1);
+  history.replaceState(null, '', url);
+}
 const glyphName = (ch) => `U+${ch.codePointAt(0).toString(16).toUpperCase().padStart(4, '0')}`;
 
 /**
@@ -53,7 +68,9 @@ function morph(st) {
   const F = () => new Float32Array(C);
   const fOn = F(), fR = F().fill(GHOST), fm = F().fill(GHOST), fa = F(), tOn = F(), tR = F().fill(GHOST), tm = F().fill(GHOST), ta = F(), dl = F(), ph0 = F(), axis = F();
   const moving = new Uint8Array(C);
-  const rnd = (() => { let s = 11; return () => ((s = (s * 16807) % 2147483647) / 2147483647); })();
+  // The small jitter in each cell's start is seeded by the glyph it changes to, so a change to a
+  // glyph is the same every time it plays (and a loop of glyphs repeats exactly).
+  let rnd;
   let spring = SPRINGS.springy, mode = 'grow';
   const m = { tStart: -10, tEnd: -10, current: -1 };
 
@@ -103,6 +120,7 @@ function morph(st) {
     const n = G.seq.length;
     g = ((g % n) + n) % n;
     const S = SHAPES[st.weight][g], was = mode;
+    rnd = (() => { let s = 11 + g * 7919; return () => ((s = (s * 16807) % 2147483647) / 2147483647); })();
     spring = SPRINGS[st.bounce];
     let maxD = 0;
     for (let k = 0; k < C; k++) {
@@ -153,6 +171,20 @@ function morph(st) {
   return m;
 }
 
+// ── The loop ──
+// Thirteen glyphs on an even beat of 8/13 s, from the view's first glyph; the thirteenth change
+// lands back on the first glyph, so the piece at 8 s is the piece at 0. Each frame replays the
+// changes from one whole loop before it, so the springs still ringing from the last change carry
+// across the seam as they do everywhere else.
+const LOOP = 8, COUNT = 13, BEAT = LOOP / COUNT;
+function loopAt(m, t) {
+  const tau = ((t % LOOP) + LOOP) % LOOP, last = Math.floor(tau / BEAT + 1e-9);
+  const glyph = (j) => FROM + ((((j % COUNT) + COUNT) % COUNT));
+  m.go(glyph(0), -LOOP - 10); // the first glyph, settled
+  for (let j = -COUNT; j <= Math.min(last, COUNT - 1); j++) m.go(glyph(j + 1), j * BEAT);
+  return tau;
+}
+
 // ── The live piece ──
 const stage = document.getElementById('stage');
 const canvas = document.createElement('canvas');
@@ -188,8 +220,8 @@ function loop() {
   draw();
 }
 
-// The hero at rest: the first glyph, settled.
-show(0);
+// The hero at rest: the view's first glyph, settled.
+show(FROM);
 if (thumb) {
   base = 10;
   draw();
@@ -228,10 +260,7 @@ function still(g) {
   return new Promise((r) => c.toBlob(r, 'image/png'));
 }
 
-/**
- * An 8 second loop at 1080 px: thirteen glyphs on an even beat, the last change landing back
- * on the first glyph as the video ends.
- */
+/** The 8 second loop at 1080 px (see The loop). */
 async function exportVideo() {
   const c = document.createElement('canvas');
   c.width = c.height = 1080;
@@ -244,16 +273,12 @@ async function exportVideo() {
   const chunks = [];
   rec.ondataavailable = (e) => e.data.size && chunks.push(e.data);
   const done = new Promise((r) => (rec.onstop = r));
-  const fps = 30, seconds = 8, count = 13, beat = seconds / count;
-  const m = morph({ ...state });
-  m.go(0, -10); // the first glyph, settled
-  let i = 0; // change i starts at i·beat and goes to glyph i + 1; the last goes back to the first
+  const fps = 30, seconds = LOOP;
   rec.start();
   const t0 = performance.now();
   for (let n = 0; n < fps * seconds; n++) {
-    const t = n / fps;
-    while (i < count && t >= i * beat) m.go((++i) % count, (i - 1) * beat);
-    m.draw(x, 1080, t);
+    const m = morph({ ...state });
+    m.draw(x, 1080, loopAt(m, n / fps));
     track.requestFrame();
     const due = t0 + ((n + 1) * 1000) / fps;
     await new Promise((r) => setTimeout(r, Math.max(0, due - performance.now())));
@@ -267,7 +292,7 @@ const caption = () =>
   [
     'Forty glyphs drawn in ovals that grow from a grid of dots.',
     '',
-    'Each glyph is sampled onto a 24 by 24 grid; every cell is one white oval, sized by how much ink it covers and turned along the stroke. Between glyphs each oval pulls back into its dot and springs out as the next one.',
+    'Each glyph is sampled onto a 24 by 24 grid; every cell is one white oval, sized by how much ink it covers and turned along the stroke. Between glyphs each oval pulls back into its dot and springs out as the next one. The set varies how the change travels and how each oval changes, the weight, the blue and the glyphs.',
     '',
     'Type: Geist by @vercel',
     'Made with: fontkit, Canvas 2D',
@@ -294,9 +319,23 @@ panel.controls(
   ],
   (key, value) => {
     state[key] = value;
+    remember();
     if (key === 'weight') show(live.current); // the ovals reshape to the other weight in place
     if (!playing) draw();
   },
 );
 
 gui.add(state, 'bounce', Object.keys(SPRINGS)).name('Bounce');
+
+// For scripts/export-set.mjs: the 8 second loop of thirteen glyphs, drawn fresh for every frame.
+exportable({
+  loop: LOOP,
+  fps: 30,
+  render(t, size) {
+    const c = document.createElement('canvas');
+    c.width = c.height = size;
+    const m = morph({ ...state });
+    m.draw(context(c), size, loopAt(m, t));
+    return c;
+  },
+});

@@ -5,6 +5,7 @@
 // back and the calendar puts itself together again.
 import '@fontsource-variable/jetbrains-mono';
 import { shell, fontsReady } from '../../src/shell.js';
+import { exportable } from '../../src/export.js';
 
 const { thumb, panel, reduced } = shell('pour', { viewer: true });
 
@@ -127,8 +128,11 @@ function paint(ctx, o, L, pose) {
 // ── Motion ──
 // Each beat, two to four runs of rows (or of columns) slide one to four cells at once and wrap.
 // A row move keeps every cell in its row, so after nine beats the same moves played back in
-// reverse undo it: the calendar puts itself together, holds, and starts over.
-const DUR = 360, GAP = 240, BEATS = 9, HOLD = 1800;
+// reverse undo it: the calendar puts itself together, holds, and starts over. One round is a
+// fixed timeline, so the piece at any moment follows from the time alone: the page plays a new
+// set of moves each round, an export repeats one round, which closes exactly.
+const DUR = 360, GAP = 240, BEATS = 9, HOLD = 1840, LEAD = 600; // ms
+const ROUND = 2 * BEATS * DUR + (2 * BEATS - 1) * GAP + HOLD; // 12 400 ms: 744 frames at 60 fps
 const snap = (t) => (t < .5 ? 16 * t ** 5 : 1 - (-2 * t + 2) ** 5 / 2); // quint in-out: still, quick, still
 function newMove(L, r) {
   const axis = r() < .5 ? 'row' : 'col', N = axis === 'row' ? L.rows : L.cols, shifts = new Map();
@@ -141,8 +145,60 @@ function newMove(L, r) {
 }
 const shiftOf = (mv, q) => mv.shifts.get(mv.axis === 'row' ? q.j : q.i) || 0;
 
+/** One round from `seed`: its 18 moves and the cells' positions before each. */
+function roundOf(L, seed) {
+  const r = rng(seed), out = [];
+  for (let b = 0; b < BEATS; b++) out.push(newMove(L, r));
+  for (let b = BEATS - 1; b >= 0; b--) out.push({ axis: out[b].axis, shifts: new Map([...out[b].shifts].map(([l, k]) => [l, -k])) });
+  let pos = L.placed.map((p) => ({ i: p.i, j: p.j }));
+  return out.map((mv) => {
+    const before = pos;
+    pos = before.map((q) => { const k = shiftOf(mv, q); return mv.axis === 'row' ? { i: mod(q.i + k, L.cols), j: q.j } : { i: q.i, j: mod(q.j + k, L.rows) }; });
+    return { mv, pos: before };
+  });
+}
+/** The cells' pose `ms` into a round (0 to ROUND): mid-slide, or at rest between moves. */
+function poseIn(L, round, ms) {
+  const n = Math.floor(ms / (DUR + GAP));
+  if (n >= round.length) return null; // the hold: at rest
+  const { mv, pos } = round[n], e = snap(Math.min(1, (ms - n * (DUR + GAP)) / DUR));
+  return (c) => { const q = pos[c], k = shiftOf(mv, q) * e; return mv.axis === 'row' ? [q.i + k, q.j] : [q.i, q.j + k]; };
+}
+/** The pose at `t` seconds: round `n` starts at LEAD + n · ROUND and plays `seedOf(n)`'s moves. */
+const rounds = new Map();
+function poseAt(L, t, seedOf) {
+  const ms = t * 1000 - LEAD;
+  if (ms < 0) return null;
+  const n = Math.floor(ms / ROUND), seed = seedOf(n);
+  if (!rounds.has(seed)) { if (rounds.size > 8) rounds.clear(); rounds.set(seed, roundOf(L, seed)); }
+  return poseIn(L, rounds.get(seed), ms - n * ROUND);
+}
+
 // ── The piece ──
-const state = { pattern: 'weekdays', motion: reduced ? 'still' : 'slide', font: 'mono', tone: 'months', hue: 'blue', shape: 'any', seed: 2604, year: new Date().getFullYear() };
+// Every open choice can come from the URL: ?pattern=lines&font=kyoto&tone=two&hue=pink&year=2027…
+const q = new URLSearchParams(location.search);
+const DEFAULTS = { pattern: 'weekdays', motion: reduced ? 'still' : 'slide', font: 'mono', tone: 'months', hue: 'blue', shape: 'any', seed: 2604, year: new Date().getFullYear(), moves: 0 };
+const pick = (key, list) => (list.includes(q.get(key)) ? q.get(key) : DEFAULTS[key]);
+const int = (key) => (q.has(key) && Number.isInteger(+q.get(key)) ? +q.get(key) : DEFAULTS[key]);
+const state = {
+  pattern: pick('pattern', ['weekdays', 'lines', 'free']),
+  motion: pick('motion', ['slide', 'still']),
+  font: pick('font', Object.keys(FONTS)),
+  tone: pick('tone', ['months', 'two', 'one']),
+  hue: pick('hue', Object.keys(HUES)),
+  shape: pick('shape', ['any', ...KINDS]),
+  seed: int('seed'),
+  year: int('year'),
+  moves: int('moves'), // the moves' seed: 0 plays new moves each round, any other number repeats one round
+};
+function remember() {
+  if (thumb) return;
+  const url = new URL(location.href);
+  url.search = '';
+  for (const [k, v] of Object.entries(state)) if (v !== DEFAULTS[k] && !(k === 'seed' && state.pattern !== 'free')) url.searchParams.set(k, v);
+  history.replaceState(null, '', url);
+}
+
 const stage = document.getElementById('stage');
 const canvas = document.createElement('canvas');
 canvas.className = 'poster';
@@ -150,7 +206,8 @@ canvas.setAttribute('role', 'img');
 stage.append(canvas);
 const ctx = canvas.getContext('2d');
 
-let L = null, M = null;
+let L = null, t0 = performance.now(), live = Math.floor(Math.random() * 1e9);
+const liveSeed = (n) => (state.moves ? state.moves : live + n);
 function fit() {
   const W = canvas.clientWidth;
   if (!W) return false;
@@ -159,44 +216,23 @@ function fit() {
   ctx.setTransform(px / S, 0, 0, px / S, 0, 0);
   return true;
 }
-function pose() {
-  if (!M) return null;
-  const mv = M.cur, e = mv ? snap(Math.min(1, (performance.now() - M.t0) / DUR)) : 0;
-  return (n) => { const q = M.pos[n], k = mv ? shiftOf(mv, q) * e : 0; return mv?.axis === 'row' ? [q.i + k, q.j] : [q.i, q.j + k]; };
-}
-const draw = () => fit() && paint(ctx, state, L, pose());
+const moving = () => state.motion === 'slide' && !thumb;
+const draw = () => fit() && paint(ctx, state, L, moving() ? poseAt(L, (performance.now() - t0) / 1000, liveSeed) : null);
 
 function rebuild() {
   L = layout(state);
-  M = state.motion === 'slide' && !thumb
-    ? { pos: L.placed.map((p) => ({ i: p.i, j: p.j })), hist: [], queue: [], phase: 'out', cur: null, t0: 0, next: performance.now() + 700, r: rng(Math.floor(Math.random() * 1e9)) }
-    : null;
+  rounds.clear();
+  t0 = performance.now();
+  live = Math.floor(Math.random() * 1e9);
   canvas.setAttribute('aria-label', `${state.year} as one shape of month letters and dated cells`);
   panel.details([['Year', String(state.year)], ['Grid', `${L.cols} × ${L.rows} cells, ${L.placed.length} filled`], ['Pattern', L.kind]]);
+  remember();
   draw();
 }
 
-function step(now) {
-  if (M.cur) {
-    if (now - M.t0 >= DUR) {
-      const mv = M.cur;
-      for (const q of M.pos) { const k = shiftOf(mv, q); if (mv.axis === 'row') q.i = mod(q.i + k, L.cols); else q.j = mod(q.j + k, L.rows); }
-      M.cur = null; M.next = now + (M.phase === 'hold' ? HOLD : GAP);
-    }
-  } else if (now >= M.next) {
-    if (M.phase === 'hold') { M.phase = 'out'; M.hist = []; }
-    if (M.phase === 'out' && M.hist.length === BEATS) {
-      M.phase = 'back';
-      M.queue = M.hist.slice().reverse().map((m) => ({ axis: m.axis, shifts: new Map([...m.shifts].map(([l, k]) => [l, -k])) }));
-    }
-    if (M.phase === 'out') { M.cur = newMove(L, M.r); M.hist.push(M.cur); }
-    else { M.cur = M.queue.shift(); if (!M.queue.length) M.phase = 'hold'; }
-    M.t0 = now;
-  }
-}
-function loop(now) {
+function loop() {
   requestAnimationFrame(loop);
-  if (M) { step(now); draw(); }
+  if (moving()) draw();
 }
 
 await fontsReady(...Object.values(FONTS).map((f) => `${f.w} 16px ${f.fam}`)).catch(() => {});
@@ -223,15 +259,32 @@ function still() {
 }
 panel.share({
   caption: () => [
-    `Pour: ${state.year} poured into one shape.`,
+    'A year of dates poured into one shape, its blocks sliding like falling pieces.',
     '',
-    'Every month opens with its three letters, then its days, one to a cell, edge to edge. The days sit under their weekdays, so the holes are where each month’s first and last weeks don’t reach, and every year has its own shape.',
+    'Every month opens with its three letters, then its days, one to a cell, edge to edge. The days sit under their weekdays, so the holes are where each month’s first and last weeks don’t reach and every year has its own shape; runs of rows and columns slide, wrap around the sheet and play back until the calendar puts itself together again. The set changes the pattern, the year, the typeface and the coloring, one at a time.',
     '',
-    `Type: ${FONTS[state.font].name} by @pangrampangram`,
+    'Type: PP Right Serif Mono and PP Kyoto by @pangrampangram',
     'Made with: Canvas 2D',
   ].join('\n'),
   note: `${EXPORT} px png, the calendar at rest`,
   exportImage: async () => ({ blob: await still(), name: `pour-${state.year}-${state.pattern}.png` }),
+});
+
+// Exports: one round, its moves from ?moves (or EXPORT_MOVES), repeated, so the piece at ROUND is
+// the piece at 0, both at rest. At t = 0 the calendar is at rest for LEAD before the first move.
+const EXPORT_MOVES = 7;
+exportable({
+  get loop() { return state.motion === 'slide' ? ROUND / 1000 : 0; },
+  fps: 60,
+  render(t, size) {
+    const c = document.createElement('canvas');
+    c.width = c.height = size;
+    const x = c.getContext('2d');
+    x.setTransform(size / S, 0, 0, size / S, 0, 0);
+    const seed = state.moves || EXPORT_MOVES;
+    paint(x, state, L, state.motion === 'slide' ? poseAt(L, ((t % (ROUND / 1000)) + ROUND / 1000) % (ROUND / 1000), () => seed) : null);
+    return c;
+  },
 });
 
 const controls = panel.controls(
