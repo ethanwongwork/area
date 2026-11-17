@@ -1468,8 +1468,11 @@ def interface(font, m, adv):
     w = m.math
     h = 0.80 * CAP_HEIGHT
     # check and cross
-    put(font, "uni2713", union(bar((40, 300), (190, 120), w * 1.25), bar((180, 120), (480, 600), w * 1.25)), 0,
-        [0x2713], lsb=40, rsb=40)
+    # owner round 8 (0.82): one construction (signs.check): the short stroke into the vertex and the long one out of
+    # it, 1.25 of the minus's weight both, ends cut square, the vertex a flat outside and a point inside (it was two
+    # overlapping bars: the short one's foot stood out past the long one in a notch)
+    put_built(font, "uni2713", dict(build="check", params=dict(t=w * 1.25, start=[40, 300], vertex=[185, 120],
+                                                               end=[480, 600])), 0, [0x2713], lsb=40, rsb=40)
     c = 270
     put(font, "uni2715", union(bar((c - 180, m.math_y - 180), (c + 180, m.math_y + 180), w * 1.1),
                                bar((c - 180, m.math_y + 180), (c + 180, m.math_y - 180), w * 1.1)), 0, [0x2715],
