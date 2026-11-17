@@ -171,6 +171,21 @@ def put(font, name, path, width, unicodes=None, lsb=None, rsb=None):
     return g
 
 
+def put_built(font, name, info, width, unicodes=None, lsb=None, rsb=None):
+    """0.82: a sign from its construction (signs.py) at the Regular's weights; the recipe is kept in the glyph's lib
+    so each master builds it again at its own (bold.construction_signs)."""
+    import signs as SG
+    a, b, c = SG.build(info)
+    path = union(*[shape(P) for P in a])
+    if b:
+        path = op(path, union(*[shape(P) for P in b]), pathops.PathOp.DIFFERENCE)
+    if c:
+        path = union(path, *[shape(P) for P in c])
+    g = put(font, name, path, width, unicodes, lsb=lsb, rsb=rsb)
+    g.lib[SG.LIB] = info
+    return g
+
+
 def _draw_cubic(path, pen):
     """Draws a Path with every quadratic piece raised to a cubic (skia leaves a few where it splits curves)."""
     cur = None
@@ -1321,10 +1336,11 @@ def maths(font, m, adv):
     put(font, "partialdiff", moved(six, 0, 0, -1, 1), 0, [0x2202], lsb=50, rsb=50)
     # lozenge
     lw, lh = 0.66 * adv, CAP_HEIGHT + 20
-    out = shape([(lw / 2, -10), (lw, lh / 2 - 10), (lw / 2, lh - 10), (0, lh / 2 - 10)])
-    k = m.cap_stem * 0.75
-    inn = shape([(lw / 2, -10 + k * 1.4), (lw - k, lh / 2 - 10), (lw / 2, lh - 10 - k * 1.4), (k, lh / 2 - 10)])
-    put(font, "lozenge", op(out, inn, pathops.PathOp.DIFFERENCE), 0, [0x25CA], lsb=30, rsb=30)
+    # owner round 8 (0.82): one stroke all round, the minus's (signs.frame); its inner outline was set by hand, the
+    # sides running 43 to 57 across
+    put_built(font, "lozenge", dict(build="frame", params=dict(t=w, outer=[[lw / 2, -10], [lw, lh / 2 - 10],
+                                                                         [lw / 2, lh - 10], [0, lh / 2 - 10]])),
+              0, [0x25CA], lsb=30, rsb=30)
     # pi: two stems under a bar at the x-height, the right one ending in a short turn
     s = m.stem
     left = bar((150, -2), (165, X_HEIGHT - 10), s * 0.92)
@@ -1482,24 +1498,26 @@ def interface(font, m, adv):
     p = union(rect(0, t - w, 0.30 * W, t), bar((0.30 * W - w * 0.4, t - w / 2), (0.72 * W, w / 2), w * 1.05),
               rect(0.70 * W, 0, W, w), rect(0.56 * W, t - w, W, t))
     put(font, "uni2325", p, 0, [0x2325], lsb=50, rsb=50)
-    # shift: an outlined arrow pointing up
+    # shift: an outlined arrow pointing up (owner round 8, 0.82: signs.frame, one stroke all round; the inner outline
+    # was set by hand, its head's flanges 32 across beside sides of 52)
     sw, sh = 520, h
-    out = shape([(sw / 2, sh), (sw, sh * 0.48), (sw * 0.72, sh * 0.48), (sw * 0.72, 0), (sw * 0.28, 0),
-                 (sw * 0.28, sh * 0.48), (0, sh * 0.48)])
+    shift_out = [[sw / 2, sh], [sw, sh * 0.48], [sw * 0.72, sh * 0.48], [sw * 0.72, 0], [sw * 0.28, 0],
+                 [sw * 0.28, sh * 0.48], [0, sh * 0.48]]
     k = w
-    inn = shape([(sw / 2, sh - k * 1.55), (sw - k * 2.35, sh * 0.48 + k * 0.6), (sw * 0.72 - k, sh * 0.48 + k * 0.6),
-                 (sw * 0.72 - k, k), (sw * 0.28 + k, k), (sw * 0.28 + k, sh * 0.48 + k * 0.6),
-                 (k * 2.35, sh * 0.48 + k * 0.6)])
-    put(font, "uni21E7", op(out, inn, pathops.PathOp.DIFFERENCE), 0, [0x21E7], lsb=50, rsb=50)
-    # erase to the left: an outlined tag pointing left with a cross inside
-    tw, th = 700, h * 0.80
-    y0 = (h - th) / 2
-    out = shape([(0, y0 + th / 2), (tw * 0.30, y0 + th), (tw, y0 + th), (tw, y0), (tw * 0.30, y0)])
-    inn = shape([(k * 1.9, y0 + th / 2), (tw * 0.30 + k * 0.45, y0 + th - k), (tw - k, y0 + th - k), (tw - k, y0 + k),
-                 (tw * 0.30 + k * 0.45, y0 + k)])
-    cxx, cyy, d = tw * 0.62, y0 + th / 2, th * 0.22
-    x = union(bar((cxx - d, cyy - d), (cxx + d, cyy + d), w), bar((cxx - d, cyy + d), (cxx + d, cyy - d), w))
-    put(font, "uni232B", union(op(out, inn, pathops.PathOp.DIFFERENCE), x), 0, [0x232B], lsb=50, rsb=50)
+    put_built(font, "uni21E7", dict(build="frame", params=dict(t=w, outer=shift_out)), 0, [0x21E7], lsb=50, rsb=50)
+    # caps lock: the shift arrow, its shaft shorter by a fifth of its height (nothing scaled), over a level bar of the
+    # plain stroke under the shaft, 39 below its foot
+    by_ = round(0.20 * sh)
+    caps_out = [[x, y if y > 0 else by_] for x, y in shift_out]
+    put_built(font, "uni21EA", dict(build="frame", params=dict(t=w, outer=caps_out,
+                                                               bar=dict(x0=sw * 0.28, x1=sw * 0.72, gap=by_ - w))),
+              0, [0x21EA], lsb=50, rsb=50)
+    # erase to the left (owner round 8, 0.82: signs.erase): a frame of one stroke all round, its inner outline a
+    # true inset of the outer with a sharp inner point (the inner point was set 1.9 strokes in and the slanted sides
+    # ran 52 to 73 across), the cross centred in the box part. U+2326 is it turned over (MIRRORS)
+    th_ = h * 0.80
+    put_built(font, "uni232B", dict(build="erase", params=dict(t=w, tw=700, th=th_, y0=(h - th_) / 2, shoulder=0.30 * 700,
+                                                               arm=th_ * 0.22 * math.sqrt(2))), 0, [0x232B], lsb=50, rsb=50)
 
 
 def diphthongs(font, m):
@@ -2807,11 +2825,7 @@ def more_symbols(font, m, adv):
     ret = union(al, rect(lb[2] - w, cy - w / 2, lb[2], cy + 0.42 * CAP_HEIGHT))
     add("uni21B5", [0x21B5, 0x23CE], ret, side=44)
     add("uni2326", 0x2326, moved(gp(font, "uni232B"), 0, 0, -1, 1))
-    sh = gp(font, "uni21E7")
-    sb = bounds(sh)
-    by = round(0.20 * (sb[3] - sb[1]))                    # the shaft shortened, nothing scaled (0.74)
-    up = moved(cut_out(sh, sb[1] + 80, by), 0, by)
-    add("uni21EA", 0x21EA, union(up, rect(sb[0] + 0.28 * (sb[2] - sb[0]), sb[1], sb[0] + 0.72 * (sb[2] - sb[0]), sb[1] + w)))
+    # caps lock (U+21EA): built with the shift arrow in interface() (owner round 8, 0.82)
     # solid shapes on the black circle's size and centre
     cb_ = bounds(gp(font, "uni25CF"))
     R = (cb_[3] - cb_[1]) / 2

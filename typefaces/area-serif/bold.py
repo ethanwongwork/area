@@ -3553,6 +3553,52 @@ def overlap_masters(reg, font, maps, v, reports, notes):
     return done
 
 
+
+def construction_signs(reg, font, v, law, resided=None):
+    """owner round 8 (0.82): each glyph whose Regular carries a construction (signs.LIB) takes the construction at
+    this master's stroke weights. Every point of the Regular's outline (corners, the rounding points soft_ends put
+    by a corner, their handles) moves as its nearest corner of the construction moves. Returns notes."""
+    import signs as SG
+    from ufoLib2.objects import Point
+    s = 1 + (SIGN - 1) * v["ft"]
+    done = []
+    for g in reg:
+        info = g.lib.get(SG.LIB)
+        if not info or g.name not in font or not g.contours:
+            continue
+        white = (lambda w0: law.least(w0)) if (law is not None and v["f"] > 0) else None
+        C0, Cm = SG.corners(info, 1.0), SG.corners(info, s, white)
+        R = glyph_contours(g)
+        ons = [q for P in R for q in P if q[2] is not None]
+        votes = {}
+        for q in ons:                                          # the shift that lays the construction on the outline
+            for c in C0:
+                k = (round(q[0] - c[0]), round(q[1] - c[1]))
+                votes[k] = votes.get(k, 0) + 1
+        dx, dy = max(votes, key=lambda k: (votes[k] + sum(votes.get((k[0] + a, k[1] + b), 0) for a in (-1, 0, 1) for b in (-1, 0, 1)), -abs(k[0]) - abs(k[1])))
+        out, far = [], 0.0
+        for P in R:
+            Q = []
+            for x, y, t_, sm in P:
+                k = min(range(len(C0)), key=lambda i: (C0[i][0] + dx - x) ** 2 + (C0[i][1] + dy - y) ** 2)
+                far = max(far, math.hypot(C0[k][0] + dx - x, C0[k][1] + dy - y))
+                Q.append((round(x + Cm[k][0] - C0[k][0]), round(y + Cm[k][1] - C0[k][1]), t_, sm))
+            out.append(Q)
+        if far > 14:
+            done.append(f"{g.name}: not its construction's points (a point {far:.0f} from every corner), left")
+            continue
+        if g.width:                                            # sides: the Regular's plus the measured change
+            r0, r1 = _zone_edges(R, g.name)
+            b0, b1 = _zone_edges(out, g.name)
+            dl, dr = bearing_change(g.name, v)
+            shift = round(r0 + dl - b0)
+            out = [[(q[0] + shift,) + tuple(q[1:]) for q in P] for P in out]
+            font[g.name].width = round(b1 + shift + (g.width - r1) + dr)
+        for c, P in zip(font[g.name].contours, out):
+            c.points = [Point(x, y, t_, smooth=sm) for x, y, t_, sm in P]
+        done.append(f"{g.name} x{s:.3f}")
+    return done
+
 def bold_font(reg, stem=STEM, **over):
     """The Bold master: every outline by rule, every anchor carried by its glyph's own node map, every component
     moved by what its two anchors moved. Returns (font, {glyph: report}, [notes])."""
@@ -4311,6 +4357,13 @@ def bold_font(reg, stem=STEM, **over):
             ringed.append(f"{g.name} (scale {sc:.3f}, white {min(_gap(MC[1], P) for P in placed(sc)):.0f} for {want:.0f})")
             resided.add(g.name)
     notes.append(f"letters in a ring: {len(ringed)} ({'; '.join(ringed)})")
+    # owner round 8 (0.82): a sign built from strokes (signs.py; its recipe in the Regular glyph's lib) is built
+    # again here with every stroke times the sign law, the minus's own (1 + (SIGN - 1) ft), and carried onto the
+    # Regular's final points corner by corner; its sides as the engine sets them. The engine's reading grew the
+    # erase keys' slanted sides 52 > 110 to 129 at the Bold (level 71) and the check 65 > 124, and left the radical's
+    # thick stroke unread
+    built_ = construction_signs(reg, font, v, law, resided)
+    notes.append(f"signs from their construction: {len(built_)} ({'; '.join(built_)})")
     for g in reg:                                              # 0.81: last, a symmetric sign made so again
         if g.contours and not g.components and g.name in font and g.name not in struck:
             cs = glyph_contours(font[g.name])
