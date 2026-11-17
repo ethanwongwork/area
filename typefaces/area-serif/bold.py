@@ -75,16 +75,43 @@ RUN = 10                                   # and for at least this many units, t
 # 1.02 and 0.98 on f itself, so those stay on f.
 LIGHT_STEM = 55
 LIGHT_THIN = 1.72
+# 0.82 (owner round 8, axis B): the Thin master (stem 32, weightaxis.THIN_STEM). Run on to stem 32, the law above (a
+# thin part's Bold gain run backwards, ft = 1.72 f) gives the hairline 30.2 against the stem's 32: contrast 1.06,
+# almost monoline, under every reference's lightest weight (stem / o's thinnest: Literata 200 1.22, Source Serif 4 200
+# 1.42, Crimson Pro 200 1.42, Serrif 100 1.50, Newsreader 200 1.95; median 1.42). Below the Light's stem a letter's
+# thin stroke (hairlines and every curved thin, H's and E's bars and arms, e's bar, the upright and the slanted thins,
+# the arm-crotch and neck floors that read the hairline) is the Light's value times (stem / 55) ** K_THIN: continuous
+# with the Light at 55 (which does not change) and monotone to the Thin. K_THIN from the contrast wanted at the Thin,
+# 1.46 (half way between the references' lightest median, 1.42, and Serrif 100's 1.50, the one real 100): the Light's
+# hairline 36.6 > 21.9 at 32, stem / hairline 1.46 (the Light's own 1.50). The references' own exponent from their 300
+# to their lightest is lower (o's thinnest: median 0.54, 0.35 to 1.01; build/weightscale/thinparts.py), because their
+# 300 has more contrast to give up (Serrif 2.27, Source Serif 4 1.69, Literata 1.45, Newsreader 1.95, Crimson Pro 1.59)
+# where Area's Light has 1.50. The parts that are ends, not strokes, keep the law above, which already lands on the
+# references' own exponent below 300 (thinparts.py medians): the serif tip (Area 0.67 at 32, references 0.57, 0.33 to
+# 0.92: tip 16.0, 0.74 of the hairline, references 0.70 to 1.09), the branch neck (0.33, references 0.33: 23.0), the
+# dot (on f: 0.49, references 0.49), the period and a dieresis (0.44 / 0.45, references 0.60, 0.47 to 0.72), the sign
+# strokes (the minus's 1 + 0.37 ft: 0.68, references 0.77, 0.39 to 1.07: hyphen 27.4, 0.86 of the stem, references
+# 0.84 to 1.04 at their lightest) and the small signs (SIGN_K)
+K_THIN = 0.95
 
 
 def vector(stem=STEM, **over):
     f = (stem - REG_STEM) / (STEM_REF - REG_STEM)
     ft = f if f >= 0 else f * LIGHT_THIN
     v = dict(stem=stem, f=f, ft=ft, tip=1 + (TIP - 1) * ft, foot=1 - (1 - FOOT) * f, bearing=1 - (1 - BEARING) * f,
-             dot=1 + (DOT - 1) * f, neck=1 + (NECK - 1) * ft)
+             dot=1 + (DOT - 1) * f, neck=1 + (NECK - 1) * ft,
+             ftL=(LIGHT_STEM - REG_STEM) / (STEM_REF - REG_STEM) * LIGHT_THIN)    # 0.82: ft at the Light (thin_law)
     if "tip" in over:
         v["tip"] = over["tip"] / 30
     return v
+
+
+def thin_law(v, law):
+    """A letter's thin stroke in this master (0.82, axis B): law(ft), the law above, down to the Light's stem; under it
+    the Light's value times (stem / LIGHT_STEM) ** K_THIN. law: ft -> the part's size (or ratio)."""
+    if v["stem"] >= LIGHT_STEM:
+        return law(v["ft"])
+    return law(v["ftL"]) * (v["stem"] / LIGHT_STEM) ** K_THIN
 
 
 # ---------------------------------------------------------------- reading the Regular
@@ -355,7 +382,7 @@ def x_target(t, straight, v):
     if t >= 56 and not straight:
         return t + SUB_ROUND[v.get("sub", "loop")] * THICK["round"] * v["f"]
     if t >= 35:
-        return t * (1 + (THIN_UPRIGHT - 1) * v["ft"])
+        return thin_law(v, lambda ft: t * (1 + (THIN_UPRIGHT - 1) * ft))
     if t >= THIN_READ:                           # 0.81: an upright stroke thinner than a hairline (the asterisk's
         return t * v["tip"]                      # arms, a small figure's hairline) follows the serif tip, as a level
     return None                                  # one under 36 always has (y_target); 0.80 left it to the slack
@@ -453,8 +480,8 @@ def y_target(t, straight, v):
         return t * sign_ratio(v)
     table = BAR if straight else HAIR
     if t in table:
-        return t + (table[t] - t) * f
-    return t * (1 + ((LEVEL if straight else HAIR_RATIO) - 1) * f)
+        return thin_law(v, lambda ft: t + (table[t] - t) * ft)
+    return thin_law(v, lambda ft: t * (1 + ((LEVEL if straight else HAIR_RATIO) - 1) * ft))
 
 
 # Slanted strokes (bold_diag.py reads v y V A in each face, Regular and Bold).
@@ -497,7 +524,7 @@ def diag_target(t, v):
         return t * (1 + (SIGN - 1) * f)
     if t >= 64:
         return t + (DIAG["thick_lc"] if t < 80 else DIAG["thick_cap"]) * f
-    return t * (1 + ((DIAG["thin_lc"] if t < 44 else DIAG["thin_cap"]) - 1) * v["ft"])
+    return thin_law(v, lambda ft: t * (1 + ((DIAG["thin_lc"] if t < 44 else DIAG["thin_cap"]) - 1) * ft))
 
 
 def diagonals(contours, polys_, tmax=130):
@@ -1828,7 +1855,8 @@ def spine(contours, up, low, v, t=None):
     if d[0] * nrm[0] + d[1] * nrm[1] < 0:
         nrm = (-nrm[0], -nrm[1])
     across = d[0] * nrm[0] + d[1] * nrm[1]
-    gain = SPINE * v["f"] if across >= 64 else across * (DIAG["thin_lc"] - 1) * v["ft"]
+    gain = SPINE * v["f"] if across >= 64 else (across * (DIAG["thin_lc"] - 1) * v["ft"] if v["stem"] >= LIGHT_STEM else
+                                                 thin_law(v, lambda ft: across * (1 + (DIAG["thin_lc"] - 1) * ft)) - across)
     if v.get("sub") == "small sign":                           # 0.81: SIGN_K, as every other part of such a sign
         gain = abs(across) * (sign_ratio(v) - 1)
     cons = {"x": [], "y": []}
@@ -2243,7 +2271,7 @@ def open_tail(t, v):
 HINTS = {
     # e: the bar keeps its upper edge (the eye gives up only the hairline's gain: Georgia Pro 0.98, Serrif 0.90 of
     # its height) and thickens downward, 41 to 49 (1.02, 1.36)
-    "e": {"y": [(279, 320, lambda v: 41 + 8 * v["ft"], "bar"), (-10, 43, lambda v: open_tail(53, v), "open tail")],
+    "e": {"y": [(279, 320, lambda v: thin_law(v, lambda ft: 41 + 8 * ft), "bar"), (-10, 43, lambda v: open_tail(53, v), "open tail")],
           "ypin": [320]},
     # c, e (owner round 5): the lower stroke running from the round stroke out to the terminal is no hairline: it
     # grows as the taper between the two, the round stroke's ratio at its root and the terminal's (the tip's) at its
@@ -2253,14 +2281,14 @@ HINTS = {
     # s: its barbs (34 at the cut, the inside edge slanting, so the scan reads no stroke there) grow as C's, S's and
     # G's barbs do, by the thin upright rule (owner round 4: they grew 1.05 and 1.21 where the references' grow 1.27
     # to 1.53; with the turns on the round strokes' ratio the s's top-right quarter holds its share within 0.02)
-    "s": {"sub": "turn", "x": [(370, 404, lambda v: 34 * (1 + (THIN_UPRIGHT - 1) * v["ft"]), "barb"),
-                               (47, 81, lambda v: 34 * (1 + (THIN_UPRIGHT - 1) * v["ft"]), "barb")]},
+    "s": {"sub": "turn", "x": [(370, 404, lambda v: thin_law(v, lambda ft: 34 * (1 + (THIN_UPRIGHT - 1) * ft)), "barb"),
+                               (47, 81, lambda v: thin_law(v, lambda ft: 34 * (1 + (THIN_UPRIGHT - 1) * ft)), "barb")]},
 }
 # owner round 8 (0.82): the summation is a capital (Esh's drawing), not a sign of plain strokes: its diagonals take the
 # capitals' laws (Z, A) and its two bars E's arms' (LEVEL, read as straight: their inner edges are curves into the
 # serifs, so the engine took them for hairlines and grew them 1.24 where E's arms grow 1.33)
-HINTS["summation"] = {"y": [(0, 46, lambda v: 46 * (1 + (LEVEL - 1) * v["ft"]), "bar"),
-                            (666, 712, lambda v: 46 * (1 + (LEVEL - 1) * v["ft"]), "bar")]}
+HINTS["summation"] = {"y": [(0, 46, lambda v: thin_law(v, lambda ft: 46 * (1 + (LEVEL - 1) * ft)), "bar"),
+                            (666, 712, lambda v: thin_law(v, lambda ft: 46 * (1 + (LEVEL - 1) * ft)), "bar")]}
 # owner round 8 (0.82): the increment is drawn with A's weights (thin left, thick right, a level base): it takes the
 # capitals' laws, as A does, not the plain strokes' sign law
 HINTS["increment"] = {}
@@ -2438,7 +2466,13 @@ def bold(contours, width, v, name="", hints=None):
                 l = pick({q for e in st["L"] for q in e}, key=lambda q: q[1])
                 r = pick({q for e in st["R"] for q in e}, key=lambda q: q[1])
                 if not (adj[l][1] and adj[l][3]) and not (adj[r][1] and adj[r][3]) and l[0] < r[0]:
-                    extra_x.append((l[0], r[0], (r[0] - l[0]) + g, "slanted end"))
+                    if v["stem"] < LIGHT_STEM:
+                        # 0.82 (axis B): under the Light the end keeps its share of the stroke across (its level
+                        # gain, an amount, took more than the end's whole width at the Thin: ð's bar ends 27 > -16,
+                        # the arrows' heads, ⌫ ⌦ ×: the solve turned the end over and the glyph fell back)
+                        extra_x.append((l[0], r[0], (r[0] - l[0]) * diag_target(st["t"], v) / st["t"], "slanted end"))
+                    else:
+                        extra_x.append((l[0], r[0], (r[0] - l[0]) + g, "slanted end"))
     cx_, hx, sx = _cons(xk, xs, xg, extra_x, v, x_target, 0, kx, sp[0])
     half_rep = []
     for q, e, t in half:                                       # a node facing a straight slanted edge: its level
@@ -2458,7 +2492,7 @@ def bold(contours, width, v, name="", hints=None):
     cy_, hy, sy = _cons(yk, ys, yg, extra_y, v, y_target, 1, ky, sp[1])
     sh = [] if plain else shallow(body, pl)
     for lo_e, up_e, t in sh:                                   # each end of each edge: its upright distance to the
-        want = t * (1 + (LEVEL_THICK - 1) * v["f"]) if t >= 64 else t * (1 + (DIAG["thin_lc"] - 1) * v["ft"])
+        want = t * (1 + (LEVEL_THICK - 1) * v["f"]) if t >= 64 else thin_law(v, lambda ft: t * (1 + (DIAG["thin_lc"] - 1) * ft))
         for edge, other, sign in ((up_e, lo_e, 1.0), (lo_e, up_e, -1.0)):   # other edge grows by the stroke's gain
             (x0, y0), (x1, y1) = other
             sl = (y1 - y0) / (x1 - x0)
@@ -2485,7 +2519,7 @@ def bold(contours, width, v, name="", hints=None):
     for lo_e, up_e, t in sh:
         (x0, y0), (x1, y1) = [(X[p_[0]], Y[p_[1]]) for p_ in lo_e]
         sl = (y1 - y0) / (x1 - x0)
-        want = t * (1 + (LEVEL_THICK - 1) * v["f"]) if t >= 64 else t * (1 + (DIAG["thin_lc"] - 1) * v["ft"])
+        want = t * (1 + (LEVEL_THICK - 1) * v["f"]) if t >= 64 else thin_law(v, lambda ft: t * (1 + (DIAG["thin_lc"] - 1) * ft))
         for q in up_e:                                         # exact, on whole units
             if q[1] not in pins:
                 Y[q[1]] = round(y0 + (X[q[0]] - x0) * sl + want * math.sqrt(1 + sl * sl))
@@ -3257,11 +3291,20 @@ def bearing_change(name, v):
         import os
         _BEARINGS = json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "bold_bearings.json")))
     ch = name if len(name) == 1 else _CHARS.get(name)
+    d = _BEARINGS.get(ch, [BEARING_REST, BEARING_REST])
     if v["f"] < 0:                                             # 0.81: the Light's own change where it is measured
         lb = light_bearings()
         if ch in lb:
-            return lb[ch]
-    d = _BEARINGS.get(ch, [BEARING_REST, BEARING_REST])
+            if v["stem"] >= LIGHT_STEM:
+                return lb[ch]
+            # 0.82 (axis B): under the Light, the Light's change and the references' own from their 300 to their
+            # lightest (thin_bearings.json), in proportion to the stem's way from the Light to the Thin; a side it does
+            # not name goes on with the Bold's change run backwards from the Light
+            share = (LIGHT_STEM - v["stem"]) / (LIGHT_STEM - _WAX_THIN)
+            fl = (LIGHT_STEM - REG_STEM) / (STEM_REF - REG_STEM)
+            tb = thin_bearings().get(ch, (d[0] * BEARING_SCALE * (v["f"] - fl) / share if share else 0,
+                                          d[1] * BEARING_SCALE * (v["f"] - fl) / share if share else 0))
+            return lb[ch][0] + share * tb[0], lb[ch][1] + share * tb[1]
     return d[0] * BEARING_SCALE * v["f"], d[1] * BEARING_SCALE * v["f"]
 
 
@@ -3274,6 +3317,23 @@ def bearing_change(name, v):
 # keeps the Bold's change run backwards. One path: bearing_change, for every master (kerning-0.81.md).
 LIGHT_BEARINGS = "light_bearings.json"
 _LIGHT_BEARINGS = None
+
+
+THIN_BEARINGS = "thin_bearings.json"          # 0.82 (axis B): tools/weight/bold_bearings.py thin
+_THIN_BEARINGS = None
+_WAX_THIN = 32                                  # the stem thin_bearings.json's change is measured to
+
+
+def thin_bearings():
+    """{character: (left, right)}: the Thin's change over the Light's, thin_bearings.json's "sides" ({} if absent)."""
+    global _THIN_BEARINGS
+    if _THIN_BEARINGS is None:
+        import json
+        import os
+        path = os.path.join(os.path.dirname(os.path.abspath(__file__)), THIN_BEARINGS)
+        sides = json.load(open(path))["sides"] if os.path.exists(path) else {}
+        _THIN_BEARINGS = {ch: (float(d[0]), float(d[1])) for ch, d in sides.items()}
+    return _THIN_BEARINGS
 
 
 def light_bearings():
@@ -3354,12 +3414,12 @@ def turn_over(A, width, mapping, types_of):
     return out
 
 
-def check_light_bearings(reg, light):
+def check_light_bearings(reg, light, stem=LIGHT_STEM):
     """The Light's sides as bearing_change sets them (qa.py): for every glyph light_bearings.json names, the Light's
     zone edges stand from its advance's ends by the Regular's plus that change (half a unit for the rounding).
     Returns the misses [(glyph, side, want, got)]."""
     bad = []
-    v = vector(LIGHT_STEM)
+    v = vector(stem)                                           # 0.82: the Thin's too (stem 32)
     for g in reg:
         ch = g.name if len(g.name) == 1 else _CHARS.get(g.name)
         if ch not in light_bearings() or not g.contours or g.components or g.name not in light:
@@ -4126,7 +4186,7 @@ def bold_font(reg, stem=STEM, **over):
     # arm's own width (hairline rule) from the arm's far edge (white.arm_crotches; the ampersand's tail arm, 25 > 13)
     armed = []
     resided = set()                                            # outlines changed after their sides were set
-    ratio_ = 1 + (HAIR_RATIO - 1) * v["ft"]
+    ratio_ = thin_law(v, lambda ft: 1 + (HAIR_RATIO - 1) * ft)
     for g in reg:
         if not g.contours or g.components or g.name in struck or g.name in signs or g.name not in font:
             continue
@@ -4143,7 +4203,7 @@ def bold_font(reg, stem=STEM, **over):
     # round 3: towards the Light, a neck where one curved stroke branches from another never runs under the
     # hairline's share of the Regular's (white.keep_necks; g's loop out of its link thinned 39 > 13 at 300)
     if v["f"] < 0:
-        share = 1 + (HAIR_RATIO - 1) * v["ft"]
+        share = thin_law(v, lambda ft: 1 + (HAIR_RATIO - 1) * ft)
         necked = []
         for g in reg:
             if not g.contours or g.components or g.name in struck or g.name in signs or g.name not in font:
@@ -4316,7 +4376,7 @@ def bold_font(reg, stem=STEM, **over):
         cat = _ud0.category(chr(g.unicodes[0])) if g.unicodes else ("Lu" if g.name[:1].isupper() else "Ll")
         big = cat in ("Lu", "Lt", "Nd") or g.name[:1].isupper()
         st_, hr_ = (CAP_STEM, CAP_HAIR) if big else (REG_STEM, LC_HAIR)
-        laws = [(st_, stem / REG_STEM), (hr_, 1 + (HAIR_RATIO - 1) * v["ft"]), (30, v["tip"])]
+        laws = [(st_, stem / REG_STEM), (hr_, thin_law(v, lambda ft: 1 + (HAIR_RATIO - 1) * ft)), (30, v["tip"])]
         # 0.81 (close): the places move (white._taper_places) towards the Light only; towards the Bold they moved the
         # quotes' nodes on the Bold master alone, and between it and the quotes' mid master the tail dipped
         # (quotedblleft 40.8 > 35.3 at 675)
@@ -4884,7 +4944,7 @@ def bold_font(reg, stem=STEM, **over):
         Rg, Ng = glyph_contours(reg["g"]), glyph_contours(font["g"])
         yr_g = tuple(_CC.REGIONS["g"][1])
         if _CC.report("g", Ng, yr_g)[0]:
-            laws_g = [(REG_STEM, stem / REG_STEM), (LC_HAIR, 1 + (HAIR_RATIO - 1) * v["ft"]), (30, v["tip"])]
+            laws_g = [(REG_STEM, stem / REG_STEM), (LC_HAIR, thin_law(v, lambda ft: 1 + (HAIR_RATIO - 1) * ft)), (30, v["tip"])]
             got_ = _LOOPS.g_loop_master(Rg, Ng, laws_g, yr_g)
             if got_ is not None:
                 Mg, f0, f1, sh_ = got_
@@ -4969,7 +5029,7 @@ def variable(reg, bold_ufo, stem=STEM, light_ufo=None, thin_ufo=None):
     ax.map = (axis_map(stem, [w for w in LIGHT_WEIGHTS if w >= low]) if light_ufo else []) + axis_map(stem)
     ds.addAxis(ax)
     masters = ((reg, REG_STEM, "Regular"), (bold_ufo, stem, "ExtraBold")) + (((light_ufo, LIGHT_STEM, "Light"),) if light_ufo else ()) \
-        + (((thin_ufo, WAX.THIN_STEM, "Thin"),) if thin_ufo else ())
+        + (((thin_ufo, WAX.THIN_STEM, WAX.LOW_NAME),) if thin_ufo else ())
     for ufo, loc, style in masters:
         src = SourceDescriptor()
         src.font, src.location, src.familyName, src.styleName = ufo, {"Weight": loc}, reg.info.familyName, style

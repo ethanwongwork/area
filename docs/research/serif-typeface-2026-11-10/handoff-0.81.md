@@ -28,6 +28,10 @@ From `typefaces/area-serif/`, with `.venv/bin/python`:
 - `build.py` builds the masters and the variable font. 0.82 (owner round 8, axis): the axis is 300 to 800, masters
   Light 300 (stem 55), Regular 400 (78), mid 600 (104.5, sparse), Bold master 800 (140, named ExtraBold); the
   0.81 axis called them 300 / 400 / 550 / 700. `weightaxis.py` converts (`python weightaxis.py` prints the table).
+  A master under the Light (a Thin at 100 or an ExtraLight at 200) is built only with `weightaxis.THIN = True`
+  (`THIN_WEIGHT`, `THIN_STEM`, `LOW_NAME`); both trials failed (`axis-0.81.md`, Owner round 8, axis, stage B), so it
+  is off. With it on, build.py writes `AreaSerif-<LOW_NAME>.ufo`, `audit_axis` adds the Light-to-it pair, `qa.py`
+  its audits; audit_rays / audit_kern take `AREA_RAY_WEIGHTS=200,225,...`.
   `AREA_KERN_FIT=1 build.py` also refits the per-master kerning (do this when advances change).
 - `qa.py` runs every check and writes the summary; keep the log at `build/qa-081.log`.
 - `audit_axis.py`, `audit_rays.py` (`AREA_RAY_WEIGHTS`, `AREA_VF`), `audit_kern.py`

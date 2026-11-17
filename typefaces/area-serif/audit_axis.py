@@ -521,6 +521,20 @@ def main():
         sweep(reg, light, {}, lts, 1, lambda t: 30 * (1 + (lv["tip"] - 1) * t), lfails, lighter=True, w_of=w_light)
         bad += report(f"weight axis, Light stem {B.LIGHT_STEM}: {len(LIGHT_STOPS)} stops ({LIGHT_STOPS[0]} down to {LIGHT_STOPS[-1]})",
                       lfails, f"{out}/audit-axis-light.txt")
+    if os.path.exists(f"{d}/AreaSerif-{W.LOW_NAME}.ufo") and os.path.exists(f"{d}/AreaSerif-Light.ufo"):   # 0.82 (axis B)
+        # the lightest side: the Light master to the lightest (ExtraLight), 275 down to its weight every 25 (a new
+        # pair: the variable font interpolates the two there); a stroke there is held to the tip at its weight
+        thin = ufoLib2.Font.open(f"{d}/AreaSerif-{W.LOW_NAME}.ufo")
+        tv, lv = B.vector(W.THIN_STEM), B.vector(B.LIGHT_STEM)
+        stops = list(range(275, W.THIN_WEIGHT - 1, -25))
+        tts = [(w, (B.LIGHT_STEM - W.stem(w)) / (B.LIGHT_STEM - W.THIN_STEM)) for w in stops]
+        w_thin = lambda t: W.short(round(W.weight(B.LIGHT_STEM - t * (B.LIGHT_STEM - W.THIN_STEM)), 1))   # noqa: E731
+        tfails = {k: [] for k in keys}
+        mirror(reg, thin, tfails)
+        seams(reg_ufo, thin, tfails)
+        sweep(light, thin, {}, tts, 1, lambda t: 30 * (lv["tip"] + (tv["tip"] - lv["tip"]) * t), tfails, lighter=True, w_of=w_thin)
+        bad += report(f"weight axis, {W.LOW_NAME} stem {W.THIN_STEM} against the Light: {len(stops)} stops ({stops[0]} down to {stops[-1]})",
+                      tfails, f"{out}/audit-axis-thin.txt")
     sys.exit(1 if bad else 0)
 
 

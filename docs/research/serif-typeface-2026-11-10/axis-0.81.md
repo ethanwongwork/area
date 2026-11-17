@@ -1168,3 +1168,87 @@ A list given as `old:300,325,...` is on the 0.81 axis and converted; a font on t
 places (`weightaxis.user`), so today's tools audit the old snapshots. `curvecheck`, the bearing lookups and the
 per-master kerning read masters, not weights: nothing to convert. The 0.81 25-unit stops on the 0.82 axis are
 `old:300,325,...,700`. Saved as `build/snap082g`; `build/qa-082g.log`.
+
+### Stage B: a master under the Light. Not landed; the font stays 300 to 800
+
+Two trial builds, both from the Stage A code plus the rules below, built in a copy of the code (the worktree's
+`build/` kept Stage A): a Thin at 100 (stem 32), then the brief's fallback, an ExtraLight at 200 (stem 42). Neither is
+sound, so neither ships: `weightaxis.THIN` is off, the axis is 300 to 800 and every rule below acts only under the
+Light's stem (55), where no master stands. A rebuild with them in is identical to `snap082g` (below). Results and
+figures: `build/axis082/trial100/`, `trial200/`.
+
+The rules written (kept, gated):
+
+- **The letters' thin strokes under the Light** (`bold.thin_law`, `K_THIN` 0.95). Run on to stem 32 the present law
+  (a thin part's Bold gain run backwards, ft = 1.72 f) gives the hairline 30.2: stem / hairline 1.06. Under 55 a
+  hairline, every curved thin, H's and E's bars and arms, e's bar, the upright and slanted thins and the arm-crotch
+  and neck floors that read the hairline are the Light's value times (stem / 55) ** 0.95: continuous with the Light at
+  55 (which does not move) and monotone to the Thin. 0.95 from the contrast wanted, 1.46 (half way between the
+  references' lightest median 1.42 and Serrif 100's 1.50). Ends keep the present law, which already lands on the
+  references' own exponent below 300 (`build/weightscale/thinparts.py`, k = ln(part ratio) / ln(stem ratio), their
+  300 to lightest): serif tip (Area 0.67; references median 0.57, 0.33 to 0.92), branch neck (0.33; 0.33), dot (0.49;
+  0.49), period (0.44; 0.60, 0.47 to 0.72), sign strokes (0.68; 0.77, 0.39 to 1.07). The references' hairline exponent
+  is lower (median 0.54) because their 300 has contrast to give (Serrif 2.27, Source Serif 4 1.69, Newsreader 1.95)
+  where Area's Light has 1.50; at 0.54 Area's Thin would be 1.17, the collapse the owner asked to avoid.
+- **Sides under the Light** (`bold.bearing_change`, `thin_bearings.json` from `tools/weight/bold_bearings.py thin`):
+  the Light's change plus the references' own from their 300 to their lightest (Serrif 100; Source Serif 4, Literata,
+  Newsreader, Crimson Pro 200), each times Area's stem loss 55 > 32 over its own, median per side: lowercase +2.6 a side
+  (median; -1.6 to +7.6), capitals +2.1, figures +4.2, punctuation +2.4; in proportion to the stem's way from 55 to 32.
+- **A slanted stroke's end under the Light** keeps its share of the stroke across (`bold`, "slanted end"): its level
+  gain, an amount, took more than the end's width at the Thin (ð's bar ends 27 > -16), so the solve turned the end
+  over and ↕ ð ⌫ ⌦ × fell back to "upright parts only" (↕'s heads and ð's bar kept the Regular's weight). With it no
+  glyph falls back at 32 or 42.
+- Kerning for the lighter master by the existing rule (the Regular's carried by the white rule, collisions at its own
+  floor; no same-weight fit: Georgia Pro has nothing under 300 and Serrif alone is not "both references"); the
+  between-masters pass between the Light and it (`spacing.BETWEEN_BASE`). `audit_axis` reads the Light-to-lightest pair,
+  `qa.py` the master's audit, curvecheck and sides, all keyed on `weightaxis.LOW_NAME`.
+
+What the Thin (100, stem 32) measured (variable font at 100, `thinparts.py`; references at their lightest):
+
+| part / stem | Area 100 | references' lightest |
+|---|---:|---|
+| stem / o's thinnest (contrast) | 1.47 (hairline 21.8) | 1.22 to 1.95, median 1.42; Serrif 100 1.50 |
+| serif tip | 16.4 (0.51) | 0.42 to 0.76 |
+| e's bar | 21.0 (0.66) | 0.61 to 0.80 |
+| H's bar | 23.0 (0.72) | 0.66 to 0.85 |
+| v's thin diagonal | 19.3 (0.60) | 0.53 to 0.83 |
+| i's dot | 72 (2.25) | 1.73 to 2.31 |
+| period | 80 (2.50) | 1.88 to 2.43 |
+| hyphen | 26 (0.81) | 0.84 to 1.04 |
+
+The laws hold; the glyphs do not. At 100 (`trial100/`): audit_rays on 100 to 400 every 50 fails 49 glyphs (33,573
+places); 75 glyphs have a place under 16 units. The thinnest places at 100 (glyph, position, the same place at 300 /
+400): § 1.1 at (92, -68) (22.9 / 44.4); s_p 1.3, 2.6, 3.2, 3.7, 4.9 round (123 to 184, 438 to 467) (19.5 to 27.4 /
+22.9 to 30.9); ɠ 6.1 at (502, 30) and 8.8 at (487, 22) (30.5, 32.9 / 42.4, 43.4); then the small figure 1's hairline,
+8.9, in ¹ ₁ ⁴ and every fraction that holds them (½ ¼ ⅓ ⅕ ⅙ ⅐ ⅛ ⅑ ⅘, at (175 to 285, 390) and (174, 9); 12.9 / 16.9).
+Seen (`trial100/img/set-100.png`, `faults.png`): the small 2 (², and the 2 in every fraction) throws its base out into
+a long wedge (`fig_flat` / `fig_joins` on a small figure under the Light); 8, $, Q's tail and y's crotch grow heavier
+than at 300 (audit_rays: Q 52.0 > 90.8 from 400 to 100 at (474, -13), y 50.4 > 71.6 at (204, 132), œ's join 45.8 >
+80.4 at (555, 464), ⱳ 60.8 > 92.9, $ thicker at every step down); ƴ's tail collapses (1.5 at 200); 7 stands 734 high
+(audit_bold 32: height 0..712 > 0..734) and g's neck misses (37.1 > 20.1, target 26.7); curvecheck on the Thin master
+4 faults (yhook 1.75 and 1.42), hooks 13. Kerning passes at 100 to 250 (least 10.3, itilde Uacute, floor 14.2).
+
+The ExtraLight (200, stem 42; `trial200/`) is better but not sound either: the small 2 holds; 0 fallbacks; audit_rays
+on 200 to 400 every 25 fails 33 glyphs: ƴ's tail 9.4 at (245, -96) where 400 has 62.7, thicker at 225 than 250 (1.2 <
+15.0); § 10.6 at (94, -69) (45.4 at 400); r's ball neck 13.4 at (269, 461) (31.8); ⁹ 17.0, ƒ 15.0; 8's right side
+24.4 at (449, 683) (55.6: the 8 tips heavy on its other side, seen); Q's tail, $ and @ thicker at every step down;
+45 glyphs have a place under 16 (the small figures' hairline 10.9 from 16.9 at 400, ª º 9.4 to 10.6). audit_bold 42:
+g's neck 37.1 > 26.1 (target 28.9), w's upright stroke at 704..744 40 > 26 (24.6), 7 0..721. curvecheck 2 faults, hooks
+7. Kerning passes (least 10.2, dcaron Ibreve). interpolatable: nothing reported. The masters 300 / 400 / 600 / 800 are
+unchanged by it, but a fourth master makes cu2qu pick other quadratic splits on 97 glyphs, so the 300 to 800 instances
+move by up to 2.6 units on those (Ohorn, ¡ !, ɠ, ₲, Ǥ), measured by `build/axis082/hausdorff.py`.
+
+What blocks a lighter master, in order: (1) the small figures' flat bars and joins under the Light (² ₂ and the
+fractions); (2) the parts that grow towards the light end (Q's tail, $, @, œ's join, y's crotch, ⱳ): read as thick
+by the engine and run backwards past the Light, as Q and $ already do mildly from 400 to 300; (3) the hooks and tails
+that thin to nothing (ƴ, ɠ, §, s_p, r's ball neck, ƒ): `keep_taper`'s laws stop at the Light's JND moves; (4) the small
+figures' and ordinals' hairlines (16.9 in the Regular, 0.52 of it at 100) need their own floor; (5) 8's two sides; 7's
+height; g's neck; w's upright. Each is a rule, not a point edit; none was written in this pass.
+
+Checks on the landed state (`build/snap082h`, Stage A plus the gated rules, axis 300 to 800): rebuilt from source, the
+three masters (with the Regular's overlap layer and the Bold's mid layer), their kerning and notes, the Regular TTF
+and the variable font's glyf, gvar, fvar, avar, STAT, HVAR, GPOS, hmtx, name and OS/2 tables are identical to
+`snap082g` (`build/axis082/diff-082g-082h.txt`), so every Stage A audit and qa result above stands for it
+(`build/qa-082g.log`). The trial fonts in `trial100/` and `trial200/` are records, not builds to ship. audit_axis on
+the trials' new pair wrote nothing (its runs in the copy ended without output); the rays, kerning, audit_bold and
+curvecheck readings above are the trials' audits of that range.

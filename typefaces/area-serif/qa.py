@@ -9,7 +9,7 @@ Runs, in order, and reports each validator's own outcome (a run that finishes is
   3c2. curvecheck.py               curvature continuity along g's loop, the tails of g.ss02 j y, a.ss03 and l.ss04
   3d. audit_charset.py             beyond a-z A-Z 0-9: mark placement, plain strokes, signs from letters, mirrors
   3e. audit_kern.py                (0.81) every pair's least white at 300 350 400 600 800, against the weight's floor
-Weights are on the 0.82 axis (300 to 800, or 100 to 800 with the Thin; weightaxis.py): the Bold master is 800, the
+Weights are on the 0.82 axis (300 to 800, or 200 to 800 with the ExtraLight; weightaxis.py): the Bold master is 800, the
 mid master 600; the audits' default stops are 0.81's at the same stems.
   4. fontbakery check-universal    font engineering (names, tables, metrics, glyphs, features)
   5. diffenator2 diff (--diff)     before/after renders and table diffs against build/previous/
@@ -85,7 +85,21 @@ def main():
                                            ufoLib2.Font.open(os.path.join(HERE, "build", "AreaSerif-Light.ufo")))
             print("\n== light side bearings (bold.check_light_bearings)\n" + (f"{len(miss)} sides off: {miss[:12]}" if miss else "every named side as light_bearings.json sets it"))
             results.append(("light side bearings (light_bearings.json, one path)", not miss))
-        for style in ("Light", "Bold"):                        # 0.81 (owner): the tails and loops in every master
+            import weightaxis as _W0
+            tp = os.path.join(HERE, "build", f"AreaSerif-{_W0.LOW_NAME}.ufo")
+            if os.path.exists(tp):                             # 0.82 (axis B): the Thin's, light + thin_bearings.json
+                import weightaxis as _W
+                tmiss = _B.check_light_bearings(ufoLib2.Font.open(os.path.join(HERE, "build", "AreaSerif-Regular.ufo")),
+                                                ufoLib2.Font.open(tp), _W.THIN_STEM)
+                print("\n== thin side bearings\n" + (f"{len(tmiss)} sides off: {tmiss[:12]}" if tmiss else "every named side as light_bearings.json and thin_bearings.json set it"))
+                results.append(("thin side bearings (light_bearings.json + thin_bearings.json)", not tmiss))
+        import weightaxis as _W1
+        if os.path.exists(os.path.join(HERE, "build", f"AreaSerif-{_W1.LOW_NAME}.ufo")):   # 0.82 (axis B): the lightest master
+            code, out = run(_W1.LOW_NAME.lower(), [PY, "audit_bold.py", str(_W1.THIN_STEM)])
+            print("\n".join(out.splitlines()[:2] + [l for l in out.splitlines() if l.startswith("  ")][:20]))
+            results.append(("thin audit (each part on its target, letters and figures)", code == 0))
+            code, out = run("bold again (leaves build/weight/audit-bold.txt as the Bold's)", [PY, "audit_bold.py"])
+        for style in (_W1.LOW_NAME, "Light", "Bold"):                # 0.81 (owner): the tails and loops in every master
             mp = os.path.join(HERE, "build", f"AreaSerif-{style}.ufo")
             if os.path.exists(mp):
                 code, out = run(f"curves, {style}", [PY, "curvecheck.py", mp])

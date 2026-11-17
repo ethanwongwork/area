@@ -45,6 +45,7 @@ measurement-only references; nothing from them is in the sources.
 | `loops.py`, `alternates.py`, `curvecheck.py` | g's loop and the tail family (0.81); the alternates and their sets; curvature continuity. |
 | `audit_kern.py` | Every pair's least white along the axis (0.81); `AREA_KERN_WEIGHTS` for more stops (0.82 axis; `old:` for the 0.81 one). |
 | `light_bearings.json` | The Light's side-bearing change, per character (references' Light, scaled); read by `bold.bearing_change`. |
+| `thin_bearings.json` | (0.82) The change under the Light, per character: the references' own from their 300 to their lightest, scaled to Area's 55 > 32; read by `bold.bearing_change` only for a master under the Light (none is built: `weightaxis.THIN` off, `axis-0.81.md`). |
 | `qa.py` | Build, then every check. |
 | `overlay.py`, `proof.py`, `sheet.py` | Comparison plates, proofs and contact sheets. |
 | `archive/drawn-2026-11-10/` | The retired hand-coded drafts. |

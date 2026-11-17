@@ -5,7 +5,7 @@ weights so the family reads less bold and steps more finely: today's Bold (stem 
 Regular stays at 400 (stem 78), today's Light stays at 300 (stem 55). Three scales live here:
 
   the 0.81 axis   300 to 700 (what every build up to snap082f has, and every audit number written before 0.82)
-  the 0.82 axis   300 to 800 (stage A) / 100 to 800 (stage B, a Thin master at stem 32)
+  the 0.82 axis   300 to 800 (stage A; stage B's lighter master is built only with THIN on, see below)
   the stem        the design coordinate, the same on both: a place on the axis IS its stem
 
 A glyph at a stem is the same outline whatever the stem is called, so the old and new axes are two names for one set
@@ -25,15 +25,21 @@ import math
 REG_STEM = 78
 LIGHT_STEM = 55            # the Light master, at 300 on both axes (kept exactly: nothing at 300 changes)
 BOLD_STEM = 140            # the Bold master: 700 on the 0.81 axis, 800 (ExtraBold) on the 0.82 axis
-THIN_STEM = 32             # stage B: the Thin master at 100 (report A5: the references' median 100/400 and stem/x-height)
-THIN = False               # stage B switches the Thin on (axis 100 to 800); stage A's axis is 300 to 800
+THIN_STEM = 42             # the lightest master's stem (0.82 stage B: the ExtraLight at 200; a Thin at 100 would be 32,
+#                            report A5's median of the references; the curve through 42 at 200 reaches 32.1 at 100)
+THIN_WEIGHT = 200          # its weight (the brief's fallback: the Thin at 100 failed, see axis-0.81.md)
+LOW_NAME = "ExtraLight"    # its name (the master file AreaSerif-ExtraLight.ufo)
+THIN = False               # 0.82 stage B: off. With it on, build.py makes the lightest master (THIN_WEIGHT, THIN_STEM) and
+#                            the axis runs from THIN_WEIGHT; both trials (a Thin at 100, stem 32; an ExtraLight at 200,
+#                            stem 42) failed the audits and the eye (axis-0.81.md, "Owner round 8, axis", stage B), so
+#                            the font stays 300 to 800 until the rules listed there are written
 
 TOP, OLD_TOP = 800, 700
 OLD_BOTTOM = 300
 
 
 def bottom():
-    return 100 if THIN else 300
+    return THIN_WEIGHT if THIN else 300
 
 
 # The 0.82 names (CSS / OpenType), each with its stem.
@@ -49,13 +55,13 @@ def named():
 
 def stem(w, bold=BOLD_STEM):
     """0.82 axis weight -> stem. Above 400 geometric to the Bold master at 800 (1.157 a step of 100); 300 to 400
-    geometric to the Light (55, as before); under 300 geometric to the Thin (32 at 100): 200 is sqrt(32 x 55) = 41.95,
-    so the steps 100 > 200 > 300 are one ratio (1.311) and 300 > 400 is 1.418 (as even as 32 / 55 / 78 allow)."""
+    geometric to the Light (55, as before); under 300 geometric to the lightest master (42 at 200, 1.310 a step; the
+    planned Thin at 32 would put 200 at sqrt(32 x 55) = 41.95, one ratio 1.311 from 100 to 300; 300 > 400 is 1.418)."""
     if w >= 400:
         return REG_STEM * (bold / REG_STEM) ** ((w - 400) / (TOP - 400))
     if w >= 300:
         return REG_STEM * (LIGHT_STEM / REG_STEM) ** ((400 - w) / 100)
-    return LIGHT_STEM * (THIN_STEM / LIGHT_STEM) ** ((300 - w) / 200)
+    return LIGHT_STEM * (THIN_STEM / LIGHT_STEM) ** ((300 - w) / (300 - THIN_WEIGHT))
 
 
 def weight(s, bold=BOLD_STEM):
@@ -64,7 +70,7 @@ def weight(s, bold=BOLD_STEM):
         return 400 + (TOP - 400) * math.log(s / REG_STEM) / math.log(bold / REG_STEM)
     if s >= LIGHT_STEM:
         return 400 - 100 * math.log(REG_STEM / s) / math.log(REG_STEM / LIGHT_STEM)
-    return 300 - 200 * math.log(LIGHT_STEM / s) / math.log(LIGHT_STEM / THIN_STEM)
+    return 300 - (300 - THIN_WEIGHT) * math.log(LIGHT_STEM / s) / math.log(LIGHT_STEM / THIN_STEM)
 
 
 def stem_old(w, bold=BOLD_STEM):

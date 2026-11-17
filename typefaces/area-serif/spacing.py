@@ -762,7 +762,7 @@ def master_fit_table():
     return json.load(open(path)).get(MASTER_FIT, {}) if os.path.exists(path) else {}
 
 
-def kern_master(reg, master, style, codepoints, fit_fn=None, reg_shapes=None):
+def kern_master(reg, master, style, codepoints, fit_fn=None, reg_shapes=None, base=None):
     """The master's kerning, replacing what it has: the Regular's carried by the rule (transfer), the same-weight fit
     (fit_fn(master) measures it, else fit_kerning.json's stored "masters" values), the collision passes at the
     master's floor. Returns a report dict ("fit": the same-weight changes applied, to store)."""
@@ -783,7 +783,7 @@ def kern_master(reg, master, style, codepoints, fit_fn=None, reg_shapes=None):
     dots = f_dots_master(master, s["ll"])
     import bold as B
     stems = dict(B.axis_map(B.STEM, B.LIGHT_WEIGHTS + B.WEIGHTS))
-    between = open_between(reg, master, style, codepoints, stems.__getitem__, reg_shapes)
+    between = open_between(reg, master, style, codepoints, stems.__getitem__, reg_shapes, base)
     return dict(style=style, scale=s, floor=floor, transferred=len(vals), blind=len(blind), fitted=fitted, fit=fit,
                 opened=len(opened), dots=dots, opened_pairs=opened, between=between)
 
@@ -831,7 +831,9 @@ def _class_value(f, k):
 # the interpolated value up to the floor (the change divided by the instance's share of the master).
 # 0.82 (owner round 8, axis): weights on the 0.82 axis (weightaxis.py); the same design places as 0.81's 350 / 300
 # and 550 / 700 (the Bold master is 800 now, its mid master 600: stems 104.5 and 140 as before).
-BETWEEN = {"Light": (350, 300), "Bold": (600, 800)}
+BETWEEN = {"Light": (350, 300), "Bold": (600, 800), "ExtraLight": (250, 200), "Thin": (200, 100)}
+# 0.82 (axis B): the lightest master's pass is between the Light and it (the variable font's segment there), half way
+BETWEEN_BASE = {"ExtraLight": 300, "Thin": 300}
 
 
 def instance(reg, master, t, mid=None):
@@ -872,7 +874,7 @@ def instance(reg, master, t, mid=None):
     return out
 
 
-def open_between(reg, master, style, codepoints, stem_of, reg_shapes=None):
+def open_between(reg, master, style, codepoints, stem_of, reg_shapes=None, base=None):
     """The collision pass at the weight between the Regular and the master (BETWEEN), on the master's values.
     reg_shapes: the Regular as the variable font's default master (its struck glyphs as overlapping strokes, the
     structure the other masters have), for the outlines; the kerning is `reg`'s."""
@@ -880,10 +882,12 @@ def open_between(reg, master, style, codepoints, stem_of, reg_shapes=None):
     import unicodedata
     from fontTools.ufoLib.kerning import lookupKerningValue
     w, wm = BETWEEN[style]
-    t = (stem_of(w) - stem_of(400)) / (stem_of(wm) - stem_of(400))
+    wb = BETWEEN_BASE.get(style, 400) if base is not None else 400   # base: the master on the segment's other end
+    t = (stem_of(w) - stem_of(wb)) / (stem_of(wm) - stem_of(wb))
     import bold as B
     mid = master.layers["mid"] if "mid" in master.layers and abs(w - B.MID_WEIGHT) < 1 else None
-    inst = instance(reg_shapes if reg_shapes is not None else reg, master, t, mid)
+    inst = instance(base if base is not None else (reg_shapes if reg_shapes is not None else reg), master, t, mid)
+    kbase = base if base is not None else reg
     floor = MIN_GAP * Optical(inst).white("n", "n") / Optical(reg).white("n", "n")
     want = set(codepoints)
     cats = master.lib.get("public.openTypeCategories", {})
@@ -901,7 +905,7 @@ def open_between(reg, master, style, codepoints, stem_of, reg_shapes=None):
         gaps = (Lm + R[a]).min(axis=1)
         for j in np.where(gaps < floor + reach)[0]:
             b = names[j]
-            kr = lookupKerningValue((a, b), reg.kerning, reg.groups) or 0
+            kr = lookupKerningValue((a, b), kbase.kerning, kbase.groups) or 0
             km = lookupKerningValue((a, b), master.kerning, master.groups) or 0
             gap = float(gaps[j]) + kr + (km - kr) * t
             if floor - gap >= 4:

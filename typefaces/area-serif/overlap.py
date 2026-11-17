@@ -323,7 +323,7 @@ def stroke_weight(T, u, v):
     elif ang >= 80:
         w = B.x_target(round(T), True, v)
     else:                                                      # 0.81 round 2: a stroke across a letter is a
-        w = T * (1 + (B.HAIR_RATIO - 1) * v["ft"])             # hairline, slanted or not (the thin diagonal's
+        w = B.thin_law(v, lambda ft: T * (1 + (B.HAIR_RATIO - 1) * ft))   # hairline, slanted or not (the thin diagonal's
     return T if w is None else w                               # 1.32 closed Astroke's pockets from 625)
 
 
