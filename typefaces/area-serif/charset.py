@@ -1275,6 +1275,17 @@ def maths(font, m, adv):
         line = rect(bx0, by0 - 0.9 * w - w * 1.0 - 30, bx1, by0 - 0.9 * w - 30)
         put(font, name, union(s, line), adv, [u], lsb=(adv - (bx1 - bx0)) / 2)
         font[name].width = adv
+    # the division sign's dots stand over the bar's middle (they stood 3 right of it)
+    g = font["divide"]
+    if len(g.contours) == 3:
+        boxes = [(min(q.x for q in c.points), max(q.x for q in c.points)) for c in g.contours]
+        bar_c = max(range(3), key=lambda k: boxes[k][1] - boxes[k][0])
+        bx = (boxes[bar_c][0] + boxes[bar_c][1]) / 2
+        for k, c in enumerate(g.contours):
+            if k != bar_c:
+                dx = round(bx - (boxes[k][0] + boxes[k][1]) / 2)
+                for q in c.points:
+                    q.x += dx
     # ~~ : two of Area's tildes
     t = gp(font, "asciitilde")
     x0, y0, x1, y1 = bounds(t)
@@ -1284,27 +1295,13 @@ def maths(font, m, adv):
     font["approxequal"].width = adv
     # infinity: two loops, each a ring stressed upright like the o, crossing at the middle
     infinity(font, m, adv)
-    # root: a short thin stroke up, a thick stroke down, a thin stroke up to the top, then a level arm
-    th = m.stem * 0.96
-    tn = w
-    top = CAP_HEIGHT + 30
-    B, V, T = (150, 372), (262, -12), (448, top)
-    def unit(a, b):
-        d = math.hypot(b[0] - a[0], b[1] - a[1])
-        return ((b[0] - a[0]) / d, (b[1] - a[1]) / d)
-    u1, u2 = unit(B, V), unit(V, T)
-    n1, n2 = (-u1[1], u1[0]), (-u2[1], u2[0])                       # left of each stroke's direction
-    B1 = (B[0] + n1[0] * th, B[1] + n1[1] * th)                     # the thick stroke: its right edge runs into V
-    T1 = (T[0] + n2[0] * tn, T[1] + n2[1] * tn)                     # the thin stroke: its left edge, offset tn
-    def meet(p, u, q, v):
-        den = u[0] * v[1] - u[1] * v[0]
-        t = ((q[0] - p[0]) * v[1] - (q[1] - p[1]) * v[0]) / den
-        return (p[0] + u[0] * t, p[1] + u[1] * t)
-    Vi = meet(B1, u1, T1, u2)                                        # where the thick's other edge meets the thin's
-    vee = shape([B, V, (T[0] + 8, T[1]), (T1[0], T[1]), Vi, B1])
-    p = union(vee, bar((60, 318), (B[0] + 6, B[1] + 6), tn), rect(T1[0], top - tn, 640, top))
-    p = op(p, rect(-100, top, 2000, 2000), pathops.PathOp.DIFFERENCE)
-    put(font, "radical", p, 0, [0x221A], lsb=30, rsb=10)
+    # root (owner round 8, 0.82: signs.radical): a thin lead-in rising into the top of the thick downstroke, a thin
+    # upstroke from the foot to the top, a level overbar, one outline with a corner at each junction (it was a union
+    # of a bar, a vee and a rectangle: a jag where the lead-in met the downstroke). Thin, lead-in and bar the minus's
+    # weight; the thick its 1.44 (Area's 0.96 stem over the minus), at every weight
+    put_built(font, "radical", dict(build="radical", params=dict(
+        thin=w, bar=w, thick=m.stem * 0.96, B=[150, 372], V=[262, -12], T=[448, CAP_HEIGHT + 30],
+        top=CAP_HEIGHT + 30, right=640, hook=[[60, 318], [156, 378]])), 0, [0x221A], lsb=30, rsb=10)
     # increment: a triangle with A's weights (thin left, thick right, a thin base)
     tri_out = shape([(0, 0), (560, 0), (280, CAP_HEIGHT)])
     a = math.atan2(CAP_HEIGHT, 280)
