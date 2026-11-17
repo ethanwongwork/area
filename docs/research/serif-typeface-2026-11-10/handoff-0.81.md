@@ -25,11 +25,16 @@ constructions), then the last sections of `axis-0.81.md` ("Owner round" to "Axis
 
 From `typefaces/area-serif/`, with `.venv/bin/python`:
 
-- `build.py` builds the masters (Light 300, Regular 400, mid 550, Bold 700) and the variable font.
+- `build.py` builds the masters and the variable font. 0.82 (owner round 8, axis): the axis is 300 to 800, masters
+  Light 300 (stem 55), Regular 400 (78), mid 600 (104.5, sparse), Bold master 800 (140, named ExtraBold); the
+  0.81 axis called them 300 / 400 / 550 / 700. `weightaxis.py` converts (`python weightaxis.py` prints the table).
   `AREA_KERN_FIT=1 build.py` also refits the per-master kerning (do this when advances change).
 - `qa.py` runs every check and writes the summary; keep the log at `build/qa-081.log`.
 - `audit_axis.py`, `audit_rays.py` (`AREA_RAY_WEIGHTS`, `AREA_VF`), `audit_kern.py`
-  (`AREA_KERN_WEIGHTS`), `audit_lean.py --refs`, `curvecheck.py` (`--hooks`) run alone too.
+  (`AREA_KERN_WEIGHTS`), `audit_lean.py --refs`, `curvecheck.py` (`--hooks`) run alone too. 0.82: weights in those
+  variables are on the 0.82 axis; `old:300,325,...,700` gives 0.81's (the 25-unit sweep), converted to the same
+  design places. Each tool reads a font on either axis (a 0.81 font, e.g. `build/snap082f`, at the same places), so a
+  snapshot from before 0.82 can be audited with today's tools.
 - Pages: `docs/research/serif-evaluation-2026-11-13/tools/build_page.py` and the editor page
   builder make the base pages; `tools/page_081.py` puts the 0.81 sections on top. Check at 1024 and
   390 px through a temporary local server.

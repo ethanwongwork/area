@@ -829,7 +829,9 @@ def _class_value(f, k):
 # side) and 550 (the Bold's mid master) the instance is built from the masters' points and the same collision pass
 # runs on it, at that instance's own floor; a pair short there by 4 or more takes the change in the master that brings
 # the interpolated value up to the floor (the change divided by the instance's share of the master).
-BETWEEN = {"Light": (350, 300), "Bold": (550, 700)}
+# 0.82 (owner round 8, axis): weights on the 0.82 axis (weightaxis.py); the same design places as 0.81's 350 / 300
+# and 550 / 700 (the Bold master is 800 now, its mid master 600: stems 104.5 and 140 as before).
+BETWEEN = {"Light": (350, 300), "Bold": (600, 800)}
 
 
 def instance(reg, master, t, mid=None):
@@ -879,7 +881,8 @@ def open_between(reg, master, style, codepoints, stem_of, reg_shapes=None):
     from fontTools.ufoLib.kerning import lookupKerningValue
     w, wm = BETWEEN[style]
     t = (stem_of(w) - stem_of(400)) / (stem_of(wm) - stem_of(400))
-    mid = master.layers["mid"] if "mid" in master.layers and abs(w - 550) < 1 else None
+    import bold as B
+    mid = master.layers["mid"] if "mid" in master.layers and abs(w - B.MID_WEIGHT) < 1 else None
     inst = instance(reg_shapes if reg_shapes is not None else reg, master, t, mid)
     floor = MIN_GAP * Optical(inst).white("n", "n") / Optical(reg).white("n", "n")
     want = set(codepoints)

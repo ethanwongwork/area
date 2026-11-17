@@ -19,7 +19,7 @@ measurement-only references; nothing from them is in the sources.
 |---|---|
 | `sources/` | Libre Baskerville's Glyphs source (Regular and Bold masters) and its licence. |
 | `derive.py` | Targets, the solved weight and width, and the transforms that make Area Serif. |
-| `build.py` | Derives, then writes `build/AreaSerif-Regular.ufo`, `.ttf` and `.woff2`; then the Light and Bold masters and `build/AreaSerif[wght].ttf` and `.woff2`, weight 300 to 700 (`AREA_BOLD=0` skips them). |
+| `build.py` | Derives, then writes `build/AreaSerif-Regular.ufo`, `.ttf` and `.woff2`; then the Light and Bold masters and `build/AreaSerif[wght].ttf` and `.woff2` (`AREA_BOLD=0` skips them). 0.82 (owner round 8): weight 300 to 800, named Light 300, Regular 400, Medium 500, SemiBold 600, Bold 700, ExtraBold 800; the masters are stems 55 / 78 / 104.5 (sparse) / 140 at 300 / 400 / 600 / 800, the named weights between on the designspace map (stems 90.3 at 500, 121.0 at 700: 1.157 a step above 400), so the font has avar. The 0.81 Bold (700) is the 0.82 ExtraBold (800), point for point. |
 | `normalize.py` | One value per shared part (stems, flags, feet, u's arch, counters, arches) and g's ear root. |
 | `audit_parts.py` | The parts audit: every shared part across its letters, against Serrif and Georgia Pro with `--refs`. |
 | `check.py` | Re-measures the build against `derive.py`'s targets. |
@@ -31,8 +31,9 @@ measurement-only references; nothing from them is in the sources.
 | `parts.py` | One construction per repeated part (0.65): the b d p q bowl, every join of a curve to a stem, spurs, u from n, a's lower stroke. `python parts.py` prints the join table and fails on drift (in `qa.py`). Skill: `area-serif-construction`. |
 | `charset.py` | The character set, last in `normalize`: lightens what lighten skipped, rebuilds letter-plus-part glyphs (ı ȷ Đ Ħ Ł Ø Þ ſ æ Æ, f ligatures, superiors) from the finished letters, draws the new glyphs, tabular figures and `tnum`. Outlines are joined with skia-pathops. |
 | `even.py` | Evenness (0.77): a stroke's thickness round each closed counter, by rays; `shelf` is how far it strays from one smooth change. Retunes handle lengths only. In `normalize` and `qa.py`. |
-| `audit_axis.py` | Every glyph between each pair of masters (0.81: Light to Regular, Regular to the sparse 550 master, 550 to Bold): new extremes and inflections, self-crossings, counters and welded corners tested over the whole pair (`axis_exact.py`), parts that collide (the union's outer contours and holes), points moved too far, thin strokes and weight stepping back at the 25-unit stops. 0.81: Bold side 16 glyphs, Light side 9 (0.80: 45 and 26 by the same test); `docs/research/serif-typeface-2026-11-10/axis-0.81.md`. |
-| `audit_rays.py` | The axis checked a second way (0.81): the variable font instanced at 300 to 700, a ray across the stroke at fixed places round every outline. |
+| `audit_axis.py` | Every glyph between each pair of masters (0.81: Light to Regular, Regular to the sparse mid master, mid to Bold; 0.82: the mid master is 600, the Bold 800, the stops 0.81's every 25 units, 400 to 800 every 33.3): new extremes and inflections, self-crossings, counters and welded corners tested over the whole pair (`axis_exact.py`), parts that collide (the union's outer contours and holes), points moved too far, thin strokes and weight stepping back at the 25-unit stops. 0.81: Bold side 16 glyphs, Light side 9 (0.80: 45 and 26 by the same test); `docs/research/serif-typeface-2026-11-10/axis-0.81.md`. |
+| `audit_rays.py` | The axis checked a second way (0.81): the variable font instanced at 300 to 800 (0.81's six stops at their design places), a ray across the stroke at fixed places round every outline. |
+| `weightaxis.py` | The weight axis in one place (0.82): the stem at each weight, the 0.81 axis (300 to 700) to the 0.82 axis and back, by the formula (the engine's) and by the variable font's map (the instancing tools'). Every tool that names weights takes them on the 0.82 axis (`old:...` for the 0.81 one) and says so. |
 | `overlap.py` | Struck glyphs (a letter and strokes across it) as overlapping contours in the variable font's masters (0.81); the static Regular keeps the merged outline. |
 | `audit_charset.py` | The character set's audit (0.71): accents, plain strokes, signs from letters, mirrors. Fails on 0.70. |
 | `bold.py` | The Bold master (0.76): the Regular's own points moved by rule from one number, the lowercase stem (140; `vector(128)` for the lighter one). Reads strokes, counters, serifs, balls, slanted strokes and necks on each glyph; `bold_font` makes the whole master (marks, anchors, composites, bearings, kerning opened for collisions); `variable` the two-master font. |
@@ -42,7 +43,7 @@ measurement-only references; nothing from them is in the sources.
 | `arms.py` | Signs of arms (0.81): each arm a centreline and width profile; a star's arms reach as the references' do where no curve turns (`REACH`). |
 | `axis_exact.py` | The exact axis tests (0.81): Bernstein turns, self-contact, counter areas, drift, over whole master pairs. |
 | `loops.py`, `alternates.py`, `curvecheck.py` | g's loop and the tail family (0.81); the alternates and their sets; curvature continuity. |
-| `audit_kern.py` | Every pair's least white along the axis (0.81); `AREA_KERN_WEIGHTS` for more stops. |
+| `audit_kern.py` | Every pair's least white along the axis (0.81); `AREA_KERN_WEIGHTS` for more stops (0.82 axis; `old:` for the 0.81 one). |
 | `light_bearings.json` | The Light's side-bearing change, per character (references' Light, scaled); read by `bold.bearing_change`. |
 | `qa.py` | Build, then every check. |
 | `overlay.py`, `proof.py`, `sheet.py` | Comparison plates, proofs and contact sheets. |

@@ -4,6 +4,10 @@ evenly along the weight axis? Read on the variable font's instances (what a read
 
     .venv/bin/python audit_lean.py [font.ttf] [--weights 300,350,...] [--glyphs a,b,...] [--ref font.ttf]
 
+0.82 (owner round 8, axis): weights on the 0.82 axis ("old:300,..." on the 0.81 one; weightaxis.py). The default stops
+are 0.81's 300 to 700 every 50 at their design places (300 ... 800); with --refs Area's 300 and 800 (the Light and
+the Bold master, 0.81's 300 and 700) are compared with the references' 300 and 700, as before.
+
 Each glyph is drawn into a one-unit raster at each weight. Per glyph and weight:
 
   lean     the ink's horizontal centre of area in its top half minus its bottom half, over the ink's height (a letter
@@ -34,7 +38,10 @@ from fontTools.varLib.instancer import instantiateVariableFont
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 VF = os.path.join(HERE, "build", "AreaSerif[wght].ttf")
-WEIGHTS = (300, 350, 400, 450, 500, 550, 600, 650, 700)
+import weightaxis as W  # noqa: E402
+WEIGHTS = W.parse(None, (300, 350, 400, 450, 500, 550, 600, 650, 700))
+LO, HI = W._r(W.place(300)), W._r(W.place(700))     # Area's places compared with the references' 300 and 700
+REF_AT = {LO: 300, HI: 700}
 LETTERS = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
 ALTS = ("a.ss03", "g.ss02")
 SYMMETRIC = set("ovwxHIOAVWXYTUMNo08iltlz") | {"zero"}
@@ -47,7 +54,7 @@ def instance(path, w):
     if "fvar" not in tt:
         return tt
     buf = io.BytesIO()
-    instantiateVariableFont(tt, {"wght": w}).save(buf)
+    instantiateVariableFont(tt, {"wght": W.user(tt, w)}).save(buf)
     buf.seek(0)
     return TTFont(buf)
 
@@ -217,7 +224,7 @@ def main(argv):
     while args:
         a = args.pop(0)
         if a == "--weights":
-            weights = tuple(int(w) for w in args.pop(0).split(","))
+            weights = W.parse(args.pop(0))
         elif a == "--glyphs":
             glyphs = args.pop(0).split(",")
         elif a == "--refs":
@@ -226,7 +233,7 @@ def main(argv):
             path = a
     insts = {w: instance(path, w) for w in weights}
     if ref:
-        weights = tuple(sorted(set(weights) | {300, 400, 700}))
+        weights = tuple(sorted(set(weights) | {LO, 400, HI}))
         insts = {w: instance(path, w) for w in weights}
         ref = references(glyphs)
     rows, flags = [], []
@@ -236,22 +243,22 @@ def main(argv):
             continue
         rd = {w: read(*raster(insts[w], name)) for w in weights}
         base = rd.get(400) or rd[weights[0]]
-        if ref is not None and len(rd[400]["rounds"]) != len(rd[700]["rounds"]):
+        if ref is not None and len(rd[400]["rounds"]) != len(rd[HI]["rounds"]):
             pass
         line = [f"{ch:7s}"]
         for w in weights:
             r = rd[w]
             st = " ".join(f"{q['stress']:+5.1f}" for q in r["rounds"])
-            line.append(f"{w}: lean {r['lean']:+.3f} ctr {r['centre']:+.3f}" + (f" stress {st}" if st else ""))
+            line.append(f"{W.short(w)}: lean {r['lean']:+.3f} ctr {r['centre']:+.3f}" + (f" stress {st}" if st else ""))
         rows.append("  ".join(line))
         for w in weights:
             r = rd[w]
-            if ref is not None and w in (300, 700):
+            if ref is not None and w in REF_AT:
                 RD = {ch: rd}
                 for key, k, lim in (("lean", None, LIM_LEAN), ("centre", None, LIM_CENTRE), ("stress", 0, LIM_STRESS),
                                     ("sides", 0, LIM_SIDES), ("stress", 1, LIM_STRESS), ("sides", 1, LIM_SIDES)):
                     d = drift(RD, ch, w, key, k)
-                    span = ref.get((ch, key, k, w))
+                    span = ref.get((ch, key, k, REF_AT[w]))
                     if d is None or span is None:
                         continue
                     off = d - span[1] if d > span[1] else (d - span[0] if d < span[0] else 0.0)
@@ -277,9 +284,11 @@ def main(argv):
     by = {}
     for ch, w, kind, val in flags:
         by.setdefault((ch, kind), []).append((w, val))
-    print(f"lean audit, {os.path.basename(path)} at {', '.join(map(str, weights))}: {len(glyphs)} glyphs, {len(by)} flags")
+    print(f"lean audit, {os.path.basename(path)} at {', '.join(map(W.short, weights))} ({W.AXIS_NOTE}"
+          + (f"; Area {W.short(LO)} and {W.short(HI)} against the references' 300 and 700" if ref is not None else "")
+          + f"): {len(glyphs)} glyphs, {len(by)} flags")
     for (ch, kind), v in sorted(by.items()):
-        print(f"  {ch} {kind}: " + "; ".join(f"{w} {val}" for w, val in v))
+        print(f"  {ch} {kind}: " + "; ".join(f"{W.short(w)} {val}" for w, val in v))
     print("written", os.path.relpath(out, HERE))
     return 1 if by else 0
 

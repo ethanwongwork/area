@@ -26,7 +26,10 @@ import ufoLib2
 
 import bold as B
 
-STOPS = list(range(400, 701, 25))
+import weightaxis as W
+# 0.82 (owner round 8, axis): stops on the 0.82 axis, at 0.81's every 25 units (400 to 700 > 400 to 800, every 33.3;
+# 375 to 300 unchanged): the same stems (weightaxis.from_old), so the results compare with every audit before
+STOPS = [W.from_old(w) for w in range(400, 701, 25)]
 LIGHT_STOPS = [375, 350, 325, 300]
 FILLET_MAX = 20           # a softened corner (7 a side in the Regular) may grow with the stroke, not past this
 FILLET_SMALL = 12         # a curve whose ends are this close in the Regular is a softened corner
@@ -494,18 +497,19 @@ def main():
     v = B.vector(stem)
     mids = bold.layers["mid"] if "mid" in bold.layers else {}
     tm = (dict(B.axis_map(stem))[B.MID_WEIGHT] - B.REG_STEM) / (stem - B.REG_STEM)
-    ts = [(w, (st - B.REG_STEM) / (stem - B.REG_STEM)) for w, st in B.axis_map(stem, STOPS)]
+    ts = [(W.short(w), (st - B.REG_STEM) / (stem - B.REG_STEM)) for w, st in B.axis_map(stem, STOPS)]
     keys = ("moved", "turns", "crossings", "counter", "drift", "symmetry", "mirror", "seam", "thin", "monotone", "composite")
-    q = stem / B.REG_STEM
-    w_bold = lambda t: round(400 + 300 * math.log((B.REG_STEM + t * (stem - B.REG_STEM)) / B.REG_STEM) / math.log(q))   # noqa: E731
-    w_light = lambda t: round(400 - 100 * math.log(B.REG_STEM / (B.REG_STEM - t * (B.REG_STEM - B.LIGHT_STEM))) / math.log(B.REG_STEM / B.LIGHT_STEM))   # noqa: E731
+    # a share of the way between two masters as a weight on the 0.82 axis (to a tenth)
+    w_bold = lambda t: W.short(round(W.weight(B.REG_STEM + t * (stem - B.REG_STEM), stem), 1))   # noqa: E731
+    w_light = lambda t: W.short(round(W.weight(B.REG_STEM - t * (B.REG_STEM - B.LIGHT_STEM)), 1))   # noqa: E731
     fails = {k: [] for k in keys}
     n_out, n_comp = sweep(reg, bold, mids, ts, tm, lambda t: 30 * (1 + (v["tip"] - 1) * t), fails, w_of=w_bold)
     mirror(reg, bold, fails)
     reg_ufo = ufoLib2.Font.open(f"{d}/AreaSerif-Regular.ufo")
     seams(reg_ufo, reg, fails)
     seams(reg_ufo, bold, fails)
-    bad = report(f"weight axis, stem {stem}: {n_out} outlined glyphs and {n_comp} composites, {len(STOPS)} stops ({STOPS[0]} to {STOPS[-1]})",
+    print(W.AXIS_NOTE + "; stops every 33.3 from 400 (0.81's every 25)")
+    bad = report(f"weight axis, stem {stem}: {n_out} outlined glyphs and {n_comp} composites, {len(STOPS)} stops ({W.short(STOPS[0])} to {W.short(STOPS[-1])})",
                  fails, f"{out}/audit-axis.txt")
     if os.path.exists(f"{d}/AreaSerif-Light.ufo"):              # 0.80: the Light side, 375 down to 300
         light = ufoLib2.Font.open(f"{d}/AreaSerif-Light.ufo")

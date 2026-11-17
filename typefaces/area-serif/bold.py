@@ -2192,8 +2192,10 @@ def neck_range(P, N, i, h):
 # the middle (the best leaves 1.7 over and 1.8 under). So a glyph whose neck sags more than MID_MISS has a third,
 # sparse master at MID_WEIGHT, where the sag peaks: the instance there, with the crotch moved along its stem until
 # the neck is on its target. The research report's rule: an intermediate master only where a measured residual
-# exceeds tolerance, and only for the glyphs that need it.
-MID_WEIGHT = 550
+# exceeds tolerance, and only for the glyphs that need it. 0.82 (owner round 8, axis): the same design place, stem
+# 104.5, half way in ratio between the Regular and the Bold master; it was 550 on the 0.81 axis and is 600 (SemiBold)
+# on the 0.82 axis (weightaxis.py).
+MID_WEIGHT = 600
 MID_MISS = 1.5
 
 
@@ -4935,33 +4937,40 @@ def bold_font(reg, stem=STEM, **over):
     return font, reports, notes
 
 
-WEIGHTS = (400, 450, 500, 550, 600, 650, 700)
+# 0.82 (owner round 8, axis): the user axis is 300 to 800 (stage A; 100 to 800 once the Thin is in), the design axis
+# the stem as before. weightaxis.py holds the scale and the conversions to and from the 0.81 axis (300 to 700).
+import weightaxis as WAX
+
+WEIGHTS = tuple(range(400, WAX.TOP + 1, 50))
 
 
-LIGHT_WEIGHTS = (300, 350)
+LIGHT_WEIGHTS = tuple(w for w in WAX.map_weights() if w < 400)
 
 
 def axis_map(stem=STEM, weights=WEIGHTS):
     """Weight to stem, an equal ratio a step (the research report: optically even steps lie on a geometric curve;
-    the axis's design values are the lowercase stem, as in Libre Baskerville's own source). Under 400 the curve
-    runs to the Light's stem at 300 the same way."""
-    q = stem / REG_STEM
-    return [(w, REG_STEM * q ** ((w - 400) / 300) if w >= 400 else REG_STEM * (LIGHT_STEM / REG_STEM) ** ((400 - w) / 100))
-            for w in weights]
+    the axis's design values are the lowercase stem, as in Libre Baskerville's own source). 0.82: 800 is the Bold
+    master (`stem`), 1.157 a step of 100 above 400; under 400 the curve runs to the Light's stem at 300 the same way
+    (and on to the Thin's at 100, weightaxis.stem)."""
+    return [(w, WAX.stem(w, stem)) for w in weights]
 
 
-def variable(reg, bold_ufo, stem=STEM, light_ufo=None):
-    """The masters as one variable font (0.80: with the Light, 300 to 700). Fails on any master ufo2ft cannot
-    interpolate."""
+def variable(reg, bold_ufo, stem=STEM, light_ufo=None, thin_ufo=None):
+    """The masters as one variable font (0.80: with the Light, 300 to 700; 0.82: 300 to 800, the Bold master at 800,
+    and with the Thin 100 to 800). Every named weight is an instance on the designspace map (so the font has avar);
+    the masters keep their design places (stems). Fails on any master ufo2ft cannot interpolate."""
     import logging
     import ufo2ft
     from fontTools.designspaceLib import AxisDescriptor, DesignSpaceDocument, InstanceDescriptor, SourceDescriptor
     ds = DesignSpaceDocument()
     ax = AxisDescriptor()
-    ax.name, ax.tag, ax.minimum, ax.default, ax.maximum = "Weight", "wght", 300 if light_ufo else 400, 400, 700
-    ax.map = (axis_map(stem, LIGHT_WEIGHTS) if light_ufo else []) + axis_map(stem)
+    low = WAX.bottom() if thin_ufo else (300 if light_ufo else 400)
+    ax.name, ax.tag, ax.minimum, ax.default, ax.maximum = "Weight", "wght", low, 400, WAX.TOP
+    ax.map = (axis_map(stem, [w for w in LIGHT_WEIGHTS if w >= low]) if light_ufo else []) + axis_map(stem)
     ds.addAxis(ax)
-    for ufo, loc, style in ((reg, REG_STEM, "Regular"), (bold_ufo, stem, "Bold")) + (((light_ufo, LIGHT_STEM, "Light"),) if light_ufo else ()):
+    masters = ((reg, REG_STEM, "Regular"), (bold_ufo, stem, "ExtraBold")) + (((light_ufo, LIGHT_STEM, "Light"),) if light_ufo else ()) \
+        + (((thin_ufo, WAX.THIN_STEM, "Thin"),) if thin_ufo else ())
+    for ufo, loc, style in masters:
         src = SourceDescriptor()
         src.font, src.location, src.familyName, src.styleName = ufo, {"Weight": loc}, reg.info.familyName, style
         ds.addSource(src)
@@ -4970,10 +4979,12 @@ def variable(reg, bold_ufo, stem=STEM, light_ufo=None):
         src.font, src.layerName, src.familyName, src.styleName = bold_ufo, "mid", reg.info.familyName, "Mid"
         src.location = {"Weight": dict(axis_map(stem))[MID_WEIGHT]}
         ds.addSource(src)
-    for w, style in (((300, "Light"),) if light_ufo else ()) + ((400, "Regular"), (500, "Medium"), (600, "SemiBold"), (700, "Bold")):
+    for w, style in WAX.named():
+        if w < low:
+            continue
         inst = InstanceDescriptor()
         inst.familyName, inst.styleName = reg.info.familyName, style
-        inst.location = {"Weight": dict(axis_map(stem, LIGHT_WEIGHTS + WEIGHTS))[w]}
+        inst.location = {"Weight": dict(axis_map(stem, [w]))[w]}
         ds.addInstance(inst)
 
     class _Catch(logging.Handler):

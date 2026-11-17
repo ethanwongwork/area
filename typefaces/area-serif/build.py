@@ -53,6 +53,7 @@ def variable(ufo):
     structure); the glyphs that have them are flagged for the rasteriser."""
     import bold as BOLD
     import spacing as SPACING
+    import weightaxis as WAX
     stem = int(os.environ.get("AREA_BOLD_STEM", BOLD.STEM))
     bold_ufo, reports, notes = BOLD.bold_font(ufo, stem)
     # 0.80: the Light master, the same engine run below the Regular (bold.LIGHT_STEM); it has no mid master.
@@ -62,6 +63,8 @@ def variable(ufo):
         del light_ufo.layers["mid"]
     import overlap as OVERLAP
     reg_vf = OVERLAP.vf_source(ufo)             # 0.81: struck glyphs as letter and strokes, overlapping
+    # the weight beside each master is the references' weight its same-weight fit is measured against (Georgia Pro
+    # Light / Bold, Serrif 300 / 700), not an Area axis value: the Bold master is 800 on the 0.82 axis (weightaxis.py)
     kern = kern_masters(ufo, {"Light": (light_ufo, 300), "Bold": (bold_ufo, 700)}, reg_vf)
     notes.append(kern["Bold"])
     lnotes.append(kern["Light"])
@@ -81,9 +84,12 @@ def variable(ufo):
                 u[name].lib["public.truetype.overlap"] = True
     vf = BOLD.variable(reg_vf, bold_ufo, stem, light_ufo)
     from fontTools.otlLib.builder import buildStatTable
-    buildStatTable(vf, [dict(tag="wght", name="Weight", values=[          # each named weight, Regular linked to Bold
-        dict(value=300, name="Light"), dict(value=400, name="Regular", flags=0x2, linkedValue=700), dict(value=500, name="Medium"),
-        dict(value=600, name="SemiBold"), dict(value=700, name="Bold")])], macNames=False)
+    # 0.82 (owner round 8, axis): one axis value per named weight on the font's axis, Regular elidable and linked to
+    # Bold 700 (weightaxis.NAMES)
+    low = min(a.minValue for a in vf["fvar"].axes if a.axisTag == "wght")
+    buildStatTable(vf, [dict(tag="wght", name="Weight", values=[
+        dict(value=w, name=n, **(dict(flags=0x2, linkedValue=700) if w == 400 else {}))
+        for w, n in WAX.named() if w >= low])], macNames=False)
     unhinted(vf)
     head = vf["head"]
     vf["OS/2"].usWinAscent = max(head.yMax, vf["hhea"].ascent)

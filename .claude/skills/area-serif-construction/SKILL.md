@@ -219,6 +219,12 @@ The Bold is never drawn and never offset. It is the Regular's points, each moved
 masters match point for point and every weight between them is sound. Read `bold-master-plan.md` (in
 `docs/research/serif-typeface-2026-11-10/`) before changing it.
 
+- **The axis (0.82, owner round 8).** The design axis is the stem; the user axis is 300 to 800 (100 to 800 once the
+  Thin is in): Light 300 (55), Regular 400 (78), the sparse mid master 600 (104.5, it was 550), the Bold master 800
+  (140, ExtraBold; it was 700); the named 500 / 700 land on 90.3 / 121.0 through the designspace map (avar).
+  `weightaxis.py` holds the scale and every conversion; a tool that names weights takes them on the 0.82 axis
+  (`old:` for the 0.81 one), prints which, and its default stops are 0.81's at the same stems, so old and new
+  audit numbers compare. Never write a weight literal into a tool: take it from `weightaxis`.
 - **One number.** `bold.STEM` (140). Every other Bold value follows from it in `vector` and the constants above it,
   and each constant has its measurement beside it. No value that only looked right: measure Georgia Pro and Serrif,
   Bold against Regular (`tools/weight/bold_*.py`), and take the mean on Area's Regular value.

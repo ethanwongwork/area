@@ -1083,3 +1083,88 @@ fonts are otherwise byte-identical to item 14's build. `audit_kern.py` passes at
 units from 300 to 700 (`build/owner8/kern-082f*.txt`; least 7.9 at 700, idieresis Itilde, as before). The final build is
 saved as `build/snap082f`; `build/owner8/compare-082f.txt` holds part B's readings for 2 5 7 3 S s g on it against the
 seven references. Pages not rebuilt.
+
+## Owner round 8, axis (17 November 2026)
+
+The owner: the family should read less bold and step more finely. The weight axis becomes 100 to 800; the new 800
+(ExtraBold) is exactly the 0.81 axis's 700 (stem 140, the Bold master unchanged); the Regular at 400 and the Light at
+300 (stem 55) do not change; the light end runs to 100 (Thin). Two stages, each built, checked and committed before
+the next. Build before: `build/snap082f`.
+
+The scale (`weightaxis.py`, one place for every conversion; the design axis is the lowercase stem, as before):
+
+| weight | name | stem | / 400 | on the 0.81 axis |
+|---:|---|---:|---:|---:|
+| 100 | Thin | 32.0 | 0.410 | (none) |
+| 200 | ExtraLight | 41.95 | 0.538 | (none) |
+| 300 | Light | 55.0 | 0.705 | 300 |
+| 400 | Regular | 78.0 | 1.000 | 400 |
+| 500 | Medium | 90.28 | 1.157 | 475 |
+| 600 | SemiBold | 104.50 | 1.340 | 550 |
+| 700 | Bold | 120.95 | 1.551 | 625 |
+| 800 | ExtraBold | 140.0 | 1.795 | 700 |
+
+Above 400 geometric to 140 at 800 (1.157 a step); 300 to 400 geometric to the Light (as before); under 300 geometric
+to the Thin: 200 = sqrt(32 x 55) = 41.95, so 100 > 200 > 300 is one ratio (1.311 a step) and 300 > 400 is 1.418, as
+even as 32 / 55 / 78 allow. The brief's "474 / 552 / 625" for the new 500 / 600 / 700 on the old axis are, exactly,
+475 / 550 / 625 (0.81's axis was geometric too: 400 + (w - 400) x 3/4); 552 would be stem 104.9, not 104.5.
+
+### Stage A: 300 to 800, no new master
+
+Only the axis changed: `bold.WEIGHTS` 400 to 800 every 50, `bold.axis_map` on `weightaxis.stem` (exponent (w - 400)
+/ 400 where it was / 300: the same stems), `bold.MID_WEIGHT` 550 > 600 (the same design place, stem 104.50, so every
+glyph's sparse master is where it was), `bold.variable` (axis 300 to 800, the Bold master a source at 140 named
+ExtraBold, one instance per named weight at its stem on the designspace map), `build.py`'s STAT (one axis value per
+named weight, Regular elidable and linked to Bold 700), `spacing.BETWEEN` (the Bold's between-masters pass at 600,
+the mid master, where it was at 550). The kerning fit's reference weights (Georgia Pro Light / Bold, Serrif 300 / 700)
+are the references' and did not change.
+
+The designspace map is the formula sampled every 50 (300 ... 800); the font interpolates linearly between samples, so
+the avar (normalized user > design) is: -1 > -1, -0.5 > -0.5436, 0 > 0, 0.125 > 0.0955, 0.25 > 0.1981, 0.375 >
+0.3085, 0.5 > 0.4274, 0.625 > 0.5552, 0.75 > 0.6928, 0.875 > 0.8408, 1 > 1 (the 0.81 font's: -1, -0.5 > -0.5436, 0,
+0.1667 > 0.1288, 0.3333 > 0.2708, 0.5 > 0.4274, 0.6667 > 0.6, 0.8333 > 0.7903, 1). fvar: wght 300 / 400 / 800; named
+instances Light 300, Regular 400, Medium 500, SemiBold 600, Bold 700, ExtraBold 800 (in order). STAT format 1 values
+at 300, 500, 600, 700, 800 and Regular 400 format 3 (elidable, linked to 700); elided fallback "Regular".
+OS/2.usWeightClass 400 on the variable font; the name table unchanged (family "Area Serif", subfamily "Regular").
+
+Proofs (`build/axis082/`):
+
+- Masters (`diff-082f-082g.txt`): Light, Regular (with its overlap layer), Bold (with its mid layer): 0 glyphs differ;
+  kerning 0 keys differ; groups, features, fontinfo and lib byte-identical; the Regular TTF 0 glyphs differ. The
+  notes files differ only where they name the mid master's weight (550 > 600).
+- Instances (`proofA.txt`, TrueType points and advances of all 1,102 glyphs): the new font at 300 / 400 / 800 is
+  identical to the old at 300 / 400 / 700; at 600 identical to the old at 550; at 500 and 700 the new font is on the
+  formula's stems (90.28, 120.95) where the old font's chords gave 90.39 and 121.10 at 475 and 625: 251 and 433
+  glyphs differ by 1 unit at most. At every 0.81 25-unit stop's design place (`weightaxis.place`: 433.7, 466.3, 500.8,
+  532.9, 567.1, 600, 633.7, 666.3, 700.8, 732.9, 767.1, 800) the new font equals the old except at 425, 650 and 675:
+  2, 8 and 17 glyphs by 1 unit (the avar's 14-bit rounding of a different set of segment ends).
+- Audits, the 0.81 tools on `snap082f` against today's tools on `snap082g` (`old-on-082f/`, `new-on-082g/`): audit_rays
+  at the default stops the same 4 glyphs, 27,161 places, the same numbers; at the 25-unit stops the same 2 glyphs
+  (27,008 > 27,009 places: one place kept at 650 / 732.9 by the 1-unit rounding); audit_kern pass at both, every stop's
+  nn white, floor and least pair the same (under-the-floor counts at 650 and 675: 1,671 > 1,654, 2,094 > 2,091, none
+  failing); audit_axis the same lists (Bold thin: @, cedi, ogonek, ogonekcomb, one.ss01; Light ok; the two held for
+  the owner), only the weights renamed (0.81's 650 is 733.3); audit_bold --sweep identical line for line apart from
+  the weight labels; audit_lean --refs, today's tool on both fonts, 43 flags each, identical (the 0.81 tool run from
+  another directory could not find Source Serif 4, so that baseline is not used). fontbakery check-universal on the
+  variable font: 0 FAIL, 0 ERROR (1 WARN, overlapping path segments, as before). The googlefonts checks asked for:
+  varfont/bold_wght_coord, opentype/fvar/regular_coords_correct, mandatory_avar_table, varfont/instances_in_order,
+  STAT_strings, opentype/varfont/STAT_axis_record_for_each_axis, the valid name-id checks: PASS; googlefonts/fvar_instances,
+  googlefonts/weightclass and the two axis-registry checks ERROR in fontbakery itself (the `axisregistry` package is
+  not installed; nothing was installed) on both builds.
+
+The tools (each prints which axis its weights are on; `weightaxis.AXIS_NOTE`):
+
+| Tool | 0.81 stops | now (0.82 axis) |
+|---|---|---|
+| audit_rays (`AREA_RAY_WEIGHTS`) | 300 350 400 500 600 700 | 300 350 400 532.9 666.3 800 (`place`); lightest-stop floor at the lowest stop's stem ratio |
+| audit_kern (`AREA_KERN_WEIGHTS`) | 300 350 400 550 700 | 300 350 400 600 800 |
+| audit_lean | 300 to 700 every 50 | 300 350 400 466.3 532.9 600 666.3 732.9 800; with --refs Area 300 / 800 against the references' 300 / 700 |
+| audit_axis | 400 to 700 every 25; 375 to 300 | 400 to 800 every 33.3 (`from_old`); 375 to 300 |
+| audit_bold --sweep | 375 to 325; 400 to 700 every 25 | the same stems, labelled on the 0.82 axis |
+| spacing.BETWEEN | Light 350, Bold 550 | Light 350, Bold 600 |
+| qa.py | names 300 to 700 | names 300 to 800 |
+
+A list given as `old:300,325,...` is on the 0.81 axis and converted; a font on the 0.81 axis is read at the same design
+places (`weightaxis.user`), so today's tools audit the old snapshots. `curvecheck`, the bearing lookups and the
+per-master kerning read masters, not weights: nothing to convert. The 0.81 25-unit stops on the 0.82 axis are
+`old:300,325,...,700`. Saved as `build/snap082g`; `build/qa-082g.log`.
