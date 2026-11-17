@@ -2017,6 +2017,11 @@ HINTS = {
     "s": {"sub": "turn", "x": [(370, 404, lambda v: 34 * (1 + (THIN_UPRIGHT - 1) * v["ft"]), "barb"),
                                (47, 81, lambda v: 34 * (1 + (THIN_UPRIGHT - 1) * v["ft"]), "barb")]},
 }
+# owner round 8 (0.82): the summation is a capital (Esh's drawing), not a sign of plain strokes: its diagonals take the
+# capitals' laws (Z, A) and its two bars E's arms' (LEVEL, read as straight: their inner edges are curves into the
+# serifs, so the engine took them for hairlines and grew them 1.24 where E's arms grow 1.33)
+HINTS["summation"] = {"y": [(0, 46, lambda v: 46 * (1 + (LEVEL - 1) * v["ft"]), "bar"),
+                            (666, 712, lambda v: 46 * (1 + (LEVEL - 1) * v["ft"]), "bar")]}
 _UNUSED = {}                        # glyph: {"x": [(a, b, target or None, kind)], "y": [...], "ypin": [y]}  (see families)
 
 
@@ -4364,6 +4369,17 @@ def bold_font(reg, stem=STEM, **over):
     # thick stroke unread
     built_ = construction_signs(reg, font, v, law, resided)
     notes.append(f"signs from their construction: {len(built_)} ({'; '.join(built_)})")
+    # owner round 8 (0.82): the summation's point is a capital's vertex in every master too: a flat 0.42 of this
+    # master's capital stem across the bisector (charset.sum_vertex; the engine's knots left it 15 at the Bold and 46
+    # at the Light where the rule asks 62 and 25)
+    import charset as _CH
+    if "summation" in font and font["summation"].contours:
+        cap_ = CAP_STEM * v["stem"] / REG_STEM if v["f"] < 0 else CAP_STEM + THICK["straight"] * v["f"]
+        n0 = [len(c.points) for c in font["summation"].contours]
+        got_ = _CH.sum_vertex(font["summation"], cap_)
+        if [len(c.points) for c in font["summation"].contours] != n0:
+            raise ValueError("summation: the vertex changed its point count")
+        notes.append(f"summation: vertex {got_}")
     for g in reg:                                              # 0.81: last, a symmetric sign made so again
         if g.contours and not g.components and g.name in font and g.name not in struck:
             cs = glyph_contours(font[g.name])

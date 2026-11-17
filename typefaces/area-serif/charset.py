@@ -1264,17 +1264,20 @@ def arrows(font, m, adv):
 def maths(font, m, adv):
     w = m.math
     cy = m.math_y
-    # <= >= : the less and greater signs over a bar (Georgia Pro, Serrif)
-    for src, name, u in (("less", "lessequal", 0x2264), ("greater", "greaterequal", 0x2265)):
-        s = gp(font, src)
-        x0, y0, x1, y1 = bounds(s)
-        k = 0.82
-        s = moved(s, 0, 0, 1, k, 0, (0, y1))
-        s = moved(s, 0, 50)
-        bx0, by0, bx1, by1 = bounds(s)
-        line = rect(bx0, by0 - 0.9 * w - w * 1.0 - 30, bx1, by0 - 0.9 * w - 30)
-        put(font, name, union(s, line), adv, [u], lsb=(adv - (bx1 - bx0)) / 2)
-        font[name].width = adv
+    # owner round 8 (0.82): < and <= are constructions (signs.chevron, chevron_bar): arms of the minus's weight
+    # meeting in an upright flat outside and a point inside, both ends cut upright at one x, the point on the maths
+    # axis; > and >= are them turned over (MIRRORS). Until 0.81 < was Libre Baskerville's drawing (arms 49.2 and
+    # 48.3 across, a 66-unit flat at the point, its middle 2 under the axis) and <= that drawing squashed to 0.82 of
+    # its height (arms 41 across beside a 52 bar). The box is the old one's: x 98 to 514, 244 each side of the axis
+    x0_, x1_ = 98, 514
+    put_built(font, "less", dict(build="chevron", params=dict(t=w, x0=x0_, x1=x1_, cy=cy, hh=244)), adv, [0x3C])
+    le = dict(build="chevron_bar", params=dict(t=w, x0=x0_, x1=x1_, cy=405, hh=200, bar_x0=x0_, bar_y=101))
+    put_built(font, "lessequal", le, adv, [0x2264])
+    put(font, "greaterequal", moved(gp(font, "lessequal"), adv, 0, -1, 1), adv, [0x2265])
+    # the multiplication sign: two strokes of the minus's weight crossing square on the maths axis, arms equal (it
+    # was Libre Baskerville's, 49.1 and 45.6 across); its ink box the old one's, 346 across
+    put_built(font, "multiply", dict(build="times", params=dict(t=w, c=[adv / 2, cy], arm=173 * math.sqrt(2) - w / 2)),
+              adv, [0xD7])
     # the division sign's dots stand over the bar's middle (they stood 3 right of it)
     g = font["divide"]
     if len(g.contours) == 3:
@@ -1326,6 +1329,7 @@ def maths(font, m, adv):
     put(font, "product", narrow(Pi, hs[0][1] + 90, round(0.14 * (pb[2] - pb[0]))), 0, [0x220F], lsb=30, rsb=30)
     if "uni01A9" in font or "Esh" in font:
         put(font, "summation", gp(font, "Esh"), 0, [0x2211], lsb=30, rsb=30)
+        sum_vertex(font["summation"], m.cap_stem)
     # integral: Area's esh, on the figures' height
     put(font, "integral", gp(font, "esh"), 0, [0x222B], lsb=20, rsb=20)
     # partial: Area's 6 turned to face left, its bowl on the baseline
@@ -1360,6 +1364,47 @@ def maths(font, m, adv):
                  rect(cx + gapw - 2, 0, cx + gapw + m.cap_stem * 0.85, 0.36 * CAP_HEIGHT))
     Om = union(cutO, feet, legs)
     put(font, "Omega", Om, 0, [0x03A9, 0x2126], lsb=30, rsb=30)
+
+
+def sum_vertex(g, stem):
+    """owner round 8 (0.82): the summation's point, where its two diagonals' outer edges meet, is a capital's vertex
+    (parts.VERTEX): a flat 0.42 of the capital stem across the bisector, where the two edges are that far apart. Esh's
+    union left four nodes there within 31 units, a zigzag (464,355 463,379 466,380 461,386)."""
+    import signs as SG
+    for c in g.contours:
+        P = c.points
+        n = len(P)
+        ys = [q.y for q in P]
+        band = [q for q in P if q.type and 0.3 <= (q.y - min(ys)) / (max(ys) - min(ys)) <= 0.7]
+        if not band:
+            continue
+        xm = max(q.x for q in band)                      # the point: the rightmost node of the middle band
+        run = [i for i, q in enumerate(P) if q.type == "line" and q.x >= xm - 12
+               and 0.3 <= (q.y - min(ys)) / (max(ys) - min(ys)) <= 0.7]
+        if len(run) < 2:
+            continue
+        i0, i1 = run[0], run[-1]
+        if (i1 - i0) != len(run) - 1:
+            continue
+        a, b = P[(i0 - 1) % n], P[(i1 + 1) % n]
+        if a.type is None or b.type != "line":
+            continue
+        L1 = ((a.x, a.y), SG.unit((a.x, a.y), (P[i0].x, P[i0].y)))
+        L2 = ((b.x, b.y), SG.unit((b.x, b.y), (P[i1].x, P[i1].y)))
+        o = SG.meet(L1, L2)
+        e1, e2 = (-L1[1][0], -L1[1][1]), (-L2[1][0], -L2[1][1])
+        bis = SG.unit((0, 0), (e1[0] + e2[0], e1[1] + e2[1]))
+        half = math.acos(e1[0] * e2[0] + e1[1] * e2[1]) / 2
+        d = VERTEX_CAP * stem / (2 * math.tan(half))
+        cut = ((o[0] + bis[0] * d, o[1] + bis[1] * d), SG.left(bis))
+        f1, f2 = SG.meet(L1, cut), SG.meet(L2, cut)
+        from ufoLib2.objects import Point
+        new = [Point(round(f1[0]), round(f1[1]), "line"), Point(round(f2[0]), round(f2[1]), "line")]
+        c.points[:] = [q for k, q in enumerate(P) if k < i0] + new + [q for k, q in enumerate(P) if k > i1]
+        return f"flat {math.dist(f1, f2):.0f} at ({o[0]:.0f}, {o[1]:.0f})"
+
+
+VERTEX_CAP = 0.42                 # parts.VERTEX
 
 
 def infinity(font, m, adv):
@@ -2167,7 +2212,7 @@ def letter_signs(font, m):
 # A right-hand bracket is its left-hand one turned over. Each pair had drifted by a unit or two through lightening
 # and rounding (bracket stems 73 and 74, braces 233 and 234 wide, 4 to 62 points apart).
 MIRRORS = [("parenleft", "parenright"), ("bracketleft", "bracketright"), ("braceleft", "braceright"),
-           (0x00AB, 0x00BB), (0x2039, 0x203A), ("less", "greater"),
+           (0x00AB, 0x00BB), (0x2039, 0x203A), ("less", "greater"), ("lessequal", "greaterequal"),
            (0x21E4, 0x21E5), (0x232B, 0x2326)]     # 0.81: the tab arrows and the erase keys, one drawing each
 
 
