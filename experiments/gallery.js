@@ -4,8 +4,8 @@ import { filtersHTML, kindsPresent, nameHTML } from './src/ui.js';
 const grid = document.querySelector('.grid');
 const filters = document.querySelector('.ui-filters');
 
-// Numbered pieces only (drafts stay out), newest first.
-const list = experiments.filter((e) => !e.draft && e.number).sort((a, b) => b.number - a.number);
+// Numbered pieces only (drafts stay out), newest first. 0 is a number: Area Cross is piece 0.
+const list = experiments.filter((e) => !e.draft && Number.isInteger(e.number)).sort((a, b) => b.number - a.number);
 
 grid.innerHTML = list
   .map((e) => {

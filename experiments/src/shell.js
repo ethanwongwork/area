@@ -80,7 +80,7 @@ function buildViewer(entry, number) {
   // The same header as the gallery: the kinds, linking back to it.
   const head = document.createElement('header');
   head.className = 'ui-head';
-  const listed = registry.filter((e) => !e.draft && e.number);
+  const listed = registry.filter((e) => !e.draft && Number.isInteger(e.number));
   head.innerHTML = `<nav class="ui-filters" aria-label="Gallery">${filtersHTML(kindsPresent(listed), '../../#')}</nav>`;
   head.querySelector(`[data-kind="${entry.kind}"]`)?.setAttribute('aria-current', 'true');
   view.append(head, stage);
