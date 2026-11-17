@@ -4698,9 +4698,10 @@ def bold_font(reg, stem=STEM, **over):
             a_ = np.array(_AA3.flat([A])[0])
             c_ = np.array(_AA3.flat([C_])[0])
             return float(np.min(np.hypot(a_[:, None, 0] - c_[None, :, 0], a_[:, None, 1] - c_[None, :, 1])))
+        import circled as _CIRC0
         for g in reg:
             if g.name == "copyright" or not g.contours or g.components or g.name in struck or g.name not in font \
-                    or g.name in layer:
+                    or g.name in layer or _CIRC0.LIB in g.lib:   # item 16: built by circled.py at the end instead
                 continue
             R_ = glyph_contours(g)
             if len(R_) < 3 or [q[:2] for q in R_[0]] != [q[:2] for q in RC[0]] or [q[:2] for q in R_[1]] != [q[:2] for q in RC[1]]:
@@ -4971,6 +4972,12 @@ def bold_font(reg, stem=STEM, **over):
     at_ = _AT.master(reg, font, lambda R_c, cs: _amp_sides(R_c, cs, "at"), tm_a, layer if v["f"] > 0 else None)
     if at_:
         notes.append(at_)
+    # owner round 8 (0.82, item 16): (C) (R) (P) take one ring (circled.py): the Regular's outer outline, the counter
+    # at this master's side and top (the references' upright stress, side their share of the stem, top 0.87 of it),
+    # and this master's C, R or P scaled and weighted as the references' letter in a ring. Their ring had the opposite
+    # stress (52 top against 40 sides at 400) and © carried Libre Baskerville's C
+    import circled as _CIRC
+    notes += _CIRC.master(reg, font, layer if v["f"] > 0 else None, tm_a)
     # 0.79: an f ligature's sides are its letters' (0.78: every one 4 wider on the left than f, ff 22 on the right)
     def _sides(f_, n):
         xs = [q.x for c in f_[n].contours for q in c.points]

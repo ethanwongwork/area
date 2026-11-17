@@ -1303,3 +1303,53 @@ the references' median 1.33 times, Area 1.33, but Area's bold a is a wide bowl, 
 Pro's); the a's spur on the stem's top (a.ss03's) reads small at 300; evaluate still reads two quarters at its limits
 (the a's foot 0.82 / 0.62 of its run after whole-unit rounding, a.ss03's own 0.74 / 0.62, and at the Bold the stroke
 out of the foot 0.42 / 0.78, lopsided 1.86) without a curvecheck fault.
+
+Item 15, the owner's note on the published page (17 November): "the a in the @ looks much sharper / not as smooth at
+thicker weights": at the heavy end the a's crotches (the spur's into the bowl's top, the bowl's bottom into the foot)
+read as a sharp notch and a pinched point. Two changes in `at.py`, built with item 16 (`build/snap082j16b`): each
+crotch is rounded by a fillet of 0.30 the a's stem (`at.fillet`: both curves cut back by that length along themselves,
+one cubic along their tangents, handles 0.55 of its chord; 0.20 left a notch at 800, 0.45 ran the bottom one into a
+wave, curvecheck 2.03); and the made-heavier a moves a run of segments under 20 units (a soft corner, a serif's step,
+a crotch's short line) as one corner on that corner's mitre (`at.embolden`, `SHORT`: needed by item 16's letters, it
+leaves the @'s a as it was apart from the fillets). Each master gains six points (58 / 13). curvecheck on the @ read
+from the masters as the variable font interpolates them (`item15/instcomb.py`, combs in `item15-at-combs.png`): 600 /
+700 / 800 worst ratio 1.18 / 1.21 / 1.24, no node fault (one flat place in the ring's lower left at 700, a reading
+between masters); Light 1.20, Regular 1.22. Looked at, at 800 large (`item15-at-800-large.png`, before over after):
+the top crotch is a rounded dip, the bottom one a rounded cleft; neither is a point. Still not right: the bottom
+cleft still reads as a cleft at 800 (the bowl's bottom and the foot are two lobes; a larger fillet waved), and the
+counter's right side is the stem's straight edge, as a.ss03's is.
+
+### Item 16: (C) (R) (P)
+
+Measured first (`item16/refring.py`, `refs.txt`; Area `area-before.txt`). Area's ©, and ® and ℗ with it, carried Libre
+Baskerville's ring with the horizontal stress: side 32 / 40 / 53 against top 44.5 / 52.5 / 65 at 300 / 400 / 800 (top
+over side 1.39 / 1.31 / 1.23); its C was Libre Baskerville's small C, ®'s R a drawn R, ℗'s P Area's P at 0.52 lightened;
+in the masters the ring's box grew (the Bold's top 775 against 761). The references (seven faces, medians): top over
+side 0.872 / 0.864 / 0.876 (every face 0.79 to 0.95: a mild upright stress, none horizontal); side 0.714 / 0.557 / 0.406
+of the stem; the letter's height 0.626 / 0.636 / 0.651 of the counter (R 0.598 / 0.616 / 0.633, P 0.621 / 0.628 /
+0.652), its box's centre off the counter's -0.025 / -0.024 / -0.019 of its width for C, +0.027 / +0.023 / +0.023 for R,
++0.024 / +0.026 / +0.029 for P, and up 0.002 to 0.010; its thick 1.43 / 1.47 / 2.23 the ring's side (C), 1.21 / 1.25 /
+1.43 (R), 1.22 / 1.29 / 1.60 (P); its thin 1.06 / 1.12 / 1.22 the ring's top.
+
+| # | Item | Cause | Rule | Before > after |
+|---|---|---|---|---|
+| 100 | 16. © ® ℗ | The ring was drawn with its weight at top and bottom; © held a C that is not this round's C; the masters grew the ring's box and its letter as loose parts | `circled.py`, in `normalize` after the @ and at the end of `bold.bold_font`: one ring for all three, the Regular's © outer outline in every master (its box and the advance do not move), the counter its four extremes moved in by the side and the top, each quarter at the outer quarter's own tension; side the references' share of the stem (interpolated on the stem's logarithm at 55 / 78 / 140), top 0.87 of the side (upright stress, the references' 0.864 to 0.888). The letter is Area's own C, R or P of the master, scaled about its box's centre to the references' share of the counter and placed off the counter's centre by their offsets (© so carries this round's C, both terminals on one vertical); in the Regular its strokes are made the references' weights relative to the ring (`at.embolden`, level for the thick, upright for the thin); in a master the Regular's additions times the stem's law (each master's own additions put the same amount on every stroke, and a thin upright one, C's barb, came out thicker at 300 than at 400: audit_rays 49.2 > 42.0 in the first build). The old "letter in a ring" rule leaves glyphs this rule builds | ring side / top at 300 / 400 / 800: 32 / 44.5, 40 / 52.5, 53 / 65 > 39 / 34, 43 / 38, 58 / 50 (top / side 1.39 / 1.31 / 1.23 > 0.87 / 0.88 / 0.86). ©'s C thick 52.9 / 73.9 / 130.9 > 44.9 / 63.9 / 105.9 (references' share of the ring 56 / 64 / 129; of the stem 0.96 / 0.95 / 0.94 > 0.82 / 0.82 / 0.76, references 1.03 / 1.00 / 0.87); C centre off the counter -0.027 / -0.033 / -0.049 > -0.025 / -0.023 / -0.019 of its width. ®'s R stem 41 / 60 / 89 > 38 / 54 / 91 (0.69 / 0.69 / 0.65 of the stem, references 0.81 / 0.73 / 0.45), centre +0.023 / +0.009. ℗'s P stem 37 / 47 / 62 > 40 / 57 / 94; height 0.533 / 0.557 / 0.594 > 0.622 / 0.627 / 0.653 of the counter. Advances: © ® ℗ 868 in every master (Light ℗ 858, Bold ℗ 876 before) |
+
+Item 16 (and the @'s fillets), what moved (`item16/diff3.txt`, against item 15's build; saved as `build/snap082j16c`): ©
+® ℗ and @ in every master, the Regular TTF and the variable font; the Bold's mid layer only @ (© ® ℗ have none);
+nothing else. Advances: © ® 867 > 868 in the Light and Bold, ℗ 858 > 868 (Light), 876 > 868 (Bold), 871 > 868 at
+600. Kerning: only collision keys with © and ® (Light 26, Bold 29; the Bold's ring is now the Regular's box, so V ©
+-11 > -17). Checks (`item16/after3/`): audit_axis Bold and Light unchanged (turns ok: a first build of item 16 listed
+©'s barb corners, "a corner's fillet grew to 20", where every node took its own mitre; runs of short segments now
+move as one corner, and a stroke's end as two, `at.SHORT`); audit_rays the same 3 glyphs (ð, ʕ, $; a first build had
+© thicker at 300 at its barb, 49.2 > 42.0, cured by carrying the Regular's additions by the stem's law); audit_charset
+0 errors; evaluate lists none of the four; even 0; curvecheck unchanged (three masters, hooks 6 / 14); pathlint 0
+errors (a first build had ®'s R crossing itself at its leg's crotch, cured by the same corner rule), warnings 138 >
+148, all on the scaled R and P: seven smooth nodes 1.7 to 2.9 degrees off one line after whole-unit rounding, two
+handles past their meeting point in R's leg; interpolatable nothing. Looked at (`item16-copyright.png`,
+`item16-registered.png`, `item16-uni2117.png`, `item16-copyright-refs.png`): the rings now read as the letters' o
+does, a touch heavier at the sides; © holds this round's C with both barbs on one vertical; the R and P are Area's,
+optically centred. Still not right: the Light letters are lighter than the references' (C 0.82 of the stem against
+1.03): the Regular's additions carried by the stem's law keep every stroke monotone but do not reach the references'
+heavier small letters at 300; the Bold's R and P serifs read slab-like (the upright addition, 27, on a letter at 0.56
+size); seven smooth nodes in the scaled R and P bend 2 to 3 degrees after rounding.

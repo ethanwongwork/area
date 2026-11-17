@@ -1252,6 +1252,8 @@ def normalize(font):
     print("amp:", AMP.regular(font))                  # on the finished o, a and v; after every node rule
     import at as AT                                   # 0.82 (owner round 8, item 15): the @, one construction: a ring
     print("at:", AT.regular(font))                    # of one stroke and Area's a.ss03 in it, joined at its foot
+    import circled as CIRCLED                         # 0.82 (owner round 8, item 16): one ring for (C) (R) (P), the
+    print("circled:", CIRCLED.regular(font))          # letters Area's C R P at the references' size and weight
     joined, promoted, copied, opened_all = SPACING.finish(font, CHARSET.COVERAGE)   # 0.73: beyond the core
     alts = sorted({b for pairs in alt_subs.values() for _a, b in pairs} | {"g.ss02", "one.ss01"} | ({"uni0261"} & set(font.keys())))
     order = font.lib.get("public.glyphOrder", [])
