@@ -108,7 +108,7 @@ def audit(reg, name, v, t=1.0):
             m[k] = max(set(vals), key=vals.count)
     ball_knots = {k for ax, lo, hi, o, lo2, hi2 in B.balls(body) for k in ((lo, hi) if ax == 1 else (lo2, hi2))}
     hints = B.HINTS.get(name, {})
-    vv = dict(v, sub=hints.get("sub", "loop"))
+    vv = dict(v, sub=hints.get("sub", "loop"), fig=name.split(".")[0] in B.FIGURES)   # as bold.bold
     named = {"x": {}, "y": {(a, b): want(vv) if callable(want) else want for a, b, want, kind in hints.get("y", [])}}
     bl = B.balls(body)
     ball = {"x": set(), "y": set()}

@@ -910,6 +910,116 @@ def round_ends(R, N):
     return out, mv
 
 
+G_LOOPED = ("g",)
+
+
+def _g_parts(c):
+    """(outer, bowl counter, loop counter) contour indices by size and height, and each contour's extents."""
+    ext = []
+    for P in c:
+        xs, ys = [q[0] for q in P], [q[1] for q in P]
+        ext.append(((max(xs) - min(xs)) * (max(ys) - min(ys)), (min(ys) + max(ys)) / 2, min(xs), max(xs), min(ys), max(ys)))
+    o = max(range(len(c)), key=lambda i: ext[i][0])
+    inner = sorted((i for i in range(len(c)) if i != o), key=lambda i: ext[i][1])
+    return o, inner[-1], inner[0], ext
+
+
+def g_centres(c):
+    """The bowl's and the loop's outer ink extremes, read across the middle of each counter (the bowl under its ear),
+    and the loop's centre less the bowl's."""
+    o, bc, lc, ext = _g_parts(c)
+    pl = polys(c, step=1.0)
+
+    def band(y0, y1):
+        lo, hi = 1e9, -1e9
+        for k in range(1, 60):
+            sp = scan(pl, y0 + (y1 - y0) * k / 60, 1)
+            if sp:
+                lo, hi = min(lo, sp[0][0]), max(hi, sp[-1][1])
+        return lo, hi
+    b, l = ext[bc], ext[lc]
+    bowl = band(b[4] + 0.2 * (b[5] - b[4]), b[4] + 0.6 * (b[5] - b[4]))
+    loop = band(l[4] + 0.2 * (l[5] - l[4]), l[4] + 0.8 * (l[5] - l[4]))
+    return bowl, loop, (loop[0] + loop[1]) / 2 - (bowl[0] + bowl[1]) / 2
+
+
+def _by_share(P, move):
+    """Handles of P by their share of their curve's run between its two nodes' moves."""
+    n = len(P)
+    on = [i for i, q in enumerate(P) if q[2] is not None]
+    for k, i in enumerate(on):
+        j = on[(k + 1) % len(on)]
+        hs = [(i + d) % n for d in range(1, (j - i) % n)]
+        if len(hs) != 2:
+            continue
+        run = P[j][0] - P[i][0]
+        for h in hs:
+            t = (0.0 if h == hs[0] else 1.0) if abs(run) < 1e-9 else min(1.0, max(0.0, (P[h][0] - P[i][0]) / run))
+            move[h] = move[i] + (move[j] - move[i]) * t
+    return [(round(q[0] + move.get(i, 0.0)), q[1]) + tuple(q[2:]) for i, q in enumerate(P)]
+
+
+def g_loop_place(R, N):
+    """Owner round 8 (0.82), item 14. g's loop keeps the Regular's left/right relation to its bowl: the loop (its
+    counter, and the outer outline under the loop counter's top) moves level by D, the link between by its share of
+    the run from the bowl counter's left to the loop counter's right; the notch where the link's turn meets the loop
+    keeps the Regular's depth from the turn. At 700 the loop's centre stood 79 right of the bowl's where the Regular
+    has 15.5 (the engine ties the loop's inner right to the bowl's outer right, 439 / 441, and its outer right to the
+    ear ball's centre, 511), at 300 4.5 left. Returns (contours, D)."""
+    D = g_centres(R)[2] - g_centres(N)[2]
+    o, bc, lc, ext = _g_parts(N)
+    ro, rbc, rlc, rext = _g_parts(R)
+    top, xa, xb = ext[lc][5], ext[bc][2], ext[lc][3]
+
+    def notch(c, o_, bc_, lc_, e):
+        P = c[o_]
+        cand = [i for i, q in enumerate(P) if q[2] is not None and not q[3] and e[lc_][5] - 20 <= q[1] < e[bc_][4] and q[0] < e[bc_][2]]
+        if not cand:
+            return None, None
+        i = min(cand, key=lambda i: P[i][1])
+        return i, min(q[0] for q in P if q[2] is not None and P[i][1] < q[1] < e[bc_][4])
+    ri, rturn = notch(R, ro, rbc, rlc, rext)
+    ni, nturn = notch(N, o, bc, lc, ext)
+    out = []
+    for ci, P in enumerate(N):
+        move = {}
+        for i, q in enumerate(P):
+            if q[2] is None:
+                continue
+            if ci == lc or (ci == o and q[1] <= top):
+                move[i] = D
+            elif ci == o and q[1] < ext[bc][4]:
+                move[i] = D * min(1.0, max(0.0, (q[0] - xa) / (xb - xa)))
+            else:
+                move[i] = 0.0
+        if ci == o and ni is not None and ri is not None:
+            move[ni] = (nturn + (R[ro][ri][0] - rturn)) - P[ni][0]
+        out.append(_by_share(P, move))
+    return out, D
+
+
+def g_ear(R, N, ratio):
+    """Owner round 8 (0.82), item 14. g's ear ball (its nodes more than a third of the ear's reach right of the bowl's
+    outer right extreme, above the bowl counter's middle) moves level until it reaches past the bowl by the Regular's
+    reach times the ball law; the neck's corners on the bowl stay. The engine reads the ear's ball and neck on the
+    loop's right-side knots (441, 511), so the ear grew as the loop's side did: 118 > 201 at 700 (1.70; the ball law
+    1.40); the neck between takes up the change (moving the neck's node too folded it into the bowl). Returns
+    (contours, dx)."""
+    o, bc, lc, ext = _g_parts(N)
+    ro, rbc, rlc, rext = _g_parts(R)
+    br, nbr = g_centres(R)[0][1], g_centres(N)[0][1]
+    ymin = ext[bc][4] + 0.6 * (ext[bc][5] - ext[bc][4])
+    rymin = rext[rbc][4] + 0.6 * (rext[rbc][5] - rext[rbc][4])
+    rtip = max(q[0] for q in R[ro] if q[2] is not None and q[1] >= rymin)
+    ntip = max(q[0] for q in N[o] if q[2] is not None and q[1] >= ymin and q[0] > nbr)
+    # the ball: nodes past the neck (a third of the ear's reach from the bowl); the neck's node on the bowl's edge stays
+    ear = lambda q: q[2] is not None and q[1] >= ymin and q[0] > nbr + (ntip - nbr) / 3    # noqa: E731
+    d = (nbr + (rtip - br) * ratio) - ntip
+    out = list(N)
+    out[o] = _by_share(N[o], {i: (d if ear(q) else 0.0) for i, q in enumerate(N[o]) if q[2] is not None})
+    return out, d
+
+
 C_SHAPES = ("C", "c")
 
 
@@ -4087,6 +4197,12 @@ def bold_font(reg, stem=STEM, **over):
     # (0.939 > 0.933, 0.930 > 0.939), and the top-right quarter lost ink (S 0.198 > 0.174, s 0.187 > 0.171). The
     # top terminal (its nodes in the top 38% within 60 of the top part's right extreme, with their handles) moves
     # level by what restores the Regular's ratio.
+    def ink_x(name):                                           # the ink's middle, x (charset.centre_marks reads it)
+        xs = [q.x for c in font[name].contours for q in c.points]
+        return (min(xs) + max(xs)) / 2 if xs else None
+    ink_before = {n: ink_x(n) for n in ROUND_ENDS + G_LOOPED if n in font}   # items 13, 14: marks follow the ink
+    loop_before = {n: sum(g_centres(glyph_contours(font[n]))[1]) / 2 for n in G_LOOPED
+                   if n in font and len(font[n].contours) == 3}  # item 14: a struck g's stroke follows its loop
     shaped = []
     for name in S_SHAPES:
         if name not in reg or name not in font or name in struck:
@@ -4131,6 +4247,21 @@ def bold_font(reg, stem=STEM, **over):
             evened.append(f"{name} " + " ".join(f"{x:+.1f}" for x in d_))
             resided.add(name)
     notes.append(f"round letters' ends (TL TR BL BR): {', '.join(evened)}")
+    # owner round 8, item 14: g's loop under its bowl as in the Regular, its ear at the ball law's reach
+    looped = []
+    for name in G_LOOPED:
+        if name not in reg or name not in font or name in struck:
+            continue
+        R_, N_ = glyph_contours(reg[name]), glyph_contours(font[name])
+        if [len(P) for P in R_] != [len(P) for P in N_] or len(N_) != 3:
+            continue
+        M_, D_ = g_loop_place(R_, N_)
+        M_, e_ = g_ear(R_, M_, 1 + (BALL - 1) * v["f"])
+        for c, P in zip(font[name].contours, M_):
+            c.points = [Point(x, y, t, smooth=s_) for x, y, t, s_ in P]
+        looped.append(f"{name} loop {D_:+.1f}, ear {e_:+.1f}")
+        resided.add(name)
+    notes.append(f"g's loop and ear: {', '.join(looped)}")
     # owner round 8, item 2: a C's two terminals stay on one vertical in every master, as in the Regular
     # (joins.TERMINAL_LINE). The engine grew C's top barb 46 and its lower end 34 at the Bold (c: ball 63, lower end
     # 50; at the Light C -23 / -15, c -24 / -19): the references' stay within a few units of each other. Each terminal
@@ -4238,8 +4369,26 @@ def bold_font(reg, stem=STEM, **over):
     for g in reg:                                              # owner round 8: a composite on a Z whose bar ends
         if g.components and not g.contours and g.name in font:  # moved takes its letter's advance again, as the
             b_ = g.components[0].baseGlyph                     # composites pass gave it before (Ž on Z)
-            if b_ in Z_SHAPES + ROUND_ENDS and b_ in resided and b_ in reg and g.width == reg[b_].width:   # item 13: S s 3
+            if b_ in Z_SHAPES + ROUND_ENDS + G_LOOPED and b_ in resided and b_ in reg and g.width == reg[b_].width:   # item 13: S s 3
                 font[g.name].width = font[b_].width
+            if b_ in ROUND_ENDS + G_LOOPED and b_ in resided and ink_before.get(b_) is not None:
+                d_ = round(ink_x(b_) - ink_before[b_])          # items 13, 14: a mark stays over its letter's ink as
+                for cp in font[g.name].components[1:]:         # the composites pass put it (Ğ over the moved g)
+                    t_ = tuple(cp.transformation)
+                    cp.transformation = type(cp.transformation)(*t_[:4], t_[4] + d_, t_[5])
+    import overlap as _OV
+    if _OV.LAYER in reg.layers:                                # item 14: a struck g (ǥ) keeps its stroke over the loop
+        for name in [n for n in struck if n in reg.layers[_OV.LAYER]]:
+            info = reg.layers[_OV.LAYER][name].lib["area.overlap"]
+            letter, nl = info["letter"], info["letter_contours"]
+            if letter not in loop_before or letter not in resided:
+                continue
+            dx = round(sum(g_centres(glyph_contours(font[letter]))[1]) / 2 - loop_before[letter])
+            for c in font[name].contours[nl:]:
+                for q in c.points:
+                    q.x += dx
+            font[name].width = reg.layers[_OV.LAYER][name].width + (font[letter].width - reg[letter].width)
+            notes.append(f"{name}: its stroke follows {letter}'s loop {dx:+d}")
     from ufoLib2.objects import Contour
     layer = font.layers.newLayer("mid")                        # the sparse master: only the glyphs that need one
     for g in reg:
