@@ -79,7 +79,7 @@ the fastest change (under 0.5 units of thickness per unit travelled on a branch,
 | Bars | f and t one bar; e's bar 41 | e f t | `balance.bars`, `e_g` | `audit_parts` |
 | Capital thin strokes | Arms 46, closing strokes of P R 47, crossbars of A H 49 (each a measured share of the 47 hairline) | A B E F H L P R T Z | `balance.cap_thins` | `audit_parts` cap thins |
 | Capital rounds | 92 at the extreme, at most 95 across the stroke | O C G Q D P R, both bowls of B | `derive.thin_rounds`, `balance.B_lower` | `audit_parts` cap rounds (5%) |
-| Figures' flat strokes | 73 (0.85 capital stems) | 2 5 7 | `balance.fig_flats` | evaluation suite, `measures.py` BAR.2 / 5 / 7 |
+| Figures' flat strokes | 73 (0.85 capital stems); in every master the same share of the master's capital stem (0.82, owner round 8: 51.5 / 73 / 95 / 125.6 at 300 / 400 / 550 / 700; they were read as "a thick level thing" and left at 73). A cut end's corner on a zone line holds its height (the Light 7's bar end) | 2 5 7 (seven.ss06, .tf, the superiors, inferiors and fractions follow) | `balance.fig_flats`; `bold.fig_flat`, `cap_stem`; `white.ZONE_Y` | evaluation suite, `measures.py` BAR.2 / 5 / 7; `build/owner8/item12/bars.py` |
 | Extreme beside a spur | Short curve at tension 0.57, curvature at the extreme equal to the long arc's | C G S s | `joins.even_extremes` | evaluation suite, `test_curves.py` (g2, handles) |
 | Curve into a straight | Handle on the straight's line | every bracket on a diagonal; seams of ligatures, Œ, carons | `clean.true_joins` | `test_curves.py` (kink) |
 | Capital serif | 77 from the stem, every upright capital stem | B D E F H I K L M N P R T U Y | `balance.cap_serifs` | `test_serifs.py` |

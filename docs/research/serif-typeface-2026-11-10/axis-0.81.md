@@ -993,3 +993,41 @@ Figures: `build/owner8/item10-schwa-glottal.png`, `item10-oe.png`, `item10-rtail
 `build/snap082e` against `snap082d`: only the &'s mid master (and so the variable font at 550) moved. audit_axis turns
 ok in both masters (the & no longer listed), thin unchanged; audit_rays & ok; interpolation pass; `audit_kern.py`
 passes (least 8.3 / 8.4 / 7.9 at 400 / 550 / 700, 0 fail). Pages not rebuilt.
+
+### Owner round 8, items 12 to 14 (16 November 2026): glyphs that did not gain weight evenly on both sides
+
+The owner, on the overlays: some glyphs lean "to the left or right, or [are] not evenly getting wider" (S and 3 among
+the examples). Measured first with `build/weightscale/balance.py` (part B; `build/owner8/rebalance.py`,
+`compare.py` against the seven references' range, `ends.py`, `refends.py` for the references' four ends about their
+centre at Area's stem step). The build before is `build/snap082e`; each item was built, diffed (all three masters, the
+Bold's mid layer, the Regular TTF, the variable font at 300 / 400 / 550 / 700), audited and looked at before the next.
+Figures: `build/owner8/item12-*.png`, `item13-*.png`, `item14-*.png` (the Regular grey under 300 / 550 / 700 in red,
+before | after, 640 px a glyph); numbers in `build/owner8/item12/`, `item13/`, `item14/`.
+
+| # | Item | Cause | Rule | Before > after |
+|---|---|---|---|---|
+| 96 | 12. The flat bars of 2, 5, 7 did not change weight (73 at 300, 400 and 700; the references' 7: Serrif 68 / 82 / 138, Georgia Pro 63 / 82 / 145) | `bold.bold` read each bar (two level edges, 326 to 354 long) as a stroke and then dropped it with every level reading of 64 or more that is not a pair of facing extremes ("a thick level thing that is not a stroke", meant for balls and blobs); `y_target` would have returned None for it too. Left to the slack, the bar kept 73. Then 2 grew only on top (TB +0.39 / +0.36 at 300 / 700, references -0.11..+0.04), 5 only at the bottom (TB -0.43 / -0.51), 7's bar was frozen (LR +0.26 / +0.30, TB +0.09 / +0.06, references TB +0.16..+0.87) | A figure's flat stroke (straight, both edges level, longer than twice its thickness) is a stroke: it keeps its Regular share of the capital stem (0.85, `balance.fig_flats`) in every master, `bold.fig_flat` = t x `cap_stem` / 86, where `cap_stem` is the straight thick law (86 > 148 towards the Bold, 86 x 55 / 78 towards the Light): bar / stem growth 0.96 at 700 (references Serrif 0.92, Georgia Pro 1.00, Source Serif 4 0.80) and 1.00 at 300 (1.05, 1.22, 0.99). Two consequences found by the audits and ruled: (a) 2's diagonal left the base at a corner the engine lifted with the base's edge but kept at its x, so its foot thinned at the Bold (audit_axis 51 > 34 at 700): `bold.fig_joins` slides that corner (and the bar's corner 2 units under it) along the Regular's tangent by the bar's change, its handle on that tangent at its own height (Bold +73, Light -30); the small figures, which take their figure's moves (`kin_parts`), take the slid figure. (b) The Light 7's bar end (a 9-unit cut once the bar thinned) was lengthened by `keep_taper`'s cut-end rule upward through the cap height (the 7 stood 716): a cut end's corner on a zone line now holds its height (`white.ZONE_Y`); the same guard puts the Light Z's two corners back on 712 and 0 (they stood at 713 and -1 since the cut rule) | bars 73 / 73 / 73 / 73 > 51 / 73 / 96 / 126 at 300 / 400 / 550 / 700 (2, 5, 7, 7.ss06, the .tf forms); superiors and inferiors 39-40 > 27 / 40 / 51 / 68. 2: TB +0.39 / +0.36 > -0.07 / -0.05 (in), DIAG +0.27 / +0.21 > +0.12 / -0.03. 5: TB -0.43 / -0.51 > -0.07 / -0.14 (in). 7: LR +0.26 / +0.30 > +0.09 / +0.06, TB +0.09 / +0.06 > +0.58 / +0.65, DIAG +0.34 / +0.26 > +0.09 / -0.03 (all in). Heights and alignment unchanged (2 0..721, 5 -9..712, 7 0..712 at every weight) |
+
+Item 12, what moved (against `snap082e`): in both masters two, five, seven, seven.ss06 and the small 2, 5, 7 (superior and
+inferior); in the Light also Z and Zstroke (the zone guard, above); the Regular and its TTF byte-identical, the Bold's mid
+layer unchanged. In the variable font the .tf forms and the fractions with a 2, 5 or 7 follow (onehalf, ⅔, ⅖, ⅗, ⅘, ⅕,
+⅚, ⅛, ⅝, ⅞, ⅐); Ƶ follows Z at 300. Advances: Light seven 573 > 571 (seven.tf 625 > 623), nothing else. 4 was
+not changed (see below).
+
+Item 12, checks against `snap082e` (`build/owner8/item12/after4/`): audit_axis (Bold and Light), audit_bold (both),
+parts, even, evaluate, curvecheck (three masters; hook lists 6 / 14) unchanged; audit_rays the same 4 glyphs (ð ʕ @ $;
+27,288 > 27,151 places: the bars' upright rays now meet a level edge that moves); interpolation passes; audit_lean 48 >
+45 flags (5's and 7's lean flags and 2's centre flag at 700 cured; one new: 2 leans -0.029 at 700 against the
+references' -0.006..+0.006). Two faults the first builds of this item had, both found by the audits and cured: 2's foot
+thinning (audit_axis, 51 > 34 at 700, and the small 2s 32 > 24) and the Light 7 standing 716. ⅔ read thicker at 350
+than 400 at (136, 491) in one build: the fraction's slash over the small 2's base end (two overlapping components), a
+place that is no stroke; it went with the join rule. Looked at (`item12-figures.png`, `item12-derived.png`): the bars
+now thicken and thin with the figure; 2's diagonal leaves the thicker base cleanly; 5's upright and 7's beak hang
+from the bar's underside, so the 7's beak drops by the bar's gain (it grows with the bar, as the references' do). Left,
+with numbers: 2's LR at 700 +0.33 (references +0.13..+0.29) and DIAG -0.03 (+0.01..+0.19); 5's ends (bar against bowl,
+dRd -0.50, dLd +0.52 at 700: the bowl and ball grow out under a bar whose ends stay, the Z's case; not this item's
+bar weight); 7's dRd -0.27 at 700 (-0.18 before; references -0.14..+0.06: the bar's thickening lowers the diagonal's
+outer corner, which runs the diagonal's edge 5 units further right at the band); 4's top-left reach unchanged (dLd
+-0.70 at 300 and -0.45 at 700, references -0.30..+0.21 and -0.27..+0.16: the diagonal's outer edge at 60% height moves
+out as the diagonal thickens while the bar's left end stays; a bar-end rule as Z's would close it, not written); the
+small figures' bars go 0.68 / 1.70 (their stems 0.78 / 1.63 by the small-figure rule).

@@ -379,8 +379,69 @@ def sign_ratio(v):
     return (v["stem"] / REG_STEM) ** SIGN_K
 
 
+FIGURES = ("zero", "one", "two", "three", "four", "five", "six", "seven", "eight", "nine")
+
+
+def cap_stem(v):
+    """The capital stem in this master by the straight thick law (x_target): 86 > 148 towards the Bold, in
+    proportion to the lowercase stem towards the Light (86 > 60.6)."""
+    return CAP_STEM + THICK["straight"] * v["f"] if v["f"] >= 0 else CAP_STEM * v["stem"] / REG_STEM
+
+
+def fig_flat(t, v):
+    """Owner round 8 (0.82), item 12: a figure's flat stroke (2's base, 5's and 7's top bars, 73 in the Regular, 0.85
+    of the capital stem: balance.fig_flats) keeps that share of the master's capital stem: 51.5 / 73 / 95 / 125.6 at
+    300 / 400 / 550 / 700. It was read as 'a thick level thing that is not a stroke' and left to the slack (73 at
+    every weight). Bar over stem growth at 700 0.96 (references: Serrif 0.92, Georgia Pro 1.00, Source Serif 4 0.80),
+    at 300 1.00 (1.05, 1.22, 0.99)."""
+    return t * cap_stem(v) / CAP_STEM
+
+
+def fig_joins(R, N):
+    """Owner round 8 (0.82), item 12. A curve leaving a figure's flat stroke at a corner on its inner edge (2's
+    diagonal off its base) starts where its Regular tangent meets the master's inner edge: the engine lifts the
+    corner with the bar's edge but keeps its x, so as the base thickened (73 > 126) the diagonal's foot thinned
+    (audit_axis 51 > 34 at 700). The corner slides along the Regular's tangent by the bar's change; its handle keeps
+    its height and lies on that tangent. Returns (contours, [moved corners])."""
+    out, done = [list(P) for P in N], []
+    ys = [q[1] for P in R for q in P if q[2] is not None]
+    lo, hi = min(ys), max(ys)
+    for ci, P in enumerate(R):
+        n = len(P)
+        for i, q in enumerate(P):
+            if q[2] is None or q[3]:
+                continue
+            for side in (1, -1):
+                h = (i + side) % n
+                if P[h][2] is not None:
+                    continue
+                inner = [y for y in {q2[1] for q2 in P if q2[2] is not None} if 60 <= abs(y - lo) <= 80 or 60 <= abs(hi - y) <= 80]
+                near = [y for y in inner if abs(q[1] - y) <= 3]
+                if not near:
+                    continue
+                outer = lo if abs(near[0] - lo) < abs(near[0] - hi) else hi
+                tx, ty = P[h][0] - q[0], P[h][1] - q[1]
+                if abs(ty) < 1 or abs(tx) < 1 or (ty > 0) != (outer == lo):   # a slanted curve away from the bar
+                    continue
+                d = abs(N[ci][i][1] - outer) - abs(q[1] - outer)
+                if abs(d) < 1:
+                    continue
+                Q = out[ci]
+                nx = N[ci][i][0] + d * tx / abs(ty)
+                Q[i] = (round(nx), N[ci][i][1]) + tuple(N[ci][i][2:])
+                j = (i - side) % n                             # the bar's corner under it (2 units in the Regular)
+                if P[j][2] is not None and P[j][0] == q[0] and abs(P[j][1] - q[1]) <= 3:
+                    Q[j] = (round(nx), N[ci][j][1]) + tuple(N[ci][j][2:])
+                hy = N[ci][h][1]
+                Q[h] = (round(nx + (hy - N[ci][i][1]) * tx / ty), hy) + tuple(N[ci][h][2:])
+                done.append(f"({q[0]},{q[1]}) {d:+.0f} > x {nx - N[ci][i][0]:+.0f}")
+    return out, done
+
+
 def y_target(t, straight, v):
     f = v["ft"]
+    if v.get("fig") and straight and 64 <= t <= 130:
+        return fig_flat(t, v)
     if t <= 36:
         return t * (sign_ratio(v) if v.get("sub") == "small sign" and t >= THIN_READ else v["tip"])
     if t >= 64:                                  # a thick level stroke: only a curved one (the top of g's loop,
@@ -2034,7 +2095,7 @@ _UNUSED = {}                        # glyph: {"x": [(a, b, target or None, kind)
 def bold(contours, width, v, name="", hints=None):
     """One glyph. contours: [[(x, y, type, smooth)]]. Returns (contours, width, report)."""
     hints = hints or HINTS.get(name, {})
-    v = dict(v, sub=hints.get("sub", "loop"))
+    v = dict(v, sub=hints.get("sub", "loop"), fig=name.split(".")[0] in FIGURES)
     body = [P for P in contours if not is_dot(P)]
     nodes = [q for P in body for q in P if q[2] is not None]
     if not nodes:                                              # dots only (period, colon, dieresis): each grows about
@@ -2115,7 +2176,10 @@ def bold(contours, width, v, name="", hints=None):
     mark = mark_like = bool(hints.get("mark"))                 # a mark is too small for the ball and facing readers
     bl = [] if mark else balls(body, tilted=v.get("sub") not in ("sign", "small sign"))   # axis round: a letter's ball
     ball_knots = {k for ax, lo, hi, o, lo2, hi2 in bl for k in ((lo, hi) if ax == 1 else (lo2, hi2))}
-    for key in [k for k, st in ys.items() if k[1] - k[0] >= 64 and (not st.get("pair") or set(k) & ball_knots)]:
+    def fig_bar(k, st):                                        # item 12: a figure's flat stroke, two level edges
+        return v["fig"] and all(st["straight"]) and k[1] - k[0] <= 130 and st["run"] >= 2 * (k[1] - k[0])   # longer than
+    for key in [k for k, st in ys.items() if k[1] - k[0] >= 64 and (not st.get("pair") or set(k) & ball_knots)  # twice
+                and not fig_bar(k, st)]:                       # its thickness, is a stroke (fig_flat)
         del ys[key]                                            # a thick level thing that is not a stroke (a ball, a blob)
     plain = bool(hints.get("upright"))                         # the fallback: upright and level parts only
     dg = [] if plain else diagonals(body, pl)
@@ -3227,7 +3291,10 @@ def kin_parts(reg, g, out, rep, v):
         base_name = SMALL[g.name]
         key = (base_name, v["stem"], "small")
         if key not in _KIN:
-            _KIN[key] = (glyph_contours(reg[base_name]), glyph_bold(reg[base_name], v)[0])
+            bR_, bB_ = glyph_contours(reg[base_name]), glyph_bold(reg[base_name], v)[0]
+            if base_name in FIGURES and [len(P) for P in bR_] == [len(P) for P in bB_]:
+                bB_ = fig_joins(bR_, bB_)[0]                   # item 12: as the figure's join is placed later
+            _KIN[key] = (bR_, bB_)
         bR, bB = _KIN[key]
         mine = glyph_contours(g)
         if len(bR) != len(mine):
@@ -3969,6 +4036,21 @@ def bold_font(reg, stem=STEM, **over):
             shaped.append(f"{name} {d_:+d}")
             resided.add(name)
     notes.append(f"S bowls: {', '.join(shaped)}")
+    # owner round 8, item 12: a curve off a figure's flat stroke starts where its tangent meets the bar's inner edge
+    joined = []
+    for name in [n_ for n_ in reg.keys() if n_.split(".")[0] in FIGURES]:
+        if name not in font or name in struck or not reg[name].contours:
+            continue
+        R_, N_ = glyph_contours(reg[name]), glyph_contours(font[name])
+        if [len(P) for P in R_] != [len(P) for P in N_]:
+            continue
+        M_, d_ = fig_joins(R_, N_)
+        if d_:
+            for c, P in zip(font[name].contours, M_):
+                c.points = [Point(x, y, t, smooth=s_) for x, y, t, s_ in P]
+            joined.append(f"{name} {', '.join(d_)}")
+            resided.add(name)
+    notes.append(f"figures' joins on their flat strokes: {'; '.join(joined)}")
     # owner round 8, item 2: a C's two terminals stay on one vertical in every master, as in the Regular
     # (joins.TERMINAL_LINE). The engine grew C's top barb 46 and its lower end 34 at the Bold (c: ball 63, lower end
     # 50; at the Light C -23 / -15, c -24 / -19): the references' stay within a few units of each other. Each terminal
