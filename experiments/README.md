@@ -16,6 +16,7 @@ npm run dev          # http://localhost:5190
 npm run new -- "Title" Type          # scaffold e/title/ as the next number (DOM)
 npm run new -- "Title" 3D three      # scaffold with a three.js canvas
 npm run thumbs                       # capture public/thumbs/*.jpg (all)
+node scripts/export-set.mjs --zip     # every piece's views: 2160 png, looping mp4s, captions, credits, zip
 npm run thumbs 003 005               # only these
 npm run build                        # static site in dist/ (relative paths, host anywhere)
 ```
@@ -72,3 +73,18 @@ piece that uses one.
 
 Pour (8) reads PP Right Serif Mono and PP Kyoto from the fonts installed on the machine
 (`local()` in its stylesheet), so nothing is bundled; without them it falls back to JetBrains Mono.
+
+## Views and exports
+
+Each piece lists its views in `public/views/<slug>/views.json` (carousel order, hero first):
+`{ id, label, note, params, video?, t?, zoom?, focus? }`. The viewer shows them as a gallery
+below the piece; a card opens its view live (its `params` are the page's URL), and a close-up
+(`zoom`, applied by the exporter) opens its still. A piece makes itself exportable with
+`exportable({ loop, fps, render(t, size) })` from `src/export.js`: `render` draws any moment
+at any size, the same every time, and `loop` is a seamless loop (the piece at `loop` is the
+piece at 0). `scripts/export-set.mjs` draws every view frame by frame (`src/record.js`): a
+2160 px PNG, and for moving views H.264 MP4s at 1080 and 2160 of whole loops, at least 8 s.
+It checks each loop's end against its start (the gap must be 0), writes each piece's caption
+and credits (flagging typefaces that may not be posted), an all-views grid and the gallery
+stills, into `exports/` (git-ignored), and with `--zip` packs it all.
+

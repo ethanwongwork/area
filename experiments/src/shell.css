@@ -203,14 +203,95 @@ body {
   grid-template-columns: minmax(0, 1fr) 0;
 }
 
-.x-view > #stage {
+.x-main {
+  min-width: 0;
+  min-height: 0;
+  overflow: auto;
+}
+
+.x-main > #stage {
   position: relative;
   inset: auto;
   min-width: 0;
-  min-height: 0;
+  height: calc(100% - var(--ui-space));
   overflow: hidden;
   container-type: size;
   margin: 0 var(--ui-space) var(--ui-space);
+}
+
+/* The views, below the piece: the gallery's six-across grid, a still and two lines each. */
+.x-views {
+  display: grid;
+  gap: var(--ui-space);
+  padding: var(--ui-space);
+  border-top: 1px solid var(--ui-soft);
+}
+
+.x-views-head {
+  margin: 0;
+  font: inherit;
+}
+
+.x-views-grid {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: var(--ui-space);
+}
+
+.x-view-card {
+  display: grid;
+  gap: 2px;
+  color: inherit;
+  text-decoration: none;
+}
+
+.x-view-card img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1;
+  margin-bottom: 4px;
+  outline: 1px solid transparent;
+}
+
+.x-view-card:hover img,
+.x-view-card[aria-current='true'] img {
+  outline-color: var(--ui-link, #1f4fff);
+}
+
+.x-view-card[aria-current='true'] .x-view-name {
+  color: var(--ui-link, #1f4fff);
+}
+
+.x-view-note {
+  color: var(--ui-soft);
+}
+
+.x-view-box {
+  max-width: min(92vw, 92vh);
+  padding: 0;
+  border: 0;
+  background: none;
+}
+
+.x-view-box::backdrop {
+  background: rgb(0 0 0 / 0.86);
+}
+
+.x-view-box img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.x-view-box button {
+  all: unset;
+  cursor: pointer;
+  color: #fff;
+  margin-top: 8px;
 }
 
 .x-panel {
@@ -345,8 +426,12 @@ body {
     overflow: auto;
   }
 
-  .x-view > #stage {
+  .x-main > #stage {
     height: min(calc(100vw - 16px), 100svh);
+  }
+
+  .x-main {
+    overflow: visible;
   }
 }
 

@@ -11,7 +11,8 @@
 // is in fonts/trial (dev only), else from JetBrains Mono, so no trial glyphs are ever shipped.
 import '@fontsource-variable/jetbrains-mono';
 import { shell } from '../../src/shell.js';
-import { stillWeb, Sheet, W, H } from './letters.js';
+import { exportable } from '../../src/export.js';
+import { stillWeb, Sheet, W, H, FLOW_RATE } from './letters.js';
 import placements from './placements.json';
 
 const { thumb, panel, reduced } = shell('word-web', { viewer: true });
@@ -157,7 +158,10 @@ function relay(R, t) {
   return { dim: plain ? 1 : 0.22, letterDim: plain ? 1 : 0.42, baseInk: true, comets, litNodes };
 }
 const look = (t) => {
-  const L = { palette: state.color, time: state.motion === 'still' ? 0 : t };
+  // The palette turns a whole number of times in one Relay loop, so the loop closes on color too.
+  const P = piece.relay?.period ?? 0, turns = Math.max(1, Math.round(FLOW_RATE * P));
+  const time = state.motion === 'still' ? 0 : P ? (t * turns) / (FLOW_RATE * P) : t;
+  const L = { palette: state.color, time };
   if (state.motion === 'flow') return { ...L, pulse: state.color === 'ink' };
   if (state.motion === 'relay') return { ...L, ...relay(piece.relay, t) };
   return L;
@@ -283,10 +287,10 @@ const caption = () => {
   return [
     `${p.name}, spelled as a web of letters.`,
     '',
-    'Every letter the word uses is set once; every time one letter follows another, an arrow runs between them. Packets of color run the word’s path all at once, letter to letter, and never stop.',
+    'Every letter the word uses is set once, and every time one letter follows another an arrow runs between them, so the letters it keeps returning to gather arrows. Packets of color run the whole path at once and loop without a restart; lines may cross but never touch. The set shows four layouts of the word and six more long words.',
     '',
-    p.about,
-    `Type: ${piece.face || 'Söhne Mono by Klim Type Foundry'}`,
+    `Type: Söhne Mono by @klimtypefoundry`,
+    `Copy: ${p.about}`,
     'Made with: Canvas 2D',
   ].join('\n');
 };
@@ -322,5 +326,18 @@ new ResizeObserver(() => {
 }).observe(stage);
 
 await build();
+// Exports: one Relay loop is the word's whole path, so the piece at `period` is the piece at 0.
+exportable({
+  get loop() {
+    return state.motion === 'still' ? 0 : piece.relay.period;
+  },
+  fps: 60,
+  render(t, size) {
+    const c = document.createElement('canvas');
+    c.width = c.height = size;
+    draw(c.getContext('2d', { colorSpace: 'display-p3' }), size / W, t);
+    return c;
+  },
+});
 requestAnimationFrame(loop);
 document.documentElement.dataset.rendered = String(Date.now());

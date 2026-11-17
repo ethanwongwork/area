@@ -216,7 +216,13 @@ layout is chosen.
 3. `npm run thumbs <slug>` for the gallery still. **The thumbnail is the hero at rest**: the
    default view, first frame, the same image as the hero export (owner, 2026-11-10). Set
    `at` to 0, and make `?thumb` draw the hero at frame 0.
-4. Export the set and the video once, open them, and check them.
+4. List the views in `public/views/<slug>/views.json` and make the piece exportable
+   (`exportable({ loop, fps, render(t, size) })`, `src/export.js`; README, "Views and
+   exports"). Every view's choices must be readable from the URL; `render` must draw the same
+   frame every time; every moving view must close its loop exactly (the exporter's
+   end-to-start gap is 0). Then run `node scripts/export-set.mjs <slug>`, open the PNGs and
+   look at frames across the loop and across the seam (owner, 2026-11-17: every piece's
+   views sit below it in the viewer and ship as one zip for posting).
 5. Tell the owner which licences block posting.
 
 ## Decided with the owner, 2026-11-10

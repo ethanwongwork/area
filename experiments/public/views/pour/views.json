@@ -1,0 +1,16 @@
+{
+  "views": [
+    { "id": "hero", "label": "Hero", "params": { "year": "2026" }, "video": true, "note": "2026 by weekday, every month its own color: nine slides out, nine back, a hold." },
+    { "id": "january", "label": "Detail, 2.5×", "params": { "year": "2026" }, "zoom": 2.5, "focus": [0.17, 0.17], "note": "January to February at rest: the letters take the cells before the 1st." },
+    { "id": "sliding", "label": "Detail, 3.5×, sliding", "params": { "year": "2026" }, "t": 5.58, "zoom": 3.5, "focus": [0.5, 0.5], "note": "Halfway through the ninth slide, the furthest the calendar comes apart." },
+    { "id": "lines", "label": "Two lines a month", "params": { "year": "2026", "pattern": "lines" }, "note": "Each month in reading order over two rows, so the second row is the month's length." },
+    { "id": "free", "label": "Free shape", "params": { "year": "2026", "pattern": "free" }, "video": true, "note": "The year in reading order inside a shape drawn from a seeded field." },
+    { "id": "islands", "label": "Free shape, islands", "params": { "year": "2026", "pattern": "free", "shape": "islands" }, "note": "The same field as islands: the year poured into blobs." },
+    { "id": "fine", "label": "Typeface, Mono Fine", "params": { "year": "2026", "font": "fine" }, "note": "The hero set in PP Right Serif Mono Fine." },
+    { "id": "kyoto", "label": "Typeface, Kyoto", "params": { "year": "2026", "font": "kyoto" }, "note": "The hero set in PP Kyoto Medium, a proportional serif in the same cells." },
+    { "id": "two", "label": "Two colors", "params": { "year": "2026", "tone": "two" }, "note": "Months alternate between blue and yellow." },
+    { "id": "one", "label": "One color", "params": { "year": "2026", "tone": "one" }, "note": "Every month blue: the shape alone carries the year." },
+    { "id": "one-pink", "label": "One color, pink", "params": { "year": "2026", "tone": "one", "hue": "pink" }, "note": "The same in pink." },
+    { "id": "2027", "label": "2027", "params": { "year": "2027" }, "note": "The next year: the 1sts move one weekday on and the holes change." }
+  ]
+}

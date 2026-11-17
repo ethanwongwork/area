@@ -1,0 +1,13 @@
+{
+  "views": [
+    {"id": "hero", "label": "Hero", "params": {}, "video": true, "note": "The default: every square counting in step, the rows rolling up the tube, the torus turning sideways once in 44 seconds."},
+    {"id": "front", "label": "Detail, 2.5×", "params": {}, "zoom": 2.5, "focus": [0.5, 0.64], "t": 0.22, "note": "The front of the tube mid-beat: each digit rolls up out of its square as the next rolls in, clipped on the surface."},
+    {"id": "hole", "label": "Detail, 3.5×", "params": {}, "zoom": 3.5, "focus": [0.5, 0.31], "note": "Into the hole, where the horn torus closes to a point and the squares and digits shrink and bend with it."},
+    {"id": "wave", "label": "Wave", "params": {"digits": "wave"}, "video": true, "t": 0.4, "note": "The digits change in a diagonal wave instead of all at once."},
+    {"id": "cascade", "label": "Cascade", "params": {"digits": "cascade"}, "t": 0.6, "note": "Each square changes at its own moment in the beat."},
+    {"id": "flip", "label": "Flip", "params": {"digits": "flip"}, "video": true, "t": 0.235, "note": "Each digit flips over to the next instead of rolling."},
+    {"id": "over", "label": "Over", "params": {"turn": "over"}, "video": true, "t": 7.3, "note": "The torus turns end over end, showing its hole face on and then its underside."},
+    {"id": "both", "label": "360, 4×", "params": {"turn": "360", "turnSpeed": "4"}, "video": true, "t": 8.25, "note": "Sideways and over at once, at four times the speed so one loop takes 33 seconds."},
+    {"id": "off", "label": "Turn off", "params": {"turn": "off"}, "video": true, "t": 4.0, "note": "The torus held at the isometric angle; only the rows and digits move, one loop in 11 seconds."}
+  ]
+}

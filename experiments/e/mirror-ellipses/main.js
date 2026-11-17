@@ -3,6 +3,7 @@
 // three, but the glyphs never are: every e is redrawn upright where it lands.
 import '@fontsource-variable/atkinson-hyperlegible-next';
 import { shell, fontsReady } from '../../src/shell.js';
+import { exportable } from '../../src/export.js';
 
 const { gui, thumb, panel, reduced } = shell('mirror-ellipses', { viewer: true });
 
@@ -163,7 +164,21 @@ function render(c, t) {
 }
 
 // ── State ──
-const state = { form: 'whirl', dir: 'counter', motion: 'flow', speed: '2', mode: 'light', stroke: 0.3, pad: 0.26 };
+// The open choices, read from the URL (?form=lens&mode=dark&stroke=1) and written back when they change.
+const DEFAULTS = { form: 'whirl', dir: 'counter', motion: 'flow', speed: '2', mode: 'light', stroke: 0.3, pad: 0.26 };
+const CHOICES = { form: Object.keys(FORMS), dir: ['normal', 'counter'], motion: ['flow', 'glide', 'still'], speed: ['1', '2', '4'], mode: ['light', 'dark'] };
+const query = new URLSearchParams(location.search);
+const state = { ...DEFAULTS };
+for (const [k, list] of Object.entries(CHOICES)) if (list.includes(query.get(k))) state[k] = query.get(k);
+for (const [k, hi] of [['stroke', 2], ['pad', 0.6]]) {
+  const v = query.get(k) === null ? NaN : +query.get(k);
+  if (v >= 0 && v <= hi) state[k] = v;
+}
+function remember() {
+  const url = new URL(location.href);
+  for (const k of Object.keys(DEFAULTS)) state[k] === DEFAULTS[k] ? url.searchParams.delete(k) : url.searchParams.set(k, state[k]);
+  history.replaceState(null, '', url);
+}
 
 // ── Page ──
 const stage = document.getElementById('stage');
@@ -197,6 +212,19 @@ await fontsReady(`${WEIGHT} 100px "Atkinson Hyperlegible Next Variable"`);
 box = null;
 panel.ground(MODES[state.mode].ground);
 draw();
+// Exports: one LOOP is a whole number of cycles at every speed, so the piece at LOOP is the piece at 0.
+exportable({
+  get loop() { return state.motion === 'still' ? 0 : LOOP; },
+  fps: 60,
+  render(t, size) {
+    const c = document.createElement('canvas');
+    c.width = c.height = size;
+    const x = c.getContext('2d');
+    x.setTransform(size / SIDE, 0, 0, size / SIDE, 0, 0);
+    render(x, state.motion === 'still' ? 0 : ((t * +state.speed) / LOOP) % 1);
+    return c;
+  },
+});
 if (thumb) document.documentElement.dataset.rendered = String(Date.now());
 else requestAnimationFrame(loop);
 new ResizeObserver(draw).observe(stage);
@@ -218,9 +246,9 @@ function still() {
 }
 panel.share({
   caption: () => [
-    'Lowercase e’s, stretched into ellipses and mirrored four ways.',
+    'Lowercase e’s stretched into ellipses, flowing from a center and mirrored four ways',
     '',
-    'Each e is stretched to fill an ellipse that flows along a spoke out of the centre, growing from nothing as it leaves the eye. One quadrant is drawn from a rule and its layout reflected into the other three, but no glyph is ever mirrored. The set varies the spokes: a whirl, petals, a lens, an inhale and counterflow.',
+    'Each e is stretched to fill an ellipse that flows along a spoke out of the center, growing from nothing as it leaves the eye and shrinking away at the rim. One quadrant is drawn from a rule and its layout reflected or turned into the other three, but no glyph is ever mirrored. The set varies the spokes (a whirl, straight spokes, petals, a lens, an inhale, counterflow), the direction of flow, the ground and the padding.',
     '',
     'Type: Atkinson Hyperlegible Next by @brailleinstitute',
     'Made with: Canvas 2D',
@@ -245,10 +273,11 @@ const controls = panel.controls(
     if (key === 'play') { playing = value === 'play'; return; }
     state[key] = key === 'stroke' || key === 'pad' ? +value : value;
     if (key === 'mode') panel.ground(MODES[value].ground);
+    remember();
     draw();
   },
 );
 
 // G: the stroke and padding as continuous sliders.
-gui.add(state, 'stroke', 0, 2, 0.05).name('Stroke').onChange(draw);
-gui.add(state, 'pad', 0, 0.6, 0.01).name('Padding').onChange(draw);
+gui.add(state, 'stroke', 0, 2, 0.05).name('Stroke').onChange(() => (remember(), draw()));
+gui.add(state, 'pad', 0, 0.6, 0.01).name('Padding').onChange(() => (remember(), draw()));

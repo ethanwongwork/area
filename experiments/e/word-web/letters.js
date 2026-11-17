@@ -1303,7 +1303,7 @@ function spectral(h, onWhite = false) {
 
 // Moving colour: the palette turns this much a second, and one turn spans this far along an
 // arrow, so colour travels FLOW_RATE × FLOW_WAVE a second (112 of the square's 1,080).
-const FLOW_RATE = 0.08;
+export const FLOW_RATE = 0.08;
 const FLOW_WAVE = 1400;
 const PULSE_WAVE = 700;
 // A pulse of ink: the faint part of the wave, and the light's width (in turns).
