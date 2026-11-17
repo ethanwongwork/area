@@ -1031,3 +1031,28 @@ outer corner, which runs the diagonal's edge 5 units further right at the band);
 -0.70 at 300 and -0.45 at 700, references -0.30..+0.21 and -0.27..+0.16: the diagonal's outer edge at 60% height moves
 out as the diagonal thickens while the bar's left end stays; a bar-end rule as Z's would close it, not written); the
 small figures' bars go 0.68 / 1.70 (their stems 0.78 / 1.63 by the small-figure rule).
+
+| # | Item | Cause | Rule | Before > after |
+|---|---|---|---|---|
+| 97 | 13. S, s and 3: "S's bottom right end reaches out", "3's bottom-left terminal reaches out" | Measured as the four ends' outward growth about their centre (`ends.py`; the seven references within 1 to 13 of each other at Area's stem step, `refends.py`). S at 700: top-left +42, top-right (the top barb) +20, bottom-left (the bottom barb) +23, bottom-right +45: the bowls' outer sides grew twice what the terminals did (the round strokes' outward share; `s_terminal` had already moved the top barb +20 and only restored the bowls' width ratio). 3 at 700: top ball +12, bottom ball +39: the engine reads the two balls on interleaved knots (top 78..166, bottom 52..140, both centres on 122) and the top ball rode the counter's knot inward; at 300 the top ball moved outward (+8 while the rest shrank). s was already within 4 | `bold.round_ends`, in every master after the S bowls and the figures' joins: on each side the top end and the bottom end keep the Regular's difference, each moving half the gap (as `c_terminals` holds C's two terminals). Each band's nodes move level: within 0.3 of the band's width from an end, with that end whole (the barb, the ball, the bowl's outer stroke keep their shape and thickness); between, by their share of the run (the counter takes it up); handles with their node; the nodes between the bands (the spine, the 3's middle bar) stay. Composites on S, s, 3 take the letter's new advance; the small 3s take the 3's moves | four ends about their centre at 300 / 700, spread: S 8 / 25 > 1 / 1, s 2 / 4 > 0 / 0, 3 11 / 27 > 1 / 1 (700: S +33 +33 +32 +32, 3 +26 +25 +25 +25). balance.py at 700: S dRd -0.40 > +0.02, dLd -0.31 > -0.02, DIAG -0.36 > -0.29 (references -0.30..-0.14); 3 dLd +0.44 > -0.02, dRd -0.19 > 0.00; at 300 S dRd -0.35 > 0.00, 3 dLd +0.48 > +0.04. Advances: Bold S 646 > 638, s 519 > 517, 3 669 > 649; Light S 562 > 563, s 456 > 457, 3 577 > 585 |
+
+Item 13, what moved (against item 12's build, `build/owner8/item13/diff-final.txt`): in both masters S, s, 3, the small
+3s (³ ₃, advances Light 312 > 316, Bold 350 > 340) and the fractions holding them (⅓ ⅔ ¾ ⅜ ⅗), and the composites on S
+and s (Ś Ṥ Š Ṧ Ş Ŝ Ș Ṡ Ṣ Ṩ and their lowercase), which now take the letter's new advance; the Regular, its TTF and the
+Bold's mid layer unchanged. The accents keep their placed offsets: over S they now stand up to 4 units right of the
+ink centre at 700 (S's ink centre moved 4; the same as Ž over Z since item 4). $ and § are their own drawings (the
+dollar is the owner's ball-ended one) and were not changed: four ends' spread at 700 $ 6, § 10 (the § grows its middle
+left at 700). 8 shares no rule with S (it is closed); its ends are even (spread 1 at 300 and 700) and its DIAG at 300
+(+0.19, references -0.21..+0.01) and TB (-0.17, -0.09..-0.03) were measured and left: at 300 the 8's lower bowl gives
+up more ink on its left than the upper does (the overlays show no lean; the reading is the junction where the two
+bowls cross, as part B's own note on 8 says). Checks against item 12 (`item13/after/`): audit_axis (both), audit_bold
+(both), parts, even, evaluate, curvecheck (three masters; hooks 6 / 14) unchanged; audit_rays the same 4 glyphs;
+audit_lean 45 > 44 flags (S's lean at 700, -0.042 against -0.027..+0.002, cured; nothing new). The spine: at the S's
+middle height its centre stands where the Regular's does (17 > 18 units right of the ink centre at 700; it was 6.5,
+off by 10.5), but it stands more upright at 700 than in the Regular (centre travel 104 against 138 per tenth of the
+height, 112 before this rule: the bowls now move level with the ends and the spine between keeps the engine's
+points). balance.py at 700, left outside: S LR +0.02 (references -0.05..+0.01) and TB +0.03 (-0.08..-0.01: the
+references grow more at the bottom); s DIAG -0.29 (-0.25..-0.05) and at 300 TB +0.07, DIAG -0.36; 3 TB -0.03
+(-0.19..-0.07). Looked at (`item13-S-s-3.png`, `item13-derived.png`): the S's top barb now reaches out with its lower
+bowl and the bottom barb with its upper bowl; the 3's top ball no longer runs in at 700 nor out at 300; the letters
+stand as the Regular does. Figure for 8, $ and §: `item13-eight-dollar-section.png`.

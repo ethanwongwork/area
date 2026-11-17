@@ -847,6 +847,69 @@ def s_terminal(R, N):
     return out, d
 
 
+ROUND_ENDS = ("S", "s", "three")
+END_BAND = 0.4          # balance.py's bands: the top and bottom 40% of the glyph's height
+END_RIGID = 0.3         # nodes within this share of a band's width from an end move with that end whole
+
+
+def band_ends(contours):
+    """The ink ends of the top and bottom 40% read on the flattened outline, as build/weightscale/balance.py reads a
+    glyph's ends: ((top left, top right, bottom left, bottom right), y0, height)."""
+    pl = polys(contours, step=1.0)
+    ys = [p[1] for P in pl for p in P]
+    y0, y1 = min(ys), max(ys)
+    H = y1 - y0
+
+    def ext(a, b):
+        lo, hi = 1e9, -1e9
+        for k in range(0, 121):
+            for l_, h_ in scan(pl, y0 + (a + (b - a) * k / 120) * H, 1):
+                lo, hi = min(lo, l_), max(hi, h_)
+        return lo, hi
+    (tl, tr), (bl, br) = ext(1 - END_BAND, 1.0), ext(0.0, END_BAND)
+    return (tl, tr, bl, br), y0, H
+
+
+def round_ends(R, N):
+    """Owner round 8 (0.82), item 13. An open round letter (S s 3) in a master: on each side its top and bottom ends
+    keep the Regular's difference, each moving half the gap. At 700 S's top terminal grew 20 and its bottom terminal
+    23 about the four ends' centre while the bowls' outer sides grew 42 and 45 (the references within 1 to 13 of each
+    other: every end grows alike); 3's top ball grew 12 where its bottom ball grew 39 (the top ball ran in with the
+    knot it shares with the counter). Each band's nodes move level: those within END_RIGID of the band's width from an
+    end with that end whole (a barb, a ball, a bowl's outer stroke keep their shape and thickness), those between by
+    their share of the run (the counter takes it up); a handle with its node; nodes between the bands stay. Returns
+    (contours, moves (top left, top right, bottom left, bottom right))."""
+    (rtl, rtr, rbl, rbr), _, _ = band_ends(R)
+    (ntl, ntr, nbl, nbr), y0, H = band_ends(N)
+    gr = (ntr - nbr) - (rtr - rbr)
+    gl = (ntl - nbl) - (rtl - rbl)
+    mv = (-gl / 2, -gr / 2, gl / 2, gr / 2)
+    out = []
+    for P in N:
+        n = len(P)
+        on = [i for i, q in enumerate(P) if q[2] is not None]
+        move = {}
+        for i in on:
+            x, y = P[i][0], P[i][1]
+            if y >= y0 + (1 - END_BAND) * H:
+                lo, hi, ml, mr = ntl, ntr, mv[0], mv[1]
+            elif y <= y0 + END_BAND * H:
+                lo, hi, ml, mr = nbl, nbr, mv[2], mv[3]
+            else:
+                move[i] = 0.0
+                continue
+            a, b = lo + END_RIGID * (hi - lo), hi - END_RIGID * (hi - lo)
+            t = 0.0 if x <= a else 1.0 if x >= b else (x - a) / (b - a)
+            move[i] = ml + (mr - ml) * t
+        for k, i in enumerate(on):
+            j = on[(k + 1) % len(on)]
+            hs = [(i + d) % n for d in range(1, (j - i) % n)]
+            if len(hs) == 2:
+                move[hs[0]], move[hs[1]] = move[i], move[j]
+        out.append([(round(q[0] + move.get(i, 0.0)), q[1]) + tuple(q[2:]) for i, q in enumerate(P)])
+    return out, mv
+
+
 C_SHAPES = ("C", "c")
 
 
@@ -3294,6 +3357,8 @@ def kin_parts(reg, g, out, rep, v):
             bR_, bB_ = glyph_contours(reg[base_name]), glyph_bold(reg[base_name], v)[0]
             if base_name in FIGURES and [len(P) for P in bR_] == [len(P) for P in bB_]:
                 bB_ = fig_joins(bR_, bB_)[0]                   # item 12: as the figure's join is placed later
+            if base_name in ROUND_ENDS and [len(P) for P in bR_] == [len(P) for P in bB_]:
+                bB_ = round_ends(bR_, bB_)[0]                  # item 13: the small 3 as the 3
             _KIN[key] = (bR_, bB_)
         bR, bB = _KIN[key]
         mine = glyph_contours(g)
@@ -4051,6 +4116,21 @@ def bold_font(reg, stem=STEM, **over):
             joined.append(f"{name} {', '.join(d_)}")
             resided.add(name)
     notes.append(f"figures' joins on their flat strokes: {'; '.join(joined)}")
+    # owner round 8, item 13: an open round letter's ends grow alike on each side (round_ends)
+    evened = []
+    for name in ROUND_ENDS:
+        if name not in reg or name not in font or name in struck:
+            continue
+        R_, N_ = glyph_contours(reg[name]), glyph_contours(font[name])
+        if [len(P) for P in R_] != [len(P) for P in N_]:
+            continue
+        M_, d_ = round_ends(R_, N_)
+        if any(abs(x) >= 0.5 for x in d_):
+            for c, P in zip(font[name].contours, M_):
+                c.points = [Point(x, y, t, smooth=s_) for x, y, t, s_ in P]
+            evened.append(f"{name} " + " ".join(f"{x:+.1f}" for x in d_))
+            resided.add(name)
+    notes.append(f"round letters' ends (TL TR BL BR): {', '.join(evened)}")
     # owner round 8, item 2: a C's two terminals stay on one vertical in every master, as in the Regular
     # (joins.TERMINAL_LINE). The engine grew C's top barb 46 and its lower end 34 at the Bold (c: ball 63, lower end
     # 50; at the Light C -23 / -15, c -24 / -19): the references' stay within a few units of each other. Each terminal
@@ -4158,7 +4238,7 @@ def bold_font(reg, stem=STEM, **over):
     for g in reg:                                              # owner round 8: a composite on a Z whose bar ends
         if g.components and not g.contours and g.name in font:  # moved takes its letter's advance again, as the
             b_ = g.components[0].baseGlyph                     # composites pass gave it before (Ž on Z)
-            if b_ in Z_SHAPES and b_ in resided and b_ in reg and g.width == reg[b_].width:
+            if b_ in Z_SHAPES + ROUND_ENDS and b_ in resided and b_ in reg and g.width == reg[b_].width:   # item 13: S s 3
                 font[g.name].width = font[b_].width
     from ufoLib2.objects import Contour
     layer = font.layers.newLayer("mid")                        # the sparse master: only the glyphs that need one
