@@ -4961,6 +4961,16 @@ def bold_font(reg, stem=STEM, **over):
                     notes.append(f"g's loop from its centreline: {f0} > {f1} faults, {sh_} places short of their law (the engine's {eng_short})")
                 else:
                     notes.append(f"g's loop from its centreline: kept the engine's ({f0} > {f1} faults, {sh_} short, engine {eng_short})")
+    # owner round 8 (0.82, item 15): the @ is one construction (at.py) run again here: its ring one stroke at this
+    # master's hairline (top and bottom; the sides the references' share, by the hairline's law), Area's a.ss03 of
+    # this master in it at the references' size and weights for this stem, joined at the a's foot; sides as a sign's. After
+    # the curvature evening below the splices, so the a.ss03 it reads is the master's finished one.
+    # The engine read the drawn @ (its a one contour with the ring) as loose parts: the a thinned towards the Bold
+    # (41 > 34) and thickened towards the Light
+    import at as _AT
+    at_ = _AT.master(reg, font, lambda R_c, cs: _amp_sides(R_c, cs, "at"), tm_a, layer if v["f"] > 0 else None)
+    if at_:
+        notes.append(at_)
     # 0.79: an f ligature's sides are its letters' (0.78: every one 4 wider on the left than f, ff 22 on the right)
     def _sides(f_, n):
         xs = [q.x for c in f_[n].contours for q in c.points]

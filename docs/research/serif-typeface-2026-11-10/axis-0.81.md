@@ -1252,3 +1252,54 @@ and the variable font's glyf, gvar, fvar, avar, STAT, HVAR, GPOS, hmtx, name and
 (`build/qa-082g.log`). The trial fonts in `trial100/` and `trial200/` are records, not builds to ship. audit_axis on
 the trials' new pair wrote nothing (its runs in the copy ended without output); the rays, kerning, audit_bold and
 curvecheck readings above are the trials' audits of that range.
+
+## Owner round 8, items 15 to 18 (17 November 2026): the symbols left open
+
+The owner, on the symbols item 10 left open: "uneven thicks and thins, non smooth curves, and visual/optical imbalance".
+Taken in the brief's order, each built, diffed (all three masters, the Bold's mid layer, the Regular TTF, the variable
+font at 300 / 400 / 600 / 800 on the 0.82 axis: `build/owner8/diffall8.py`), audited (`qa.py --skip-build`, plus
+`evaluate.py`) and looked at before the next. The build before is `build/snap082h`. Figures: `build/owner8/item15-*.png`
+to `item18-*.png` (before row over after row, 300 / 400 / 600 / 800, 749 px a tile); numbers and scripts in
+`build/owner8/item15/` to `item18/`.
+
+### Item 15: @
+
+Measured first (`item15/refat.py`, `refo.py`, `refo2.txt`: Georgia Pro, Source Serif 4, Serrif, Literata, Newsreader,
+Merriweather, Crimson Pro at 300 / 400 / 700, numbers only; Area on snap082h, `area-before.txt`). Area's @ was Libre
+Baskerville's: its ring thick on the left (74) and thin on the right (39) with top and bottom 49 / 51 at 400, its a an
+italic a drawn into the ring as one contour, the ring's top on the cap overshoot (721) and its bottom at -122. Every
+reference's ring has the letters' upright stress: top and bottom at their o's top (1.05 / 1.02 at 400, 1.05 / 1.03 at
+300, 0.96 / 1.09 at 700), the left side 0.86 of the stem at 400, the right 0.883 of the left (0.866 / 0.874 at 300 /
+700); the contrast stays along the axis (left over top 1.74 / 1.85 / 1.74) and the ring grows as their hairline does
+(left 0.83 / 1.27 of the 400 at 300 / 700, top 0.88 / 1.25). None is even all round; Area's © ring (52 top, 40 sides)
+has the opposite stress (item 16). Their box: top 0.985 of the cap, bottom -0.231, width over height 0.941 / 0.968 /
+1.012. The inner letter: height 0.545 / 0.558 / 0.597 of the ring's counter, its centre 0.011 of the ring's height
+over the ring's, its stem 0.984 / 0.841 / 0.778 of the stem, its top and bottom 1.18 / 1.21 / 1.26 of the ring's thin,
+the white right of its stem 1.24 times the white left of its bowl.
+
+| # | Item | Cause | Rule | Before > after |
+|---|---|---|---|---|
+| 99 | 15. @ | The a was one contour with the ring, so no rule could place or weight it: towards the Bold its thinnest place thinned (audit_axis 41 > 35 / 34 at 766.7 / 800), towards the Light a place fell to 0.667 of the Regular (47.4 against 71.1 at (641, 143); the stem's law 0.705) and another grew (47.5 > 41.0 > 32.3 from 300 to 400 at (510, 170)); it grew more on the left at 300 (LR -0.38). The ring's weight changed where it turned into the a; the a was italic | `at.py`, one construction in every master. The ring is one stroke out of the a's foot: up the right side, over the top, down the left, along the bottom, out to the tail's cut; each edge one chain of curves (`at.Ring`: the bowl's tensions 0.57 outside / 0.61 inside where nothing else asks, curvature across every smooth node within 1.2, a curve easing off the stem's straight). Thickness (vertical stress, the references' and the letters'): top and bottom the master's hairline (o's top), the left side 0.86 of the Regular's stem and the right 0.883 of the left, carried into each master by the hairline's law (the references' ring keeps its contrast); the tail's cut 0.853 of the hairline (the drawn). The ring's right extremes stand 0.107 of its height over its centre (the drawn @'s), so the stroke out of the foot climbs as one long turn. Box: top 701, bottom -164 (the references' 0.985 / -0.231 of the cap), width 0.941 / 0.968 / 1.012 of the height. The a is Area's a.ss03 (upright, single-storey) in that master, scaled to the references' share of the ring's counter, its strokes then made the references' weight: level by the stem's share, upright by the inner letter's share of the ring's thin (`at.embolden`: each node along its normal, a convex corner on its true mitre so a straight edge moves parallel, a crotch's cusp held to 1.0); white right of its stem 1.24 times the white left of its bowl, its centre 0.011 of the ring's height over the ring's. The a's foot keeps a.ss03's own two curves; the ring is solved on from them, then every smooth node evened to one curvature (`loops.even_nodes`, handles only). In the masters the shares are interpolated on the stem's logarithm between the references' 300 / 400 / 700 (Area's 55 / 78 / 140); the mid master is the construction at the readings that far (0.427). In `normalize` after the ampersand (`at.regular`) and at the end of `bold.bold_font` after the curvature evening (`at.master`), so the a.ss03 it reads is the master's finished one | ring left / right / top / bottom at 300 / 400 / 600 / 800 (rays from its centre): 53.1 / 74.1 / 98.0 / 131.0 > 58 / 67 / 74 / 83 left; 31.8 / 38.7 / 45.2 / 53.6 > 53 / 62 / 66 / 73 right; top 41.9 / 49.2 / 54.7 / 62.8 > 37 / 43 / 47 / 53; bottom 40.5 / 50.8 / 58.2 / 68.2 > 37 / 43 / 47 / 53; top / side 0.99 / 0.87 / 0.76 / 0.68 > 0.66 / 0.67 / 0.67 / 0.68 (references 0.67). The a's stem / bowl on the level over the stem 1.57 / 1.07 / 1.08 / 1.08 > 0.98 / 0.85 / 0.83 / 0.79 (references 0.98 / 0.84 / 0.78). Box 721 / -122 > 701 / -164. audit_axis Bold thin: @ listed (41 > 35, 34) > not listed; audit_rays @: 3 faults > ok at the default stops and at every 25 to 50 units from 300 to 800 (273 places). curvecheck on the whole glyph: Light inf (8 faults) / Regular 1.36 (3) / mid 2.58 (10) / Bold inf (10) > 1.18 / 1.16 / 1.19 / 1.23, no fault. balance.py (`build/owner8/rebalance8.py`, the 0.81 weights at their design places): LR at 300 -0.377 > -0.048, at 800 -0.177 > -0.006; TB -0.049 / -0.129 > +0.010 / +0.018; DIAG +0.107 / +0.121 > +0.028 / +0.009. Advances: Light 943 > 941, Regular 955 > 960, mid 967 > 972, Bold 984 > 988 (+0.5% at most) |
+
+Item 15, what moved (`item15/diff3.txt`, against snap082h; the build saved as `build/snap082j15c`): @ in every master,
+the Bold's mid layer, the Regular TTF and the variable font at 300 / 400 / 600 / 800; nothing else. Kerning: only the
+collision keys with @ (Light 19, Regular 1 (ldot @ 8 > 7), Bold 17, each a unit). The point structure changed (57 / 12
+> 52 / 13 points), the same in every master. Checks (`item15/after3/`, `qa2.log`): audit_axis Bold thin 6 glyphs > 5
+(@ gone; cedi, ogonek, ogonekcomb, one.ss01 as before), Light ok, turns and crossings ok; audit_rays 4 glyphs > 3 (@
+gone; ð, ʕ, $ as before); audit_charset 0 errors; evaluate: @ no longer listed (the drawn @ had a pinched quarter); even
+0; curvecheck (Regular, Light, Bold; hooks 6 / 14 as before) unchanged; pathlint 0 errors, 139 > 138 warnings (@'s);
+interpolatable nothing reported; audit_kern pass (no advance moved by more than 5). Before building, two trial faults
+were found on the figures and cured in the rule: the made-heavier a's crotch under the bowl ran 40 units down at the
+Bold (an uncapped mitre on a cusp; held to 1.0), and its stem leaned 3 units in the Light (a convex corner's mitre
+capped too; convex corners now keep their true mitre); the a's foot turned boxy (handles kept their length while the
+foot shortened; they now keep their share of the curve).
+
+Looked at (`item15-at.png`, before row over after row; `item15-at-refs.png`, Area before and after beside the seven
+references at 400 and at their bold): the a now stands upright, the a.ss03 of the text, joined to the ring at its foot
+by one turn that climbs into the ring's right side; the ring is thin at top and bottom and full at both sides, as the
+references' and as the letters' o; the sign sits lower (701 / -164 against the cap's 712), as every reference's does,
+and keeps Area's tail. Still not right, honestly: at 800 the a is heavy against the ring (a stem 110, ring side 83:
+the references' median 1.33 times, Area 1.33, but Area's bold a is a wide bowl, so the a reads darker than Georgia
+Pro's); the a's spur on the stem's top (a.ss03's) reads small at 300; evaluate still reads two quarters at its limits
+(the a's foot 0.82 / 0.62 of its run after whole-unit rounding, a.ss03's own 0.74 / 0.62, and at the Bold the stroke
+out of the foot 0.42 / 0.78, lopsided 1.86) without a curvecheck fault.

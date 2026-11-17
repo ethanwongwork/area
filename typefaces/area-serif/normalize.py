@@ -1250,6 +1250,8 @@ def normalize(font):
     CHARSET.mirrors(font)
     import amp as AMP                                 # 0.82 (owner round 8, item 9): the ampersand, one construction
     print("amp:", AMP.regular(font))                  # on the finished o, a and v; after every node rule
+    import at as AT                                   # 0.82 (owner round 8, item 15): the @, one construction: a ring
+    print("at:", AT.regular(font))                    # of one stroke and Area's a.ss03 in it, joined at its foot
     joined, promoted, copied, opened_all = SPACING.finish(font, CHARSET.COVERAGE)   # 0.73: beyond the core
     alts = sorted({b for pairs in alt_subs.values() for _a, b in pairs} | {"g.ss02", "one.ss01"} | ({"uni0261"} & set(font.keys())))
     order = font.lib.get("public.glyphOrder", [])
