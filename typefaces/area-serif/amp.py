@@ -752,12 +752,19 @@ def _round_handles(pts):
                 ka, kb = abs(curvature(sa, 0.0)), abs(curvature(sb, 0.0))
                 r = max(ka, kb) / max(min(ka, kb), 1e-9)
                 d = math.dist(ca, ia) + math.dist(cb, ib)
-                key = (_waves(sa) + _waves(sb), r > 1.15, r + 0.02 * d + 0.1 * g1)
+                key = (_infl(sa) + _infl(sb), _waves(sa) + _waves(sb), r > 1.15, r + 0.02 * d + 0.1 * g1)
                 if best is None or key < best[0]:
                     best = (key, ca, cb)
         if best:
             a[0], a[1] = best[1]
             b[0], b[1] = best[2]
+
+
+def _infl(s):
+    """1 when a cubic's control polygon turns both ways (an inflection the rounding made), else 0."""
+    legs = [(s[k + 1][0] - s[k][0], s[k + 1][1] - s[k][1]) for k in range(3)]
+    cr = [a[0] * b[1] - a[1] * b[0] for a, b in zip(legs, legs[1:])]
+    return 1 if cr[0] * cr[1] < -1e-9 else 0
 
 
 def _waves(s):

@@ -4418,6 +4418,17 @@ def bold_font(reg, stem=STEM, **over):
     amp_ = _AMP.master(reg, font, _amp_sides, tm_a, layer if v["f"] > 0 else None)
     if amp_:
         notes.append(amp_)
+    # owner round 8 (0.82, item 10): symbols whose strokes the engine read the wrong way along the axis (symbols.py):
+    # Ə's bar takes the capitals' middle-arm law (it went 79 / 67 / 48 at 300 / 400 / 700), ɂ's lower hook stroke ?'s law
+    # (its lower stroke 110 / 99 / 80), œ towards the Light o and e joined as in the Regular (its upper join 70 > 58);
+    # ɽ's curves meet at one curvature at every node towards the Bold (in the mid master too)
+    import symbols as _SYM
+    rs_ = [_SYM.schwa_bar(reg, font), _SYM.glottal_small(reg, font), _SYM.oe_joined(reg, font, v)]
+    for n_ in _SYM.EVEN if v["f"] > 0 else ():       # towards the Bold only: evened in the Light, ɽ's tail read
+        rs_.append(_SYM.even_curves(font, n_))        # 34.4 at 300 where the Regular has 52.4 (audit_rays)
+        if n_ in layer:
+            rs_.append("mid " + str(_SYM.even_curves(layer, n_)))
+    notes += [r_ for r_ in rs_ if r_]
     # owner round 8 (0.82): the summation's point is a capital's vertex in every master too: a flat 0.42 of this
     # master's capital stem across the bisector (charset.sum_vertex; the engine's knots left it 15 at the Bold and 46
     # at the Light where the rule asks 62 and 25)

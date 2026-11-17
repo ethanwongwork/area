@@ -941,3 +941,55 @@ extreme's handles on its axis; the Regular is unchanged by it and the fix lands 
 audit_axis Light, curvecheck (three masters; the hooks' lists unchanged), even, evaluate (& and ÷ clean), pathlint
 (0 / 0 / 0), audit_charset (0 errors; the & ink rule holds), interpolation: pass. `audit_axis.py` takes
 AREA_AXIS_ROWS to print more than six rows a check.
+
+### Owner round 8, item 10 (16 November 2026): the other symbols
+
+Measured first on `build/snap082s5b` (audit_rays on the variable font, the masters read upright where a stroke is
+level; `build/owner8/amp/rays-before.txt`, `ring.py`). The rules are `symbols.py`, run in `bold.bold_font` after the
+ampersand; the Regular is unchanged. Build: `build/snap082d` (then `snap082e`, which differs only in the & mid master,
+below), kerning refit in the same round (`AREA_KERN_FIT=1`: fit_kerning.json unchanged; only collision keys with Ə,
+Light 12 and Bold 12, moved).
+
+| # | Glyph | Cause (measured) | Rule | Before > after (300 / 400 / 700) |
+|---|---|---|---|---|
+| 92 | Ə | Its bar (a capital's level middle stroke, 67 in the Regular) was read as white between two counters: 79 / 67 / 48, thinner at every step to the Bold (audit_rays 67 > 62 > 56 > 48 near (410, 224)) and thicker towards the Light | `symbols.schwa_bar`: the Regular's bar times E's middle-arm law in the master (0.879, 1.192), about the bar's middle as the engine left it; the bar's top line and the counter's top move level, the left end's corner and the curve into the bowl fading over 30 and 40 units | bar 79 / 67 / 48 > 59 / 67 / 80; audit_rays ok |
+| 93 | ɂ | The hook's lower stroke into the stem (99 in the Regular, as ?'s) thinned towards the Bold and thickened towards the Light: 110 / 99 / 80 upright right of the stem (audit_rays 97.2 > 74.3 at (224, 254)), while the upper stroke grew 71 / 83 / 126 | `symbols.glottal_small`: the lower stroke the Regular's times ?'s law for the same stroke (? is the same drawing at another size: 0.962, 1.038); the counter's floor moves level, each handle with its node. The ceiling is left: moving it to ?'s law for the upper stroke (89) bent the neck from the ball into an S at the Bold | lower stroke 110 / 99 / 80 > 95 / 99 / 103; audit_rays ok; curvecheck on the whole glyph as many faults as the engine's (4 Light, 7 Bold) |
+| 94 | œ | Towards the Light the engine read the joins of o and e as strokes of their own and filled the upper one (audit_rays 58.2 at 350 and 62.8 > 70.2 at 300 against 65.7 at 400, near (542, 452) to (555, 464)) | `symbols.oe_joined`: towards the Light œ is the master's o and e joined as the Regular joins them (`charset.diphthongs`), used only where the union keeps the Regular's structure (it does in the Light; in the Bold the e's 119-unit left stroke meets the o's counter in three more nodes, so the Bold keeps the engine's) | audit_rays ok; Light advance 935 > 940 (o's and e's own) |
+| 95 | ɽ | Its tail's drawing jumps in curvature across nodes (Regular 1.81 and 2.14), which the Bold made 2.31 and 2.66 (13 faults on the whole glyph; the qa hook list's node 28 off one line 2.6 degrees) | `symbols.even_curves` (`loops.even_nodes`: handle lengths only) towards the Bold and in the mid master. Not in the Light: evened there the tail read 34.4 at 300 where the Regular has 52.4 (audit_rays) | Bold worst 2.31 > 1.75, faults 13 > 4 (mid 2.08 > 1.59, 10 > 4); hook list Bold 15 > 14. The Regular's own 2.14 at (297, -186) and the flat place in its flag's curve (28-31) stay: the Regular's hook drawings wait on the owner (hand-over, open item 5) |
+
+Not changed, with numbers (each is a different or larger job than one stroke's law):
+
+- @ (first in the brief's order). Its ring is a c-like stroke, thick on the left: across it every 30 degrees from the
+  right, 39 40 47 49 57 68 74 69 58 51 42 45 at 400; it grows 1.38 on the right and 1.77 on the left at 700 (54 to
+  131), 0.82 and 0.72 at 300, so the left grows and shrinks most, as a thick stroke should; the profile is smooth. The
+  faults are in the a: audit_axis Bold 41 > 35 and 34 at 675 and 700 (thin), audit_rays at 300 47.4 where 400 has
+  71.1 at (641, 143) (the a's stem turning into its foot: 0.667 of the Regular against the stem's 0.705) and thicker at
+  300 at (510, 170) (47.5 against 41.0). The a is one contour with the ring, so the ®-style fit cannot place it; the
+  rule it needs is the ampersand's: the ring as one stroke at o's laws and the a as Area's a.ss03 drawn into it,
+  joined where the a's stem meets the ring. Not done this round.
+- $: thicker at 300 at (207, 4), 59.7 against 55.3 at 400 (the stroke's lower stub where it leaves the S's bottom
+  curve; 8%). Its own ball-ended drawing (owner, 0.80); left.
+- ð: thicker at 300 at (279, 697), 53.1 against 50.4 at 400 (the bar across the ascender, 5%); left.
+- ¢: follows c (item 2) by construction (c plus a stroke in every master). Stroke 34 / 43 / 49 / 57 at 300 / 400 / 550 /
+  700 (o's hairline 37 / 43 / 53 at 300 / 400 / 700); it stands 116 above the c and 107 below at every weight. No
+  axis fault; the 9-unit difference is the Regular's drawing.
+- ®: the ring is ©'s point for point: 40 at the sides and 52 at top and bottom at 400 (53 / 66 at 700), a horizontal
+  stress against the letters' upright one (o: sides 82, top 43). Changing it changes ©, which is outside this brief.
+- The hook mark (U+0309): curvecheck on the whole glyph, Regular 1.53 at node 9, Light 2.01, Bold 1.95 and two flat
+  places. In the variable font's masters it is two overlapping parts (`overlap.curl_master`), and every Vietnamese
+  composite carries it; evening its handles is one call (`loops.even_nodes`: Regular 1.53 > 1.18, Bold 1.95 > 1.17 in a
+  trial) but was not built, because it moves some 100 composites and the curl parts were not checked against it.
+
+Every glyph that moved (`amp/diff-d.txt`, against `snap082b`): Light Ə ɂ œ; Bold Ə ɂ ɽ; the Bold's mid layer ɽ and
+the & (item 9's rounding fix); the Regular and its TTF byte-identical; the variable font at 300 to 700 Ə ɂ œ ɽ (and the
+& at 550). Checks: audit_rays on & ÷ Ə ɂ œ ɽ ok (still failing: @ $ ð, as above); interpolation pass; curvecheck pass
+(three masters), hook lists Light 6 (unchanged), Bold 15 > 14; audit_charset 0 errors; even 0; pathlint 0 errors (the
+4 warnings on ɂ and ɽ are the Regular's, unchanged). audit_axis: the Bold's thin list unchanged; turns flagged the &'s
+mid master once more (curve 21, the loop's inside off the diagonal, an inflection at 544 and 550: the rounding put the
+short handle's curve through a turn). `amp._round_handles` now refuses a rounding that makes a control polygon turn
+both ways; checked on every instance from 300 to 700 every 5% before building `snap082e`.
+Figures: `build/owner8/item10-schwa-glottal.png`, `item10-oe.png`, `item10-rtail.png`.
+
+`build/snap082e` against `snap082d`: only the &'s mid master (and so the variable font at 550) moved. audit_axis turns
+ok in both masters (the & no longer listed), thin unchanged; audit_rays & ok; interpolation pass; `audit_kern.py`
+passes (least 8.3 / 8.4 / 7.9 at 400 / 550 / 700, 0 fail). Pages not rebuilt.
