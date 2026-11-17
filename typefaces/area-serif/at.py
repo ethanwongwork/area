@@ -100,30 +100,100 @@ def _mix(R0, R1, t):
 MITRE = 1.0
 
 
+def _mitre(ti, to):
+    ni, no = (ti[1], -ti[0]), (to[1], -to[0])
+    dot = ni[0] * no[0] + ni[1] * no[1]
+    m = ((ni[0] + no[0]) / (1 + dot), (ni[1] + no[1]) / (1 + dot)) if dot > -0.9 else ni
+    lm = math.hypot(*m)
+    convex = ti[0] * to[1] - ti[1] * to[0] > 0       # a left turn with the ink on the left
+    if not convex and lm > MITRE:                   # a crotch's cusp: the mitre held to MITRE (uncapped it ran the
+        m = (m[0] * MITRE / lm, m[1] * MITRE / lm)  # Bold crotch 40 units down into a bump); a convex corner keeps
+    return m                                        # its true mitre, so a straight edge moves parallel
+
+
+SHORT = 20.0           # a segment shorter than this (a soft corner's curve, a serif's step, a crotch's short line) is
+                       # part of one corner: its nodes move together on that corner's mitre, so the corner keeps its
+                       # radius (the C's barb corners grew 7 > 20 between masters otherwise) and nothing crosses (R's
+                       # leg crotch in (R) crossed itself)
+
+
 def embolden(cs, dx, dy):
     """Each on-curve node moves along its outward normal (a corner along its mitre) by dx / 2 level and dy / 2 upright
-    shares; its handles move with it. UFO winding (ink on the left of travel)."""
+    shares; its handles move with it. UFO winding (ink on the left of travel). Runs of segments under SHORT move
+    as one corner."""
     out = []
     for P in cs:
         n = len(P)
         Q = [list(q) for q in P]
-        for i, q in enumerate(P):
-            if not q[2]:
+        on = [i for i, q in enumerate(P) if q[2]]
+        m_ = len(on)
+
+        def tang_in(i):
+            a = P[i - 1]
+            q = P[i]
+            if math.dist(q[:2], a[:2]) < 1e-6:
+                a = P[i - 2]
+            return A.unit((q[0] - a[0], q[1] - a[1]))
+
+        def tang_out(i):
+            b = P[(i + 1) % n]
+            q = P[i]
+            if math.dist(q[:2], b[:2]) < 1e-6:
+                b = P[(i + 2) % n]
+            return A.unit((b[0] - q[0], b[1] - q[1]))
+        # groups of nodes joined by short segments
+        short = [math.dist(P[on[k]][:2], P[on[(k + 1) % m_]][:2]) < SHORT for k in range(m_)]
+        group = list(range(m_))
+        for k in range(m_):
+            if short[k]:
+                g0, g1 = group[k], group[(k + 1) % m_]
+                if g0 != g1:
+                    group = [g0 if g == g1 else g for g in group]
+        delta = {}
+        for gid in set(group):
+            ks = [k for k in range(m_) if group[k] == gid]
+            if len(ks) == m_:
+                ks = ks[:1]
+            # the run's first node is the one whose previous segment is not short
+            first = next((k for k in ks if not short[(k - 1) % m_]), ks[0])
+            last = next((k for k in ks if not short[k]), ks[-1])
+            ti_, to_ = tang_in(on[first]), tang_out(on[last])
+            # the run's turning, summed along its points (two opposite edges, as a serif's end, cross to 0)
+            order_ = [first]
+            while order_[-1] != last and len(order_) <= m_:
+                order_.append((order_[-1] + 1) % m_)
+            i_a, i_b = on[order_[0]], on[order_[-1]]
+            idx_ = list(range(i_a - 1, i_a + ((i_b - i_a) % n) + 2))
+            pl_ = [P[j % n][:2] for j in idx_]
+            turn_ = 0.0
+            for j in range(1, len(pl_) - 1):
+                a_ = (pl_[j][0] - pl_[j - 1][0], pl_[j][1] - pl_[j - 1][1])
+                b_ = (pl_[j + 1][0] - pl_[j][0], pl_[j + 1][1] - pl_[j][1])
+                if math.hypot(*a_) > 1e-6 and math.hypot(*b_) > 1e-6:
+                    turn_ += math.atan2(a_[0] * b_[1] - a_[1] * b_[0], a_[0] * b_[0] + a_[1] * b_[1])
+            convex_u = turn_ > math.radians(120)
+            if len(ks) == 1:
+                m = _mitre(tang_in(on[ks[0]]), tang_out(on[ks[0]]))
+                delta[on[ks[0]]] = (m[0] * dx / 2, m[1] * dy / 2)
                 continue
-            a, b = P[i - 1], P[(i + 1) % n]
-            ti = A.unit((q[0] - a[0], q[1] - a[1])) if math.dist(q[:2], a[:2]) > 1e-6 else None
-            to = A.unit((b[0] - q[0], b[1] - q[1])) if math.dist(q[:2], b[:2]) > 1e-6 else None
-            ti = ti or to
-            to = to or ti
-            ni, no = (ti[1], -ti[0]), (to[1], -to[0])
-            dot = ni[0] * no[0] + ni[1] * no[1]
-            m = ((ni[0] + no[0]) / (1 + dot), (ni[1] + no[1]) / (1 + dot)) if dot > -0.9 else ni
-            lm = math.hypot(*m)
-            convex = ti[0] * to[1] - ti[1] * to[0] > 0   # a left turn with the ink on the left
-            if not convex and lm > MITRE:           # a crotch's cusp: the mitre held to MITRE (uncapped it ran the
-                m = (m[0] * MITRE / lm, m[1] * MITRE / lm)   # Bold crotch 40 units down into a bump); a convex corner
-                                                    # keeps its true mitre, so a straight edge moves parallel
-            d = (m[0] * dx / 2, m[1] * dy / 2)
+            if convex_u:                                # a stroke's end (a serif's end, turning back outward): two
+                order = [first]                         # corners, split at the run's longest segment (the end's cut),
+                while order[-1] != last:                # each on its own mitre
+                    order.append((order[-1] + 1) % m_)
+                segl = [math.dist(P[on[order[j]]][:2], P[on[order[j + 1]]][:2]) for j in range(len(order) - 1)]
+                cut = max(range(len(segl)), key=lambda j: segl[j]) if segl else 0
+                for part in (order[:cut + 1], order[cut + 1:]):
+                    if not part:
+                        continue
+                    m = _mitre(tang_in(on[part[0]]), tang_out(on[part[-1]]))
+                    for k in part:
+                        delta[on[k]] = (m[0] * dx / 2, m[1] * dy / 2)
+                continue
+            m = _mitre(ti_, to_)
+            for k in ks:
+                delta[on[k]] = (m[0] * dx / 2, m[1] * dy / 2)
+        for i in on:
+            d = delta[i]
             Q[i][0] += d[0]
             Q[i][1] += d[1]
             for j in (i - 1, (i + 1) % n):          # its handles (an off-curve point next to it)
@@ -276,9 +346,55 @@ def construct(R):
     outer.append(("L", (T1, T1, T2, T2)))
     for kind, s in reversed(list(zip(Q.kinds, sQ))):
         outer.append(("L" if kind == "L" else "C", (s[3], s[2], s[1], s[0])))
+    # the a's two crotches (the spur's into the bowl's top, the bowl's bottom into the foot) rounded: each a fillet of
+    # FILLET the a's stem (owner, 17 November: "the a in the @ looks much sharper / not as smooth at thicker weights";
+    # at 800 the made-heavier a's crotches read as a notch and a pinch). Bottom first, so the top's index holds
+    r_f = FILLET * sh["astem"] * R["stem"]
+    outer = fillet(outer, 5, r_f)
+    outer = fillet(outer, 1, r_f)
     info = {"k": k, "dx": dx, "dy": dy, "width": Wd, "ring": (tl, tr, tt, tb), "a_stem": sh["astem"] * R["stem"],
             "a_thin": athin, "a_h": ah, "white": (white, white * WHITE_RL), "shares": sh}
     return outer, c1, info
+
+
+FILLET = 0.30          # a crotch's fillet in the @'s a, of the a's stem (looked at at 800: 0.20 left a notch; 0.45 ran the bottom one into a wave, curvecheck 2.03)
+
+
+def _cut(seg, r, at_end):
+    """A cubic cut back by arc length r from its end (at_end) or start: (the kept part, the cut point, the unit tangent
+    at the cut, pointing along the curve's direction)."""
+    N = 400
+    pts = [A.bez(seg, k / N) for k in range(N + 1)]
+    run = 0.0
+    rng = range(N, 0, -1) if at_end else range(N)
+    for k in rng:
+        a, b = (pts[k], pts[k - 1]) if at_end else (pts[k], pts[k + 1])
+        run += math.dist(a, b)
+        if run >= r:
+            t = (k - 1) / N if at_end else (k + 1) / N
+            break
+    else:
+        t = 0.0 if at_end else 1.0
+    kept = A.sub(seg, 0.0, t) if at_end else A.sub(seg, t, 1.0)
+    e = 1e-4
+    p0, p1 = A.bez(seg, max(0.0, t - e)), A.bez(seg, min(1.0, t + e))
+    return kept, A.bez(seg, t), A.unit((p1[0] - p0[0], p1[1] - p0[1]))
+
+
+def fillet(outer, k, r):
+    """The corner between outer[k] and outer[k + 1] rounded: both cut back by r along themselves and joined by one
+    cubic along their tangents, each handle 0.55 of the chord (a quarter's tension where the two tangents turn by
+    about 90 degrees; less turn, the same share of a shorter chord)."""
+    (ka, sa), (kb, sb) = outer[k], outer[k + 1]
+    a_kept, pa, ta = _cut(sa, r, True)
+    b_kept, pb, tb = _cut(sb, r, False)
+    ch = math.dist(pa, pb)
+    f = (pa, (pa[0] + ta[0] * 0.55 * ch, pa[1] + ta[1] * 0.55 * ch), (pb[0] - tb[0] * 0.55 * ch, pb[1] - tb[1] * 0.55 * ch), pb)
+    if ka == "L":
+        a_kept = (sa[0], sa[0], pa, pa)
+    if kb == "L":
+        b_kept = (pb, pb, sb[3], sb[3])
+    return outer[:k] + [(ka, a_kept), ("C", f), (kb, b_kept)] + outer[k + 2:]
 
 
 def outline(R):
