@@ -1215,7 +1215,7 @@ def arrows(font, m, adv):
     head = 0.36 * L                    # each head stroke's run along the shaft
     cy = m.math_y
 
-    def east(length=L):
+    def east(length=L, head=head):
         """0.77 (owner, 2026-11-14: "does uni21b5 arrow tip need to be fixed?"). The head was two bars and a small
         triangle joined by a union: the triangle's sides did not lie on the bars' outer edges, so the tip came out
         as a zigzag of three 12-unit steps on every arrow. The head is one outline now: the two strokes' outer
@@ -1252,7 +1252,9 @@ def arrows(font, m, adv):
     ud = moved(both, 0, 0, 1, 1, 90, (L / 2, cy))
     x0, y0, x1, y1 = bounds(ud)
     put(font, "arrowupdn", moved(ud, 0, (CAP_HEIGHT - (y1 - y0)) / 2 - y0 - 30), 0, [0x2195], lsb=vside, rsb=vside)
-    d = moved(e, 0, 0, 0.92, 0.92)
+    # owner round 8 (0.82): the slanting arrows are the arrow made 0.92 as long with its head 0.92 as long, its strokes
+    # the minus's (scaled whole, they were 48 across beside every other arrow's 52)
+    d = east(0.92 * L, 0.92 * head)
     for name, u, rot in (("uni2197", 0x2197, 45), ("uni2196", 0x2196, 135), ("uni2199", 0x2199, -135),
                          ("uni2198", 0x2198, -45)):
         p = moved(d, 0, 0, 1, 1, rot, (L * 0.43, cy))
@@ -1305,15 +1307,14 @@ def maths(font, m, adv):
     put_built(font, "radical", dict(build="radical", params=dict(
         thin=w, bar=w, thick=m.stem * 0.96, B=[150, 372], V=[262, -12], T=[448, CAP_HEIGHT + 30],
         top=CAP_HEIGHT + 30, right=640, hook=[[60, 318], [156, 378]])), 0, [0x221A], lsb=30, rsb=10)
-    # increment: a triangle with A's weights (thin left, thick right, a thin base)
-    tri_out = shape([(0, 0), (560, 0), (280, CAP_HEIGHT)])
-    a = math.atan2(CAP_HEIGHT, 280)
-    tl = m.cap_bar / math.sin(a) * 1.0
-    tr = m.cap_stem / math.sin(a)
-    inner = shape([(tl + 0.65 * m.cap_bar / math.tan(a) + 22, m.cap_bar * 0.9),
-                   (560 - tr - m.cap_bar * 0.9 / math.tan(a) + 6, m.cap_bar * 0.9),
-                   (280 + (tl - tr) / 2 * 0.5, CAP_HEIGHT - (tl + tr) * 0.95)])
-    put(font, "increment", op(tri_out, inner, pathops.PathOp.DIFFERENCE), 0, [0x2206], lsb=24, rsb=24)
+    # increment: a triangle with A's weights, thin left (A's thin diagonal, the capital bar), thick right (the capital
+    # stem), a thin base (0.9 of the bar); owner round 8 (0.82): each side's inner edge parallel to its outer edge at
+    # its weight, corners where the inner edges meet (signs.inset_edges; the inner corners were set by hand and the
+    # sides ran 52 to 76 and 69 to 97 across). In the masters it is a capital (bold.HINTS), as A is
+    import signs as SG
+    tri = [(0, 0), (560, 0), (280, CAP_HEIGHT)]
+    inn = SG.inset_edges(tri, [m.cap_bar * 0.9, m.cap_stem, m.cap_bar])
+    put(font, "increment", op(shape(tri), shape(inn), pathops.PathOp.DIFFERENCE), 0, [0x2206], lsb=24, rsb=24)
     # product and sum: Pi from H's stems under one bar; Sigma is Area's Esh capital (the Greek letter's shape)
     H = gp(font, "H")
     hs = scan_h(H, 200)
@@ -1540,7 +1541,7 @@ def interface(font, m, adv):
     # option: a level stroke, a falling diagonal, a level stroke; a short level stroke at the right top
     W = 520
     t = h * 0.86
-    p = union(rect(0, t - w, 0.30 * W, t), bar((0.30 * W - w * 0.4, t - w / 2), (0.72 * W, w / 2), w * 1.05),
+    p = union(rect(0, t - w, 0.30 * W, t), bar((0.30 * W - w * 0.4, t - w / 2), (0.72 * W, w / 2), w),   # 0.82: the minus's (was 1.05)
               rect(0.70 * W, 0, W, w), rect(0.56 * W, t - w, W, t))
     put(font, "uni2325", p, 0, [0x2325], lsb=50, rsb=50)
     # shift: an outlined arrow pointing up (owner round 8, 0.82: signs.frame, one stroke all round; the inner outline
@@ -1995,6 +1996,19 @@ def plain_strokes(font, m):
     s = _slash(lo, hi, w)
     put(font, "slash", s, 0, lsb=side[0], rsb=side[1])
     put(font, "backslash", moved(s, 0, 0, -1, 1), 0, lsb=side[1], rsb=side[0])
+    # owner round 8 (0.82): the not-equal sign's stroke is the minus's across itself on its own centreline (it was 46,
+    # beside bars of 52)
+    if "notequal" in font:
+        for c in font["notequal"].contours:
+            cut = _level_cut(c)
+            if not cut:
+                continue
+            tmp = put(font, "_notequal_slash", _slash(cut[0], cut[1], w), 0)
+            from ufoLib2.objects import Point
+            c.points[:] = [Point(q.x, q.y, q.type, smooth=q.smooth) for q in tmp.contours[0].points]
+            del font["_notequal_slash"]
+            REBUILT.discard("_notequal_slash")
+            done.append("notequal")
     lo, hi = _level_cut(font["fraction"].contours[0])    # the fraction bar keeps its own lighter weight, one
     bc, tc = (lo[0] + lo[1]) / 2, (hi[0] + hi[1]) / 2    # width (FRACTION_BAR) here and in every ready-made fraction
     put(font, "fraction", shape([(bc - FRACTION_BAR / 2, lo[2]), (bc + FRACTION_BAR / 2, lo[2]),
@@ -2858,10 +2872,14 @@ def more_symbols(font, m, adv):
     ab = bounds(ar)
     au = gp(font, "arrowup")
     ub = bounds(au)
-    head = op(au, rect(-500, ub[3] - (ab[3] - ab[1]) / 2 - w * 0.2, 3000, 3000), pathops.PathOp.INTERSECTION)
-    ucx = (ub[0] + ub[2]) / 2                              # without the shaft's stub under the point
-    head = op(head, rect(ucx - w / 2 - 1, -500, ucx + w / 2 + 1, ub[3] - w * 1.42 - 2), pathops.PathOp.DIFFERENCE)
-    add("uni2303", 0x2303, head, side=ub[0])
+    # owner round 8 (0.82): the arrows' head as its own construction (signs.caret): the arrows' head stroke (0.36 of
+    # the arrow's length along the shaft), its point where the up arrow's is
+    L_ = 0.80 * adv
+    hd_ = 0.36 * L_
+    tip_ = w / 2 / math.cos(math.atan2(hd_, hd_ - w / 2))  # the outer point above the centrelines' meeting
+    put_built(font, "uni2303", dict(build="caret", params=dict(t=w, head=hd_, apex=[(ub[0] + ub[2]) / 2, ub[3] - tip_])),
+              0, [0x2303], lsb=ub[0], rsb=ub[0])
+    made.append("uni2303")
     tab = union(ar, rect(ab[2], ab[1], ab[2] + w, ab[3]))
     add("uni21E5", 0x21E5, tab, side=44)
     add("uni21E4", 0x21E4, moved(tab, 0, 0, -1, 1), side=44)

@@ -336,8 +336,9 @@ def x_target(t, straight, v):
     if v.get("sub") == "sign":
         if 56 <= t < 76:
             return t * (1 + (SIGN_UPRIGHT - 1) * v["f"])
-        if 50 <= t <= 55:
-            return t * (1 + (SIGN - 1) * v["f"])
+        if 50 <= t <= 55:                        # owner round 8 (0.82): a straight one the minus's own law (ft), level
+            return t * (1 + (SIGN - 1) * (v["ft"] if straight else v["f"]))   # or upright (the plus's upright stroke
+            #                                      was 44 beside its level 40 at 300); a curved one as before
     if v["f"] < 0 and (t >= 76 or (straight and t >= 64) or (t >= 56 and not straight)):
         # 0.81, towards the Light: a thick part loses in proportion to itself, as the stem does (78 > 55). The
         # Bold's gains are amounts (the stem's 62, s's turns 1.26 of the round stroke's 64, measured on Bold
@@ -426,7 +427,9 @@ def diag_target(t, v):
     f = v["f"]
     if v.get("sub") == "small sign":
         return t * sign_ratio(v)
-    if v.get("sub") == "sign" and (50 <= t <= 55 or f < 0):
+    if v.get("sub") == "sign" and 50 <= t <= 55:
+        return t * (1 + (SIGN - 1) * v["ft"])    # owner round 8 (0.82): a slanted plain stroke takes the minus's law
+    if v.get("sub") == "sign" and f < 0:
         # axis round 2: towards the Light every slanted stroke of a sign takes the sign law, as its plain strokes do
         # (✓'s 66-unit stroke was read as a letter's thick diagonal, which loses a fixed 22 units: 0.666 of 400 at
         # 300; ⌦ and ⌫ 0.606, against the stem's 0.705)
@@ -2022,6 +2025,9 @@ HINTS = {
 # serifs, so the engine took them for hairlines and grew them 1.24 where E's arms grow 1.33)
 HINTS["summation"] = {"y": [(0, 46, lambda v: 46 * (1 + (LEVEL - 1) * v["ft"]), "bar"),
                             (666, 712, lambda v: 46 * (1 + (LEVEL - 1) * v["ft"]), "bar")]}
+# owner round 8 (0.82): the increment is drawn with A's weights (thin left, thick right, a level base): it takes the
+# capitals' laws, as A does, not the plain strokes' sign law
+HINTS["increment"] = {}
 _UNUSED = {}                        # glyph: {"x": [(a, b, target or None, kind)], "y": [...], "ypin": [y]}  (see families)
 
 

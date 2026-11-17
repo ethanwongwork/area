@@ -837,3 +837,54 @@ Kerning, once at the end of items 2 to 4 (`AREA_KERN_FIT=1 build.py`): the per-m
 with a C, c, x, X, z or Z class or glyph on one side (Light 25 pairs, 206 > 220 fitted; Bold 115, 555 > 521).
 `audit_kern.py` passes at 300, 350, 400, 550, 700 and at every 25 units from 300 to 700 (`build/owner8/kern*.txt`).
 Pages not rebuilt.
+
+### Owner round 8, items 5 to 8 and the sweep (16 November 2026): the geometric signs
+
+The owner, on the symbols at 300 / 400 / 550 / 700: "a lot of uneven thicks and thins, non smooth curves, and
+visual/optical imbalance. Some vector errors with the arrows on the delete keys, checks, division symbol." Measured
+first with `build/owner8/signs/measure.py` (every straight edge 22 units or longer against the near-parallel edge
+across the ink, perpendicular, on the variable font at 300, 400, 550, 700) and on the references with `refs.py`
+(numbers only). The build before is `build/snap082i4k`; one build carries all of it (`build/snap082s5`, kerning
+refit), committed per item.
+
+The rule (`signs.py`): a sign of plain strokes is centrelines and stroke weights; each edge a line half the stroke
+from its centreline, each corner where two edge lines meet (an inner outline is a true inset, an inner point sharp),
+each end cut as the sign's kind says; nothing a union of overlapping bars. The Regular builds it at the Regular's
+weights and keeps the recipe in the glyph's lib (`charset.put_built`); each master builds it again with every stroke
+times the minus's own law, 1 + 0.37 ft (Light 0.764, Bold 1.370), and carries it onto the Regular's final points
+corner by corner (`bold.construction_signs`: a point moves as its nearest construction corner moves, so soft_ends'
+rounding goes with its corner). The corners are linear in the stroke, so the 550 instance is the construction at
+its own weight. The erase key's cross is shortened only where its white would fall under the white law's least
+(it does not at 700).
+
+| # | Item | Cause (measured) | Rule | Before > after (across the stroke; 300 / 400 / 700) |
+|---|---|---|---|---|
+| 85 | 5. ⌫ ⌦ | The inner outline was set by hand (point 1.9 strokes in, slanted inner edges at 52.7 degrees against the outer's 47.4): slanted sides 43-64 / 52-73 / 110-129 against level 39 / 52 / 71; the inner point 99 behind the outer at 400 and 180 at 700 (a true inset: 71 and 97), a solid wedge at 700; the top pinned on the x-height zone so the Bold grew downward only (middle 285 > 273); the cross at 484 where the box part's middle is 490.5 (Bold 522 against 546.5) | `signs.erase`: the frame's centreline is the Regular outer outline moved in half the stroke, the outlines half the stroke either side; the cross half way between the shoulders' and the right side's centrelines, on the frame's middle. ⌦ is ⌫ turned over (MIRRORS) | frame level / slanted / upright 40 40 40, 52 52.2 52, 72 71.5 72; inner point sharp; the cross centred in the box part at every weight; Bold advance 847 > 813 |
+| 86 | 6. ✓ | Two bars unioned: the short bar's foot stood out past the long one (a notch at the vertex at every weight); the engine read the 65-unit strokes as letters' thick diagonals: 57 / 65 / 124 (1.90 at 700) | `signs.check`: the short stroke into the vertex and the long one out, 1.25 of the minus both at every weight, ends cut square, the vertex a flat 0.42 of the stroke across the bisector outside (the face's vertex rule) and a point inside | 49 / 65 / 88-89 (the law's 1.37); one clean vertex, the same at every weight; Bold advance 622 > 582 |
+| 87 | 7. √ ÷ | A union of a bar, a vee and a rectangle: a jag where the lead-in met the downstroke ((126,400), (142,374)); the lead-in did not change with weight (52 at 300 and 700), the thin upstroke tapered 3-4, the thick stroke went unread at 550 and 700 (a wedge). ÷: dots equal (118) but centred 3 right of the bar; bar the minus's | `signs.radical`: the outer edges meet in the foot's point (which stays); the thick and the upstroke grow inward from their outer edges, the lead-in about its centreline; the lead-in's top edge meets the downstroke's right edge in the beak, its lower edge the left edge in the crotch; the upstroke's left edge meets the bar's top in a corner, its right edge the bar's underside. Thin, lead-in and bar the minus's; the thick 1.44 of them (Area's 0.96 stem over the minus) at every weight. ÷'s dots moved over the bar's middle | lead-in / upstroke / bar / thick: 40 40 40 57, 52 52 52 75, 71 71 71 102 (references' thick grows 1.24 to 1.71, median 1.34; Area 1.37). ÷ centred in every master |
+| 88 | 8. ∑ < > × | ∑ is Esh's drawing but was read as a plain sign: its bars (curved inner edges) grew as hairlines 46 > 57 where E's arms grow 46 > 61, its thin diagonal 53 > 73 by the sign law, and in the Light all its slanted strokes by the sign law (upper 84 at 300 where Z's thick goes 0.75); its point was four nodes in 31 units (a zigzag). < >: Libre Baskerville's drawing, arms 49.2 and 48.3 (65.4 / 64.4 at 700 against the minus's 72), a 66-unit flat at the point (the references' 0.72 to 0.92 of the stroke), its middle 2 under the axis. ×: arms 49.1 and 45.6 (64.4 / 60.9 at 700); ≤ ≥ the < squashed to 0.82: arms 41 beside a 52 bar | ∑ a capital in the masters (`bold.HINTS`: the letters' laws; its bars E's arms', read as straight), its point a capital vertex in every master (`charset.sum_vertex`: a flat 0.42 of the master's capital stem across the bisector: 36, Bold 62, Light 25). < (`signs.chevron`): arms of the minus's weight on the maths axis, both ends cut upright at one x, an upright flat of 0.79 the stroke (the references' median) outside the point and a point inside; ≤ (`chevron_bar`) the same over a bar; > ≥ them turned over. × (`signs.times`): two strokes of the minus's weight crossing square on the axis, the old ink box | ∑ bars 36 / 46 / 61, thin diagonal 43 / 54 / 71, thick 77 / 98 / 158 (Z's 66 / 88 / 149); upper / lower 1.85 / 2.26 at 400 / 700 (Georgia Pro 2.47 / 3.53, Serrif 2.40 / 2.91, Source Serif 4 1.50 / 1.62). < > 40 / 52.3 / 71.6, both arms; × 40.5 / 52.3 / 71.8; ≤ ≥ 40 / 52.4 / 71.4 with their bars 40 / 52 / 72 |
+| 89 | Sweep: the same faults elsewhere | (a) Towards the Light a sign's upright and slanted strokes took 1 + 0.37 f where its level ones (the minus's) take 1 + 0.37 ft: + 40 level beside 44 upright at 300, ± ¬ the same, every arrow's head 44-45 beside its shaft 40, ⌃ ⇧ ↵ 45. (b) Inner outlines set by hand: ⇧ ⇪ (head flanges 32 beside sides 52), ◊ (43 to 57), ∆ (sides 52 to 76 and 69 to 97). (c) Weights off the minus: ≠'s stroke 46, ⌥'s diagonal 54.7 (drawn 1.05), ↖ ↗ ↘ ↙ 48 (the arrow scaled whole to 0.92). (d) ⌃ was the up arrow cut across: a 54 by 16 notch in its crotch and two 2-unit steps | (a) `bold.x_target`, `diag_target`: a straight stroke of 50 to 55 in a sign takes 1 + 0.37 ft in both directions (curved ones keep f: & @ $ ® § £ do not move). (b) `signs.frame` for ⇧ ⇪ ◊ (⇪'s bar under the shaft at the Regular's gap, the law's least towards the Bold); ∆'s inner edges parallel at A's weights (`signs.inset_edges`) and the capitals' laws in the masters (`bold.HINTS`). (c) ≠'s stroke rebuilt at the minus's across itself (`charset.plain_strokes`), ⌥'s diagonal at the minus's, the slanting arrows the arrow made 0.92 as long at full weight. (d) `signs.caret`: the arrows' head stroke, two of them mitred | + 40 40 at 300; arrows' heads 39.6-40 at 300; ⇧ ⇪ 40 / 52 / 71-72 all round; ◊ 39.5 / 52 / 71.2; ∆ thin 39 / 49 / 64 and thick 64 / 86 / 146 (A's 39.6 / 48.5 / 64.7 and 64.5 / 86.5 / 147); ≠ 40 / 52.8 / 72.4; ⌥ 39.6 / 51.6 / 70.3; ↖ 40-41 / 52 / 70; ⌃ 40 / 52 / 71, advance 612 > 566 |
+
+Every glyph that moved (`build/owner8/signs/diff-final.txt`, all three masters, the Bold's mid layer, the Regular TTF,
+the variable font at 300, 400, 550, 700): Regular and Bold 22 glyphs: ⌫ ⌦ ✓ √ ÷ ∑ < > ≤ ≥ × ≠ ∆ ◊ ⇧ ⇪ ⌃ ⌥ ↖ ↗ ↘ ↙; the
+Light those and 20 more by (a): + ± ¬ | ¦ / \ # ← → ↑ ↓ ↔ ↕ ↵ ⇤ ⇥ ⌘ □ ☆. Nothing else: & @ $ ¢ ® and every letter are
+byte-identical; the Bold's mid layer unchanged. Advances: Regular ⌃ 612 > 566, ↖ ↗ ↘ ↙ 424 > 428; Bold ⌫ ⌦ 847 > 813,
+✓ 622 > 582, × 646 > 616, ⌃ 620 > 570, < > 602 > 608, ≤ ≥ 602 > 609, ◊ 454 > 476 and a few units on the rest; the Light
+2 to 14 units narrower on (a)'s glyphs (◊ 468 > 454, ⌃ 610 > 560). Kerning refit (`AREA_KERN_FIT=1`): fit_kerning.json
+unchanged; the masters' collision keys with these glyphs moved (Light 6, Regular 1, Bold 14, all with ldot, the
+fractions or ĩ). Checks against item 4's build: audit_bold (both), parts, curvecheck (three masters, hooks), even,
+audit_axis Light unchanged; audit_rays the same 8 glyphs (27,240 > 27,234 places); audit_charset 0 errors;
+interpolation passes; audit_kern passes at every 25 units. Two new notes, honestly: audit_axis Bold lists the radical
+(41 > 40 at 700, tip 41): its same-place cut lies across the beak (74 degrees, edges 19 and 20 at shares 0.79 and
+0.11), where the downstroke's right edge shortens as its inner point rises; no stroke thins. pathlint: ∑ one handle
+warning more (the curve into the lower diagonal, its node's handle turned 1 unit by clean.true_curves onto the new
+line; its 1.3-degree bend INFO gone). Figures (`build/owner8/`, before row over after row at 300 / 400 / 550 / 700,
+600 px per 1000 units, nodes marked): `item5-erase.png`, `item6-check.png`, `item7-radical-divide.png`,
+`item8-sum-less-times.png`, `sweep-1.png` to `sweep-3.png`. Pages not rebuilt.
+
+Left, with numbers: ∑ at 700 still reads heavy in its upper diagonal where it meets the top bar (the drawn bracket
+curve fills to a wedge; the diagonal itself is Z's law, 158 against Z's 149, and the ratio is inside the references');
+÷'s dots at 700 are 178 across and 33 from the bar (74 at 400: the dot law grows them 1.47 while the bar grows 1.37);
+⇤ ⇥'s bar reads 44 at 300 beside 40 (the engine reads it with the arrow's end, not as a 52 stroke); ✕ (U+2715) is
+1.1 of the minus by design at every weight; ^ is an accent-like drawing with tapering arms (outer 56.7 degrees, inner
+45.5), a different kind; ∞ ∂ ∫ µ π Ω ∏ are curves or letters (∏ is H's stems, 86 / 148) and were not touched.
