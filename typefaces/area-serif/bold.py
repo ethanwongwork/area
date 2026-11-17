@@ -4375,6 +4375,49 @@ def bold_font(reg, stem=STEM, **over):
     # thick stroke unread
     built_ = construction_signs(reg, font, v, law, resided)
     notes.append(f"signs from their construction: {len(built_)} ({'; '.join(built_)})")
+    # owner round 8 (0.82, item 9): the ampersand is one construction (amp.py) run again here at this master's
+    # letters' weights (v's thick and thin and its serif, o's side and hairline, a's lower stroke), its skeleton
+    # stretched level so the loop's counter changes as o's counter does; sides as a sign's. The engine read it as
+    # loose parts: the bowl's stroke into the diagonal thinned 48.8 > 30.8 from 400 to 700 and the loop's counter
+    # closed to 69 across at the Bold. The mid master (550) takes the construction at the readings half way
+    import amp as _AMP
+
+    def _amp_sides(R_c, cs, name_="ampersand"):
+        r0, r1 = _zone_edges(R_c, name_)
+        b0, b1 = _zone_edges(cs, name_)
+        dl, dr = bearing_change(name_, v)
+        shift_ = round(r0 + dl - b0)
+        return shift_, round(b1 + shift_ + (reg[name_].width - r1) + dr)
+    # owner round 8 (0.82, item 11): the division sign's dots take the sign law (the minus's, 1 + (SIGN - 1) ft, as its
+    # bar) about their centres, not the i's dot law (1.51: 178 across at the Bold, 33 from a 72 bar); towards the Bold
+    # each dot stands at least the bar's thickness off the bar (the references' gap at 700 is 0.45 to 1.11 of their
+    # bar, median 0.99; their dots grow 1.08 to 1.43, median 1.24)
+    if "divide" in font and len(font["divide"].contours) == 3 and v["f"] > 0:
+        cs_ = font["divide"].contours
+        bx_ = [(min(q.x for q in c_.points), max(q.x for q in c_.points), min(q.y for q in c_.points), max(q.y for q in c_.points)) for c_ in cs_]
+        rg_ = [(min(q.x for q in c_.points), max(q.x for q in c_.points), min(q.y for q in c_.points), max(q.y for q in c_.points)) for c_ in reg["divide"].contours]
+        k_bar = max(range(3), key=lambda k: bx_[k][1] - bx_[k][0])
+        bar_ = bx_[k_bar]
+        s_ = 1 + (SIGN - 1) * v["ft"]
+        for k, c_ in enumerate(cs_):
+            if k == k_bar:
+                continue
+            cx_, cy_ = (bx_[k][0] + bx_[k][1]) / 2, (bx_[k][2] + bx_[k][3]) / 2
+            r0 = rg_[k]
+            rcx, rcy = (r0[0] + r0[1]) / 2, (r0[2] + r0[3]) / 2
+            half = (r0[1] - r0[0]) * s_ / 2
+            up = cy_ > (bar_[2] + bar_[3]) / 2
+            edge = bar_[3] if up else bar_[2]
+            gap0 = (cy_ - half - edge) if up else (edge - (cy_ + half))
+            ncy = cy_ + (max(0.0, (bar_[3] - bar_[2]) - gap0) * (1 if up else -1))
+            for q, q0 in zip(c_.points, reg["divide"].contours[k].points):
+                q.x = round(cx_ + (q0.x - rcx) * s_)
+                q.y = round(ncy + (q0.y - rcy) * s_)
+        notes.append(f"divide: dots x{s_:.3f}, at least the bar off it")
+    tm_a = (dict(axis_map(stem))[MID_WEIGHT] - REG_STEM) / (stem - REG_STEM) if v["f"] > 0 else None
+    amp_ = _AMP.master(reg, font, _amp_sides, tm_a, layer if v["f"] > 0 else None)
+    if amp_:
+        notes.append(amp_)
     # owner round 8 (0.82): the summation's point is a capital's vertex in every master too: a flat 0.42 of this
     # master's capital stem across the bisector (charset.sum_vertex; the engine's knots left it 15 at the Bold and 46
     # at the Light where the rule asks 62 and 25)

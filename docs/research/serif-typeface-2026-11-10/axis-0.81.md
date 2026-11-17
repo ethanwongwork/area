@@ -888,3 +888,56 @@ curve fills to a wedge; the diagonal itself is Z's law, 158 against Z's 149, and
 ⇤ ⇥'s bar reads 44 at 300 beside 40 (the engine reads it with the arrow's end, not as a 52 stroke); ✕ (U+2715) is
 1.1 of the minus by design at every weight; ^ is an accent-like drawing with tapering arms (outer 56.7 degrees, inner
 45.5), a different kind; ∞ ∂ ∫ µ π Ω ∏ are curves or letters (∏ is H's stems, 86 / 148) and were not touched.
+
+### Owner round 8, items 9 and 11 (16 November 2026): the ampersand, the division sign's dots
+
+The owner, on the symbols: "a lot of uneven thicks and thins, non smooth curves, and visual/optical imbalance ... the
+ampersand needs a lot of work". The build before is `build/snap082s5b`; the build that carries both items is
+`build/snap082b`. Figures and numbers: `build/owner8/` (`item9-ampersand.png`, `item9-amp-refs.png`,
+`item11-divide.png`; `amp/` holds the scripts, the diffs and the audit outputs).
+
+The ampersand, read first as a skeleton (`build/owner8/sym/ampmeasure.py`, the references measured only). In the
+Regular drawing the strokes did not follow one model: the diagonal 90 across where v's thick is 74 (the references 0.90
+to 1.07 of their stem), the loop's top 62 where the hairline is 43 (references 0.41 to 0.59 of the stem), the loop's
+left 81 and its right side 79 (references' right 0.68 to 0.83 of the stem), the lower bowl's left 93 (o's side 82)
+and its bottom 60; the upper counter 0.45 of the lower in area (references 0.55 to 0.79) and its centre 59 right of
+the lower counter's (references +1 to +49, median +12), so the loop sat over the crossing, not over the bowl. Its
+pieces met in corners hidden in the diagonal, so no edge was one run. In the masters the engine read it as loose
+parts: towards the Bold the bowl's stroke into the diagonal thinned (audit_rays 48.8 > 42.9 > 37.6 > 30.8 at
+(594, 349) from 400 to 700) and the loop's counter closed to 69 across (references 134 to 166); towards the Light it
+thickened at (541, 256) (45.9 > 53.0 at 300).
+
+| # | Item | Cause | Rule | Before > after |
+|---|---|---|---|---|
+| 90 | 9. & | As above: weights that belong to no letter, a loop off the bowl's axis, pieces joined in hidden corners; the engine could not read the parts | `amp.py`: the & is one stroke and an arm. The stroke runs from the tail's tip up the diagonal, round the loop (up its left side, over the top, down its right side), down the spine across the diagonal, round the lower bowl and into the diagonal again; each of its two edges is one chain of curves (lines on the diagonal), and the outline is where the ribbon crosses itself and where the arm leaves the diagonal: every corner is two edges meeting, found, not placed. Weights from the same master's letters (`amp.readings`): the diagonal and the loop's left side v's thick (one stroke, one weight), the lower bowl's left side o's side (the round thick), the loop's top and the spine where it crosses o's hairline, the loop's right side half way between (the stroke runs from the top's hairline into the spine's), the bowl's bottom and the tail a's lower stroke (a bottom that runs into a stem), the arm v's thin stroke ending in v's serif on its thin arm, point for point (the arm is a thin up-right diagonal as v's is; every reference but Literata ends it level). The tail ends in the drawn cut. The skeleton (`amp.REG`): the loop's counter over the lower counter (+21, references' median +12), the spine crossing the diagonal at 28 degrees below level so the bowl's upper-left turns as a full quarter (at 38 degrees its outside ran straight and turned in a 31-unit handle: a chin), the bowl's left extreme at 160. Handles solved: one curvature on both sides of every smooth node, a curve leaving a straight at under 0.30 of its mean, no flat place, no inflection inside a curve. Each master runs the construction again at its own letters' weights, the skeleton stretched level as o's counter changes (the loop's white), then the outer parts (the bowl's left side and bottom out to the left, the tail and the arm to the right) spread until the ink widens as n's advance does (`amp.widen`; the references' & widen 0.98 to 1.05 of their own n's growth at 700, median 1.02; towards the Light the stretch alone gives 1.008, no spread). The 550 mid master is the construction at the readings half way (0.427). In `normalize` after every node rule (`amp.regular`) and in `bold.bold_font` after the signs (`amp.master`) | Regular: diagonal 90 > 74, loop top 62 > 43, loop left 81 > 74, bowl left 93 > 82, bowl bottom 60 > 50; upper / lower counter area 0.45 > 0.58, centres +59 > +21; counters 137 / 299 > 208 / 326 across. Light: upper / lower 0.59, +18.5. Bold: upper counter 69 > 167 across, lower 278, upper / lower 0.51, +35.5, loop right 99.6, bowl left 143. curvecheck on the whole glyph: Regular worst node 1.02 (no fault), Light 1.03, Bold 1.03 (the previous worker's construction, unbuilt, worst 1.02 in the Regular but the chin). Advances: Regular 810 = 810 (ink 38 to 774 as before), Light 788 > 796, Bold 885 > 872 (mid 842 > 836). audit_rays: ok at every default stop (was the 48.8 > 30.8 thinning and the 300 thickening) |
+| 91 | 11. ÷ | Its dots took the i's dot law (1.51 at the Bold): 178 across and 33 from a 72 bar at 700 (74 at 400) | Towards the Bold the dots take the sign law, the minus's own (1 + 0.37 ft, as the bar), about their centres, and each stands at least the bar's thickness off the bar (the references' gap at 700 is 0.45 to 1.11 of their bar, median 0.99; their dots grow 1.08 to 1.43, median 1.24). The Light keeps the engine's (dots 96, gap 90). `bold.bold_font` after the signs | dots 96 / 118 / 137 / 162 (were 96 / 118 / 144 / 178) at 300 / 400 / 550 / 700; gaps 90-91 / 73-74 / 73-74 / 72-73 (were 90 / 73 / 56 / 33); bar 40 / 52 / 60 / 72; advance unchanged |
+
+Every glyph that moved (`amp/diff-b.txt`; three masters, the Bold's mid layer, the Regular TTF, the variable font at
+300, 400, 550, 700): the ampersand everywhere and the division sign in the Bold (and so the variable font at 550 and
+700); nothing else. Kerning: only keys with the ampersand (Light 26, Bold 34; the collision passes on the new outline);
+the fit refit is left to the end of the round.
+
+What was kept and what was not of the first attempt (an earlier worker's uncommitted `amp.py` and hook-up, which built
+the Regular and then failed in the Bold): kept the construction (the ribbon, the corners found, the readings, v's serif
+on the arm, the handle solver, the mid master) and the division-sign rule as written. Changed: the spine's angle
+(38 > 28 degrees) and the bowl's left extreme (150 > 160), which took the chin out of the bowl at every weight; the
+master's width (o's counter alone left the Bold & 0.97 of n's growth and its lower counter cramped; stretching it whole
+to n's width ran the loop's inside back past the diagonal's edge, so only the outer parts spread); the error message.
+The Bold failure was not the construction: it does not recur.
+
+Looked at, honestly. At 300 and 400 the & now reads as one stroke: thick down the diagonal and the loop's left side,
+thin over the top and through the spine, the bowl's left the o's round thick, the bottom easing into the diagonal; the
+loop stands over the bowl. At 550 and 700 the upper counter is open (it was a slit) and the bowl round. Still not
+right: at 700 the loop's outer top is broad and flat from the heavy left shoulder (the loop's left side is v's thick,
+133, against a 53 hairline over a 218-unit quarter); the bowl's bottom (a's lower stroke, 55 at the Bold) reads lighter
+than the references' at 700; the bowl's outer left extreme turns tighter at 700 than at 400 (radius about 0.6 of the
+Regular's, read on the figure). These are the next things to change if the owner wants the Bold heavier at the base.
+
+Checks on `build/snap082b` against the build before: audit_rays on & and ÷ ok (the & was the worst glyph in it);
+audit_axis Bold the same thin list (@, ₵, ogonek, one.ss01, the radical) and one new note: & curve 22 (the upper
+counter's top-left quarter) gained an x extreme between 400 and 550, because the mid master's construction rounded a
+handle one unit off the upright at the counter's left extreme. The handle rounding (`amp._round_handles`) now keeps an
+extreme's handles on its axis; the Regular is unchanged by it and the fix lands in the next build (the item 10 build).
+audit_axis Light, curvecheck (three masters; the hooks' lists unchanged), even, evaluate (& and ÷ clean), pathlint
+(0 / 0 / 0), audit_charset (0 errors; the & ink rule holds), interpolation: pass. `audit_axis.py` takes
+AREA_AXIS_ROWS to print more than six rows a check.

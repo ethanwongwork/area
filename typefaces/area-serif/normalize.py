@@ -1248,6 +1248,8 @@ def normalize(font):
     print(f"arms: {len(signs)} signs drawn from one half or one arm", sorted(signs))
     CHARSET.turned_pairs(font)                        # 0.74: after the node rules, the turned glyphs once more
     CHARSET.mirrors(font)
+    import amp as AMP                                 # 0.82 (owner round 8, item 9): the ampersand, one construction
+    print("amp:", AMP.regular(font))                  # on the finished o, a and v; after every node rule
     joined, promoted, copied, opened_all = SPACING.finish(font, CHARSET.COVERAGE)   # 0.73: beyond the core
     alts = sorted({b for pairs in alt_subs.values() for _a, b in pairs} | {"g.ss02", "one.ss01"} | ({"uni0261"} & set(font.keys())))
     order = font.lib.get("public.glyphOrder", [])

@@ -18,6 +18,8 @@ A slashed letter whose points flew thousands of units off (0.76's first build) f
 """
 import math
 import sys
+import os as _os
+ROWS = int(_os.environ.get("AREA_AXIS_ROWS", 6))      # rows printed per check (0.82)
 
 import numpy as np
 import ufoLib2
@@ -474,7 +476,7 @@ def report(title, fails, path):
     for k, rows in fails.items():
         names = sorted({r.split(" ")[0] for r in rows})
         bad += len(names)
-        print(f"  {k:10} {'ok' if not rows else str(len(names)) + ' glyphs: ' + '; '.join(rows[:6]) + (' ...' if len(rows) > 6 else '')}")
+        print(f"  {k:10} {'ok' if not rows else str(len(names)) + ' glyphs: ' + '; '.join(rows[:ROWS]) + (' ...' if len(rows) > ROWS else '')}")
     with open(path, "w") as f:
         for k, rows in fails.items():
             f.writelines(f"{k}\t{r}\n" for r in rows)
