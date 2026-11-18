@@ -1215,7 +1215,7 @@ def arrows(font, m, adv):
     head = 0.36 * L                    # each head stroke's run along the shaft
     cy = m.math_y
 
-    def east(length=L, head=head, both=False):
+    def east(length=L, head=head, both=False, half=None):
         """0.77 (owner, 2026-11-14: "does uni21b5 arrow tip need to be fixed?"). The head was two bars and a small
         triangle joined by a union: the triangle's sides did not lie on the bars' outer edges, so the tip came out
         as a zigzag of three 12-unit steps on every arrow. The head is one outline now: the two strokes' outer
@@ -1228,6 +1228,11 @@ def arrows(font, m, adv):
         x0, x1 = 0.0, length
         px, py = x1 - head, head                           # the upper stroke's far end, from the axis
         qx = x1 - w * 0.5
+        if half is not None:
+            # 0.83 item B: the same arm (its centreline as long as the level arrow's, the same weight) opened to `half`
+            # degrees off the shaft
+            arm_ = math.hypot(qx - px, py)
+            px, py = qx - arm_ * math.cos(math.radians(half)), arm_ * math.sin(math.radians(half))
         L_ = math.hypot(qx - px, py)
         dx_, dy_ = (qx - px) / L_, -py / L_                # along the stroke, towards the point
         nx_, ny_ = -dy_ * w / 2, dx_ * w / 2               # to its outer side
@@ -1263,10 +1268,11 @@ def arrows(font, m, adv):
     ud = moved(both, 0, 0, 1, 1, 90, (L / 2, cy))
     x0, y0, x1, y1 = bounds(ud)
     put(font, "arrowupdn", moved(ud, 0, cy - (y0 + y1) / 2), 0, [0x2195], lsb=vside, rsb=vside)
-    # 0.83 (Regular pass, item B): the slanting arrows are the arrow turned, whole: the same length and the same head
-    # (every reference with them: Serrif, Source Serif 4, Merriweather, PP Kyoto, length and head 1.00 of the level
-    # arrow's). 0.82 made them 0.92 as long with a head 0.92 as long (0.82 before that: scaled whole, strokes 48)
-    d = east()
+    # 0.83 (Regular pass, item B): the slanting arrows keep their length (0.92 of the level arrow's) and take the level
+    # arrow's arm (its centreline length and weight; 0.82 scaled the head 0.92 too), opened to 45 degrees off the shaft
+    # so that, turned, one arm is level and the other upright (the turned copy's arms stood 4.9 degrees off; PP Kyoto's
+    # 1, the reference study, spec.md)
+    d = east(0.92 * L, head, half=45.0)
     for name, u, rot in (("uni2197", 0x2197, 45), ("uni2196", 0x2196, 135), ("uni2199", 0x2199, -135),
                          ("uni2198", 0x2198, -45)):
         p = moved(d, 0, 0, 1, 1, rot, (L * 0.43, cy))

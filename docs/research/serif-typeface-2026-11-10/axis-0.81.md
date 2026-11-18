@@ -1533,3 +1533,26 @@ masters the same rule gives a bottom bar of 49.5 / 126 at 300 / 800 and the poin
 `itemA2-product.png`, `-combs`, `itemA2-text.png`. Looked at: the ∑ now reads as an operator beside x and ∏, its heavy
 foot balancing the thick diagonal; still, ∏'s and ∑'s descent needs ∏ j / ∑ j opened by 126 to 132 units (the collision
 pass), and ∏ x sits close (its sides are 30, a sign's).
+
+#### Item B, second pass (the reference study)
+
+The study (`build/refstudy/spec.md`) confirms the rule for ↔ ↕ (no reference has them; in every single arrow the
+shaft's end never shows outside the head) and asks that this item change no length, head angle or stroke style (a
+later pass restyles the family from the spec), and that the slanted arrows' arms lie level and upright (the turned copy
+put them 4.9 degrees off; PP Kyoto's 1). So the first pass's lengthening of ↖ ↗ ↘ ↙ to 1.00 is undone: they keep 0.92 of
+the level arrow's length, take the level arrow's arm (centreline 231, weight 52) and open it to 45 degrees off the shaft
+(`east(half=45)`), so turned 45 degrees one arm is level and the other upright. ↔ ↕ and the axis placement stand.
+
+| | 0.82i | first pass | second pass |
+|---|---|---|---|
+| ↖ ↗ ↘ ↙ length along the arrow | 451 (0.92) | 490 (1.00) | 451 (0.92) |
+| their arms off level / upright | 4.9 deg | 4.9 deg | 0.0 deg (edges at 0, 45, 90 deg) |
+| their arm (outer edge) | 230 | 250 | 250 (→'s) |
+| advance | 428 | 455 | 407 |
+| ink middle (axis 313) | 324 to 328 | 311 to 315 | 310.5 to 315.5 |
+
+What moved against item A's second build: ↖ ↗ ↘ ↙ only (kerning: ldot ↖ 21 > 26, ldot ↙ 20 > 26). Checks identical.
+Figures `reg/itemB2-uni2197.png`, `itemB2-uni2198.png`, `itemB2-family-after.png`, `itemB2-text.png`. Still not right:
+the slanted arrows' heads are now a 90-degree chevron beside the level arrows' 99 degrees (the study's 45-degree
+half-angle for every arrow is for the later restyle); the family is short against the references (0.94 x-height
+against 1.21 to 1.32), left for that pass.
