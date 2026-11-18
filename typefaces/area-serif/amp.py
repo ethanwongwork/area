@@ -76,7 +76,7 @@ REG = {
     "top": 721.0, "bottom": -9.0,
     # 0.82 (owner round 8, item 19): the loop is placed by LOOP's rule (`loop_rule`); ul, ur, ut_x, p1_y, p2_y above
     # are only its first guess
-    "loop": "D",
+    "loop": "A",
     # each edge's turn off the diagonal's straight runs twice the circle's height (an Euler spiral turning theta up to
     # the quarter's curvature k runs 2 theta / k, twice the circle's arc): the curvature rises from the straight's ease
     # to the quarter's with no peak between (at 1.0 the Light's counter took a 1.47 jump at its left extreme)
@@ -98,7 +98,7 @@ def _study_skeleton(G, k=0.952, deg=39.5, rise=18.0):
     return G
 
 
-REG = _study_skeleton(REG)
+# REG = _study_skeleton(REG)   (0.83 item C, second pass: not applied; Area keeps its own proportions)
 
 # 0.82 (owner round 8, item 19): the loop, by rule. Measured on the references (build/owner8/r9/refloop.py, refamp.py,
 # measure only) at 400 and 700, carried to Area's stems 78 and 140 on the stem's logarithm (the Light takes the 400's):
@@ -454,8 +454,8 @@ def widths(R):
     # 0.83 (Regular pass, item C; the reference study, build/refstudy/spec.md: Georgia Pro, Serrif, PP Kyoto medians
     # over each face's n stem): the diagonal 1.05 of n's stem (v's thick, 0.95, read light), the loop's left side 1.04,
     # its right side 0.77 (the stroke rising into it from the spine)
-    ul = STUDY["left"] * R["stem"]
-    return {"diag": STUDY["diag"] * R["stem"], "ul": ul, "ut": R["h"], "ur": STUDY["right"] * R["stem"], "sp": R["h"],
+    ul = R["thick"]
+    return {"diag": R["thick"], "ul": ul, "ut": R["h"], "ur": (R["r"] + R["h"]) / 2, "sp": R["h"],
             "ll": R["r"], "lb": R.get("e_bot", R["arch"]), "tail": R["arch"], "arm": R["thin"]}
 
 

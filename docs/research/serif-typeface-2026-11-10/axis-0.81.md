@@ -1664,3 +1664,35 @@ Figures `reg/itemE-g.png`, `itemE-g-combs.png`, `itemE-text.png`. Looked at: at 
 owner saw is a heavy-weight one, which the masters' rule now holds: numbers in the full build below). Not done: the
 ear's angle and position against the references (only a sanity check: inside their range by eye); the g's other
 whole-glyph curvature faults (link, loop ends) are its existing drawing.
+
+### Item C, second pass: the ampersand in Area's own terms
+
+After the owner's clarification (the references show how glyphs appear; they are not targets), item C's moves onto the
+references' medians are undone and what was uneven or awkward in Area's own terms is kept fixed. Undone: the skeleton's
+narrowing to 0.98 cap, the diagonal's turn to 50.5 degrees and the crossing's 18-unit rise (`amp._study_skeleton` kept,
+not applied), the diagonal and the loop's sides as shares of n's stem (`amp.STUDY` kept, unused), kappa 1.08. Kept:
+the stopped worker's loop rule (round teardrop, no flat lid, no angular shoulder), the bowl's left radius, e's bottom,
+the arm's crotch fillet. In Area's terms: the diagonal and the loop's left side are one stroke at v's thick diagonal (74:
+the ladder's thick diagonal; the stopped worker's 0.89 of it left the loop's left side light, 66), the loop's right side
+half way between o's side and the hairline (62.5, the 0.82 rule: a round stroke running from the top's hairline into
+the spine's), the top o's hairline (43). The loop's form: A (kappa 1.01 / 1.085) against C (0.974 / 1.054) on this
+skeleton, looked at large and in text (`reg/c/AvsC-ampersand.png`, `second-text.png`): A's loop is the rounder teardrop
+and passes curvecheck (worst 1.05, 0 faults); C's narrower loop has a 1.33 jump. A is taken. B (0.88 / 0.97) stays
+in `LOOP` for the record (its loop reads small: 0.41 of the width).
+
+| | 0.82i | first pass (D) | second pass (A) |
+|---|---|---|---|
+| advance / width over cap | 810 / 1.033 | 777 / 0.987 | 810 / 1.033 |
+| loop counter / bowl counter: area, width, height | 0.575, 0.637, 0.858 | 0.573, 0.651, 0.774 | 0.598, 0.628, 0.879 |
+| loop outer / bowl outer; offset | 0.817; 0.029 | 0.886; 0.033 | 0.850; 0.073 |
+| diagonal; loop left; loop right; loop top (units) | 74; 74; 62.5; 43 (drawn loop) | 82; 81; 60; 43 | 74; 74; 62.5; 43 |
+| loop's outer upper-left quarter, width over height | 1.50 (lid) | 1.08 | 1.01 |
+| curvecheck on the glyph, worst / faults | 1.02 / 0 | 1.09 / 0 | 1.05 / 0 |
+
+What moved against item E's build: the ampersand only (advance 777 > 810, its 0.82 advance again). Checks identical to
+item E's but audit_charset's & ink 2.50 > 2.45 and the fillet's no-node warning moving with the fillet (520, 153).
+Figures `reg/itemC2-ampersand.png`, `itemC2-ampersand-combs.png`, `itemC2-text.png`. Looked at: the &'s Baskerville
+character and width are back; the loop is round, its curvature smooth all round, the left side the diagonal's weight.
+Still: the loop sits 0.073 of the width right of the bowl's counter (the 0.82 drawing 0.029: the loop's left side
+leaves the diagonal on a turn of its own radius, which carries it right); the thinnest places are the bowl's bottom into
+the diagonal and the tail's join (0.78 of the hairline).
