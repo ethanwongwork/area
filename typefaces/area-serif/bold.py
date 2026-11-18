@@ -2288,8 +2288,10 @@ HINTS = {
 # owner round 8 (0.82): the summation is a capital (Esh's drawing), not a sign of plain strokes: its diagonals take the
 # capitals' laws (Z, A) and its two bars E's arms' (LEVEL, read as straight: their inner edges are curves into the
 # serifs, so the engine took them for hairlines and grew them 1.24 where E's arms grow 1.33)
-HINTS["summation"] = {"y": [(0, 46, lambda v: thin_law(v, lambda ft: 46 * (1 + (LEVEL - 1) * ft)), "bar"),
-                            (666, 712, lambda v: thin_law(v, lambda ft: 46 * (1 + (LEVEL - 1) * ft)), "bar")]}
+# 0.83 (Regular pass, item A): the summation is a construction run again in each master (sigma.master, at the end of
+# bold_font), which replaces what the engine makes of it; the engine reads it with no hint (the 0.82 hints named the
+# old drawing's knots, 0 / 46 and 666 / 712, which the operator's bars no longer have)
+HINTS["summation"] = {}
 # owner round 8 (0.82): the increment is drawn with A's weights (thin left, thick right, a level base): it takes the
 # capitals' laws, as A does, not the plain strokes' sign law
 HINTS["increment"] = {}
@@ -4341,12 +4343,10 @@ def bold_font(reg, stem=STEM, **over):
             continue
         M_, D_ = g_loop_place(R_, N_)
         M_, e_ = g_ear(R_, M_, 1 + (BALL - 1) * v["f"])
-        # 0.83 (Regular pass, item E): the bowl either side of the ear is one curve, as in the Regular (figs.g_oval:
-        # the ear's two roots on one cubic from the bowl's right extreme to its top at the bowl's own upper-left
-        # tensions); snap082i's Bold stood U +25.3 out and D -10.5 in (the notch at the heavy weights)
-        import figs as _FIGS
-        if name in _FIGS.G_OVAL:
-            M_ = [_FIGS.g_oval(M_[0])[0]] + list(M_[1:])
+        # 0.83 (Regular pass, item E): figs.g_oval here (the bowl one curve through the ear's roots, as in the Regular)
+        # was tried and withdrawn: at the Bold it slid the ear's lower root 16 units into the ear, which crossed the
+        # ear's first handle (audit_axis turns: an inflection in g's curve 7 at 565 and 369; audit_bold lost g's neck).
+        # The masters' ear needs its own rule that moves the ear with the bowl, not the roots along it (open)
         for c, P in zip(font[name].contours, M_):
             c.points = [Point(x, y, t, smooth=s_) for x, y, t, s_ in P]
         looped.append(f"{name} loop {D_:+.1f}, ear {e_:+.1f}")

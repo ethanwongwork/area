@@ -1656,7 +1656,7 @@ branch, thin at the root and swelling to the ball.
 
 | # | Item | Rule | Before > after |
 |---|---|---|---|
-| 111 | E. g | `figs.g_oval` (the stopped worker's, kept, with one change): the bowl's outer upper-right quarter is one cubic from E to T, its two handles fitted (least squares, end tangents fixed) to the drawn pieces either side of the ear; the ear's roots D and U slide to the nearest places on it and the pieces E-D and U-T become that cubic's own pieces, so the outline either side of the ear lies on one curve; the ear's curves keep their shape, their ends moving with D and U. The stopped worker's cubic took the bowl's upper-left tensions, which made it another oval (a 1.73 curvature jump at E); matching E's curvature alone bulged it 8 units out; the fit keeps E's join (no new fault). In the Regular (`normalize`, with the 3's rule, before spacing: ǥ follows) and in every master right after `bold.g_ear` (the ear's reach and ball law untouched) | Regular: step across the ear 2.1 > 0 (the two pieces one cubic); roots moved D (+0.6, 0), U (-1.0, -0.5); curvecheck on the whole g 9 faults, worst 2.57 > 9, 2.42 (the ear's ball top; the faults are the g's own drawing: the link, the loop's ends, none at the bowl) |
+| 111 | E. g | `figs.g_oval` (the stopped worker's, kept, with one change): the bowl's outer upper-right quarter is one cubic from E to T, its two handles fitted (least squares, end tangents fixed) to the drawn pieces either side of the ear; the ear's roots D and U slide to the nearest places on it and the pieces E-D and U-T become that cubic's own pieces, so the outline either side of the ear lies on one curve; the ear's curves keep their shape, their ends moving with D and U. The stopped worker's cubic took the bowl's upper-left tensions, which made it another oval (a 1.73 curvature jump at E); matching E's curvature alone bulged it 8 units out; the fit keeps E's join (no new fault). In the Regular (`normalize`, with the 3's rule, before spacing: ǥ follows). In the masters it was tried right after `bold.g_ear` and withdrawn (full build, below) | Regular: step across the ear 2.1 > 0 (the two pieces one cubic); roots moved D (+0.6, 0), U (-1.0, -0.5); curvecheck on the whole g 9 faults, worst 2.57 > 9, 2.42 (the ear's ball top; the faults are the g's own drawing: the link, the loop's ends, none at the bowl) |
 
 What moved against item D's build: g and ǥ (gstroke, also its overlap layer) in the Regular UFO and TTF; ğ ĝ ġ ģ ǧ ǵ ḡ
 follow as composites; g.ss02 and ɡ byte-identical; nothing else; kerning unchanged. Checks identical to item D's.
@@ -1696,3 +1696,43 @@ character and width are back; the loop is round, its curvature smooth all round,
 Still: the loop sits 0.073 of the width right of the bowl's counter (the 0.82 drawing 0.029: the loop's left side
 leaves the diagonal on a turn of its own radius, which carries it right); the thinnest places are the bowl's bottom into
 the diagonal and the tail's join (0.78 of the hairline).
+
+### Full build (all masters), the audits, `build/snap083a`
+
+One full build (`AREA_KERN_FIT=1 build.py`, `reg/build-083a2.log`), the audit set on it and on `snap082i` with the same
+script (`reg/fullaudit.sh`; `reg/audit-082i/`, `reg/audit-083a2/`), the masters reported and not tuned. The first full
+build stopped in the Bold engine: `bold.HINTS["summation"]` named the old drawing's knots (0 / 46, 666 / 712); the
+summation is now a construction run again in each master (`sigma.master`), so the engine reads it without hints. A
+second build carried `figs.g_oval` into the masters after `g_ear`; at the Bold it slid the ear's lower root 16 units into
+the ear and crossed the ear's first handle (audit_axis turns: an inflection in g's curve 7 at 565 and 369), so it was
+withdrawn (`reg/snap083a-try1/`). The third is `build/snap083a`.
+
+What moved against snap082i (`reg/diff-082i-083a.txt`): in every master, the Regular TTF and the variable font at 300 /
+400 / 600 / 800, exactly the items' glyphs: Ʃ ∑ ∏; ← ↑ ↓ ↔ ↕ ↖ ↗ ↘ ↙ ⌃ (← → ↵ ⇤ ⇥ unchanged); &; 3 5 and ³ ₃ ⁵ ₅, the
+fractions built from them; g and ǥ (the accented g as composites); the Bold's mid layer: &, g and ǥ (g and ǥ no longer
+need a mid master: their crotch's neck now interpolates within `MID_MISS`). Advances (Light / Regular / Bold): Ʃ 658 /
+665 / 684 > 663 / 677 / 708; ∑ 630 / 638 / 659 > 610 / 623 / 653; ↖ ↗ ↘ ↙ 415 / 428 / 445 > 390 / 407 / 430; ↔ 550 / 578 /
+618 > 542 / 578 / 630; ↕ 580 / 612 / 658 > 582 / 612 / 656; 3 and 5 by a unit in the Light; fractions 2 to 3. Kerning
+refit: fit_kerning.json unchanged; the masters' keys moved only in collision pairs with these glyphs (Light 79, Regular
+34, Bold 381, most with ∏ and ∑ now hanging below the baseline).
+
+| Audit | snap082i | snap083a |
+|---|---|---|
+| audit_axis (Bold and Light: counter, drift, symmetry, mirror, seam, thin, monotone, composite, turns, crossings) | ok | ok (identical) |
+| audit_rays (300 to 800) | 1 glyph (ʕ) | 1 glyph (ʕ), 27,229 > 27,063 places (∑ Ʃ ∏ arrows have fewer, straighter parts) |
+| audit_bold (Bold) | 432 / 432 | 431 / 432: g's neck "missed": the reader looks for the Bold's crotch within 0.75 of where the Regular's maps, and the Regular's root moved a unit (item E); read directly, the Bold neck is 44.8 > 46.1 against the target 45.9 (on target) |
+| audit_bold (Light) | 432 / 432 | 432 / 432 |
+| audit_kern (300 / 350 / 400 / 600 / 800) | pass, least 10.4 / 9.3 / 8.3 / 8.4 / 7.9 | pass, the same |
+| curvecheck regions (Light, Bold) | pass | pass |
+| curvecheck hooks (Light, Bold) | 6 / 14 faults | 6 / 14 (unchanged) |
+| interpolation (varLib.interpolatable on the default layers) | 61 struck glyphs listed (the overlap layer is the VF source) | the same 61, nothing new |
+| fallbacks in the variable font | ® ℗ (Bold), ℗ (Light) | the same |
+
+The masters, as the existing rules give them (curvecheck on the whole glyph, faults / worst ratio, Light and Bold,
+snap082i > snap083a): 3 11 / 2.11 > 2 / 1.38 and 9 / 2.33 > 5 / 1.54; 5 7 / 3.13 > 0 / 1.24 and 7 / 3.01 > 1 / 1.38; &
+0 / 1.03 > 0 / 1.03 and 0 / 1.03 > 1 / 2.07 (the Bold's loop form A: one jump to look at); ∑ 6 / 249 > 0 / 1.00 and 6 /
+160 > 0 / 1.00; Ʃ 5 / 166 > 0 and 4 / 162 > 0; g 11 / 2.25 > 10 / 2.00 and 12 / 3.01 = 12 / 3.01. The g's bowl through
+the ear in the masters (`e/gdent.py`): Bold U +24.3 / D -9.6 (snap082i +25.3 / -10.5), Light D +8.9 / U -10.1: the
+dent the owner saw at the heavy weights is still there; its rule (move the ear with the bowl in `g_ear`) is open. The
+∑'s bottom bar at the Bold is 126 (0.9 of the Bold n stem) and its point rises to 0.59 of the height (the diagonals'
+angles fixed while the bar grows). Pages not rebuilt.
