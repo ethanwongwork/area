@@ -1429,3 +1429,45 @@ unchanged; the masters' keys moved only in collision pairs with those glyphs (an
 8.4 / 7.9, as before; `item18/kern.txt`, `kern-every25.txt`). The final build is saved as `build/snap082i`; against
 `snap082h` (`item18/diff-082h-082i.txt`) only @, © ® ℗, $, ð, §, the two hook marks and the four Light capitals moved.
 Pages not rebuilt.
+
+## Regular pass (0.83, 18 November 2026)
+
+The owner: "Focus on how to bring more consistency, cohesiveness, visual clarity, smoothness, and evenness to the whole
+glyph set ... let's get the regular weight in a good place first." Five items, each designed and judged at the Regular
+(400), built with `AREA_BOLD=0 build.py`, diffed against the build before (`build/owner8/reg/diffreg.py`: the Regular UFO,
+its overlap layer, kerning and the TTF), checked with `evaluate`, `even`, `curvecheck` (and `--hooks`), `pathlint`,
+`parts`, `audit_charset` (`build/owner8/reg/checks.sh`; baseline `chk-082i/`), looked at large (before beside after at
+1000 px per 1000 units, combs, a line of text: `build/owner8/reg/item*-*.png`) and committed before the next. The masters
+follow by the existing rules; they were not tuned. The build before is `build/snap082i`.
+
+The previous worker's uncommitted files (`build/owner8/reg/stopped/`): `sigma.py` kept as the base of item A and
+corrected (below); `amp.py`'s loop rule kept for item C; `figs.py` split (item D, item E).
+
+### Item A: the summation (U+2211) and Esh (U+01A9)
+
+Measured (`build/owner8/reg/a/refsum2.py`, `tip.py`; Georgia Pro, Serrif, Source Serif 4, Literata, Merriweather,
+Crimson Pro at 400, PP Kyoto Medium beside them; numbers only). Area's ∑ was Libre Baskerville's Esh: each bar's
+underside ran into its diagonal through an S-shaped bracket of five curves; the point a 36-unit upright flat (four
+nodes); hooked heels at the two left corners (heel 33 against the references' -3); the top serif's beak 3.57 of its bar,
+the bottom's 3.98, at different angles; the point 0.746 across where the references put it at 0.637 (it leaned right),
+0.542 up (0.523); width 0.964 of E's ink; the upper diagonal 1.14 of the stem (98.5) against the references' 0.98; and
+it stood on the baseline where every reference hangs the sign from the cap height to -0.119 to -0.292 of it (median
+-0.200, PP Kyoto -0.189).
+
+| # | Item | Cause | Rule | Before > after (Regular) |
+|---|---|---|---|---|
+| 104 | A. ∑ Ʃ | As above: a drawn letter read as loose parts, no part from Area's capitals | `sigma.py`: one closed outline of straight edges from the master's capitals. Bars E's top arm across (46), each ending in E's top-arm beak (the bottom one E's turned over, so both one size and angle); upper diagonal Z's diagonal across (89), lower A's thin diagonal (49). The bars' left ends a square cut on one vertical; the upper diagonal's outer edge leaves the top bar's left end at its underside, the lower diagonal's inner edge the bottom bar's at its top, meeting in the inner notch (a point); the other edges meet the bars in plain corners (Z's joins, no bracket) and each other in a sharp point (four references of six have no flat; Georgia Pro 0.13 and Literata 0.16 of the stem; the capitals' 0.42 flat stands in for an overshoot on a zone line and read "chipped" mid-height). Places from the references' medians: ink 0.982 of E's ink (589), the top bar's end 0.974 of the bottom bar's, the point 0.637 across and 0.523 up; ∑ from 712 to -142 (-0.200 of the cap), Ʃ (a capital letter) from 0 to 712 on the same construction. In each master the same construction at that master's capitals, width 0.982 of its E (replaces `charset.sum_vertex` in `bold.bold_font`; the Regular's `sum_vertex` is overwritten). In `normalize` after the ampersand | point 0.746 / 0.542 > 0.637 / 0.523 of the ink; bottom 0 > -142 (∑); upper / lower diagonal 98.5 / 54.1 > 89 / 49 (Z's / A's); bars 46.5 / 46.0 > 46 / 46; beaks 3.57 / 3.98 > 2.96 / 2.96 of the bar (E's); heel 33 > 0; joins: 2 S-brackets of 5 curves > plain corners; point flat 36 > 0 (sharp); width 589 (0.982 E) both; nodes 47 > 38. Advances ∑ 638 > 650, Ʃ 665 > 677 (sides kept) |
+
+What moved (`a/build-a1.log`, `diffreg.py`): Esh and summation in the Regular UFO and TTF, nothing else; the overlap
+layer unchanged. Kerning: 19 collision keys with ∑ (the pass that keeps ink 13 apart: ∑ now hangs below the baseline,
+so ∑ j 123, ∑ ƒ 54, ſ ∑ 39 > 72, f ∑ 32; K ∑ 5 dropped). Checks against snap082i: evaluate, even, curvecheck (both),
+parts, audit_charset unchanged (0 errors); pathlint 147 > 144 warnings, 31 > 29 infos (the three handles past their
+meeting point and the overlap note on Ʃ and ∑ are gone). The master construction was run on snap082i's Light and Bold:
+structure matches (38 points), bars 36 / 61, thick 67 / 149, thin 40 / 65, width 571 / 630.
+
+Looked at (`reg/itemA-summation.png`, `itemA-Esh.png`, `-combs`, `itemA-text.png`): the ∑ now reads as Area's E and Z
+put together: straight, upright, one weight per stroke, the two beaks one size, the left side one vertical, a clean
+point. Still not right, honestly: the bars (E's 46) read light beside the 89 diagonal at text size; every reference
+makes the bottom bar heavier (1.6 of the top, median), which the owner's "capitals' arm weight" does not; the long
+level runs of the bars' undersides show the beak's bracket (E's own curve from 463) as the only curve in the glyph; and
+the hanging ∑ needs ∑ j kerned open by 123 (a collision pass value, not a fit).

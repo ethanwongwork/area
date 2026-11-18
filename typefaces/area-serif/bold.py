@@ -4828,17 +4828,14 @@ def bold_font(reg, stem=STEM, **over):
         if n_ in layer:
             rs_.append("mid " + str(_SYM.even_curves(layer, n_)))
     notes += [r_ for r_ in rs_ if r_]
-    # owner round 8 (0.82): the summation's point is a capital's vertex in every master too: a flat 0.42 of this
-    # master's capital stem across the bisector (charset.sum_vertex; the engine's knots left it 15 at the Bold and 46
-    # at the Light where the rule asks 62 and 25)
-    import charset as _CH
-    if "summation" in font and font["summation"].contours:
-        cap_ = CAP_STEM * v["stem"] / REG_STEM if v["f"] < 0 else CAP_STEM + THICK["straight"] * v["f"]
-        n0 = [len(c.points) for c in font["summation"].contours]
-        got_ = _CH.sum_vertex(font["summation"], cap_)
-        if [len(c.points) for c in font["summation"].contours] != n0:
-            raise ValueError("summation: the vertex changed its point count")
-        notes.append(f"summation: vertex {got_}")
+    # 0.83 (Regular pass, item A): the summation and Esh are one construction (sigma.py) run again here at this master's
+    # capitals (E's top arm and beak, Z's diagonal, A's thin diagonal), the width changed as E's ink; sides as a sign's.
+    # (0.82: Esh's drawing as the engine read it, the summation's point then cut by charset.sum_vertex.)
+    import sigma as _SIG
+    for n_ in _SIG.NAMES:
+        got_ = _SIG.master(reg, font, lambda a_, b_, n__=n_: _amp_sides(a_, b_, n__), n_)
+        if got_:
+            notes.append(got_)
     for g in reg:                                              # 0.81: last, a symmetric sign made so again
         if g.contours and not g.components and g.name in font and g.name not in struck:
             cs = glyph_contours(font[g.name])

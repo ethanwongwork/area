@@ -1250,6 +1250,8 @@ def normalize(font):
     CHARSET.mirrors(font)
     import amp as AMP                                 # 0.82 (owner round 8, item 9): the ampersand, one construction
     print("amp:", AMP.regular(font))                  # on the finished o, a and v; after every node rule
+    import sigma as SIGMA                             # 0.83 (Regular pass, item A): the summation and Esh, one
+    print("sigma:", SIGMA.regular(font))              # construction from E's arm and beak, Z's and A's diagonals
     import at as AT                                   # 0.82 (owner round 8, item 15): the @, one construction: a ring
     print("at:", AT.regular(font))                    # of one stroke and Area's a.ss03 in it, joined at its foot
     import circled as CIRCLED                         # 0.82 (owner round 8, item 16): one ring for (C) (R) (P), the
