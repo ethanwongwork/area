@@ -1215,11 +1215,16 @@ def arrows(font, m, adv):
     head = 0.36 * L                    # each head stroke's run along the shaft
     cy = m.math_y
 
-    def east(length=L, head=head):
+    def east(length=L, head=head, both=False):
         """0.77 (owner, 2026-11-14: "does uni21b5 arrow tip need to be fixed?"). The head was two bars and a small
         triangle joined by a union: the triangle's sides did not lie on the bars' outer edges, so the tip came out
         as a zigzag of three 12-unit steps on every arrow. The head is one outline now: the two strokes' outer
-        edges meet in the point, their inner edges in the crotch (a mitre), and nothing is left to a union there."""
+        edges meet in the point, their inner edges in the crotch (a mitre), and nothing is left to a union there.
+        0.83 (Regular pass, item B; the owner: "arrow both shouldn't have the middle line go through the arrows?"):
+        the shaft stops at the head's crotch, where the head's two inner edges meet, and the head is solid from there
+        to its point. The two-headed arrow is one shaft from crotch to crotch with this head at both ends, the left
+        one the right one turned over about the arrow's middle (it was the arrow and its mirror unioned, so each
+        shaft ran on through the other end's head and cut its point square: a 22-unit flat, 52 high, at both tips)."""
         x0, x1 = 0.0, length
         px, py = x1 - head, head                           # the upper stroke's far end, from the axis
         qx = x1 - w * 0.5
@@ -1232,34 +1237,41 @@ def arrows(font, m, adv):
         sh = x1 - apex                                     # the point stays where the arrow ended
         pts = [(apex + sh, 0), (ou[0] + sh, ou[1]), (iu[0] + sh, iu[1]), (crotch + sh, 0), (iu[0] + sh, -iu[1]), (ou[0] + sh, -ou[1])]
         head_ = shape([(x, cy + y) for x, y in pts])
-        shaft = rect(x0, cy - w / 2, crotch + sh + 1, cy + w / 2)
-        return union(shaft, head_)
+        if not both:
+            shaft = rect(x0, cy - w / 2, crotch + sh + 1, cy + w / 2)
+            return union(shaft, head_)
+        left_ = moved(head_, length, 0, -1, 1)             # the same head turned over about the middle
+        shaft = rect(length - (crotch + sh) - 1, cy - w / 2, crotch + sh + 1, cy + w / 2)
+        return union(shaft, head_, left_)
 
     e = east()
     side = 44
     put(font, "arrowright", e, 0, [0x2192], lsb=side, rsb=side)
     put(font, "arrowleft", moved(e, 0, 0, -1, 1), 0, [0x2190], lsb=side, rsb=side)
-    both = union(e, moved(e, L, 0, -1, 1))
+    both = east(both=True)
     put(font, "arrowboth", both, 0, [0x2194], lsb=side, rsb=side)
     up = moved(e, 0, 0, 1, 1, 90, (0, cy))
     vside = (adv - (bounds(up)[2] - bounds(up)[0])) / 2          # vertical arrows: centred in the maths' width
-    # vertical arrows: the same arrow turned, standing from the descender to the cap height's middle
+    # vertical arrows: the same arrow turned. 0.83 (Regular pass, item B): every arrow's ink centred on the maths axis,
+    # as the level arrows' shafts are (references: the up arrow's middle -0.033 to +0.109 of the arrow's length off
+    # their level arrow's axis, median +0.010; Area stood them 30 under the cap height's middle, +0.027)
     for name, u, rot in (("arrowup", 0x2191, 90), ("arrowdown", 0x2193, -90)):
         p = moved(e, 0, 0, 1, 1, rot, (L / 2, cy))
         x0, y0, x1, y1 = bounds(p)
-        p = moved(p, 0, (CAP_HEIGHT - (y1 - y0)) / 2 - y0 - 30)
+        p = moved(p, 0, cy - (y0 + y1) / 2)
         put(font, name, p, 0, [u], lsb=vside, rsb=vside)
     ud = moved(both, 0, 0, 1, 1, 90, (L / 2, cy))
     x0, y0, x1, y1 = bounds(ud)
-    put(font, "arrowupdn", moved(ud, 0, (CAP_HEIGHT - (y1 - y0)) / 2 - y0 - 30), 0, [0x2195], lsb=vside, rsb=vside)
-    # owner round 8 (0.82): the slanting arrows are the arrow made 0.92 as long with its head 0.92 as long, its strokes
-    # the minus's (scaled whole, they were 48 across beside every other arrow's 52)
-    d = east(0.92 * L, 0.92 * head)
+    put(font, "arrowupdn", moved(ud, 0, cy - (y0 + y1) / 2), 0, [0x2195], lsb=vside, rsb=vside)
+    # 0.83 (Regular pass, item B): the slanting arrows are the arrow turned, whole: the same length and the same head
+    # (every reference with them: Serrif, Source Serif 4, Merriweather, PP Kyoto, length and head 1.00 of the level
+    # arrow's). 0.82 made them 0.92 as long with a head 0.92 as long (0.82 before that: scaled whole, strokes 48)
+    d = east()
     for name, u, rot in (("uni2197", 0x2197, 45), ("uni2196", 0x2196, 135), ("uni2199", 0x2199, -135),
                          ("uni2198", 0x2198, -45)):
         p = moved(d, 0, 0, 1, 1, rot, (L * 0.43, cy))
         x0, y0, x1, y1 = bounds(p)
-        p = moved(p, 0, (CAP_HEIGHT - (y1 - y0)) / 2 - y0 - 30)
+        p = moved(p, 0, cy - (y0 + y1) / 2)
         put(font, name, p, 0, [u], lsb=side * 0.8, rsb=side * 0.8)
 
 

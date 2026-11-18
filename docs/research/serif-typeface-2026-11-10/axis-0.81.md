@@ -1456,7 +1456,7 @@ it stood on the baseline where every reference hangs the sign from the cap heigh
 
 | # | Item | Cause | Rule | Before > after (Regular) |
 |---|---|---|---|---|
-| 104 | A. ∑ Ʃ | As above: a drawn letter read as loose parts, no part from Area's capitals | `sigma.py`: one closed outline of straight edges from the master's capitals. Bars E's top arm across (46), each ending in E's top-arm beak (the bottom one E's turned over, so both one size and angle); upper diagonal Z's diagonal across (89), lower A's thin diagonal (49). The bars' left ends a square cut on one vertical; the upper diagonal's outer edge leaves the top bar's left end at its underside, the lower diagonal's inner edge the bottom bar's at its top, meeting in the inner notch (a point); the other edges meet the bars in plain corners (Z's joins, no bracket) and each other in a sharp point (four references of six have no flat; Georgia Pro 0.13 and Literata 0.16 of the stem; the capitals' 0.42 flat stands in for an overshoot on a zone line and read "chipped" mid-height). Places from the references' medians: ink 0.982 of E's ink (589), the top bar's end 0.974 of the bottom bar's, the point 0.637 across and 0.523 up; ∑ from 712 to -142 (-0.200 of the cap), Ʃ (a capital letter) from 0 to 712 on the same construction. In each master the same construction at that master's capitals, width 0.982 of its E (replaces `charset.sum_vertex` in `bold.bold_font`; the Regular's `sum_vertex` is overwritten). In `normalize` after the ampersand | point 0.746 / 0.542 > 0.637 / 0.523 of the ink; bottom 0 > -142 (∑); upper / lower diagonal 98.5 / 54.1 > 89 / 49 (Z's / A's); bars 46.5 / 46.0 > 46 / 46; beaks 3.57 / 3.98 > 2.96 / 2.96 of the bar (E's); heel 33 > 0; joins: 2 S-brackets of 5 curves > plain corners; point flat 36 > 0 (sharp); width 589 (0.982 E) both; nodes 47 > 38. Advances ∑ 638 > 650, Ʃ 665 > 677 (sides kept) |
+| 104 | A. ∑ Ʃ | As above: a drawn letter read as loose parts, no part from Area's capitals | `sigma.py`: one closed outline of straight edges from the master's capitals. Bars E's top arm across (46), each ending in E's top-arm beak (the bottom one E's turned over, so both one size and angle); upper diagonal Z's diagonal across (89), lower A's thin diagonal (49). The bars' left ends a square cut on one vertical; the upper diagonal's outer edge leaves the top bar's left end at its underside, the lower diagonal's inner edge the bottom bar's at its top, meeting in the inner notch (a point); the other edges meet the bars in plain corners (Z's joins, no bracket) and each other in a sharp point (four references of six have no flat; Georgia Pro 0.13 and Literata 0.16 of the stem; the capitals' 0.42 flat stands in for an overshoot on a zone line and read "chipped" mid-height). Places from the references' medians: ink 0.982 of E's ink (589), the top bar's end 0.974 of the bottom bar's, the point 0.637 across and 0.523 up; ∑ from 712 to -142 (-0.200 of the cap), Ʃ (a capital letter) from 0 to 712 on the same construction. In each master the same construction at that master's capitals, width 0.982 of its E (replaces `charset.sum_vertex` in `bold.bold_font`; the Regular's `sum_vertex` is overwritten). In `normalize` after the ampersand | point 0.746 / 0.542 > 0.637 / 0.523 of the ink; bottom 0 > -142 (∑); upper / lower diagonal 98.5 / 54.1 > 89 / 49 (Z's / A's); bars 46.5 / 46.0 > 46 / 46; beaks 3.57 / 3.98 > 2.96 / 2.96 of the bar (E's); heel 33 > 0; joins: 2 S-brackets of 5 curves > plain corners; point flat 36 > 0 (sharp); width 589 (0.982 E); points 53 > 38 (on-curve 27 > 22). Advances ∑ 638 > 650, Ʃ 665 > 677 (sides kept) |
 
 What moved (`a/build-a1.log`, `diffreg.py`): Esh and summation in the Regular UFO and TTF, nothing else; the overlap
 layer unchanged. Kerning: 19 collision keys with ∑ (the pass that keeps ink 13 apart: ∑ now hangs below the baseline,
@@ -1471,3 +1471,34 @@ point. Still not right, honestly: the bars (E's 46) read light beside the 89 dia
 makes the bottom bar heavier (1.6 of the top, median), which the owner's "capitals' arm weight" does not; the long
 level runs of the bars' undersides show the beak's bracket (E's own curve from 463) as the only curve in the glyph; and
 the hanging ∑ needs ∑ j kerned open by 123 (a collision pass value, not a fit).
+
+### Item B: the arrows
+
+The owner: "arrow both shouldn't have the middle line go through the arrows?" Measured (`b/arrownum.py` on Area;
+`b/refarrows.py`, `refcentre.py`, `sysarrows.py` on Serrif, Source Serif 4, Literata, Merriweather, PP Kyoto Medium,
+Times New Roman; Georgia Pro, Crimson Pro and Newsreader have no arrows). In ← → ↑ ↓ the shaft stopped at the head's
+crotch and the head ran solid to a sharp point (end flat 0): sound. ↔ and ↕ were → and its mirror unioned: each shaft ran
+on through the other end's head to the arrow's end, so both points were cut square (a 52-unit flat at each tip, 22
+units of shaft past the head's edges): the owner's "middle line through the arrows". The heads were one construction
+everywhere except the slanted four, made 0.92 as long with a 0.92 head (the references' slanted arrows are the level one
+turned: length and head 1.00 in Serrif, Source Serif 4, Merriweather and PP Kyoto). The vertical and slanted arrows
+stood 13 to 15 units over the maths axis (30 under the cap height's middle); the references centre theirs on their
+level arrow's axis (the up arrow's middle -0.033 to +0.109 of the arrow's length, median +0.010). Lengths: ↔ the same
+as → (Times New Roman 1.00, Merriweather 1.66; the others have none); ↑ the same as → (every reference 1.00).
+
+| # | Item | Cause | Rule | Before > after (Regular) |
+|---|---|---|---|---|
+| 105 | B. ↔ ↕ | Two arrows unioned: each shaft ran through the far head | `charset.arrows.east(both=True)`: one shaft from crotch to crotch, the right head and the same head turned over about the arrow's middle; the shaft stops at each head's crotch as in → | tip flats 52 / 52 > 0 / 0; on-curve points 28 > 22; length 490 = →'s; advance 578 / 612 kept |
+| 106 | B. ↖ ↗ ↘ ↙ | Made 0.92 as long, head 0.92 | The arrow turned whole (`east()`): the same head and length as → | head run 162 > 176 (→'s); advance 428 > 455 (sides 35 kept) |
+| 107 | B. ↑ ↓ ↕ ↖ ↗ ↘ ↙ (⌃) | Placed 30 under the cap height's middle | Every arrow's ink centred on the maths axis (313), as the level arrows' shafts; ⌃'s point follows ↑'s | ink middle 326 > 313 (↑ ↓ ↕), 324-328 > 311-315 (slanted: whole-unit rounding of the turn); ⌃ 13 lower |
+
+The family after (`b/arrownum.py`): every arrow's shaft the minus (52) on the axis, every head the same two strokes
+(run 176, spread 376, sharp point), the shaft ending in the head's crotch; ↵ ⇤ ⇥ were already built from ← → and are
+unchanged (heads identical); lengths: → ← ↑ ↓ ↔ ↕ and the slanted arrows along their axis 490. What moved: ↔ ↕ ↑ ↓ ↖ ↗ ↘
+↙ ⌃ in the Regular UFO and TTF, nothing else; kerning: three collision keys with ŀ (ldot ↔ 17 > 15, ldot ↖ 22 > 21, ldot
+↙ 19 > 20). Checks against item A: evaluate, even, curvecheck (both), pathlint, parts, audit_charset identical.
+Looked at (`reg/itemB-arrowboth.png`, `itemB-arrowupdn.png`, `itemB-uni2197.png`, `itemB-arrowup.png`, the families
+`itemB-family-before.png` / `-after.png`, `itemB-text.png`): ↔ and ↕ now end in the same points as ← and →; the slanted
+arrows are the same size as the level ones. Not right yet: ↔ at →'s length leaves 310 units of shaft between the
+crotches, which reads short at text size beside → (one reference, Merriweather, makes it 1.66 as long; the advance
+would grow); the masters were not looked at (the engine reads the new ↔ / ↕ outlines).
