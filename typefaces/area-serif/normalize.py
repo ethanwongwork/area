@@ -1201,6 +1201,7 @@ def normalize(font):
         print("loops:", LOOPS.round_tail(font, "j"), LOOPS.round_tail(font, "y"), LOOPS.a_exit(font))
     import figs as FIGS                               # 0.83 (Regular pass, item D): the 3's bowls: the upper ball's
     print("figs:", FIGS.regular(font))                # neck one curve, extremes at the references' shares, one
+    print("g's ear:", FIGS.g_regular(font))           # 0.83 (Regular pass, item E): the ear's roots on the bowl's oval
     #                                                   curvature; before spacing and the charset, so ³ ₃ ¾ follow
     delta, moved, opened = SPACING.run(font)          # last: it reads the finished outlines
     CLEAN.owner_final(font, json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "owner_edits.json"))))

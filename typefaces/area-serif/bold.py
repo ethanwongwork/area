@@ -4341,6 +4341,12 @@ def bold_font(reg, stem=STEM, **over):
             continue
         M_, D_ = g_loop_place(R_, N_)
         M_, e_ = g_ear(R_, M_, 1 + (BALL - 1) * v["f"])
+        # 0.83 (Regular pass, item E): the bowl either side of the ear is one curve, as in the Regular (figs.g_oval:
+        # the ear's two roots on one cubic from the bowl's right extreme to its top at the bowl's own upper-left
+        # tensions); snap082i's Bold stood U +25.3 out and D -10.5 in (the notch at the heavy weights)
+        import figs as _FIGS
+        if name in _FIGS.G_OVAL:
+            M_ = [_FIGS.g_oval(M_[0])[0]] + list(M_[1:])
         for c, P in zip(font[name].contours, M_):
             c.points = [Point(x, y, t, smooth=s_) for x, y, t, s_ in P]
         looped.append(f"{name} loop {D_:+.1f}, ear {e_:+.1f}")

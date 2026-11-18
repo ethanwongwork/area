@@ -1642,3 +1642,25 @@ point after scaling), 29 > 27 infos. Figures `reg/itemD-three.png`, `itemD-three
 into the ball (no flat run then a tight turn), the top a level meeting of two arcs of one curvature, the bottom-left arc
 no longer long and flat; the upper ball meets its bowl as the lower does. Not right yet: 6 and 9 as above; the 2's ball
 neck; the lower ball's left quarter reads slightly lopsided in evaluate's handle test.
+
+### Item E: g's ear and bowl
+
+The owner: "is the ear of the g supposed to have the round part of the top story of the g be misaligned?" It is not.
+Measured (`reg/e/gdent.py`: the drawn outline either side of the ear, E to D below the ear's lower root and U to T above
+its upper root, against one cubic from the bowl's right extreme E (upright) to its top T (level); + outside): the
+Regular's pieces stand +2.8 at D and +4.9 at U, a 2-unit step across the ear, too small to see at 400 (the stopped
+worker's ellipse reading: U / D 1.034 / 1.020); snap082i's Bold +25.3 at U and -10.5 at D (the outline above the ear
+stands out, the bowl below resumes inside: the notch the owner saw at the heavy weights, made by `bold.g_ear` moving the
+ear's ball and roots without the bowl), the Light -7.4 / +8.0. The ear itself is sound in the Regular: it leaves as a
+branch, thin at the root and swelling to the ball.
+
+| # | Item | Rule | Before > after |
+|---|---|---|---|
+| 111 | E. g | `figs.g_oval` (the stopped worker's, kept, with one change): the bowl's outer upper-right quarter is one cubic from E to T, its two handles fitted (least squares, end tangents fixed) to the drawn pieces either side of the ear; the ear's roots D and U slide to the nearest places on it and the pieces E-D and U-T become that cubic's own pieces, so the outline either side of the ear lies on one curve; the ear's curves keep their shape, their ends moving with D and U. The stopped worker's cubic took the bowl's upper-left tensions, which made it another oval (a 1.73 curvature jump at E); matching E's curvature alone bulged it 8 units out; the fit keeps E's join (no new fault). In the Regular (`normalize`, with the 3's rule, before spacing: ǥ follows) and in every master right after `bold.g_ear` (the ear's reach and ball law untouched) | Regular: step across the ear 2.1 > 0 (the two pieces one cubic); roots moved D (+0.6, 0), U (-1.0, -0.5); curvecheck on the whole g 9 faults, worst 2.57 > 9, 2.42 (the ear's ball top; the faults are the g's own drawing: the link, the loop's ends, none at the bowl) |
+
+What moved against item D's build: g and ǥ (gstroke, also its overlap layer) in the Regular UFO and TTF; ğ ĝ ġ ģ ǧ ǵ ḡ
+follow as composites; g.ss02 and ɡ byte-identical; nothing else; kerning unchanged. Checks identical to item D's.
+Figures `reg/itemE-g.png`, `itemE-g-combs.png`, `itemE-text.png`. Looked at: at 400 the change is a unit (the dent the
+owner saw is a heavy-weight one, which the masters' rule now holds: numbers in the full build below). Not done: the
+ear's angle and position against the references (only a sanity check: inside their range by eye); the g's other
+whole-glyph curvature faults (link, loop ends) are its existing drawing.

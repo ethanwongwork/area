@@ -222,3 +222,131 @@ def regular(font):
                      f"{len(b0)} > {len(b1)}")
     notes.append(even_figs(font))
     return "; ".join(notes)
+
+
+# ------------------------------------------------------------------ 0.83 item E: g's bowl one oval through the ear's root
+# The owner: "is the ear of the g supposed to have the round part of the top story of the g be misaligned?" It is not.
+# Measured (build/owner8/reg/e/gdent.py: the drawn outline either side of the ear against one cubic from the bowl's
+# right extreme to its top at the bowl's own upper-left quarter's tensions, + outside): the Regular's upper piece stands
+# out 4.9 at the ear's upper root U and the lower piece 2.8 at its lower root D, a 2-unit step across the ear; the Bold
+# (snap082i) U +25.3 and D -10.5 (the outline above the ear stands out, the bowl below it resumes inside: the notch the
+# owner saw at the heavy weights), the Light D +8.0, U -7.4. The rule
+# (`g_oval`): the bowl's outer upper-right quarter is one cubic from the right extreme E (upright) to the top T (level),
+# at the bowl's own upper-left quarter's tensions (the oval the ear is laid over); U and D slide onto it (each to the
+# nearest place on it) and the two outer pieces E-D and U-T are that cubic's pieces, so the outline either side of the
+# ear lies on one curve, tangent-continuous. The ear's own curves keep their shape, their ends moving with U and D.
+G_OVAL = ("g",)
+
+
+def _bez(s, t):
+    u = 1 - t
+    return (u ** 3 * s[0][0] + 3 * u * u * t * s[1][0] + 3 * u * t * t * s[2][0] + t ** 3 * s[3][0],
+            u ** 3 * s[0][1] + 3 * u * u * t * s[1][1] + 3 * u * t * t * s[2][1] + t ** 3 * s[3][1])
+
+
+def _sub(s, t0, t1):
+    def split(s, t):
+        lerp = lambda a, b: (a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t)   # noqa: E731
+        a, b, c = lerp(s[0], s[1]), lerp(s[1], s[2]), lerp(s[2], s[3])
+        d, e = lerp(a, b), lerp(b, c)
+        f = lerp(d, e)
+        return (s[0], a, d, f), (f, e, c, s[3])
+    if t1 < 1:
+        s = split(s, t1)[0]
+        t0 = t0 / t1 if t1 > 0 else 0
+    if t0 > 0:
+        s = split(s, t0)[1]
+    return s
+
+
+def ear_places(P):
+    """(E, D, U, T) indices on g's outer contour: the bowl's right extreme, the ear's lower and upper roots (corners),
+    the bowl's top; and the next on-curve node after T (the bowl's left extreme)."""
+    n = len(P)
+    on = [i for i, q in enumerate(P) if q[2]]
+    top = max(q[1] for q in P)
+    corners = [i for i in on if not P[i][3] and P[i][1] > top - 150 and P[i][0] > 300]
+    corners = sorted(corners, key=lambda i: P[i][1])[:2]
+    D, U = corners[0], corners[1]
+    E = max([i for i in on if i < D], default=None) if D > 0 else None
+    k = on.index(D)
+    E = on[k - 1]
+    T = on[(on.index(U) + 1) % len(on)]
+    Lx = on[(on.index(T) + 1) % len(on)]
+    return E, D, U, T, Lx
+
+
+def g_oval(P):
+    P = [list(q) for q in P]
+    n = len(P)
+    E, D, U, T, Lx = ear_places(P)
+    pt = lambda i: (P[i % n][0], P[i % n][1])                                  # noqa: E731
+    # the upper-left quarter's tensions: T's handle over the width, Lx's handle over the height
+    th = abs(pt(T + 1)[0] - pt(T)[0]) / abs(pt(T)[0] - pt(Lx)[0])
+    tv = abs(pt(Lx - 1)[1] - pt(Lx)[1]) / abs(pt(T)[1] - pt(Lx)[1])
+    e, t = pt(E), pt(T)
+    s = (e, (e[0], e[1] + tv * (t[1] - e[1])), (t[0] + th * (e[0] - t[0]), t[1]), t)
+    # 0.83 item E: the cubic's two handles are fitted (least squares, end tangents fixed) to the drawn outline either
+    # side of the ear, so the complete quarter is the one the two pieces were drawn on (the upper-left quarter's
+    # tensions alone made it a different oval: a 1.73 jump at E; matching E's curvature alone bulged it 8 units out)
+    import numpy as np
+    drawn = []
+    for i0, i3 in ((E, D), (U, T)):
+        c_ = (pt(i0), pt(i0 + 1), pt(i0 + 2), pt(i3))
+        drawn += [_bez(c_, k / 12) for k in range(13)]
+    drawn = np.array(drawn)
+
+    def cost(tv_, th_):
+        c_ = (e, (e[0], e[1] + tv_ * (t[1] - e[1])), (t[0] + th_ * (e[0] - t[0]), t[1]), t)
+        poly = np.array([_bez(c_, k / 160) for k in range(161)])
+        d = np.sqrt(((drawn[:, None, :] - poly[None, :, :]) ** 2).sum(-1)).min(1)
+        return float((d ** 2).sum())
+    best = min(((cost(a_, b_), a_, b_) for a_ in np.arange(0.40, 0.80, 0.02) for b_ in np.arange(0.40, 0.80, 0.02)))
+    _, tv, th = best
+    for step in (0.005, 0.001):
+        best = min(((cost(a_, b_), a_, b_) for a_ in np.arange(tv - 4 * step, tv + 4.5 * step, step)
+                    for b_ in np.arange(th - 4 * step, th + 4.5 * step, step)))
+        _, tv, th = best
+    s = (e, (e[0], e[1] + tv * (t[1] - e[1])), (t[0] + th * (e[0] - t[0]), t[1]), t)
+
+    def nearest(p):
+        best = min(range(401), key=lambda k: math.dist(_bez(s, k / 400), p))
+        return best / 400
+    tD, tU = nearest(pt(D)), nearest(pt(U))
+    a, b = _sub(s, 0.0, tD), _sub(s, tU, 1.0)
+    moved = {}
+    for i, new in ((D, a[3]), (U, b[0])):
+        moved[i] = (new[0] - P[i][0], new[1] - P[i][1])
+    # E-D: points E+1, E+2 (handles), D; U-T: U, U+1, U+2
+    P[(E + 1) % n][:2] = a[1]; P[(E + 2) % n][:2] = a[2]
+    P[D][:2] = a[3]
+    P[(D + 1) % n][0] += moved[D][0]; P[(D + 1) % n][1] += moved[D][1]      # the ear's curve leaving D
+    P[(U - 1) % n][0] += moved[U][0]; P[(U - 1) % n][1] += moved[U][1]      # the ear's curve into U
+    P[U][:2] = b[0]
+    P[(U + 1) % n][:2] = b[1]; P[(U + 2) % n][:2] = b[2]
+    out = [(round(q[0]), round(q[1]), q[2], q[3]) for q in P]
+    return out, (round(float(moved[D][0]), 1), round(float(moved[D][1]), 1)), (round(float(moved[U][0]), 1), round(float(moved[U][1]), 1))
+
+
+def oval_reading(P):
+    """The ear's two roots against the bowl's extremes' ellipse (1 = on it)."""
+    E, D, U, T, Lx = ear_places(P)
+    cx = (P[E][0] + P[Lx][0]) / 2
+    a = (P[E][0] - P[Lx][0]) / 2
+    b = P[T][1] - P[Lx][1]
+    cy = P[Lx][1]
+    r = lambda i: math.sqrt(((P[i][0] - cx) / a) ** 2 + ((P[i][1] - cy) / b) ** 2)     # noqa: E731
+    return round(r(U), 3), round(r(D), 3)
+
+
+def g_regular(font):
+    notes = []
+    for name in G_OVAL:
+        if name not in font:
+            continue
+        cs = _pts(font[name])
+        before = oval_reading(cs[0])
+        new, dD, dU = g_oval(cs[0])
+        _put(font[name], [new] + cs[1:])
+        notes.append(f"{name}: ear roots on the bowl's oval (U / D {before} > {oval_reading(new)}; moved D {dD}, U {dU})")
+    return "; ".join(notes)
