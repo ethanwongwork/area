@@ -186,7 +186,15 @@ def radical(p, s=1.0, white=None):
     nh = left(uh)
     El = (H0[0] - nh[0] * tn / 2, H0[1] - nh[1] * tn / 2)
     Eu = (H0[0] + nh[0] * tn / 2, H0[1] + nh[1] * tn / 2)
-    return [[P, Vi, C2, (xr, top), (xr, top - tb), C1, V, K, El, Eu]], [], []
+    foot = [V]
+    if p.get("flat"):                                  # 0.83 (symbols 1): the foot a vertex, a flat across the bisector
+        e1, e2 = u1, u2                                # where the two outer edges are `flat` (times the stroke law) apart
+        half = math.acos(max(-1.0, min(1.0, e1[0] * e2[0] + e1[1] * e2[1]))) / 2
+        bis = unit((0, 0), (e1[0] + e2[0], e1[1] + e2[1]))
+        d_ = p["flat"] * s / (2 * math.tan(half))
+        cut = ((V[0] + bis[0] * d_, V[1] + bis[1] * d_), left(bis))
+        foot = [meet(E2, cut), meet(W1, cut)]
+    return [[P, Vi, C2, (xr, top), (xr, top - tb), C1] + foot + [K, El, Eu]], [], []
 
 
 def chevron(p, s=1.0, white=None):
@@ -252,7 +260,7 @@ def caret(p, s=1.0, white=None):
     and inside mitred, as the arrows' heads), ends cut square. It was the up arrow cut across with its shaft's stub
     taken out: a 54 by 16 notch in the crotch and two 2-unit steps at the ends."""
     a, h, t = p["apex"], p["head"], p["t"] * s
-    dx = h - p["t"] / 2                                 # the arrows' head stroke: across h - t/2, down h (east())
+    dx = p.get("run", h - p["t"] / 2)                   # the arrows' head stroke: across run (0.82: h - t/2), down h
     return [stroke_polyline([(a[0] - dx, a[1] - h), tuple(a), (a[0] + dx, a[1] - h)], [t, t])], [], []
 
 
@@ -269,3 +277,278 @@ def corners(info, s=1.0, white=None):
     """Every corner of the construction, in one fixed order."""
     a, b, c = build(info, s, white)
     return [q for P in a + b + c for q in P]
+
+
+# ---------------------------------------------------------------- 0.83 (Regular pass, symbols): strokes with a width
+# profile along a centreline (as arms.py reads the asterisk's arms), outlines fitted as cubics
+
+def fit_cubic(S, d0, d1):
+    """One cubic through the samples S (first and last fixed), leaving along d0 and arriving along d1 (unit vectors,
+    the direction of travel at both ends); the two handle lengths by least squares on chord-length parameters, then
+    the parameters refined against the curve twice."""
+    p0, p3 = S[0], S[-1]
+    L = [0.0]
+    for a, b in zip(S, S[1:]):
+        L.append(L[-1] + math.dist(a, b))
+    T = [l / L[-1] for l in L]
+    span = math.dist(p0, p3)
+    al = be = span / 3
+    for _ in range(4):
+        # B(t) = A0 + al * A1 + be * A2, A1 = 3u^2 t d0, A2 = -3u t^2 d1
+        a11 = a12 = a22 = r1 = r2 = 0.0
+        for (x, y), t in zip(S, T):
+            u = 1 - t
+            b0, b3 = u ** 3 + 3 * u * u * t, 3 * u * t * t + t ** 3
+            ax, ay = b0 * p0[0] + b3 * p3[0], b0 * p0[1] + b3 * p3[1]
+            c1 = (3 * u * u * t * d0[0], 3 * u * u * t * d0[1])
+            c2 = (-3 * u * t * t * d1[0], -3 * u * t * t * d1[1])
+            a11 += c1[0] ** 2 + c1[1] ** 2
+            a12 += c1[0] * c2[0] + c1[1] * c2[1]
+            a22 += c2[0] ** 2 + c2[1] ** 2
+            r1 += c1[0] * (x - ax) + c1[1] * (y - ay)
+            r2 += c2[0] * (x - ax) + c2[1] * (y - ay)
+        det = a11 * a22 - a12 * a12
+        if abs(det) > 1e-9:
+            al, be = (r1 * a22 - r2 * a12) / det, (a11 * r2 - a12 * r1) / det
+        al, be = max(al, span * 0.05), max(be, span * 0.05)
+        den_ = d0[0] * d1[1] - d0[1] * d1[0]           # the handles stay inside their triangle: neither runs past
+        if abs(den_) > 1e-9:                           # the point where the two end directions meet
+            ta = ((p3[0] - p0[0]) * d1[1] - (p3[1] - p0[1]) * d1[0]) / den_
+            tb = (d0[0] * (p3[1] - p0[1]) - d0[1] * (p3[0] - p0[0])) / den_
+            if ta > 0 and tb > 0:
+                al, be = min(al, 0.92 * ta), min(be, 0.92 * tb)
+        P = [p0, (p0[0] + d0[0] * al, p0[1] + d0[1] * al), (p3[0] - d1[0] * be, p3[1] - d1[1] * be), p3]
+        T2 = []
+        for (x, y), t in zip(S, T):                      # Newton on each parameter
+            for _k in range(3):
+                u = 1 - t
+                B = [u ** 3 * P[0][i] + 3 * u * u * t * P[1][i] + 3 * u * t * t * P[2][i] + t ** 3 * P[3][i] for i in (0, 1)]
+                D = [3 * u * u * (P[1][i] - P[0][i]) + 6 * u * t * (P[2][i] - P[1][i]) + 3 * t * t * (P[3][i] - P[2][i]) for i in (0, 1)]
+                E = [6 * u * (P[2][i] - 2 * P[1][i] + P[0][i]) + 6 * t * (P[3][i] - 2 * P[2][i] + P[1][i]) for i in (0, 1)]
+                num = (B[0] - x) * D[0] + (B[1] - y) * D[1]
+                den = D[0] ** 2 + D[1] ** 2 + (B[0] - x) * E[0] + (B[1] - y) * E[1]
+                if abs(den) < 1e-9:
+                    break
+                t = min(1.0, max(0.0, t - num / den))
+            T2.append(t)
+        T = T2
+    return P
+
+
+def offset_sides(C, nodes, width, n=32):
+    """A centreline C(t) -> (x, y) stroked with width(t) across: the left and the right edge, each a list of cubics
+    (p0, p1, p2, p3), one per span between consecutive node parameters. Every point of an edge is the centreline
+    point moved half the width along the centreline's normal; each span's cubic leaves and arrives along the edge's
+    own tangent (read from the edge, so a changing width tilts it) and is fitted to the edge between."""
+    h = 1e-5
+
+    def edge(t, sg):
+        (x, y), (xa, ya), (xb, yb) = C(t), C(t - h), C(t + h)
+        dx, dy = xb - xa, yb - ya
+        m = math.hypot(dx, dy)
+        w = width(t) / 2 * sg
+        return (x - dy / m * w, y + dx / m * w)
+
+    def tan(t, sg, at_start):
+        a, b = (edge(t, sg), edge(t + 1e-4, sg)) if at_start else (edge(t - 1e-4, sg), edge(t, sg))
+        return unit(a, b)
+    sides = []
+    for sg in (1, -1):
+        segs = []
+        for t0, t1 in zip(nodes, nodes[1:]):
+            S = [edge(t0 + (t1 - t0) * k / n, sg) for k in range(n + 1)]
+            segs.append(fit_cubic(S, tan(t0, sg, True), tan(t1, sg, False)))
+        sides.append(segs)
+    return sides
+
+
+def stress(lo, hi):
+    """The signs' damped upright stress (the letters' own, much damped): a stroke lo wide where it runs level, hi
+    where it runs upright, lo + (hi - lo) sin^2 between, as a function of the direction (dx, dy)."""
+    def w(dx, dy):
+        s2 = dy * dy / (dx * dx + dy * dy)
+        return lo + (hi - lo) * s2
+    return w
+
+
+def _dir(C, t, h=1e-5):
+    (xa, ya), (xb, yb) = C(t - h), C(t + h)
+    return xb - xa, yb - ya
+
+
+def ribbon(C, nodes, width):
+    """The stroked centreline as closed pieces (shape() contours), one per span: left edge forward, right edge back.
+    Unioned they are the ink; the pieces' cut lines are shared exactly, so nothing is left on them."""
+    L, R = offset_sides(C, nodes, width)
+    out = []
+    for a, b in zip(L, R):
+        out.append([a[0], ("c", a[1], a[2], a[3]), b[3], ("c", b[2], b[1], b[0])])
+    return out
+
+
+def tilde(p, s=1.0, white=None):
+    """The tilde (U+007E), and the almost-equal sign's two (U+2248): one period of a sine wave, from an inflection
+    rising to the crest, down through the middle inflection to the trough and up to the last inflection, each end
+    run on straight along its own tangent for half the stroke (curvature 0 there, so the run is a smooth join) and
+    cut square to the stroke. Weights: the signs' damped stress (stress(lo, hi)). p: x0, x1 (the centreline's ends,
+    the runs inside them), cy (or cys, several), amp, lo, hi."""
+    lo, hi = p["lo"] * s, p["hi"] * s
+    wf = stress(lo, hi)
+    x0, x1, A = p["x0"], p["x1"], p["amp"]
+    run = p.get("run", 0.5) * (lo + hi) / 2
+    out = []
+    for cy in p.get("cys", [p.get("cy")]):
+        lam = (x1 - x0) - 2 * run * math.cos(math.atan(2 * math.pi * A / max(1.0, (x1 - x0))))
+        for _ in range(20):                              # the wave's length so the runs end at x0 and x1
+            k = 2 * math.pi * A / lam
+            lam = (x1 - x0) - 2 * run / math.sqrt(1 + k * k)
+        k = 2 * math.pi * A / lam
+        ca, sa = 1 / math.sqrt(1 + k * k), k / math.sqrt(1 + k * k)
+        xs = x0 + run * ca
+        ys = cy                                          # the wave starts here (an inflection, rising), on its axis
+
+        def C(t, xs=xs, ys=ys, lam=lam):
+            return (xs + t * lam, ys + A * math.sin(2 * math.pi * t))
+        width = lambda t, C=C: wf(*_dir(C, t))
+        nodes = [0.0, 0.25, 0.5, 0.75, 1.0]
+        L, R = offset_sides(C, nodes, width)
+        w0, w1 = width(0.0), width(1.0)
+        n0 = (-sa, ca)                                   # the left normal at both ends (the same slope there)
+        r0, r1 = run, run
+
+        def at(pt, d, ln, sg, w):
+            return (pt[0] + d[0] * ln + n0[0] * w / 2 * sg, pt[1] + d[1] * ln + n0[1] * w / 2 * sg)
+        P0, P1 = C(0.0), C(1.0)
+        d = (ca, sa)
+        def run_on(q, h, ln):                          # an edge run on straight along its own tangent (q to h)
+            u_ = unit(h, q)
+            return (q[0] + u_[0] * ln, q[1] + u_[1] * ln)
+        contour = [run_on(L[0][0], L[0][1], r0), L[0][0]]
+        for a in L:
+            contour.append(("c", a[1], a[2], a[3]))
+        contour += [run_on(L[-1][3], L[-1][2], r1), run_on(R[-1][3], R[-1][2], r1), R[-1][3]]
+        for b in reversed(R):
+            contour.append(("c", b[2], b[1], b[0]))
+        contour.append(run_on(R[0][0], R[0][1], r0))
+        out.append(contour)
+    return out, [], []
+
+
+def infinity(p, s=1.0, white=None):
+    """The infinity sign (U+221E): one stroke round a lemniscate of Gerono, x = a cos t, y = b sin 2t, crossing
+    itself at the middle; the signs' damped stress (thick where it runs upright, at the outer ends; thin over the
+    lobes' tops and bottoms; between on the crossing). Nodes at every extreme and at the crossing. Returns the
+    stroke's pieces (unioned by the caller): a closed stroke has no ends."""
+    lo, hi = p["lo"] * s, p["hi"] * s
+    wf = stress(lo, hi)
+    a, b, cx, cy = p["a"], p["b"], p["cx"], p["cy"]
+
+    def C(t):
+        return (cx + a * math.cos(t), cy + b * math.sin(2 * t))
+    width = lambda t: wf(*_dir(C, t))
+    nodes = [k * math.pi / 4 for k in range(9)]
+    return ribbon(C, nodes, width), [], []
+
+
+def _arm(J, u, L, w0, d, a0, lead=0.5, enter=1.6, hold=0.55):
+    """One arm of a reference mark (the dagger's, as the asterisk's): from the junction J along the unit u, w0 across
+    where it leaves (a0 from J: the crossing arm's half width), widening steadily to a round end of diameter d whose
+    tip is L from J. phi is the side's straight flare (from the leaving point to the end's widest); each side is one
+    cubic leaving lead * phi out from u and arriving tangent on the end's circle where the circle turns enter * phi
+    out (a gently concave side: the arm swells as it nears the end), both handles `hold` of the way to where the two
+    directions meet. The end is the circle's arc over the tip, split at the tip (an extreme). Returns shape() steps
+    from the left leaving point round the end to the right one (clockwise round the arm)."""
+    n = (-u[1], u[0])
+    r = d / 2
+    c = (J[0] + u[0] * (L - r), J[1] + u[1] * (L - r))
+    tip = (J[0] + u[0] * L, J[1] + u[1] * L)
+    phi = math.atan2(r - w0 / 2, (L - r) - a0)
+    b, l_ = enter * phi, lead * phi
+    sides = []
+    for sg in (1, -1):
+        s0 = (J[0] + u[0] * a0 + n[0] * w0 / 2 * sg, J[1] + u[1] * a0 + n[1] * w0 / 2 * sg)
+        lu = (u[0] * math.cos(l_) + n[0] * sg * math.sin(l_), u[1] * math.cos(l_) + n[1] * sg * math.sin(l_))
+        tp = (c[0] + r * (n[0] * sg * math.cos(b) - u[0] * math.sin(b)), c[1] + r * (n[1] * sg * math.cos(b) - u[1] * math.sin(b)))
+        td = (u[0] * math.cos(b) + n[0] * sg * math.sin(b), u[1] * math.cos(b) + n[1] * sg * math.sin(b))
+        m = meet((s0, lu), (tp, td))
+        h1 = (s0[0] + (m[0] - s0[0]) * hold, s0[1] + (m[1] - s0[1]) * hold)
+        h2 = (tp[0] + (m[0] - tp[0]) * hold, tp[1] + (m[1] - tp[1]) * hold)
+        sides.append((s0, h1, h2, tp))
+    (l0, l1, l2, l3), (r0, r1, r2, r3) = sides
+    steps = [l0, ("c", l1, l2, l3)]
+    steps += _arc(c, r, l3, tip, ccw=False) + _arc(c, r, tip, r3, ccw=False)
+    steps.append(("c", r2, r1, r0))
+    return steps
+
+
+def _arc(c, r, p0, p1, ccw):
+    """A circular arc from p0 to p1 about c as cubics (each at most 90 degrees)."""
+    a0 = math.atan2(p0[1] - c[1], p0[0] - c[0])
+    a1 = math.atan2(p1[1] - c[1], p1[0] - c[0])
+    if ccw:
+        while a1 <= a0:
+            a1 += 2 * math.pi
+    else:
+        while a1 >= a0:
+            a1 -= 2 * math.pi
+    k = max(1, math.ceil(abs(a1 - a0) / (math.pi / 2) - 1e-6))
+    out = []
+    for i in range(k):
+        b0, b1 = a0 + (a1 - a0) * i / k, a0 + (a1 - a0) * (i + 1) / k
+        h = 4 / 3 * math.tan((b1 - b0) / 4) * r
+        q0 = (c[0] + r * math.cos(b0), c[1] + r * math.sin(b0))
+        q3 = (c[0] + r * math.cos(b1), c[1] + r * math.sin(b1))
+        out.append(("c", (q0[0] - h * math.sin(b0), q0[1] + h * math.cos(b0)),
+                    (q3[0] + h * math.sin(b1), q3[1] - h * math.cos(b1)), q3))
+    return out
+
+
+def _between(A, B, a, mid_w, side, k=0.55):
+    """The double dagger's upright between its two crossings, one side: from the crotch by A to the crotch by B,
+    a from the axis at both, mid_w across at the middle; two cubics, upright at the crotches and at the middle."""
+    x, ym = A[0], (A[1] + B[1]) / 2
+    sgn = -1 if B[1] < A[1] else 1
+    p0 = (x + side * a, A[1] + sgn * a)
+    p1 = (x + side * a, B[1] - sgn * a)
+    m = (x + side * mid_w / 2, ym)
+    d0, d1 = ym - p0[1], p1[1] - ym
+    return [("c", (p0[0], p0[1] + d0 * k), (m[0], m[1] - d0 * k), m),
+            ("c", (m[0], m[1] + d1 * k), (p1[0], p1[1] - d1 * k), p1)]
+
+
+def dagger(p, s=1.0, white=None):
+    """The dagger (U+2020) and the double dagger (U+2021): crosses of arms, every arm the reference marks' one arm
+    (_arm: thin where it leaves the crossing, swelling to a round end, as the asterisk's arms). p: cx, crossings
+    [y, ...], top and bottom (the upright arms' tips), reach (the side arms' tips from the axis), w0 (an arm where it
+    leaves), d (the round end), mid (the double dagger's upright between its crossings at its widest). One contour,
+    clockwise; each crotch the point where two arms' leaving points coincide (half the crossing arm's width out)."""
+    cx, ys = p["cx"], sorted(p["crossings"])
+    w0, d = p["w0"] * s, p["d"] * s
+    lead, enter, hold = p.get("lead", 0.5), p.get("enter", 1.6), p.get("hold", 0.55)
+    a = w0 / 2
+    yt, yb = ys[-1], ys[0]
+    R = p["reach"]
+    parts = [_arm((cx, yt), (0, 1), p["top"] - yt, w0, d, a, lead, enter, hold),
+             _arm((cx, yt), (1, 0), R, w0, d, a, lead, enter, hold)]
+    if yt != yb:
+        mid = (w0 + 0.9 * d) / 2                        # half way from the leaving width to the end's: the arms' law
+        parts.append(_between((cx, yt), (cx, yb), a, mid, 1))
+        parts.append(_arm((cx, yb), (1, 0), R, w0, d, a, lead, enter, hold))
+    parts.append(_arm((cx, yb), (0, -1), yb - p["bottom"], w0, d, a, lead, enter, hold))
+    parts.append(_arm((cx, yb), (-1, 0), R, w0, d, a, lead, enter, hold))
+    if yt != yb:
+        parts.append(_between((cx, yb), (cx, yt), a, mid, -1))
+        parts.append(_arm((cx, yt), (-1, 0), R, w0, d, a, lead, enter, hold))
+    contour = []
+    for P in parts:
+        for q in P:
+            end = contour[-1][3] if contour and contour[-1][0] == "c" else (contour[-1] if contour else None)
+            if q[0] != "c" and end is not None and math.dist(q, end) < 1e-6:
+                continue
+            contour.append(q)
+    if contour[-1][0] == "c" and math.dist(contour[-1][3], contour[0]) < 1e-6:
+        pass                                            # closes on the first point
+    return [contour], [], []
+
+
+BUILDERS.update({"tilde": tilde, "infinity": infinity, "dagger": dagger})

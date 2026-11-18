@@ -1207,32 +1207,35 @@ def spine_across(path):
     return best
 
 
+# 0.83 (Regular pass, symbols 1): one arrow. Its length is twice the maths axis (626, 1.20 x-heights; it was 0.80 of
+# the maths' advance, 490, 0.94 x-height, the references 1.21 to 1.32), so the vertical arrows, centred on the axis
+# as every arrow is, stand on the baseline. One head for every arrow: two arms at 45 degrees off the shaft (the
+# slanted arrows, turned 45 degrees, then have one arm level and one upright; the level arrows' head was 99 degrees
+# and the slanted ones' 90), each arm's centreline ARROW_ARM long (the head's outer span 0.60 of the arrow, as
+# before). Every arrow is this one turned or turned over, at its full length (the slanted ones were 0.92 of it).
+ARROW_LENGTH = 2.0                 # of the maths axis
+ARROW_ARM = 240                    # an arm's centreline, from the shaft's end to its free end
+ARROW_HALF = 45.0                  # degrees off the shaft
+
+
 def arrows(font, m, adv):
     """Arrows on the maths' axis and weight: the shaft is the minus, the head two strokes of the same weight meeting
     in a point (Serrif's open head; Georgia Pro has none)."""
     w = m.math
-    L = 0.80 * adv * 1.0
-    head = 0.36 * L                    # each head stroke's run along the shaft
+    L = ARROW_LENGTH * m.math_y
     cy = m.math_y
 
-    def east(length=L, head=head, both=False, half=None):
-        """0.77 (owner, 2026-11-14: "does uni21b5 arrow tip need to be fixed?"). The head was two bars and a small
-        triangle joined by a union: the triangle's sides did not lie on the bars' outer edges, so the tip came out
-        as a zigzag of three 12-unit steps on every arrow. The head is one outline now: the two strokes' outer
-        edges meet in the point, their inner edges in the crotch (a mitre), and nothing is left to a union there.
-        0.83 (Regular pass, item B; the owner: "arrow both shouldn't have the middle line go through the arrows?"):
-        the shaft stops at the head's crotch, where the head's two inner edges meet, and the head is solid from there
-        to its point. The two-headed arrow is one shaft from crotch to crotch with this head at both ends, the left
-        one the right one turned over about the arrow's middle (it was the arrow and its mirror unioned, so each
-        shaft ran on through the other end's head and cut its point square: a 22-unit flat, 52 high, at both tips)."""
+    def east(length=L, both=False):
+        """0.77 (owner, 2026-11-14: "does uni21b5 arrow tip need to be fixed?"). The head is one outline: the two
+        strokes' outer edges meet in the point, their inner edges in the crotch (a mitre), nothing left to a union.
+        0.83 (Regular pass, item B): the shaft stops at the head's crotch and the head is solid from there to its
+        point. The two-headed arrow is one shaft from crotch to crotch with this head at both ends, the left one the
+        right one turned over about the arrow's middle. 0.83 (symbols 1): the arm ARROW_ARM long at ARROW_HALF
+        degrees off the shaft, for every arrow."""
         x0, x1 = 0.0, length
-        px, py = x1 - head, head                           # the upper stroke's far end, from the axis
-        qx = x1 - w * 0.5
-        if half is not None:
-            # 0.83 item B: the same arm (its centreline as long as the level arrow's, the same weight) opened to `half`
-            # degrees off the shaft
-            arm_ = math.hypot(qx - px, py)
-            px, py = qx - arm_ * math.cos(math.radians(half)), arm_ * math.sin(math.radians(half))
+        qx = x1 - w * 0.5                                  # the arms' centrelines meet on the axis here
+        a_ = math.radians(ARROW_HALF)
+        px, py = qx - ARROW_ARM * math.cos(a_), ARROW_ARM * math.sin(a_)
         L_ = math.hypot(qx - px, py)
         dx_, dy_ = (qx - px) / L_, -py / L_                # along the stroke, towards the point
         nx_, ny_ = -dy_ * w / 2, dx_ * w / 2               # to its outer side
@@ -1253,29 +1256,30 @@ def arrows(font, m, adv):
     side = 44
     put(font, "arrowright", e, 0, [0x2192], lsb=side, rsb=side)
     put(font, "arrowleft", moved(e, 0, 0, -1, 1), 0, [0x2190], lsb=side, rsb=side)
-    both = east(both=True)
+    # the two-headed arrows: the shaft between the two crotches as long as the single arrow's shaft (tail to crotch),
+    # so the arrow is the single one plus one head's depth (it was the single arrow's length: its shaft read short)
+    eb = bounds(e)
+    crotch_x = max((sp[0] for sp in scan_h(e, cy + w / 2 + 2)), default=eb[2])  # the head's inner edge just over the shaft
+    depth = eb[2] - crotch_x
+    both = east(L + depth, both=True)
     put(font, "arrowboth", both, 0, [0x2194], lsb=side, rsb=side)
     up = moved(e, 0, 0, 1, 1, 90, (0, cy))
     vside = (adv - (bounds(up)[2] - bounds(up)[0])) / 2          # vertical arrows: centred in the maths' width
-    # vertical arrows: the same arrow turned. 0.83 (Regular pass, item B): every arrow's ink centred on the maths axis,
-    # as the level arrows' shafts are (references: the up arrow's middle -0.033 to +0.109 of the arrow's length off
-    # their level arrow's axis, median +0.010; Area stood them 30 under the cap height's middle, +0.027)
+    # vertical arrows: the same arrow turned, centred on the maths axis (references: the up arrow's middle -0.033 to
+    # +0.109 of the arrow's length off their level arrow's axis, median +0.010); at twice the axis long they stand on
+    # the baseline
     for name, u, rot in (("arrowup", 0x2191, 90), ("arrowdown", 0x2193, -90)):
         p = moved(e, 0, 0, 1, 1, rot, (L / 2, cy))
         x0, y0, x1, y1 = bounds(p)
         p = moved(p, 0, cy - (y0 + y1) / 2)
         put(font, name, p, 0, [u], lsb=vside, rsb=vside)
-    ud = moved(both, 0, 0, 1, 1, 90, (L / 2, cy))
+    ud = moved(both, 0, 0, 1, 1, 90, ((L + depth) / 2, cy))
     x0, y0, x1, y1 = bounds(ud)
     put(font, "arrowupdn", moved(ud, 0, cy - (y0 + y1) / 2), 0, [0x2195], lsb=vside, rsb=vside)
-    # 0.83 (Regular pass, item B): the slanting arrows keep their length (0.92 of the level arrow's) and take the level
-    # arrow's arm (its centreline length and weight; 0.82 scaled the head 0.92 too), opened to 45 degrees off the shaft
-    # so that, turned, one arm is level and the other upright (the turned copy's arms stood 4.9 degrees off; PP Kyoto's
-    # 1, the reference study, spec.md)
-    d = east(0.92 * L, head, half=45.0)
+    # the slanting arrows: the arrow turned 45 degrees whole (its 45-degree head turned so lies level and upright)
     for name, u, rot in (("uni2197", 0x2197, 45), ("uni2196", 0x2196, 135), ("uni2199", 0x2199, -135),
                          ("uni2198", 0x2198, -45)):
-        p = moved(d, 0, 0, 1, 1, rot, (L * 0.43, cy))
+        p = moved(e, 0, 0, 1, 1, rot, (L / 2, cy))
         x0, y0, x1, y1 = bounds(p)
         p = moved(p, 0, cy - (y0 + y1) / 2)
         put(font, name, p, 0, [u], lsb=side * 0.8, rsb=side * 0.8)
@@ -1289,9 +1293,16 @@ def maths(font, m, adv):
     # axis; > and >= are them turned over (MIRRORS). Until 0.81 < was Libre Baskerville's drawing (arms 49.2 and
     # 48.3 across, a 66-unit flat at the point, its middle 2 under the axis) and <= that drawing squashed to 0.82 of
     # its height (arms 41 across beside a 52 bar). The box is the old one's: x 98 to 514, 244 each side of the axis
-    x0_, x1_ = 98, 514
+    # 0.83 (symbols 1): every maths operator is the minus's width (94 to 518 in the maths' advance, the + box) and
+    # its ink centred on the maths axis; < was 98 to 514 and <= stood 26 over the axis (its ink 75 to 603)
+    x0_, x1_ = 94, 518
     put_built(font, "less", dict(build="chevron", params=dict(t=w, x0=x0_, x1=x1_, cy=cy, hh=244)), adv, [0x3C])
-    le = dict(build="chevron_bar", params=dict(t=w, x0=x0_, x1=x1_, cy=405, hh=200, bar_x0=x0_, bar_y=101))
+    le_cy, le_bar = 405, 101                          # the chevron over its bar as drawn, then the whole on the axis
+    probe = dict(build="chevron_bar", params=dict(t=w, x0=x0_, x1=x1_, cy=le_cy, hh=200, bar_x0=x0_, bar_y=le_bar))
+    import signs as SG
+    ys_ = [q[1] for q in SG.corners(probe)]
+    dy_ = cy - (min(ys_) + max(ys_)) / 2
+    le = dict(build="chevron_bar", params=dict(t=w, x0=x0_, x1=x1_, cy=le_cy + dy_, hh=200, bar_x0=x0_, bar_y=le_bar + dy_))
     put_built(font, "lessequal", le, adv, [0x2264])
     put(font, "greaterequal", moved(gp(font, "lessequal"), adv, 0, -1, 1), adv, [0x2265])
     # the multiplication sign: two strokes of the minus's weight crossing square on the maths axis, arms equal (it
@@ -1309,22 +1320,25 @@ def maths(font, m, adv):
                 dx = round(bx - (boxes[k][0] + boxes[k][1]) / 2)
                 for q in c.points:
                     q.x += dx
-    # ~~ : two of Area's tildes
-    t = gp(font, "asciitilde")
-    x0, y0, x1, y1 = bounds(t)
-    gap = 0.75 * (y1 - y0) + w * 0.6
-    p = union(moved(t, 0, cy + gap / 2 - (y0 + y1) / 2), moved(t, 0, cy - gap / 2 - (y0 + y1) / 2))
-    put(font, "approxequal", p, adv, [0x2248], lsb=(adv - (x1 - x0)) / 2)
-    font["approxequal"].width = adv
-    # infinity: two loops, each a ring stressed upright like the o, crossing at the middle
-    infinity(font, m, adv)
+    # 0.83 (symbols 1): the tilde, the almost-equal sign and infinity are one stroke each along a smooth centreline
+    # (signs.tilde, signs.infinity), the signs' damped upright stress (level 47, upright 57: the plain stroke's 52 on
+    # average; the letters' stress, much damped). ~ was 349 wide (0.67 of the + box's 424) with a 25-unit thinnest
+    # place and curvature jumps of 1.54; ~ is one period of a sine wave from inflection to inflection, the + box wide,
+    # on the maths axis; the almost-equal sign is two of it on the equals sign's two lines; infinity was two o's
+    # (vertical stress, 248 tall) and is a lemniscate the + box tall
+    tilde_signs(font, m, adv)
+    caret_sign(font, m)
+    # root (owner round 8, 0.82: signs.radical)
     # root (owner round 8, 0.82: signs.radical): a thin lead-in rising into the top of the thick downstroke, a thin
     # upstroke from the foot to the top, a level overbar, one outline with a corner at each junction (it was a union
     # of a bar, a vee and a rectangle: a jag where the lead-in met the downstroke). Thin, lead-in and bar the minus's
     # weight; the thick its 1.44 (Area's 0.96 stem over the minus), at every weight
     put_built(font, "radical", dict(build="radical", params=dict(
         thin=w, bar=w, thick=m.stem * 0.96, B=[150, 372], V=[262, -12], T=[448, CAP_HEIGHT + 30],
-        top=CAP_HEIGHT + 30, right=640, hook=[[60, 318], [156, 378]])), 0, [0x221A], lsb=30, rsb=10)
+        top=CAP_HEIGHT + 30, right=640, hook=[[60, 318], [156, 378]],
+        flat=VERTEX_CAP * m.stem * 0.96)), 0, [0x221A], lsb=30, rsb=10)
+    # 0.83 (symbols 1): the radical's foot is a vertex (the face's vertex rule: a flat 0.42 of the thick stroke
+    # across the bisector, 31.5); it was a sharp point
     # increment: a triangle with A's weights, thin left (A's thin diagonal, the capital bar), thick right (the capital
     # stem), a thin base (0.9 of the bar); owner round 8 (0.82): each side's inner edge parallel to its outer edge at
     # its weight, corners where the inner edges meet (signs.inset_edges; the inner corners were set by hand and the
@@ -1433,16 +1447,66 @@ def sum_vertex(g, stem):
 VERTEX_CAP = 0.42                 # parts.VERTEX
 
 
-def infinity(font, m, adv):
-    s = m.stem
-    thin = m.math
-    rx, ry = 168, 124
-    cy = m.math_y + 10
-    loops = []
-    for cx in (rx, 3 * rx - 0.92 * s):                 # the two loops share one upright stroke where they meet
-        loops.append(ring(cx, cy, rx, ry, s * 0.92, thin))
-    p = union(*loops)
+SIGN_LO, SIGN_HI = 47, 57         # the signs' damped stress: a stroke running level, upright (mean 52, the plain stroke)
+EQUAL_GAP = 154                    # the equals sign's two bars, centre to centre (as drawn)
+TILDE_AMP = 54                     # the tilde's wave, its centreline's height over the axis (slope 40 degrees at its inflections)
+INF_WIDTH = 1.85                   # infinity's ink width over its height (the references 1.58 to 2.2)
+
+
+def built_path(info):
+    import signs as SG
+    a, b, c = SG.build(info)
+    p = union(*[shape(P) for P in a])
+    if b:
+        p = op(p, union(*[shape(P) for P in b]), pathops.PathOp.DIFFERENCE)
+    if c:
+        p = union(p, *[shape(P) for P in c])
+    return p
+
+
+def tilde_signs(font, m, adv):
+    """0.83 (symbols 1): ~ and its kin, from their centrelines (signs.tilde, signs.infinity). ~'s ink is the minus's
+    width, the wave on the maths axis; the almost-equal sign its two tildes on the equals sign's lines (axis plus and
+    minus half EQUAL_GAP); infinity's ink the + box's height (the minus's width, the + is square) and INF_WIDTH of it
+    across, on the axis."""
+    w, cy = m.math, m.math_y
+    mb = bounds(gp(font, "minus"))
+    want = mb[2] - mb[0]
+
+    def tilde_info(cys, x0, x1):
+        return dict(build="tilde", params=dict(x0=x0, x1=x1, cys=cys, amp=TILDE_AMP, lo=SIGN_LO, hi=SIGN_HI))
+    x0, x1 = mb[0], mb[2]
+    for _ in range(30):                                  # the centreline's ends so the ink is the minus's width
+        b = bounds(built_path(tilde_info([cy], x0, x1)))
+        d = (want - (b[2] - b[0])) / 2
+        if abs(d) < 0.01:
+            break
+        x0, x1 = x0 - d, x1 + d
+    put(font, "asciitilde", built_path(tilde_info([cy], x0, x1)), 0, [0x7E],
+        lsb=(font["asciitilde"].width - want) / 2, rsb=(font["asciitilde"].width - want) / 2)
+    put(font, "approxequal", built_path(tilde_info([cy - EQUAL_GAP / 2, cy + EQUAL_GAP / 2], x0, x1)), 0, [0x2248],
+        lsb=(adv - want) / 2, rsb=(adv - want) / 2)
+    H = want                                             # the + box's height
+    b_ = (H - SIGN_LO) / 2                               # the centreline's half height (thin over the tops)
+    a_ = (INF_WIDTH * H - SIGN_HI) / 2                   # its half width (thick at the outer ends)
+    p = built_path(dict(build="infinity", params=dict(a=a_, b=b_, cx=0, cy=cy, lo=SIGN_LO, hi=SIGN_HI)))
     put(font, "infinity", p, 0, [0x221E], lsb=34, rsb=34)
+
+
+def caret_sign(font, m):
+    """0.83 (symbols 1): ^ (U+005E) is the less-than sign's chevron turned to point up, at its angle and with its
+    upright flat at the point, 0.60 of the x-height tall, its point at the cap height (it was 0.35 x-height tall, on
+    the maths axis, its arms tapering 35 to 66); ends cut level."""
+    import signs as SG
+    w = m.math
+    hgt = 0.60 * X_HEIGHT
+    half = hgt * 244 / (518 - 94)                        # <'s arms' rise over their run, as the chevron is solved
+    info = dict(build="chevron", params=dict(t=w, x0=0, x1=hgt, cy=0, hh=half))
+    p = built_path(info)
+    p = moved(p, 0, 0, 1, 1, -90, (0, 0))                # the point to the top
+    b = bounds(p)
+    p = moved(p, -(b[0] + b[2]) / 2, CAP_HEIGHT - b[3])
+    put(font, "asciicircum", p, 0, [0x5E], lsb=60, rsb=60)
 
 
 def primes(font, m):
@@ -1535,20 +1599,29 @@ def interface(font, m, adv):
     """Symbols on keys and in menus, on the figures' height and the maths' weight."""
     w = m.math
     h = 0.80 * CAP_HEIGHT
+    # 0.83 (symbols 1): the key box. Every interface sign and geometric shape is centred on the maths axis, as the
+    # arrows and the operators are (one axis for every sign that is not a letter or punctuation); the key signs share
+    # one box h tall (0.80 cap, 570). They stood on the baseline (command, option, shift, caps lock), at 285 (the erase
+    # keys), at 343 (the circles, squares, triangles, diamond and stars), at 350 (the check); option was 0.86 h tall
+    ky0 = m.math_y - h / 2
+    import signs as SG
+    chk = dict(build="check", params=dict(t=w * 1.25, start=[40, 300], vertex=[185, 120], end=[480, 600]))
+    cys_ = [q[1] for q in SG.corners(chk)]
+    dy_ = m.math_y - (min(cys_) + max(cys_)) / 2
+    chk["params"] = dict(t=w * 1.25, start=[40, 300 + dy_], vertex=[185, 120 + dy_], end=[480, 600 + dy_])
     # check and cross
     # owner round 8 (0.82): one construction (signs.check): the short stroke into the vertex and the long one out of
     # it, 1.25 of the minus's weight both, ends cut square, the vertex a flat outside and a point inside (it was two
     # overlapping bars: the short one's foot stood out past the long one in a notch)
-    put_built(font, "uni2713", dict(build="check", params=dict(t=w * 1.25, start=[40, 300], vertex=[185, 120],
-                                                               end=[480, 600])), 0, [0x2713], lsb=40, rsb=40)
+    put_built(font, "uni2713", chk, 0, [0x2713], lsb=40, rsb=40)
     c = 270
     put(font, "uni2715", union(bar((c - 180, m.math_y - 180), (c + 180, m.math_y + 180), w * 1.1),
                                bar((c - 180, m.math_y + 180), (c + 180, m.math_y - 180), w * 1.1)), 0, [0x2715],
         lsb=50, rsb=50)
     # circles: black circle the bullet's sibling at the figures' size, white circle its outline
     R = 0.40 * CAP_HEIGHT
-    put(font, "uni25CF", ellipse(0, m.math_y + 30, R, R), 0, [0x25CF], lsb=50, rsb=50)
-    put(font, "uni25CB", ring(0, m.math_y + 30, R, R, w, w), 0, [0x25CB], lsb=50, rsb=50)
+    put(font, "uni25CF", ellipse(0, m.math_y, R, R), 0, [0x25CF], lsb=50, rsb=50)
+    put(font, "uni25CB", ring(0, m.math_y, R, R, w, w), 0, [0x25CB], lsb=50, rsb=50)
     # command: a square whose sides run on past its corners and curl into four loops (three quarters of a circle)
     qc, rc = 104, 80            # the square's and the loops' centre lines
     parts = []
@@ -1562,24 +1635,24 @@ def interface(font, m, adv):
             facing = rect(min(cx, sx * qc), min(cy, sy * qc), max(cx, sx * qc), max(cy, sy * qc))
             parts.append(op(loop, facing, pathops.PathOp.DIFFERENCE))
     cmd = union(*parts)
-    put(font, "uni2318", moved(cmd, 0, h / 2), 0, [0x2318], lsb=50, rsb=50)
+    put(font, "uni2318", moved(cmd, 0, m.math_y), 0, [0x2318], lsb=50, rsb=50)
     # option: a level stroke, a falling diagonal, a level stroke; a short level stroke at the right top
     W = 520
-    t = h * 0.86
+    t = h
     p = union(rect(0, t - w, 0.30 * W, t), bar((0.30 * W - w * 0.4, t - w / 2), (0.72 * W, w / 2), w),   # 0.82: the minus's (was 1.05)
               rect(0.70 * W, 0, W, w), rect(0.56 * W, t - w, W, t))
-    put(font, "uni2325", p, 0, [0x2325], lsb=50, rsb=50)
+    put(font, "uni2325", moved(p, 0, ky0), 0, [0x2325], lsb=50, rsb=50)
     # shift: an outlined arrow pointing up (owner round 8, 0.82: signs.frame, one stroke all round; the inner outline
     # was set by hand, its head's flanges 32 across beside sides of 52)
     sw, sh = 520, h
-    shift_out = [[sw / 2, sh], [sw, sh * 0.48], [sw * 0.72, sh * 0.48], [sw * 0.72, 0], [sw * 0.28, 0],
-                 [sw * 0.28, sh * 0.48], [0, sh * 0.48]]
+    shift_out = [[x, y + ky0] for x, y in [[sw / 2, sh], [sw, sh * 0.48], [sw * 0.72, sh * 0.48], [sw * 0.72, 0],
+                                            [sw * 0.28, 0], [sw * 0.28, sh * 0.48], [0, sh * 0.48]]]
     k = w
     put_built(font, "uni21E7", dict(build="frame", params=dict(t=w, outer=shift_out)), 0, [0x21E7], lsb=50, rsb=50)
     # caps lock: the shift arrow, its shaft shorter by a fifth of its height (nothing scaled), over a level bar of the
     # plain stroke under the shaft, 39 below its foot
     by_ = round(0.20 * sh)
-    caps_out = [[x, y if y > 0 else by_] for x, y in shift_out]
+    caps_out = [[x, y if y > ky0 + 0.5 else ky0 + by_] for x, y in shift_out]
     put_built(font, "uni21EA", dict(build="frame", params=dict(t=w, outer=caps_out,
                                                                bar=dict(x0=sw * 0.28, x1=sw * 0.72, gap=by_ - w))),
               0, [0x21EA], lsb=50, rsb=50)
@@ -1587,7 +1660,7 @@ def interface(font, m, adv):
     # true inset of the outer with a sharp inner point (the inner point was set 1.9 strokes in and the slanted sides
     # ran 52 to 73 across), the cross centred in the box part. U+2326 is it turned over (MIRRORS)
     th_ = h * 0.80
-    put_built(font, "uni232B", dict(build="erase", params=dict(t=w, tw=700, th=th_, y0=(h - th_) / 2, shoulder=0.30 * 700,
+    put_built(font, "uni232B", dict(build="erase", params=dict(t=w, tw=700, th=th_, y0=m.math_y - th_ / 2, shoulder=0.30 * 700,
                                                                arm=th_ * 0.22 * math.sqrt(2))), 0, [0x232B], lsb=50, rsb=50)
 
 
@@ -1995,18 +2068,41 @@ def _slash(lo, hi, perp=None):
 def plain_strokes(font, m):
     w = m.math
     done = []
-    b = bounds(gp(font, "plus"))
-    cx, cy = (b[0] + b[2]) / 2, m.math_y
-    plus = union(rect(b[0], cy - w / 2, b[2], cy + w / 2), rect(cx - w / 2, b[1], cx + w / 2, b[3]))
+    # 0.83 (symbols 1): the + box. Every maths operator is the minus's width (mb); the + is square (it was 424 wide
+    # and 430 tall) on the maths axis; = (it stood 22 over the axis, 412 wide), the plus-minus sign (55 over), the
+    # not sign (414 wide) are the minus's width with their ink centred on the axis (the not sign: its bar on it)
+    mb = bounds(gp(font, "minus"))
+    cx, cy = (mb[0] + mb[2]) / 2, m.math_y
+    hw = (mb[2] - mb[0]) / 2
+    plus = union(rect(mb[0], cy - w / 2, mb[2], cy + w / 2), rect(cx - w / 2, cy - hw, cx + w / 2, cy + hw))
     put(font, "plus", plus, font["plus"].width)
-    g = font["plusminus"]                                # its plus, and the bar under it as it is
+    g = font["plusminus"]                                # its plus, and the bar under it at the gap it had
     boxes = sorted((bounds(_contour_path(c)) for c in g.contours), key=lambda q: q[3] - q[1])
     bar_, pl = boxes[0], boxes[-1]
-    pcx, pcy = (pl[0] + pl[2]) / 2, (pl[1] + pl[3]) / 2
-    put(font, "plusminus", union(rect(pl[0], pcy - w / 2, pl[2], pcy + w / 2), rect(pcx - w / 2, pl[1], pcx + w / 2, pl[3]),
-                                 rect(bar_[0], bar_[1], bar_[2], bar_[1] + w)), g.width)
+    gap_ = pl[1] - (bar_[1] + w)                         # white between the plus's foot and the bar
+    tot = 2 * hw + gap_ + w
+    py0 = cy - tot / 2                                   # the bar's foot
+    pcy = py0 + w + gap_ + hw
+    put(font, "plusminus", union(rect(mb[0], pcy - w / 2, mb[2], pcy + w / 2), rect(cx - w / 2, pcy - hw, cx + w / 2, pcy + hw),
+                                 rect(mb[0], py0, mb[2], py0 + w)), g.width)
     b = bounds(gp(font, "logicalnot"))
-    put(font, "logicalnot", union(rect(b[0], b[3] - w, b[2], b[3]), rect(b[2] - w, b[1], b[2], b[3])), font["logicalnot"].width)
+    drop = b[3] - b[1] - w                               # the hook's drop under the bar, as drawn
+    put(font, "logicalnot", union(rect(mb[0], cy - w / 2, mb[2], cy + w / 2), rect(mb[2] - w, cy + w / 2 - w - drop, mb[2], cy + w / 2)),
+        font["logicalnot"].width)
+    # = : two bars of the minus, EQUAL_GAP apart, on the axis; the not-equal sign's slash moves with them
+    put(font, "equal", union(rect(mb[0], cy - EQUAL_GAP / 2 - w / 2, mb[2], cy - EQUAL_GAP / 2 + w / 2),
+                             rect(mb[0], cy + EQUAL_GAP / 2 - w / 2, mb[2], cy + EQUAL_GAP / 2 + w / 2)), font["equal"].width)
+    if "notequal" in font:                              # the = in place, the slash's middle on the ='s middle
+        ne = font["notequal"]
+        for comp in ne.components:
+            comp.transformation = (1, 0, 0, 1, 0, 0)
+        xs_ = [q.x for c in ne.contours for q in c.points]
+        ys_ = [q.y for c in ne.contours for q in c.points]
+        ddx, ddy = round(cx - (min(xs_) + max(xs_)) / 2), round(cy - (min(ys_) + max(ys_)) / 2)
+        for c in ne.contours:
+            for q in c.points:
+                q.x += ddx
+                q.y += ddy
     b = bounds(gp(font, "underscore"))
     cy = (b[1] + b[3]) / 2
     put(font, "underscore", rect(b[0], cy - w / 2, b[2], cy + w / 2), font["underscore"].width)
@@ -2066,6 +2162,7 @@ def plain_strokes(font, m):
 # level at the slash's slope measures 55; the heaviest plain stroke in the set (the long stroke overlay, 59 to 60).
 SOFT = 7                          # derive.SOFT, the letters' radius
 SOFT_FACE = (20, 62)
+SOFT_WIDE = {"uni2713": 70}       # 0.83 (symbols 1): the check's ends (1.25 plain strokes, 65) are plain ends too
 SOFT_ANGLE = (54, 126)            # normalize.END_ANGLE is 70 to 125; a leaning stroke cut level has corners of its
                                   # slope and the rest of 180: the slash 65.6 / 114.4, the fraction bar 54.5 / 125.5
 SOFT_PARALLEL = 8                 # degrees the two edges may differ: a plain stroke, not a wedge
@@ -2078,7 +2175,7 @@ def soft_skip(font):
     return core | {g.name for g in font if g.name.endswith(("superior", "inferior")) or g.name.split(".")[0] in core}
 
 
-def _plain_ends(c, ink_ccw):
+def _plain_ends(c, ink_ccw, face_max=None):
     """Indexes of the corners at the ends of plain strokes in one contour."""
     P, n = c.points, len(c.points)
     if any(p.type == "qcurve" for p in P):
@@ -2099,7 +2196,7 @@ def _plain_ends(c, ink_ccw):
         if nxt not in info or P[nxt].type != "line" or P[i].type != "line" or P[info[nxt][2]].type != "line":
             continue                                           # the cut and both edges beside it are straight
         face = math.hypot(P[nxt].x - P[i].x, P[nxt].y - P[i].y)
-        if not (SOFT_FACE[0] <= face <= SOFT_FACE[1] and SOFT_ANGLE[0] <= ang <= SOFT_ANGLE[1]
+        if not (SOFT_FACE[0] <= face <= (face_max or SOFT_FACE[1]) and SOFT_ANGLE[0] <= ang <= SOFT_ANGLE[1]
                 and SOFT_ANGLE[0] <= info[nxt][0] <= SOFT_ANGLE[1]):
             continue
         q0, q1 = P[prev], P[info[nxt][2]]
@@ -2130,7 +2227,7 @@ def soft_ends(font, skip=None):
             areas.append(pen.value)
         outer = max(areas, key=abs) > 0
         for c, sg in zip(g.contours, areas):
-            chosen = _plain_ends(c, (sg > 0) == outer)
+            chosen = _plain_ends(c, (sg > 0) == outer, SOFT_WIDE.get(g.name))
             if not chosen:
                 continue
             P, n, out = c.points, len(c.points), []
@@ -2168,7 +2265,7 @@ def sharp_ends(font, skip=None):
             c.draw(pen)
             areas.append(pen.value)
         outer = max(areas, key=abs) > 0
-        k = sum(len(_plain_ends(c, (sg > 0) == outer)) // 2 for c, sg in zip(g.contours, areas))
+        k = sum(len(_plain_ends(c, (sg > 0) == outer, SOFT_WIDE.get(g.name))) // 2 for c, sg in zip(g.contours, areas))
         if k:
             left[g.name] = k
     return left
@@ -2252,7 +2349,8 @@ def letter_signs(font, m):
 # and rounding (bracket stems 73 and 74, braces 233 and 234 wide, 4 to 62 points apart).
 MIRRORS = [("parenleft", "parenright"), ("bracketleft", "bracketright"), ("braceleft", "braceright"),
            (0x00AB, 0x00BB), (0x2039, 0x203A), ("less", "greater"), ("lessequal", "greaterequal"),
-           (0x21E4, 0x21E5), (0x232B, 0x2326)]     # 0.81: the tab arrows and the erase keys, one drawing each
+           (0x21E4, 0x21E5), (0x232B, 0x2326),      # 0.81: the tab arrows and the erase keys, one drawing each
+           ("arrowright", "arrowleft"), ("uni2197", "uni2196"), ("uni2198", "uni2199")]   # 0.83: the arrows too
 
 
 def _name(font, key):
@@ -2770,6 +2868,68 @@ def fraction_gap(font, g, comp):
     return min(_seg_dist(p, bar_[i], bar_[(i + 1) % len(bar_)]) for p in pts for i in range(len(bar_)))
 
 
+def percent_fit(font):
+    """0.83 (symbols 1): the percent and per-mille signs are set as the fractions are: their figures (a superior zero
+    over the bar, inferior zeros under it) each FRAC_GAP from the bar, moved level only (they keep their heights);
+    they stood 25 to 40 from it, so % was 1.06 x-heights wide (one half 1.18; the references' % 1.36 to 1.51)."""
+    done = []
+    for name in ("percent", "perthousand"):
+        if name not in font or not font[name].components or len(font[name].contours) != 1:
+            continue
+        g = font[name]
+        b0 = bounds(gp(font, name))
+        lsb, rsb = b0[0], g.width - b0[2]
+        sup = [c for c in g.components if c.baseGlyph.endswith("superior")]
+        inf = [c for c in g.components if c.baseGlyph.endswith("inferior")]
+        if not sup or not inf:
+            continue
+        near = min(inf, key=lambda c: c.transformation[4])
+        was = []
+        for group, sign, probe in ((sup, -1, sup[0]), (inf, 1, near)):
+            was.append(round(fraction_gap(font, g, probe)))
+            t0 = [c.transformation for c in group]
+            lo, hi = -150.0, 250.0
+            for _ in range(26):
+                mid = (lo + hi) / 2
+                for c, t in zip(group, t0):
+                    c.transformation = (1, 0, 0, 1, t[4] + sign * mid, t[5])
+                if fraction_gap(font, g, probe) < FRAC_GAP:
+                    lo = mid
+                else:
+                    hi = mid
+            for c, t in zip(group, t0):
+                c.transformation = (1, 0, 0, 1, round(t[4] + sign * hi), t[5])
+        b1 = bounds(gp(font, name))
+        d = round(lsb - b1[0])
+        for c in g.components:
+            t = c.transformation
+            c.transformation = (1, 0, 0, 1, t[4] + d, t[5])
+        for q in g.contours[0].points:
+            q.x += d
+        w0 = g.width
+        g.width = round(lsb + (b1[2] - b1[0]) + rsb)
+        done.append(f"{name} gaps {was[0]} / {was[1]} > {FRAC_GAP}, advance {w0} > {g.width}")
+    return done
+
+
+def euro_sign(font, m):
+    """0.83 (symbols 1): the euro is Area's C and two level bars of the capitals' crossbar (a sign from a letter, as
+    the colon sign is C and strokes): the bars where they were drawn (centres 0.43 and 0.60 of the cap), from 0.9 of
+    the capital stem left of the C (as the peso's and the ruble's bars) to 0.66 of the C's width. It was its own
+    narrow C (1.04 x-heights where Area's C is 1.17)."""
+    if "euro" not in font or "C" not in font:
+        return None
+    C = gp(font, "C")
+    cb = bounds(C)
+    x0 = cb[0] - 0.9 * m.cap_stem
+    x1 = cb[0] + 0.66 * (cb[2] - cb[0])
+    bars_ = [rect(x0, band(y * CAP_HEIGHT, m.cap_bar)[0], x1, band(y * CAP_HEIGHT, m.cap_bar)[1]) for y in (0.43, 0.60)]
+    STRUCK["euro"] = ("C", list(bars_))
+    lsb, rsb = cb[0], font["C"].width - cb[2]
+    put(font, "euro", union(C, *bars_), 0, list(font["euro"].unicodes) or [0x20AC], lsb=lsb, rsb=rsb)
+    return f"euro {cb[2] - x0:.0f} wide (C {cb[2] - cb[0]:.0f})"
+
+
 def fraction_names(font):
     return [g.name for g in font if g.components and len(g.contours) == 1 and g.name not in ("percent", "perthousand")
             and any(c.baseGlyph.endswith("inferior") for c in g.components)
@@ -2875,6 +3035,25 @@ def letter_currencies(font, m):
     return made
 
 
+DAGGER = dict(w0=22, d=78)          # the asterisk's arm where it leaves its centre, and its round end (as read)
+
+
+def dagger_info(font, name):
+    """The dagger's construction: the asterisk's centre, arm length and ball, read from the finished asterisk."""
+    if "asterisk" not in font:
+        return None
+    ab = bounds(gp(font, "asterisk"))
+    acy = (ab[1] + ab[3]) / 2                            # its centre (its arms' junction)
+    arm = ab[3] - acy
+    over = -9                                            # the capitals' and figures' overshoot under the baseline
+    top = ab[3]
+    xs = [acy]
+    if name == "daggerdbl":
+        xs = [CAP_HEIGHT - acy, acy]
+    return dict(build="dagger", params=dict(cx=0, crossings=xs, top=top, bottom=over, reach=arm, w0=DAGGER["w0"],
+                                            d=DAGGER["d"]))
+
+
 def more_symbols(font, m, adv):
     w, cy = m.math, m.math_y
     made = []
@@ -2897,12 +3076,13 @@ def more_symbols(font, m, adv):
     ab = bounds(ar)
     au = gp(font, "arrowup")
     ub = bounds(au)
-    # owner round 8 (0.82): the arrows' head as its own construction (signs.caret): the arrows' head stroke (0.36 of
-    # the arrow's length along the shaft), its point where the up arrow's is
-    L_ = 0.80 * adv
-    hd_ = 0.36 * L_
-    tip_ = w / 2 / math.cos(math.atan2(hd_, hd_ - w / 2))  # the outer point above the centrelines' meeting
-    put_built(font, "uni2303", dict(build="caret", params=dict(t=w, head=hd_, apex=[(ub[0] + ub[2]) / 2, ub[3] - tip_])),
+    # 0.83 (symbols 1): the arrows' head as its own construction (signs.caret): the arrows' head stroke (the arm's
+    # run along the shaft), its point at the top of the key box (it followed the up arrow's point)
+    a_ = math.radians(ARROW_HALF)
+    hd_ = ARROW_ARM * math.sin(a_)
+    tip_ = w / 2 / math.sin(a_)                             # the outer point above the centrelines' meeting
+    key_top = cy + 0.80 * CAP_HEIGHT / 2
+    put_built(font, "uni2303", dict(build="caret", params=dict(t=w, head=hd_, run=hd_, apex=[(ub[0] + ub[2]) / 2, key_top - tip_])),
               0, [0x2303], lsb=ub[0], rsb=ub[0])
     made.append("uni2303")
     tab = union(ar, rect(ab[2], ab[1], ab[2] + w, ab[3]))
@@ -2910,23 +3090,35 @@ def more_symbols(font, m, adv):
     add("uni21E4", 0x21E4, moved(tab, 0, 0, -1, 1), side=44)
     al = gp(font, "arrowleft")
     lb = bounds(al)
-    ret = union(al, rect(lb[2] - w, cy - w / 2, lb[2], cy + 0.42 * CAP_HEIGHT))
+    ret = union(al, rect(lb[2] - w, cy - w / 2, lb[2], ub[3]))    # 0.83: its riser up to the up arrow's point
     add("uni21B5", [0x21B5, 0x23CE], ret, side=44)
     add("uni2326", 0x2326, moved(gp(font, "uni232B"), 0, 0, -1, 1))
     # caps lock (U+21EA): built with the shift arrow in interface() (owner round 8, 0.82)
-    # solid shapes on the black circle's size and centre
+    # 0.83 (symbols 1): the geometric shapes, one size and one axis. The circle (the key box, 0.80 cap across) is the
+    # measure: the square's area is the circle's (side 0.886 of the diameter); the pointed shapes' (the triangles,
+    # the diamond) 0.70 of it, their corners carrying less ink to the eye (an equilateral triangle 0.977 of the
+    # diameter tall, the diamond 1.049 across its points; they were 0.87 and 1.00, the triangle 0.56 of the circle's
+    # area beside the square's 0.98). Each is centred on the maths axis (they stood 30 over it); a triangle by its
+    # optical middle, half way between its box's middle and its centroid; the small triangles are the large ones at
+    # 0.55; the stars on their centre point
     cb_ = bounds(gp(font, "uni25CF"))
-    R = (cb_[3] - cb_[1]) / 2
-    oy = (cb_[1] + cb_[3]) / 2
-    tri = shape([(-R, -0.87 * R), (R, -0.87 * R), (0, 0.87 * R)])                 # level base, as wide as the circle
+    D = cb_[3] - cb_[1]
+    R = D / 2
+    oy = cy
+    A_c = math.pi * R * R
+    th_ = math.sqrt(0.70 * A_c * math.sqrt(3))              # the triangle's height: h^2 / sqrt(3) = 0.70 of the circle
+    sd_ = 2 * th_ / math.sqrt(3)
+    lift = -(th_ / 2 + th_ / 3) / 2                         # the base below the axis: half way, box middle and centroid
+    tri = shape([(-sd_ / 2, lift), (sd_ / 2, lift), (0, lift + th_)])
     for name, cp, rot, sc in (("uni25B2", 0x25B2, 0, 1), ("uni25BC", 0x25BC, 180, 1), ("uni25B6", 0x25B6, -90, 1),
                               ("uni25C0", 0x25C0, 90, 1), ("uni25B4", 0x25B4, 0, 0.55), ("uni25BE", 0x25BE, 180, 0.55),
                               ("uni25B8", 0x25B8, -90, 0.55), ("uni25C2", 0x25C2, 90, 0.55)):
-        add(name, cp, moved(moved(tri, 0, 0, sc, sc, rot), 0, oy if sc == 1 else cy))
-    q = 0.88 * R
+        add(name, cp, moved(moved(tri, 0, 0, sc, sc, rot), 0, oy))
+    q = math.sqrt(A_c) / 2
     add("uni25A0", 0x25A0, rect(-q, oy - q, q, oy + q))
     add("uni25A1", 0x25A1, op(rect(-q, oy - q, q, oy + q), rect(-q + w, oy - q + w, q - w, oy + q - w), pathops.PathOp.DIFFERENCE))
-    add("uni25C6", 0x25C6, shape([(0, oy - R), (R, oy), (0, oy + R), (-R, oy)]))
+    dg = math.sqrt(0.70 * A_c * 2) / 2
+    add("uni25C6", 0x25C6, shape([(0, oy - dg), (dg, oy), (0, oy + dg), (-dg, oy)]))
 
     def star(r_out, r_in):
         pts = []
@@ -2944,6 +3136,20 @@ def more_symbols(font, m, adv):
     kk = (d0 - w) / d0
     add("uni2605", 0x2605, star(R5, r_in))
     add("uni2606", 0x2606, op(star(R5, r_in), star(R5 * kk, r_in * kk), pathops.PathOp.DIFFERENCE))
+    # 0.83 (symbols 1): the daggers are the reference marks' arm (signs.dagger, as the asterisk's: thin where it
+    # leaves the crossing, swelling to a round end), one family with the asterisk: the crossing at the asterisk's
+    # centre, the upper and side arms the asterisk's arm length, its waist and its round end (the ink's 22 and 78);
+    # the lower arm down to the baseline (the round end's foot at the overshoot). They were a spear 0.33 cap under
+    # the baseline, 1.84 x-heights tall, heaviest (1.68 stems) under the cross. The double dagger is the same at two
+    # crossings, the asterisk's centre and its mirror about half the cap height
+    for name in ("dagger", "daggerdbl"):
+        if name not in font:
+            continue
+        info = dagger_info(font, name)
+        if info is None:
+            continue
+        put(font, name, built_path(info), 0, list(font[name].unicodes), lsb=50, rsb=50)
+        made.append(name)
     return made
 
 
@@ -3290,6 +3496,8 @@ def run(font, lightened):
     print("charset: fractions", fractions(font))                       # 0.72
     print(f"charset: fraction figures {FRAC_GAP} from the bar (they were)", fraction_fit(font))   # 0.72
     print("charset: currencies from capitals", letter_currencies(font, m))   # 0.72
+    print("charset: euro", euro_sign(font, m))                         # 0.83
+    print("charset: percent", percent_fit(font))                       # 0.83
     print("charset: symbols", more_symbols(font, m, adv))               # 0.72
     print("charset: kra", kra(font))                                   # 0.71
     letters_extra(font)

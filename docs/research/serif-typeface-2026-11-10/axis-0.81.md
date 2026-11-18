@@ -1736,3 +1736,63 @@ the ear in the masters (`e/gdent.py`): Bold U +24.3 / D -9.6 (snap082i +25.3 / -
 dent the owner saw at the heavy weights is still there; its rule (move the ear with the bowl in `g_ear`) is open. The
 ∑'s bottom bar at the Bold is 126 (0.9 of the Bold n stem) and its point rises to 0.59 of the height (the diagonals'
 angles fixed while the bar grows). Pages not rebuilt.
+
+### Symbols 1: accuracy (the symbol system's rules, every non-letter glyph against them)
+
+The owner: "the arrows and symbols definitely need another style and consistency pass, making sure everything is
+mathematically, optically, and visually accurate first". The references (Georgia Pro, Serrif, PP Kyoto; the study
+`build/refstudy/spec.md`) are a sanity range, never a target: each rule below is stated in Area's own parts. Census of
+all 147 non-letter glyphs of the Regular (`build/owner8/sym/census.py`: advance, sides, ink box over the x-height, the
+line or axis each is centred on or stands on, the strokes across themselves by rays from the outline, straight
+strokes by angle, sharp and softened corners, the worst curvature ratio across a smooth node, mirror partners by the
+area of their XOR): `build/owner8/sym/census-before.txt` (snap083a), `census-after-stage1.txt`.
+
+The rules (one table for the symbol system):
+
+| | Rule | Glyphs |
+|---|---|---|
+| Axes | The maths axis (313, the minus's middle) for every sign that is not a letter, a figure or punctuation: operators, arrows, interface signs, geometric shapes, ~ ≈ ∞. The dash line (278) for hyphen and dashes; the baseline and cap height for the letter-like signs | |
+| The + box | The minus's width (424; 94 to 518 in the maths' 612 advance) is every operator's width; the + is that square | + − ± × ÷ = ≠ < > ≤ ≥ ¬ ~ ≈; ∞'s height |
+| Arrow | Length twice the axis (626, so ↑ stands on the baseline); one head: arms 240 along their centrelines at 45 degrees off the shaft; every arrow that one turned or turned over, whole; ↔ ↕ the single arrow plus one head's depth (the shaft between the crotches the single arrow's shaft) | ← → ↑ ↓ ↔ ↕ ↖ ↗ ↘ ↙ ↵ ⇤ ⇥ ⌃ |
+| Key box | 0.80 cap (570) tall, centred on the axis | ⌘ ⌥ ⇧ ⇪ (the erase keys 0.80 of it), ⌃'s point at its top, ✓ centred |
+| Shapes | The circle is the key box; the square's area the circle's; the pointed shapes' 0.70 of it; triangles centred half way between their box's middle and their centroid; the small triangles 0.55 | ● ○ ■ □ ▲ ▼ ▶ ◀ ▴ ▾ ▸ ◂ ◆ ★ ☆ |
+| Letter-like signs | Baseline to cap height (and the operators' descent, -0.25 cap, for ∏ ∑), the capitals' weights | ∂ ∆ ∏ ∑ ◊ # € and the currencies |
+| Reference marks | One arm: from the asterisk's centre (521), 22 where it leaves, swelling to a round end of 78, the asterisk's length (200); the dagger's lower arm down to the baseline's overshoot; the double dagger's second crossing the first's mirror about half the cap | * † ‡ |
+| Weights | The plain stroke (the minus, 52) in every straight sign; the check 1.25 of it; the radical's thick 0.96 of the stem; the curved maths signs the damped upright stress, 47 level and 57 upright (52 on average); the letter-signs' strokes the case's hairline (47, 43), their level bars H's crossbar (49); the fraction bar 48 level | |
+| Ends and corners | A plain stroke's free end cut square, both corners on radius 7 (the letters' cut ends; kept, as the owner chose in 0.79); a meeting stays sharp; a vertex's outside a flat 0.42 of the stroke across the bisector (✓, the radical's foot); a chevron's point an upright flat 0.79 of the stroke (< > ≤ ≥ ^); arrow heads and frames mitred | |
+| Partners | A mirrored pair is one drawing turned over (the brackets, guillemets, < >, ≤ ≥, ⇤ ⇥, ⌫ ⌦, now ← →, ↗ ↖, ↘ ↙); turned ones the same drawing turned (the arrows, the triangles); ≈ is two ~; ≠ is = and a slash centred on it | |
+
+What broke a rule, and what changed (Regular; census before > after):
+
+| # | Glyphs | Was | Now |
+|---|---|---|---|
+| 112 | + = ≠ ± ¬ < > ≤ ≥ | + 424 wide, 430 tall; = 412 wide, centred 22 over the axis (≠'s slash 43 over, 20 left of the ='s middle); ± 55 over; ≤ ≥ 26 over; < > ¬ 416 / 414 wide | every one 424 wide, centred on the axis (¬ its bar on it); + 424 square |
+| 113 | ~ ≈ | ~ 349 wide (0.82 of the box), on the dash line, 25 to 78 across (thinnest 0.58 hairline), curvature jumps 1.54 (≈ 99: a node's handle collapsed); ≈ two of it 0.75 of their height apart | `signs.tilde`: one period of a sine wave from inflection to inflection, the + box wide (418 after the soft corners), on the axis, wave height 54 (40 degrees at the inflections), each end run on along its edge's tangent and cut square, the damped stress 46 to 52 across; ≈ two on the equals' lines (154 apart); 0 curvature faults |
+| 114 | ∞ | two o's (outer sides 72, tops 52), 248 tall (0.58 of the + box), 600 wide | `signs.infinity`: one stroke round a lemniscate of Gerono, the + box tall (424), 1.85 of it wide (784), the damped stress (47 over the tops, 57 at the ends, about 52 through the crossing); nodes at every extreme and the crossing; 0 faults |
+| 115 | ^ | 0.35 x-height tall, centred on the axis, arms tapering 35 to 66 | the < chevron turned up (its angle, its upright flat), 0.60 x-height tall, point at the cap height, 52 across |
+| 116 | arrows | 490 long (0.94 x-height); level heads 99 degrees, slanted 90; slanted arrows 0.92 of the length; ↔ ↕ the single arrow's length (the shaft between its heads 310); ← not exactly → turned over (arms 51.7 against 52.5: audit_charset error) | 626 long; one 90-degree head; every arrow → turned; ↔ ↕ 728 (shaft between crotches 400, →'s); ← ↖ ↙ the mirror of → ↗ ↘ (MIRRORS); advances → 578 > 714, ↔ 578 > 816, ↖ 407 > 531, ⇤ ⇥ 630 > 766, ↵ 578 > 714 (riser to ↑'s point) |
+| 117 | ⌘ ⌥ ⇧ ⇪ ⌫ ⌦ ⌃ ✓ ● ○ ■ □ ▲ ▼ ▶ ◀ ◆ ★ ☆ | key signs on the baseline (⌥ 490 tall where the others are 570), the erase keys centred at 285, the shapes at 343, ✓ at 350, ⌃'s point at ↑'s (558); ▲ 0.56 of the circle's area beside ■ 0.98; ◆ 0.64 | all on the axis; ⌥ 570; ⌃'s point at the key box's top (598); ■ the circle's area (side 505), ▲ ◆ 0.70 of it (▲ 642 wide, 556 tall; ◆ 598); stars on their centre point |
+| 118 | † ‡ | a spear to -238 (0.33 cap under the baseline), 1.84 x-heights tall, heaviest (137) under the crossing, ball ends 102 | `signs.dagger`: the asterisk's arm (22 to 78) on a cross at the asterisk's centre; -9 to 721; ‡ crossings at 521 and 191, its upright 50 at the middle; 22 at the crossings, 78 at the ends |
+| 119 | √ | the foot a sharp point (0.33 hairline thinnest) | a vertex: a flat 31.5 (0.42 of the 75 thick) across the bisector |
+| 120 | % ‰ | figures 25 to 40 from the bar (the fractions keep 66): % 1.06 x-heights wide | set as the fractions (each figure 66 from the bar, level moves only): % 1.22 x-heights (advance 640 > 719), ‰ 885 > 924 |
+| 121 | € | its own narrow C (1.04 x-heights) with flat-cut terminals | Area's C and two bars of H's crossbar (centres 0.43 and 0.60 cap, from 0.9 of the capital stem left of the C to 0.66 of its width; struck in the variable font as ₡ is): 1.31 x-heights, advance 655 > 746 |
+| 122 | ✓ | its 65 ends sharp (soft_ends stopped at 62: audit_charset error) | radius 7 as every plain end (`charset.SOFT_WIDE`) |
+
+Checked and in rule, unchanged: − × ÷ (dots over the bar's middle), / \ | ¦ _, the dashes, ∆ ∏ ∑ (∏ and ∑ against j are
+already opened by the collision pass, ∏ j +132, ∑ j +126: no ink closer than 13), ∂ ∫, the brackets, quotes,
+guillemets, ¶ § # © ® ℗ ™ and the letter currencies, ⋯ ⋮ • ∙ °, ◊ (left at 0.55 wide over tall: the frame's rule;
+the study's 0.65 is a reference number, not a fault in Area's terms), ✕ (on the axis, 1.1 of the plain stroke by
+design). The stage changes no stroke style: maths stay monoline, ends keep radius 7.
+
+What moved (`build/owner8/reg/diffreg.py` snap083a > `build/owner8/sym/b6`): exactly the 55 glyphs above (and € in
+the overlap layer); no letter or figure. Kerning: 29 collision keys with € % ‰ and the moved signs (ldot, longs,
+jcircumflex). Checks against snap083a: evaluate, even, curvecheck (both), parts unchanged; audit_charset 2 errors >
+0 (← and ✓); pathlint 146 > 140 warnings (the old ~ † € handles gone), 27 > 33 info (2.1-degree bends where the ~'s
+19-unit end runs meet the wave, whole-unit rounding). Figures: `build/owner8/sym/before-sheet1.png`, `-sheet2.png`,
+`s1/stage1-sheet-pair.png` (before over after by family), `s1/stage1-big-1.png`, `-big-2.png` (before beside
+after, nodes), `s1/stage1-text.png` (14, 18, 28 and 96 px at 2x).
+
+Looked at, honestly: the arrows now read as arrows beside letters (→ was the length of an x), ↔ is clearly longer
+than →; the operators line up on one axis (= and ≤ no longer float); ∞ reads as one stroke; † and ‡ now belong with
+*. Not right yet: ▲ ▼ ◆ look large beside ● in a line (the 0.70 area share is a first number); ~ at text size still
+reads light and small next to ≈'s pair; ↕ at 728 runs from -51 to 677 (under the baseline); ⌃ high on its own.
