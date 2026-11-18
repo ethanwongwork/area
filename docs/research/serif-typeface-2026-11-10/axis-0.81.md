@@ -1396,3 +1396,36 @@ stubs are one length. Still not right: at 800 the upper counter left of the bar 
 middle against 99 right of the bar; the lower counter 150 / 93): the S's own bowls are uneven at the Bold (the upper
 bowl's left side grows inward), which no bar position balances (the best shift is 4 units); ð's ascender curve at 300
 now reads lighter than its crossbar; § at 800 keeps its lumpy left side (the engine's; only its ends were moved).
+
+### Item 18: the hook above (U+0309)
+
+Measured (curvecheck on the whole mark, snap082h / item 17's build): Regular hookabovecomb worst ratio 1.53 (node 9, the
+eye's top-left), Light 2.01 (node 18), Bold 1.95 (node 9) and two flat places; the capital form 1.30 / 1.38 / 1.72. In
+the variable font's masters the mark is two overlapping parts (`overlap.curl_master`: the curl, closed by a line inside
+the stem, and the stem); the static Regular keeps the merged outline. It is carried by 27 composites (the brief's "about
+100" counts the Vietnamese letters with any tone mark; 27 hold this one, ả ẳ ẩ ẻ ể ỉ ỏ ổ ở ủ ử ỷ and their capitals and
+ss03 forms).
+
+| # | Item | Cause | Rule | Before > after |
+|---|---|---|---|---|
+| 103 | 18. ̉ | The mark's first drawing (charset.hook_above, a union of an arc, a ball and a stem, then the node rules) meets at its nodes with jumps; the masters' curl carried them and the engine's knots made them worse | Every smooth node at one curvature, handle lengths only (`symbols.even_curves`, `HOOKS`): on the Regular's merged outline in `normalize` (after the letters in a ring), so the variable font's default curl and stem (`overlap.vf_source`) come from it; and on each master's curl and stem right after `curl_master` builds them, kept only where the faults fall. The curl's last node (the eye's foot, where the closing line runs inside the stem) is a corner (`overlap.curl_parts`): curvecheck read it as a smooth node bent 126 to 138 degrees | worst ratio / faults, Light / Regular / Bold: hookabovecomb 2.01 (4) / 1.53 (2) / 1.95 (5) > 1.21 (1) / 1.18 (1) / 1.23 (3); hookabovecomb.case 1.38 (2) / 1.30 (1) / 1.72 (6) > 1.23 (0) / 1.11 (0) / 1.14 (4). Left: flat places (the Bold's curl 2, the capital's 4 at the Bold, the Light's 1) and the Regular's eye foot leaving the stem's straight at 1.00 of its tightest (the stem's top is a corner by design) |
+
+Item 18, what moved (`item18/diff.txt`, against item 17's build; `build/snap082j18` = `build/snap082i`): the two marks in
+every master, the Regular TTF (hookabovecomb) and the variable font; in the Light four capitals with two marks (Ẩ Ẳ Ể
+Ổ), whose hook the Light's mark placement set 1 to 2 units lower over the changed ink (419, 100 > 419, 98 on Ẩ); $ in
+the Light and the 600 master: a follow-up of item 17 (`dollar.true_crossing`: the S's outer top and bottom leave the bar
+level when both pieces are within 4 degrees of level; it did not reach the Light's bottom, whose lowest point lies right
+of the bar, so the Light turn note stands). No composite collides: the least white between the hook and the rest of
+each of the 27 composites at 300 / 400 / 600 / 800 is 54.0 / 54.0 / 46.6 / 32.5 (Ỏ, Ỏ, Ẳ, ẳ), before 54.0 / 54.0 /
+46.6 / 32.5 (`item18/hookgap.py`, `gap-before.txt`, `gap-after.txt`). Checks (`item18/after/`): audit_axis Bold and
+Light as item 17 (turns ok in the Bold; the Light's $ note), crossings ok; audit_rays 1 glyph (ʕ); audit_charset 0;
+even 0; curvecheck unchanged (hooks with a ball 6 / 14: the IPA hooks, not this mark); pathlint 0 errors, 147 warnings;
+interpolatable nothing. Figures: `item18-hookabove.png` (both forms, 300 / 400 / 600 / 800, before over after),
+`item18-uni1EA3.png`, `item18-uni1EA8.png`, `item18-uni1EB3.png`, `item18-uni1EDF.png`.
+
+Kerning, once at the end (`AREA_KERN_FIT=1 build.py`; the advances of @, © ® ℗, $ and § moved): fit_kerning.json
+unchanged; the masters' keys moved only in collision pairs with those glyphs (and Ể / Ổ in the Light, a unit).
+`audit_kern.py` passes at 300 / 350 / 400 / 600 / 800 and at every 25 units from 300 to 800 (least 10.4 / 9.3 / 8.3 /
+8.4 / 7.9, as before; `item18/kern.txt`, `kern-every25.txt`). The final build is saved as `build/snap082i`; against
+`snap082h` (`item18/diff-082h-082i.txt`) only @, © ® ℗, $, ð, §, the two hook marks and the four Light capitals moved.
+Pages not rebuilt.

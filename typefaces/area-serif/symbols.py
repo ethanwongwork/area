@@ -187,6 +187,7 @@ def oe_joined(reg, font, v, name="oe"):
 
 
 EVEN = ("rtail",)
+HOOKS = ("hookabovecomb", "hookabovecomb.case")   # owner round 8, item 18: the Regular, and each master's curl
 
 
 def even_curves(font, name):

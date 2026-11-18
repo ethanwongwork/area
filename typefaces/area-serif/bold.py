@@ -4035,7 +4035,10 @@ def bold_font(reg, stem=STEM, **over):
             c.points = [Point(x, y, t, smooth=s_) for x, y, t, s_ in P]
             g_.contours.append(c)
         struck.add(name)
-        curled.append(f"{name} {log_}")
+        # owner round 8 (0.82, item 18): the curl's curves meet at one curvature in this master too (the stem is lines)
+        import symbols as _SYM0
+        ev_ = _SYM0.even_curves(font, name)
+        curled.append(f"{name} {log_}; {ev_}")
     notes.append(f"curls on stems: {len(curled)} ({'; '.join(curled)})")
 
     def anchors(font_, name):

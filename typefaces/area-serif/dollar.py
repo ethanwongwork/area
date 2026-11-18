@@ -251,6 +251,22 @@ def true_crossing(cs):
         # the left piece, written back as it runs (bar node, near handle, far handle, far node)
         new_l = (Lp[3], Lp[2], Lp[1], Lp[0])
         new_r = Rp
+        # the S's outer top and bottom: a piece that leaves the bar within 4 degrees of level leaves it level, so its
+        # extreme stays at the bar in every master (the Light's lowest point right of the bar made the bottom's right
+        # piece gain an extreme between 300 and 333: audit_axis turns)
+        near_level = all(abs(A.unit((pc[1][0] - pc[0][0], pc[1][1] - pc[0][1]))[1]) < math.sin(math.radians(4))
+                         for pc in (new_l, new_r))
+        if k_ in (0, len(prs) - 1) and near_level:            # both sides together, or neither
+            for pc in (new_l, new_r):
+                u_ = A.unit((pc[1][0] - pc[0][0], pc[1][1] - pc[0][1]))
+                if abs(u_[1]) < math.sin(math.radians(4)):
+                    L_ = math.dist(pc[0], pc[1])
+                    pc_ = list(pc)
+                    pc_[1] = (pc[0][0] + math.copysign(L_, u_[0]), pc[0][1])
+                    if pc is new_l:
+                        new_l = tuple(pc_)
+                    else:
+                        new_r = tuple(pc_)
         for ci, i, far, (hn, hf), piece in ((lci, li, lfar, lh, new_l), (rci, ri, rfar, rh, new_r)):
             P[ci][i][0], P[ci][i][1] = piece[0]
             P[ci][hn][0], P[ci][hn][1] = piece[1]

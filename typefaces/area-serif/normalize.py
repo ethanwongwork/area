@@ -1254,6 +1254,9 @@ def normalize(font):
     print("at:", AT.regular(font))                    # of one stroke and Area's a.ss03 in it, joined at its foot
     import circled as CIRCLED                         # 0.82 (owner round 8, item 16): one ring for (C) (R) (P), the
     print("circled:", CIRCLED.regular(font))          # letters Area's C R P at the references' size and weight
+    import symbols as SYMBOLS                         # 0.82 (owner round 8, item 18): the hook above's curves meet at
+    for n_ in SYMBOLS.HOOKS:                          # one curvature (handle lengths only; its ~30 composites follow)
+        print("hook above:", SYMBOLS.even_curves(font, n_))
     import dollar as DOLLAR                           # 0.82 (owner round 8, item 17): $'s S one outline through its
     if "dollar" in font:                              # bar, the bar centred on the S, its stubs one length
         cs_ = [[(p.x, p.y, p.type, p.smooth) for p in c.points] for c in font["dollar"].contours]

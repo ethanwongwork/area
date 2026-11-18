@@ -435,6 +435,7 @@ def curl_parts(P, t=None):
     t = _stem_top(P) if t is None else t
     assert P[0][2] == "line" and P[t][2] == "line"
     curl = [tuple(q) for q in P[:t]]
+    curl[-1] = tuple(curl[-1][:3]) + (False,)          # 0.82 (item 18): the eye's foot meets the closing line in a corner
     stem = [tuple(q) for q in P[t:]] + [(P[0][0], P[t][1], "line", False)]
     return [curl, stem]
 
