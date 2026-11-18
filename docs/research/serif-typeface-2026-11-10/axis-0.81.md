@@ -1556,3 +1556,47 @@ Figures `reg/itemB2-uni2197.png`, `itemB2-uni2198.png`, `itemB2-family-after.png
 the slanted arrows' heads are now a 90-degree chevron beside the level arrows' 99 degrees (the study's 45-degree
 half-angle for every arrow is for the later restyle); the family is short against the references (0.94 x-height
 against 1.21 to 1.32), left for that pass.
+
+### Item C: the ampersand
+
+Measured with the reference study's reader (`build/refstudy/ampm.py`, run read-only by `reg/c/ampref.py`; Georgia Pro,
+Serrif, PP Kyoto Medium; table `reg/c/ampref-final.txt`). The 0.82 & had a flat lid and an angular upper-left shoulder
+(the loop's outer upper-left quarter 1.50 as wide as tall, references 1.14; its left extreme at 0.70 of the counter's
+height, references 0.52); the loop's left side and the diagonal light (0.80 / 0.95 of n's stem, references 1.04 /
+1.05); the loop counter tall (0.86 of the bowl counter's height, references 0.80); the crossing and the bowl's top low
+(0.59 / 0.49 cap, references 0.61 / 0.51); the glyph wide (1.03 cap, references 0.98); the diagonal steep (53 degrees
+from level, references 50.5).
+
+The stopped worker's `amp.py` (two candidates in `build/owner8/item19-candidates.png`) was kept: the loop by rule
+(`loop_rule`: the outer extremes at the references' share of the counter's height, the outer quarter's width over its
+height `kappa`, the counter's upper-left quarter never under `il_min`, the left side leaving the diagonal's straight on
+a circular turn of the quarter's own radius, an Euler-like ease twice the circle's height), the bowl's outer left at a
+radius 0.89 of its lower quarter, the bowl's bottom e's bottom, the arm's crotch filleted (0.30 stem, the @'s), the
+solver's no-peak and rise terms, the whole-unit rounding guard against new inflections. Candidate A (kappa 1.01 /
+1.085 at 400 / 800) and B (0.88 / 0.97, a narrower loop) are kept in `LOOP["kappa"]` with C (0.974 / 1.054, a first
+interpolation). Read against the study, A was nearer the references (B's loop 0.41 of the width against 0.48, counter
+area 0.51 against 0.62), but both kept the old skeleton's faults above. So a fourth, D, from A:
+
+| # | Item | Rule | 0.82i > 0.83 (Regular) | references (median) |
+|---|---|---|---|---|
+| 108 | C. & | Weights as shares of n's stem (`amp.STUDY`): diagonal 1.05, loop's left 1.04, loop's right 0.77 (they were v's thick, 0.89 of it and 0.895 of the left); skeleton (`amp._study_skeleton`): x narrowed 0.952 about the left (ink 0.98 cap), the diagonal at 50.5 degrees from level, the spine's crossing raised 18; the loop's kappa 1.08 (`LOOP["kappa"]["D"]`, Bold 1.16), between A's 1.01 (counter area 0.50, width 0.57, offset 0.014 on this skeleton) and 1.12 (0.62, 0.69, 0.046): the value that puts the loop's outer width over the bowl's and its counter width on the medians with the offset inside the references' range | width / cap 1.033 > 0.987 | 0.98 |
+| | | | loop counter / bowl counter: area 0.575 > 0.573, width 0.637 > 0.651, height 0.858 > 0.774 | 0.62, 0.63, 0.80 |
+| | | | loop outer / bowl outer 0.817 > 0.886; loop width / ink 0.447 > 0.492 | 0.89; 0.48 |
+| | | | loop offset / width 0.029 > 0.033 | 0.017 to 0.052 |
+| | | | loop foot / cap 0.586 > 0.612; bowl counter top 0.485 > 0.506 | 0.61; 0.51 |
+| | | | stations / stem: loop left 0.80 > 1.04, loop right 0.78 > 0.77, loop top 0.55 = 0.55, bowl left 1.00 > 1.01, bowl bottom 0.58 > 0.64, diagonal 0.95 > 1.05 | 1.04, 0.77, 0.47, 1.07, 0.72, 1.05 |
+| | | | curvecheck on the glyph: worst 1.02 > 1.09, 0 faults; advance 810 > 777 | ratio within 1.2 |
+
+What moved against item B's second build: the ampersand only (advance 810 > 777); kerning unchanged. Checks: evaluate,
+even, curvecheck, parts unchanged; audit_charset 0 errors (the & ink rule 2.44 > 2.50, limit 3.0); pathlint one
+warning more: the arm's crotch fillet has its leftmost point inside the curve (x 506, t 0.53), no node there (adding it
+must happen in every master's construction too; left). The master construction was run on snap082i's Light and Bold
+with this Regular: no curvecheck fault (worst 1.17 / 1.05). Figures `reg/itemC-ampersand.png`,
+`itemC-ampersand-combs.png`, `itemC-text.png`; the k = 1.08 / 1.12 trials in `reg/c/k1.08`, `k1.12`.
+
+Looked at: the loop is a round teardrop, its curvature changing smoothly all round (no lid, no shoulder), standing over
+the bowl; the diagonal carries the weight; the glyph sits narrower in text. Still not right: the thinnest place is
+0.80 of the hairline where the references keep 0.97 to 1.00 (it is in the bowl's bottom as it runs into the diagonal
+and at the tail's join, not on the stroke rising into the loop as theirs); the bowl's bottom 0.64 of the stem against
+0.72; the loop's top 0.55 against 0.47 (o's hairline, heavier than theirs); the bowl's outer left extreme still reads
+a little tighter than the arcs either side in the comb.

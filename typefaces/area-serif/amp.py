@@ -74,10 +74,62 @@ REG = {
     # the arm: its centreline through (x, 355), its direction (dx, dy) (drawn: 34.5 degrees from upright)
     "arm_x": 631.0, "arm_dir": (0.5664, 0.8241), "arm_top": 434.0,
     "top": 721.0, "bottom": -9.0,
+    # 0.82 (owner round 8, item 19): the loop is placed by LOOP's rule (`loop_rule`); ul, ur, ut_x, p1_y, p2_y above
+    # are only its first guess
+    "loop": "D",
+    # each edge's turn off the diagonal's straight runs twice the circle's height (an Euler spiral turning theta up to
+    # the quarter's curvature k runs 2 theta / k, twice the circle's arc): the curvature rises from the straight's ease
+    # to the quarter's with no peak between (at 1.0 the Light's counter took a 1.47 jump at its left extreme)
+    "ease1": 2.0, "ease2": 2.0,
 }
+
+# 0.83 (Regular pass, item C; refstudy/spec.md medians of Georgia Pro, Serrif, PP Kyoto): the ink 0.98 of the cap
+# (it was 1.03: the skeleton's x narrowed by 0.952 about its left), the diagonal 50.5 degrees from level (it was 53),
+# the spine's crossing raised so the loop's foot stands at 0.61 of the cap and the bowl's counter top at 0.51 (0.59 /
+# 0.48: 18 units)
+def _study_skeleton(G, k=0.952, deg=39.5, rise=18.0):
+    G = dict(G)
+    for key in ("diag_x", "ut_x", "lb_x", "tb_x", "tt_x", "arm_x"):
+        G[key] = G[key] * k
+    for key in ("ul", "ur", "ll", "t1", "t2"):
+        G[key] = (G[key][0] * k, G[key][1])
+    G["diag_deg"] = deg
+    G["sp_y"] = G["sp_y"] + rise
+    return G
+
+
+REG = _study_skeleton(REG)
+
+# 0.82 (owner round 8, item 19): the loop, by rule. Measured on the references (build/owner8/r9/refloop.py, refamp.py,
+# measure only) at 400 and 700, carried to Area's stems 78 and 140 on the stem's logarithm (the Light takes the 400's):
+#   share   the outer left extreme's height in the upper counter's span (medians 0.52 / 0.46; Libre Baskerville 0.48 /
+#           0.46); 0.70 in the 0.82 drawing, which put the left side's thick next to the top
+#   kappa   the outer upper-left quarter's width over its height (medians 1.14 / 1.20, Libre Baskerville 0.88 / 0.97);
+#           1.50 / 1.78 in the 0.82 drawing (the flat lid)
+#   il_min  the counter's upper-left quarter, width over height, the references' least (Libre Baskerville 0.65 / 0.70):
+#           the outer quarter widens before the counter pinches
+#   right   the loop's right side over its left (medians 0.895 / 0.89; the 0.82 drawing 0.84 / 0.74)
+#   left    the loop's left side over the diagonal across (refdiag.py: medians 0.88 / 0.91, Libre Baskerville 0.89 /
+#           0.91; the 0.82 drawing 1.00: v's thick at the left extreme, 133 beside a 53 top at 800)
+# A master's loop: its counter changes across as o's counter does (as the 0.82 stretch had it), the outer top over
+# the middle; its extremes stand where the outer quarter is kappa, or higher where the counter's upper-left quarter
+# would fall under il_min (the Bold: kappa 1.085 would pinch the counter's top to a point)
+# The outer top stands over the middle of the outer extremes (top_x 0.50; references 0.53 to 0.55 where read cleanly);
+# the left side leaves the diagonal's straight edge on a circular turn of the top quarter's own radius (no shoulder):
+# the outer left extreme stands (1 - cos diag) x a right of the edge's line at its height, the turn starting
+# sin diag x a below it. Form A takes kappa as the median and Libre Baskerville's mean (1.01 / 1.085); form B
+# Libre Baskerville's own (0.88 / 0.97), a narrower loop.
+LOOP = {"share": (0.52, 0.46), "il_min": (0.65, 0.70), "right": 0.895, "left": 0.89,
+        "kappa": {"A": (1.01, 1.085), "B": (0.88, 0.97), "C": (0.974, 1.054), "D": (1.08, 1.16)}}
+STUDY = {"diag": 1.05, "left": 1.04, "right": 0.77}   # 0.83 item C: shares of n's stem (refstudy/spec.md medians)
+BOWL_R = (0.89, 0.84)   # the bowl's outer left extreme: radius over its lower quarter's width (references' median and
+                        # Libre Baskerville's mean, 400 / 700: 0.94 / 0.89 and 0.84 / 0.79; o's own is flatter, 1.06 to 1.61;
+                        # the 0.82 drawing 0.56 / 0.34, tighter at the Bold)
 TENSION = 0.56          # handles' share of their reach where nothing else decides (the bowl's 0.57 outside, 0.61 in)
 RATIO = 1.25            # curvecheck.RATIO
 EASE = 0.45             # curvecheck.EASE
+ARM_FILLET = 0.30       # 0.82 item 19: the crotch under the arm (at.FILLET's share of the stem, the @'s a)
+PEAK = 1.30             # 0.82 item 19: a node's curvature over the curves' a third in (a round turn, not a point)
 
 
 # ------------------------------------------------------------------ cubic geometry
@@ -138,8 +190,13 @@ class Chain:
     """Nodes (point, unit tangent along the chain) and the kind of each piece between them ("C" or "L").
     Handles are solved (solve) and the chain is a list of cubic segments (lines as cubics at thirds)."""
 
-    def __init__(self, nodes, kinds, smooth, inflect=()):
+    def __init__(self, nodes, kinds, smooth, inflect=(), peaks=False, radii=None, rise=(), capped=()):
         self.nodes, self.kinds, self.smooth, self.inflect = nodes, kinds, smooth, set(inflect)
+        self.peaks = peaks
+        self.radii = radii or {}            # node -> the radius of curvature asked there (0.82 item 19)
+        self.rise = set(rise)               # curves off a straight whose curvature only rises (0.82 item 19)
+        self.cap = 0.90                     # a capped curve's handles at most this share of their reach
+        self.capped = set(capped)
         self.lens = []
         for i, k in enumerate(kinds):
             if k == "L":
@@ -199,6 +256,10 @@ class Chain:
                 ak = [abs(k) for k in ks]
                 dip = max(min(max(ak[:m + 1]), max(ak[m:])) - ak[m] for m in range(17)) / top_
                 out.append(20 * max(0.0, dip - 0.04))                           # a flat place
+                if i in self.rise:
+                    # 0.82 item 19: a turn off a straight rises to the curvature it hands on and no further (a
+                    # peak just short of the next node reads as a shoulder: the loop's upper left at the Bold)
+                    out.append(10 * max(0.0, max(ak) / max(ak[-1], 1e-9) - 1.05))
             for n in range(1, len(self.nodes) - 1):
                 if not self.smooth[n]:
                     continue
@@ -206,6 +267,13 @@ class Chain:
                 if ka == "C" and kb == "C":
                     k1, k2 = curvature(S[n - 1], 1.0), curvature(S[n], 0.0)
                     out.append(0.0 if n in self.inflect else 6 * math.log((abs(k1) + 1e-6) / (abs(k2) + 1e-6)))
+                    if self.peaks and n not in self.inflect:
+                        # 0.82 item 19: no point at a node: the curvature there at most PEAK times the tightest
+                        # place a third of the way into either curve
+                        mid = max(abs(curvature(S[n - 1], 2 / 3)), abs(curvature(S[n], 1 / 3)), 1e-9)
+                        out.append(8 * max(0.0, math.log(max(abs(k1), abs(k2)) / mid / PEAK)))
+                    if n in self.radii:
+                        out.append(6 * math.log(max(abs(k2), 1e-9) * self.radii[n]))
                 elif ka != kb:
                     s, at = (S[n], 0.0) if kb == "C" else (S[n - 1], 1.0)
                     u0 = unit((s[1][0] - s[0][0], s[1][1] - s[0][1]))
@@ -217,7 +285,15 @@ class Chain:
 
         from scipy.optimize import least_squares
         x0 = np.array([math.log(TENSION)] * (2 * len(idx)))
-        r = least_squares(res, x0, bounds=(lo, hi), method="trf", diff_step=1e-4, xtol=1e-10, ftol=1e-10, max_nfev=4000)
+        # 0.82 item 19: the counter's left turn off the diagonal keeps its handles inside `cap` (0.90) of their reach,
+        # so no instance between masters turns its control polygon both ways (at 0.95 it gained an inflection at 714)
+        his = []
+        for i in idx:
+            h_ = math.log(self.cap) if i in self.capped else hi
+            his += [h_, h_]
+        his = np.array(his)
+        x0 = np.minimum(x0, his - 1e-9)
+        r = least_squares(res, x0, bounds=(lo, his), method="trf", diff_step=1e-4, xtol=1e-10, ftol=1e-10, max_nfev=4000)
         self.last = r
         put(r.x)
         return float(np.sum(r.fun ** 2))
@@ -361,19 +437,133 @@ def readings(font):
     thin = _line_dist(V[1], V[2], V[26], V[27])
     thick = _line_dist(V[27], V[28], V[-1], V[0])
     serif = [(p.x, p.y, p.type, p.smooth) for p in font["v"].contours[0].points]
+    # 0.82 (owner round 8, item 19): n's stem (the master's place on the axis) and e's bottom under its lowest point (the
+    # lower bowl's bottom: a round stroke running on into a stroke, as e's does into its tail)
+    stem = min(b_ - a_ for a_, b_ in _spans(_flat(font["n"]), 200.0, 1))
+    e = _flat(font["e"])
+    lo_e = min((q for P in e for q in P), key=lambda q: q[1])
+    sp_e = _spans(e, lo_e[0] + 0.3, 0)
     return {"r": r, "h": h, "arch": arch, "thin": thin, "thick": thick, "o_counter": ocw, "n": float(font["n"].width),
-            "v": serif}
+            "v": serif, "stem": stem, "e_bot": sp_e[0][1] - sp_e[0][0]}
 
 
 def widths(R):
-    return {"diag": R["thick"], "ul": R["thick"], "ut": R["h"], "ur": (R["r"] + R["h"]) / 2, "sp": R["h"],
-            "ll": R["r"], "lb": R["arch"], "tail": R["arch"], "arm": R["thin"]}
+    # 0.82 (owner round 8, item 19): the loop's right side LOOP["right"] of its left (was the mean of o's side and
+    # hairline: 0.84 / 0.74 of the left at 400 / 800, the references 0.895 / 0.90); the bowl's bottom e's bottom (was
+    # a's lower stroke: 50 / 55 at 400 / 800 against e's 54.5 / 88.6; the owner: "its bottom is light")
+    # 0.83 (Regular pass, item C; the reference study, build/refstudy/spec.md: Georgia Pro, Serrif, PP Kyoto medians
+    # over each face's n stem): the diagonal 1.05 of n's stem (v's thick, 0.95, read light), the loop's left side 1.04,
+    # its right side 0.77 (the stroke rising into it from the spine)
+    ul = STUDY["left"] * R["stem"]
+    return {"diag": STUDY["diag"] * R["stem"], "ul": ul, "ut": R["h"], "ur": STUDY["right"] * R["stem"], "sp": R["h"],
+            "ll": R["r"], "lb": R.get("e_bot", R["arch"]), "tail": R["arch"], "arm": R["thin"]}
 
 
 # ------------------------------------------------------------------ the construction
-def construct(R, G=None, sx=1.0):
+def weight_share(R):
+    """0 at the Regular's stem, 1 at the Bold's (140), on the stem's logarithm; the Light takes the Regular's."""
+    return min(1.0, max(0.0, math.log(R["stem"] / 78.0) / math.log(140.0 / 78.0)))
+
+
+def _lerp(pair, t):
+    return pair[0] + (pair[1] - pair[0]) * t
+
+
+def loop_rule(R, G, sx, Ky, R0=None, a0=None, cross_lo=None):
+    """The loop's skeleton in this master (LOOP): returns G with ul, ur, ut_x, p1_y, p2_y set (pre-stretch x)."""
+    W = widths(R)
+    t = weight_share(R)
+    top = G["top"]
+    top_i = top - W["ut"]
+    kap = _lerp(LOOP["kappa"][G.get("loop", "A")], t)
+    if R0 is None:
+        # the Regular: the extremes at the references' share of the counter's span, the quarter at kappa
+        y_e = Ky + _lerp(LOOP["share"], t) * (top_i - Ky)
+        a = max(kap * (top - y_e), W["ul"] + _lerp(LOOP["il_min"], t) * (top_i - y_e))
+    else:
+        # a master: the counter's width changes as o's counter does (the white law's letter, as before), the outer
+        # top centred over it
+        W0 = widths(R0)
+        cw0 = 2 * a0 - W0["ul"] - W0["ur"]
+        cw = cw0 * R["o_counter"] / R0["o_counter"]
+        a = (cw + W["ul"] + W["ur"]) / 2
+        y_e = None
+    # the outer left extreme where the outer quarter is kappa, the counter's where its quarter is il_min (never
+    # higher than the outer's): where one height cannot give both (the Bold: kappa would pinch the counter's top, il_min
+    # would flatten the outer), the outer extreme stands lower than the counter's, the loop's left side thickest a
+    # little below the counter's extreme, as a stroke coming up off the diagonal is
+    il = _lerp(LOOP["il_min"], t)
+    ai = a - W["ul"]
+    if y_e is None:
+        y_o = top - a / kap
+        y_i = max(y_o, top_i - ai / il)
+    else:
+        y_o = y_i = y_e
+    ang = math.radians(G["diag_deg"])
+    dd = unit((math.sin(ang) * sx, -math.cos(ang)))
+    th = math.atan2(abs(dd[0]), abs(dd[1]))
+    half = W["diag"] / 2
+    n_ll = (-abs(dd[1]), -abs(dd[0]))
+    c0 = (G["diag_x"] * sx, 250.0)
+    L1p = (c0[0] + n_ll[0] * half, c0[1] + n_ll[1] * half)
+    L2p = (c0[0] - n_ll[0] * half, c0[1] - n_ll[1] * half)
+    # both edges turn off their straight on at least a circle of their own quarter's radius: the outer edge by
+    # (1 - cos) a; the counter's edge, whose straight stands (e2 - e1) right of the outer's while the loop's left side
+    # is only W["ul"] across, by (1 - cos) (a - W["ul"])
+    e1, e2 = on_line(L1p, dd, y_o)[0], on_line(L2p, dd, y_i)[0]
+    off = max((1 - math.cos(th)) * a, (1 - math.cos(th)) * ai + (e2 - e1) - W["ul"])
+    ulo = e1 + off
+    ut = ulo + a
+    uro = ut + a
+    y_e = (y_o + y_i) / 2
+    G = dict(G)
+    G["ul"] = ((ulo + W["ul"] / 2) / sx, y_e)
+    G["ul_y"] = (y_o, y_i)
+    G["ur"] = ((uro - W["ur"] / 2) / sx, y_i)
+    G["ut_x"] = ut / sx
+    # each turn's radius from its offset: (1 - cos) r = the offset; the turn starts sin x r below the extreme
+    r_o = off / (1 - math.cos(th))
+    r_i = (ulo + W["ul"] - e2) / (1 - math.cos(th))
+    G["p1_y"] = y_o - G.get("ease1", 1.0) * math.sin(th) * r_o
+    G["p2_y"] = y_i - G.get("ease2", 1.0) * math.sin(th) * r_i
+    G["_loop"] = {"y_o": y_o, "y_i": y_i, "a": a, "kappa": kap, "kappa_eff": a / (top - y_o), "ai": ai,
+                  "il": ai / (top_i - y_i), "ulo": ulo, "edge": e1, "edge2": e2, "p1": G["p1_y"], "p2": G["p2_y"]}
+    return G
+
+
+_A0 = {}
+
+
+def _regular_a(R0, G):
+    """The Regular's loop quarter (its `a`), from the Regular's own skeleton (the master's spread does not reach it)."""
+    key = (id(R0), G.get("loop"))
+    if key not in _A0:
+        G0 = {k: v for k, v in REG.items()}
+        G0["loop"] = G.get("loop", REG["loop"])
+        for k in ("ease1", "ease2", "curve_cross"):
+            if k in G:
+                G0[k] = G[k]
+        _A0[key] = construct(R0, G0, 1.0)[1]["loop"]["a"]
+    return _A0[key]
+
+
+def construct(R, G=None, sx=1.0, _pass=0):
     """R: readings; G: skeleton (REG); sx: level stretch of the skeleton about x 0. Returns (contours, info)."""
     G = dict(G or REG)
+    if G.get("loop") and "_loop" not in G and _pass == 0:
+        # the counter's bottom is the crossing K, which the loop's place moves a little: two passes
+        R0, a0 = G.get("_R0"), None
+        if R0 is not None and R0 is not R:
+            a0 = _regular_a(R0, G)
+        else:
+            R0 = None
+        _cs, inf = construct(R, G, sx, _pass=1)
+        lo_ = min(inf["J"][1], inf["C1"][1])
+        G2 = loop_rule(R, G, sx, inf["K"][1], R0, a0, lo_)
+        _cs, inf = construct(R, G2, sx, _pass=1)
+        lo_ = min(lo_, inf["J"][1], inf["C1"][1])
+        G2 = loop_rule(R, G, sx, inf["K"][1], R0, a0, lo_)
+        return construct(R, G2, sx, _pass=2)
     W = widths(R)
     X = lambda x: x * sx
     top, bot = G["top"], G["bottom"]
@@ -396,7 +586,8 @@ def construct(R, G=None, sx=1.0):
         return on_line(L2p, dd, y)
 
     ul, ur, ll = G["ul"], G["ur"], G["ll"]
-    ULo, ULi = (X(ul[0]) - W["ul"] / 2, ul[1]), (X(ul[0]) + W["ul"] / 2, ul[1])
+    yo, yi = G.get("ul_y", (ul[1], ul[1]))
+    ULo, ULi = (X(ul[0]) - W["ul"] / 2, yo), (X(ul[0]) + W["ul"] / 2, yi)
     URo, URi = (X(ur[0]) + W["ur"] / 2, ur[1]), (X(ur[0]) - W["ur"] / 2, ur[1])
     UTo, UTi = (X(G["ut_x"]), top), (X(G["ut_x"]), top - W["ut"])
     LLo, LLi = (X(ll[0]) - W["ll"] / 2, ll[1]), (X(ll[0]) + W["ll"] / 2, ll[1])
@@ -429,14 +620,23 @@ def construct(R, G=None, sx=1.0):
     AL = (ac[0] - an[0] * W["arm"] / 2, ac[1] - an[1] * W["arm"] / 2)
     s_ = meet(AR, ad, L2p, dd)
     p4_y = min(G["p4_y"], AR[1] + ad[1] * s_ - 25)
+    if G.get("loop"):
+        # 0.82 item 19: the tail's top reaches the diagonal's straight edge at least twice the arm's fillet below where
+        # the arm's edge meets it, in every master, so the crotch under the arm is filleted on the straight (one
+        # structure at every weight; on the curve in some masters it had to be merged into the curve)
+        p4_y = min(p4_y, AR[1] + ad[1] * s_ - 25 - 2 * ARM_FILLET * R["stem"])
     P = Chain([(T1, (-t1d[0], -t1d[1])), (TB, L), (l1(G["p3_y"]), up), (l1(G["p1_y"]), up), (ULo, U), (UTo, Rt),
                (URo, D), (SB, sd), (LLi, D), (LBi, Rt), (C2, c2d)],
               ["C", "C", "L", "C", "C", "C", "C", "C", "C", "C"],
-              [False, True, True, True, True, True, True, True, True, True, False], inflect=[7])
+              [False, True, True, True, True, True, True, True, True, True, False], inflect=[7],
+              peaks=bool(G.get("loop")), rise=(3,) if G.get("loop") else ())
     Q = Chain([(T2, (-t2d[0], -t2d[1])), (TT, L), (l2(p4_y), up), (l2(G["p2_y"]), up), (ULi, U), (UTi, Rt),
                (URi, D), (SA, sd), (LLo, D), (LBo, Rt), (X1, x1d)],
               ["C", "C", "L", "C", "C", "C", "C", "C", "C", "C"],
-              [False, True, True, True, True, True, True, True, True, True, False], inflect=[7])
+              [False, True, True, True, True, True, True, True, True, True, False], inflect=[7],
+              peaks=bool(G.get("loop")),
+              radii={8: _lerp(BOWL_R, weight_share(R)) * (LBo[0] - LLo[0])} if G.get("loop") else None,
+              capped=(3,) if G.get("loop") else ())
     P.solve()
     Q.solve()
     sP, sQ = P.segs(), Q.segs()
@@ -478,7 +678,7 @@ def construct(R, G=None, sx=1.0):
     # loop's curve would carry one, its straight runs on up to 20 units past it
     need1 = max(J[2][1], C1p[1]) + 20 if 3 in (J[0][0], min(ca, cb)[0]) else None
     need2 = max(J2[2][1], Kp[1]) + 20 if 3 in (J2[1][0], min(ka, kb)[0]) else None
-    if need1 or need2:
+    if (need1 or need2) and not G.get("curve_cross"):
         G2 = dict(G)
         if need1:
             G2["p1_y"] = max(G["p1_y"], need1)
@@ -502,18 +702,52 @@ def construct(R, G=None, sx=1.0):
     outer += [("L", (T1, T1, T2, T2))]
     outer += [("C" if i != 2 else "L", s) for s, i in piece(sQ, (0, 0.0), X2q)]
     outer += [("L", (X2, X2, serif[0][0], serif[0][0]))]
+    k_x2 = len(outer) - 2
     outer += serif[1]
     outer += [("L", (serif[2], serif[2], X3, X3))]
     outer += [("C" if i != 2 else "L", s) for s, i in piece(sQ, X3q, J2[1])]
     outer += [("C" if i != 2 else "L", s) for s, i in piece(sP, J2[0], J[0])]
     outer += [("C" if i != 2 else "L", s) for s, i in piece(sQ, J[1], lb_q)]
+    if G.get("loop"):
+        # 0.82 (owner round 8, item 19): the arm grows out of the tail as the @'s a out of its bowl, not laid on it:
+        # the crotch under the arm rounded by a fillet of ARM_FILLET the stem (at.fillet; the @'s 0.30)
+        import at as _AT
+        def _len(sg):
+            return sum(math.dist(bez(sg, i / 32), bez(sg, (i + 1) / 32)) for i in range(32))
+        # the tail's top reaches X2 on the diagonal's straight edge in some masters and on its curve in others: the
+        # straight piece (and a piece too short for the fillet) is taken into the curve before it, so every master
+        # has one structure
+        r_f = ARM_FILLET * R["stem"]
+        while k_x2 > 0 and _len(outer[k_x2][1]) < 1.2 * r_f:
+            a_, b_ = outer[k_x2 - 1][1], outer[k_x2][1]
+            if outer[k_x2 - 1][0] != "C":
+                break
+            # join the two pieces into one cubic (end tangents kept, each handle a third of the joined length; the
+            # nodes are then evened, `outline`)
+            la, lb = _len(a_), _len(b_)
+            ta = unit((a_[1][0] - a_[0][0], a_[1][1] - a_[0][1]))
+            tb = unit((b_[3][0] - b_[2][0], b_[3][1] - b_[2][1])) if math.dist(b_[3], b_[2]) > 1e-6 else \
+                unit((b_[3][0] - b_[0][0], b_[3][1] - b_[0][1]))
+            L_ = (la + lb) / 3
+            p2_ = (b_[3][0] - tb[0] * L_, b_[3][1] - tb[1] * L_)
+            # the start handle's length gives the curve, at the tail top's lowest node, the curvature the curve before
+            # that node ends with (one curvature across it: the third alone left a 2.8 jump at 400)
+            La = L_
+            if k_x2 - 2 >= 0 and outer[k_x2 - 2][0] == "C":
+                want = abs(curvature(outer[k_x2 - 2][1], 1.0))
+                cr_ = abs(ta[0] * (p2_[1] - a_[0][1]) - ta[1] * (p2_[0] - a_[0][0]))
+                if want > 1e-9:
+                    La = min(max(math.sqrt((2 / 3) * cr_ / want), 0.2 * L_), 2.5 * L_)
+            outer[k_x2 - 1:k_x2 + 1] = [("C", (a_[0], (a_[0][0] + ta[0] * La, a_[0][1] + ta[1] * La), p2_, b_[3]))]
+            k_x2 -= 1
+        outer = _AT.fillet(outer, k_x2, r_f)
     # lower counter: P from C1 (on the spine) down the counter to C2; the diagonal's lower edge back up to C1
     lower = [("C", s) for s, _ in piece(sP, C1_hi, endP)]
     lower += [("C" if i != 2 else "L", s) for s, i in piece(sP, tl1(C2), C1_lo)]
     # upper counter: Q from K on the diagonal's upper edge round the loop's inside to K on the spine
     upper = [("C" if i != 2 else "L", s) for s, i in piece(sQ, Kq_lo, Kq_hi)]
     info.update({"J": J[2], "J2": J2[2], "K": Kp, "C1": C1p, "C2": C2, "X1": X1, "X2": X2, "X3": X3,
-                 "widths": W, "sx": sx})
+                 "widths": W, "sx": sx, "chains": (sP, sQ), "loop": G.get("_loop")})
     return [outer, lower, upper], info
 
 
@@ -587,6 +821,7 @@ def to_points(segs):
             pts.append([s[3][0], s[3][1], "curve", smooth])
     # rounding: nodes first, then each smooth node's handles back onto one line through the rounded node
     N = len(pts)
+    ideal_pts = [tuple(q[:2]) for q in pts]
     for q in pts:
         if q[2]:
             q[0], q[1] = round(q[0]), round(q[1])
@@ -605,6 +840,7 @@ def to_points(segs):
                 L = math.dist(h_[:2], q[:2])
                 h_[0], h_[1] = q[0] + d[0] * L, q[1] + d[1] * L
     _round_handles(pts)
+    _no_infl(pts, ideal_pts)
     out = [(int(q[0]), int(q[1]), q[2], q[3]) for q in pts]
     # drop zero-length lines and doubled nodes
     clean = []
@@ -633,7 +869,27 @@ def outline(R, G=None, sx=1.0):
         if (a > 0) != want_ccw:
             P = _reverse(P)
         out.append(P)
+    if (G or REG).get("loop"):
+        out = _even(out)
     return out, info
+
+
+def _even(cs):
+    """0.82 (owner round 8, item 19): every smooth node at one curvature (loops.even_nodes, handle lengths only, as
+    the @'s `at.even`), kept where it leaves fewer curvecheck faults (and no worse a ratio) on the whole glyph: the
+    arm's fillet and the tail's top merged before it meet the curves beside them with jumps the chains' solver did
+    not see."""
+    import curvecheck as K
+    import loops as LP
+    yr = (-1000, 2000)
+    b0, w0 = K.report("ampersand", cs, yr)[:2]
+    if not b0:
+        return cs
+    new = [[(round(q[0]), round(q[1]), q[2], q[3]) for q in LP.even_nodes(P, yr)[0]] for P in cs]
+    b1, w1 = K.report("ampersand", new, yr)[:2]
+    if (len(b1), w1) < (len(b0), w0) and [[q[2] for q in P] for P in new] == [[q[2] for q in P] for P in cs]:
+        return new
+    return cs
 
 
 def _reverse(P):
@@ -693,6 +949,7 @@ def widen(R0, R, G=None):
     alone the Bold & came out 1.065 as wide as the Regular's where n grows 1.098 (0.97 of n's) and its lower counter
     read cramped; stretched whole to n's width, the loop's inside ran back past the diagonal's edge (a spur)."""
     G = dict(G or REG)
+    G["_R0"] = R0                                           # 0.82 item 19: the loop's rule reads the Regular's
     sx = stretch(R0, R, G)
     want = ink_width(R0, 1.0, G) * R["n"] / R0["n"]
     a, b = 0.0, 10.0
@@ -760,6 +1017,37 @@ def _round_handles(pts):
             b[0], b[1] = best[2]
 
 
+def _no_infl(pts, ideal):
+    """0.82 (owner round 8, item 19): a cubic whose drawn form turns one way and whose rounded control polygon turns
+    both ways (a nearly straight run into a corner, the bowl's bottom into the diagonal in the mid master) takes the
+    whole-unit handles nearest its drawn ones that turn one way."""
+    n = len(pts)
+    for i, q in enumerate(pts):
+        if not q[2]:
+            continue
+        a, b, e = pts[(i + 1) % n], pts[(i + 2) % n], pts[(i + 3) % n]
+        if a[2] is not None or b[2] is not None:
+            continue
+        seg = lambda h1, h2: ((q[0], q[1]), h1, h2, (e[0], e[1]))           # noqa: E731
+        ia, ib = ideal[(i + 1) % n], ideal[(i + 2) % n]
+        if _infl(seg(ia, ib)) or not _infl(seg((a[0], a[1]), (b[0], b[1]))):
+            continue
+        best = None
+        for dx1 in (-1, 0, 1):
+            for dy1 in (-1, 0, 1):
+                for dx2 in (-1, 0, 1):
+                    for dy2 in (-1, 0, 1):
+                        h1, h2 = (a[0] + dx1, a[1] + dy1), (b[0] + dx2, b[1] + dy2)
+                        if _infl(seg(h1, h2)):
+                            continue
+                        d = math.dist(h1, ia) + math.dist(h2, ib)
+                        if best is None or d < best[0]:
+                            best = (d, h1, h2)
+        if best:
+            a[0], a[1] = best[1]
+            b[0], b[1] = best[2]
+
+
 def _infl(s):
     """1 when a cubic's control polygon turns both ways (an inflection the rounding made), else 0."""
     legs = [(s[k + 1][0] - s[k][0], s[k + 1][1] - s[k][1]) for k in range(3)]
@@ -803,7 +1091,7 @@ def regular(font, name="ampersand"):
     _put(g, cs)
     g.width = round(max(nx) + dx + rsb)
     g.lib[LIB] = {"version": 1}
-    return f"{name}: built (advance {g.width}; corners " + ", ".join(f"{k} {round(v[0])},{round(v[1])}" for k, v in info.items() if isinstance(v, tuple)) + ")"
+    return f"{name}: built (advance {g.width}; corners " + ", ".join(f"{k} {round(v[0])},{round(v[1])}" for k, v in info.items() if isinstance(v, tuple) and k not in ("chains", "loop")) + ")"
 
 
 def _mix(R0, R1, t):
