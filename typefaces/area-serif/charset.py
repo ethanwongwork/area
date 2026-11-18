@@ -1340,6 +1340,13 @@ def maths(font, m, adv):
     Pi = union(keep, top_bar)
     pb = bounds(Pi)                                    # 0.74: narrowed between its stems (it was scaled: stems 74)
     put(font, "product", narrow(Pi, hs[0][1] + 90, round(0.14 * (pb[2] - pb[0]))), 0, [0x220F], lsb=30, rsb=30)
+    # 0.83 (Regular pass, item A): an n-ary operator hangs below the baseline as the summation does (sigma.KIND: -0.25
+    # to 1.00 of the cap; Georgia Pro and PP Kyoto's product -0.29 / -0.19): its stems run down to -178, the feet whole
+    g_ = font["product"]
+    for c_ in g_.contours:
+        for q_ in c_.points:
+            if q_.y < CAP_HEIGHT / 2:
+                q_.y -= round(0.25 * CAP_HEIGHT)
     if "uni01A9" in font or "Esh" in font:
         put(font, "summation", gp(font, "Esh"), 0, [0x2211], lsb=30, rsb=30)
         sum_vertex(font["summation"], m.cap_stem)

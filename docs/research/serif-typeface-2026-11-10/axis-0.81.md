@@ -1502,3 +1502,34 @@ Looked at (`reg/itemB-arrowboth.png`, `itemB-arrowupdn.png`, `itemB-uni2197.png`
 arrows are the same size as the level ones. Not right yet: ↔ at →'s length leaves 310 units of shaft between the
 crotches, which reads short at text size beside → (one reference, Merriweather, makes it 1.66 as long; the advance
 would grow); the masters were not looked at (the engine reads the new ↔ / ↕ outlines).
+
+#### Item A, second pass: the operator (the reference study's numbers)
+
+The reference study (`build/refstudy/spec.md`, Georgia Pro, Serrif, PP Kyoto) came in after the first pass: Area's ∑
+was still the Greek capital's proportions on an operator's extent. Its numbers, taken for the summation only (Ʃ stays
+the letter of the first pass): extent -0.25 to 1.00 of the cap (-178 to 712; references' height 1.23 to 1.29 cap, the
+centre 0.04 to 0.13 cap under the maths axis: Area's now 267, 0.065 under); width 0.79 cap (562, 0.9375 of E's ink in
+any master); the bottom bar 0.90 of n's stem (70; Georgia Pro 0.96, Serrif 0.89: the operator's heavy foot; this
+overrides the brief's "both at the arm weight" for the summation, the coordinator's instruction), its beak E's moved
+down with the bar's inner edge so both serifs stand as far past their bars; the diagonals' long edges at 55 and 52
+degrees from level, the point where their inner and outer edges meet (VX 0.662, VY 0.525 result); the point's flat 0.13
+of the capital stem across the bisector (11; Georgia Pro's 0.127 measured, Serrif sharp; the study's 0.42 is the
+capitals' zone-line flat, which the owner read as chipped mid-height). ∏ takes the same extent: its stems run down to
+-178, feet whole (`charset.maths`).
+
+| | first pass | second pass | references (study) |
+|---|---|---|---|
+| ∑ extent | -142 to 712 | -178 to 712 | -0.19 to -0.29 cap |
+| width / cap | 0.827 | 0.790 | 0.69 to 0.96, rule 0.79 |
+| bottom bar | 46 | 70 | 0.89 to 0.96 stem |
+| diagonals from level | 53.7 / 52.0 | 55.0 / 52.0 | 53/50, 59/53, 65/67 |
+| point flat | 0 | 11 | Georgia 13, Serrif 0 |
+| ∏ extent | 0 to 712 | -178 to 712 | G -0.29, K -0.19, S 0 |
+
+What moved against item B's build: summation (advance 650 > 623) and product in the Regular UFO and TTF, nothing else;
+kerning: collision keys with ∏ and ∑ and j / ƒ (∏ j 132, ∏ ƒ 64, ∑ j 126). Checks identical to item B's. In the
+masters the same rule gives a bottom bar of 49.5 / 126 at 300 / 800 and the point rising to 0.59 of the height at 800
+(the angles fixed while the bottom bar grows): reported, not tuned. Figures `reg/itemA2-summation.png`,
+`itemA2-product.png`, `-combs`, `itemA2-text.png`. Looked at: the ∑ now reads as an operator beside x and ∏, its heavy
+foot balancing the thick diagonal; still, ∏'s and ∑'s descent needs ∏ j / ∑ j opened by 126 to 132 units (the collision
+pass), and ∏ x sits close (its sides are 30, a sign's).

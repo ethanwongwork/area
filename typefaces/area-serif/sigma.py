@@ -38,9 +38,21 @@ TOP_R = 0.974           # the top bar's right end over the bottom bar's, from th
 VX = 0.637              # the point's place across the ink (references 0.605 to 0.700, median 0.637)
 VY = 0.523              # and up the height (references 0.516 to 0.531, median 0.523)
 VERTEX = 0.0            # the point's flat, a share of the capital stem: sharp (four references of six)
-DESC = -0.200           # the summation's bottom over the cap height (references -0.119 to -0.292, median -0.200)
 NAMES = ("Esh", "summation")
-SPAN = {"Esh": (CAP, 0.0), "summation": (CAP, round(DESC * CAP))}   # (top, bottom) of the bars' outer edges
+# 0.83 item A, second pass (the reference study, build/refstudy/spec.md, Georgia Pro / Serrif / PP Kyoto): the
+# summation is the n-ary operator, not the Greek capital. Its extent -0.25 to 1.00 of the cap (references -0.19 to
+# -0.29, height 1.23 to 1.29 cap; centre 267, 0.065 cap under the maths axis as theirs 0.04 to 0.13); width 0.79 cap
+# (references 0.69 to 0.96) at the Regular's E, so 0.9375 of E's ink in any master; its bottom bar heavy, 0.90 of n's
+# stem (Georgia Pro 0.96, Serrif 0.89: the operator's mark), the top bar E's arm (references 1.07 to 1.20 hair); the
+# diagonals' long edges at 55 and 52 degrees from level (references 53 / 50, 59 / 53, 65 / 67), the point where they
+# meet; the point's flat 0.13 of the capital stem across the bisector (Georgia Pro's 0.127; Serrif's is sharp; the
+# capitals' 0.42 flat read "chipped" to the owner mid-height). Esh is the letter: cap height, E's arms both, places
+# from the median summation (VX, VY above), sharp.
+KIND = {
+    "Esh": dict(span=(CAP, 0.0), w_e=W_E, bot=None, angles=None, flat=0.0),
+    "summation": dict(span=(CAP, -0.25 * CAP), w_e=0.79 * CAP / 600.0, bot=0.90, angles=(55.0, 52.0), flat=0.13),
+}
+SPAN = {k: v["span"] for k, v in KIND.items()}
 
 
 def _on(g):
@@ -123,7 +135,14 @@ def readings(font):
     xs.sort()
     stem = min(xs[i + 1] - xs[i] for i in range(0, len(xs) - 1, 2))
     ex = [q[0] for P in _on(font["E"]) for q in P]
-    return {"t": t, "beak": segs, "td": td, "tn": tn, "stem": stem, "e_ink": max(ex) - min(ex)}
+    nst = []
+    for P in _on(font["n"]):
+        for a, b in zip(P, P[1:] + P[:1]):
+            if (a[1] - 200) * (b[1] - 200) < 0 and a[2] and b[2]:
+                nst.append(a[0] + (200 - a[1]) * (b[0] - a[0]) / (b[1] - a[1]))
+    nst.sort()
+    return {"t": t, "beak": segs, "td": td, "tn": tn, "stem": stem, "e_ink": max(ex) - min(ex),
+            "nstem": min(nst[i + 1] - nst[i] for i in range(0, len(nst) - 1, 2))}
 
 
 def _meet(p, u, q, v):
@@ -158,10 +177,12 @@ def _edge_through(P, V, w, side):
     return f((lo + hi) / 2)[1]
 
 
-def construct(R, wd, x0=0.0, span=(CAP, 0.0)):
+def construct(R, wd, x0=0.0, span=(CAP, 0.0), tb=None, angles=None, flat=0.0):
     """Segments of one closed outline (kind, p0, p1, p2, p3), counter-clockwise, and info. span: the bars' outer edges'
-    heights (top, bottom)."""
+    heights (top, bottom); tb: the bottom bar (default the top's); angles: the diagonals' long edges from level (upper,
+    lower), else the point at VX, VY; flat: the point's flat, a share of the capital stem."""
     t, td, tn = R["t"], R["td"], R["tn"]
+    tb = t if tb is None else tb
     beak = R["beak"]
     Y1, Y0 = span
     bx = max(max(s[1][0], s[4][0]) for s in beak)            # the beak's rightmost x in E
@@ -172,22 +193,36 @@ def construct(R, wd, x0=0.0, span=(CAP, 0.0)):
            for k, a, b, c, d in beak]
     # the bottom beak: E's turned over (its bottom on Y0), run the other way, its end at the full width
     dxb = x1 - bx
-    flip = lambda p: (p[0] + dxb, Y0 + CAP - p[1])                                   # noqa: E731
+    # a heavier bottom bar: the beak's parts under the arm move with the bar's inner edge, so the serif stands as far
+    # past the bar as E's does (one size of serif top and bottom)
+    deep = lambda p: (p[0], p[1] - (tb - t) if p[1] < CAP - 7 else p[1])                # noqa: E731
+    flip = lambda p: (deep(p)[0] + dxb, Y0 + CAP - deep(p)[1])                         # noqa: E731
     bot = [(k, flip(d), flip(c), flip(b), flip(a)) for k, a, b, c, d in reversed(beak)]
-    V = (x0 + VX * wd, Y0 + VY * (Y1 - Y0))
-    Ptl, Pbl = (x0, Y1 - t), (x0, Y0 + t)
-    # the upper diagonal: its outer edge from Ptl down-right; its inner edge, td to the edge's upper right, through V
-    du = _edge_through(Ptl, V, td, +1)
-    # the lower diagonal: its inner (upper-left) edge from Pbl up-right; its outer edge tn to its lower right, through V
-    dl = _edge_through(Pbl, V, tn, -1)
+    Ptl, Pbl = (x0, Y1 - t), (x0, Y0 + tb)
+    if angles:
+        # the long edges at their angles from level; the point where the inner edge of the upper and the outer edge of
+        # the lower meet
+        au, al = math.radians(90 - angles[0]), math.radians(90 - angles[1])
+        du = (math.sin(au), -math.cos(au))
+        dl = (math.sin(al), math.cos(al))
+        # the upper diagonal's inner edge: td to the outer edge's upper right; the lower's outer edge tn to its lower right
+        nu = (-du[1], du[0]) if (-du[1]) > 0 else (du[1], -du[0])
+        nl = (dl[1], -dl[0]) if dl[1] > 0 else (-dl[1], dl[0])
+        V = _meet((Ptl[0] + nu[0] * td, Ptl[1] + nu[1] * td), du, (Pbl[0] + nl[0] * tn, Pbl[1] + nl[1] * tn), dl)
+    else:
+        V = (x0 + VX * wd, Y0 + VY * (Y1 - Y0))
+        # the upper diagonal: its outer edge from Ptl down-right; its inner edge, td to the edge's upper right, through V
+        du = _edge_through(Ptl, V, td, +1)
+        # the lower diagonal: its inner (upper-left) edge from Pbl up-right; its outer edge tn to its lower right
+        dl = _edge_through(Pbl, V, tn, -1)
     notch = _meet(Ptl, du, Pbl, dl)
     A1 = _meet(V, du, (0.0, Y1 - t), (1.0, 0.0))             # inner edge of the upper diagonal under the top bar
-    A2 = _meet(V, dl, (0.0, Y0 + t), (1.0, 0.0))             # outer edge of the lower diagonal over the bottom bar
+    A2 = _meet(V, dl, (0.0, Y0 + tb), (1.0, 0.0))            # outer edge of the lower diagonal over the bottom bar
     # the point cut as the capitals' vertices: a flat VERTEX x stem across the bisector, where the edges are that far
     e1, e2 = _unit((A1[0] - V[0], A1[1] - V[1])), _unit((A2[0] - V[0], A2[1] - V[1]))
     bis = _unit((e1[0] + e2[0], e1[1] + e2[1]))
     half = math.acos(max(-1.0, min(1.0, e1[0] * e2[0] + e1[1] * e2[1]))) / 2
-    dcut = VERTEX * R["stem"] / (2 * math.tan(half))
+    dcut = (flat or VERTEX) * R["stem"] / (2 * math.tan(half))
     c0 = (V[0] + bis[0] * dcut, V[1] + bis[1] * dcut)
     cd = (-bis[1], bis[0])
     f_up = _meet(V, e1, c0, cd)
@@ -200,7 +235,7 @@ def construct(R, wd, x0=0.0, span=(CAP, 0.0)):
     segs += [L(bot[-1][4], A2), L(A2, f_dn), L(f_dn, f_up), L(f_up, A1), L(A1, top[0][1])]   # f_dn == f_up: sharp
     segs += top
     segs += [L(top[-1][4], (x0, Y1))]
-    info = {"V": V, "notch": notch, "A1": A1, "A2": A2, "flat": math.dist(f_up, f_dn), "x1": x1,
+    info = {"VX": (V[0] - x0) / wd, "VY": (V[1] - Y0) / (Y1 - Y0), "tb": tb, "V": V, "notch": notch, "A1": A1, "A2": A2, "flat": math.dist(f_up, f_dn), "x1": x1,
             "up_deg": math.degrees(math.atan2(du[0], -du[1])), "low_deg": math.degrees(math.atan2(dl[0], dl[1]))}
     return segs, info
 
@@ -242,8 +277,14 @@ def _put(g, P):
     g.contours.append(c)
 
 
-def _wd(R):
-    return W_E * R["e_ink"]
+def _wd(R, name="Esh"):
+    return KIND[name]["w_e"] * R["e_ink"]
+
+
+def build(R, name):
+    k = KIND[name]
+    tb = None if k["bot"] is None else k["bot"] * R["nstem"]
+    return construct(R, _wd(R, name), 0.0, k["span"], tb, k["angles"], k["flat"])
 
 
 def regular(font):
@@ -258,7 +299,7 @@ def regular(font):
         g = font[name]
         xs = [p.x for c in g.contours for p in c.points]
         lsb, rsb = (min(xs), g.width - max(xs)) if xs else (30, 30)
-        segs, info = construct(R, _wd(R), 0.0, SPAN[name])
+        segs, info = build(R, name)
         P = to_points(segs)
         nx = [q[0] for q in P]
         dx = round(lsb - min(nx))
@@ -266,8 +307,9 @@ def regular(font):
         _put(g, P)
         g.width = round(max(nx) + dx + rsb)
         g.lib[LIB] = {"version": 1}
-        notes.append(f"{name} advance {g.width}, width {_wd(R):.0f}, span {SPAN[name]}, point flat {info['flat']:.0f}, diagonals {info['up_deg']:.1f} / "
-                     f"{info['low_deg']:.1f} deg, bars {R['t']:.0f}, thick {R['td']:.0f}, thin {R['tn']:.0f}")
+        notes.append(f"{name} advance {g.width}, width {_wd(R, name):.0f}, span {SPAN[name]}, point flat {info['flat']:.0f} "
+                     f"at {info['VX']:.3f} / {info['VY']:.3f}, diagonals {info['up_deg']:.1f} / {info['low_deg']:.1f} deg "
+                     f"from upright, bars {R['t']:.0f} / {info['tb']:.0f}, thick {R['td']:.0f}, thin {R['tn']:.0f}")
     return "; ".join(notes)
 
 
@@ -277,7 +319,7 @@ def master(reg, font, sides, name):
     if name not in reg or LIB not in reg[name].lib or name not in font:
         return None
     R0, R = readings(reg), readings(font)
-    segs, info = construct(R, _wd(R), 0.0, SPAN[name])
+    segs, info = build(R, name)
     P = to_points(segs)
     Rp = _on(reg[name])
     if [[q[2] for q in Rp[0]]] != [[q[2] for q in P]]:
@@ -287,4 +329,4 @@ def master(reg, font, sides, name):
     _put(font[name], [(x + shift, y, t, sm) for x, y, t, sm in P])
     font[name].width = width
     return (f"{name}: construction, bars {R['t']:.0f}, thick {R['td']:.0f}, thin {R['tn']:.0f}, flat "
-            f"{info['flat']:.0f}, width {_wd(R):.0f}")
+            f"{info['flat']:.0f}, width {_wd(R, name):.0f}, bottom bar {info['tb']:.0f}")
