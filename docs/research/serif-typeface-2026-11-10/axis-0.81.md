@@ -1600,3 +1600,45 @@ the bowl; the diagonal carries the weight; the glyph sits narrower in text. Stil
 and at the tail's join, not on the stroke rising into the loop as theirs); the bowl's bottom 0.64 of the stem against
 0.72; the loop's top 0.55 against 0.47 (o's hairline, heavier than theirs); the bowl's outer left extreme still reads
 a little tighter than the arcs either side in the comb.
+
+The owner's clarification on the references (after item C was committed): they show how glyphs appear, they are not
+targets; the test is Area's own system, the references only catch a glyph plainly outside normal practice or choose
+between equal options. Item C's proportional moves (width, the diagonal's angle, the crossing's height, the loop's kappa
+to the medians) are therefore revisited after item E (below, "Item C, second pass"); items D and E take their places from
+Area's own glyphs first.
+
+### Item D: the figure 3, and the other round figures
+
+Measured (`reg/d/figcomb.py`: curvecheck on each whole figure; `ref3x.py`; `thick.py`: radial rays from each bowl's
+counter centre; Area's 8 and S for the extremes' places). The 3: 8 faults, worst ratio 2.00: the top's two arcs met
+with a 1.25 jump (inner) and 1.30 at the ball's left, because the top stood at 0.451 of the upper bowl's width (Area's 8
+0.493, S 0.498; references 0.487 to 0.550), so the left quarter was 200 wide and the right 243 for one height; each
+quarter's handles unequal (top-left 0.64 / 0.48 of their sides: long at the top, short at the ball, so the arc ran
+flat and then turned tight into the ball, the owner's "flattens toward the ball"; bottom-left 0.59 / 0.49, the owner's
+"longer and flatter"); three flat places, two of them in the inner curves into the waist; the upper ball's neck a second
+upright node 6 units left of the ball's right extreme (an S of 21 units, 1.59 and 1.33 jumps), where the lower ball runs
+straight into its inner curve. The thick sits right: on the right of each bowl at mid-height (thickest at 0 degrees in
+both bowls, 92.1 / 92.3, as the references' 0 to +5 and Area's 2 and 5).
+
+| # | Item | Rule (`figs.py`, in normalize before spacing, so ³ ₃ and the fractions follow) | Before > after (Regular) |
+|---|---|---|---|
+| 109 | D. 3 | (1) the upper ball's neck is one curve, as the lower ball's: the node between the ball's right extreme and the inner top dropped, the two curves refitted as one quarter with the lower ball's handle shares (`neck`); (2) the top and bottom extremes, outer and inner together, moved level with their handles to the places nearest the middle of each bowl (Area's 8 and S) at which every node meets at one curvature with no flat place: top 0.51, bottom 0.445 (scanned: top 0.49 to 0.505 left a flat place in the inner curve into the waist, bottom 0.452 / 0.449 one in the lower bowl's; both inside the references' ranges); (3) every smooth node between two curves at one curvature (`loops.even_nodes`, handles only, target 1.05) | curvecheck worst 2.00 > 1.09, faults 8 > 0 (flat places 3 > 0); top at 0.451 > 0.510, bottom 0.452 > 0.445 of their bowls; points 60 > 57; thick at 0 degrees both bowls (unchanged); width unchanged |
+| 110 | D. 5 | The same evening (`even_figs`), and a handle the rounding left off its node's line turned back onto it (`collinear`) | curvecheck worst 2.95 > 1.05, faults 6 > 0 |
+
+The comb table over the Regular's round figures after (`d/figcomb-after.txt`; worst ratio at a smooth node, faults,
+thickest place): 2 1.43, 1 fault (node 9 at the ball's neck: the ball's own drawing, left; thick at -5 degrees); 3 1.09, 0
+(thick 0 / 0); 5 1.05, 0 (thick +5); 6 4.56, 2 and 9 2.51, 1 (where the long stroke enters the bowl: the same evening
+cures them, 1.15 / 1.06, but undoes even.py's thickness round their counters, strays 2.4 / 2.6 > 4.7 / 3.7 against 2.75,
+so left until one solve holds both; listed); 8 1.21, 0; 0 1.07, 0. Thick placement: 2 3 5 at 0 to +5 degrees (right,
+mid-height); 6 9 read at their junction (the ray runs into the long stroke), 0 symmetric (87.9 left, 87.0 right).
+
+What moved against item C's build: 3, 5 and their superiors and inferiors (³ ₃ ⁵ ₅), the fractions built from them
+(⅓ ⅔ ¾ ⅜ ⅗ ⅝ ⅚ ⅕ ⅖ ⅘ as composites; advances of ⅓ ⅔ ¾ ⅜ ⅗ ⅝ ⅚ by 2 to 3 units through the fraction spacing),
+nothing else; kerning: five collision keys with ď / ľ. Checks: curvecheck, parts, audit_charset, even unchanged;
+evaluate jumps 35 > 33 (the 3 lists two "curvature flips sign" at its ball necks and a lopsided quarter at the lower
+ball's left, 0.52 / 0.86: the evening's; the 5 lost two); pathlint 145 > 146 warnings (⁵: one handle past its meeting
+point after scaling), 29 > 27 infos. Figures `reg/itemD-three.png`, `itemD-three-combs.png` and `itemD-c4k-three-combs.png`
+(a finer comb scale), `itemD-five*.png`, `itemD-text.png`. Looked at: the top bowl's upper-left arc now turns evenly
+into the ball (no flat run then a tight turn), the top a level meeting of two arcs of one curvature, the bottom-left arc
+no longer long and flat; the upper ball meets its bowl as the lower does. Not right yet: 6 and 9 as above; the 2's ball
+neck; the lower ball's left quarter reads slightly lopsided in evaluate's handle test.
