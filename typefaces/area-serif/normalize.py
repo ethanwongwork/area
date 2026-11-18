@@ -1254,6 +1254,15 @@ def normalize(font):
     print("at:", AT.regular(font))                    # of one stroke and Area's a.ss03 in it, joined at its foot
     import circled as CIRCLED                         # 0.82 (owner round 8, item 16): one ring for (C) (R) (P), the
     print("circled:", CIRCLED.regular(font))          # letters Area's C R P at the references' size and weight
+    import dollar as DOLLAR                           # 0.82 (owner round 8, item 17): $'s S one outline through its
+    if "dollar" in font:                              # bar, the bar centred on the S, its stubs one length
+        cs_ = [[(p.x, p.y, p.type, p.smooth) for p in c.points] for c in font["dollar"].contours]
+        new_, log_ = DOLLAR.true_crossing(cs_)
+        if new_ is not cs_:
+            from ufoLib2.objects import Point as _Pt
+            for c, P in zip(font["dollar"].contours, new_):
+                c.points = [_Pt(x, y, t, smooth=sm) for x, y, t, sm in P]
+        print("dollar:", log_)
     joined, promoted, copied, opened_all = SPACING.finish(font, CHARSET.COVERAGE)   # 0.73: beyond the core
     alts = sorted({b for pairs in alt_subs.values() for _a, b in pairs} | {"g.ss02", "one.ss01"} | ({"uni0261"} & set(font.keys())))
     order = font.lib.get("public.glyphOrder", [])

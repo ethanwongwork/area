@@ -1353,3 +1353,46 @@ optically centred. Still not right: the Light letters are lighter than the refer
 1.03): the Regular's additions carried by the stem's law keep every stroke monotone but do not reach the references'
 heavier small letters at 300; the Bold's R and P serifs read slab-like (the upright addition, 27, on a letter at 0.56
 size); seven smooth nodes in the scaled R and P bend 2 to 3 degrees after rounding.
+
+### Item 17: $ and ð (and §'s ends)
+
+The brief: $ thicker at 300 than at 400 at (207, 4) (59.7 against 55.3), ð at (279, 697) (53.1 against 50.4); $'s
+four ends spread 6 at the Bold and §'s 10. Then the owner, on the published page: "misalignment on the $": where the
+S's strokes pass behind the bar, the edge leaving the bar on one side is at a different height and angle from the edge
+entering on the other (worse at the heavy end, the upper-left counter pinched), the stubs not centred on the S.
+
+Measured (`item17/dollarx.py`, `dollar.check`: each of the S's six edges that cross the bar carried on along its
+osculating circle to the bar's middle from both sides, the difference; the bar's middle against the S's ink centre).
+$ is its own drawing (owner, 0.80), one contour with its bar, so each crossing edge is two pieces ending on the bar's
+edges. Regular: steps within 0.9, the bar 8.5 right of the S's ink centre (308 against 299.5). Light: steps -16.3,
++7.3, +8.4, +23.3 (the top stroke's inside, the spine's two edges, the bottom stroke's inside), bar 10 right. Bold:
++4.6, -41.4, -19.4, bar 5.5 right; the 600 master 7.9 and 6.8. The cause in the masters: the engine moved the
+counters' corners on the bar's edges as the bar's knots, which also thickened the strokes there towards the Light
+(the bottom stroke's inside at the bar 63 / 41 left and right of it at 300 where the Regular has 44 / 46 over -8 / -7):
+the audit_rays fault. ð's place (279, 697) is the ascender's curve past the crossing, up to its cut end at the top
+left (item 10's "bar"): 51.7 at 300 against 48.4 at 400 at its middle, 53.0 at the Bold (1.10): read as part of the
+ascender's thick.
+
+| # | Item | Cause | Rule | Before > after |
+|---|---|---|---|---|
+| 101 | 17. $ | As above: the crossing pieces moved apart in the masters; the bar off the S's centre in every master | `dollar.py`, `true_crossing`, in `normalize` and at the end of `bold.bold_font` (each master and the mid master): the bar (its edges and stubs) moves level so its middle is the S's ink centre; each crossing edge is refitted as one curve through the bar (two cubics joined under the bar's middle at one tangent and one curvature, from the far node of the left piece to the far node of the right one, both far nodes' tangents kept, their handles within a fifth of their own length and their curvature met; every handle inside its curve's triangle; least squares on the pieces' own points, the half nearer the bar a fifth; an edge that is the S's top or bottom or a stroke's inside, near level at the bar and with its drawn extreme under the bar, gets a level node at that extreme's height, so the S keeps its height and no extreme or inflection appears between masters) and cut at the bar's edges, so the two pieces are one curve; the stubs one length, the mean of the two. The first rule written for the thickness (each crossing corner moved to S's law for its stroke) was dropped: it left the pieces as far apart as before. And `bold.round_ends` on $ and § (`ROUND_SIGNS`; $'s bar kept upright, centred after) | steps across the bar, Light / Regular / mid / Bold, largest: 23.3 / 0.9 / 7.9 / 41.4 > 1.1 / 0.5 / 0.6 / 1.5 (read along each piece's osculating circle to the bar's middle; the pieces are cut from one curve, so the rest is that reading's error where the spine's curvature changes under the bar); bar off the S's centre 10.0 / 8.5 / 7.0 / 5.5 > -0.5 / 0.5 / 0.0 / -0.5; stubs 94 / 94 (Regular), 95 / 95 (Bold). Four ends about their centre, spread at 300 / 600 / 800: $ 2 / 3 / 6 > 1 / 1 / 1, § 4 / 4 / 10 > 2 / 1 / 3. curvecheck on the whole $: Light 2.64 (6 faults) / Regular 1.36 (4) / Bold 3.59 (5) > 1.43 (3) / 1.36 (3) / 2.20 (4); audit_rays $: thicker at 300 (59.7 against 55.3) > ok at every 25 to 50 units from 300 to 800. Advances: Light 582 > 581, mid 624 > 626, Bold 652 > 656; § Bold 610 > 615 |
+| 102 | 17. ð | The ascender's curve past the crossing grew towards the Light (read with the ascender's thick) | `symbols.eth_bar`: in each master the stroke between the crossing and its cut end keeps the Regular's thickness times the hairline's law (o's top: 0.860 / 1.233), about its centreline as the engine left it, the junction's corners sliding along their own edges | pairs across it (junction to cut end), Light 71 / 59 / 48 / 43 > 58 / 47 / 39 / 36, Bold 72 / 60 / 50 / 43 > 82 / 69 / 55 / 52 (Regular 70 / 57 / 48 / 42) |
+
+Item 17, what moved (`item17/diff3.txt`, against item 16's build; saved as `build/snap082j17c`): $ in every master, the
+mid layer, the Regular TTF and the variable font; ð and § in the Light and Bold (and so the variable font at 300, 600,
+800); nothing else; ð and § are byte-identical in the Regular. Kerning: § j / jdotless (Light) and ldot § (Bold), a
+unit each. Checks (`item17/after3/`): audit_rays 3 glyphs > 1 (ʕ, as before: $ and ð cured); audit_axis Bold thin
+unchanged (5 glyphs, none of these), turns ok; Light turns: one new note, $ curve 10 at 314.6 (the bottom stroke's
+outer edge right of the bar gains a y extreme at its very start: in the Light the S's lowest point lies right of the
+bar, in the Regular under it); audit_charset 0 errors; evaluate lists none of the three; even 0; curvecheck unchanged;
+pathlint 0 errors, warnings 148 > 147 (one handle on $'s refitted counter top past its meeting point by under a unit,
+whole-unit rounding); interpolatable nothing. Two first builds, refused: one moved each crossing corner to S's law (the
+pieces stayed apart); one refitted the far handles freely (audit_axis then listed $ thin at the Bold, 41 > 37, and two
+turns, and audit_rays a new place at (164, 94)); the far handles now stay within a fifth of their own length.
+
+Looked at (`item17-dollar.png`, `item17-eth.png`, `item17-section.png`): the S now runs through the bar at every weight
+(the Light's upper counter lost its shelf, the Bold spine's two halves meet), the bar stands on the S's middle and its
+stubs are one length. Still not right: at 800 the upper counter left of the bar is pinched (58 units of white at its
+middle against 99 right of the bar; the lower counter 150 / 93): the S's own bowls are uneven at the Bold (the upper
+bowl's left side grows inward), which no bar position balances (the best shift is 4 units); ð's ascender curve at 300
+now reads lighter than its crossbar; § at 800 keeps its lumpy left side (the engine's; only its ends were moved).

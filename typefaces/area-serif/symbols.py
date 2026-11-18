@@ -209,3 +209,65 @@ def even_curves(font, name):
         for p, q in zip(c.points, P):
             p.x, p.y = q[0], q[1]
     return f"{name}: worst curvature ratio {w0:.2f} > {w1:.2f}, faults {len(b0)} > {len(b1)}"
+
+
+# ------------------------------------------------------------------ owner round 8, item 17: ð's upper stroke
+# (called "the bar" in item 10's notes and the brief: the ascender's curve from where it crosses the bar up to its cut
+# end at the top left, the stroke audit_rays read at (279, 697))
+def eth_bar_edges(g):
+    """ð's bar: the short straight cut (30 to 60 long between two corners) at the glyph's top left, the curve into
+    it (the bar's upper edge) and the curve out of it (its lower edge). Returns (contour, [upper indices from the
+    junction to the cut], [lower indices from the cut to the junction]) or None."""
+    for ci, c in enumerate(g.contours):
+        P = c.points
+        n = len(P)
+        best = None
+        for i, q in enumerate(P):
+            a = P[i - 1]
+            if q.type == "line" and a.type and 30 <= ((a.x - q.x) ** 2 + (a.y - q.y) ** 2) ** 0.5 <= 60:
+                key = -(a.y + q.y) + (a.x + q.x)       # top left
+                if P[i - 2].type is None and P[(i + 1) % n].type is None and (best is None or key < best[0]):
+                    best = (key, i)
+        if best:
+            i = best[1]
+            up = [(i - 4) % n, (i - 3) % n, (i - 2) % n, (i - 1) % n]
+            lo = [i, (i + 1) % n, (i + 2) % n, (i + 3) % n]
+            if P[up[0]].type and P[lo[3]].type:
+                return ci, up, lo
+    return None
+
+
+def eth_bar(reg, font, name="eth"):
+    """ð's upper stroke (the ascender's curve past the crossing, up to its cut end) keeps the Regular's thickness times
+    the hairline's law in this master (o's top, as amp reads it): its
+    centreline as the engine left it, each pair of points across it (the cut's corners, the handles, the junction's
+    corners) set apart by the Regular's offset times the law; the junction's corners slide along the ascender's edges.
+    The engine read it as a part of the ascender's thick: 51.7 at 300 against 48.4 at 400 at its middle (audit_rays 53.1
+    against 50.4, (279, 697)), 53.0 at the Bold (1.10)."""
+    if name not in reg or name not in font:
+        return None
+    e0, e1 = eth_bar_edges(reg[name]), eth_bar_edges(font[name])
+    if not e0 or not e1 or e0[1:] != e1[1:]:
+        return f"{name}: bar not found, left"
+    law = A.readings(font)["h"] / A.readings(reg)["h"]
+    ci, up, lo = e1
+    R = reg[name].contours[ci].points
+    P = font[name].contours[ci].points
+    pairs = list(zip(up, reversed(lo)))                # junction-upper with junction-lower ... cut corners
+    before = []
+    for k, (u, l_) in enumerate(pairs):
+        dR = (R[u].x - R[l_].x, R[u].y - R[l_].y)
+        c = ((P[u].x + P[l_].x) / 2, (P[u].y + P[l_].y) / 2)
+        before.append(round(((P[u].x - P[l_].x) ** 2 + (P[u].y - P[l_].y) ** 2) ** 0.5))
+        tu = (c[0] + dR[0] * law / 2, c[1] + dR[1] * law / 2)
+        tl = (c[0] - dR[0] * law / 2, c[1] - dR[1] * law / 2)
+        for idx, t in ((u, tu), (l_, tl)):
+            if k == 0:                                 # a junction corner slides along its other edge (a line)
+                n = len(P)
+                nb = P[(idx - 1) % n] if idx == up[0] else P[(idx + 1) % n]
+                d = A.unit((P[idx].x - nb.x, P[idx].y - nb.y))
+                s = (t[0] - P[idx].x) * d[0] + (t[1] - P[idx].y) * d[1]
+                t = (P[idx].x + d[0] * s, P[idx].y + d[1] * s)
+            P[idx].x, P[idx].y = round(t[0]), round(t[1])
+    after = [round(((P[u].x - P[l_].x) ** 2 + (P[u].y - P[l_].y) ** 2) ** 0.5) for u, l_ in pairs]
+    return f"{name}: bar x{law:.3f} (pairs across {before} > {after})"

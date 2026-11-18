@@ -875,6 +875,7 @@ def s_terminal(R, N):
 
 
 ROUND_ENDS = ("S", "s", "three")
+ROUND_SIGNS = ("dollar", "section")   # owner round 8, item 17: the same rule on two signs of their own drawing
 END_BAND = 0.4          # balance.py's bands: the top and bottom 40% of the glyph's height
 END_RIGID = 0.3         # nodes within this share of a band's width from an end move with that end whole
 
@@ -4308,6 +4309,24 @@ def bold_font(reg, stem=STEM, **over):
                 c.points = [Point(x, y, t, smooth=s_) for x, y, t, s_ in P]
             evened.append(f"{name} " + " ".join(f"{x:+.1f}" for x in d_))
             resided.add(name)
+    # owner round 8 (0.82, item 17): $ and § are open round signs too (their own drawings, not S's points): the same
+    # rule; $'s bar keeps the engine's here (dollar.true_crossing centres it last)
+    for name in ROUND_SIGNS:
+        if name not in reg or name not in font or name in struck:
+            continue
+        R_, N_ = glyph_contours(reg[name]), glyph_contours(font[name])
+        if [len(P) for P in R_] != [len(P) for P in N_]:
+            continue
+        M_, d_ = round_ends(R_, N_)
+        bar_x = {q[0] for P in R_ for i, q in enumerate(P) if q[2] == "line" and P[i - 1][2] and P[i - 1][0] == q[0]
+                 and abs(P[i - 1][1] - q[1]) >= 40} if name == "dollar" else set()
+        M_ = [[(n_[0],) + tuple(m_[1:]) if r_[0] in bar_x and r_[2] is not None else m_ for r_, n_, m_ in zip(Rp, Np, Mp)]
+              for Rp, Np, Mp in zip(R_, N_, M_)]
+        if any(abs(x) >= 0.5 for x in d_):
+            for c, P in zip(font[name].contours, M_):
+                c.points = [Point(x, y, t, smooth=s_) for x, y, t, s_ in P]
+            evened.append(f"{name} " + " ".join(f"{x:+.1f}" for x in d_))
+            resided.add(name)
     notes.append(f"round letters' ends (TL TR BL BR): {', '.join(evened)}")
     # owner round 8, item 14: g's loop under its bowl as in the Regular, its ear at the ball law's reach
     looped = []
@@ -4798,6 +4817,9 @@ def bold_font(reg, stem=STEM, **over):
     # ɽ's curves meet at one curvature at every node towards the Bold (in the mid master too)
     import symbols as _SYM
     rs_ = [_SYM.schwa_bar(reg, font), _SYM.glottal_small(reg, font), _SYM.oe_joined(reg, font, v)]
+    # owner round 8 (0.82, item 17): ð's upper stroke (the ascender's curve past the crossing to its cut end) takes the
+    # hairline's law (51.7 at 300 against 48.4 at 400 at its middle)
+    rs_.append(_SYM.eth_bar(reg, font))
     for n_ in _SYM.EVEN if v["f"] > 0 else ():       # towards the Bold only: evened in the Light, ɽ's tail read
         rs_.append(_SYM.even_curves(font, n_))        # 34.4 at 300 where the Regular has 52.4 (audit_rays)
         if n_ in layer:
@@ -4978,6 +5000,19 @@ def bold_font(reg, stem=STEM, **over):
     # stress (52 top against 40 sides at 400) and © carried Libre Baskerville's C
     import circled as _CIRC
     notes += _CIRC.master(reg, font, layer if v["f"] > 0 else None, tm_a)
+    # owner round 8 (0.82, item 17): $'s S one outline through its bar in this master (and its mid master): each of
+    # the six edges crossing the bar refitted as one curve and cut at the bar's edges, the bar centred on the S, the
+    # stubs one length (dollar.py). The engine moved the corners on the bar as its knots: the edges either side of
+    # the bar missed each other by up to 24 units at 300 and 41 at 800
+    import dollar as _DOL
+    for f_, tag_ in ((font, ""), (layer, " (mid)")):
+        if "dollar" in f_ and (f_ is font or v["f"] > 0):
+            cs_ = glyph_contours(f_["dollar"])
+            new_, log_ = _DOL.true_crossing(cs_)
+            if new_ is not cs_:
+                for c, P in zip(f_["dollar"].contours, new_):
+                    c.points = [Point(x, y, t, smooth=s_) for x, y, t, s_ in P]
+            notes.append(f"dollar{tag_}: {log_}")
     # 0.79: an f ligature's sides are its letters' (0.78: every one 4 wider on the left than f, ff 22 on the right)
     def _sides(f_, n):
         xs = [q.x for c in f_[n].contours for q in c.points]
