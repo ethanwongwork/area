@@ -50,8 +50,12 @@ NAMES = ("Esh", "summation")
 # from the median summation (VX, VY above), sharp.
 KIND = {
     "Esh": dict(span=(CAP, 0.0), w_e=W_E, bot=None, angles=None, flat=0.0),
-    "summation": dict(span=(CAP, -0.25 * CAP), w_e=0.79 * CAP / 600.0, bot=0.90, angles=(55.0, 52.0), flat=0.13),
+    "summation": dict(span=(CAP, -0.25 * CAP), w_e=0.79 * CAP / 600.0, bot=None, angles=(55.0, 52.0), flat=0.13),
 }
+# 0.84 (Regular pass 2, item 4; the owner: "is the top part of summation supposed to be thicker?"): both bars E's arm
+# again. The bottom bar was 0.90 of n's stem (70, the references' operator mark) under a 46 top: Area's own letters
+# give no reason for a difference (E's top and bottom arms are both 46, balance.CAP_ARM), so the two agree; the top
+# read heavier because the thick diagonal (Z's, 89 upright) joins it in a wide dark corner, not by the bar
 SPAN = {k: v["span"] for k, v in KIND.items()}
 
 

@@ -1381,7 +1381,10 @@ def maths(font, m, adv):
     # 0.81 round 3: the stems run 2 units into the bar, so the two are one outline (they were cut at 60 under the
     # cap height, 4 short of the bar's underside: a 4-unit sliver of white that closed at 675). Georgia Pro draws
     # its product as one contour, Source Serif 4 as stems overlapping the bar: the parts touch.
-    bar_lo = CAP_HEIGHT - m.cap_bar * 1.15
+    # 0.84 (Regular pass 2, item 4): the bar the capitals' arm (balance.CAP_ARM 46: E's and T's top arms, the
+    # summation's bars); it was 1.15 of H's crossbar (56), a number with no derivation
+    import balance as _BAL
+    bar_lo = CAP_HEIGHT - _BAL.CAP_ARM
     keep = op(keep, rect(-100, bar_lo + 2, 2000, 1000), pathops.PathOp.DIFFERENCE)   # no head serifs
     top_bar = rect(hs[0][0] - 0.7 * m.cap_stem, bar_lo, hs[1][1] + 0.7 * m.cap_stem, CAP_HEIGHT)
     Pi = union(keep, top_bar)
