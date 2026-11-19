@@ -1276,6 +1276,7 @@ def normalize(font):
     print("at:", AT.regular(font))                    # of one stroke and Area's a.ss03 in it, joined at its foot
     import circled as CIRCLED                         # 0.82 (owner round 8, item 16): one ring for (C) (R) (P), the
     print("circled:", CIRCLED.regular(font))          # letters Area's C R P at the references' size and weight
+    print("hair: curves", HAIR.even_more(font))       # 0.84 (pass 2, item 7): ß ə Ə ɔ s_p ɍ © ® ℗ at one curvature
     import symbols as SYMBOLS                         # 0.82 (owner round 8, item 18): the hook above's curves meet at
     for n_ in SYMBOLS.HOOKS:                          # one curvature (handle lengths only; its ~30 composites follow)
         print("hook above:", SYMBOLS.even_curves(font, n_))

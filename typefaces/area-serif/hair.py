@@ -621,3 +621,19 @@ def quote_head(font):
     nb = CH.bounds(CH.gp(font, "quoteright"))
     g.width = round(nb[2] + rsb)
     return f"quoteright the comma x {k:.3f} ({b[3] - b[1]:.0f} > {nb[3] - nb[1]:.0f} tall), top {top:.0f}"
+
+
+
+# ------------------------------------------------------------------------------------------ curve breaks (item 7)
+# The stroke audit's curvature jumps on drawings outside the core: ß 17.6 times at (411, 250), ə 11.0 and Ə 9.4 where
+# the bar meets the bowl, ɔ 8.1 at (113, 102); © ® ℗ their letters' tangent breaks. The one rule for a smooth node
+# whose curves were drawn apart (0.83, letters 6): every smooth node at one curvature by handle lengths only
+# (`figs.even_glyph`: aims 1.25, 1.5, 1.8, kept only where curvecheck's faults do not grow, even.py stays in its
+# limits and a branch keeps its neck). Run on the finished glyphs, after the charset and the rings.
+EVEN_MORE = ("germandbls", "schwa", "Schwa", "oopen", "Oopen", "s_p", "copyright", "registered",
+             "uni2117")
+
+
+def even_more(font):
+    import figs as FIGS
+    return [FIGS.even_glyph(font, n) for n in EVEN_MORE if n in font and font[n].contours]
