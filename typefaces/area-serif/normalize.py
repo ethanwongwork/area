@@ -1200,6 +1200,7 @@ def normalize(font):
     print(f"clean: nodes added {len(nodes)}", nodes)
     # 0.81 round 3: j's and y's tails by g.ss02's rule, the a's exit (after the node rule: they read the extremes)
     if os.environ.get("AREA_081_TAILS", "1") != "0":     # 0: the comparison build without them
+        print("loops: tail law", LOOPS.tail_law(font))   # 0.84 (pass 2, strokes 2): depth and ball
         print("loops:", LOOPS.round_tail(font, "j"), LOOPS.round_tail(font, "y"), LOOPS.a_exit(font))
     import figs as FIGS                               # 0.83 (Regular pass, item D): the 3's bowls: the upper ball's
     print("figs:", FIGS.regular(font))                # neck one curve, extremes at the references' shares, one
