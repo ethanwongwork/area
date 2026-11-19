@@ -3872,6 +3872,18 @@ def overlap_masters(reg, font, maps, v, reports, notes):
 
 
 
+def _hair_ratio(reg, font):
+    """The master's hairline over the Regular's, read as o's top stroke at its middle."""
+    import charset as CS
+    out = []
+    for f in (reg, font):
+        o = CS.glyph_path(f, "o")
+        b = CS.bounds(o)
+        sp = CS.scan_v(o, (b[0] + b[2]) / 2)
+        out.append(sp[-1][1] - sp[-1][0] if sp else 43.0)
+    return out[1] / out[0]
+
+
 def construction_signs(reg, font, v, law, resided=None):
     """owner round 8 (0.82): each glyph whose Regular carries a construction (signs.LIB) takes the construction at
     this master's stroke weights. Every point of the Regular's outline (corners, the rounding points soft_ends put
@@ -3885,7 +3897,10 @@ def construction_signs(reg, font, v, law, resided=None):
         if not info or g.name not in font or not g.contours:
             continue
         white = (lambda w0: law.least(w0)) if (law is not None and v["f"] > 0) else None
-        C0, Cm = SG.corners(info, 1.0), SG.corners(info, s, white)
+        # 0.83 (symbols 2): a tapered sign's join is the hairline: it takes the master's own hairline (o's top) over
+        # the Regular's; its free ends the plain stroke's law
+        sh = _hair_ratio(reg, font) if info.get("build") in SG.TAPERED else None
+        C0, Cm = SG.corners(info, 1.0), SG.corners(info, s, white, sh)
         R = glyph_contours(g)
         ons = [q for P in R for q in P if q[2] is not None]
         votes = {}

@@ -137,8 +137,13 @@ def erase(p, s=1.0, white=None):
     t0, t = p["t"], p["t"] * s
     tw, th, y0, sh = p["tw"], p["th"], p["y0"], p["shoulder"]
     outer0 = [(tw, y0), (tw, y0 + th), (sh, y0 + th), (0.0, y0 + th / 2), (sh, y0)]
-    mid = offset_polygon(outer0, t0 / 2)
-    outer, inner = offset_polygon(mid, -t / 2), offset_polygon(mid, t / 2)
+    if p.get("stress"):                                 # 0.83 (symbols 2, A)
+        lo0, hi0 = p["stress"]
+        mid = inset_edges(outer0, [stress_w(outer0[i], outer0[(i + 1) % 5], lo0, hi0) / 2 for i in range(5)])
+        outer, inner = stress_frame(mid, lo0 * s, hi0 * s)
+    else:
+        mid = offset_polygon(outer0, t0 / 2)
+        outer, inner = offset_polygon(mid, -t / 2), offset_polygon(mid, t / 2)
     cy = y0 + th / 2
     cx = (mid[2][0] + mid[0][0]) / 2
     L = p["arm"]
@@ -150,7 +155,10 @@ def erase(p, s=1.0, white=None):
         need = white(gaps(L, t0, inner0))
         if gaps(L, t, inner) < need:
             L = (min(inner[1][1] - cy, inner[0][0] - cx) - need) * math.sqrt(2) - t / 2
-    return [outer], [inner], [cross((cx, cy), L, t)]
+    X = cross((cx, cy), L, t)
+    if p.get("soft"):
+        outer, X = soften(outer), soften(X)
+    return [outer], [inner], [X]
 
 
 def check(p, s=1.0, white=None):
@@ -238,20 +246,70 @@ def times(p, s=1.0, white=None):
     return [cross(tuple(p["c"]), p["arm"], p["t"] * s)], [], []
 
 
+SOFT = 7          # the letters' radius on a stroke's cut end (derive.SOFT); the A signs' outer corners take it
+
+
+def stress_w(a, b, lo, hi):
+    """The A signs' stroke along the edge a to b: lo level, hi upright, lo + (hi - lo) sin^2 between."""
+    dx, dy = b[0] - a[0], b[1] - a[1]
+    return lo + (hi - lo) * dy * dy / (dx * dx + dy * dy)
+
+
+def soften(P, r=SOFT, k=0.55):
+    """A polygon's convex corners (the ink's outside corners: for an outer contour, those turning its own way)
+    rounded on r as the letters' cut ends are (a point r along each edge, the handles k of the way to the corner);
+    concave corners (meetings) stay sharp."""
+    ar = area(P)
+    n = len(P)
+    out = []
+    for i in range(n):
+        a, p_, b = P[i - 1], P[i], P[(i + 1) % n]
+        cr = (p_[0] - a[0]) * (b[1] - p_[1]) - (p_[1] - a[1]) * (b[0] - p_[0])
+        if cr * ar <= 1e-9 or math.dist(a, p_) < 3 * r or math.dist(p_, b) < 3 * r:
+            out.append(p_)
+            continue
+        ua, ub = unit(p_, a), unit(p_, b)
+        pa = (p_[0] + ua[0] * r, p_[1] + ua[1] * r)
+        pb = (p_[0] + ub[0] * r, p_[1] + ub[1] * r)
+        out.append(pa)
+        out.append(("c", (pa[0] + (p_[0] - pa[0]) * k, pa[1] + (p_[1] - pa[1]) * k),
+                    (pb[0] + (p_[0] - pb[0]) * k, pb[1] + (p_[1] - pb[1]) * k), pb))
+    return out
+
+
+def stress_frame(mid, lo, hi):
+    """An outline of one stroke all round its centreline polygon `mid`, each edge's stroke by stress_w: (outer,
+    inner), every corner where two moved edges meet."""
+    n = len(mid)
+    ws = [stress_w(mid[i], mid[(i + 1) % n], lo, hi) for i in range(n)]
+    return inset_edges(mid, [-w / 2 for w in ws]), inset_edges(mid, [w / 2 for w in ws])
+
+
 def frame(p, s=1.0, white=None):
     """A closed outline of one stroke all round (the shift arrow, caps lock, the lozenge): the centreline is the
     Regular outer outline moved in half the Regular stroke, the outlines half the stroke either side of it, so the
     inner outline is a true inset at every weight. caps lock's bar (bar: x0, x1, gap) is a level stroke under the
     outline's foot, the Regular's gap below it (in a master towards the Bold, the law's least for that gap)."""
     t0, t = p["t"], p["t"] * s
-    mid = offset_polygon([tuple(q) for q in p["outer"]], t0 / 2)
-    outer, inner = offset_polygon(mid, -t / 2), offset_polygon(mid, t / 2)
+    if p.get("stress"):                                 # 0.83 (symbols 2, A): uprights hi, levels lo, between by sin^2
+        lo0, hi0 = p["stress"]
+        P0 = [tuple(q) for q in p["outer"]]
+        n_ = len(P0)
+        mid = inset_edges(P0, [stress_w(P0[i], P0[(i + 1) % n_], lo0, hi0) / 2 for i in range(n_)])
+        outer, inner = stress_frame(mid, lo0 * s, hi0 * s)
+        t = lo0 * s                                     # caps lock's bar: a level stroke
+    else:
+        mid = offset_polygon([tuple(q) for q in p["outer"]], t0 / 2)
+        outer, inner = offset_polygon(mid, -t / 2), offset_polygon(mid, t / 2)
     more = []
     if p.get("bar"):
         b = p["bar"]
         foot = min(q[1] for q in outer)
         gap = white(b["gap"]) if white is not None else b["gap"]
         more.append([(b["x0"], foot - gap - t), (b["x1"], foot - gap - t), (b["x1"], foot - gap), (b["x0"], foot - gap)])
+    if p.get("soft"):
+        outer = soften(outer)
+        more = [soften(q) for q in more]
     return [outer], [inner], more
 
 
@@ -261,22 +319,52 @@ def caret(p, s=1.0, white=None):
     taken out: a 54 by 16 notch in the crotch and two 2-unit steps at the ends."""
     a, h, t = p["apex"], p["head"], p["t"] * s
     dx = p.get("run", h - p["t"] / 2)                   # the arrows' head stroke: across run (0.82: h - t/2), down h
-    return [stroke_polyline([(a[0] - dx, a[1] - h), tuple(a), (a[0] + dx, a[1] - h)], [t, t])], [], []
+    P = stroke_polyline([(a[0] - dx, a[1] - h), tuple(a), (a[0] + dx, a[1] - h)], [t, t])
+    return [soften(P) if p.get("soft") else P], [], []
 
 
-BUILDERS = {"caret": caret, "frame": frame, "erase": erase, "check": check, "radical": radical, "chevron": chevron, "chevron_bar": chevron_bar,
+def option(p, s=1.0, white=None):
+    """The option key (U+2325), A: a level stroke, a falling stroke, a level stroke (one centreline, mitred), and a
+    short level stroke at the top right; each segment's stroke by stress_w; outer corners soft."""
+    lo, hi = p["stress"][0] * s, p["stress"][1] * s
+    lo0 = p["stress"][0]
+    W, t_ = p["W"], p["top"]
+    y0 = p["y0"]
+    yt, yb = y0 + t_ - lo0 / 2, y0 + lo0 / 2         # the level strokes' centrelines (their outer edges fixed)
+    x1, x2 = p["x1"], p["x2"]
+    C = [(0.0, yt), (x1, yt), (x2, yb), (W, yb)]
+    ws = [stress_w(C[i], C[i + 1], lo, hi) for i in range(3)]
+    P = stroke_polyline(C, ws)
+    bar_ = [(p["x3"], yt - lo / 2), (W, yt - lo / 2), (W, yt + lo / 2), (p["x3"], yt + lo / 2)]
+    return [soften(P), soften(bar_)], [], []
+
+
+BUILDERS = {"option": option, "caret": caret, "frame": frame, "erase": erase, "check": check, "radical": radical, "chevron": chevron, "chevron_bar": chevron_bar,
             "times": times}
 
 
-def build(info, s=1.0, white=None):
-    """(outer contours, holes, more outer contours) for a stored recipe {"build": name, "params": {...}}."""
+TAPERED = set()
+
+
+def build(info, s=1.0, white=None, sh=None):
+    """(outer contours, holes, more outer contours) for a stored recipe {"build": name, "params": {...}}. sh: the
+    hairline's law, for the tapered signs (their join is the hairline); s the plain stroke's."""
+    if info["build"] in TAPERED:
+        return BUILDERS[info["build"]](info["params"], s, white, sh=s if sh is None else sh)
     return BUILDERS[info["build"]](info["params"], s, white)
 
 
-def corners(info, s=1.0, white=None):
-    """Every corner of the construction, in one fixed order."""
-    a, b, c = build(info, s, white)
-    return [q for P in a + b + c for q in P]
+def corners(info, s=1.0, white=None, sh=None):
+    """Every point of the construction (corners, and the points of its curves), in one fixed order."""
+    a, b, c = build(info, s, white, sh)
+    out = []
+    for P in a + b + c:
+        for q in P:
+            if q[0] == "c":
+                out += [q[1], q[2], q[3]]
+            else:
+                out.append(q)
+    return out
 
 
 # ---------------------------------------------------------------- 0.83 (Regular pass, symbols): strokes with a width
@@ -552,3 +640,285 @@ def dagger(p, s=1.0, white=None):
 
 
 BUILDERS.update({"tilde": tilde, "infinity": infinity, "dagger": dagger})
+
+
+# ---------------------------------------------------------------- 0.83 (Regular pass, symbols 2): the gentle taper
+# The owner's choice from the study's options (B, "gentle taper"): the arrows and the open interface signs (the return,
+# tab, check and cross keys) are strokes that thin to the hairline where they join (a head's point, a crossing, a
+# vertex) and widen to a round end where they are free: w0 at the join, w1 at the free end, the end a round cap of
+# w1's radius, a head's point cut flat (`flat`) across its bisector. Every edge is a straight line (the width changes
+# linearly along a straight centreline) tangent to its round end; every corner is two edges meeting. One contour per
+# glyph, its round ends split at every extreme, so each point of the outline is a point of the construction and a
+# master builds the same points at its own w0 and w1 (`corners`).
+
+def _tangent(P0, E, r, n, sg):
+    """The point where a line from P0 touches the circle (E, r), on the side sg of the direction whose left is n."""
+    dx, dy = P0[0] - E[0], P0[1] - E[1]
+    d = math.hypot(dx, dy)
+    th0 = math.atan2(dy, dx)
+    b = math.acos(max(-1.0, min(1.0, r / d)))
+    best = None
+    for s_ in (1, -1):
+        T = (E[0] + r * math.cos(th0 + s_ * b), E[1] + r * math.sin(th0 + s_ * b))
+        side = (T[0] - E[0]) * n[0] + (T[1] - E[1]) * n[1]
+        if best is None or side * sg > best[0]:
+            best = (side * sg, T)
+    return best[1]
+
+
+class _Taper:
+    """A straight stroke from its join A to its free end F (the ink's tip): w0 across at A, a round end of w1 across
+    whose tip is F. sides[sg] = (point at A, direction, tangent point on the end's circle) for sg = +1 (left of A to F)
+    and -1."""
+
+    def __init__(self, A, F, w0, w1):
+        self.A, self.F = A, F
+        self.u = unit(A, F)
+        self.n = left(self.u)
+        self.r = w1 / 2
+        self.E = (F[0] - self.u[0] * self.r, F[1] - self.u[1] * self.r)
+        self.sides = {}
+        for sg in (1, -1):
+            P0 = (A[0] + self.n[0] * w0 / 2 * sg, A[1] + self.n[1] * w0 / 2 * sg)
+            T = _tangent(P0, self.E, self.r, self.n, sg)
+            self.sides[sg] = (P0, unit(P0, T), T)
+
+    def line(self, sg):
+        P0, d, _ = self.sides[sg]
+        return (P0, d)
+
+    def T(self, sg):
+        return self.sides[sg][2]
+
+
+SNAP = math.radians(4)       # an arc's end this near an extreme is drawn from the extreme (no sliver of a curve
+                             # past it, which whole units would fold into the line before it)
+
+
+def _arc_via(c, r, p0, p1, via, snap=False, start=False):
+    """The circle's arc from p0 to p1 that passes the direction of `via`, as cubics split at every multiple of 90
+    degrees (a node at each extreme). snap: an end within SNAP of a multiple of 90 degrees moves to it."""
+    tau = 2 * math.pi
+    a0 = math.atan2(p0[1] - c[1], p0[0] - c[0])
+    a1r = math.atan2(p1[1] - c[1], p1[0] - c[0])
+    if snap:
+        q_ = math.pi / 2
+        a0 = round(a0 / q_) * q_ if abs(a0 - round(a0 / q_) * q_) < SNAP else a0
+        a1r = round(a1r / q_) * q_ if abs(a1r - round(a1r / q_) * q_) < SNAP else a1r
+    av = math.atan2(via[1] - c[1], via[0] - c[0])
+    ccw = (av - a0) % tau <= (a1r - a0) % tau
+    a1 = a0 + (a1r - a0) % tau if ccw else a0 - (a0 - a1r) % tau
+    q = math.pi / 2
+    cuts = [a0]
+    if ccw:
+        k = math.floor(a0 / q) + 1
+        while k * q < a1 - 1e-6:
+            if k * q > a0 + 1e-6:
+                cuts.append(k * q)
+            k += 1
+    else:
+        k = math.ceil(a0 / q) - 1
+        while k * q > a1 + 1e-6:
+            if k * q < a0 - 1e-6:
+                cuts.append(k * q)
+            k -= 1
+    cuts.append(a1)
+    out = []
+    for b0, b1 in zip(cuts, cuts[1:]):
+        if abs(b1 - b0) < 1e-6:
+            continue
+        h = 4 / 3 * math.tan((b1 - b0) / 4) * r
+        q0 = (c[0] + r * math.cos(b0), c[1] + r * math.sin(b0))
+        q3 = (c[0] + r * math.cos(b1), c[1] + r * math.sin(b1))
+        out.append(("c", (q0[0] - h * math.sin(b0), q0[1] + h * math.cos(b0)),
+                    (q3[0] + h * math.sin(b1), q3[1] - h * math.cos(b1)), q3))
+    if start:
+        return out, (c[0] + r * math.cos(a0), c[1] + r * math.sin(a0))
+    return out
+
+
+def _cap(t, sg0=1):
+    """A stroke's round end, from its sg0 side over the tip to the other (an arc kept as a placeholder until the
+    glyph is placed, so its nodes fall on the placed circle's extremes)."""
+    return [("a", t.E, t.r, t.T(sg0), t.T(-sg0), t.F)]
+
+
+def _xf(steps, f):
+    out = []
+    for q in steps:
+        if q[0] == "c":
+            out.append(("c", f(q[1]), f(q[2]), f(q[3])))
+        elif q[0] == "a":
+            out.append(("a", f(q[1]), q[2], f(q[3]), f(q[4]), f(q[5])))
+        else:
+            out.append(f(q))
+    return out
+
+
+def _arcs(steps):
+    """Placeholders drawn as arcs; an arc whose start snapped to an extreme takes the line's end before it along."""
+    out = []
+    for q in steps:
+        if q[0] == "a":
+            A, start = _arc_via(q[1], q[2], q[3], q[4], q[5], snap=True, start=True)
+            if out and out[-1][0] != "c" and math.dist(out[-1], q[3]) < 1e-6:
+                out[-1] = start
+            out += A
+        else:
+            out.append(q)
+    return out
+
+
+def _head(L, arm, half, w0, w1, flat):
+    """A head pointing right, its point's flat at x = L, on the axis y = 0: the two arms (tapers from the arms'
+    meeting Q out to their free ends) and the lines and points the outline is cut from."""
+    a = math.radians(half)
+    Q = (0.0, 0.0)
+    arms = {}
+    for k, sy in ((1, 1), (2, -1)):
+        F = (Q[0] - arm * math.cos(a), Q[1] + sy * arm * math.sin(a))
+        arms[k] = _Taper(Q, F, w0, w1)
+    # on arm 1 (up and left) the side away from the axis is its right side (-1), on arm 2 its left (+1)
+    out1, in1 = arms[1].line(-1), arms[1].line(1)
+    out2, in2 = arms[2].line(1), arms[2].line(-1)
+    yf = flat / 2
+    f1 = meet(out1, ((0, yf), (1, 0)))
+    dx = L - f1[0]
+    sh = lambda p: (p[0] + dx, p[1])
+    for t in arms.values():
+        t.A, t.F, t.E = sh(t.A), sh(t.F), sh(t.E)
+        t.sides = {s_: (sh(P0), d, sh(T)) for s_, (P0, d, T) in t.sides.items()}
+    out1, in1 = arms[1].line(-1), arms[1].line(1)
+    out2, in2 = arms[2].line(1), arms[2].line(-1)
+    return dict(Q=sh(Q), arms=arms, out1=out1, in1=in1, out2=out2, in2=in2,
+                f1=(L, yf), f2=(L, -yf), crotch=meet(in1, in2))
+
+
+def tarrow(p, s=1.0, white=None, sh=1.0):
+    """An arrow of the gentle taper (B). p: L (the ink's length), arm, half (degrees off the shaft), w0, w1 (scaled by
+    the hairline's law sh and the plain stroke's s), flat (a share of w0), kind ("one", "both", "bar", "ret"), rise
+    (ret: the riser's top over the axis), rot (degrees), at (where the arrow's middle goes). One contour."""
+    w0, w1 = p["w0"] * sh, p["w1"] * s
+    L, kind = p["L"], p.get("kind", "one")
+    flat = p.get("flat", 0.5) * w0
+    H = _head(L, p["arm"], p["half"], w0, w1, flat)
+    a1, a2 = H["arms"][1], H["arms"][2]
+    Qx = H["Q"][0]
+    steps = []
+    if kind == "both":
+        # the left head is the right one turned over about the middle; the shaft between them w0 at each head's Q
+        # and w1 at the middle, each edge one cubic (level at the middle)
+        mx = L / 2
+        mir = lambda q: (2 * mx - q[0], q[1])
+        S1 = meet(((Qx, w0 / 2), (-1, 0)), H["in1"])                 # the shaft's top meets arm 1's inside
+        S2 = (S1[0], -S1[1])
+
+        def edge(p0, p3, y_mid):
+            # two quarters meeting level at the middle (a node at the extreme), each a quadratic raised to a cubic
+            m_ = ((p0[0] + p3[0]) / 2, y_mid)
+            out_ = []
+            for a_, b_ in ((p0, m_), (m_, p3)):
+                Q_ = ((a_[0] + b_[0]) / 2, y_mid)
+                out_.append(("c", (a_[0] + 2 / 3 * (Q_[0] - a_[0]), a_[1] + 2 / 3 * (Q_[1] - a_[1])),
+                             (b_[0] + 2 / 3 * (Q_[0] - b_[0]), b_[1] + 2 / 3 * (Q_[1] - b_[1])), b_))
+            return out_
+        right = [a1.T(1)] + _cap(a1) + [H["f1"], H["f2"], a2.T(1)] + _cap(a2) + [S2]
+        P = [S1] + right + edge(S2, mir(S2), -w1 / 2)
+        left_ = [mir(a2.T(-1))] + _xf([("a", a2.E, a2.r, a2.T(-1), a2.T(1), a2.F)], mir) + \
+            [mir(H["f2"]), mir(H["f1"]), mir(a1.T(-1))] + _xf([("a", a1.E, a1.r, a1.T(-1), a1.T(1), a1.F)], mir) + [mir(S1)]
+        P += left_ + edge(mir(S1), S1, w1 / 2)
+    else:
+        # the shaft: from the tail (x = 0, a free end, w1) to Q (w0)
+        tail = _Taper((Qx, 0.0), (0.0, 0.0), w0, w1)           # A at Q, F at the tail's tip; its +1 side is below
+        top_line, bot_line = tail.line(-1), tail.line(1)
+        S1, S2 = meet(top_line, H["in1"]), meet(bot_line, H["in2"])
+        head_steps = [S1, a1.T(1)] + _cap(a1)
+        if kind == "bar":
+            # the bar at the point: a stroke across it, its back straight (x = L + w0), its face thinning from the
+            # round ends (w1) to w0 where the arrow meets it; the arms' outsides run into its face
+            xr = L + w0
+            span = max(a1.E[1] + a1.r, 0)
+            topE = (xr - w1 / 2, span - w1 / 2)
+            face_top = ((L, 0.0), unit((L, 0.0), _tangent((L, 0.0), topE, w1 / 2, (1, 0), -1)))
+            Tt = _tangent((L, 0.0), topE, w1 / 2, (1, 0), -1)
+            K1 = meet(H["out1"], ((L, 0.0), face_top[1]))
+            botE = (topE[0], -topE[1])
+            Tb = (Tt[0], -Tt[1])
+            K2 = (K1[0], -K1[1])
+            head_steps += [K1, Tt, ("a", topE, w1 / 2, Tt, (xr, topE[1]), (topE[0], topE[1] + 1))]
+            head_steps += [(xr, botE[1]), ("a", botE, w1 / 2, (xr, botE[1]), Tb, (botE[0], botE[1] - 1))]
+            head_steps += [K2]
+        else:
+            head_steps += [H["f1"], H["f2"]]
+        head_steps += [a2.T(1)] + _cap(a2) + [S2]
+        if kind == "ret":
+            # the shaft runs back to a corner and turns up into a riser ending free at `rise` over the axis; the
+            # width runs w0 at Q to w1 at the riser's tip, linear along the centreline
+            rise = p["rise"]
+            Ls, Lr = Qx, rise
+            wc = w0 + (w1 - w0) * Ls / (Ls + Lr)
+            xc = wc / 2                                          # the riser's centre: its outside at x = 0
+            riser = _Taper((xc, 0.0), (xc, rise), wc, w1)        # its +1 side is left (outside)
+            sb = ((Qx, -w0 / 2), unit((Qx, -w0 / 2), (xc, -wc / 2)))
+            st = ((Qx, w0 / 2), unit((Qx, w0 / 2), (xc, wc / 2)))
+            S1, S2 = meet(st, H["in1"]), meet(sb, H["in2"])
+            head_steps[0] = S1
+            head_steps[-1] = S2
+            outer = meet(sb, riser.line(1))
+            inner = meet(st, riser.line(-1))
+            P = head_steps + [outer, riser.T(1)] + _cap(riser) + [inner]
+        else:
+            P = head_steps + [tail.T(1)] + _cap(tail) + [tail.T(-1)]
+    # place: rotate about the arrow's middle and move the middle to `at`
+    rot = math.radians(p.get("rot", 0.0))
+    cx_ = p.get("mid", L / 2)
+    at = p["at"]
+    if p.get("mirror"):
+        P = _xf(P, lambda q: (L - q[0], q[1]))
+    c_, s_ = math.cos(rot), math.sin(rot)
+    f = lambda q: (at[0] + (q[0] - cx_) * c_ - q[1] * s_, at[1] + (q[0] - cx_) * s_ + q[1] * c_)
+    P = _arcs(_xf(P, f))                                          # round ends drawn on the placed circles
+    return [P], [], []
+
+
+def tcheck(p, s=1.0, white=None, sh=1.0):
+    """The check of the gentle taper: the short stroke and the long one free at their ends (round, w1) and joined at
+    the vertex (w0), the vertex's outside cut flat (`flat` of w0) across the bisector, its inside a point."""
+    w0, w1 = p["w0"] * sh, p["w1"] * s
+    S, V, E_ = tuple(p["start"]), tuple(p["vertex"]), tuple(p["end"])
+    a, b = _Taper(V, S, w0, w1), _Taper(V, E_, w0, w1)
+    # the outside of the vertex is below: on a (V to S, up-left) its left (+1) side; on b (V to E, up-right) its right
+    oa, ia = a.line(1), a.line(-1)
+    ob, ib = b.line(-1), b.line(1)
+    o = meet(oa, ob)
+    inn = meet(ia, ib)
+    bis = unit(o, inn)
+    e1, e2 = oa[1], ob[1]
+    half = math.acos(max(-1.0, min(1.0, e1[0] * e2[0] + e1[1] * e2[1]))) / 2
+    d_ = p.get("flat", 0.5) * w0 / (2 * math.tan(half))
+    cut = ((o[0] + bis[0] * d_, o[1] + bis[1] * d_), left(bis))
+    fa, fb = meet(oa, cut), meet(ob, cut)
+    P = [inn, a.T(-1)] + _arc_via(a.E, a.r, a.T(-1), a.T(1), a.F) + [fa, fb, b.T(-1)] + \
+        _arc_via(b.E, b.r, b.T(-1), b.T(1), b.F)
+    return [P], [], []
+
+
+def tcross(p, s=1.0, white=None, sh=1.0):
+    """The cross key of the gentle taper (U+2715): four arms from the crossing (w0) to round free ends (w1), each
+    crotch where two neighbouring arms' sides meet."""
+    w0, w1 = p["w0"] * sh, p["w1"] * s
+    c, R = tuple(p["c"]), p["arm"]
+    arms = []
+    for ang in (45, 135, 225, 315):
+        a = math.radians(ang)
+        arms.append(_Taper(c, (c[0] + R * math.cos(a), c[1] + R * math.sin(a)), w0, w1))
+    P = []
+    for k, t in enumerate(arms):
+        nx = arms[(k + 1) % 4]
+        P += [t.T(-1)] + _arc_via(t.E, t.r, t.T(-1), t.T(1), t.F)
+        P.append(meet(t.line(1), nx.line(-1)))
+    return [P], [], []
+
+
+BUILDERS.update({"tarrow": tarrow, "tcheck": tcheck, "tcross": tcross})
+TAPERED = {"tarrow", "tcheck", "tcross"}

@@ -1796,3 +1796,48 @@ Looked at, honestly: the arrows now read as arrows beside letters (→ was the l
 than →; the operators line up on one axis (= and ≤ no longer float); ∞ reads as one stroke; † and ‡ now belong with
 *. Not right yet: ▲ ▼ ◆ look large beside ● in a line (the 0.70 area share is a first number); ~ at text size still
 reads light and small next to ≈'s pair; ↕ at 728 runs from -51 to 677 (under the baseline); ⌃ high on its own.
+
+### Symbols 2: the gentle taper (the owner's B for the arrows and open keys, A for the closed keys)
+
+The owner chose the study's "gentle taper" and asked for "something very subtle". Built in `signs.py` from the
+centreline construction, so every tapered sign is one rule: a stroke from its join A to its free end F is `_Taper`
+(w0 at A, a round end of w1 across whose tip is F; each edge one straight line from A ± w0/2 tangent to the end's
+circle; every corner two edges meeting, found). Each glyph is one contour whose round ends are drawn on their placed
+circles split at every extreme, so every point of the outline is a point of the construction (`corners`), and a master
+builds the same points at its own weights: w0 at the master's hairline (o's top over the Regular's, `bold._hair_ratio`),
+w1 and the A strokes at the plain stroke's law (`bold.construction_signs`, which now passes both).
+
+| # | Glyphs | Rule (numbers as built) | Before (symbols 1) > after |
+|---|---|---|---|
+| 123 | → ← ↑ ↓ ↖ ↗ ↘ ↙ (`signs.tarrow`) | B: the shaft from a round tail (w1 60 = 1.15 plain strokes) to the hairline (w0 43) where it runs into the head; each arm from the hairline at the head's meeting to a round end (60); the point cut flat 0.5 w0 (21.5) across its bisector; the skeleton of symbols 1 kept (626, arms 240 at 45 degrees) | 52 monoline, square ends at r 7 > 44.5 to 59 across, median 53; ink area 1.007 of before |
+| 124 | ↔ ↕ | the same heads at both ends; the shaft w0 at each head and w1 at the middle, each edge two quadratic quarters meeting level at the middle (a node at the extreme) | 1.032 |
+| 125 | ⇤ ⇥ (`kind="bar"`) | the bar at the point a stroke across it: its back straight, its face from round ends (w1) to w0 where the arms' outsides run into it (one contour) | 0.985 |
+| 126 | ↵ (`kind="ret"`) | the shaft runs back to a mitred corner and up into a riser to the up arrow's point; the width from w0 at the head to w1 at the riser's round end, linear along the centreline | 1.002 |
+| 127 | ✓ (`tcheck`) | both strokes from the hairline at the vertex to round ends; the vertex's outside cut 0.5 w0 across the bisector, its inside a point | 65 (1.25 plain strokes) all along > 44 to 59; area 0.794 (now the family's colour) |
+| 128 | ✕ (`tcross`) | four arms from the crossing (w0) to round ends (w1); its ink box kept (394) | 57 > 46 to 60; 0.963 |
+| 129 | ⌘ ⌥ ⇧ ⇪ ⌃ ⌫ ⌦ □ ◊ ○ ☆ | A: uprights 57, level strokes 47, slanted ones 47 + 10 sin^2 of their slope (`signs.stress_w`, `stress_frame`, `option`; ⌘'s loops and ○ as rings 57 at the sides and 47 at top and bottom, ○'s outside the circle, its counter an ellipse as o's); outer corners rounded on 7 as the letters' cut ends (`signs.soften`), inner corners (meetings) sharp | 52 monoline > 47 / 57; areas 0.98 to 1.04 |
+| 130 | ● ■ ▲ ▼ ▶ ◀ ▴ ▾ ▸ ◂ ◆ ★ | their outer corners soft on 7, so □ and ■ (and ☆, ★) are one family | sharp > r 7 |
+
+Final numbers against the study's starting ones: w0 43 (the hairline, as started), w1 60 (1.15 plain strokes, as
+started), the cap's radius 30, the flat 21.5 (0.5 w0), A 57 / 47: the starting numbers held when looked at in lines of
+text at 14, 18, 28 and 96 px; nothing was nudged. At 14 to 28 px the change is below a pixel (the signs keep their
+colour: ink areas within 4% but ✓), at 96 px the arrows' round ends and their thinning into the head read as drawn
+strokes beside the letters, and the key frames' upright/level difference reads as the letters' stress, quietly. The
+maths operators stay monoline; † ‡ * were made one family in symbols 1 (the asterisk's arm).
+
+What moved (Regular, snap083a > `build/owner8/sym/c4`): the 57 glyphs of both stages (39 in this stage, all signs;
+no letter or figure). Advances (symbols 1 > 2): ↖ ↗ ↘ ↙ 531 > 538, ↵ 714 > 717, ⇤ ⇥ 766 > 757, ✓ 573 > 545, ✕ 500 > 494,
+⌃ 612 > 626, the key and shape signs 1 to 7 units narrower (their soft corners shorten the ink; sides kept). Checks
+against snap083a: evaluate, even, curvecheck (both), parts unchanged; audit_charset 0 errors (its caps-lock rule now
+reads A's level stroke, 47); pathlint 0 errors, 146 > 156 warnings: 16 "no node at extreme, t = 0.03" on the four slanted
+arrows, where a round end's tangent point stands 2.3 degrees from its extreme (the taper's angle): the end is drawn
+from the extreme and `clean.true_joins` turns the 16-unit handle onto the side's line, so the extreme lies half a unit
+inside the curve (whole units; not visible). Figures: `build/owner8/sym/symbols-sheet-pair.png` (snap083a over
+after, every family), `after-sheet1.png`, `-sheet2.png`, `s2/stage2-big-arrows.png`, `s2/stage2-big-keys.png`
+(symbols 1 beside 2, nodes), `text-before-after.png` (snap083a, symbols 1, symbols 2 at 14, 18, 28, 96 px). Census:
+`census-after.txt`.
+
+Looked at, honestly: the arrows feel drawn rather than ruled, and ↔'s shaft swells slightly to its middle (reads as a
+lens at 96 px; at text size it is invisible); ⇤ ⇥'s bar, thin where the arms run in, reads at 96 px as two short strokes
+meeting in a shallow wedge; the check is lighter than it was (by design: 1.25 plain strokes was its own exception).
+A is barely visible, as asked: ⇧'s uprights against its level foot are the only place it shows at text size.

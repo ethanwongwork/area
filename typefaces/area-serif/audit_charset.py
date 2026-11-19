@@ -183,8 +183,8 @@ def audit_074(font, bad, notes):
     t_arm = max(col("T", 0.25))
     if "uni20B8" in font and sorted(col("uni20B8", 0.25)) != [t_arm, t_arm]:
         bad.append(f"tenge: bars {col('uni20B8', 0.25)} at a quarter of its width, T's arm {t_arm}")
-    if "uni21EA" in font and round(m.math) not in col("uni21EA", 0.5)[:1]:
-        bad.append(f"caps lock: its bar {col('uni21EA', 0.5)[:1]}, the minus {m.math:.0f}")
+    if "uni21EA" in font and C.SIGN_A[0] not in col("uni21EA", 0.5)[:1]:      # 0.83: the A signs' level stroke
+        bad.append(f"caps lock: its bar {col('uni21EA', 0.5)[:1]}, the A signs' level stroke {C.SIGN_A[0]}")
     if "product" in font and any(abs(v - m.cap_stem) > 1 for v in row("product", 300)):
         bad.append(f"product: stems {row('product', 300)}, H's {m.cap_stem:.0f}")
     for name, want in (("tbar", m.low_bar), ("dcroat", m.low_bar), ("uni20B2", C.STROKE_UP), ("dollar", C.STROKE_UP)):
