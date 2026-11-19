@@ -334,3 +334,71 @@ def spines(font, names=None, verbose=False):
         if verbose:
             log.append(str([round(x, 2) for x in v]))
     return log
+
+
+# ------------------------------------------------------------------------------------------- bowls' sides (item 4)
+# The stroke audit read B's upper bowl 94.1 at its side against P's 92.5 and R's 92.2, the census 97.8 across it at
+# 500 (over the capital rounds' 95 at most; B 30% darker than the median capital). The B P R bowl is one part (P the
+# control: it closes as R does, `figs.cap_bowls`): the widest across a bowl's side, within SIDE_REACH of its right
+# extremes, is P's. The rule (`bowl_sides`): the counter's right extreme node moves level with its handles, the least
+# whole-unit move bringing the widest there to P's; the outside stays.
+SIDE_REACH = 60
+SIDES = {"B": "upper"}
+
+
+def _upright_pairs(cs):
+    nodes = []
+    for ci, P in enumerate(cs):
+        n = len(P)
+        for i, q in enumerate(P):
+            if not q[2] or not q[3] or P[(i - 1) % n][2] or P[(i + 1) % n][2]:
+                continue
+            if abs(P[(i - 1) % n][0] - q[0]) > 0.6 or abs(P[(i + 1) % n][0] - q[0]) > 0.6:
+                continue
+            nodes.append((ci, i, q[0], q[1]))
+    out = []
+    for a in nodes:
+        for b in nodes:
+            if a[0] != b[0] and 40 < a[2] - b[2] < 130 and abs(a[3] - b[3]) < 40:
+                out.append((a, b))          # a the outside's right extreme, b the counter's
+    return out
+
+
+def widest_near(cs, a, b, reach=SIDE_REACH):
+    w = balls(cs, [(a[2], a[3]), (b[2], b[3])], reach=reach)
+    return max(t[0] for t in w)
+
+
+def bowl_sides(font, control="P"):
+    log = []
+    cp = [[(p.x, p.y, p.type, p.smooth) for p in c.points] for c in font[control].contours]
+    pp = _upright_pairs(cp)
+    if not pp:
+        return [f"{control}: no bowl side"]
+    T = widest_near(cp, *max(pp, key=lambda t: t[0][3]))
+    for name, which in SIDES.items():
+        g = font[name]
+        cs = [[(p.x, p.y, p.type, p.smooth) for p in c.points] for c in g.contours]
+        prs = _upright_pairs(cs)
+        if not prs:
+            log.append(f"{name}: no bowl side"); continue
+        a, b = (max if which == "upper" else min)(prs, key=lambda t: t[0][3])
+        w0 = widest_near(cs, a, b)
+        best = (abs(w0 - T), 0, w0)
+        for dx in range(-12, 13):
+            c2 = [list(P) for P in cs]
+            P = list(c2[b[0]]); n = len(P)
+            for j in ((b[1] - 1) % n, b[1], (b[1] + 1) % n):
+                x, y, t, s = P[j]; P[j] = (x + dx, y, t, s)
+            c2[b[0]] = P
+            w = widest_near(c2, a, (b[0], b[1], b[2] + dx, b[3]))
+            if abs(w - T) < best[0] - 1e-6:
+                best = (abs(w - T), dx, w)
+        dx = best[1]
+        for c_i, c in enumerate(g.contours):
+            if c_i == b[0]:
+                n = len(c.points)
+                for j in ((b[1] - 1) % n, b[1], (b[1] + 1) % n):
+                    c.points[j].x += dx
+        log.append(f"{name} {which} bowl's side {w0:.1f} > {best[2]:.1f} ({control}'s {T:.1f}; counter's extreme {dx:+d})")
+    return log
