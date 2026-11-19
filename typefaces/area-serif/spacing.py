@@ -80,6 +80,11 @@ OPTICAL_MORE = {
     # stay; the right bracket follows the left through charset.mirrors); plus and equals keep the maths' one advance.
     "percent": [0, 26], "exclamdown": [0, 18], "dollar": [17, 15], "trademark": [-24, 0], "bracketleft": [0, 11],
     "underscore": [-19, -19], "at": [0, 9], "numbersign": [0, 12], "sterling": [10, 0],
+    # 0.83 (Regular pass, consistency 1): the 1 is an upright stroke and shows the same white each side, as I does: its
+    # right white (fit.py) was 164.5 against its left 123.6 (the figures' 102 to 129; Serrif's 1 rel +14.6 right,
+    # +25.8 left; Georgia Pro's +124): the right side moves in by the difference. Every pair with 1 was among the
+    # lightest of the 100 figure pairs
+    "one": [0, -41],
 }
 
 

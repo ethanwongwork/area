@@ -3402,6 +3402,58 @@ def turned_pairs(font):
         g.width = round(bounds(gp(font, double))[2] + rsb)
 
 
+def no_steps(font, names=("Germandbls",)):
+    """0.83 (Regular pass, consistency 1): a stroke's foot is one corner. Where a level line under 20 units near the
+    baseline is followed by a short line into a curve (ẞ's lower stroke: (314,12)-(329,12)-(358,56), a 15-unit step
+    between the spur's foot and the bowl's outer curve), the step's two corners go and the curve leaves from the foot's
+    corner (its first handle kept: it runs level out of the foot)."""
+    done = []
+    for name in names:
+        if name not in font:
+            continue
+        for c in font[name].contours:
+            P = c.points
+            n = len(P)
+            for i in range(n):
+                a, b, d = P[i], P[(i + 1) % n], P[(i + 2) % n]
+                if a.type == "line" and b.type == "line" and d.type == "line" and P[(i + 3) % n].type is None \
+                        and a.y == b.y and abs(a.y) < 20 and 0 < abs(b.x - a.x) < 20 and d.y > b.y:
+                    for q in sorted(((i + 1) % n, (i + 2) % n), reverse=True):
+                        del c.points[q]
+                    done.append(f"{name} step at ({a.x},{a.y})")
+                    break
+    return done
+
+
+BALL_CAP = 1.10 * 88              # the round end at the capitals' size (J 98.5; 1.10 of the lowercase's 88)
+QUESTION_BALL = 105.2              # ?'s ball as drawn (largest inscribed circle)
+
+
+def question_ball(font):
+    """0.83 (Regular pass, consistency 1): ?'s ball is a round end at the capitals' size (BALL_CAP; it was 105, the
+    heaviest ball in the face beside c's and r's). The ball, from the stroke's top to the neck's node under the ball,
+    is scaled about the top node (the outer stroke's level extreme, which stays); the neck's next handle moves with
+    its node. ¿ is ? turned (one_drawing)."""
+    c = max(font["question"].contours, key=lambda c_: len(c_.points))
+    P, n = c.points, len(c.points)
+    top = max((i for i, p in enumerate(P) if p.type), key=lambda i: (P[i].y, -P[i].x))
+    on = [k % n for k in range(top + 1, top + n) if P[k % n].type]
+    if len(on) < 4:
+        return "question ball: not found"
+    left, bottom, neck = on[0], on[1], on[2]
+    if not (P[left].x < P[top].x and P[bottom].y < P[left].y and P[neck].x > P[bottom].x):
+        return "question ball: not found"
+    k = BALL_CAP / QUESTION_BALL
+    ox, oy = P[top].x, P[top].y
+    span = [j % n for j in range(top + 1, neck + 1 if neck > top else neck + n + 1)]
+    for j in span:
+        dx, dy = (P[j].x - ox) * (k - 1), (P[j].y - oy) * (k - 1)
+        P[j].x, P[j].y = round(P[j].x + dx), round(P[j].y + dy)
+        if j == neck:
+            P[(j + 1) % n].x, P[(j + 1) % n].y = round(P[(j + 1) % n].x + dx), round(P[(j + 1) % n].y + dy)
+    return f"question ball {QUESTION_BALL} > {BALL_CAP:.1f}"
+
+
 def one_drawing(font):
     """Glyphs that are another glyph's parts carry those parts: colon and semicolon the period's dot; the ellipsis
     three; the inverted marks the upright ones turned half round; the opening quote the closing one turned; the
@@ -3413,6 +3465,12 @@ def one_drawing(font):
         for c, h in zip(dots, hold):
             _place_dot(font, c, "period", h)
         done.append(name)
+    # 0.83 (Regular pass, consistency 1): one dot in the punctuation, the period's (124): ! and ? carried the i's (116)
+    for name in ("exclam", "question"):
+        dots = [c for c in font[name].contours if _is_dot(c)]
+        if dots:
+            _place_dot(font, min(dots, key=lambda c: min(p.y for p in c.points)), "period", "bottom")
+    done.append(question_ball(font))
     for src, dst in (("exclam", "exclamdown"), ("question", "questiondown"), ("quoteright", "quoteleft")):
         w = font[dst].width
         rsb = w - bounds(gp(font, dst))[2]
@@ -3513,7 +3571,13 @@ def eng_capital(font):
     o_st, n_st = scan_h(old, 100)[-1], scan_h(N, 100)[-1]
     tail = op(old, rect(o_st[0] - 330, -3000, 3000, 30), pathops.PathOp.INTERSECTION)
     was = round(o_st[1] - o_st[0])
-    put(font, name, union(N, moved(tail, n_st[1] - o_st[1])), font["N"].width)
+    g = put(font, name, union(N, moved(tail, n_st[1] - o_st[1])), font["N"].width)
+    # 0.83 (Regular pass, consistency 1): the cut keeps only what hangs under the baseline. A piece of the old left
+    # foot's serif (55 x 30, on the baseline right of N's left foot) fell inside the cut's box and stood apart
+    for c in list(g.contours):
+        ys = [q.y for q in c.points]
+        if min(ys) >= -1 and max(ys) - min(ys) <= 40:
+            g.contours.remove(c)
     kern_like(font, name, "N", "N")
     return [f"{name}: N and the tail (its upright {was}, N's {n_st[1] - n_st[0]:.0f})"]
 
@@ -3538,6 +3602,7 @@ def run(font, lightened):
     m = M(font)
     print("charset: round dots", round_dots(font))                     # 0.74
     print("charset: one drawing", one_drawing(font))                   # 0.74
+    print("charset: no steps", no_steps(font))                         # 0.83
     print("charset: macron", macron_weight(font))                      # 0.74
     dotless(font)
     bars(font, m)
