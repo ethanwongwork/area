@@ -2030,3 +2030,58 @@ composites), the mid layer 6 (@ ɦ œ ƥ ɽ s_p). fit_kerning.json refit (92 lin
 Not right yet, honestly: the 6 in the masters (one place 2.3 units thinner at 800 than at 666, where the long stroke
 meets the counter: the 6 is now exactly the 9 turned, and the engine reads the turned junction differently); the Bold's
 hook faults 14 > 16 (ɂ's scaled ball, s_p's evened stem); the items' leftovers listed above.
+
+## Regular pass 2 (0.84), named glyphs and the corner rule (18 November 2026)
+
+The owner reviewed 0.83 and asked for another pass on the Regular (400) only: the ampersand, ~ and ≈, @, ∑, and one
+call on sharp against rounded corners. Worked with `AREA_BOLD=0 build.py`, each item built (`build/owner9/s0` .. `s5`),
+diffed (`build/owner8/reg/diffreg.py`), checked (`build/owner8/reg/checks.sh`, `build/owner9/chk-s*`), looked at large
+with nodes and combs and in text at 14 / 18 / 28 / 96 px (`build/owner9/*/item*-big.png`, `item*-text.png`), committed
+before the next. The masters build every change by their constructions and were not tuned. The references (Georgia Pro,
+PP Kyoto Medium, Serrif 400) were drawn and measured as examples only (`build/owner9/refdraw.py`, `at/atmeas.py`).
+
+| # | Item | Was | Rule | Now (Regular) |
+|---|---|---|---|---|
+| 1 | & | the lower bowl met the diagonal at placed points and angles (C2 at 122, 40 degrees; X1 at 92, 32 degrees) while the arm sat on the tail elsewhere, its crotch filleted (0.30 stem): fitted across the crossing, the bowl's edges and the arm's stood 1.3 to 7.1 units apart and 5.4 to 9.5 degrees off; the stroke's width dipped to 33.8 where the bowl ran into the diagonal, troughed 53.3 before the bowl's bottom and rose to 54.5 again, a 0.7 dip where the diagonal turns into the loop; the tail's cut 21 with sharp corners; bottom -9 | `amp.py`: the bowl's two edges turn into the arm's edge lines at nodes hidden inside the diagonal (on its centreline), tangent to them, so the bowl's stroke crosses the diagonal and is the arm; every corner found by intersection. P and Q solved together (`even_ribbon`: each chain's own terms, node curvature weight 30, eases 40, plus the width along each segment from the tail's root over the loop to the crossing moving one way only between its nodes, second difference small); the counter's bottom 8 right of the outside's (`lb_di`: 0 left the trough, 8 the least of 8 and 16 that clears it); the crotch under the arm sharp; bowl and tail on o's -10; the tail's cut the serif tip (30, `TAIL_CUT`, joins.END_MIN) with both corners on 7 (`soft_cut`) | each edge 0.14 to 0.60 units off its one curve through both crossings, 0.12 to 0.77 degrees at the corners (whole-unit rounding; the hidden nodes exact: 0.000 degrees); width extremes only at the nodes (74 diagonal, 43 loop top, 62.5 loop right, 43 spine, 82 bowl's left, falling to 39.4 at the arm), fastest change 0.18 (swell.py; S 0.50, 8 0.35; was 0.28), max second difference 0.72 at the spine's rise; curvecheck 0 faults, worst 1.13; advance 810 > 809 |
+| 2 | ~ ≈ | one sine period, height 54 on a 348 wave: 44 degrees at the inflections, crest radius 57 (1.16 strokes), 157 tall | `charset.TILDE_SLOPE` 32 (signs.tilde `slope`): the wave set by its slope, its height following from its length; the stress scaled so the mean width along the centreline is the minus's 52 (`tilde_k`, 1.0705); + box wide, ≈ two on the equals' lines, ends square, corners 7. 28 and 35 measured (crest radius 105 and 79, 2.06 and 1.58 strokes); 32 looked at in text | height 34.7, crest radius 89 (1.76 strokes), 120 tall; colour per unit of run 54.3 against the minus's 51.9 (was 58.5) |
+| 3 | @ | the ring the references' 0.968 of its height wide, the a with 1.24 times more white right of its stem: rays from the centre read the white to the a 213 to 245 per mille of the height on the right (most at 20 to 30 degrees), 187 to 196 over the top, 189 at the left; ring exponent upper right 2.38 (references 2.50 to 2.80) | `at.EVEN_WHITE`: each side's white the white over and under the a, so the ring's width follows from the a; ring thickness one law, the letters' upright stress (hairline 43 at top and bottom to 67 / 59 at the sides, as o; monoline would leave the @ alone among Area's rounds); the rise of the right extreme (0.107) kept: 0.05 and 0 broke the curvature at the a's foot (1.28, 2.71) | 816 wide (0.943 of the height), advance 960 > 939; white 183 to 223 per mille all round; curvecheck 0 faults, worst 1.19. A 2 to 3 unit thinner place 25 degrees off the top (47 against 50 per mille) came with the narrower ring |
+| 4 | ∑ ∏ | ∑ top bar 46 (E's arm), bottom bar 70 (0.90 of n's stem), upper diagonal Z's (89 across), lower A's thin (49); ∏ bar 56 (1.15 of H's crossbar), feet H's | E's top and bottom arms are both 46 (`balance.CAP_ARM`): both ∑ bars and ∏'s bar take it (`sigma.KIND`, `charset.maths`); Ʃ had it already | ∑ 46 / 46, ∏ 46. The owner's question: the top was not thicker by its bar; the thick diagonal joining it in a wide dark corner made it read so |
+| 5 | corners | free ends r 7 on letters and signs (already one number); vertices: arrows 21.5, < > ≤ ≥ 41, ^ 41, ✓ 21.5, √ 31.5, ∑ 11, Ʃ and ∆ sharp, ⌃ mitred then softened | one rule (`signs.LETTER_FLAT`, `LESS_FLAT` 0.630, `charset.TAPER_FLAT` 0.762, `vertex_flats`, `sigma.KIND` flat 0.42, `signs.soften(keep=)`): free ends r 7; a vertex the letters' apex flat, 0.42 of the class's stem (v w 33, A V W M N 36), the inside a point; inner corners sharp; solids r 7 | arrows 32.0 to 32.8, < > ≤ ≥ ^ ⌃ √ ✓ 32 to 33, ∑ Ʃ ∆ 36; census and exceptions `build/owner9/corners/corners.md`, sheets `contact-vertices.png`, `contact-ends.png` |
+
+The owner's three questions. ≈ before (the review page's 0.82 outline): `snap082i`'s ≈ is truly what 0.82 shipped, not a
+drawing error: two contours of 26 points, each a Baskerville swung tilde 348 wide (0.82 of the + box), its two ends
+turning up to upright and cut level (24 across, a hairline end), so it reads flat-cut, hooked and narrow. ∑'s top: see
+item 4. Arrow tips: cut, not sharp and not round: the letters' vertex flat (33), the same corner as v's point; the
+tapered arrows keep their round free ends (the owner's taper).
+
+Withdrawn or left, honestly: the @'s rise at 0.05 and 0 (curvature); the &'s loop keeps a 0.7-unit dip where the
+diagonal turns into the loop (74.3 > 73.6 > 74.0; two weightings tried); the & crossing's corner X1 reads 0.77 degrees
+(the 0.5 target) from whole-unit rounding of the corner; the @ ring's thinnest place sits 25 degrees off the top; ~ and
+≈ in the Regular now carry curvecheck reports: a 7.86 ratio across the middle inflection between radii 1442 and 11335
+(both edges nearly straight there; the fitted edges' end curvature is not matched) and a 3-degree bend where the
+19-unit end run meets the wave (whole-unit rounding; pathlint warns 6 times); the ∆'s flats narrow its ink (advance 608
+> 585).
+
+### Full build (all masters), the audits, `build/snap084a`
+
+`AREA_KERN_FIT=1 build.py` (18 min 57 s, `build/snap084a/build-084a.log`), the audit set by
+`build/owner8/reg/fullaudit.sh` (`build/owner9/audit-084a/`) against snap083d's (`build/owner8/let/audit-083d/`), the
+Regular's checks (`build/owner9/chk-084a/` against `build/owner8/let/chk-083d/`).
+
+What moved against snap083d: in the Regular, the Light and the Bold exactly the same 29 glyphs (& @ ~ ≈ ∑ ∏ Ʃ ∆ √ ^ <
+> ≤ ≥ ⌃ ✓ → ← ↑ ↓ ↔ ↕ ↖ ↗ ↘ ↙ ↵ ⇤ ⇥), the mid layer & and @; advances & 810 > 809, @ 960 > 939, ∆ 608 > 585, ↖ ↗ ↘ ↙
+538 > 542. Kerning keys moved: Regular 2 (ŀ with ↖ ↙), Light 71, Bold 129. Fallbacks as before (® ℗ Bold, ℗ Light).
+
+| Audit | snap083d | snap084a |
+|---|---|---|
+| audit_axis Bold: turns | ok | ~ ≈ an inflection at 751 (the wave's near-straight quarters between the Regular and the Bold) |
+| audit_axis Light: turns | ~ ≈ at 344.9 and $ at 314.6 | $ at 314.6 only |
+| audit_axis thin, the rest | cedi, ogonek x 2, one.ss01; ok | the same |
+| audit_rays (300 to 800) | 1 glyph (6), 27,435 places | 2 glyphs: 6 as before; @ thicker at 300 / 350 than at 400 by 2.6 units at (714, 140), where the ring leaves the a's foot (the narrower ring in the Light), 27,425 places |
+| audit_bold Bold / Light | 431 / 432, 432 / 432 | the same |
+| audit_kern | pass (600 least 8.3; 800 least 7.7) | the same |
+| curvecheck regions / hooks, Light and Bold | pass; 5 / 16 | the same |
+| curvecheck on the rebuilt glyphs (Light / Regular / Bold) | & 0 / 0 / 1 (2.07) faults; ~ 2 / 0 / 3 | & 0 / 0 / 0 (worst 1.15); ~ 2 / 4 / 2 (Bold worst 1.49 > 1.05) |
+| interpolation | 62 struck glyphs | the same |
+| Regular: evaluate, even, curvecheck, parts, audit_charset | | unchanged |
+| Regular: pathlint | 0 / 157 / 38 | 0 / 162 / 33 (the ~ ≈ end bends, above) |
