@@ -3604,6 +3604,7 @@ def run(font, lightened):
     print("charset: one drawing", one_drawing(font))                   # 0.74
     print("charset: no steps", no_steps(font))                         # 0.83
     print("charset: extended capitals", ext_capitals(font))            # 0.83 (letters 3)
+    print("charset: hooked lowercase", ext_lowercase(font))            # 0.83 (letters 4)
     print("charset: glottal stops", glottal_balls(font))               # 0.83 (letters 3)
     print("charset: macron", macron_weight(font))                      # 0.74
     dotless(font)
@@ -3836,3 +3837,96 @@ def _even_ball(font, name):
             return f"{name} evened {w0:.2f}>{w1:.2f}"
     return f"{name} left"
 
+
+
+# ---------------------------------------------------------------- 0.83 Regular pass, letters 4: the hooked lowercase
+# The audit (B1): the IPA and hooked lowercase letters outside COVERAGE keep Libre Baskerville's first drawings' stems,
+# 81 to 83 against the lowercase's 78 (n's), and their feet reach 76 to 105 from the stem against n's 70. The rule, the
+# capitals' (letters 3) on the lowercase's own parts read from n: a stem is two upright straight edges facing each other
+# (line segments of at least STEM_RUN, overlapping by as much) between n's stem and EXT_LC_MAX apart; it takes n's
+# stem, both edges moving in by half the difference, every point on an edge's line (within the stem's height and its
+# serifs') moving with it; a foot slab reaching from EXT_LC_FOOT up to EXT_SERIF_MAX from its stem's edge takes n's
+# foot, its end moving in level. Flags are left (their angle and length: listed open).
+EXT_LOWER = ("dhook", "dtail", "ghook", "hhook", "hturned", "iota-latin", "phook", "rfishhook", "rtail", "s_p", "s_t",
+             "thook", "tretroflexhook", "vhook", "c_t", "glottalstop", "glottalstopreversed", "khook", "nhookleft",
+             "Vhook")
+STEM_RUN = 100
+EXT_LC_MAX = 92
+EXT_LC_FOOT = 74
+
+
+def _upright_stems(g, lo, hi):
+    """[(left x, right x, y0, y1)]: pairs of upright line segments lo..hi apart facing each other."""
+    segs = []
+    for c in g.contours:
+        P, n = c.points, len(c.points)
+        for i in range(n):
+            a, b = P[i - 1], P[i]
+            if b.type == "line" and a.type and a.x == b.x and abs(b.y - a.y) >= STEM_RUN:
+                segs.append((a.x, min(a.y, b.y), max(a.y, b.y), 1 if b.y > a.y else -1))
+    out = []
+    for x1, a0, a1, d1 in segs:
+        for x2, b0, b1, d2 in segs:
+            if lo <= x2 - x1 <= hi and d1 != d2 and min(a1, b1) - max(a0, b0) >= STEM_RUN:
+                out.append((x1, x2, max(a0, b0), min(a1, b1)))
+    return out
+
+
+def _foot_reach(g, edge, sg):
+    pts = [p for c in g.contours for p in c.points]
+    tip = [p for p in pts if abs(p.y) <= 30 and 40 <= (p.x - edge) * sg <= EXT_SERIF_MAX]
+    if len([p for p in tip if p.type]) < 3:
+        return None, tip, pts
+    return max((p.x - edge) * sg for p in tip), tip, pts
+
+
+def ext_lowercase(font):
+    n = font["n"]
+    st = _upright_stems(n, 60, 100)
+    stem = st[0][1] - st[0][0]
+    foot = _foot_reach(n, st[0][0], -1)[0]
+    done = []
+    for name in EXT_LOWER:
+        if name not in font or not font[name].contours:
+            continue
+        g = font[name]
+        target = CAP_STEM_W if name[0].isupper() else stem
+        notes = []
+        moves = {}                                     # an edge shared by two runs (a stem under an arch and the
+        pairs = sorted(_upright_stems(g, target + 2, target + 20), key=lambda s_: s_[2] - s_[3])   # ascender) moves once
+        for x1, x2, y0, y1 in pairs:
+            if x1 in moves and x2 in moves:
+                continue
+            if x1 in moves:
+                moves[x2] = (x1 + moves[x1][0] + target - x2, y0, y1)
+            elif x2 in moves:
+                moves[x1] = (x2 + moves[x2][0] - target - x1, y0, y1)
+            else:
+                d = (x2 - x1 - target) / 2
+                moves[x1], moves[x2] = (d, y0, y1), (-d, y0, y1)
+            notes.append(f"stem {x2 - x1}>{target}")
+        for c in g.contours:
+            for p in c.points:
+                for edge, (d, y0, y1) in moves.items():
+                    if abs(p.x - edge) <= 1 and y0 - 60 <= p.y <= y1 + 60:
+                        p.x = round(p.x + d)
+                        break
+        if not name[0].isupper():
+            for x1, x2, y0, y1 in _upright_stems(g, target - 1, target + 1):
+                if y0 > 130:
+                    continue
+                for edge, sg in ((x1, -1), (x2, 1)):
+                    proj, tip, pts = _foot_reach(g, edge, sg)
+                    if proj is None or not EXT_LC_FOOT <= proj <= EXT_SERIF_MAX:
+                        continue
+                    if any(proj + 2 < (p.x - edge) * sg <= proj + 200 for p in pts if abs(p.y) <= 30):
+                        continue
+                    far = edge + sg * proj
+                    dd = round(foot - proj)
+                    for p in tip:
+                        if abs(p.x - far) <= 8:
+                            p.x += sg * dd
+                    notes.append(f"foot {proj:.0f}>{foot:.0f}")
+        if notes:
+            done.append(f"{name}: " + ", ".join(notes))
+    return done
