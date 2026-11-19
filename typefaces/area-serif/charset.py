@@ -190,6 +190,14 @@ def put_built(font, name, info, width, unicodes=None, lsb=None, rsb=None):
     return g
 
 
+def _built_mid(info, cy):
+    """How far a construction's ink middle stands over cy."""
+    import signs as SG
+    a, b, c = SG.build(info)
+    bb = bounds(union(*[shape(P) for P in a + (c or [])]))
+    return (bb[1] + bb[3]) / 2 - cy
+
+
 def soft_flags(g, chord=16):
     """0.83 (symbols 2): a corner rounded on the letters' radius (a curve under `chord` between two lines) is two
     corners, as soft_ends marks them, not smooth nodes (its 4-unit handles cannot hold a tangent in whole units)."""
@@ -788,9 +796,18 @@ def dashes(font, m):
 def bullet(font, m):
     g = font["bullet"]
     r = BULLET * X_HEIGHT / 2
-    cy = (bounds(gp(font, "bullet"))[1] + bounds(gp(font, "bullet"))[3]) / 2
-    cy = min(cy, X_HEIGHT / 2 + 20)
+    # 0.84 (placement): the bullet, the middle dot and the bullet operator centred on the maths axis (Georgia Pro,
+    # Times New Roman, Source Serif 4, Literata, Newsreader within 5 of their minus's middle); · stood at 269, • at
+    # 280, ∙ at 255. The two small ones are the period's dot (124; ∙ was 118)
+    cy = m.math_y
     put(font, "bullet", ellipse(0, cy, r, r), 0, list(g.unicodes), lsb=86, rsb=86)
+    for name in ("periodcentered", next((g_.name for g_ in font if 0x2219 in g_.unicodes), "bulletoperator")):
+        if name in font and len(font[name].contours) == 1 and not font[name].components:
+            c = font[name].contours[0]
+            _place_dot(font, c, "period", "centre")
+            d = round(cy - (min(q.y for q in c.points) + max(q.y for q in c.points)) / 2)
+            for q in c.points:
+                q.y += d
 
 
 MATH = ["plus", "minus", "multiply", "divide", "equal", "notequal", "greater", "less", "plusminus", "logicalnot",
@@ -1303,7 +1320,10 @@ def arrows(font, m, adv):
               lsb=vside, rsb=vside)
     for name, u, rot in (("uni2197", 0x2197, 45), ("uni2196", 0x2196, 135), ("uni2199", 0x2199, -135),
                          ("uni2198", 0x2198, -45)):
-        put_built(font, name, tap(at=[0, cy], rot=rot), 0, [u], lsb=side * 0.8, rsb=side * 0.8)
+        # 0.84 (placement): the ink, not the arrow's middle, on the axis (the head is wider than the shaft's end:
+        # the box stood 4 off, up for the two pointing up)
+        put_built(font, name, tap(at=[0, cy - _built_mid(tap(at=[0, cy], rot=rot), cy)], rot=rot), 0, [u],
+                  lsb=side * 0.8, rsb=side * 0.8)
 
 
 TAPER_END = 60 / 52                # the free end's round cap across, over the plain stroke (the study's B: 1.15)
@@ -1740,6 +1760,8 @@ def interface(font, m, adv):
     shift_out = [[x, y + ky0] for x, y in [[sw / 2, sh], [sw, sh * 0.48], [sw * 0.72, sh * 0.48], [sw * 0.72, 0],
                                             [sw * 0.28, 0], [sw * 0.28, sh * 0.48], [0, sh * 0.48]]]
     k = w
+    d_ = _built_mid(dict(build="frame", params=dict(t=w, outer=shift_out, stress=A_, soft=True)), m.math_y)
+    shift_out = [[x, y - d_] for x, y in shift_out]          # 0.84 (placement): the ink on the axis (it stood 1.75 low)
     put_built(font, "uni21E7", dict(build="frame", params=dict(t=w, outer=shift_out, stress=A_, soft=True)), 0, [0x21E7], lsb=50, rsb=50)
     # caps lock: the shift arrow, its shaft shorter by a fifth of its height (nothing scaled), over a level bar of the
     # plain stroke under the shaft, 39 below its foot
@@ -1817,7 +1839,7 @@ def ogonek_letters(font):
     st = _stem_x(l, 300)
     pc = bounds(gp(font, "periodcentered"))
     dx = st[1] + 90 - pc[0]
-    compose(font, "ldot", [("l", 0, 0), ("periodcentered", round(dx), 39)], round(font["l"].width + 61), [0x0140])
+    compose(font, "ldot", [("l", 0, 0), ("periodcentered", round(dx), 0)], round(font["l"].width + 61), [0x0140])
 
 
 def letters_extra(font):
@@ -3363,9 +3385,15 @@ def more_symbols(font, m, adv):
     A_c = math.pi * R * R
     th_ = math.sqrt(POINTED * A_c * math.sqrt(3))              # the triangle's height: h^2 / sqrt(3) = 0.70 of the circle
     sd_ = 2 * th_ / math.sqrt(3)
-    lift = -(th_ / 2 + th_ / 3) / 2                         # the base below the axis: half way, box middle and centroid
+    # 0.84 (placement): a triangle's box on the axis, as every other shape's. Half way between the box's middle and
+    # the centroid (0.83) left ▲ 41 over the axis by its box and ▴ 23; of 79 faces measured with ▲ and a minus,
+    # the serif ones put the box's middle within 0.03 of the height of the axis (Times New Roman +0.020, Literata
+    # -0.008, Shippori Mincho +0.02), none the centroid (it falls 0.14 to 0.28 of the height under it)
+    lift = -th_ / 2
     import signs as SG                                      # 0.83 (symbols 2): every shape's outer corners soft (7)
     tri = shape(SG.soften([(-sd_ / 2, lift), (sd_ / 2, lift), (0, lift + th_)]))
+    tb_ = bounds(tri)
+    tri = moved(tri, 0, -(tb_[1] + tb_[3]) / 2)             # the soft corners cut the point more than the base
     for name, cp, rot, sc in (("uni25B2", 0x25B2, 0, 1), ("uni25BC", 0x25BC, 180, 1), ("uni25B6", 0x25B6, -90, 1),
                               ("uni25C0", 0x25C0, 90, 1), ("uni25B4", 0x25B4, 0, 0.55), ("uni25BE", 0x25BE, 180, 0.55),
                               ("uni25B8", 0x25B8, -90, 0.55), ("uni25C2", 0x25C2, 90, 0.55)):
