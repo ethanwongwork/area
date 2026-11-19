@@ -1307,7 +1307,8 @@ def arrows(font, m, adv):
 
 
 TAPER_END = 60 / 52                # the free end's round cap across, over the plain stroke (the study's B: 1.15)
-TAPER_FLAT = 0.5                   # a head's point cut flat, over the hairline (the study's B)
+TAPER_FLAT = 0.42 * 78.0 / 43.0    # a head's point cut flat, over the hairline: 0.84 (item 5) the letters' vertex
+                                   # flat (v's 33, signs.LETTER_FLAT), 0.762 of the hairline; it was 0.5 (21.5)
 SHAFT_BOTH = 1.0                   # 0.83 (consistency 0a): a shaft between two heads, one width, of the hairline (43)
 TAB_BAR = 57 / 52                  # 0.83 (consistency 0b): the tab arrows' bar, one width, of the plain stroke (A's upright 57)
 
@@ -1363,7 +1364,7 @@ def maths(font, m, adv):
     put_built(font, "radical", dict(build="radical", params=dict(
         thin=w, bar=w, thick=m.stem * 0.96, B=[150, 372], V=[262, -12], T=[448, CAP_HEIGHT + 30],
         top=CAP_HEIGHT + 30, right=640, hook=[[60, 318], [156, 378]],
-        flat=VERTEX_CAP * m.stem * 0.96)), 0, [0x221A], lsb=30, rsb=10)
+        flat=VERTEX_CAP * m.stem)), 0, [0x221A], lsb=30, rsb=10)   # 0.84 (item 5): v's flat, 0.42 of the stem (33)
     # 0.83 (symbols 1): the radical's foot is a vertex (the face's vertex rule: a flat 0.42 of the thick stroke
     # across the bisector, 31.5); it was a sharp point
     # increment: a triangle with A's weights, thin left (A's thin diagonal, the capital bar), thick right (the capital
@@ -1373,7 +1374,10 @@ def maths(font, m, adv):
     import signs as SG
     tri = [(0, 0), (560, 0), (280, CAP_HEIGHT)]
     inn = SG.inset_edges(tri, [m.cap_bar * 0.9, m.cap_stem, m.cap_bar])
-    put(font, "increment", op(shape(tri), shape(inn), pathops.PathOp.DIFFERENCE), 0, [0x2206], lsb=24, rsb=24)
+    # 0.84 (Regular pass 2, item 5): each outer corner a vertex as A's apex: a flat 0.42 of the capital stem (36)
+    # across its bisector, its inner corners points (it was sharp at all three, 43 and 69 degrees)
+    put(font, "increment", op(shape(vertex_flats(tri, VERTEX_CAP * m.cap_stem)), shape(inn), pathops.PathOp.DIFFERENCE),
+        0, [0x2206], lsb=24, rsb=24)
     # product and sum: Pi from H's stems under one bar; Sigma is Area's Esh capital (the Greek letter's shape)
     H = gp(font, "H")
     hs = scan_h(H, 200)
@@ -1435,6 +1439,20 @@ def maths(font, m, adv):
                  rect(cx + gapw - 2, 0, cx + gapw + m.cap_stem * 0.85, 0.36 * CAP_HEIGHT))
     Om = union(cutO, feet, legs)
     put(font, "Omega", Om, 0, [0x03A9, 0x2126], lsb=30, rsb=30)
+
+
+def vertex_flats(P, w):
+    """A convex polygon's corners each cut by a flat w across its bisector (where the two edges are w apart)."""
+    n = len(P)
+    out = []
+    for i in range(n):
+        a, p, b = P[i - 1], P[i], P[(i + 1) % n]
+        ua = ((a[0] - p[0]) / math.dist(a, p), (a[1] - p[1]) / math.dist(a, p))
+        ub = ((b[0] - p[0]) / math.dist(b, p), (b[1] - p[1]) / math.dist(b, p))
+        half = math.acos(max(-1.0, min(1.0, ua[0] * ub[0] + ua[1] * ub[1]))) / 2
+        d = w / 2 / math.sin(half)                    # along each edge to the flat's end
+        out += [(p[0] + ua[0] * d, p[1] + ua[1] * d), (p[0] + ub[0] * d, p[1] + ub[1] * d)]
+    return out
 
 
 def sum_vertex(g, stem):

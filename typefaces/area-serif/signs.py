@@ -22,9 +22,16 @@ LIB = "area.sign"
 
 # The references' outer flat at the point of < (upright, across the two outer edges), over the stroke across itself
 # at 400: Georgia Pro 0.92 (Bold 0.85), Serrif 0.78, Source Serif 4 0.81, Literata 0.72, Merriweather 0.76: median 0.79
-LESS_FLAT = 0.79
 # A vertex's outside flat across the bisector, over the stroke (parts.VERTEX: 0.42 of the class's stem)
 VERTEX = 0.42
+# 0.84 (Regular pass 2, item 5: one corner rule): a point where two strokes meet is finished as the letters' apexes are.
+# Measured on the Regular (build/owner9/corners/census.py): v w 33.0, A V W M N 36.0, each a flat across the bisector,
+# 0.42 of the class's stem, 0.77 of the class's hairline (33 / 43, 36 / 47). A sign's vertex takes the lowercase's,
+# LETTER_FLAT, at the Regular: an arrow's point, a chevron's, the check's elbow, the radical's foot, the control key's.
+# It was 21.5 at the arrows' points (0.5 of the hairline), 41 at < > ^ (LESS_FLAT 0.79 of the stroke, the references'
+# median), 31.5 at the radical's foot (0.42 of its thick), the control key's apex mitred and softened on 7
+LETTER_FLAT = VERTEX * 78.0                            # 32.8: v's outside flat
+LESS_FLAT = LETTER_FLAT / 52.0                         # 0.630 of the plain stroke (it was 0.79)
 
 
 # ---------------------------------------------------------------- geometry
@@ -255,17 +262,17 @@ def stress_w(a, b, lo, hi):
     return lo + (hi - lo) * dy * dy / (dx * dx + dy * dy)
 
 
-def soften(P, r=SOFT, k=0.55):
+def soften(P, r=SOFT, k=0.55, keep=()):
     """A polygon's convex corners (the ink's outside corners: for an outer contour, those turning its own way)
     rounded on r as the letters' cut ends are (a point r along each edge, the handles k of the way to the corner);
-    concave corners (meetings) stay sharp."""
+    concave corners (meetings) stay sharp, and so do the corners in `keep` (a vertex's flat: 0.84, as the letters')."""
     ar = area(P)
     n = len(P)
     out = []
     for i in range(n):
         a, p_, b = P[i - 1], P[i], P[(i + 1) % n]
         cr = (p_[0] - a[0]) * (b[1] - p_[1]) - (p_[1] - a[1]) * (b[0] - p_[0])
-        if cr * ar <= 1e-9 or math.dist(a, p_) < 3 * r or math.dist(p_, b) < 3 * r:
+        if i in keep or cr * ar <= 1e-9 or math.dist(a, p_) < 3 * r or math.dist(p_, b) < 3 * r:
             out.append(p_)
             continue
         ua, ub = unit(p_, a), unit(p_, b)
@@ -319,8 +326,11 @@ def caret(p, s=1.0, white=None):
     taken out: a 54 by 16 notch in the crotch and two 2-unit steps at the ends."""
     a, h, t = p["apex"], p["head"], p["t"] * s
     dx = p.get("run", h - p["t"] / 2)                   # the arrows' head stroke: across run (0.82: h - t/2), down h
-    P = stroke_polyline([(a[0] - dx, a[1] - h), tuple(a), (a[0] + dx, a[1] - h)], [t, t])
-    return [soften(P) if p.get("soft") else P], [], []
+    # 0.84 (item 5): the apex a vertex, the letters' flat (LESS_FLAT of the stroke: 33 at the Regular), its two
+    # corners sharp as v's; the free ends' corners soft
+    P = stroke_polyline([(a[0] - dx, a[1] - h), tuple(a), (a[0] + dx, a[1] - h)], [t, t], flat={1: LESS_FLAT * t})
+    flat_i = {i for i, q in enumerate(P) if math.dist(q, tuple(a)) < 2 * t} - {i for i, q in enumerate(P) if q[1] < a[1] - h + 1}
+    return [soften(P, keep=flat_i) if p.get("soft") else P], [], []
 
 
 def option(p, s=1.0, white=None):
