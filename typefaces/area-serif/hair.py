@@ -445,11 +445,13 @@ def diagonals(font):
         try:
             was = across(font[name], sign, lo, hi)
             r = BAL.diag(font[name], sign, target, (lo + hi) / 2)
-            for _ in range(2):           # diag reads at one height; the stroke is read across its parallel edges
+            aim = target
+            for _ in range(6):           # diag reads at one height; the stroke is read across its parallel edges
                 now = across(font[name], sign, lo, hi)
                 if now is None or abs(now - target) < 0.6:
                     break
-                BAL.diag(font[name], sign, target + (target - now), (lo + hi) / 2)
+                aim += target - now
+                BAL.diag(font[name], sign, aim, (lo + hi) / 2)
             r = ([was], [across(font[name], sign, lo, hi)]) if was is not None else r
         finally:
             BAL._diag_edges = orig
