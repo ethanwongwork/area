@@ -14,6 +14,8 @@ handles (rigidly: the curve either side keeps its tangent and its handle lengths
 brings the thin place to the hairline; the outside, every zone line and every other node stay. Composites, the
 ligatures, the figures' small forms and the struck letters follow (the rule runs before spacing and the charset).
 """
+import math
+
 import numpy as np
 
 REACH = 40          # edge places read within this of either extreme node
@@ -187,4 +189,148 @@ def hairlines(font, names=None):
         for c, P in zip(g.contours, cs):
             for p, q in zip(c.points, P):
                 p.x, p.y = q[0], q[1]
+    return log
+
+
+# ------------------------------------------------------------------------------------------------- spines (item 3)
+# The stroke audit read S's spine 99.4 > 95.0 > 101.5 along its length (thick at both ends, thin at the middle) and
+# s's 81 > 84 > 89 > 84 > 81; the census S 16% dark with its density +28%. A spine is a round stroke: one swell, its
+# widest at the middle (the spine's two nodes, one on each edge), there the class's round widest (O's side for S, o's
+# for s, read on the build), falling steadily towards both bowls. The rule (`spines`): the two spine nodes move along
+# their own normals and their four handles change length (tangents kept), least change, until the width along the
+# spine's middle (medial balls on the upper edge, within SPINE_SPAN of each adjacent curve's length from the node)
+# has one maximum, at the node, equal to the class's round widest.
+SPINE_SPAN = 0.55
+HANDLE_W = 30        # least change: a handle length factor weighs as this many square units of width
+SPINES = {"S": ("O", 712), "s": ("o", 520)}
+
+
+def _bez(c, t):
+    t = np.asarray(t)[:, None]
+    return (1 - t) ** 3 * c[0] + 3 * (1 - t) ** 2 * t * c[1] + 3 * (1 - t) * t ** 2 * c[2] + t ** 3 * c[3]
+
+
+def _dbez(c, t):
+    t = np.asarray(t)[:, None]
+    return 3 * (1 - t) ** 2 * (c[1] - c[0]) + 6 * (1 - t) * t * (c[2] - c[1]) + 3 * t ** 2 * (c[3] - c[2])
+
+
+def _seg_at(P, i):
+    """The curve ending at node i and the curve starting at it (control arrays), for a smooth node between curves."""
+    n = len(P)
+    a = np.array([P[(i - 3) % n][:2], P[(i - 2) % n][:2], P[(i - 1) % n][:2], P[i][:2]], float)
+    b = np.array([P[i][:2], P[(i + 1) % n][:2], P[(i + 2) % n][:2], P[(i + 3) % n][:2]], float)
+    return a, b
+
+
+def widest_side(font, name):
+    """The class's round widest: the largest ball on the letter's left side (o, O)."""
+    cs = [[(p.x, p.y, p.type, p.smooth) for p in c.points] for c in font[name].contours]
+    xs = [q[0] for P in cs for q in P]
+    ys = [q[1] for P in cs for q in P]
+    q = min((q for P in cs for q in P if q[2]), key=lambda q: q[0])
+    w = balls(cs, [(q[0], q[1])], reach=30)
+    return max(t[0] for t in w)
+
+
+def spine_profile(cs, ci, iu):
+    """Width along the spine (balls on the upper edge, the node's two curves within SPINE_SPAN), as (s, w)."""
+    P = cs[ci]
+    polys = [_flat(Q) for Q in cs]
+    allp = np.concatenate(polys)
+    a, b = _seg_at(P, iu)
+    out = []
+    for c, sign, ts in ((a, -1, np.linspace(1 - SPINE_SPAN, 1, 24)), (b, 1, np.linspace(0, SPINE_SPAN, 24))):
+        pts, der = _bez(c, ts), _dbez(c, ts)
+        L = np.hypot(*(c[3] - c[0]))
+        for p, d, t in zip(pts, der, ts):
+            nv = np.array([-d[1], d[0]]) / (np.hypot(*d) + 1e-9)
+            if not _inside(p + nv * 0.8, polys):
+                nv = -nv
+            q = allp - p
+            dn = q @ nv
+            dd = (q ** 2).sum(1)
+            ok = (dn > 1e-3) & (dd > 4.0)
+            s = sign * (abs(t - (1 if sign < 0 else 0))) * L
+            r = np.min(dd[ok] / (2 * dn[ok]))
+            out.append((s, 2 * r, p + nv * r))
+    out.sort(key=lambda t: t[0])
+    return out
+
+
+def _spine_nodes(P, height):
+    on = [i for i, q in enumerate(P) if q[2] == "curve" and q[3]]
+    xs = [q[0] for q in P]
+    mid = (min(xs) + max(xs)) / 2
+    sp = [i for i in on if abs(P[i][0] - mid) < 60 and 0.3 * height < P[i][1] < 0.75 * height]
+    sp.sort(key=lambda i: -P[i][1])
+    return sp[:2] if len(sp) >= 2 else None
+
+
+def _apply(P0, iu, il, v):
+    """v: (du, dl, hu_in, hu_out, hl_in, hl_out): node moves along their normals, handle length factors."""
+    P = [list(q) for q in P0]
+    n = len(P)
+    for i, d, hin, hout in ((iu, v[0], v[2], v[3]), (il, v[1], v[4], v[5])):
+        x, y = P0[i][0], P0[i][1]
+        hx, hy = P0[(i + 1) % n][0] - x, P0[(i + 1) % n][1] - y
+        L = np.hypot(hx, hy)
+        nx, ny = -hy / L, hx / L
+        nx_, ny_ = x + d * nx, y + d * ny
+        for j, f in (((i - 1) % n, hin), ((i + 1) % n, hout)):
+            P[j][0] = nx_ + f * (P0[j][0] - x)
+            P[j][1] = ny_ + f * (P0[j][1] - y)
+        P[i][0], P[i][1] = nx_, ny_
+    return [tuple(q) for q in P]
+
+
+def spine_score(prof, T, mid):
+    """mid: the middle of the spine (half way between its two nodes); the profile's place whose ball is centred
+    nearest it is the middle."""
+    s = np.array([p[0] for p in prof]); w = np.array([p[1] for p in prof])
+    k0 = int(np.argmin([np.hypot(*(p[2] - mid)) for p in prof]))
+    w0 = w[k0]
+    bad = 0.0
+    for k in range(k0, len(w) - 1):
+        bad += max(0.0, w[k + 1] - w[k]) ** 2
+    for k in range(k0, 0, -1):
+        bad += max(0.0, w[k - 1] - w[k]) ** 2
+    return (w0 - T) ** 2 + 40 * bad, w0, float(w.max()), float(s[int(np.argmax(w))])
+
+
+def spines(font, names=None, verbose=False):
+    from scipy.optimize import minimize
+    log = []
+    for name, (ref, height) in SPINES.items():
+        if names and name not in names or name not in font:
+            continue
+        T = widest_side(font, ref)
+        g = font[name]
+        cs = [[(p.x, p.y, p.type, p.smooth) for p in c.points] for c in g.contours]
+        sp = _spine_nodes(cs[0], height)
+        if not sp:
+            log.append(f"{name}: spine not found"); continue
+        iu, il = sp
+        mid = lambda P: np.array([(P[iu][0] + P[il][0]) / 2, (P[iu][1] + P[il][1]) / 2])   # noqa: E731
+        before = spine_score(spine_profile(cs, 0, iu), T, mid(cs[0]))
+
+        def f(v):
+            c2 = list(cs); c2[0] = _apply(cs[0], iu, il, v)
+            sc = spine_score(spine_profile(c2, 0, iu), T, mid(c2[0]))[0]
+            return sc + 0.02 * (v[0] ** 2 + v[1] ** 2) + HANDLE_W * sum((x - 1) ** 2 for x in v[2:])
+        v0 = np.array([0, 0, 1, 1, 1, 1.0])
+        simplex = [v0] + [v0 + np.eye(6)[k] * (4.0 if k < 2 else 0.1) for k in range(6)]
+        r = minimize(f, v0, method="Nelder-Mead", options=dict(maxiter=1500, xatol=0.02, fatol=0.005,
+                                                                 initial_simplex=np.array(simplex)))
+        v = r.x
+        new = _apply(cs[0], iu, il, v)
+        new = [(round(q[0]), round(q[1]), q[2], q[3]) for q in new]
+        c2 = list(cs); c2[0] = new
+        after = spine_score(spine_profile(c2, 0, iu), T, mid(new))
+        for p, q in zip(g.contours[0].points, new):
+            p.x, p.y = q[0], q[1]
+        log.append(f"{name}: spine middle {before[1]:.1f} > {after[1]:.1f} (target {T:.1f}), widest {before[2]:.1f} at "
+                   f"{before[3]:+.0f} > {after[2]:.1f} at {after[3]:+.0f}")
+        if verbose:
+            log.append(str([round(x, 2) for x in v]))
     return log
