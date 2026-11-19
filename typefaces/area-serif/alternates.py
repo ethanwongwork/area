@@ -322,10 +322,13 @@ def barred(font, base, name, hair):
 
 # ------------------------------------------------------------------------------------------------ families
 def _body_cx(font, name):
-    """The centre of a's or ɑ's bowl and stem: from the ink's left to the stem's right edge (the exit is a terminal)."""
+    """The centre of a's or ɑ's bowl and stem: from the ink's left to the stem's right edge (the exit is a terminal).
+    0.84 (placement): the ink's left is the bowl's left extreme (the bounds); the scan at 260 crossed a's bowl above
+    its extreme (124 against 54), so ɑ's marks stood 35 to 37 left of where a's offset puts them."""
     g = C.gp(font, name)
     row = C.scan_h(g, 260)
-    return (row[0][0] + row[-1][1]) / 2, row[-1][1], C.bounds(g)
+    b = C.bounds(g)
+    return (b[0] + row[-1][1]) / 2, row[-1][1], b
 
 
 RIGHT_MARKS = {"ogonek", "ringhalfright"}

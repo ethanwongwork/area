@@ -1988,8 +1988,8 @@ def vietnamese(font):
         prev = None                                                  # the mark already above, and its ink box
         for mk in marks:
             mname = TONE[mk]
-            if mname == "dotbelowcomb":
-                mg = font[mname + suf] if (mname + suf) in font else font[mname]
+            if mname == "dotbelowcomb":                              # 0.84: one dot below under both cases
+                mg = font[mname]
                 ma = _anchor(mg, "_bottom")
                 parts.append((mg.name, round(bottom[0] - ma[0]), round(bottom[1] - ma[1]) if upper else 0))
                 continue
@@ -2555,7 +2555,7 @@ MARK_X = {"top": {"A": 0, "a": -36, "C": 45, "c": 13, "D": -24, "E": 5, "e": 11,
                   "W": 18, "w": 20, "Y": 13, "y": 16, "Z": 9, "z": 8},
           "bottom": {"A": -16, "a": -20, "E": 11, "e": 8, "I": 0, "O": 0, "o": 0, "S": 7, "s": 0, "T": 8, "U": 0,
                      "u": 0}}
-MARK_BAND = 6
+MARK_BAND = 1           # 0.84 (placement): every letter's marks on MARK_X (6 left 34 letters 3 to 6 off it)
 MARK_ALIAS = {"Oslash": "O", "oslash": "o"}     # a struck letter takes its letter's move (its ink includes the stroke)
 CAP_MARK_Y = 763        # one height for the marks over every capital, as both references (O's sat 11 lower, B H K
                         # M P V X 4, D G S T 2: Libre Baskerville's own offsets)
@@ -2865,6 +2865,143 @@ def drop_marks(font):
                 if q.name == "_top":
                     q.y += MARK_DROP
     return n
+
+
+# 0.84 (Regular pass 2, placement). The census (build/owner9/place/report.md, 3.3) found 64 capitals composed by
+# Libre Baskerville with the lowercase marks (a dot 112 across at 794 where Ċ's is 94 at 787, carons and acutes at 759
+# where Č's and Á's are at 780), Ḟ's dot 59 lower again, and first marks standing a unit or more off their letter's
+# anchor on 83 letters. The rules: a capital carries the capital (.case) form of every mark that has one, its first
+# mark above with its anchor on the capitals' one height (CAP_MARK_Y) at the x where its mark stood, a mark stacked on
+# it centred on it STACK_GAP over it (the Vietnamese capitals' rule); and after every other mark rule, each letter's
+# first mark above and first mark below stand with their anchor exactly on the letter's anchor (BOTTOM_ANCHOR one
+# height under every letter), the marks stacked on them moving along. Exception, by MARK_DROP's own rule: on letters
+# with an ascender the dropped marks keep their old height, 19 over the anchor that a typed mark uses.
+BOTTOM_ANCHOR = 4       # the bottom anchor of 99 of the 101 base letters (H and s stood at 5)
+
+
+def _is_mark(font, name):
+    cats = font.lib.get("public.openTypeCategories", {})
+    return cats.get(name) == "mark" or name in MARKS_SPACING or name.endswith("comb")
+
+
+def _case_form(font, name):
+    if "." in name:
+        return None
+    for cand in (name + ".case", name + "comb.case"):     # dotbelow (spacing) has dotbelowcomb.case
+        if cand in font:
+            return cand
+    return None
+
+
+def _root(font, name):
+    dx = dy = 0
+    while name in font and not font[name].contours and font[name].components:
+        c = font[name].components[0]
+        dx, dy = dx + c.transformation[4], dy + c.transformation[5]
+        name = c.baseGlyph
+    return name, dx, dy
+
+
+def _capital(font, name):
+    import unicodedata
+    return name in font and any(unicodedata.category(chr(u)) == "Lu" for u in font[name].unicodes)
+
+
+def case_forms(font):
+    """Every capital's marks in their capital form (the rule above). Returns the glyphs with marks stacked above,
+    for `restack` (after case_marks, which moves the capital circumflex and caron)."""
+    stacked = []
+    for g in font:
+        if len(g.components) < 2 or not _capital(font, _root(font, g.components[0].baseGlyph)[0]):
+            continue
+        tops, swapped = [], False
+        for comp in g.components[1:]:
+            n = comp.baseGlyph
+            if not _is_mark(font, n):
+                continue
+            side = "_top" if _anchor(font[n], "_top") else None    # marks above only: below the baseline both
+            if side is None:                                         # cases share one space and one form
+                continue
+            tops.append(comp)
+            new = _case_form(font, n)
+            if new is None or _anchor(font[new], side) is None:
+                continue
+            a0, a1 = _anchor(font[n], side), _anchor(font[new], side)
+            t = comp.transformation
+            x, y = t[4] + a0[0], t[5] + a0[1]           # where the mark's anchor stood
+            if side == "_top" and len(tops) == 1:
+                y = CAP_MARK_Y
+            comp.baseGlyph = new
+            comp.transformation = (1, 0, 0, 1, round(x - a1[0]), round(y - a1[1]))
+            swapped = True
+        if swapped and len(tops) > 1:
+            stacked.append(g.name)
+    return stacked
+
+
+def restack(font, names):
+    """A mark stacked over a capital's first mark: centred on its ink, STACK_GAP over it."""
+    done = []
+    for name in names:
+        g = font[name]
+        tops = [c for c in g.components[1:] if _anchor(font[c.baseGlyph], "_top")]
+        for prev, comp in zip(tops, tops[1:]):
+            pt, t = prev.transformation, comp.transformation
+            pb, mb = bounds(gp(font, prev.baseGlyph)), bounds(gp(font, comp.baseGlyph))
+            dx = round((pb[0] + pb[2]) / 2 + pt[4] - (mb[0] + mb[2]) / 2)
+            dy = round(pb[3] + pt[5] + STACK_GAP - mb[1])
+            comp.transformation = (1, 0, 0, 1, dx, dy)
+        done.append(name)
+    return done
+
+
+def marks_on_anchors(font):
+    """Each letter's first mark above and below with its anchor on the letter's (the rule above)."""
+    done, left, combos = [], [], set()
+    for g in font:
+        if g.contours:
+            for a in g.anchors:
+                if a.name == "bottom" and a.y != BOTTOM_ANCHOR and abs(a.y - BOTTOM_ANCHOR) <= 2:
+                    done.append(f"{g.name} bottom anchor {a.y}>{BOTTOM_ANCHOR}")
+                    a.y = BOTTOM_ANCHOR
+    for g in font:
+        if len(g.components) < 2:
+            continue
+        b0 = g.components[0]
+        if _is_mark(font, b0.baseGlyph):
+            continue                                     # a mark made of marks
+        base, bx, by = _root(font, b0.baseGlyph)
+        bx, by = bx + b0.transformation[4], by + b0.transformation[5]
+        if base not in font:
+            continue
+        for side in ("top", "bottom"):
+            ba = _anchor(font[base], side)
+            marks = [c for c in g.components[1:] if _anchor(font[c.baseGlyph], "_" + side)]
+            if ba is None or not marks:
+                continue
+            ma = _anchor(font[marks[0].baseGlyph], "_" + side)
+            t = marks[0].transformation
+            dx, dy = round(ba[0] + bx - t[4] - ma[0]), round(ba[1] + by - t[5] - ma[1])
+            if not (dx or dy):
+                continue
+            mk = font[marks[0].baseGlyph]
+            if "_" in mk.name and mk.name not in combos:   # a mark drawn as two (ring and acute): it stands where
+                combos.add(mk.name)                        # its letters put it (nested lower than the ring alone);
+                for q in mk.anchors:                       # its anchor goes there, as align_anchors sets a letter's
+                    if q.name == "_" + side:
+                        q.x, q.y = q.x - dx, q.y - dy
+                done.append(f"{mk.name} anchor ({-dx:+d}, {-dy:+d})")
+                continue
+            if side == "top" and marks[0].baseGlyph in DROP_MARKS and (dx, dy) == (0, -MARK_DROP):
+                continue                                 # an ascender's dropped mark: kept where it was (MARK_DROP)
+            if abs(dx) > 16 or abs(dy) > 16:            # (a lowercase macron's 13 or 14 is moved; a digraph is not)
+                left.append(f"{g.name} {side} ({dx:+d}, {dy:+d})")
+                continue
+            for c in marks:
+                t = c.transformation
+                c.transformation = (t[0], t[1], t[2], t[3], t[4] + dx, t[5] + dy)
+            done.append(f"{g.name} {side} ({dx:+d}, {dy:+d})")
+    return {"moved": len(done), "left": left, "list": done}
 
 
 # ---------------------------------------------------------------- 0.72: more glyphs, from the letters and parts
@@ -3577,7 +3714,9 @@ def macron_weight(font):
 # Marks that hang below. The ogonek reached -225 under A, -216 under I and U and -215 under a e i u E; the dot
 # below reached -219 under the capitals Libre Baskerville composed and -208 under the horned capitals composed
 # here. One depth for each (the commonest: -215 and -219).
-BELOW = {"ogonek": -215, "dotbelow": -219}
+BELOW = {"ogonek": -215, "dotbelow": -215}
+# 0.84 (placement): the dot below on its anchor under every letter, the lowercase's -215 (the capitals' -219 stood 4
+# under their anchor, the horned capitals' smaller capital form 10 over it); one form under both cases
 
 
 def below_depths(font):
@@ -3692,8 +3831,10 @@ def run(font, lightened):
                        ("Thorn", "I", "P")):
         kern_like(font, name, l, r)
     followed = follow_rebuilt(font, before)
+    stacked = case_forms(font)                                         # 0.84 (placement)
     anchored = align_anchors(font)
     print("charset: capital marks", case_marks(font))                  # 0.71
+    print(f"charset: capitals carry the capital marks, {len(stacked)} stacks", restack(font, stacked))   # 0.84
     centred, n_centred = centre_marks(font)                            # 0.71
     print(f"charset: marks centred on {len(centred)} anchors, {n_centred} letters follow", centred)
     print(f"charset: lowercase accents {MARK_DROP} closer on", drop_marks(font), "letters")   # 0.71
@@ -3701,6 +3842,7 @@ def run(font, lightened):
     horns(font)
     viet = vietnamese(font)
     print("charset: marks below", below_depths(font))                  # 0.74
+    print("charset: marks on their anchors", marks_on_anchors(font))   # 0.84 (placement)
     print("charset: digraphs", digraphs(font))                         # 0.73
     print("charset: numero", numero(font))                             # 0.73
     for g in font:                                    # 0.65: every outline, not only the ones this module wrote

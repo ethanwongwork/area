@@ -331,6 +331,12 @@ def klass(font, name):
             return "low"
         if base != name and base in font:
             return klass(font, base)
+        # 0.84 (placement): an unencoded accented letter (the Dutch J with acute, reached by a feature) is its letter:
+        # as "base" its J was placed at (7, 14), the offsets scaled for the letter's class and the composite's apart
+        if g.components and g.components[0].baseGlyph in font and font[g.components[0].baseGlyph].unicodes:
+            first = klass(font, g.components[0].baseGlyph)
+            if first in ("up", "low"):
+                return first
         return "base"
     ch = chr(u)
     cat = unicodedata.category(ch)
