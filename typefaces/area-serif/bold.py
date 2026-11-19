@@ -4375,6 +4375,13 @@ def bold_font(reg, stem=STEM, **over):
             evened.append(f"{name} " + " ".join(f"{x:+.1f}" for x in d_))
             resided.add(name)
     notes.append(f"round letters' ends (TL TR BL BR): {', '.join(evened)}")
+    # 0.84 (pass 2, spine construction): S and s are one stroke from the top pair of level extremes to the bottom
+    # pair, built again here from this master's centreline and the width law at this master's O and o sides
+    # (spine.py), after the terminal rules above, so the ends stay theirs
+    import spine as _SPINE
+    sp_note, sp_names = _SPINE.master(reg, font, struck)
+    notes.append(sp_note)
+    resided.update(sp_names)
     # owner round 8, item 14: g's loop under its bowl as in the Regular, its ear at the ball law's reach
     looped = []
     for name in G_LOOPED:
