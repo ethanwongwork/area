@@ -402,3 +402,131 @@ def bowl_sides(font, control="P"):
                     c.points[j].x += dx
         log.append(f"{name} {which} bowl's side {w0:.1f} > {best[2]:.1f} ({control}'s {T:.1f}; counter's extreme {dx:+d})")
     return log
+
+
+# --------------------------------------------------------------------------------------------- diagonals (item 5)
+# The stroke audit reads a diagonal as each pair of parallel straight edges: X's thin diagonal 42.2 / 43.1 (its two
+# halves, offset across the crossing) against A V W M Y's 48, x's 36.1 / 38.0 thin and 72.6 / 72.3 thick against v's
+# 39.2 / 74.3, the capitals' thick diagonals 84.7 (K) to 88.8 (N). balance.diag set X and x at one height, where the
+# two halves' edges were read as one stroke. The rule (`diagonals`): each half of a crossing stroke is its own stroke
+# (only the straight edges whose middle lies in the half's band are read), set by balance.diag to the ladder: the thin
+# diagonals 39 lowercase and 48 capitals (balance.THIN_LOW, THIN_CAP_DIAG), the lowercase thick v's 74 (DIAGS: w's 73,
+# 0.94 stems), every capital thick diagonal the capital stem, 86 (the median of A V W M N K Y Z was 86.5; Y's
+# comment: both references 1.01 of H). Z's arms the capitals' arm, 46 (balance.CAP_ARM): the arm's inner edge moves,
+# its corner on the diagonal sliding along the diagonal.
+CAP_THICK_DIAG = 86
+DIAG_HALVES = [   # glyph, direction, target, (band low, band high): only edges with their middle inside
+    ("x", 1, 39, (0, 260)), ("x", 1, 39, (260, 520)), ("x", -1, 74, (0, 260)), ("x", -1, 74, (260, 520)),
+    ("X", 1, 48, (0, 356)), ("X", 1, 48, (356, 712)),
+    ("A", -1, CAP_THICK_DIAG, (0, 712)), ("V", -1, CAP_THICK_DIAG, (0, 712)), ("W", -1, CAP_THICK_DIAG, (0, 712)),
+    ("M", -1, CAP_THICK_DIAG, (0, 712)), ("N", -1, CAP_THICK_DIAG, (0, 712)), ("K", -1, CAP_THICK_DIAG, (0, 712)),
+    ("Y", -1, CAP_THICK_DIAG, (356, 712)), ("Z", 1, CAP_THICK_DIAG, (0, 712)),
+]
+
+
+def diagonals(font):
+    import balance as BAL
+    import normalize as NORM
+    log = []
+    orig = BAL._diag_edges
+    for name, sign, target, (lo, hi) in DIAG_HALVES:
+        if name not in font:
+            continue
+        def edges(g, min_len=60, lo=lo, hi=hi):
+            L = NORM._diag_edges(g, min_len)
+            out = []
+            for l_ in L:
+                P = g.contours[l_[0]].points
+                ym = (P[l_[1]].y + P[l_[2]].y) / 2
+                if lo <= ym < hi:
+                    out.append(l_)
+            return out
+        BAL._diag_edges = edges
+        try:
+            was = across(font[name], sign, lo, hi)
+            r = BAL.diag(font[name], sign, target, (lo + hi) / 2)
+            for _ in range(2):           # diag reads at one height; the stroke is read across its parallel edges
+                now = across(font[name], sign, lo, hi)
+                if now is None or abs(now - target) < 0.6:
+                    break
+                BAL.diag(font[name], sign, target + (target - now), (lo + hi) / 2)
+            r = ([was], [across(font[name], sign, lo, hi)]) if was is not None else r
+        finally:
+            BAL._diag_edges = orig
+        log.append(f"{name}{'+' if sign > 0 else '-'}[{lo},{hi}] {r[0]}>{r[1]}" if r else f"{name}{sign:+d}[{lo},{hi}]: none")
+    log.append(z_arms(font))
+    return log
+
+
+def z_arms(font, name="Z", target=46, cap=712):
+    g = font[name]
+    P = g.contours[0].points
+    n = len(P)
+    done = []
+    for i, p in enumerate(P):
+        q = P[(i + 1) % n]
+        if not (p.type and q.type == "line"):
+            continue
+        # a long diagonal leaving a corner p on a level edge near a zone line
+        if abs(q.y - p.y) < 300:
+            continue
+        for edge_y, zone, sgn in ((p.y, 0, 1), (p.y, cap, -1)):
+            if abs(abs(edge_y - zone) - target) > 6 or abs(edge_y - zone) == target:
+                continue
+            d = (zone + sgn * target) - edge_y
+            row = [k for k, r in enumerate(P) if r.y == edge_y and k != i]
+            for k in row:
+                P[k].y += d
+            P[i].x = round(p.x + d * (q.x - p.x) / (q.y - p.y))
+            P[i].y += d
+            done.append(f"{name} arm at {edge_y} {abs(edge_y - zone)}>{target}")
+    for i, p in enumerate(P):     # the other direction: a diagonal arriving at the corner
+        q = P[(i - 1) % n]
+        if not (p.type == "line" and q.type and abs(q.y - p.y) >= 300):
+            continue
+        for zone, sgn in ((0, 1), (cap, -1)):
+            if abs(abs(p.y - zone) - target) > 6 or abs(p.y - zone) == target:
+                continue
+            edge_y = p.y
+            d = (zone + sgn * target) - edge_y
+            for k, r in enumerate(P):
+                if r.y == edge_y and k != i:
+                    r.y += d
+            P[i].x = round(p.x + d * (q.x - p.x) / (q.y - p.y))
+            P[i].y += d
+            done.append(f"{name} arm at {edge_y} {abs(edge_y - zone)}>{target}")
+    return done
+
+
+def across(g, sign, lo, hi, min_len=60):
+    """A diagonal stroke's width as the stroke audit reads it: the two longest parallel straight edges leaning one way
+    with their middles in the band, the distance between their lines (the mean, if they are not quite parallel)."""
+    import math
+    L = []
+    for c in g.contours:
+        P, n = c.points, len(c.points)
+        for i in range(n):
+            a_, b_ = P[i], P[(i + 1) % n]
+            if b_.type != "line" or a_.type is None:
+                continue
+            dx, dy = b_.x - a_.x, b_.y - a_.y
+            ln = math.hypot(dx, dy)
+            if ln < min_len or abs(dy) < 1 or not 0.2 < abs(dx / dy) < 5 or (dx / dy > 0) != (sign > 0):
+                continue
+            if not lo <= (a_.y + b_.y) / 2 < hi:
+                continue
+            L.append((ln, (a_.x, a_.y), (b_.x, b_.y)))
+    best = None
+    for i in range(len(L)):
+        for j in range(i + 1, len(L)):
+            (l1, a1, b1), (l2, a2, b2) = L[i], L[j]
+            d1 = ((b1[0] - a1[0]) / l1, (b1[1] - a1[1]) / l1)
+            d2 = ((b2[0] - a2[0]) / l2, (b2[1] - a2[1]) / l2)
+            if abs(abs(d1[0] * d2[0] + d1[1] * d2[1]) - 1) > 1e-3:
+                continue
+            w1 = abs((a2[0] - a1[0]) * d1[1] - (a2[1] - a1[1]) * d1[0])
+            w2 = abs((a1[0] - a2[0]) * d2[1] - (a1[1] - a2[1]) * d2[0])
+            w = (w1 + w2) / 2
+            if 25 < w < 120 and (best is None or l1 + l2 > best[0]):
+                best = (l1 + l2, w)
+    return round(best[1], 1) if best else None

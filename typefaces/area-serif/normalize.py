@@ -1213,6 +1213,7 @@ def normalize(font):
     print("hair: thin places", HAIR.hairlines(font))  # ladder's hairline (J f 5 G 6 9 8 C c e), the inner node moves
     print("hair: spines", HAIR.spines(font))         # 0.84 (pass 2, strokes 3): S s one swell, widest at the middle
     print("hair: bowls", HAIR.bowl_sides(font))      # 0.84 (pass 2, strokes 4): B's upper bowl P's side
+    print("hair: diagonals", HAIR.diagonals(font))   # 0.84 (pass 2, strokes 5): X x halves, capital thick 86, Z arms
     #                                                   curvature; before spacing and the charset, so ³ ₃ ¾ follow
     delta, moved, opened = SPACING.run(font)          # last: it reads the finished outlines
     CLEAN.owner_final(font, json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "owner_edits.json"))))
