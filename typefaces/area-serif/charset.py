@@ -1616,6 +1616,7 @@ def primes(font, m):
     q = gp(font, "quotesingle")
     x0, y0, x1, y1 = bounds(q)
     p = moved(q, 0, 0, 1, 1, -14, ((x0 + x1) / 2, y0))
+    p = moved(p, 0, y1 - bounds(p)[3])                   # 0.84 (placement): the top on the quotes' (leaning, it fell 7)
     put(font, "minute", p, 0, [0x2032], lsb=40, rsb=40)
     w = bounds(p)[2] - bounds(p)[0]
     put(font, "second", union(p, moved(p, w + 40)), 0, [0x2033], lsb=40, rsb=40)
@@ -1846,6 +1847,9 @@ def letters_extra(font):
     """n preceded by apostrophe (deprecated but in Latin Extended-A), and sound recording copyright."""
     if not any(0x02BB in g.unicodes for g in font):                 # turned comma (okina), English auxiliary
         compose(font, "uni02BB", [("quoteleft", 0, 0)], font["quoteleft"].width, [0x02BB])
+    apos = next((g.name for g in font if 0x02BC in g.unicodes), None)    # 0.84 (placement): ʼ is ’
+    if apos is not None:
+        compose(font, apos, [("quoteright", 0, 0)], font["quoteright"].width, [0x02BC])
     compose(font, "napostrophe", [("quoteright", 0, 0), ("n", font["quoteright"].width - 30, 0)],
             font["quoteright"].width - 30 + font["n"].width, [0x0149])
     c = gp(font, "copyright")
@@ -3616,6 +3620,60 @@ def _place_dot(font, target_contour, src, hold):
     target_contour.points[:] = [Point(p.x + dx, p.y + dy, p.type, smooth=p.smooth) for p in c.points]
 
 
+# 0.84 (Regular pass 2, placement). The census found ’ and ‘ one drawing turned half round but spaced apart (’ 63 / 52,
+# advance 252; ‘ 55 / 57, 249; the doubles 63 / 52 against 55 / 58), ‘ a unit under ’ (808, 809), the low quotes a
+# drawing of their own beside the comma, and the modifier apostrophe ʼ a smaller drawing. The rules: a turned pair
+# is turned whole, its sides swapped and its top on the other's (the closing quote is the drawing, as the apostrophe
+# the text uses most); a double quote is two of its single at the single's sides and height, the gap between them
+# kept; the low single quote is the comma (Times New Roman, Lora, Inter; Georgia Pro draws its own), keeping its
+# sides; ʼ is ’ (as ʻ is ‘). The inverted ! and ? keep their own sides (OPTICAL_MORE fitted ¡).
+DOUBLES = (("quoteleft", "quotedblleft"), ("quoteright", "quotedblright"), ("quotesinglbase", "quotedblbase"),
+           ("quotesingle", "quotedbl"))
+
+
+def _shift(g, dx, dy):
+    for c in g.contours:
+        for p in c.points:
+            p.x, p.y = round(p.x + dx), round(p.y + dy)
+
+
+def _turn_pair(font, src, dst):
+    rsb = font[dst].width - bounds(gp(font, dst))[2]
+    _turned(font, src, dst)
+    if dst == "quoteleft":
+        sb, db = bounds(gp(font, src)), bounds(gp(font, dst))
+        _shift(font[dst], (font[src].width - sb[2]) - db[0], sb[3] - db[3])
+        font[dst].width = font[src].width
+    else:
+        font[dst].width = round(bounds(gp(font, dst))[2] + rsb)
+
+
+def _double(font, single, double):
+    g = font[double]
+    old = sorted((bounds(_contour_path(c)) for c in g.contours), key=lambda b: b[0])
+    sb = bounds(gp(font, single))
+    gap = round(old[len(old) // 2][0] - old[0][0])     # the second single's place (each single may be contours)
+    if double == "quotedblleft" and "quotedblright" in font:   # the turned pair's one gap (184 and 185)
+        o2 = sorted((bounds(_contour_path(c)) for c in font["quotedblright"].contours), key=lambda b: b[0])
+        gap = round(o2[len(o2) // 2][0] - o2[0][0])
+    g.clearContours()
+    pen = g.getPen()
+    for k in range(2):
+        font[single].draw(TransformPen(pen, Transform(1, 0, 0, 1, k * gap, 0)))
+    g.width = round(font[single].width + gap)
+    REBUILT.add(double)
+
+
+def low_quote(font):
+    """The low single quote is the comma, its sides kept."""
+    if "comma" not in font or "quotesinglbase" not in font:
+        return
+    g = font["quotesinglbase"]
+    b = bounds(gp(font, "quotesinglbase"))
+    lsb, rsb = b[0], g.width - b[2]
+    put(font, "quotesinglbase", gp(font, "comma"), 0, list(g.unicodes), lsb=round(lsb), rsb=round(rsb))
+
+
 def _turned(font, src, dst):
     """dst is src turned half round within dst's own box (inverted marks, the opening quote)."""
     from fontTools.pens.transformPen import TransformPen as TP
@@ -3636,24 +3694,9 @@ def turned_pairs(font):
     """Again at the very end of the build: the node and join rules run after charset and may cut a curve of one
     glyph and not of its turned twin."""
     for src, dst in (("exclam", "exclamdown"), ("question", "questiondown"), ("quoteright", "quoteleft")):
-        w = font[dst].width
-        rsb = w - bounds(gp(font, dst))[2]
-        _turned(font, src, dst)
-        font[dst].width = round(bounds(gp(font, dst))[2] + rsb)
-    for single, double in (("quoteleft", "quotedblleft"), ("quoteright", "quotedblright"), ("quotesinglbase", "quotedblbase"),
-                           ("quotesingle", "quotedbl")):
-        g = font[double]
-        old = sorted((bounds(_contour_path(c)) for c in g.contours), key=lambda b: b[0])
-        sb = bounds(gp(font, single))
-        rsb = g.width - max(b[2] for b in old)
-        g.clearContours()
-        pen = g.getPen()
-        for b in old:
-            font[single].draw(TransformPen(pen, Transform(1, 0, 0, 1, round(b[0] - sb[0]), round(old[0][1] - sb[1]))))
-        for c in g.contours:
-            for p in c.points:
-                p.x, p.y = round(p.x), round(p.y)
-        g.width = round(bounds(gp(font, double))[2] + rsb)
+        _turn_pair(font, src, dst)
+    for single, double in DOUBLES:
+        _double(font, single, double)
 
 
 def no_steps(font, names=("Germandbls",)):
@@ -3725,27 +3768,12 @@ def one_drawing(font):
         if dots:
             _place_dot(font, min(dots, key=lambda c: min(p.y for p in c.points)), "period", "bottom")
     done.append(question_ball(font))
+    low_quote(font)
     for src, dst in (("exclam", "exclamdown"), ("question", "questiondown"), ("quoteright", "quoteleft")):
-        w = font[dst].width
-        rsb = w - bounds(gp(font, dst))[2]
-        _turned(font, src, dst)
-        font[dst].width = round(bounds(gp(font, dst))[2] + rsb)
+        _turn_pair(font, src, dst)
         done.append(dst)
-    for single, double in (("quoteleft", "quotedblleft"), ("quoteright", "quotedblright"), ("quotesinglbase", "quotedblbase"),
-                           ("quotesingle", "quotedbl")):
-        g = font[double]
-        old = sorted((bounds(_contour_path(c)) for c in g.contours), key=lambda b: b[0])
-        sb = bounds(gp(font, single))
-        rsb = g.width - max(b[2] for b in old)
-        g.clearContours()
-        pen = g.getPen()
-        for b in old:
-            font[single].draw(TransformPen(pen, Transform(1, 0, 0, 1, round(b[0] - sb[0]), round(old[0][1] - sb[1]))))
-        for c in g.contours:
-            for p in c.points:
-                p.x, p.y = round(p.x), round(p.y)
-        g.width = round(bounds(gp(font, double))[2] + rsb)
-        REBUILT.add(double)
+    for single, double in DOUBLES:
+        _double(font, single, double)
         done.append(double)
     g = font["bracketleft"]                                # the upper arm 51, the lower 50: the lower's
     ys = sorted({p.y for c in g.contours for p in c.points})
