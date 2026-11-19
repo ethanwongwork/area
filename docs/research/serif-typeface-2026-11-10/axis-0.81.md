@@ -2085,3 +2085,83 @@ What moved against snap083d: in the Regular, the Light and the Bold exactly the 
 | interpolation | 62 struck glyphs | the same |
 | Regular: evaluate, even, curvecheck, parts, audit_charset | | unchanged |
 | Regular: pathlint | 0 / 157 / 38 | 0 / 162 / 33 (the ~ ≈ end bends, above) |
+
+## Regular pass 2 (0.84), placement (19 November 2026)
+
+The owner's round 9 asked for every glyph's placement to be exact. A census of the Regular (`build/owner9/place/`:
+`census.py`, `composites.py`, `report.py`) listed 125 plain placement errors (list A) on snap083d (the same 125 on
+snap084a). This pass fixed them in the engine, by rule, in the order asked; each step built with `AREA_BOLD=0`
+(`build/owner9/place-fix/r1` .. `r6`), the census rerun on a copy of its scripts (`build/owner9/place-work/`), the
+glyphs looked at large, before (red outline) over after (black), and in a line of text (`build/owner9/place-fix/img/`,
+`pairs.py`, `text.py`). Items 2 to 6 were checked together in r4 to r6 and committed one by one after. Lists B (sizes)
+and C (ink) were not touched (B lost one entry by the way: a's bottom stroke).
+
+| # | Item | Was | Rule | Now |
+|---|---|---|---|---|
+| 1 | capital marks, marks on anchors | 64 capitals with the lowercase marks (dot 112 at 794 against Ċ's 94 at 787; caron and acute 759 against 780); Ḟ's dot 735; J́'s J at (7, 14) (derive scaled the unencoded composite as a "base" glyph) with its acute at 801; the capitals' dot below 4 under its anchor (BELOW -219), Ợ Ự 14; 83 first marks off their anchor (Ǽ (-7, 2), Ĵ (-5, -21), Ǵ Ḱ Ḿ Ǹ Ṕ 19 up, ǻ 29, 50 by one unit); 34 marks 3 to 6 from MARK_X inside its 6-unit band; ɑ's marks 35 to 37 left of a's rule | `charset.case_forms` (a capital's marks above in their .case form, the first on CAP_MARK_Y at the x it stood, `restack` STACK_GAP 13 over it, centred: the Vietnamese capitals' rule); marks below one form for both cases (the dot below dotbelowcomb's, -215 on its anchor); `marks_on_anchors` (after every mark rule the first mark above and below exactly on the letter's anchor, BOTTOM_ANCHOR 4 for H and s too; a drawn ring-and-acute's anchor where its letters put it); `MARK_BAND` 1; `derive.klass` (an unencoded accented letter is its letter's class); `alternates._body_cx` (the body from the bowl's left extreme, not the scan at 260) | 0 capitals with lowercase marks; J́ at (0, 0), acute.case at 780; marks off their anchor: only ĥ ḱ (by MARK_DROP's rule, below); audit_charset's marks worst 6 > 2 |
+| 2 | glyphs off their line | ɋ 518, ﬆ 536, π -3, ʌ 531, a æ ⱥ -9, ɓ -11, ﬁ ﬃ 519, Ə 722, % 735 / -13, ‰ 770 / -5, ¦ 732 | `balance.zone_lines` (a level edge within 2 of a flat line, a round extreme or vertex flat within 1 of a round line, stands on it with its handles; a foot cut within 3 under the baseline on it; ﬆ's s comes down by its overshoot); ʌ is v turned (`turned_v`); % ‰ zeros on the figures' round lines (`percent_fit`, `FIG_ROUND`); ¦ the bar's extent, its gap centred | all on their lines; % 732 wide (719) and ‰ 958 (924): the zeros keep FRAC_GAP from the bar |
+| 3 | signs on the axis | ∙ 255 (118 across), · 269, • 280; ▲ ▼ ▴ ▾ 354 / 272 / 336 / 290 (half way between box and centroid); diagonal arrows ±4; ⇧ 311.25 | triangles: the box's middle on the axis. Of 79 faces measured with ▲ and a minus, the serif ones put the box's middle within 0.03 of the height of the axis (Times New Roman +0.020, Literata -0.008), none the centroid (0.14 to 0.28 under); all eight triangles alike. Arrows and ⇧ by their ink, through the recipe's `at` (`_built_mid`), so each master builds them there; · • ∙ on the axis (Georgia Pro, Times New Roman, Source Serif 4, Literata, Newsreader within 5), · ∙ the period's dot; ŀ's dot the middle dot at no offset | all within 0.25 of 313 |
+| 4 | brackets | ( ) -176 / 767, [ ] -137 / 758, { } -137 / 767 | `charset.bracket_extent`: one top 767 (four of six), one bottom -164 (Georgia Pro's bottom-to-top ratio, -160 / 748, on 767; its ( [ { stand within 12 of each other); [ ]'s arms move whole, ( { scaled upright; the right forms mirrored | all six -164 / 767 |
+| 5 | quotes | ‘ 55 / 57, 249, top 808; ’ 63 / 52, 252; “ 55 / 58, 435; ” 63 / 52, 436; ‚ „ their own drawing (-147 to 105); ʼ a smaller drawing | `_turn_pair` (‘ is ’ turned, sides swapped, top on ’'s), `_double` (a double is two singles at the single's sides and height; “ takes ”'s gap), `low_quote` (‚ is the comma, its sides kept), ʼ is ’ | ‘ 52 / 63, 252; ” “ 436; every quote top 809; ‚ the comma (advance 257 > 274, „ 433 > 450) |
+| 6 | sidebearings | H 54 / 56, I 53 / 54, 0 61 / 60, . … · ' " ° the bar ¦ * ¤ ⁰ ₀ 1 apart | `spacing.symmetric_sides`: a drawing that is its own mirror within 1.6 (outline sampled, closing segments included) gets equal sides, the outline moved by whole units, an odd total gaining a unit; its accented letters follow; run after spacing (so Ħ Ɨ and the rest are built on the centred letter) and again before `finish` | all equal; advances +1 on I (and its 17 accented forms, IJ) 0 0.ss05 0.zero . … · ' " ° the bar ¦ * ¤ dieresis dotaccent dotbelow macron.case |
+
+Withdrawn after the full builds (both made the masters worse):
+
+- The head serifs on i's line (n m p r eng ɲ ᵽ ɍ ɦ's flag 529 > 530, ɽ 516 > 530, `balance.flag_line`). With n's corner
+  on 530 the masters' height pin read n's and m's arch differently: the Bold's counter top 464 > 469 (the arch 5
+  thinner), the Light's 490 > 487; audit_bold lost two level strokes; r's ball (528) left the pin and rose to 534 in the
+  Bold; ɽ took a 1.26 curvature fault in the Bold. Kept at 529 (and 516) until the pin tells a flag corner from an
+  arch's overshoot, or i's family takes 529 (not tried in a full build).
+- The primes on the quotes' top (802 > 809): the masters stopped growing them (Bold ′ 102 across as the Regular's, it
+  was 156). They keep 802.
+- ◀ ◂ as ▶ ▸ turned over (MIRRORS): the rotated triangles stand on half units and audit_charset failed the mirror by
+  rounding.
+
+What the census still lists (40 on snap084b; `build/owner9/place-084b/report.md`). report.py prints 21 of its A
+entries as fixed text whatever the font measures; `build/owner9/place-fix/fixed.py` measures them on the TTF:
+
+- Fixed, though the text stays: J́; "0 capitals carry lowercase marks" (an empty finding); ’ ‘ spacing; brackets; ∙;
+  ↖ ↗ ↘ ↙; ▲ ▼ ▴ ▾; · •; ʼ; ⇧; ‚ „ as the comma.
+- Held for the weights stage (as briefed): the four variable-font entries.
+- Left, with reasons: high quotes, the primes at 802 (above); ◀ ▶ / ◂ ▸ one unit apart (half units, above); one.tf
+  two.tf three.tf a half unit off centre and Î Ǐ 19 / 20 (an odd ink width in an even advance, or the reverse: whole
+  units cannot centre it); ≈ and ~ 96.4 to 515.6 (the wave is solved to the minus's width, 424; soft_ends trims its
+  end corners after, 2.4 a side: not changed here); ◆ 49.75 / 50.5 (its points on half units); o 45 / 46 (its outline
+  is 2.7 from its mirror by the closing-segment sampling, 1.55 by the census's: not read as symmetric, not moved);
+  y and ɏ at -209 (below); @ 701 (at.py's box, 0.985 of the cap from the references); ¡ 523 (¡ is ! turned in the cap
+  zone, -9 to 721, as Georgia Pro and Libre Baskerville set it; 523 is the stroke's cut end, not a zone edge); ĥ ḱ 19
+  over the anchor (MARK_DROP raises the dropped marks' anchors for the x-height letters and keeps an ascender's mark
+  where it was: one anchor cannot serve both); n m p r eng ɲ ᵽ ɍ 529 and ɽ 516 (withdrawn, above).
+
+y's tail. The tail rule (`loops.round_tail`, 0.81) keeps "ball, depth, stroke and reach": it does not choose y's depth,
+it inherits the drawing's (-209). Every reference measured puts y's lowest point with j's and g's (Georgia Pro p j g y
+all -217; Literata, Lora, Newsreader, Source Serif 4, Libre Baskerville y = j). So -209 is not intended by the rule;
+it was not changed here.
+
+### Full build (all masters), the audits, `build/snap084b`
+
+`caffeinate -i build.py` (23 min 28 s, `build/snap084b/build-084b.log`; the third full build of the pass, the first
+two in `build/owner9/place-fix/snap084b-first`, `-second`), the census on it (`build/owner9/place-084b/`), the audit
+set (`build/owner9/audit-084b/`) and the Regular's checks (`build/owner9/chk-084b/`) against snap084a's.
+
+| Audit | snap084a | snap084b |
+|---|---|---|
+| placement census A / B / C | 125 / 13 / 8 | 40 / 12 / 8 |
+| audit_axis Bold, Light | as 084a | the same |
+| audit_rays (300 to 800) | 2 glyphs | the same 2; a, ae, & thinnest at 300 within 0.6 |
+| audit_bold Bold / Light | 431 / 432, 432 / 432 | the same |
+| audit_kern | pass; under the floor 84 / 121 / 286 / 864 / 1683, least at 400 8.3 | pass; 80 / 109 / 280 / 842 / 1670, least at 400 9.3 (new under 13 at 400: f‘ f“ 11.0, ‚j „j 12.5, f] 12.9, aogonek.ss03 ) 12.1) |
+| curvecheck regions / hooks, Light and Bold | pass; 5 / 16 | the same |
+| interpolation | 62 struck glyphs | the same |
+| Regular: evaluate, curvecheck, parts | | unchanged |
+| Regular: even | a 2.0 | a 1.9 |
+| Regular: curvecheck hooks | 30 parts on 28 glyphs, 33 faults | 29 on 27, 33 (ʼ is now ’, a composite) |
+| Regular: audit_charset | 0 errors, marks worst 6 | 0 errors, marks worst 2 |
+| Regular: pathlint | 0 / 162 / 33 | 0 / 162 / 29 (the diagonal arrows' bends gone) |
+
+Glyphs changed: Regular 392, Light 339, Bold 335; in the masters 12 outside the Regular's set, each following a
+Regular change (the dot below and ogonek offsets as the dot and a moved, ª from a, the Light's .tf zeros one narrower).
+Advances changed in the Regular (46): I and its 17 accented forms, IJ, Istroke +1; 0 0.ss05 0.zero . … · ·.loclCAT
+' " ° | ¦ * ¤ dieresis dotaccent dotaccent.case dotbelow macron.case +1; ‘ ʻ 249 > 252, “ 435 > 436, ‚ 257 > 274,
+„ 433 > 450, ʼ 174 > 252, % 719 > 732, ‰ 924 > 958. The masters' follow (and ʌ, ﬆ, ∙, the Light's ⁰ ₀ by a unit or
+three). Kerning was not refit.
