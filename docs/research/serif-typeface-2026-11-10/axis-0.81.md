@@ -2165,3 +2165,99 @@ Advances changed in the Regular (46): I and its 17 accented forms, IJ, Istroke +
 ' " ° | ¦ * ¤ dieresis dotaccent dotaccent.case dotbelow macron.case +1; ‘ ʻ 249 > 252, “ 435 > 436, ‚ 257 > 274,
 „ 433 > 450, ʼ 174 > 252, % 719 > 732, ‰ 924 > 958. The masters' follow (and ʌ, ﬆ, ∙, the Light's ⁰ ₀ by a unit or
 three). Kerning was not refit.
+
+## Regular pass 2 (0.84), &, ~ ≈, @ second pass (19 November 2026)
+
+The owner was not satisfied with the first pass on these three ("still near 45 degree diagonals ... the inside seems a
+bit sharp"; the ampersand "not smooth, the stroke doesn't look continuous through the bottom intersection, the thicks
+and thins are not even/gradual"; the @'s "right side appears to protrude more"). A read-only audit measured them
+(`build/owner9/stroke/`, `special.py`); its scripts were the acceptance test. Each glyph built with `AREA_BOLD=0`
+(`build/owner9/pass2/r1` .. `r5`, `fast.sh`: diff against r0 = snap084b's Regular, the Regular's checks), looked at large
+with nodes and combs and in text (`build/owner9/pass2/{tilde,at,amp}/`), its masters checked by its own construction on
+snap084b's Light and Bold letters (curvecheck, `amp_masters.py`), committed before the next.
+
+| # | Glyph | Target | Before (0.84b) | After |
+|---|---|---|---|---|
+| 2 | ~ ≈ | slope at the inflection 20 to 25 | 31.7 | 23.0 (22.5 set; 20 read as a dash at 18 px, 25 steeper than needed at 96: `tilde/slopes-text.png`) |
+| | | edges true parallels, stress at most as before | stress 47 / 57 scaled; edges offset per span | one width 52 (`TILDE_STRESS` 0), each edge the centreline's parallel, quarters G2 at both ends (`signs.wave_sides`) |
+| | | inside radius at crest and trough at least 62 | 34 (centreline 71 / 76) | 131 (centreline 160, outside 189) |
+| | | no tangent break over 0.5 degrees | 2.95 (the end run) | 0.21 (no run: the ends are the wave's inflections) |
+| | | one sign change per edge, no bump | one; curvecheck 4 faults (7.86 across the middle) | one; curvecheck 0, worst 1.012 |
+| | | ≈ white normal to the strokes, spread under 4 | nearest 80 to 104 | nearest 90 to 102 (12): **not met**, see below |
+| | | ≈ white equal to ='s if operators share a gap | | the rules table puts ≈ on the equals' lines (Symbol system): at the crests 102 = ='s 102 |
+| | | mean width the minus's 52; ink the + box | 52.2; 418 of 424 (soft_ends trimmed after) | 52.1; 423.6 (the box solved on the softened ink; corners on 7 in the construction) |
+| 1 | & | each edge at both crossings one curve: offset ≤ 0.5, direction ≤ 0.5 | lower: 0.09 to 3.05 units, 0.41 to 2.3 degrees (7.9 apart at the middle) | lower 0.05 to 0.69, 0.21 to 0.68 (2.2 at the middle); upper 0.01 to 0.77, 0.25 to 0.58: **close, not met** |
+| | | width in = out (≤ 0.5) | lower 41.3 > 39.2 | lower 39.9 / 40.0; upper (spine) 43.6 / 43.3 |
+| | | width law: monotone, even, ≤ o's rate (0.157 per unit) | bowl 82 > 55 (plateau 55 over 80 units) > 41; bowl left 0.265 | 82 > 77 > 70 > 66 > 63 > 61 > 59 > 55 > 51 > 47 > 43 > 40; bowl left 0.165, spine 0.235 (was 0.325): **near, not under** |
+| | | the 0.7 dip where the diagonal turns into the loop | 74.3 > 73.2 > 74.0 | 74.2 > 73.2 > 73.8: **not removed** |
+| | | curvature: no jump over 1.5 at a node, no flat place | curvecheck 0, worst 1.14 | 0, worst 1.23 (the hidden nodes G2: the ease's two ends, the spine's inflection) |
+| | | masters | curvecheck 0 / 0 / 0 | 0 / 0 / 0, and at 0.3, 0.5, 0.7 between |
+| 3 | @ | right extreme within 0.03 of the centre | 0.107 | 0.020 |
+| | | curvature round the right monotone | 284 / 426 / 351 / 204 (tighten, loosen, tighten) | 416 to 422 from +55 to +5 degrees (within 1.5%), then falling steadily 376, 341, 304, 269, 241, 208 to the foot |
+| | | the dive starts lower, radius ≥ 280 where it was 204 | 204 at -40 | the tightening starts at 0 degrees (was +15); about 195 at -35 to -40: **not met** |
+| | | thin spot 25 degrees off the top | 41.5 (Regular) | 43 to 47 (none); every master steady to the top |
+| | | masters | curvecheck 0 / 0 / 0 | 0 / 0 / 0 and between |
+
+~ ≈ (`signs.tilde(parallel=True, whole=True)`, `wave_sides`, `whole_units`, `_g2_cubic`; `charset.TILDE_SLOPE` 22.5,
+`TILDE_STRESS` 0). Each quarter of each edge is one cubic solved for the parallel's own curvature at the crest or trough
+and 1/4000 at the inflection (G2 at both ends; 0 at the inflection cannot be told from a kink in whole units). The
+whole-unit rounding is a search (`whole_units`: each handle within 2 of its place, a smooth node's two together, a level
+extreme's along its axis) for one curvature across every node, no turn back of |k| inside a curve and no handle past
+the triangle. The ≈ white: two identical waves a vertical gap g apart are g cos(slope) apart along the normal at the
+inflections, so the spread is g (1 - cos 22.5) = 11.7 whatever their weight; under 4 needs a slope under 13 degrees
+or two different waves (the upper the lower's parallel: its trough's radius would be the crest's less the gap, 6).
+Kept identical (~ is one wave of ≈) on the equals' lines. The combining tilde is its own drawing and did not change.
+
+& (`amp.py`, `bowl_taper`, `even_ribbon` taper, `Chain.fixed` / `dip_w` / `infl_w`, `_round_eases`). The bowl's two
+edges run into the arm on an ease: a clothoid (radius 450 at the node on the diagonal's centreline to 2500 at the
+arm's line 100 past the diagonal) and its parallel at the arm's width, each one cubic G2 at both ends. Every corner is
+still found by intersection (the union of the two ribbons, computed edge by edge, so every master keeps one point
+structure). Tried and left (`build/owner9/pass2/amp/`): a node hidden on the centreline G2 into the straight arm (the
+bowl's turn bunched into the last 40 units: 3.2 units off), the ease from outside the diagonal (width 39.2 in and
+out, but the bowl's rise turned at the diagonal's edge: 1.1 to 2.3 off), the ease in two cubics, radii 300 to 700,
+lengths 80 to 150. The remaining 0.69 / 0.77 units are whole-unit rounding of corners and the quadratic each side
+reads over 60 units of a curve that still turns. The arm's lower part now curves very slightly into the crossing.
+
+@ (`at.py`: `RISE` 0.02, `DIVE`, `_dive`, `_spiral`, `Ring.mono`, `Ring.tight`; `soft_cut` on the tail). Lowering the
+extreme alone broke the foot (1.28, 2.71 in 0.84a); a spiral from the extreme to a foot moved a little lower and right
+keeps one curvature down to the a. The dive's tightest (about 195) is where the ring meets the a's own foot curve
+(radius 80 to 140): a larger radius there needs the foot 30 to 60 lower than the a's bowl (tried: 450 / 220 put the
+a's foot under its bowl with a tight inner hook) or a different a. The tail's cut corners were sharp and are now on 7.
+The first full build showed the Bold's @ ring thinning 25 to 40 degrees off the top (39 against 53 at the top: the
+inside of the upper right quarter, solved alone, went boxier than the outside once the extreme was lowered; audit_axis
+Bold thin, audit_rays). Fixed by rule (`at.construct`: that quarter's inside takes the outside's shares of its reach;
+`DIVE["re"]` a share of the ring's half width): the ring now thins steadily from the side to the top in every master
+(Regular 60 > 43, Light 51 > 37, Bold 73 > 53). A second @ commit; the build below is the second full build (the first
+is kept in `build/owner9/pass2/snap084c-first`, its audits beside it).
+
+Images: `build/owner9/pass2/tilde/` (`slopes-*.png` 20 / 22.5 / 25 big and in text; `item2-*.png` before over after,
+combs, text; `masters-approxequal.png` 300 to 800), `amp/` (`item1-big.png`, `item1-text.png`, `item1-crossings.png`
+the two crossings at 5x with combs, `profile-before.png` / `profile-after.png` the width along the ribbon,
+`masters-ampersand.png`), `at/` (`item3-big.png`, `item3-text.png`, `masters-at.png`). The stroke audit on snap084c:
+`build/owner9/stroke-084c/` (`special.md`, `amp-profile.png`, `tilde.png`, `at.png`).
+
+### Full build (all masters), the audits, `build/snap084c`
+
+`caffeinate -i build.py` (26 min 32 s, `build/snap084c/build-084c.log`), the audit set by `fullaudit.sh`
+(`build/owner9/pass2/audit-084c/`) and the Regular's checks (`chk-084c/`) against snap084b's.
+
+What moved against snap084b: in every master exactly & @ ~ ≈ (the mid layer & @). Advances: none in the Regular; ~ ≈
+in the Light +2 (508 > 510, 610 > 612) and the Bold -2 (510 > 508, 612 > 610): the box is now solved on the softened
+ink. Kerning keys moved: Regular 1 (ŀ ~ 15 > 16), Light 22 and Bold 39 (pairs with @ and &; kerning not refit).
+
+| Audit | snap084b | snap084c |
+|---|---|---|
+| audit_axis Bold / Light: turns | ≈ an inflection at 751 / at 318 | ok / ok |
+| audit_axis thin | cedi, ogonek x 2, one.ss01 | the same |
+| audit_rays | 2 glyphs (6; @ thicker at 300 / 350 than at 400 by its foot) | 1 glyph (6) |
+| audit_bold Bold / Light, audit_kern | as 084b | the same |
+| curvecheck regions / hooks, Light and Bold; interpolation | pass; 62 struck | the same |
+| curvecheck on the glyph, Light / Regular / Bold / mid | & 0/0/0/0; @ 0/0/0/0; ~ ≈ 2/4/2 | all 0 (worst & 1.23, @ 1.24, ~ 1.03) |
+| Regular: evaluate, even, parts, curvecheck, audit_charset | | unchanged |
+| Regular: pathlint | 0 / 162 / 29 | 0 / 156 / 30 (the ~ ≈ bends gone; an INFO on @'s inner middle node, 1.0 degree) |
+
+Left, honestly: ≈'s white along the normal (12, a property of two equal waves); the &'s crossings at 0.69 / 0.77 units
+and 0.68 / 0.58 degrees (target 0.5); its bowl's fastest taper 0.165 per unit and the spine's 0.235 against o's 0.157;
+the 0.7 dip where the diagonal turns into the loop; the @'s dive, about 195 where the target was 280. Not done: no
+reference faces were measured this pass (Georgia and the rest are not needed for these targets); the review page and
+its tools were not touched; the masters were not tuned, they build by the same constructions.
