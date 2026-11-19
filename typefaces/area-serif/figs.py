@@ -492,3 +492,174 @@ def nine_even(font):
         return "9: " + note + "; 6 left (its points are not the 9's turned)"
     _put(g6, turned)
     return "9: " + note + "; 6 the 9 turned"
+
+
+# ------------------------------------------------------------------ 0.83 Regular pass, letters 2: Q's tail leaves as a stroke
+# The audit (A3): Q's tail began in a small curl: the straight upper edge ran into a long flat curve to the end's
+# leftmost point and then turned tight round the end (6.89 times the curvature at the leftmost node, radius 338 into
+# 49), and the underside rose out of the end through two curves each with an inflection inside it and a flat place: a
+# knob under the bowl at display size. No rule covered it. The construction (`q_tail`): the tail's start is a round
+# end of the stroke's own width, as a stroke's end is: a circle whose diameter is the stroke across at the end (the
+# underside's first node from the straight upper edge's line), tangent to that line, its leftmost point where the
+# drawing's was (the tail's reach kept); the edge runs straight into it, the end is three arcs (to the leftmost, to the
+# lowest, up to the underside's inflection), each a cubic at the circle's own handle (4/3 tan of a quarter of its
+# angle), so the curvature round the end is one; at the inflection node the underside turns concave and runs over its
+# level top into the wave, the top's place and the handles solved for one curvature at the top (aim Q_RATIO) and no
+# curvecheck fault, nearest the drawn wave. The bowl, the wave beyond the first node down and the tip are not moved.
+Q_RATIO = 1.12
+
+
+def q_tail(font):
+    import numpy as np
+    import curvecheck as K
+    from scipy.optimize import minimize
+    if "Q" not in font:
+        return "no Q"
+    g = font["Q"]
+    cs = _pts(g)
+    P0, rest = cs[0], cs[1:]
+    on = [i for i, q in enumerate(P0) if q[2]]
+    Ls = [i for i in on if P0[i][2] == "line" and P0[i][1] < -50 and P0[i][0] < 400]
+    if not Ls:
+        return "Q: no straight edge into the tail"
+    L = Ls[0]
+    seq = [j for j in on if L <= j <= L + 15]
+    if len(seq) != 6 or any(b - a != 3 for a, b in zip(seq, seq[1:])):
+        return f"Q: the tail's start is not five curves ({seq}); left"
+    i10, i13, i16, i19, i22 = seq[1:]
+    yr = (-1000, 2000)
+    bad0, w0 = K.report("Q", cs, yr)[:2]
+    A = np.array(P0[L - 1][:2], float)
+    B = np.array(P0[L][:2], float)
+    d = (B - A) / np.linalg.norm(B - A)
+    nrm = np.array([-d[1], d[0]])
+    if nrm[1] > 0:
+        nrm = -nrm
+    v = np.array(P0[i16][:2], float) - A
+    w = abs(v[0] * d[1] - v[1] * d[0])                 # the stroke across at the end
+    r = w / 2
+    left = min(P0[i][0] for i in range(L, i16))
+    off = A + nrm * r
+    C = off + d * (((left + r) - off[0]) / d[0])
+    T = C - nrm * r
+
+    def arc(a0, a1):
+        p0 = C + r * np.array([math.cos(a0), math.sin(a0)])
+        p3 = C + r * np.array([math.cos(a1), math.sin(a1)])
+        k = 4 / 3 * math.tan(abs(a1 - a0) / 4) * r
+        t0 = np.array([-math.sin(a0), math.cos(a0)])
+        t3 = np.array([-math.sin(a1), math.cos(a1)])
+        return p0, p0 + t0 * k, p3 - t3 * k, p3
+
+    d22 = np.array(P0[i22 - 1][:2], float) - np.array(P0[i22][:2], float)
+    d22 /= np.linalg.norm(d22)
+
+    def build(x):
+        phi, x19, y19, a17, a18, a20, a21 = x
+        P = [list(q) for q in P0]
+        aT = math.atan2(*(T - C)[::-1])
+        a10, a13, a16 = math.pi, 1.5 * math.pi, 1.5 * math.pi + phi
+        while aT > a10:
+            aT -= 2 * math.pi
+        while aT < a10 - 2 * math.pi:
+            aT += 2 * math.pi
+        for s, e, i in ((aT, a10, L), (a10, a13, i10), (a13, a16, i13)):
+            for k, p in enumerate(arc(s, e)):
+                P[i + k][:2] = list(p)
+        tan16 = np.array([-math.sin(a16), math.cos(a16)])
+        P[i16 + 1][:2] = list(np.array(P[i16][:2]) + tan16 * a17)
+        P[i19][:2] = [x19, y19]
+        P[i19 - 1][:2] = [x19 - a18, y19]
+        P[i19 + 1][:2] = [x19 + a20, y19]
+        P[i22 - 1][:2] = list(np.array(P0[i22][:2]) + d22 * a21)
+        return [tuple(q) for q in P]
+
+    def samp(P, a, b, k=30):
+        out = []
+        for s in range(a, b, 3):
+            p = [P[s][:2], P[s + 1][:2], P[s + 2][:2], P[s + 3][:2]]
+            for m in range(k):
+                t = m / k
+                u = 1 - t
+                out.append(tuple(u ** 3 * p[0][j] + 3 * u * u * t * p[1][j] + 3 * u * t * t * p[2][j] + t ** 3 * p[3][j]
+                                 for j in (0, 1)))
+        return np.array(out)
+
+    ref = samp(P0, i19, i22 + 3)
+
+    def mine(b):                                       # a fault on the end, the underside or the top
+        return any(f"node {i} " in b or f"curve {i}-" in b for i in range(L, i22 + 1))
+
+    def reading(P):
+        bad, worst, N, Cv, E, V = K.report("Q", [P] + rest, yr)
+        rs = [r_ for i, xy, g1, ka, kb, r_, fl, kinds in N if kinds == "CC" and r_ is not None and not fl
+              and seq[0] <= i <= i22]
+        return bad, rs
+
+    def cost(x):
+        P = build(x)
+        bad, rs = reading(P)
+        pen = 10 * len([b for b in bad if mine(b)]) + 200 * sum(max(0, r_ - Q_RATIO) ** 2 for r_ in rs)
+        D = np.sqrt(((samp(P, i19, i22 + 3)[:, None, :] - ref[None, :, :]) ** 2).sum(-1))
+        pen += 0.01 * (D.min(1) ** 2).mean() + 0.001 * (x[2] - P0[i19][1]) ** 2
+        pen += sum((12 - a) ** 2 for a in x[3:] if a < 12)
+        pen += neck(P)
+        return pen
+
+    def neck(P):                                       # the stroke never under 0.9 of the end: no ball on a neck
+        S = samp(P, i16, i19, 20) - A
+        across = np.abs(S[:, 0] * d[1] - S[:, 1] * d[0])
+        return float((np.maximum(0, 0.9 * w - across) ** 2).sum())
+
+    def whole(x):                                      # on whole units
+        P = [[round(q[0]), round(q[1]), q[2], q[3]] for q in build(x)]
+        # the straight edge's line runs on into the end, and the inflection's handles are on one line: on whole units the
+        # node and handle are the integer points nearest their places that put the handle within half a degree of the line (a short
+        # handle rounded alone turns up to 3 degrees)
+        for prev, node, hnd in ((L - 1, L, L + 1), (i16 - 1, i16, i16 + 1)):
+            best = None
+            x0_, y0_ = P[node][:2]
+            hx, hy = P[hnd][:2]
+            for dx in (-1, 0, 1):
+                for dy in (-1, 0, 1):
+                    t_ = (x0_ + dx, y0_ + dy)
+                    for ex in range(-2, 3):
+                        for ey in range(-2, 3):
+                            q = (hx + dx + ex, hy + dy + ey)
+                            u1 = math.atan2(t_[1] - P[prev][1], t_[0] - P[prev][0])
+                            u2 = math.atan2(q[1] - t_[1], q[0] - t_[0])
+                            off = abs((math.degrees(u2 - u1) + 180) % 360 - 180)
+                            key = (round(off, 2) > 0.5, abs(dx) + abs(dy) + 0.5 * (abs(ex) + abs(ey)), off)
+                            if best is None or key < best[0]:
+                                best = (key, t_, q)
+            P[node][:2] = list(best[1])
+            P[hnd][:2] = list(best[2])
+            P[node - 1][:2] = [P[node - 1][0] + best[1][0] - x0_, P[node - 1][1] + best[1][1] - y0_] if P[node - 1][2] is None else P[node - 1][:2]
+        return [tuple(q) for q in P]
+
+    cands = []
+    for phi0 in (25, 40, 55):                          # the inflection's place: three starts, the best on whole units
+        x = [math.radians(phi0), P0[i19][0], P0[i19][1], 20, 30, 36, 40]
+        for m in ("Nelder-Mead", "Powell", "Nelder-Mead"):
+            x = minimize(cost, x, method=m, options={"maxiter": 8000}).x
+        def cost_w(x_):                                # then on whole units (the rounding can leave a flat place)
+            Pw_ = whole(x_)
+            b_, r_ = reading(Pw_)
+            return (10 * len([q for q in b_ if mine(q)]) + 200 * sum(max(0, v - Q_RATIO) ** 2 for v in r_)
+                    + neck(Pw_) + 0.01 * cost(x_))
+        if cost_w(x) >= 10:
+            x = minimize(cost_w, x, method="Nelder-Mead", options={"maxiter": 600, "initial_simplex": [
+                list(x)] + [list(np.array(x) + np.eye(len(x))[k] * (0.03 if k == 0 else 2.0)) for k in range(len(x))]}).x
+        Pw = whole(x)
+        bw, rw = reading(Pw)
+        cands.append(((len([b_ for b_ in bw if mine(b_)]) + (neck(Pw) > 4), max(rw or [1.0]), cost(x)), Pw))
+    cands.sort(key=lambda c_: c_[0])
+    P = [list(q) for q in cands[0][1]]
+    P = [tuple(q) for q in P]
+    bad = [b for b in reading(P)[0] if mine(b)]
+    note = (f"end {w:.0f} across (radius {r:.1f}), worst ratio {w0:.2f} > {K.report('Q', [P] + rest, yr)[1]:.2f}, "
+            f"faults {len(bad0)} > {len(reading(P)[0])}")
+    if bad:
+        return "Q left: " + note + "; " + "; ".join(bad)
+    _put(g, [P] + rest)
+    return "Q: " + note
