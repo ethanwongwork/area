@@ -1531,11 +1531,23 @@ INF_H = 0.78
 # the crests' radius is about 2 strokes. Its weight: the damped stress scaled so the mean width along the centreline is
 # the plain stroke's (52), read on the wave itself (`tilde_k`), so ~ has the minus's colour at any slope
 TILDE_SLOPE = 32.0
+# 0.84 (Regular pass 2, second pass; the owner: "still near 45 degree diagonals, not gentle waves. the inside seems a
+# bit sharp of an angle still. the negative space isn't even"): measured on 0.84a, 31.7 degrees at the inflections,
+# the inside edges' radius 34 at crest and trough where a parallel of the centreline gives 45 to 50 (the stress, laid
+# across a tight crest, tightened the inside), a 2.95-degree break where the straight end run met the wave, and the
+# ink 2.4 a side short of the + box (soft_ends trimmed the end corners after the box was solved). Now: the wave 22.5
+# degrees at its inflections (20, 22.5 and 25 set in text beside - + =; build/owner9/pass2/tilde), both edges the
+# centreline's parallels (signs.wave_sides: each quarter G2 at its two ends), the ends the wave's own inflections cut
+# square (no run), the box solved on the softened ink. TILDE_STRESS: the share of the signs' damped stress (47 level,
+# 57 upright) laid on, symmetric about the centreline; 0, a stroke of one width, so the edges are true parallels
+TILDE_SLOPE = 22.5
+TILDE_STRESS = 0.0
 
 
-def tilde_k(slope, mean=None):
+def tilde_k(slope, mean=None, lo=None, hi=None):
     """The stress's scale so the stroke's mean width along a sine centreline of this inflection slope is the plain
-    stroke's ((SIGN_LO + SIGN_HI) / 2, the minus's 52)."""
+    stroke's ((SIGN_LO + SIGN_HI) / 2, the minus's 52); lo, hi the stress's level and upright widths (the signs')."""
+    lo, hi = (SIGN_LO if lo is None else lo), (SIGN_HI if hi is None else hi)
     mean = mean or (SIGN_LO + SIGN_HI) / 2
     k = math.tan(math.radians(slope))
     n, tot, ln = 720, 0.0, 0.0
@@ -1543,9 +1555,11 @@ def tilde_k(slope, mean=None):
         t = (i + 0.5) / n
         dy = k * math.cos(2 * math.pi * t)               # dy/dx of y = k / (2 pi) sin (2 pi t), x = t
         ds = math.sqrt(1 + dy * dy)
-        tot += (SIGN_LO + (SIGN_HI - SIGN_LO) * dy * dy / (1 + dy * dy)) * ds
+        tot += (lo + (hi - lo) * dy * dy / (1 + dy * dy)) * ds
         ln += ds
     return mean / (tot / ln)
+
+
 INF_W = 1.50
 POINTED = 0.60                     # 0.83 (consistency 0d): the pointed shapes' area over the circle's (symbols 1: 0.70)
 
@@ -1570,18 +1584,27 @@ def tilde_signs(font, m, adv):
     mb = bounds(gp(font, "minus"))
     want = mb[2] - mb[0]
 
-    K_ = tilde_k(TILDE_SLOPE)
+    mid_ = (SIGN_LO + SIGN_HI) / 2
+    lo_ = mid_ + (SIGN_LO - mid_) * TILDE_STRESS
+    hi_ = mid_ + (SIGN_HI - mid_) * TILDE_STRESS
+    K_ = tilde_k(TILDE_SLOPE, lo=lo_, hi=hi_)
 
     def tilde_info(cys, x0, x1):
         return dict(build="tilde", params=dict(x0=x0, x1=x1, cys=cys, amp=TILDE_AMP, slope=TILDE_SLOPE,
-                                               lo=SIGN_LO * K_, hi=SIGN_HI * K_))
+                                               lo=lo_ * K_, hi=hi_ * K_, run=0.0, parallel=True))
     x0, x1 = mb[0], mb[2]
-    for _ in range(30):                                  # the centreline's ends so the ink is the minus's width
-        b = bounds(built_path(tilde_info([cy], x0, x1)))
+    for _ in range(30):                                  # the centreline's ends so the ink, its end corners softened
+        b = bounds(built_path(tilde_info([cy], x0, x1)))   # (its corners softened by the construction) is the minus's width
         d = (want - (b[2] - b[0])) / 2
         if abs(d) < 0.01:
             break
         x0, x1 = x0 - d, x1 + d
+    _info = tilde_info
+
+    def tilde_info(cys, x0, x1):                         # 0.84 pass 2: the stored recipe puts its points on whole units
+        d_ = _info(cys, x0, x1)                          # itself (signs.whole_units), keeping its curvature
+        d_["params"]["whole"] = True
+        return d_
     # kept as constructions (put_built): each master builds the same wave at its own stroke (the engine read the
     # wave's near-straight quarters and gave them an inflection between the masters)
     put_built(font, "asciitilde", tilde_info([cy], x0, x1), 0, [0x7E],

@@ -499,6 +499,277 @@ def ribbon(C, nodes, width):
     return out
 
 
+WAVE_INFL_R = 4000.0   # 0.84 (pass 2): an edge's radius where it reaches an inflection node (not 0: a node where both
+                       # sides read flat cannot be told from a kink in whole units; at 4000 the curvature still only
+                       # falls from the extreme to the node, curvecheck reads the node as a flip, and whole-unit
+                       # rounding, at most 0.6e-4, leaves its sign)
+
+
+def _g2_cubic(p0, T0, k0, p3, T1, k1):
+    """The cubic from p0 (leaving along T0, signed curvature k0) to p3 (arriving along T1, curvature k1): both
+    handle lengths solved so the curvature at each end is the one asked (G2 Hermite). None if no positive pair."""
+    cr = lambda a, b: a[0] * b[1] - a[1] * b[0]                 # noqa: E731
+    D = (p3[0] - p0[0], p3[1] - p0[1])
+    c = cr(T0, T1)
+    if abs(c) < 1e-12:
+        return None
+
+    def fa(a):
+        b = (cr(T0, D) - 1.5 * k0 * a * a) / c
+        return 1.5 * k1 * b * b - (cr(D, T1) - a * c)
+    span = math.hypot(*D)
+    grid = [span * (i + 1) / 400 for i in range(400)]
+    vals = [fa(a) for a in grid]
+    for i in range(len(grid) - 1):
+        if vals[i] * vals[i + 1] > 0:
+            continue
+        lo_, hi_ = grid[i], grid[i + 1]
+        for _ in range(80):
+            mid = (lo_ + hi_) / 2
+            if fa(lo_) * fa(mid) <= 0:
+                hi_ = mid
+            else:
+                lo_ = mid
+        a = (lo_ + hi_) / 2
+        b = (cr(T0, D) - 1.5 * k0 * a * a) / c
+        if a > 0 and b > 0:
+            return (p0, (p0[0] + T0[0] * a, p0[1] + T0[1] * a), (p3[0] - T1[0] * b, p3[1] - T1[1] * b), p3)
+    return None
+
+
+def wave_sides(C, nodes, width, extremes, r_infl=WAVE_INFL_R):
+    """0.84 (Regular pass 2, item 2, second pass): a wave's two edges, each the parallel of the centreline C at half
+    the width (laid on symmetrically along the normal). Each span runs between an extreme (a crest or trough of the
+    centreline; `extremes` the node parameters that are) and an inflection; its cubic is solved for the edge's own
+    curvature at the extreme (read on the parallel itself) and WAVE_INFL_R at the inflection (G2 at both ends), so the
+    curvature only falls from the extreme to the inflection and changes sign there once. Returns (left, right)."""
+    h = 1e-5
+
+    def edge(t, sg):
+        (x, y), (xa, ya), (xb, yb) = C(t), C(t - h), C(t + h)
+        dx, dy = xb - xa, yb - ya
+        m = math.hypot(dx, dy)
+        w = width(t) / 2 * sg
+        return (x - dy / m * w, y + dx / m * w)
+
+    def k_at(t, sg, e=1e-3):
+        a, b, c = edge(t - e, sg), edge(t, sg), edge(t + e, sg)
+        d1 = ((c[0] - a[0]) / 2, (c[1] - a[1]) / 2)
+        d2 = (c[0] - 2 * b[0] + a[0], c[1] - 2 * b[1] + a[1])
+        return (d1[0] * d2[1] - d1[1] * d2[0]) / math.hypot(*d1) ** 3
+
+    def tan(t, sg):
+        return unit(edge(t - 1e-4, sg), edge(t + 1e-4, sg))
+    sides = []
+    for sg in (1, -1):
+        segs = []
+        for t0, t1 in zip(nodes, nodes[1:]):
+            ext0 = any(abs(t0 - e) < 1e-9 for e in extremes)
+            te, ti = (t0, t1) if ext0 else (t1, t0)
+            ke = k_at(te, sg)
+            Te, Ti = tan(te, sg), tan(ti, sg)
+            if not ext0:                                    # solved from the extreme towards the inflection
+                Te, Ti = (-Te[0], -Te[1]), (-Ti[0], -Ti[1])
+                ke = -ke
+            ki = math.copysign(1.0 / r_infl, ke)
+            s3 = _g2_cubic(edge(te, sg), Te, ke, edge(ti, sg), Ti, ki)
+            if s3 is None:
+                raise ValueError("wave_sides: no G2 cubic for a span")
+            segs.append(s3 if ext0 else (s3[3], s3[2], s3[1], s3[0]))
+        sides.append(segs)
+    return sides
+
+
+def _cubic_split(s, t):
+    lerp = lambda a, b: (a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t)   # noqa: E731
+    a, b, c = lerp(s[0], s[1]), lerp(s[1], s[2]), lerp(s[2], s[3])
+    d, e = lerp(a, b), lerp(b, c)
+    f = lerp(d, e)
+    return (s[0], a, d, f), (f, e, c, s[3])
+
+
+def _cut_back(s, r, at_end):
+    """The cubic s less its last (at_end) or first r units of arc."""
+    n = 400
+    pts = [_cubic_split(s, i / n)[0][3] if 0 < i < n else (s[0] if i == 0 else s[3]) for i in range(n + 1)]
+    seq = range(n, 0, -1) if at_end else range(n)
+    acc = 0.0
+    for i in seq:
+        j = i - 1 if at_end else i + 1
+        acc += math.dist(pts[i], pts[j])
+        if acc >= r:
+            return _cubic_split(s, j / n)[0] if at_end else _cubic_split(s, j / n)[1]
+    return s
+
+
+def _soft_wave(L, R, r):
+    """A wave's outline from its two edges (lists of cubics, both running from the start to the end), each end cut
+    square between the edges' end points, both corners of each cut on the letters' radius r as soft_ends rounds a
+    plain stroke's (the edge cut back r along itself, the cut r in, handles 0.55 of the way to the corner, along the
+    edge's own tangent). Starts at the end cut's lower point; the closing line is that cut."""
+    k = 0.55
+    A, B = L[-1][3], R[-1][3]              # the end cut: top corner (left edge), bottom corner (right edge)
+    Cc, D = R[0][0], L[0][0]               # the start cut: bottom corner, top corner
+    Lf = [_cut_back(L[0], r, False)] + list(L[1:-1]) + [_cut_back(L[-1], r, True)]
+    Rf = [_cut_back(R[0], r, False)] + list(R[1:-1]) + [_cut_back(R[-1], r, True)]
+    rev = [(c[3], c[2], c[1], c[0]) for c in reversed(Rf)]
+
+    def toward(p, q, ln):
+        u_ = unit(p, q)
+        return (p[0] + u_[0] * ln, p[1] + u_[1] * ln)
+
+    def corner(p, tp, c, q):
+        # from p (leaving along tp) round the corner c to q on the straight cut
+        lp, lq = k * math.dist(p, c), k * math.dist(q, c)
+        return ("c", (p[0] + tp[0] * lp, p[1] + tp[1] * lp), toward(q, c, lq), q)
+
+    def corner_in(p, c, q, tq):
+        # from p on the cut round c to q, arriving along tq
+        lp, lq = k * math.dist(p, c), k * math.dist(q, c)
+        return ("c", toward(p, c, lp), (q[0] - tq[0] * lq, q[1] - tq[1] * lq), q)
+    a1, a2 = Lf[-1][3], toward(A, B, r)
+    b1, b2 = toward(B, A, r), rev[0][0]
+    c1, c2 = rev[-1][3], toward(Cc, D, r)
+    d0, d1 = toward(D, Cc, r), Lf[0][0]
+    out = [b1, corner_in(b1, B, b2, unit(rev[0][0], rev[0][1]))]
+    out += [("c", c[1], c[2], c[3]) for c in rev]
+    out += [corner(c1, unit(rev[-1][2], rev[-1][3]), Cc, c2), d0, corner_in(d0, D, d1, unit(Lf[0][0], Lf[0][1]))]
+    out += [("c", c[1], c[2], c[3]) for c in Lf]
+    out += [corner(a1, unit(Lf[-1][2], Lf[-1][3]), A, a2)]
+    return out
+
+
+def _cubic_k(s, t):
+    u = 1 - t
+    dx = 3 * (u * u * (s[1][0] - s[0][0]) + 2 * u * t * (s[2][0] - s[1][0]) + t * t * (s[3][0] - s[2][0]))
+    dy = 3 * (u * u * (s[1][1] - s[0][1]) + 2 * u * t * (s[2][1] - s[1][1]) + t * t * (s[3][1] - s[2][1]))
+    ddx = 6 * (u * (s[2][0] - 2 * s[1][0] + s[0][0]) + t * (s[3][0] - 2 * s[2][0] + s[1][0]))
+    ddy = 6 * (u * (s[2][1] - 2 * s[1][1] + s[0][1]) + t * (s[3][1] - 2 * s[2][1] + s[1][1]))
+    v = math.hypot(dx, dy)
+    return (dx * ddy - dy * ddx) / v ** 3 if v > 1e-9 else 0.0
+
+
+def whole_units(steps, g1=2.0, rounds=6):
+    """0.84 (pass 2): a closed shape() contour (a point, then points and ("c", h1, h2, p) steps; the closing step a
+    line) on whole units without losing what the construction solved: nodes rounded; then every handle moved over the
+    whole-unit places within 2 of its own (a level or upright extreme's handles along their axis only; the two handles
+    of a smooth node together, on one line through it) to the least of: the curvature ratio across each smooth node
+    between two curves, the two handles' angle there, |k| turning back inside a curve, the distance from the drawn
+    places. A node is smooth where its tangents run on within g1 degrees."""
+    n = len(steps)
+
+    def node(k):
+        q = steps[k % n]
+        return q[3] if q[0] == "c" else q
+    P = []                                                   # [x, y, kind]; kind None for a handle
+    smooth, axis = {}, {}
+    for k, q in enumerate(steps):
+        p_ = node(k)
+        prev_ = steps[k][2] if steps[k][0] == "c" else node(k - 1)
+        nxt = steps[(k + 1) % n]
+        next_ = nxt[1] if nxt[0] == "c" else node(k + 1)
+        if q[0] == "c":
+            P += [[q[1][0], q[1][1], None], [q[2][0], q[2][1], None]]
+        P.append([p_[0], p_[1], "c" if q[0] == "c" else "l"])
+        i = len(P) - 1
+        if math.dist(prev_, p_) > 1e-9 and math.dist(p_, next_) > 1e-9:
+            u, v = unit(prev_, p_), unit(p_, next_)
+            if u[0] * v[0] + u[1] * v[1] > math.cos(math.radians(g1)):
+                smooth[i] = True
+                if abs(u[1]) < 1e-3 and abs(v[1]) < 1e-3:
+                    axis[i] = "level"
+                elif abs(u[0]) < 1e-3 and abs(v[0]) < 1e-3:
+                    axis[i] = "upright"
+    N = len(P)
+    ideal = [tuple(q[:2]) for q in P]
+    for q in P:
+        q[0], q[1] = float(round(q[0])), float(round(q[1]))
+    # segments: for each node index i of a curve, its cubic (i-3 .. i)
+    curves = [i for i in range(N) if P[i][2] == "c" and math.dist(ideal[(i - 3) % N], ideal[i]) >= 30]
+
+    def seg(i):
+        return tuple((P[(i - 3 + k) % N][0], P[(i - 3 + k) % N][1]) for k in range(4))
+    def long_(i):                                            # a curve ending at node i of a real span (not a corner's round)
+        return P[i][2] == "c" and math.dist(P[(i - 3) % N][:2], P[i][:2]) >= 30
+    cc_nodes = [i for i in smooth if long_(i) and P[(i + 1) % N][2] is None and long_((i + 3) % N)]
+
+    ccs = set(cc_nodes)
+
+    def node_cost(i):
+        ka, kb = _cubic_k(seg(i), 1.0), _cubic_k(seg((i + 3) % N), 0.0)
+        lo_, hi_ = sorted((abs(ka), abs(kb)))
+        c = 400 * math.log((hi_ + 1e-7) / (lo_ + 1e-7)) ** 2
+        a, b = P[(i - 1) % N], P[(i + 1) % N]
+        u = (P[i][0] - a[0], P[i][1] - a[1]); v = (b[0] - P[i][0], b[1] - P[i][1])
+        ang = abs(math.degrees(math.atan2(u[0] * v[1] - u[1] * v[0], u[0] * v[0] + u[1] * v[1])))
+        return c + 40 * max(0.0, ang - 0.25) ** 2
+
+    def curve_cost(i):
+        s_ = seg(i)
+        ks = [abs(_cubic_k(s_, t / 24)) for t in range(25)]
+        top = max(ks) or 1e-9
+        sgn = 1 if ks[-1] >= ks[0] else -1
+        c = 200 * sum(max(0.0, -sgn * (b_ - a_)) for a_, b_ in zip(ks, ks[1:])) / top
+        # each handle inside the triangle: never past where the two handles' lines meet
+        d0 = (s_[1][0] - s_[0][0], s_[1][1] - s_[0][1]); d3 = (s_[2][0] - s_[3][0], s_[2][1] - s_[3][1])
+        den = d0[0] * d3[1] - d0[1] * d3[0]
+        if abs(den) > 1e-9:
+            w_ = (s_[3][0] - s_[0][0], s_[3][1] - s_[0][1])
+            ta = (w_[0] * d3[1] - w_[1] * d3[0]) / den
+            tb = (w_[0] * d0[1] - w_[1] * d0[0]) / den
+            if ta > 0 and tb > 0:
+                c += 1000 * (max(0.0, 1.0 - ta + 0.02) + max(0.0, 1.0 - tb + 0.02)) if min(ta, tb) < 1.02 else 0.0
+        return c
+
+    def local(hs):
+        cv = {i for i in curves for h in hs if 0 < (i - h) % N < 3}
+        nd = {j for i in cv for j in (i, (i - 3) % N) if j in ccs}
+        return (sum(curve_cost(i) for i in cv) + sum(node_cost(j) for j in nd)
+                + 0.02 * sum((P[h][0] - ideal[h][0]) ** 2 + (P[h][1] - ideal[h][1]) ** 2 for h in hs))
+    one = [(dx, dy) for dx in (-2, -1, 0, 1, 2) for dy in (-2, -1, 0, 1, 2)]
+    pair = [(dx, dy) for dx in (-1, 0, 1) for dy in (-1, 0, 1)]
+    groups = []
+    for i in range(N):
+        if P[i][2] is None:
+            continue
+        a, b = (i - 1) % N, (i + 1) % N
+        if i in cc_nodes:
+            groups.append((i, [a, b]))
+    owned = {h for _i, hs in groups for h in hs}
+    for j in range(N):
+        if P[j][2] is None and j not in owned:
+            groups.append((None, [j]))
+    for _ in range(rounds):
+        moved = False
+        for i, hs in groups:
+            ax = axis.get(i)
+            offs = one if len(hs) == 1 else pair
+            ok = [o for o in offs if (ax != "level" or o[1] == 0) and (ax != "upright" or o[0] == 0)]
+            base = [(P[h][0], P[h][1]) for h in hs]
+            best, choice = local(hs), None
+            combos = [(o,) for o in ok] if len(hs) == 1 else [(o1, o2) for o1 in ok for o2 in ok]
+            for cmb in combos:
+                for h, (x0_, y0_), o in zip(hs, base, cmb):
+                    P[h][0], P[h][1] = x0_ + o[0], y0_ + o[1]
+                c = local(hs)
+                if c < best - 1e-9:
+                    best, choice = c, cmb
+            for h, (x0_, y0_), o in zip(hs, base, choice or [(0, 0)] * len(hs)):
+                P[h][0], P[h][1] = x0_ + o[0], y0_ + o[1]
+            moved = moved or choice is not None
+        if not moved:
+            break
+    out, buf = [], []
+    for q in P:
+        if q[2] is None:
+            buf.append((q[0], q[1]))
+        elif q[2] == "c":
+            out.append(("c", buf[0], buf[1], (q[0], q[1])))
+            buf = []
+        else:
+            out.append((q[0], q[1]))
+    return out
+
 def tilde(p, s=1.0, white=None):
     """The tilde (U+007E), and the almost-equal sign's two (U+2248): one period of a sine wave, from an inflection
     rising to the crest, down through the middle inflection to the trough and up to the last inflection, each end
@@ -531,6 +802,14 @@ def tilde(p, s=1.0, white=None):
             return (xs + t * lam, ys + A * math.sin(2 * math.pi * t))
         width = lambda t, C=C: wf(*_dir(C, t))
         nodes = [0.0, 0.25, 0.5, 0.75, 1.0]
+        if p.get("parallel"):
+            # 0.84 (Regular pass 2, item 2, second pass; the owner: "the inside seems a bit sharp ... the negative
+            # space isn't even"): both edges the centreline's parallels, each span G2 at both its ends (wave_sides);
+            # no straight run (run 0): each end is the wave's own inflection, cut square to the stroke there
+            L, R = wave_sides(C, nodes, width, (0.25, 0.75))
+            sw = _soft_wave(L, R, p.get("soft", SOFT))
+            out.append(whole_units(sw) if p.get("whole") else sw)
+            continue
         L, R = offset_sides(C, nodes, width)
         w0, w1 = width(0.0), width(1.0)
         n0 = (-sa, ca)                                   # the left normal at both ends (the same slope there)
