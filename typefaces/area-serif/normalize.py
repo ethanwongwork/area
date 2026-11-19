@@ -1219,6 +1219,8 @@ def normalize(font):
     print("spine:", SPINE.regular(font))              # top pair to the bottom pair, a centreline and one width law
     print("hair: bowls", HAIR.bowl_sides(font))      # 0.84 (pass 2, strokes 4): B's upper bowl P's side
     print("hair: diagonals", HAIR.diagonals(font))   # 0.84 (pass 2, strokes 5): X x halves, capital thick 86, Z arms
+    import cross as CROSS                             # 0.84 (pass 2, crossing construction): x and X two straight
+    print("cross:", CROSS.regular(font))              # strokes, each one through the other, at v's and V's weights
     print("hair: dots", HAIR.dots(font, "letters"), HAIR.quote_head(font))   # 0.84 (pass 2, item 6): j's dot i's; ’
     #                                                   curvature; before spacing and the charset, so ³ ₃ ¾ follow
     delta, moved, opened = SPACING.run(font)          # last: it reads the finished outlines

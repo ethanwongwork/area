@@ -4382,6 +4382,12 @@ def bold_font(reg, stem=STEM, **over):
     sp_note, sp_names = _SPINE.master(reg, font, struck)
     notes.append(sp_note)
     resided.update(sp_names)
+    # 0.84 (pass 2, crossing construction): x and X two straight strokes, each one line through the other, at this
+    # master's v and V weights, the serif-end openings as the engine and the crossing rules above left them (cross.py)
+    import cross as _CROSS
+    cr_note, cr_names = _CROSS.master(reg, font, struck)
+    notes.append(cr_note)
+    resided.update(cr_names)
     # owner round 8, item 14: g's loop under its bowl as in the Regular, its ear at the ball law's reach
     looped = []
     for name in G_LOOPED:
@@ -4867,6 +4873,9 @@ def bold_font(reg, stem=STEM, **over):
         notes.append(f"divide: dots x{s_:.3f}, at least the bar off it")
     tm_a = (dict(axis_map(stem))[MID_WEIGHT] - REG_STEM) / (stem - REG_STEM) if v["f"] > 0 else None
     amp_ = _AMP.master(reg, font, _amp_sides, tm_a, layer if v["f"] > 0 else None)
+    # 0.84 (pass 2, crossing construction): x and X in the mid master too, built at the readings half way (cross.mid)
+    if v["f"] > 0:
+        notes += _CROSS.mid(reg, font, layer, tm_a)
     if amp_:
         notes.append(amp_)
     # owner round 8 (0.82, item 10): symbols whose strokes the engine read the wrong way along the axis (symbols.py):
