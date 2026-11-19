@@ -739,7 +739,8 @@ def even_glyph(font, name):
     """Every smooth node of the glyph at one curvature (`loops.even_nodes`, handle lengths only), at the first target
     (1.25 = curvecheck's ratio, then 1.5, 1.8) whose result lowers the worst ratio without adding a curvecheck fault
     and keeps even.py's two readings (the stroke's thickness round each counter) under its limits, or under what they
-    were where the drawing already passed them."""
+    were where the drawing already passed them, and parts.check's branch rules (a crotch's neck and leave) where the
+    letter has a branch."""
     import curvecheck as K
     import loops as LOOPS
     import even as EVEN
@@ -750,15 +751,48 @@ def even_glyph(font, name):
     b0, w0 = K.report(name, cs, yr)[:2]
     e0 = EVEN.worst(g)
     lim = (max(EVEN.SHELF_LIMIT, e0[0]), max(EVEN.LIMIT, e0[1]))
-    for t in EVEN_TARGETS:
+    import parts as PARTS
+
+    def joins_bad():                                   # the branch rules (neck 32, leave (53, 64)) on this letter
+        return len([b_ for b_ in PARTS.check(font)[1] if b_.startswith(name + " ") or b_.startswith(name + ":")])
+    j0 = joins_bad() if name in PARTS.EXPECT else 0
+    def keep_corners(P, Q):
+        # a curve that ends on a corner (a crotch, a bracket's foot) keeps its shape: its handles go back
+        n = len(P)
+        Q = list(Q)
+        on = [i for i, q in enumerate(P) if q[2]]
+        for a, i in enumerate(on):
+            j = on[(a + 1) % len(on)]
+            if (i + 3) % n == j and (not P[i][3] or not P[j][3]):
+                Q[(i + 1) % n], Q[(i + 2) % n] = P[(i + 1) % n], P[(i + 2) % n]
+        return Q
+
+    tries = [(t, False) for t in EVEN_TARGETS] + [(t, True) for t in EVEN_TARGETS]
+    for t, frozen in tries:
         new = [[(round(q[0]), round(q[1]), q[2], q[3]) for q in LOOPS.even_nodes(P, yr, target=t)[0]] for P in cs]
+        if frozen:
+            new = [keep_corners(P, Q) for P, Q in zip(cs, new)]
         b1, w1 = K.report(name, new, yr)[:2]
         if len(b1) > len(b0) or w1 >= w0 - 0.01:
             continue
         _put(g, new)
         e1 = EVEN.worst(g)
-        if e1[0] <= lim[0] + 1e-6 and e1[1] <= lim[1] + 1e-6:
-            return (f"{name} worst ratio {w0:.2f} > {w1:.2f} (aim {t}), faults {len(b0)} > {len(b1)}, "
+        if e1[0] <= lim[0] + 1e-6 and e1[1] <= lim[1] + 1e-6 and (name not in PARTS.EXPECT or joins_bad() <= j0):
+            return (f"{name} worst ratio {w0:.2f} > {w1:.2f} (aim {t}{', curves on corners kept' if frozen else ''}), faults {len(b0)} > {len(b1)}, "
                     f"thickness {e0[0]:.1f}/{e0[1]:.1f} > {e1[0]:.1f}/{e1[1]:.1f}")
         _put(g, cs)
     return f"{name} left ({w0:.2f}, faults {len(b0)})"
+
+
+# ------------------------------------------------------------------ 0.83 Regular pass, letters 6: curves
+# The audit (B3, B4, B6, B8, B9, B16): a's counter 3.74 times the curvature at its lowest right node, e's eye 2.66
+# where its arc runs into the bar's fillet, d's right foot bracket two curves meeting at 4.70, G 1.61 by its spur, J's
+# ball seam 2.66, r's shoulder 2.18 at the ball's top, the 2's ball neck 1.43. Each is a smooth node whose two curves
+# were drawn apart; `even_glyph` (handles only, guarded by curvecheck and even.py) is the one rule. Not here: U (its
+# evening raises the worst ratio, 1.01 > 1.20), g (the ear: its Regular handles feed the masters' g_ear), R (even.py),
+# the 3 and 5 (already at one curvature by item D: 1.09, 1.05).
+EVEN_LETTERS = ("a", "e", "d", "G", "J", "r", "two")
+
+
+def even_letters(font):
+    return "; ".join(even_glyph(font, n) for n in EVEN_LETTERS if n in font)
