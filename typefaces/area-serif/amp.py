@@ -73,10 +73,14 @@ REG = {
     "t2": (754.0, 110.0), "t2_dir": (20.0, 42.0),    # top's end
     # the arm: its centreline through (x, 355), its direction (dx, dy) (drawn: 34.5 degrees from upright)
     "arm_x": 631.0, "arm_dir": (0.5664, 0.8241), "arm_top": 434.0,
-    "top": 721.0, "bottom": -9.0,
+    "top": 721.0, "bottom": -10.0,   # 0.84: the bowl's and the tail's bottom on o's overshoot line
     # 0.82 (owner round 8, item 19): the loop is placed by LOOP's rule (`loop_rule`); ul, ur, ut_x, p1_y, p2_y above
     # are only its first guess
     "loop": "A",
+    # 0.84 (Regular pass 2, item 1): the counter's bottom stands 8 right of the outside's, so the stroke's width falls
+    # all the way from the bowl's left side (82) to the arm (39) with no trough before the bottom (at 0 a 0.3 trough and
+    # rise at the bottom; 8 and 16 tried, 8 the least that clears it)
+    "lb_di": 8.0,
     # each edge's turn off the diagonal's straight runs twice the circle's height (an Euler spiral turning theta up to
     # the quarter's curvature k runs 2 theta / k, twice the circle's arc): the curvature rises from the straight's ease
     # to the quarter's with no peak between (at 1.0 the Light's counter took a 1.47 jump at its left extreme)
@@ -129,6 +133,9 @@ TENSION = 0.56          # handles' share of their reach where nothing else decid
 RATIO = 1.25            # curvecheck.RATIO
 EASE = 0.45             # curvecheck.EASE
 ARM_FILLET = 0.30       # 0.82 item 19: the crotch under the arm (at.FILLET's share of the stem, the @'s a)
+TAIL_CUT = 30.0          # 0.84: the tail's cut end across, the serif tip (joins.END_MIN)
+SOFT = 7.0               # 0.84: a free end's corners, the letters' serif-tip radius (derive.SOFT, measured 7.0 on H n I l)
+RIBBON_SEGS = (1, 3, 4, 5, 6, 7, 8, 9)   # 0.84: the P segments whose width is evened (`even_ribbon`)
 PEAK = 1.30             # 0.82 item 19: a node's curvature over the curves' a third in (a round turn, not a point)
 
 
@@ -230,6 +237,15 @@ class Chain:
         return out
 
     def solve(self):
+        idx, x0, lo, his, put, res = self.problem()
+        from scipy.optimize import least_squares
+        r = least_squares(res, x0, bounds=(lo, his), method="trf", diff_step=1e-4, xtol=1e-10, ftol=1e-10, max_nfev=4000)
+        self.last = r
+        put(r.x)
+        self.x = r.x
+        return float(np.sum(r.fun ** 2))
+
+    def problem(self):
         """Handle lengths (least squares, each handle's share of its reach): one curvature on both sides of every
         smooth node between two curves; a curve leaving a straight eases (its curvature there at most 0.35 of its
         tightest); no flat place and no inflection inside a curve; otherwise near TENSION; inside the triangle."""
@@ -266,7 +282,7 @@ class Chain:
                 ka, kb = self.kinds[n - 1], self.kinds[n]
                 if ka == "C" and kb == "C":
                     k1, k2 = curvature(S[n - 1], 1.0), curvature(S[n], 0.0)
-                    out.append(0.0 if n in self.inflect else 6 * math.log((abs(k1) + 1e-6) / (abs(k2) + 1e-6)))
+                    out.append(0.0 if n in self.inflect else getattr(self, "kw", 6) * math.log((abs(k1) + 1e-6) / (abs(k2) + 1e-6)))
                     if self.peaks and n not in self.inflect:
                         # 0.82 item 19: no point at a node: the curvature there at most PEAK times the tightest
                         # place a third of the way into either curve
@@ -280,10 +296,9 @@ class Chain:
                     u1 = unit((s[3][0] - s[2][0], s[3][1] - s[2][1]))
                     turn = math.acos(max(-1, min(1, u0[0] * u1[0] + u0[1] * u1[1])))
                     L = sum(math.dist(bez(s, t / 24), bez(s, (t + 1) / 24)) for t in range(24))
-                    out.append(10 * max(0.0, abs(curvature(s, at)) / (turn / L + 1e-9) - 0.30))   # over the mean
+                    out.append(getattr(self, "ew", 10) * max(0.0, abs(curvature(s, at)) / (turn / L + 1e-9) - 0.30))   # over the mean
             return np.array(out)
 
-        from scipy.optimize import least_squares
         x0 = np.array([math.log(TENSION)] * (2 * len(idx)))
         # 0.82 item 19: the counter's left turn off the diagonal keeps its handles inside `cap` (0.90) of their reach,
         # so no instance between masters turns its control polygon both ways (at 0.95 it gained an inflection at 714)
@@ -293,10 +308,60 @@ class Chain:
             his += [h_, h_]
         his = np.array(his)
         x0 = np.minimum(x0, his - 1e-9)
-        r = least_squares(res, x0, bounds=(lo, his), method="trf", diff_step=1e-4, xtol=1e-10, ftol=1e-10, max_nfev=4000)
-        self.last = r
-        put(r.x)
-        return float(np.sum(r.fun ** 2))
+        return idx, x0, lo, his, put, res
+
+
+_TQ = np.linspace(0, 1, 33)
+_BQ = np.stack([(1 - _TQ) ** 3, 3 * (1 - _TQ) ** 2 * _TQ, 3 * (1 - _TQ) * _TQ ** 2, _TQ ** 3], 1)
+
+
+def ribbon_width(P, Q, segs_P, n=12):
+    """The stroke's width along P's segments segs_P: for each sample on P the nearest distance to Q's facing segments
+    (the same index and its neighbours). Returns [(segment, t, width)]."""
+    SP, SQ = P.segs(), Q.segs()
+    tp = np.linspace(0, 1, n + 1)
+    bp = np.stack([(1 - tp) ** 3, 3 * (1 - tp) ** 2 * tp, 3 * (1 - tp) * tp ** 2, tp ** 3], 1)
+    out = []
+    for i in segs_P:
+        qs = np.concatenate([_BQ @ np.array(SQ[j]) for j in (i - 1, i, i + 1) if 0 <= j < len(SQ)])
+        ps = bp @ np.array(SP[i])
+        d = np.min(np.hypot(ps[:, None, 0] - qs[None, :, 0], ps[:, None, 1] - qs[None, :, 1]), axis=1)
+        out += [(i, float(t), float(v)) for t, v in zip(tp, d)]
+    return out
+
+
+def even_ribbon(P, Q, segs, weight=15.0):
+    """0.84 (Regular pass 2, item 1): the ribbon's two edges solved together. Each chain keeps its own terms (one
+    curvature at every smooth node, eases, no flat place or inflection); added, along each of the given P segments
+    (each between two nodes whose widths are set: every extreme of the stroke's width is a node), the width must move
+    one way only from the one node's width to the other's (any turn back is penalised), and its second difference is
+    kept small (a gradual swell, no local bump)."""
+    from scipy.optimize import least_squares
+    P.ew = Q.ew = 40          # and each ease off a straight (the Light's tail underside left at 0.54 at 10)
+    P.kw = Q.kw = 30          # one curvature across each node holds first (the bowl's bottom took a 1.38 jump at 6)
+    pa = P.problem()
+    qa = Q.problem()
+    nP = len(pa[1])
+
+    def res(x):
+        r = list(pa[5](x[:nP])) + list(qa[5](x[nP:]))
+        W = ribbon_width(P, Q, segs)
+        for i in segs:
+            w = [v for j, _t, v in W if j == i]
+            sg = 1 if w[-1] >= w[0] else -1
+            for a_, b_ in zip(w, w[1:]):
+                r.append(weight * max(0.0, -sg * (b_ - a_)))           # a turn back inside the segment
+            for k in range(1, len(w) - 1):
+                r.append(0.6 * (w[k + 1] - 2 * w[k] + w[k - 1]))
+        return np.array(r)
+    x0 = np.concatenate([P.x, Q.x])
+    lo = np.concatenate([np.full(nP, pa[2]), np.full(len(qa[1]), qa[2])])
+    hi = np.concatenate([pa[3], qa[3]])
+    r = least_squares(res, np.clip(x0, lo + 1e-9, hi - 1e-9), bounds=(lo, hi), method="trf", diff_step=1e-4,
+                      xtol=1e-6, ftol=1e-6, max_nfev=400)
+    pa[4](r.x[:nP])
+    qa[4](r.x[nP:])
+    return r
 
 
 def flat_chain(segs, n=48):
@@ -591,7 +656,7 @@ def construct(R, G=None, sx=1.0, _pass=0):
     URo, URi = (X(ur[0]) + W["ur"] / 2, ur[1]), (X(ur[0]) - W["ur"] / 2, ur[1])
     UTo, UTi = (X(G["ut_x"]), top), (X(G["ut_x"]), top - W["ut"])
     LLo, LLi = (X(ll[0]) - W["ll"] / 2, ll[1]), (X(ll[0]) + W["ll"] / 2, ll[1])
-    LBo, LBi = (X(G["lb_x"]), bot), (X(G["lb_x"]), bot + W["lb"])
+    LBo, LBi = (X(G["lb_x"]), bot), (X(G["lb_x"] + G.get("lb_di", 0.0)), bot + W["lb"])
     # the spine's inflection: where it crosses the diagonal's centreline
     sc = on_line(c0, dd, G["sp_y"])
     sd = unit((-math.cos(math.radians(G["sp_deg"])) * sx, -math.sin(math.radians(G["sp_deg"]))))   # down-left
@@ -601,14 +666,14 @@ def construct(R, G=None, sx=1.0, _pass=0):
     SA = (sc[0] - sn[0] * W["sp"] / 2, sc[1] - sn[1] * W["sp"] / 2)     # upper-left edge (Q)
     SB = (sc[0] + sn[0] * W["sp"] / 2, sc[1] + sn[1] * W["sp"] / 2)     # lower-right edge (P)
     # bowl into the diagonal
-    C2 = l1(G["c2_y"])
-    X1 = l1(G["x1_y"])
-    c2d = unit((math.cos(math.radians(G["c2_deg"])), math.sin(math.radians(G["c2_deg"]))))
-    x1d = unit((math.cos(math.radians(G["x1_deg"])), math.sin(math.radians(G["x1_deg"]))))
     # tail
     TB = (X(G["tb_x"]), bot)
     TT = (X(G["tt_x"]), bot + W["tail"])
     T1, T2 = (X(G["t1"][0]), G["t1"][1]), (X(G["t2"][0]), G["t2"][1])
+    # 0.84 (Regular pass 2, item 1): the tail's cut is the letters' least flat-cut end, the serif tip (joins.END_MIN,
+    # 30; it was the drawn 21): its top corner moves out along the drawn cut
+    _cu = unit((T2[0] - T1[0], T2[1] - T1[1]))
+    T2 = (T1[0] + _cu[0] * TAIL_CUT, T1[1] + _cu[1] * TAIL_CUT)
     t1d = unit((G["t1_dir"][0] * sx, G["t1_dir"][1]))
     t2d = unit((G["t2_dir"][0] * sx, G["t2_dir"][1]))
     D, U, L, Rt = (0.0, -1.0), (0.0, 1.0), (-1.0, 0.0), (1.0, 0.0)
@@ -624,21 +689,40 @@ def construct(R, G=None, sx=1.0, _pass=0):
         # 0.82 item 19: the tail's top reaches the diagonal's straight edge at least twice the arm's fillet below where
         # the arm's edge meets it, in every master, so the crotch under the arm is filleted on the straight (one
         # structure at every weight; on the curve in some masters it had to be merged into the curve)
-        p4_y = min(p4_y, AR[1] + ad[1] * s_ - 25 - 2 * ARM_FILLET * R["stem"])
+        pass   # 0.84: the crotch under the arm is sharp (no fillet), the tail's top still reaches the straight 25 below it
+    # 0.84 (Regular pass 2, item 1): the lower bowl's stroke runs on through the diagonal as the arm, as one stroke
+    # crossing another: each edge of the bowl turns into the arm's edge line at a node inside the diagonal (where the
+    # arm's edge crosses the diagonal's centreline), tangent to it, so the edge entering the diagonal and the edge
+    # leaving it are one curve then one line (no step, no kink); every corner of that crossing is found, not placed
+    def _on_mid(Lp):
+        s_ = meet(Lp, ad, c0, dd)
+        return (Lp[0] + ad[0] * s_, Lp[1] + ad[1] * s_)
+    NP, NQ = _on_mid(AL), _on_mid(AR)
+    # the diagonal's lower edge runs straight down past where the bowl's outside crosses it (the arm's right edge's
+    # line there, less 20: the curve leaves that line inside the diagonal), so the crossing's corner is on the straight
+    # in every master (the Bold's heavier diagonal crossed it at 64, under the Regular's turn at 70)
+    _s1 = meet(AR, ad, L1p, dd)
+    G = dict(G)
+    G["p3_y"] = min(G["p3_y"], AR[1] + ad[1] * _s1 - 20)
+    up_P = (AL[0] + ad[0] * 400, AL[1] + ad[1] * 400)
+    up_Q = (AR[0] + ad[0] * 400, AR[1] + ad[1] * 400)
     P = Chain([(T1, (-t1d[0], -t1d[1])), (TB, L), (l1(G["p3_y"]), up), (l1(G["p1_y"]), up), (ULo, U), (UTo, Rt),
-               (URo, D), (SB, sd), (LLi, D), (LBi, Rt), (C2, c2d)],
-              ["C", "C", "L", "C", "C", "C", "C", "C", "C", "C"],
-              [False, True, True, True, True, True, True, True, True, True, False], inflect=[7],
+               (URo, D), (SB, sd), (LLi, D), (LBi, Rt), (NP, ad), (up_P, ad)],
+              ["C", "C", "L", "C", "C", "C", "C", "C", "C", "C", "L"],
+              [False, True, True, True, True, True, True, True, True, True, True, False], inflect=[7],
               peaks=bool(G.get("loop")), rise=(3,) if G.get("loop") else ())
     Q = Chain([(T2, (-t2d[0], -t2d[1])), (TT, L), (l2(p4_y), up), (l2(G["p2_y"]), up), (ULi, U), (UTi, Rt),
-               (URi, D), (SA, sd), (LLo, D), (LBo, Rt), (X1, x1d)],
-              ["C", "C", "L", "C", "C", "C", "C", "C", "C", "C"],
-              [False, True, True, True, True, True, True, True, True, True, False], inflect=[7],
+               (URi, D), (SA, sd), (LLo, D), (LBo, Rt), (NQ, ad), (up_Q, ad)],
+              ["C", "C", "L", "C", "C", "C", "C", "C", "C", "C", "L"],
+              [False, True, True, True, True, True, True, True, True, True, True, False], inflect=[7],
               peaks=bool(G.get("loop")),
               radii={8: _lerp(BOWL_R, weight_share(R)) * (LBo[0] - LLo[0])} if G.get("loop") else None,
               capped=(3,) if G.get("loop") else ())
     P.solve()
     Q.solve()
+    if G.get("even_ribbon", True) and _pass != 1:
+        # the loop (its turn off the diagonal, its left, top, right), the spine and the bowl to where it crosses
+        even_ribbon(P, Q, RIBBON_SEGS)
     sP, sQ = P.segs(), Q.segs()
     # v's serif on the arm
     serif = v_serif(R["v"], AR, AL, ad, G["arm_top"])
@@ -692,13 +776,23 @@ def construct(R, G=None, sx=1.0, _pass=0):
         s = sP[2]
         return (2, (p[1] - s[0][1]) / (s[3][1] - s[0][1]))
     nP, nQ = len(sP), len(sQ)
-    endP, endQ = (nP - 1, 1.0), (nQ - 1, 1.0)
+    # C2 and X1: the bowl's two edges (P's and Q's curve into the arm, index 9) cross the diagonal's lower edge
+    L1seg = [(l1(-400), l1(-400), l1(1200), l1(1200))]
+    hP = crossings(sP[9:10], L1seg)
+    hQ = crossings(sQ[9:10], L1seg)
+    if not (hP and hQ):
+        raise ValueError("ampersand: the bowl's stroke does not cross the diagonal's lower edge on its curve")
+    endP, C2 = (9, hP[0][0][1]), hP[0][2]
+    endQ, X1 = (9, hQ[0][0][1]), hQ[0][2]
+    if not (sP[2][0][1] < X1[1] < sP[2][3][1] and sP[2][0][1] < C2[1] < sP[2][3][1]):
+        raise ValueError(f"ampersand: the bowl crosses the diagonal off its straight (X1 {X1}, C2 {C2})")
     # outer contour: Q from the bowl's bottom to X1; P back from X1 to the tip; the cut; Q from the tip to X2; the
     # arm (right edge, serif, left edge) to X3; Q up the diagonal to J2; P back over the loop to J; Q down the bowl
     lb_q = (8, 1.0)                                        # LBo is node 9: end of segment 8
     outer = []
     outer += [("C", s) for s, _ in piece(sQ, lb_q, endQ)]
     outer += [("C" if sP[i] is not None and i != 2 else "L", s) for s, i in piece(sP, tl1(X1), (0, 0.0))]
+    k_cut = len(outer)
     outer += [("L", (T1, T1, T2, T2))]
     outer += [("C" if i != 2 else "L", s) for s, i in piece(sQ, (0, 0.0), X2q)]
     outer += [("L", (X2, X2, serif[0][0], serif[0][0]))]
@@ -708,39 +802,10 @@ def construct(R, G=None, sx=1.0, _pass=0):
     outer += [("C" if i != 2 else "L", s) for s, i in piece(sQ, X3q, J2[1])]
     outer += [("C" if i != 2 else "L", s) for s, i in piece(sP, J2[0], J[0])]
     outer += [("C" if i != 2 else "L", s) for s, i in piece(sQ, J[1], lb_q)]
-    if G.get("loop"):
-        # 0.82 (owner round 8, item 19): the arm grows out of the tail as the @'s a out of its bowl, not laid on it:
-        # the crotch under the arm rounded by a fillet of ARM_FILLET the stem (at.fillet; the @'s 0.30)
-        import at as _AT
-        def _len(sg):
-            return sum(math.dist(bez(sg, i / 32), bez(sg, (i + 1) / 32)) for i in range(32))
-        # the tail's top reaches X2 on the diagonal's straight edge in some masters and on its curve in others: the
-        # straight piece (and a piece too short for the fillet) is taken into the curve before it, so every master
-        # has one structure
-        r_f = ARM_FILLET * R["stem"]
-        while k_x2 > 0 and _len(outer[k_x2][1]) < 1.2 * r_f:
-            a_, b_ = outer[k_x2 - 1][1], outer[k_x2][1]
-            if outer[k_x2 - 1][0] != "C":
-                break
-            # join the two pieces into one cubic (end tangents kept, each handle a third of the joined length; the
-            # nodes are then evened, `outline`)
-            la, lb = _len(a_), _len(b_)
-            ta = unit((a_[1][0] - a_[0][0], a_[1][1] - a_[0][1]))
-            tb = unit((b_[3][0] - b_[2][0], b_[3][1] - b_[2][1])) if math.dist(b_[3], b_[2]) > 1e-6 else \
-                unit((b_[3][0] - b_[0][0], b_[3][1] - b_[0][1]))
-            L_ = (la + lb) / 3
-            p2_ = (b_[3][0] - tb[0] * L_, b_[3][1] - tb[1] * L_)
-            # the start handle's length gives the curve, at the tail top's lowest node, the curvature the curve before
-            # that node ends with (one curvature across it: the third alone left a 2.8 jump at 400)
-            La = L_
-            if k_x2 - 2 >= 0 and outer[k_x2 - 2][0] == "C":
-                want = abs(curvature(outer[k_x2 - 2][1], 1.0))
-                cr_ = abs(ta[0] * (p2_[1] - a_[0][1]) - ta[1] * (p2_[0] - a_[0][0]))
-                if want > 1e-9:
-                    La = min(max(math.sqrt((2 / 3) * cr_ / want), 0.2 * L_), 2.5 * L_)
-            outer[k_x2 - 1:k_x2 + 1] = [("C", (a_[0], (a_[0][0] + ta[0] * La, a_[0][1] + ta[1] * La), p2_, b_[3]))]
-            k_x2 -= 1
-        outer = _AT.fillet(outer, k_x2, r_f)
+    # 0.84 (Regular pass 2, items 1 and 5): the crotch under the arm is a sharp inner corner where the arm's lower edge
+    # (the bowl's outer edge run on as a line) meets the tail's top (the 0.82 fillet of 0.30 stem broke that edge's line)
+    # 0.84 (items 1 and 5): the tail's cut is a free end: both corners softened on the letters' serif-tip radius
+    outer = soft_cut(outer, k_cut, SOFT)
     # lower counter: P from C1 (on the spine) down the counter to C2; the diagonal's lower edge back up to C1
     lower = [("C", s) for s, _ in piece(sP, C1_hi, endP)]
     lower += [("C" if i != 2 else "L", s) for s, i in piece(sP, tl1(C2), C1_lo)]
@@ -749,6 +814,49 @@ def construct(R, G=None, sx=1.0, _pass=0):
     info.update({"J": J[2], "J2": J2[2], "K": Kp, "C1": C1p, "C2": C2, "X1": X1, "X2": X2, "X3": X3,
                  "widths": W, "sx": sx, "chains": (sP, sQ), "loop": G.get("_loop")})
     return [outer, lower, upper], info
+
+
+def soft_cut(segs, k, r):
+    """The straight cut segs[k] between two curves (or lines): each corner rounded as the letters' serif tips are
+    (normalize.soften_ends): the edge cut back r from the corner (along the curve, by its arc length), the cut r in,
+    and a cubic between with both handles 0.55 of the way to the corner."""
+    a_k, b_k = k - 1, k + 1
+    pa, cut, pb = segs[a_k][1], segs[k][1], segs[b_k][1]
+    c0, c1 = cut[0], cut[3]
+    def back(s, r, at_end):
+        # the parameter on s at arc length r from its end (at_end) or start
+        n = 200
+        pts = [bez(s, i / n) for i in range(n + 1)]
+        if at_end:
+            pts = pts[::-1]
+        acc = 0
+        for i in range(n):
+            acc += math.dist(pts[i], pts[i + 1])
+            if acc >= r:
+                t = (i + 1) / n
+                return 1 - t if at_end else t
+        return 0.5
+    ta = back(pa, r, True)
+    sa = sub(pa, 0, ta)
+    tb = back(pb, r, False)
+    sb = sub(pb, tb, 1)
+    u = unit((c1[0] - c0[0], c1[1] - c0[1]))
+    q0, q1 = (c0[0] + u[0] * r, c0[1] + u[1] * r), (c1[0] - u[0] * r, c1[1] - u[1] * r)
+    def corner(p, dp, c, q, dq):
+        # each handle 0.55 of the way to the corner, along its edge's own tangent there (a curve's, cut back r, is not
+        # the chord to the corner: 4.4 degrees off on the tail's underside)
+        lp, lq = 0.55 * math.dist(p, c), 0.55 * math.dist(q, c)
+        return (p, (p[0] + dp[0] * lp, p[1] + dp[1] * lp), (q[0] + dq[0] * lq, q[1] + dq[1] * lq), q)
+    def tan_end(s):
+        d = (s[3][0] - s[2][0], s[3][1] - s[2][1]) if math.dist(s[3], s[2]) > 1e-6 else (s[3][0] - s[0][0], s[3][1] - s[0][1])
+        return unit(d)
+    def tan_start(s):
+        d = (s[0][0] - s[1][0], s[0][1] - s[1][1]) if math.dist(s[1], s[0]) > 1e-6 else (s[0][0] - s[3][0], s[0][1] - s[3][1])
+        return unit(d)
+    # kind "K": a softened corner's curve, its two nodes corners as the letters' (normalize.soften_ends)
+    new = [(segs[a_k][0], sa), ("K", corner(sa[3], tan_end(sa), c0, q0, (-u[0], -u[1]))), ("L", (q0, q0, q1, q1)),
+           ("K", corner(q1, u, c1, sb[0], tan_start(sb))), (segs[b_k][0], sb)]
+    return segs[:a_k] + new + segs[b_k + 1:]
 
 
 def v_serif(V, AR, AL, ad, top):
@@ -813,6 +921,8 @@ def to_points(segs):
         d_in = unit((s[3][0] - s[2][0], s[3][1] - s[2][1])) if math.dist(s[3], s[2]) > 1e-6 else unit((s[3][0] - s[0][0], s[3][1] - s[0][1]))
         d_out = unit((nxt[1][0] - nxt[0][0], nxt[1][1] - nxt[0][1])) if math.dist(nxt[1], nxt[0]) > 1e-6 else unit((nxt[3][0] - nxt[0][0], nxt[3][1] - nxt[0][1]))
         smooth = d_in[0] * d_out[0] + d_in[1] * d_out[1] > math.cos(math.radians(2.0))
+        if kind == "K" or segs[(k + 1) % n][0] == "K":     # a softened corner's ends are corners (as the letters')
+            smooth = False
         if kind == "L":
             pts.append([s[3][0], s[3][1], "line", smooth])
         else:
@@ -923,6 +1033,8 @@ def stretch(R0, R, G=None):
 
 
 def ink_width(R, sx, G=None):
+    G = dict(G or REG)
+    G["even_ribbon"] = False                                 # 0.84: the width evening moves handles only, not the ink box
     cs, _ = construct(R, G, sx)
     xs = [p[0] for C in cs for _k, s_ in C for p in (s_[0], s_[3])]
     return max(xs) - min(xs)
