@@ -1212,6 +1212,7 @@ def normalize(font):
     delta, moved, opened = SPACING.run(font)          # last: it reads the finished outlines
     CLEAN.owner_final(font, json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "owner_edits.json"))))
     print(f"spacing: {len(delta)} letters re-spaced, {moved} kerning pairs carried over, {len(opened)} near-touches opened")
+    print("spacing: symmetric letters, equal sides", SPACING.symmetric_sides(font))   # 0.84: before the letters built on them
     import charset as CHARSET                         # 0.47: the full character set, on the finished letters
     n_light, tab = CHARSET.run(font, letters)
     print(f"charset: lightened {n_light} more glyphs; tabular figures {tab}")
@@ -1280,6 +1281,7 @@ def normalize(font):
             for c, P in zip(font["dollar"].contours, new_):
                 c.points = [_Pt(x, y, t, smooth=sm) for x, y, t, sm in P]
         print("dollar:", log_)
+    print("spacing: symmetric drawings, equal sides", SPACING.symmetric_sides(font))   # 0.84 (placement)
     joined, promoted, copied, opened_all = SPACING.finish(font, CHARSET.COVERAGE)   # 0.73: beyond the core
     alts = sorted({b for pairs in alt_subs.values() for _a, b in pairs} | {"g.ss02", "one.ss01"} | ({"uni0261"} & set(font.keys())))
     order = font.lib.get("public.glyphOrder", [])
