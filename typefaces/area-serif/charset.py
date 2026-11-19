@@ -3603,6 +3603,8 @@ def run(font, lightened):
     print("charset: round dots", round_dots(font))                     # 0.74
     print("charset: one drawing", one_drawing(font))                   # 0.74
     print("charset: no steps", no_steps(font))                         # 0.83
+    print("charset: extended capitals", ext_capitals(font))            # 0.83 (letters 3)
+    print("charset: glottal stops", glottal_balls(font))               # 0.83 (letters 3)
     print("charset: macron", macron_weight(font))                      # 0.74
     dotless(font)
     bars(font, m)
@@ -3661,3 +3663,176 @@ def run(font, lightened):
     print(f"charset: Vietnamese, {viet} letters composed")
     print(f"charset: {followed} composites follow their rebuilt base; {anchored} anchors set from the precomposed letters")
     return len(skipped), adv
+
+
+# ---------------------------------------------------------------- 0.83 Regular pass, letters 3: the extended capitals
+# The audit (A5, A6): the capitals outside A-Z keep Libre Baskerville's first drawings' parts: head serifs 90 to 94 and
+# feet 100 to 103 from the stem's edge (every core capital's 77, `balance.CAP_SERIF`), stems 101 to 103 on Ƭ Ʈ Ʋ
+# (every capital stem 86), and the glottal stops' balls 106 to 112 across (the round end at the capitals' size, 96.8,
+# which ? carries). The rules: an upright capital stem (the same two edges at 0.3 and 0.7 of its height) wider than
+# the capital stem by EXT_STEM_MIN or more is the capital stem, both edges moving in by half the difference (every
+# point on an edge's line moves with it); a serif slab at the foot or the head reaching EXT_SERIF_MIN to EXT_SERIF_MAX
+# from its stem's edge is CAP_SERIF, its end (the tip and its two soft corners) moving in level; a glottal stop's ball
+# is a round end, scaled about the stroke's top as ?'s is: the capitals' size where the letter stands to the cap height
+# or over, the lowercase's (88) where it stands to the x-height.
+EXT_STEM_MIN = 6
+EXT_SERIF_MIN, EXT_SERIF_MAX = 80, 130
+CAP_STEM_W = 86
+LC_BALL = 88
+GLOTTALS = ("glottalstop", "glottalstopreversed", "Glottalstopsmall", "glottalstopsmall")
+
+
+# the capitals with upright stems that are first drawings (outside COVERAGE; the struck, barred and accented capitals
+# and Æ Œ are built from the core letters and carry their parts already)
+EXT_CAPS = ("Bhook", "Dhook", "Eturned", "Fhook", "Hhook", "Hturned", "Iota-latin", "Khook", "Nhookleft", "Phook",
+            "Rtail", "Thook", "Tretroflexhook", "Vhook", "Yhook", "Glottalstopsmall")
+
+
+def _ext_capitals(font):
+    return [n for n in EXT_CAPS if n in font and font[n].contours]
+
+
+def ext_capitals(font):
+    """The stems and serifs of the capitals outside A-Z on the core capitals' parts (the rules above)."""
+    from normalize import flatten, spans_at
+    import balance as BALANCE
+    done = []
+    for name in _ext_capitals(font):
+        g = font[name]
+        top = max(p.y for c in g.contours for p in c.points)
+        h = CAP_HEIGHT if top >= CAP_HEIGHT - 60 else top
+        pts = [p for c in g.contours for p in c.points]
+        notes = []
+        fl = flatten(g)
+        lo, hi = spans_at(fl, 0.3 * h), spans_at(fl, 0.7 * h)
+        stems = [(a, b) for a, b in lo if any(abs(a - a2) <= 1.5 and abs(b - b2) <= 1.5 for a2, b2 in hi)]
+        for a, b in stems:
+            w = b - a
+            if not CAP_STEM_W + EXT_STEM_MIN <= w <= CAP_STEM_W + 30:
+                continue
+            d = (w - CAP_STEM_W) / 2
+            for edge, sg in ((a, 1), (b, -1)):
+                for p in pts:
+                    if abs(p.x - edge) <= 1:
+                        p.x = round(p.x + sg * d)
+            notes.append(f"stem {w:.0f}>{CAP_STEM_W}")
+        fl = flatten(g)
+        for yq, line in ((0.3 * h, 0), (0.7 * h, h)):
+            for a, b in spans_at(fl, yq):
+                if not 60 <= b - a <= 125:
+                    continue
+                if not any(abs(a - a2) <= 1.5 and abs(b - b2) <= 1.5 for a2, b2 in spans_at(fl, h - yq)):
+                    continue
+                for edge, sg in ((a, -1), (b, 1)):
+                    tip = [p for p in pts if abs(p.y - line) <= 30 and EXT_SERIF_MIN - 20 <= (p.x - edge) * sg <= EXT_SERIF_MAX]
+                    if len([p for p in tip if p.type]) < 3:
+                        continue
+                    proj = max((p.x - edge) * sg for p in tip)
+                    if not EXT_SERIF_MIN <= proj <= EXT_SERIF_MAX:
+                        continue
+                    if any(proj + 2 < (p.x - edge) * sg <= proj + 40 for p in pts if abs(p.y - line) <= 30):
+                        continue                         # not a slab's end: an arm or a bowl runs on past it
+                    slab = [sp for sp in spans_at(fl, 8 if line == 0 else line - 8) if sp[0] <= a + 1 and sp[1] >= b - 1]
+                    if not slab or abs((slab[0][1] - b if sg > 0 else a - slab[0][0]) - proj) > 3:
+                        continue                         # the slab's own reach (a scan inside it) is not the tip's
+                    far = edge + sg * proj
+                    dd = round(BALANCE.CAP_SERIF - proj)
+                    for p in tip:
+                        if abs(p.x - far) <= 8:
+                            p.x += sg * dd
+                    notes.append(f"{'foot' if line == 0 else 'head'} {proj:.0f}>{BALANCE.CAP_SERIF}")
+        if notes:
+            done.append(f"{name}: " + ", ".join(notes))
+    return done
+
+
+def _inscribed(P, box, step=2.0):
+    """The largest circle inside the contour P [(x, y)] polyline with its centre in box: (diameter, centre)."""
+    import numpy as np
+    A = np.array(P, float)
+    B = np.roll(A, -1, axis=0)
+    xs = np.arange(box[0], box[2], step)
+    ys = np.arange(box[1], box[3], step)
+    X, Y = np.meshgrid(xs, ys)
+    Q = np.stack([X.ravel(), Y.ravel()], 1)
+    inside = np.zeros(len(Q), bool)
+    for (x1, y1), (x2, y2) in zip(A, B):                 # even-odd crossing count
+        c = ((y1 > Q[:, 1]) != (y2 > Q[:, 1]))
+        with np.errstate(divide="ignore", invalid="ignore"):
+            xc = x1 + (Q[:, 1] - y1) * (x2 - x1) / (y2 - y1)
+        inside ^= c & (Q[:, 0] < xc)
+    Q = Q[inside]
+    if not len(Q):
+        return 0.0, None
+    E = B - A
+    L2 = (E ** 2).sum(1) + 1e-12
+    best = (0.0, None)
+    for q in Q:
+        t = np.clip(((q - A) * E).sum(1) / L2, 0, 1)
+        dist = np.sqrt(((A + E * t[:, None] - q) ** 2).sum(1)).min()
+        if dist > best[0]:
+            best = (float(dist), (float(q[0]), float(q[1])))
+    return 2 * best[0], best[1]
+
+
+def round_end_ball(font, name, target):
+    """The ball of a ? shape (the stroke's top, then the ball's outer side, its bottom and the neck's node) scaled about
+    the top node to `target` across (largest inscribed circle); a ball drawn on the right (ʕ) is read turned over."""
+    from normalize import flatten
+    g = font[name]
+    c = max(g.contours, key=lambda c_: len(c_.points))
+    P, n = c.points, len(c.points)
+    top = max((i for i, p in enumerate(P) if p.type), key=lambda i: (P[i].y, -P[i].x))
+    for direction in (1, -1):
+        on = [(top + direction * k) % n for k in range(1, n) if P[(top + direction * k) % n].type]
+        side, bottom, neck = on[0], on[1], on[2]
+        if not (P[bottom].y < P[side].y < P[top].y and P[top].y - P[bottom].y < 160 and
+                abs(P[neck].x - P[side].x) > abs(P[bottom].x - P[side].x)):
+            continue
+        poly = flatten(g)[font[name].contours.index(c)]
+        x0, x1 = sorted((P[side].x, P[top].x + (P[top].x - P[side].x)))
+        drawn, _c = _inscribed(poly, (x0, P[bottom].y, x1, P[top].y))
+        if not drawn:
+            return f"{name}: ball not read"
+        k = target / drawn
+        ox, oy = P[top].x, P[top].y
+        span = [(top + direction * j) % n for j in range(1, ((neck - top) * direction) % n + 1)]
+        for j in span:
+            dx, dy = (P[j].x - ox) * (k - 1), (P[j].y - oy) * (k - 1)
+            P[j].x, P[j].y = round(P[j].x + dx), round(P[j].y + dy)
+            if j == neck:
+                h_ = (j + direction) % n
+                P[h_].x, P[h_].y = round(P[h_].x + dx), round(P[h_].y + dy)
+        return f"{name} ball {drawn:.1f}>{target:.1f}"
+    return f"{name}: ball not found"
+
+
+def glottal_balls(font):
+    out = []
+    for name in GLOTTALS:
+        if name in font:
+            top = max(p.y for c in font[name].contours for p in c.points)
+            out.append(round_end_ball(font, name, BALL_CAP if top > X_HEIGHT + 100 else LC_BALL))
+            out.append(_even_ball(font, name))
+    return out
+
+
+def _even_ball(font, name):
+    """After the ball is scaled, its smooth nodes at one curvature (`loops.even_nodes`, handle lengths only), as the
+    symbols' curves are evened (`symbols.even_curves`): the scaled ball meets the unscaled neck."""
+    import curvecheck as K
+    import loops as LOOPS
+    g = font[name]
+    yr = (-1000, 2000)
+    for c in g.contours:
+        P = [(p.x, p.y, p.type, p.smooth) for p in c.points]
+        b0, w0 = K.report(name, [P], yr)[:2]
+        Q, _log = LOOPS.even_nodes(P, yr)
+        Q = [(round(q[0]), round(q[1]), q[2], q[3]) for q in Q]
+        b1, w1 = K.report(name, [Q], yr)[:2]
+        if (len(b1), w1) < (len(b0), w0):
+            for p, q in zip(c.points, Q):
+                p.x, p.y = q[0], q[1]
+            return f"{name} evened {w0:.2f}>{w1:.2f}"
+    return f"{name} left"
+
