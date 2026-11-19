@@ -1959,3 +1959,74 @@ Fallbacks in the variable font: ® ℗ (Bold), ℗ (Light), as before.
 
 In the masters, honestly: ↔ ↕'s shaft takes the hairline's law, so at 700 to 800 it is thin beside the round ends that
 take the plain stroke's (the heads' joins do the same: one family); ∞ at 800 keeps its right lobe heavier (the engine).
+
+## Regular pass, letters (0.83, 18 November 2026)
+
+The letter items of the audit (`build/regaudit/report.md`) the consistency pass left: worked at 400 with `AREA_BOLD=0
+build.py`, each item built, diffed (`build/owner8/reg/diffreg.py`), checked (`build/owner8/reg/checks.sh`:
+evaluate, even, curvecheck and `--hooks`, pathlint, parts, audit_charset; `build/owner8/let/chk-s*`), looked at large
+with nodes and combs and in text at 14 / 18 / 28 / 96 px (`build/owner8/let/big.py`, `cons/text.py`; images
+`build/owner8/let/*.png`), committed before the next. The masters were not tuned. Every change is a rule in the engine
+(`figs.py`, `charset.py`, `parts.py`); no point was moved by hand.
+
+| # | Item | Rule | Before > after (Regular) |
+|---|---|---|---|
+| 1 | 6 and 9 | `figs.nine_even`: the 9's counter handles, the outer bowl's handles either side of its lowest node under the counter, and those two lowest nodes (level), solved together for curvecheck (aim 1.15, no other fault) and even.py (shelf under 2.3, rate jump under 1.0, mean thickness within 0.6), least change; the 6 the 9 turned half round, point for point (they had drifted apart by up to 18 units of handle) | 9 2.51 > 1.15, 6 4.56 > 1.15, faults 1 / 2 > 0; even.py 2.6 / 2.4 > 2.4 / 2.4 (jump 0.4 / 0.5 > 0.5); ⁶ ⁹ 5.22 / 2.47 > 1.37 / 1.42; ∂ 4.56 > 1.15. The outer bottom moved 5 units left, the counter's 1 right |
+| 2 | Q's tail | `figs.q_tail`: the start is a round end of the stroke's own width (54 across), tangent to the straight upper edge, its leftmost where the drawing's was; three arcs at the circle's handle; the underside's inflection on a node; its level top solved for one curvature, the stroke never under 0.9 of the end | 6.89 > 1.17, faults 5 > 0 (an inflection inside two curves and a flat place gone). A first solve without the neck guard made a ball on a neck: withdrawn |
+| 3 | extended capitals, glottal stops | `charset.ext_capitals` (EXT_CAPS): a serif slab reaching 80 to 130 from its stem's edge, read by a scan inside the slab, is 77; an upright stem 6 or more over 86 is 86. `charset.glottal_balls`: ?'s ball rule (scaled about the stroke's top), the capitals' 96.8 at cap height, the lowercase's 88 at the x-height, then the nodes evened | heads 90-94 > 77, feet 100-114 > 77 (Ɓ Ɗ Ǝ Ƒ Ɦ Ɥ Ɩ Ƙ Ƥ Ɽ Ƭ), Ƭ Ʈ stems 101 > 86; ʔ ʕ 111.3 > 96.8, Ɂ 105.9 > 96.8, ɂ 110.9 > 88; hook faults (drawn) 41 > 33 |
+| 4 | hooked lowercase | `charset.ext_lowercase` (EXT_LOWER): a stem (two upright straight edges, 100 long, facing) between n's stem and 92 is n's; an edge shared by two runs moves once; a foot slab of 74 to 130 is n's 70 | ɦ ɥ ɩ ƥ ɾ ɽ ﬆ ƭ ʈ ʋ c_t s_p 80-83 > 78, Ʋ 103 > 86; ɦ ƙ ɲ feet 78-96 > 70 |
+| 5 | shared bowls, B P R, E F | `parts.bowl`: the branch's and run-in's handle at the bowl's extreme solved for the far quarter's curvature. `figs.cap_bowls`: F's middle arm (edges and beak) on E's centre; P's bowl closing where R's does (lower quarters scaled about the right extremes); B P evened by `even_glyph` | b d p q 1.48 > 1.03; F +17 (355 > 372, its beak 243-466 > 260-483 as E's 260-484); P closes 322 / 369 > 335 / 382 (R's); B 2.11 > 1.10, P 1.22 > 1.12 |
+| 6 | curves | `figs.even_glyph` on EVEN_LETTERS: handle lengths only (`loops.even_nodes`) at aim 1.25, else 1.5, else 1.8, kept only where curvecheck's faults do not grow, even.py holds and parts.check's crotches hold | e 2.66 > 1.24, d's foot bracket 4.70 > 1.18, G 1.61 > 1.17, J 2.66 > 1.58, 2's ball neck 1.43 > 1.20 (œ æ ǥ ₂ ² follow) |
+| 7 | small alignments | `charset.turned_v`: Ʌ is V turned half round on the baseline; Y and Ƴ read by `ext_capitals` under the arms (`FOOT_ONLY`); `figs.f_foot`: f's right foot n's | Ʌ feet -11 > 0, point 710 > 721; Y Ƴ feet 102 > 77 (Ɏ ¥ follow); f 87 > 70 (every f ligature and ſ follow) |
+| 8 | ink | measured (`build/owner8/let/ink8.py`: ink in the x-zone over advance x 520, as the audit's grey) | a +12.9% and g +15.7% over the lowercase mean before and after: the curve work did not touch their weight (a's evening was refused, g was left). Not adjusted |
+
+Tried and withdrawn or left, honestly:
+- 1: the earlier one-sided solves (even_nodes alone; even.py alone) were not used; the joint solve holds both.
+- 2: the first q_tail chose, among three starts, one whose end swelled into a ball on a neck; the 0.9 stroke guard
+  removed it.
+- 5: R's evening (2.00 > 1.01) broke even.py's limit (2.7 > 4.3): R is left at 2.00 / 1.86. b and p's thickness stray
+  rose 3.0 > 3.4 (audited, no limit for the constructed bowl). The first F move left the arm's beak behind (a lopsided
+  bracket, evaluate's lopsided count 3 > 7); the second moves the whole arm.
+- 6: a (3.74) and r (2.18): every evening that cures them moves their crotch off parts.check's neck (r 29.4, a 24.5) or
+  leave, so both are left; U's evening raises its worst ratio (1.01 > 1.20); g left (its Regular handles feed the
+  masters' `g_ear`); R as above. J's evening leaves two lopsided quarters (handles 0.46 / 0.78 and 0.38 / 0.67).
+- 7: r's long foot (131) kept by eye (`7-feet-trial.png`: shortened, the r stands on a stub with a hole after it);
+  y's tail (-209) and μ (-193) left: their depths are rules (round_tail keeps y's, `MU_DESC` 0.86 of p's from the
+  references); Œ's seam (3.01) and c_t's link (infinite): `even_glyph` cannot reach either without a new join
+  construction.
+- 4: ɗ ᶑ ɠ keep 81 (their stem's inner edge is the counter's, not a straight 100 long); the hooked letters' flags are
+  untouched.
+- 8: a and g are still the two darkest lowercase letters; a rule (their strokes' weights against n's, or their
+  advances) is the next step, not taken here.
+
+### Full build (all masters), the audits, `build/snap083d`
+
+`AREA_KERN_FIT=1 build.py` (19 min 42 s, `build/snap083d/build-083d.log`), the audit set by
+`build/owner8/reg/fullaudit.sh` (`build/owner8/let/audit-083d/`) against snap083c's (`build/owner8/cons/audit-083c/`), and
+the Regular's checks (`build/owner8/let/chk-083d/` against `build/owner8/cons/chk-083c/`). A first full build was
+discarded: it showed F's middle arm moved without its beak (evaluate: a lopsided bracket); `cap_bowls` now moves the
+whole arm, and the second build is snap083d. Its Regular is the last Regular-only build's but F.
+
+What moved against snap083c: Regular 97 glyphs (the items' letters and what is built from them: the f ligatures and ſ,
+þ Þ ƀ ɃꝐ Ᵽ, ǥ Ɏ ¥ ₱ ₲ ₽ ₿ ℗ @ ɑ g.ss02, the small 2 6 9, ∂, the fractions as composites), 15 in the overlap layer; Light
+106, Bold 124 (with the accented Y's, and through the engine's laws read on the letters ∗ † ‡ " ⌦ ⌫ and five accent
+composites), the mid layer 6 (@ ɦ œ ƥ ɽ s_p). fit_kerning.json refit (92 lines in, 87 out); kerning keys moved Regular 1
+(ſ ı), Light 755, Bold 222. Fallbacks in the variable font: ® ℗ (Bold), ℗ (Light), as before.
+
+| Audit | snap083c | snap083d |
+|---|---|---|
+| audit_axis Bold / Light | ok (thin: cedi, ogonek x 2, one.ss01) | the same |
+| audit_rays (300 to 800) | 1 glyph (ʕ), 27,600 places | 1 glyph (6: 40.0 > 37.7 at (255, 406), thinner at 800 than at 666), 27,435 places; ʕ cured by its round end |
+| audit_bold Bold / Light | 431 / 432, 432 / 432 | the same (g's neck missed, as before) |
+| audit_kern | pass, 600 least 8.4, 757 under the floor; 800 least 7.9 | pass, 600 least 8.3, 864 under the floor; 800 least 7.7 (f ł.ss04) |
+| curvecheck regions Light, Bold | pass | pass (Bold g.ss02 1.65 > 1.60) |
+| curvecheck hooks Light / Bold | 6 / 14 | 5 / 16 (Bold: ɂ an inflection at its neck, s_p a flat place; Ghook, Nhookleft cured) |
+| interpolation | 62 struck glyphs | the same |
+| Regular: curvecheck, curvecheck hooks (drawn faults) | pass, 41 drawn | pass, 33 drawn |
+| Regular: evaluate | jumps 33, lopsided 3 | jumps 27, lopsided 6 (J two quarters, 6 the 9's turned, the 9 as before) |
+| Regular: even, parts, audit_charset | 0 errors | 0 errors (b p stray 3.0 > 3.4, 9 2.6 > 2.4, P 1.7 > 2.0, e 1.1 > 1.5) |
+| Regular: pathlint | 0 / 159 / 39 | 0 / 157 / 38 |
+
+Not right yet, honestly: the 6 in the masters (one place 2.3 units thinner at 800 than at 666, where the long stroke
+meets the counter: the 6 is now exactly the 9 turned, and the engine reads the turned junction differently); the Bold's
+hook faults 14 > 16 (ɂ's scaled ball, s_p's evened stem); the items' leftovers listed above.

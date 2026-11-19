@@ -674,6 +674,9 @@ def q_tail(font):
 # its lower quarters (outside and counter) scaled upright about their right extremes so the hairline under the counter
 # keeps its thickness; then every smooth node of B P R at one curvature (`loops.even_nodes`, handle lengths only), kept
 # where curvecheck's faults on the glyph do not grow.
+X_ZONE = 520
+
+
 def _band(g, lo, hi, x_min):
     return [p for c in g.contours for p in c.points if lo <= p.y <= hi and p.x > x_min]
 
@@ -714,8 +717,13 @@ def cap_bowls(font):
     if e_arm and f_arm:
         d = round((e_arm[0] + e_arm[1]) / 2 - (f_arm[0] + f_arm[1]) / 2)
         if d:
-            for p in _band(font["F"], f_arm[0] - 3, f_arm[1] + 3, f_stem_r - 1):
+            # the whole arm moves: its two level edges and the upright beak at its end (243 to 466 on F, E's 260 to
+            # 484), not the top arm's beak (over the x-height)
+            for p in _band(font["F"], 150, X_ZONE, f_stem_r + 1):
                 p.y += d
+            for p in _band(font["F"], f_arm[0] - 1, f_arm[1] + 1, f_stem_r - 1):
+                if abs(p.x - f_stem_r) <= 1:
+                    p.y += d
             notes.append(f"F's arm {d:+d} (centre {(f_arm[0] + f_arm[1]) / 2:.1f} > E's {(e_arm[0] + e_arm[1]) / 2:.1f})")
     *_, rob, rib, _a, _b = _closure(font["R"])
     out, inn, ob, ib, oy, iy = _closure(font["P"])

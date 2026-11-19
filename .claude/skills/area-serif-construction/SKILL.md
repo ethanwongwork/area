@@ -148,6 +148,15 @@ the fastest change (under 0.5 units of thickness per unit travelled on a branch,
 | Punctuation dot and ball (0.83, consistency 1) | One dot, the period's (124), on . , : ; … ! ? ¡ ¿; ?'s ball the capitals' round end (1.10 x 88), scaled about the stroke's top; ¿ ¡ are ? ! turned | ! ? ¡ ¿ | `charset.one_drawing`, `question_ball` | `audit_charset` dots |
 | A foot is one corner (0.83, consistency 1) | No level step under 20 units between a foot's corner and the curve leaving it; no stray contour (pathlint `STRAY_AREA`) | ẞ, Ŋ | `charset.no_steps`, `eng_capital` | `pathlint.py` |
 | Figures' sides (0.83, consistency 1 and 3) | A figure shows the same white each side (fit.py) where both references keep its two whites equal: 1 (an upright stroke, as I), 4, 5; the 3's open left is kept | 1 4 5 | `spacing.OPTICAL_MORE` | `tools/fit/fit.py sides` |
+| 9 and 6, one solve (0.83, letters 1) | The counter's handle lengths, the outer bowl's handles either side of its lowest node under the counter, and those two lowest nodes (level) solved together for curvecheck (every smooth node, aim 1.15, no other fault) and even.py (shelf under 2.3, rate jump under 1.0, mean thickness within 0.6), least change; the 6 the 9 turned half round, point for point | 9 6 (their small forms, ∂ follow) | `figs.nine_even`, `nine_solve` (normalize, after `even.run`) | `curvecheck` on the figure, `even.py` |
+| Q's tail start (0.83, letters 2) | A round end of the stroke's own width: a circle of the stroke across (54) tangent to the straight upper edge, its leftmost where the drawing's was; three arcs at the circle's handle; the underside's inflection at a node, its level top solved for one curvature (1.12), the stroke never under 0.9 of the end (no ball on a neck) | Q | `figs.q_tail` | curvecheck on the glyph |
+| Extended capitals' parts (0.83, letters 3, 7) | On the first-drawn capitals (`EXT_CAPS`, Y, Ƴ) a serif slab reaching 80 to 130 from its stem's edge (read by a scan inside the slab) is `CAP_SERIF` 77; an upright stem 6 or more over 86 is 86, both edges in by half | Ɓ Ɗ Ǝ Ƒ Ɦ Ɥ Ɩ Ƙ Ɲ Ƥ Ɽ Ƭ Ʈ Ƴ Y (Ɏ ¥ follow) | `charset.ext_capitals`, `FOOT_ONLY` | `build/owner8/let/t3/capserif.py` |
+| Glottal stops' balls (0.83, letters 3) | ?'s rule: the ball scaled about the stroke's top to the round end, the capitals' (96.8) at cap height, the lowercase's (88) at the x-height; then its nodes evened (handles only) | ʔ ʕ Ɂ ɂ | `charset.glottal_balls`, `round_end_ball`, `_inscribed` | `curvecheck --hooks` |
+| Hooked lowercase's parts (0.83, letters 4) | A stem (two upright straight edges 100 long facing each other) between n's stem and 92 is n's (Ʋ the capitals' 86), an edge shared by two runs moving once; a foot slab of 74 to 130 is n's (70). Flags not yet | ɦ ɥ ɩ ƥ ɾ ɽ ﬆ ƭ ʈ ʋ c_t s_p ƙ ɲ Ʋ | `charset.ext_lowercase`, `EXT_LOWER` | `build/owner8/let/t4/lcstem.py` |
+| Bowl's extreme (0.83, letters 5) | The branch's (or run-in's) handle at the bowl's top and bottom extreme is sqrt((2/3) rise / k), k the far quarter's curvature there: one curvature at the extreme (it was 0.40 of the run, 1.48 times flatter) | b d p q (þ ɑ g.ss02 @ follow) | `parts.bowl`, `BOWL_EXTREME_ONE` | curvecheck, `parts.check` |
+| F's arm, P's closure (0.83, letters 5) | F's middle arm centred on E's; P's bowl closes where R's does, its lower quarters scaled upright about the right extremes (looked at in FERN PREP) | F P (Ꝑ Þ follow) | `figs.cap_bowls` | `build/owner8/let/5-FERN-PREP*.png` |
+| One curvature by handles, guarded (0.83, letters 5, 6) | Every smooth node at one curvature by handle lengths (`loops.even_nodes`), at aim 1.25, else 1.5, else 1.8, kept only where curvecheck's faults do not grow, even.py stays in its limits (or its old reading) and parts.check's crotches hold | B P e d G J 2 (a r R tried and left) | `figs.even_glyph`, `EVEN_LETTERS` | curvecheck, even, parts |
+| f's foot, Ʌ (0.83, letters 7) | f's right foot reaches as n's (70); Ʌ is V turned half round, feet on the baseline | f (every f ligature, ſ), Ʌ | `figs.f_foot`, `charset.turned_v` | build notes |
 | Heights | x 520, cap 712, ascender 780; overshoot 530 / -10 lowercase, 721 / -9 capitals and figures | all | `balance.heights` | `audit_serifs` 4, `check.py` |
 
 A part not in this table has no rule yet. Add the row when you write the rule.
@@ -322,7 +331,10 @@ Say this in every report until it is closed:
   alpha, turned h, r with tail, the s ligatures).
 - u's head serifs are level (520); n's are 8-degree flags. Both references lean u's. Open with the owner since 0.33.
 - Capitals and figures: bowls on B D P R and the joins of 4 6 9 have hairline and stem rules but no shared-bowl
-  construction yet.
+  construction yet (0.83 letters 5: P closes where R does and B P are at one curvature; R's evening breaks even.py).
+- 0.83 letters pass, left: a's counter (3.74) and r's shoulder (2.18) (every evening moves their crotch off its neck or
+  leave); the hooked lowercase's flags and ɗ ᶑ ɠ's stems (their stem edge lies in the counter); Œ's seam and c_t's link;
+  a and g 13% and 16% darker than the lowercase mean (their drawings).
 - r's arm takes n's branch at the stem and keeps its own arm and ball above it.
 
 ## References
