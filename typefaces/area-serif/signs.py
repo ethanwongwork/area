@@ -501,16 +501,23 @@ def tilde(p, s=1.0, white=None):
     run = p.get("run", 0.5) * (lo + hi) / 2
     out = []
     for cy in p.get("cys", [p.get("cy")]):
-        lam = (x1 - x0) - 2 * run * math.cos(math.atan(2 * math.pi * A / max(1.0, (x1 - x0))))
-        for _ in range(20):                              # the wave's length so the runs end at x0 and x1
-            k = 2 * math.pi * A / lam
+        if p.get("slope"):
+            # 0.84 (Regular pass 2, item 2): the wave set by its slope at the inflections (the owner: "too sharp
+            # angled"): its height follows from its length, so the crests' radius is lam / (2 pi tan slope)
+            k = math.tan(math.radians(p["slope"]))
             lam = (x1 - x0) - 2 * run / math.sqrt(1 + k * k)
-        k = 2 * math.pi * A / lam
+            A = k * lam / (2 * math.pi)
+        else:
+            lam = (x1 - x0) - 2 * run * math.cos(math.atan(2 * math.pi * A / max(1.0, (x1 - x0))))
+            for _ in range(20):                          # the wave's length so the runs end at x0 and x1
+                k = 2 * math.pi * A / lam
+                lam = (x1 - x0) - 2 * run / math.sqrt(1 + k * k)
+            k = 2 * math.pi * A / lam
         ca, sa = 1 / math.sqrt(1 + k * k), k / math.sqrt(1 + k * k)
         xs = x0 + run * ca
         ys = cy                                          # the wave starts here (an inflection, rising), on its axis
 
-        def C(t, xs=xs, ys=ys, lam=lam):
+        def C(t, xs=xs, ys=ys, lam=lam, A=A):
             return (xs + t * lam, ys + A * math.sin(2 * math.pi * t))
         width = lambda t, C=C: wf(*_dir(C, t))
         nodes = [0.0, 0.25, 0.5, 0.75, 1.0]

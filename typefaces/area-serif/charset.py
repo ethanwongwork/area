@@ -1485,6 +1485,26 @@ TILDE_K = 1.04                     # 0.83 (consistency 0d): ~'s mean width along
                                    # minus's 52 (thinnest 47 over the crests; ink 23,799 over a 494-unit centreline):
                                    # the damped stress scaled so the mean is the plain stroke's (48.9 level, 59.3 upright)
 INF_H = 0.78
+# 0.84 (Regular pass 2, item 2; the owner: ~ and ≈ "too sharp angled, not smooth enough"): the wave set by its slope at
+# the inflections, TILDE_SLOPE (it was 40 to 45 degrees: amplitude 54 on a 370 wave, crest radius 1.2 strokes); at 32
+# the crests' radius is about 2 strokes. Its weight: the damped stress scaled so the mean width along the centreline is
+# the plain stroke's (52), read on the wave itself (`tilde_k`), so ~ has the minus's colour at any slope
+TILDE_SLOPE = 32.0
+
+
+def tilde_k(slope, mean=None):
+    """The stress's scale so the stroke's mean width along a sine centreline of this inflection slope is the plain
+    stroke's ((SIGN_LO + SIGN_HI) / 2, the minus's 52)."""
+    mean = mean or (SIGN_LO + SIGN_HI) / 2
+    k = math.tan(math.radians(slope))
+    n, tot, ln = 720, 0.0, 0.0
+    for i in range(n):
+        t = (i + 0.5) / n
+        dy = k * math.cos(2 * math.pi * t)               # dy/dx of y = k / (2 pi) sin (2 pi t), x = t
+        ds = math.sqrt(1 + dy * dy)
+        tot += (SIGN_LO + (SIGN_HI - SIGN_LO) * dy * dy / (1 + dy * dy)) * ds
+        ln += ds
+    return mean / (tot / ln)
 INF_W = 1.50
 POINTED = 0.60                     # 0.83 (consistency 0d): the pointed shapes' area over the circle's (symbols 1: 0.70)
 
@@ -1509,9 +1529,11 @@ def tilde_signs(font, m, adv):
     mb = bounds(gp(font, "minus"))
     want = mb[2] - mb[0]
 
+    K_ = tilde_k(TILDE_SLOPE)
+
     def tilde_info(cys, x0, x1):
-        return dict(build="tilde", params=dict(x0=x0, x1=x1, cys=cys, amp=TILDE_AMP, lo=SIGN_LO * TILDE_K,
-                                               hi=SIGN_HI * TILDE_K))
+        return dict(build="tilde", params=dict(x0=x0, x1=x1, cys=cys, amp=TILDE_AMP, slope=TILDE_SLOPE,
+                                               lo=SIGN_LO * K_, hi=SIGN_HI * K_))
     x0, x1 = mb[0], mb[2]
     for _ in range(30):                                  # the centreline's ends so the ink is the minus's width
         b = bounds(built_path(tilde_info([cy], x0, x1)))
