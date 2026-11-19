@@ -520,7 +520,7 @@ def _g2_cubic(p0, T0, k0, p3, T1, k1, balanced=False):
         b = (cr(T0, D) - 1.5 * k0 * a * a) / c
         return 1.5 * k1 * b * b - (cr(D, T1) - a * c)
     span = math.hypot(*D)
-    grid = [span * (i + 1) / 400 for i in range(400)]
+    grid = [span * (i + 1) / 400 for i in range(1000)]          # up to 2.5 chords (a nearly straight span)
     vals = [fa(a) for a in grid]
     sols = []
     for i in range(len(grid) - 1):

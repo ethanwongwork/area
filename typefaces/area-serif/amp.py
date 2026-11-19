@@ -136,6 +136,28 @@ ARM_FILLET = 0.30       # 0.82 item 19: the crotch under the arm (at.FILLET's sh
 TAIL_CUT = 30.0          # 0.84: the tail's cut end across, the serif tip (joins.END_MIN)
 SOFT = 7.0               # 0.84: a free end's corners, the letters' serif-tip radius (derive.SOFT, measured 7.0 on H n I l)
 RIBBON_SEGS = (1, 3, 4, 5, 6, 7, 8, 9)   # 0.84: the P segments whose width is evened (`even_ribbon`)
+# 0.84 (Regular pass 2, second pass; the owner: "not smooth, the stroke doesn't look continuous through the bottom
+# intersection, the thicks and thins are not even/gradual"). Measured on 0.84b (build/owner9/stroke): the counter's
+# edge came out of the diagonal 3 units and 7.9 degrees off its own continuation, the width stepped 41.3 > 39.2 there,
+# the bowl's width ran 82 > 55 > 55 > 41 (a plateau at the bottom, then a drop). The bowl's stroke now runs into the arm
+# on an ease (construct): its two edges a clothoid and its parallel, from a node on the diagonal's centreline turning at
+# ARM_R to the arm's line ARM_EASE past the diagonal (at ARM_END_R there, ARM_STRAIGHT of straight left before v's
+# serif); the bowl's curves meet it at one curvature; the bowl's width one even taper from the left side to the arm's
+# width TAPER_LEAD before the diagonal (bowl_taper, and even_ribbon's taper term at TAPER_W); the spine's hidden
+# inflection at curvature 0 (INFL_W, falling to 0 at the Bold, where it held the loop 1.32 off one curvature); no flat
+# place in the edges' curves (DIP_W). Tried at the Regular (build/owner9/pass2/amp): ARM_R 300 to 700, ARM_EASE 80 to
+# 150 and as a share of the free arm, the ease from outside the diagonal (the width then 39.4 in and out, but the bowl's
+# rise turned at the diagonal's edge: 1.1 to 2.3 units off), two cubics for the ease, ARM_END_R 1500 to 1e9; each moved
+# the crossing's fit or left a fault in a master. These values: every master clean (curvecheck 0 faults)
+TAPER_W = 0.3
+TAPER_LEAD = 30.0
+ARM_EASE = 100.0
+ARM_STRAIGHT = 50.0
+DIP_W = 200.0
+ROUND_EASES = True      # `_round_eases`: a curve's handles where it meets a straight on whole units by the straight
+INFL_W = 20.0
+ARM_END_R = 2500.0      # not 0: whole units would turn a curvature of 0 either way at the join
+ARM_R = 450.0
 PEAK = 1.30             # 0.82 item 19: a node's curvature over the curves' a third in (a round turn, not a point)
 
 
@@ -249,7 +271,7 @@ class Chain:
         """Handle lengths (least squares, each handle's share of its reach): one curvature on both sides of every
         smooth node between two curves; a curve leaving a straight eases (its curvature there at most 0.35 of its
         tightest); no flat place and no inflection inside a curve; otherwise near TENSION; inside the triangle."""
-        idx = [i for i, k in enumerate(self.kinds) if k == "C"]
+        idx = [i for i, k in enumerate(self.kinds) if k == "C" and i not in getattr(self, "fixed", ())]
         reach = {i: self._reach(i) for i in idx}
         lo, hi = math.log(0.22), math.log(0.95)
 
@@ -271,7 +293,7 @@ class Chain:
                 out.append(30 * min(max(pos, 0), max(-neg, 0)) / top_)        # an inflection inside a curve
                 ak = [abs(k) for k in ks]
                 dip = max(min(max(ak[:m + 1]), max(ak[m:])) - ak[m] for m in range(17)) / top_
-                out.append(20 * max(0.0, dip - 0.04))                           # a flat place
+                out.append(getattr(self, "dip_w", 20) * max(0.0, dip - 0.04))   # a flat place
                 if i in self.rise:
                     # 0.82 item 19: a turn off a straight rises to the curvature it hands on and no further (a
                     # peak just short of the next node reads as a shoulder: the loop's upper left at the Bold)
@@ -282,7 +304,14 @@ class Chain:
                 ka, kb = self.kinds[n - 1], self.kinds[n]
                 if ka == "C" and kb == "C":
                     k1, k2 = curvature(S[n - 1], 1.0), curvature(S[n], 0.0)
-                    out.append(0.0 if n in self.inflect else getattr(self, "kw", 6) * math.log((abs(k1) + 1e-6) / (abs(k2) + 1e-6)))
+                    if n in self.inflect:
+                        # 0.84 pass 2: an inflection hidden in a crossing (the spine's, on the diagonal's centreline)
+                        # is G2: the curvature 0 on both sides, so each edge is one curve through the crossing
+                        mk = max(abs(curvature(S[n - 1], 0.5)), abs(curvature(S[n], 0.5)), 1e-9)
+                        iw = getattr(self, "infl_w", 0.0)
+                        out += [iw * abs(k1) / mk, iw * abs(k2) / mk]
+                    else:
+                        out.append(getattr(self, "kw", 6) * math.log((abs(k1) + 1e-6) / (abs(k2) + 1e-6)))
                     if self.peaks and n not in self.inflect:
                         # 0.82 item 19: no point at a node: the curvature there at most PEAK times the tightest
                         # place a third of the way into either curve
@@ -343,9 +372,27 @@ def even_ribbon(P, Q, segs, weight=15.0):
     qa = Q.problem()
     nP = len(pa[1])
 
+    taper = getattr(P, "taper", None)
+
     def res(x):
         r = list(pa[5](x[:nP])) + list(qa[5](x[nP:]))
         W = ribbon_width(P, Q, segs)
+        if taper:
+            # 0.84 pass 2: across these P segments the width falls evenly along the edge (one even taper), reaching
+            # the arm's `back` units before the segments' end (so the stroke enters the diagonal at the arm's width)
+            tsegs, w0, w1, back = taper
+            SP_ = P.segs()
+            pts = [(j, t_, v) for j, t_, v in W if j in tsegs]
+            arc, prev, acc = [], None, 0.0
+            for j, t_, v in pts:
+                q_ = bez(SP_[j], t_)
+                if prev is not None:
+                    acc += math.dist(prev, q_)
+                arc.append(acc)
+                prev = q_
+            end_ = max(acc - back, 1e-9)
+            for (j, t_, v), a_ in zip(pts, arc):
+                r.append(TAPER_W * (v - (w0 + (w1 - w0) * min(1.0, a_ / end_))))
         for i in segs:
             w = [v for j, _t, v in W if j == i]
             sg = 1 if w[-1] >= w[0] else -1
@@ -525,6 +572,34 @@ def widths(R):
 
 
 # ------------------------------------------------------------------ the construction
+def bowl_taper(W, G, sx):
+    """0.84 (Regular pass 2, second pass; the owner: "the thicks and thins are not even/gradual"): the lower bowl's
+    stroke from its left side (o's side, 82) to the arm (v's thin, 39) is one even taper: the bottom's width is where a
+    width falling evenly along the centreline from the left extreme to the arm's crossing stands at the bottom (it was
+    e's bottom, 54.5, a plateau before the fall into the arm: 82 > 55 > 55 > 41)."""
+    lo, hi = W["arm"], W["ll"]
+    lb = W["lb"]
+    ll, lbx = G["ll"], G["lb_x"]
+    for _ in range(4):
+        a = abs(lbx - ll[0]) * sx
+        b = abs(ll[1] - (G["bottom"] + lb / 2))
+        h = ((a - b) / (a + b)) ** 2
+        arc1 = math.pi * (a + b) * (1 + 3 * h / (10 + math.sqrt(4 - 3 * h))) / 4       # the quarter (Ramanujan)
+        # on to where the bowl's centreline meets the diagonal's centreline (on the arm's line)
+        ad = unit((G["arm_dir"][0] * sx, G["arm_dir"][1]))
+        ac = (G["arm_x"] * sx, 355.0)
+        dang = math.radians(G["diag_deg"])
+        dd = unit((math.sin(dang) * sx, -math.cos(dang)))
+        c0 = (G["diag_x"] * sx, 250.0)
+        n_ll = (-abs(dd[1]), -abs(dd[0]))
+        L1p = (c0[0] + n_ll[0] * W["diag"] / 2, c0[1] + n_ll[1] * W["diag"] / 2)
+        t = meet(ac, ad, L1p, dd) - TAPER_LEAD
+        nx, ny = ac[0] + ad[0] * t, ac[1] + ad[1] * t
+        arc2 = 1.05 * math.dist((lbx * sx, G["bottom"] + lb / 2), (nx, ny))
+        lb = hi - (hi - lo) * arc1 / (arc1 + arc2)
+    return lb
+
+
 def weight_share(R):
     """0 at the Regular's stem, 1 at the Bold's (140), on the stem's logarithm; the Light takes the Regular's."""
     return min(1.0, max(0.0, math.log(R["stem"] / 78.0) / math.log(140.0 / 78.0)))
@@ -632,6 +707,9 @@ def construct(R, G=None, sx=1.0, _pass=0):
     W = widths(R)
     X = lambda x: x * sx
     top, bot = G["top"], G["bottom"]
+    if G.get("taper", True):
+        W = dict(W)
+        W["lb"] = bowl_taper(W, G, sx)
     # the diagonal
     a = math.radians(G["diag_deg"])
     dd = unit((math.sin(a) * sx, -math.cos(a)))          # down the diagonal
@@ -718,6 +796,63 @@ def construct(R, G=None, sx=1.0, _pass=0):
               peaks=bool(G.get("loop")),
               radii={8: _lerp(BOWL_R, weight_share(R)) * (LBo[0] - LLo[0])} if G.get("loop") else None,
               capped=(3,) if G.get("loop") else ())
+    # 0.84 (Regular pass 2, second pass; the owner: "the stroke doesn't look continuous through the bottom
+    # intersection"): the bowl's stroke and the arm are one stroke whose edges run on through the diagonal as one
+    # curve. Each edge leaves the bowl, is still turning (gently) as it crosses the diagonal, and straightens into the
+    # arm's line ARM_EASE beyond the diagonal's upper edge: from there back the edge is a clothoid (curvature rising
+    # evenly from 0 to 1 / ARM_R at the node inside the diagonal), one cubic G2 at both ends; the bowl's curve meets it
+    # at one curvature. Before, each edge met the arm's line at a node inside the diagonal with the bowl's whole turn
+    # still in it: the counter's edge came out 3 units and 7.9 degrees off its own continuation
+    def _ease(Lp):
+        """The counter edge's ease: a clothoid from its node inside the diagonal (curvature 1 / ARM_R) to the arm's
+        line ARM_EASE beyond the diagonal's upper edge (curvature 1 / ARM_END_R): (start, tangent, end)."""
+        # the ease ends ARM_EASE beyond the diagonal's upper edge, or ARM_STRAIGHT before the serif's bracket leaves the
+        # arm if that comes first
+        sv = v_serif(R["v"], AR, AL, ad, G["arm_top"])
+        s_br = min(((sv[0][0][0] - AR[0]) * ad[0] + (sv[0][0][1] - AR[1]) * ad[1]),
+                   ((sv[2][0] - AL[0]) * ad[0] + (sv[2][1] - AL[1]) * ad[1]))
+        s_up = meet(Lp, ad, L2p, dd)
+        sA = s_up + min(ARM_EASE, s_br - s_up - ARM_STRAIGHT)
+        sN = meet(Lp, ad, c0, dd)
+        Ls = sA - sN
+        A_ = (Lp[0] + ad[0] * sA, Lp[1] + ad[1] * sA)
+        th = math.atan2(ad[1], ad[0])
+        x_, y_ = A_
+        n_ = 400
+        ds = Ls / n_
+        kN, kA = 1.0 / ARM_R, 1.0 / ARM_END_R
+        for i_ in range(n_):
+            k_ = kA + (kN - kA) * (i_ + 0.5) / n_
+            x_ -= math.cos(th - k_ * ds / 2) * ds
+            y_ -= math.sin(th - k_ * ds / 2) * ds
+            th -= k_ * ds
+        return (x_, y_), (math.cos(th), math.sin(th)), A_
+    import signs as SG_
+    N0, tN, A0 = _ease(AL)
+    for nm, C_ in (("P", P), ("Q", Q)):
+        N_, A_, kN_, kA_ = N0, A0, 1.0 / ARM_R, 1.0 / ARM_END_R
+        if nm == "Q":
+            # the outside edge is the counter edge's parallel at the arm's width: the stroke one width through the
+            # crossing (each node moved the width along the edge's normal, its curvature the parallel's)
+            w_ = W["arm"]
+            N_ = (N0[0] + tN[1] * w_, N0[1] - tN[0] * w_)
+            A_ = (A0[0] + ad[1] * w_, A0[1] - ad[0] * w_)
+            kN_, kA_ = kN_ / (1 + kN_ * w_), kA_ / (1 + kA_ * w_)
+        cub = SG_._g2_cubic(N_, tN, kN_, A_, ad, kA_, balanced=True)
+        if cub is None:
+            raise ValueError("ampersand: no G2 cubic for the arm's ease")
+        C_.nodes[10] = (N_, tN)
+        C_.nodes.insert(11, (A_, ad))
+        C_.kinds.insert(10, "C")
+        C_.smooth.insert(11, True)
+        C_.lens.insert(10, [math.dist(cub[0], cub[1]), math.dist(cub[3], cub[2])])
+        C_.fixed = {10}
+        C_.dip_w = DIP_W                     # 0.84 pass 2: no flat place in the bowl's quarters under the ease's pull
+        # the hidden inflection's weight falls to 0 at the Bold (there it would hold the loop off one curvature, 1.32)
+        C_.infl_w = INFL_W * (1.0 - weight_share(R))
+    # the taper reaches the arm's width TAPER_LEAD before the diagonal's lower edge
+    _sin = abs(ad[0] * dd[1] - ad[1] * dd[0])
+    P.taper = ((8, 9), W["ll"], W["arm"], W["diag"] / 2 / _sin + TAPER_LEAD)
     P.solve()
     Q.solve()
     if G.get("even_ribbon", True) and _pass != 1:
@@ -736,13 +871,20 @@ def construct(R, G=None, sx=1.0, _pass=0):
     info = {}
     # X3: the arm's left edge meets the diagonal's upper edge (a line on Q)
     iL2 = 2
-    X3 = meet(AL, ad, L2p, dd)
-    X3 = (AL[0] + ad[0] * X3, AL[1] + ad[1] * X3)
+    h3 = cross_line(sP[10:12], L2p, dd, lambda hs: hs[0])
+    X3p, X3 = (10 + h3[0][0], h3[0][1]), h3[2]
     tq = ((X3[1] - sQ[iL2][0][1]) / (sQ[iL2][3][1] - sQ[iL2][0][1]))
     X3q = (iL2, tq)
-    # X2: the arm's right edge meets the tail's top (Q, before the line)
-    h = cross_line(sQ[:3], AR, ad, lambda hs: max(hs, key=lambda z: z[0]))
-    X2q, X2 = h[0], h[2]
+    # X2: the arm's right edge (Q's, from the bowl) meets the tail's top (Q, before the line)
+    h2 = crossings(sQ[:3], sQ[10:12])
+    if not h2:
+        raise ValueError("ampersand: the arm's right edge does not meet the tail's top")
+    h2 = max(h2, key=lambda z: z[0])
+    X2q, X2a, X2 = h2[0], (10 + h2[1][0], h2[1][1]), h2[2]
+    def on_seg_line(segs, i, p):
+        s_ = segs[i]
+        d_ = (s_[3][0] - s_[0][0], s_[3][1] - s_[0][1])
+        return (i, ((p[0] - s_[0][0]) * d_[0] + (p[1] - s_[0][1]) * d_[1]) / (d_[0] ** 2 + d_[1] ** 2))
     # crossings of the ribbon with itself
     PQ = crossings(sP, sQ)
     QQ = crossings(sQ, sQ, skip_same=8)
@@ -778,12 +920,12 @@ def construct(R, G=None, sx=1.0, _pass=0):
     nP, nQ = len(sP), len(sQ)
     # C2 and X1: the bowl's two edges (P's and Q's curve into the arm, index 9) cross the diagonal's lower edge
     L1seg = [(l1(-400), l1(-400), l1(1200), l1(1200))]
-    hP = crossings(sP[9:10], L1seg)
-    hQ = crossings(sQ[9:10], L1seg)
+    hP = [((9 + a[0], a[1]), b, pt) for a, b, pt in crossings(sP[9:11], L1seg)]
+    hQ = [((9 + a[0], a[1]), b, pt) for a, b, pt in crossings(sQ[9:11], L1seg)]
     if not (hP and hQ):
         raise ValueError("ampersand: the bowl's stroke does not cross the diagonal's lower edge on its curve")
-    endP, C2 = (9, hP[0][0][1]), hP[0][2]
-    endQ, X1 = (9, hQ[0][0][1]), hQ[0][2]
+    endP, C2 = hP[0][0], hP[0][2]
+    endQ, X1 = hQ[0][0], hQ[0][2]
     if not (sP[2][0][1] < X1[1] < sP[2][3][1] and sP[2][0][1] < C2[1] < sP[2][3][1]):
         raise ValueError(f"ampersand: the bowl crosses the diagonal off its straight (X1 {X1}, C2 {C2})")
     # outer contour: Q from the bowl's bottom to X1; P back from X1 to the tip; the cut; Q from the tip to X2; the
@@ -795,10 +937,9 @@ def construct(R, G=None, sx=1.0, _pass=0):
     k_cut = len(outer)
     outer += [("L", (T1, T1, T2, T2))]
     outer += [("C" if i != 2 else "L", s) for s, i in piece(sQ, (0, 0.0), X2q)]
-    outer += [("L", (X2, X2, serif[0][0], serif[0][0]))]
-    k_x2 = len(outer) - 2
+    outer += [("C" if i == 10 else "L", s_) for s_, i in piece(sQ, X2a, on_seg_line(sQ, 11, serif[0][0]))]
     outer += serif[1]
-    outer += [("L", (serif[2], serif[2], X3, X3))]
+    outer += [("C" if i == 10 else "L", s_) for s_, i in piece(sP, on_seg_line(sP, 11, serif[2]), X3p)]
     outer += [("C" if i != 2 else "L", s) for s, i in piece(sQ, X3q, J2[1])]
     outer += [("C" if i != 2 else "L", s) for s, i in piece(sP, J2[0], J[0])]
     outer += [("C" if i != 2 else "L", s) for s, i in piece(sQ, J[1], lb_q)]
@@ -951,6 +1092,8 @@ def to_points(segs):
                 h_[0], h_[1] = q[0] + d[0] * L, q[1] + d[1] * L
     _round_handles(pts)
     _no_infl(pts, ideal_pts)
+    if ROUND_EASES:
+        _round_eases(pts, ideal_pts)
     out = [(int(q[0]), int(q[1]), q[2], q[3]) for q in pts]
     # drop zero-length lines and doubled nodes
     clean = []
@@ -1128,6 +1271,53 @@ def _round_handles(pts):
             a[0], a[1] = best[1]
             b[0], b[1] = best[2]
 
+
+def _round_eases(pts, ideal):
+    """0.84 (Regular pass 2, second pass): where a curve runs into a straight at a smooth node, the curvature at the join
+    is set by how far the curve's far handle stands off the straight's line: that handle takes the whole-unit place
+    within 1 of its rounded one whose distance from the line is nearest the drawn one's (the arm's ease ends nearly
+    flat; rounded on its own, half a unit of that handle read as a curve leaving the straight at 0.62 of its tightest)."""
+    n = len(pts)
+    for i, q in enumerate(pts):
+        if not (q[2] and q[3]):
+            continue
+        a, b = pts[i - 1], pts[(i + 1) % n]
+        if a[2] is None and b[2] is not None and q[2] == "curve":     # a curve arrives, a line leaves
+            near, far, other = (i - 1) % n, (i - 2) % n, (i - 3) % n
+        elif b[2] is None and q[2] == "line" and pts[(i + 3) % n][2] == "curve":   # a line arrives, a curve leaves
+            near, far, other = (i + 1) % n, (i + 2) % n, (i + 3) % n
+        else:
+            continue
+        if pts[other][3]:                                   # the far handle is a smooth node's: its line stays
+            continue
+        # the line's own direction (from its far end to the node), and the near handle on it: of the whole-unit places
+        # within 1 of it, the one nearest that line
+        o_ = pts[(i + 1) % n] if q[2] == "curve" else pts[i - 1]
+        lin = (q[0] - o_[0], q[1] - o_[1]) if q[2] == "curve" else (o_[0] - q[0], o_[1] - q[1])
+        ml = math.hypot(*lin)
+        if ml < 1e-9:
+            continue
+        lu = (-lin[0] / ml, -lin[1] / ml) if q[2] == "curve" else (lin[0] / ml, lin[1] / ml)
+        hx, hy = pts[near][0], pts[near][1]
+        side = lambda p_: abs((p_[0] - q[0]) * lu[1] - (p_[1] - q[1]) * lu[0])        # noqa: E731
+        along = lambda x_, y_: (x_ - q[0]) * lu[0] + (y_ - q[1]) * lu[1]     # noqa: E731
+        sg_ = 1 if along(hx, hy) > 0 else -1
+        cand = [(side((hx + dx, hy + dy)), abs(dx) + abs(dy), hx + dx, hy + dy) for dx in (-1, 0, 1) for dy in (-1, 0, 1)
+                if sg_ * along(hx + dx, hy + dy) > 1]
+        if cand:
+            b_ = min(cand)
+            pts[near][0], pts[near][1] = b_[2], b_[3]
+        d = (pts[near][0] - q[0], pts[near][1] - q[1])
+        m = math.hypot(*d)
+        if m < 1e-9:
+            continue
+        u = (d[0] / m, d[1] / m)
+        off = lambda p_: (p_[0] - q[0]) * u[1] - (p_[1] - q[1]) * u[0]     # noqa: E731
+        want = off(ideal[far])
+        x0, y0 = pts[far][0], pts[far][1]
+        best = min(((abs(off((x0 + dx, y0 + dy)) - want), abs(dx) + abs(dy), x0 + dx, y0 + dy)
+                    for dx in (-1, 0, 1) for dy in (-1, 0, 1)))
+        pts[far][0], pts[far][1] = best[2], best[3]
 
 def _no_infl(pts, ideal):
     """0.82 (owner round 8, item 19): a cubic whose drawn form turns one way and whose rounded control polygon turns
