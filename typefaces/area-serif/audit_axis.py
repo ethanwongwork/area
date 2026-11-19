@@ -18,13 +18,18 @@ A slashed letter whose points flew thousands of units off (0.76's first build) f
 """
 import math
 import sys
+import os as _os
+ROWS = int(_os.environ.get("AREA_AXIS_ROWS", 6))      # rows printed per check (0.82)
 
 import numpy as np
 import ufoLib2
 
 import bold as B
 
-STOPS = list(range(400, 701, 25))
+import weightaxis as W
+# 0.82 (owner round 8, axis): stops on the 0.82 axis, at 0.81's every 25 units (400 to 700 > 400 to 800, every 33.3;
+# 375 to 300 unchanged): the same stems (weightaxis.from_old), so the results compare with every audit before
+STOPS = [W.from_old(w) for w in range(400, 701, 25)]
 LIGHT_STOPS = [375, 350, 325, 300]
 FILLET_MAX = 20           # a softened corner (7 a side in the Regular) may grow with the stroke, not past this
 FILLET_SMALL = 12         # a curve whose ends are this close in the Regular is a softened corner
@@ -474,7 +479,7 @@ def report(title, fails, path):
     for k, rows in fails.items():
         names = sorted({r.split(" ")[0] for r in rows})
         bad += len(names)
-        print(f"  {k:10} {'ok' if not rows else str(len(names)) + ' glyphs: ' + '; '.join(rows[:6]) + (' ...' if len(rows) > 6 else '')}")
+        print(f"  {k:10} {'ok' if not rows else str(len(names)) + ' glyphs: ' + '; '.join(rows[:ROWS]) + (' ...' if len(rows) > ROWS else '')}")
     with open(path, "w") as f:
         for k, rows in fails.items():
             f.writelines(f"{k}\t{r}\n" for r in rows)
@@ -492,18 +497,19 @@ def main():
     v = B.vector(stem)
     mids = bold.layers["mid"] if "mid" in bold.layers else {}
     tm = (dict(B.axis_map(stem))[B.MID_WEIGHT] - B.REG_STEM) / (stem - B.REG_STEM)
-    ts = [(w, (st - B.REG_STEM) / (stem - B.REG_STEM)) for w, st in B.axis_map(stem, STOPS)]
+    ts = [(W.short(w), (st - B.REG_STEM) / (stem - B.REG_STEM)) for w, st in B.axis_map(stem, STOPS)]
     keys = ("moved", "turns", "crossings", "counter", "drift", "symmetry", "mirror", "seam", "thin", "monotone", "composite")
-    q = stem / B.REG_STEM
-    w_bold = lambda t: round(400 + 300 * math.log((B.REG_STEM + t * (stem - B.REG_STEM)) / B.REG_STEM) / math.log(q))   # noqa: E731
-    w_light = lambda t: round(400 - 100 * math.log(B.REG_STEM / (B.REG_STEM - t * (B.REG_STEM - B.LIGHT_STEM))) / math.log(B.REG_STEM / B.LIGHT_STEM))   # noqa: E731
+    # a share of the way between two masters as a weight on the 0.82 axis (to a tenth)
+    w_bold = lambda t: W.short(round(W.weight(B.REG_STEM + t * (stem - B.REG_STEM), stem), 1))   # noqa: E731
+    w_light = lambda t: W.short(round(W.weight(B.REG_STEM - t * (B.REG_STEM - B.LIGHT_STEM)), 1))   # noqa: E731
     fails = {k: [] for k in keys}
     n_out, n_comp = sweep(reg, bold, mids, ts, tm, lambda t: 30 * (1 + (v["tip"] - 1) * t), fails, w_of=w_bold)
     mirror(reg, bold, fails)
     reg_ufo = ufoLib2.Font.open(f"{d}/AreaSerif-Regular.ufo")
     seams(reg_ufo, reg, fails)
     seams(reg_ufo, bold, fails)
-    bad = report(f"weight axis, stem {stem}: {n_out} outlined glyphs and {n_comp} composites, {len(STOPS)} stops ({STOPS[0]} to {STOPS[-1]})",
+    print(W.AXIS_NOTE + "; stops every 33.3 from 400 (0.81's every 25)")
+    bad = report(f"weight axis, stem {stem}: {n_out} outlined glyphs and {n_comp} composites, {len(STOPS)} stops ({W.short(STOPS[0])} to {W.short(STOPS[-1])})",
                  fails, f"{out}/audit-axis.txt")
     if os.path.exists(f"{d}/AreaSerif-Light.ufo"):              # 0.80: the Light side, 375 down to 300
         light = ufoLib2.Font.open(f"{d}/AreaSerif-Light.ufo")
@@ -515,6 +521,20 @@ def main():
         sweep(reg, light, {}, lts, 1, lambda t: 30 * (1 + (lv["tip"] - 1) * t), lfails, lighter=True, w_of=w_light)
         bad += report(f"weight axis, Light stem {B.LIGHT_STEM}: {len(LIGHT_STOPS)} stops ({LIGHT_STOPS[0]} down to {LIGHT_STOPS[-1]})",
                       lfails, f"{out}/audit-axis-light.txt")
+    if os.path.exists(f"{d}/AreaSerif-{W.LOW_NAME}.ufo") and os.path.exists(f"{d}/AreaSerif-Light.ufo"):   # 0.82 (axis B)
+        # the lightest side: the Light master to the lightest (ExtraLight), 275 down to its weight every 25 (a new
+        # pair: the variable font interpolates the two there); a stroke there is held to the tip at its weight
+        thin = ufoLib2.Font.open(f"{d}/AreaSerif-{W.LOW_NAME}.ufo")
+        tv, lv = B.vector(W.THIN_STEM), B.vector(B.LIGHT_STEM)
+        stops = list(range(275, W.THIN_WEIGHT - 1, -25))
+        tts = [(w, (B.LIGHT_STEM - W.stem(w)) / (B.LIGHT_STEM - W.THIN_STEM)) for w in stops]
+        w_thin = lambda t: W.short(round(W.weight(B.LIGHT_STEM - t * (B.LIGHT_STEM - W.THIN_STEM)), 1))   # noqa: E731
+        tfails = {k: [] for k in keys}
+        mirror(reg, thin, tfails)
+        seams(reg_ufo, thin, tfails)
+        sweep(light, thin, {}, tts, 1, lambda t: 30 * (lv["tip"] + (tv["tip"] - lv["tip"]) * t), tfails, lighter=True, w_of=w_thin)
+        bad += report(f"weight axis, {W.LOW_NAME} stem {W.THIN_STEM} against the Light: {len(stops)} stops ({stops[0]} down to {stops[-1]})",
+                      tfails, f"{out}/audit-axis-thin.txt")
     sys.exit(1 if bad else 0)
 
 

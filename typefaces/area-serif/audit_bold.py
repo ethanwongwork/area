@@ -108,7 +108,7 @@ def audit(reg, name, v, t=1.0):
             m[k] = max(set(vals), key=vals.count)
     ball_knots = {k for ax, lo, hi, o, lo2, hi2 in B.balls(body) for k in ((lo, hi) if ax == 1 else (lo2, hi2))}
     hints = B.HINTS.get(name, {})
-    vv = dict(v, sub=hints.get("sub", "loop"))
+    vv = dict(v, sub=hints.get("sub", "loop"), fig=name.split(".")[0] in B.FIGURES)   # as bold.bold
     named = {"x": {}, "y": {(a, b): want(vv) if callable(want) else want for a, b, want, kind in hints.get("y", [])}}
     bl = B.balls(body)
     ball = {"x": set(), "y": set()}
@@ -197,8 +197,13 @@ def sweep(stem=B.STEM, names=None):
     names = names or list(string.ascii_lowercase + string.ascii_uppercase) + FIGURES
     reg = ufoLib2.Font.open("build/AreaSerif-Regular.ufo")
     fail = 0
+    # 0.82 (owner round 8, axis): weights on the 0.82 axis; the stops are 0.81's (375 to 325, then 400 to 700 every 25),
+    # at the same stems (weightaxis.from_old): 400 to 800 every 33.3
+    import weightaxis as W
+    print(f"{W.AXIS_NOTE}; the stops are the 0.81 axis's every 25 units at their stems")
     stops = [(w, st, B.vector(B.LIGHT_STEM)) for w, st in B.axis_map(stem, (375, 350, 325))]
-    stops += [(w, st, B.vector(stem)) for w, st in B.axis_map(stem, range(400, 701, 25))]
+    stops += [(W.short(round(W.from_old(o), 1)), st, B.vector(stem))
+              for (w, st), o in zip(B.axis_map(stem, [W.from_old(o) for o in range(400, 701, 25)]), range(400, 701, 25))]
     for w, st, v in stops:
         t = (st - B.REG_STEM) / (v["stem"] - B.REG_STEM)
         rows, bad, unsound = [], [], 0

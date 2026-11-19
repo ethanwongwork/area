@@ -749,3 +749,1284 @@ every 25 units. The hooks' curvature check still fails on the faults even_part c
 sheets `24-hook-combs-masters.png`, the Regular's ten worst `24-hook-combs-regular.png`). Figure `24-axis.png`; both base
 pages rebuilt on this build with the 0.81 sections ("Axis round 3" on top), checked at 1024 and 390 px: no broken image,
 no horizontal scroll on the evaluation page, UTF-8.
+
+## Owner round 8 (16 November 2026)
+
+The owner compared g.ss02 in 0.80, the 0.81 tip before the owner round and the round 7 build at 300, 400, 550, 700:
+"the g from 0.80 is the best one. the new single story g is not smooth at all on the bottom right curve." Item 1 only:
+g.ss02. The build before this change is saved as `build/snap081` (fonts and master UFOs).
+
+| # | Item | Cause | Rule | Before > after |
+|---|---|---|---|---|
+| 80 | g.ss02's tail back to 0.80's | Form D (owner round, #46) kept 0.80's ball height on 0.81's half-ellipse: both stem edges ran straight down to the ball's height (-115 in the Regular) and the outside then turned in one quarter 158 wide and 69 tall. Along the outside from the stem the radius went 64, 87, 136, 188, 262, 351, 428, 495 (a tight corner, then a flat run into the lowest point, which sat at x 302). 0.80's outside leaves the stem at the baseline and turns in one quarter 255 wide and 235 tall, radius 207 to 290 all the way (read on the variable font at 400) | 0.80's construction restored as form E (`charset.G_TAIL_FORMS["E"]`, `_tail_080`): four quarter turns between five places, each handle 0.55 of its side; the outside leaves the stem 2 units above the baseline (0.80's j as drawn; j's own tail rule has since moved j's to 11), the inside where j's inner stem edge ends; lowest point 0.518 of the bowl's width (0.560 at the Bold stem), ball top 0.138 x-height under the baseline (0.120 at the Bold stem). The ball is j's: in the Regular and Light j's ball is 0.80's point for point; in a master `bold.bold_font` now passes the master's j as the engine read it, before the 0.81 tail rebuild (the Bold engine's j ball is 0.80's Bold j ball point for point, so 0.80's path is reproduced, not copied). The white law between ball and bowl still holds the Bold ball (1 unit lower than 0.80's). The masters' curvature evening (`loops.even_part`) leaves g.ss02 alone (`bold.G_OWNER_SHAPE`). The bowl and stem stay today's (q's) | tail against 0.80, variable font, greatest distance between the outlines anywhere on the tail: 300 1.0, 400 0.0, 550 0.4, 700 1.0 units (point for point on the masters: Light 1, the whole tail a unit left with today's Light stem; Regular 0; Bold 1, the ball by the white law and the outer foot 2 against 3). Against the round 7 build the tail moves up to 38, 40, 44, 49 units at 300, 400, 550, 700 |
+| 81 | ɡ (U+0261, g.ss02 as a component) | Its master advance was the composites pass's reading of g.ss02's ink, taken before the splice: Light 606, Bold 689 against g.ss02's 603 and 688, and it moved with the tail (610 and 678 in the first build of #80) | After the splice a glyph that is g.ss02 alone takes the spliced g.ss02's advance (`bold.bold_font`) | Light 606 > 603, Bold 689 > 688 (now g.ss02's); the Regular 628 unchanged |
+
+Curvature (curvecheck), honestly: 0.80's tail reads as 0.80 did. Regular: the ball's left side 1.42, the outside's lowest
+point 1.45, the inside's 1.38 (limit 1.25); Light 1.45, 1.65, 1.30; Bold the ball's left side 1.65 and a 49% valley on the
+inside into the ball (the engine's ball, 0.80's). The outside's lower-right quarter itself has no fault: its radius runs
+207 to 290 with no jump. The faults are where the quarters meet at the lowest points (the bottom-left quarter is flatter,
+radius 401 against 277) and at the ball. They are listed in `curvecheck.EXPECTED` as the owner's choice, so the check
+still prints them and fails on anything new. audit_axis: unchanged (the same 27 lines as round 7's build; g.ss02 and ɡ
+not flagged). audit_rays on g.ss02 and ɡ every 50 units 300 to 700: ok (254 places). audit_charset: 0 errors (form E,
+ball top 0.138, tail end 0.959).
+
+Every glyph that moved, against `build/snap081` (all three masters, the Bold's mid layer, the Regular TTF, the variable
+font at 300, 400, 550, 700): g.ss02 and ɡ (uni0261) only; ɡ's advance as #81, no other advance. Kerning: only the
+collision keys before j: g.ss02 / ɡ with j, ĵ, ȷ 71 > 37 (Regular), 72 / 69 > 37 (Light), 95 / 74 > 67 / 42 (Bold, ĵ ȷ
+85 / 64 > 57 / 32), and the Bold's g.ss02 florin 16 > none: the 0.80 tail reaches less far under the j. No kerning refit
+was needed. Figures (`build/owner8/`): `new-over-080.png` (0.82 filled, 0.80 red), `new-over-081.png` (0.82 filled, round
+7 red), `before-081-over-080.png`; numbers in `new-over-080.txt`, `diff-vs-081.txt`. Pages not rebuilt.
+
+### Owner round 8, items 2 to 4 (16 November 2026): weight gained evenly on both sides
+
+The owner looked at overlays (the Regular grey under each weight in red) and ruled that some letters "do not gain
+weight evenly on both sides, causing visual imbalance". Measured first with `build/weightscale/balance.py` (part B,
+against seven reference families, numbers only); ends are the outermost ink of the top and bottom 40% of the glyph.
+Each item was built, diffed against the build before it (all three masters, the Bold's mid layer, the Regular TTF and
+the variable font at 300, 400, 550, 700), audited and looked at before the next. Figures and numbers: `build/owner8/`.
+
+| # | Item | Cause | Rule | Before > after |
+|---|---|---|---|---|
+| 82 | 2. C and c: "the c top part is way longer than the bottom part ... the top and bottom parts should be aligned" | Drawn so in the Regular: C's top barb reached 33 units past its lower end (C 661 against 628), c's lower end 10 past its ball; every reference has the bottom as far out as the top or further (C top - bottom -30 to +2). The engine then grew the top more (C +12, c +13 at 700) | The two terminals end on one vertical (`joins.terminal_line`, in normalize after `C_end`, before the extremes are solved): the line is the references' median reach of the rightmost terminal over the round letter's width (C over O 0.891, range 0.887 to 0.901; c over o 0.882, range 0.820 to 0.923; `build/owner8/cshare.py`), so C's top barb comes in 11 and its lower end goes out 22, c's ball goes out 10 and its lower end stays (1 unit). A terminal moves level as one piece and the half of the letter it ends is stretched level to meet it: the outer and counter extremes keep their share of the run from the left extreme, each handle its share of its curve (`joins.move_terminal`, as `charset.restretch_x`); moving the terminal alone left a flat place in C's lower arc. In the masters the two terminals share one x knot, so the engine moves them alike; `bold.c_terminals` holds them on one line after the later rules (half the difference each; no glyph needed it in the final build). The advance follows the rightmost ink: C 680 > 669 (side bearings unchanged), c 505 | top - bottom, variable font, 300 / 350 / 400 / 450 / 500 / 550 / 600 / 650 / 700: C +25 +28 +33 +35 +36 +38 +41 +42 +45 > 0 at every stop; c -15 -13 -10 -8 -7 -4 -2 0 +3 > +1 at every stop. Advances: C Light 660 > 653, Regular 680 > 669, Bold 723 > 707; c 489 > 486, 505, 553 > 554 |
+
+Item 2, what followed and what did not. Moved (every master and the variable font): C c and their composites (Ç ç Ć ć
+Č č Ĉ ĉ Ċ ċ Ḉ ḉ), the barred and struck forms (Ꞓ ꞓ Ȼ ȼ), ¢ and ₡; nothing else, and only these glyphs' kerning keys
+(Light 70, Regular 6, Bold 72: collision and fit keys of the C and c families). Not derived from C or c, so unchanged:
+©'s C (Libre Baskerville's own drawing inside the ring), ₵ (its own drawing; the rebuild from Area's C is still the
+owner's decision, `23-cedi.png`), Ɔ ɔ (own drawings, not turned C's), Ƈ ƈ (own drawings). G: its top barb is its own
+(not C's points) and already ends 17 units inside its stem in the Regular (`joins.G_lower` put the stem in line with the
+top barb as Georgia Pro has it); G's ends grow the other way (top - bottom -9 / -20 / -51), the lean the hand-over lists
+(open item 6). G was not changed. Checks against the build before: audit_axis, audit_bold (Bold and Light), parts,
+curvecheck (three masters, hooks), even: unchanged; audit_rays the same 8 glyphs (27,271 > 27,235 places, the C family's);
+audit_lean one flag fewer (C's lean at 300); evaluate: c's ball node 2.8 > 2.6 times. Read on the whole glyph with
+curvecheck's comb (outside its regions): Regular C as before, c 1.31 / 2.78 / 1.39 > 1.33 / 2.71 / 1.37 at its three
+worst nodes; Bold c four faults > two; Light c 1.92 > 1.35 at its left extreme, but the Light C's left extreme now
+reads 1.27 (limit 1.25). Figures: `item2-C-c.png`, `item2-derived.png` (before | after at 300, 550, 700).
+
+| # | Item | Cause | Rule | Before > after |
+|---|---|---|---|---|
+| 83 | 3. x and X: "the top left and bottom right ends get longer and causes visual imbalance" | Towards the Bold only (the Light x is even). The thick stroke gains more across than the thin one (x 73 > 132 against 37 > 47), and each end's serif hangs off its stroke's outer edge, so the thick stroke's ends (top left, bottom right) went out further: about the four ends' centre at 700, x +27 / +6 / +7 / +29 (TL TR BL BR), X +40 / +18 / +20 / +43; the seven references at Area's stem step within -6 to +4 of each other (median growth 24 for x, 17 for X) | The letter turns about its crossing, both strokes the same way, so the openings between the ends stay (`bold.cross_ends`, towards the Bold only). X (four arms, each a stroke of its own): in `slant_lines` every arm takes the Regular's lean turned by one angle (`arm_turn`) and its line is placed through its corners at the crossing, so its end slides along the turned edge and its serif follows by `serif_on_slant`; the angle is solved by halving (0.51 degrees). x (two whole strokes, its thin ends placed by `crossing_openings`): after the engine the two top arms move level +s and the two bottom arms -s, each whole (`cross_shear`, s = 11), each stroke's edges come back to the engine's thickness across, the corners are where the edge lines meet and each bracket's handle lies on its turned edge. Tried and refused first for x: turning the thick stroke in the engine (`cross_turn`) with a smaller openings' share; the serif-end openings are held on the knots, so the thick stroke's inner bracket ran back under its serif (an S in both inner brackets at 700, `item3-x-X.png` of that build). The earlier decisions stand: the thick stroke's angle is still the Regular's within the engine and `crossing_openings` still sets the openings; the shear then turns the x as a whole about its crossing (thick stroke 36.1 Regular, 36.3 > 33.7 Bold; thin 38.5, 40.1 > 42.2; the references' thick turns +1.0 and -2.2, Georgia Pro's thin 5.1). X is still four arms; the crossing rule still does not see it | ends about their centre, spread (largest less smallest) at 450 / 500 / 550 / 600 / 650 / 700: x 3 6 10 14 18 23 > 0 1 1 1 2 2 (700: +16 +17 +18 +18); X 3 7 11 15 19 25 > 0 0 0 0 0 0 (700: +31.5 at all four). Mean growth kept (x 17.2, X 30.2 > 31.5). Advances at the Bold: x 596 > 582 (1.054 of the Regular; n's 1.098: 0.96 of n's growth, references 0.997 and 1.032), X 820 |
+
+Item 3, what moved: the Bold master's x, X and their composites (ẋ ẍ Ẋ Ẍ); the Light and the Regular are byte-identical,
+and in the variable font at 300 and 400 x and X differ only in the quadratic conversion (cu2qu converts the masters
+together; 1 to 2 units on two off-curve points). Kerning: only keys with x or X (Bold 339, the collision and fit
+passes on the new advance). Checks against item 2's build: audit_axis, audit_bold (both), parts, curvecheck (three
+masters, hooks), evaluate, even unchanged; audit_rays the same 8 glyphs (27,235 > 27,226 places); audit_lean: X's lean
+at 700 (-0.048, references -0.027 to -0.024) cured, but x now leans the other way at 700 (-0.005 against the
+references' -0.037 to -0.018; it was -0.044, inside): the references' x leans a little left with its ends balanced, so
+the two asks cannot both be met by one shear (a shear of 7 keeps the lean in band and leaves the ends 7 apart); the
+ends were kept. A first build turned X in the Light too (6 units' spread at 300, not asked): it put a lean flag on X at
+300, so the rule acts towards the Bold only. Left as the engine draws it: the x's thick stroke's inner bracket at the
+Bold stands almost upright under its serif (the serif reaches 1 unit past the edge there, 37 in the Regular), as
+before this item. Figure: `item3-x-X.png`.
+
+| # | Item | Cause | Rule | Before > after |
+|---|---|---|---|---|
+| 84 | 4. z and Z: the diagonal's outer ends grow, so the letters lean right as they gain weight | The diagonal already thickens about its centreline (its centreline moves 2 units against the four ends' centre at 700). Its outer corners are the top bar's right end and the bottom bar's left end, so each goes out by half the diagonal's gain across, while the bars' free ends (the beaks) stay: about the four ends' centre at 700, z +5 / +36 / +32 / 0 (TL TR BL BR), Z +5 / +42 / +40 / +2; the references within -10 to +9 of each other, all four growing together (Georgia Pro 38 to 41, Serrif 21 to 29) | The bars' free ends move out level by the difference (`bold.bar_ends`, both masters, after the C rule): the nodes of the top 40% left of its middle (the top-left beak and the bar's end) and of the bottom 40% right of its middle (the bottom-right beak), with their handles; the bars' level edges take up the length. The diagonal, the outer corners and the letter's width stay the engine's; the four ends grow alike, as the references' do. A barred z's middle bar lies in neither band. Composites on Z, z, z.ss06 take the letter's new advance (they were placed before the master rules). Chosen over pulling the diagonal's corners in (turning the diagonal steeper with the bars shifted): that keeps the mean but narrows the Bold z by 31 units (1.044 of the Regular against n's 1.098), where the z's width growth is already inside the references' (1.010 of n's; Georgia Pro 1.013, Source Serif 4 1.001) | ends about their centre at 700: z +37 / +36 / +32 / +32, Z +43 / +42 / +40 / +40 (top-right less top-left -0.6 and -0.6; bottom-left less bottom-right -0.4 and -0.4; limit 8). Spread at 450 to 700 every 50: z 1 2 2 3 3 5, Z 1 1 2 2 3 3 (before: z 11 22 34 47 62 79 read as TR+BL less TL+BR; the band ends' Rd at 700 +40 > +8, Ld +66 > +34). At 300: z 3, Z 1 (before 16 and 15). balance.py dRd/stem at 700: z +0.58 > +0.06, Z +0.65 > +0.03 (references -0.18 to +0.15) |
+
+Item 4, what moved: in both masters z, Z, z.ss06 and their composites (ź ż ž ẑ ẓ ẕ Ź Ż Ž Ẑ Ẓ Ẕ and the .ss06 forms), and the
+struck Ƶ ƶ, which the variable font builds from the master's letter. Advances: Light z 470 > 457, z.ss06 464 > 454, Z 605
+> 590 (the top-left beak, the Light's leftmost ink, comes in 13 and 15); Bold Z 687 > 690, z 530. Regular unchanged.
+Kerning: only keys with the z and Z families (Light 132, Bold 130). Checks against item 3's build: audit_axis, audit_bold
+(both), parts, curvecheck (three masters, hooks), evaluate, even unchanged; audit_rays the same 8 glyphs (27,226 >
+27,240 places); audit_lean 50 > 48 flags: z's lean at 700 (+0.048, references +0.008 to +0.025) and the z and Z centre
+flags at 300 cured; one new: Z at 700 now leans +0.009 against the references' +0.019 to +0.040 (it leaned more before
+and passed). Figures: `item4-z-Z.png`, `item4-derived.png`.
+
+Kerning, once at the end of items 2 to 4 (`AREA_KERN_FIT=1 build.py`): the per-master fit table changed only in pairs
+with a C, c, x, X, z or Z class or glyph on one side (Light 25 pairs, 206 > 220 fitted; Bold 115, 555 > 521).
+`audit_kern.py` passes at 300, 350, 400, 550, 700 and at every 25 units from 300 to 700 (`build/owner8/kern*.txt`).
+Pages not rebuilt.
+
+### Owner round 8, items 5 to 8 and the sweep (16 November 2026): the geometric signs
+
+The owner, on the symbols at 300 / 400 / 550 / 700: "a lot of uneven thicks and thins, non smooth curves, and
+visual/optical imbalance. Some vector errors with the arrows on the delete keys, checks, division symbol." Measured
+first with `build/owner8/signs/measure.py` (every straight edge 22 units or longer against the near-parallel edge
+across the ink, perpendicular, on the variable font at 300, 400, 550, 700) and on the references with `refs.py`
+(numbers only). The build before is `build/snap082i4k`; one build carries all of it (`build/snap082s5`, kerning
+refit), committed per item.
+
+The rule (`signs.py`): a sign of plain strokes is centrelines and stroke weights; each edge a line half the stroke
+from its centreline, each corner where two edge lines meet (an inner outline is a true inset, an inner point sharp),
+each end cut as the sign's kind says; nothing a union of overlapping bars. The Regular builds it at the Regular's
+weights and keeps the recipe in the glyph's lib (`charset.put_built`); each master builds it again with every stroke
+times the minus's own law, 1 + 0.37 ft (Light 0.764, Bold 1.370), and carries it onto the Regular's final points
+corner by corner (`bold.construction_signs`: a point moves as its nearest construction corner moves, so soft_ends'
+rounding goes with its corner). The corners are linear in the stroke, so the 550 instance is the construction at
+its own weight. The erase key's cross is shortened only where its white would fall under the white law's least
+(it does not at 700).
+
+| # | Item | Cause (measured) | Rule | Before > after (across the stroke; 300 / 400 / 700) |
+|---|---|---|---|---|
+| 85 | 5. ⌫ ⌦ | The inner outline was set by hand (point 1.9 strokes in, slanted inner edges at 52.7 degrees against the outer's 47.4): slanted sides 43-64 / 52-73 / 110-129 against level 39 / 52 / 71; the inner point 99 behind the outer at 400 and 180 at 700 (a true inset: 71 and 97), a solid wedge at 700; the top pinned on the x-height zone so the Bold grew downward only (middle 285 > 273); the cross at 484 where the box part's middle is 490.5 (Bold 522 against 546.5) | `signs.erase`: the frame's centreline is the Regular outer outline moved in half the stroke, the outlines half the stroke either side; the cross half way between the shoulders' and the right side's centrelines, on the frame's middle. ⌦ is ⌫ turned over (MIRRORS) | frame level / slanted / upright 40 40 40, 52 52.2 52, 72 71.5 72; inner point sharp; the cross centred in the box part at every weight; Bold advance 847 > 813 |
+| 86 | 6. ✓ | Two bars unioned: the short bar's foot stood out past the long one (a notch at the vertex at every weight); the engine read the 65-unit strokes as letters' thick diagonals: 57 / 65 / 124 (1.90 at 700) | `signs.check`: the short stroke into the vertex and the long one out, 1.25 of the minus both at every weight, ends cut square, the vertex a flat 0.42 of the stroke across the bisector outside (the face's vertex rule) and a point inside | 49 / 65 / 88-89 (the law's 1.37); one clean vertex, the same at every weight; Bold advance 622 > 582 |
+| 87 | 7. √ ÷ | A union of a bar, a vee and a rectangle: a jag where the lead-in met the downstroke ((126,400), (142,374)); the lead-in did not change with weight (52 at 300 and 700), the thin upstroke tapered 3-4, the thick stroke went unread at 550 and 700 (a wedge). ÷: dots equal (118) but centred 3 right of the bar; bar the minus's | `signs.radical`: the outer edges meet in the foot's point (which stays); the thick and the upstroke grow inward from their outer edges, the lead-in about its centreline; the lead-in's top edge meets the downstroke's right edge in the beak, its lower edge the left edge in the crotch; the upstroke's left edge meets the bar's top in a corner, its right edge the bar's underside. Thin, lead-in and bar the minus's; the thick 1.44 of them (Area's 0.96 stem over the minus) at every weight. ÷'s dots moved over the bar's middle | lead-in / upstroke / bar / thick: 40 40 40 57, 52 52 52 75, 71 71 71 102 (references' thick grows 1.24 to 1.71, median 1.34; Area 1.37). ÷ centred in every master |
+| 88 | 8. ∑ < > × | ∑ is Esh's drawing but was read as a plain sign: its bars (curved inner edges) grew as hairlines 46 > 57 where E's arms grow 46 > 61, its thin diagonal 53 > 73 by the sign law, and in the Light all its slanted strokes by the sign law (upper 84 at 300 where Z's thick goes 0.75); its point was four nodes in 31 units (a zigzag). < >: Libre Baskerville's drawing, arms 49.2 and 48.3 (65.4 / 64.4 at 700 against the minus's 72), a 66-unit flat at the point (the references' 0.72 to 0.92 of the stroke), its middle 2 under the axis. ×: arms 49.1 and 45.6 (64.4 / 60.9 at 700); ≤ ≥ the < squashed to 0.82: arms 41 beside a 52 bar | ∑ a capital in the masters (`bold.HINTS`: the letters' laws; its bars E's arms', read as straight), its point a capital vertex in every master (`charset.sum_vertex`: a flat 0.42 of the master's capital stem across the bisector: 36, Bold 62, Light 25). < (`signs.chevron`): arms of the minus's weight on the maths axis, both ends cut upright at one x, an upright flat of 0.79 the stroke (the references' median) outside the point and a point inside; ≤ (`chevron_bar`) the same over a bar; > ≥ them turned over. × (`signs.times`): two strokes of the minus's weight crossing square on the axis, the old ink box | ∑ bars 36 / 46 / 61, thin diagonal 43 / 54 / 71, thick 77 / 98 / 158 (Z's 66 / 88 / 149); upper / lower 1.85 / 2.26 at 400 / 700 (Georgia Pro 2.47 / 3.53, Serrif 2.40 / 2.91, Source Serif 4 1.50 / 1.62). < > 40 / 52.3 / 71.6, both arms; × 40.5 / 52.3 / 71.8; ≤ ≥ 40 / 52.4 / 71.4 with their bars 40 / 52 / 72 |
+| 89 | Sweep: the same faults elsewhere | (a) Towards the Light a sign's upright and slanted strokes took 1 + 0.37 f where its level ones (the minus's) take 1 + 0.37 ft: + 40 level beside 44 upright at 300, ± ¬ the same, every arrow's head 44-45 beside its shaft 40, ⌃ ⇧ ↵ 45. (b) Inner outlines set by hand: ⇧ ⇪ (head flanges 32 beside sides 52), ◊ (43 to 57), ∆ (sides 52 to 76 and 69 to 97). (c) Weights off the minus: ≠'s stroke 46, ⌥'s diagonal 54.7 (drawn 1.05), ↖ ↗ ↘ ↙ 48 (the arrow scaled whole to 0.92). (d) ⌃ was the up arrow cut across: a 54 by 16 notch in its crotch and two 2-unit steps | (a) `bold.x_target`, `diag_target`: a straight stroke of 50 to 55 in a sign takes 1 + 0.37 ft in both directions (curved ones keep f: & @ $ ® § £ do not move). (b) `signs.frame` for ⇧ ⇪ ◊ (⇪'s bar under the shaft at the Regular's gap, the law's least towards the Bold); ∆'s inner edges parallel at A's weights (`signs.inset_edges`) and the capitals' laws in the masters (`bold.HINTS`). (c) ≠'s stroke rebuilt at the minus's across itself (`charset.plain_strokes`), ⌥'s diagonal at the minus's, the slanting arrows the arrow made 0.92 as long at full weight. (d) `signs.caret`: the arrows' head stroke, two of them mitred | + 40 40 at 300; arrows' heads 39.6-40 at 300; ⇧ ⇪ 40 / 52 / 71-72 all round; ◊ 39.5 / 52 / 71.2; ∆ thin 39 / 49 / 64 and thick 64 / 86 / 146 (A's 39.6 / 48.5 / 64.7 and 64.5 / 86.5 / 147); ≠ 40 / 52.8 / 72.4; ⌥ 39.6 / 51.6 / 70.3; ↖ 40-41 / 52 / 70; ⌃ 40 / 52 / 71, advance 612 > 566 |
+
+Every glyph that moved (`build/owner8/signs/diff-final.txt`, all three masters, the Bold's mid layer, the Regular TTF,
+the variable font at 300, 400, 550, 700): Regular and Bold 22 glyphs: ⌫ ⌦ ✓ √ ÷ ∑ < > ≤ ≥ × ≠ ∆ ◊ ⇧ ⇪ ⌃ ⌥ ↖ ↗ ↘ ↙; the
+Light those and 20 more by (a): + ± ¬ | ¦ / \ # ← → ↑ ↓ ↔ ↕ ↵ ⇤ ⇥ ⌘ □ ☆. Nothing else: & @ $ ¢ ® and every letter are
+byte-identical; the Bold's mid layer unchanged. Advances: Regular ⌃ 612 > 566, ↖ ↗ ↘ ↙ 424 > 428; Bold ⌫ ⌦ 847 > 813,
+✓ 622 > 582, × 646 > 616, ⌃ 620 > 570, < > 602 > 608, ≤ ≥ 602 > 609, ◊ 454 > 476 and a few units on the rest; the Light
+2 to 14 units narrower on (a)'s glyphs (◊ 468 > 454, ⌃ 610 > 560). Kerning refit (`AREA_KERN_FIT=1`): fit_kerning.json
+unchanged; the masters' collision keys with these glyphs moved (Light 6, Regular 1, Bold 14, all with ldot, the
+fractions or ĩ). Checks against item 4's build: audit_bold (both), parts, curvecheck (three masters, hooks), even,
+audit_axis Light unchanged; audit_rays the same 8 glyphs (27,240 > 27,234 places); audit_charset 0 errors;
+interpolation passes; audit_kern passes at every 25 units. Two new notes, honestly: audit_axis Bold lists the radical
+(41 > 40 at 700, tip 41): its same-place cut lies across the beak (74 degrees, edges 19 and 20 at shares 0.79 and
+0.11), where the downstroke's right edge shortens as its inner point rises; no stroke thins. pathlint: ∑ one handle
+warning more (the curve into the lower diagonal, its node's handle turned 1 unit by clean.true_curves onto the new
+line; its 1.3-degree bend INFO gone). Figures (`build/owner8/`, before row over after row at 300 / 400 / 550 / 700,
+600 px per 1000 units, nodes marked): `item5-erase.png`, `item6-check.png`, `item7-radical-divide.png`,
+`item8-sum-less-times.png`, `sweep-1.png` to `sweep-3.png`. Pages not rebuilt.
+
+Left, with numbers: ∑ at 700 still reads heavy in its upper diagonal where it meets the top bar (the drawn bracket
+curve fills to a wedge; the diagonal itself is Z's law, 158 against Z's 149, and the ratio is inside the references');
+÷'s dots at 700 are 178 across and 33 from the bar (74 at 400: the dot law grows them 1.47 while the bar grows 1.37);
+⇤ ⇥'s bar reads 44 at 300 beside 40 (the engine reads it with the arrow's end, not as a 52 stroke); ✕ (U+2715) is
+1.1 of the minus by design at every weight; ^ is an accent-like drawing with tapering arms (outer 56.7 degrees, inner
+45.5), a different kind; ∞ ∂ ∫ µ π Ω ∏ are curves or letters (∏ is H's stems, 86 / 148) and were not touched.
+
+### Owner round 8, items 9 and 11 (16 November 2026): the ampersand, the division sign's dots
+
+The owner, on the symbols: "a lot of uneven thicks and thins, non smooth curves, and visual/optical imbalance ... the
+ampersand needs a lot of work". The build before is `build/snap082s5b`; the build that carries both items is
+`build/snap082b`. Figures and numbers: `build/owner8/` (`item9-ampersand.png`, `item9-amp-refs.png`,
+`item11-divide.png`; `amp/` holds the scripts, the diffs and the audit outputs).
+
+The ampersand, read first as a skeleton (`build/owner8/sym/ampmeasure.py`, the references measured only). In the
+Regular drawing the strokes did not follow one model: the diagonal 90 across where v's thick is 74 (the references 0.90
+to 1.07 of their stem), the loop's top 62 where the hairline is 43 (references 0.41 to 0.59 of the stem), the loop's
+left 81 and its right side 79 (references' right 0.68 to 0.83 of the stem), the lower bowl's left 93 (o's side 82)
+and its bottom 60; the upper counter 0.45 of the lower in area (references 0.55 to 0.79) and its centre 59 right of
+the lower counter's (references +1 to +49, median +12), so the loop sat over the crossing, not over the bowl. Its
+pieces met in corners hidden in the diagonal, so no edge was one run. In the masters the engine read it as loose
+parts: towards the Bold the bowl's stroke into the diagonal thinned (audit_rays 48.8 > 42.9 > 37.6 > 30.8 at
+(594, 349) from 400 to 700) and the loop's counter closed to 69 across (references 134 to 166); towards the Light it
+thickened at (541, 256) (45.9 > 53.0 at 300).
+
+| # | Item | Cause | Rule | Before > after |
+|---|---|---|---|---|
+| 90 | 9. & | As above: weights that belong to no letter, a loop off the bowl's axis, pieces joined in hidden corners; the engine could not read the parts | `amp.py`: the & is one stroke and an arm. The stroke runs from the tail's tip up the diagonal, round the loop (up its left side, over the top, down its right side), down the spine across the diagonal, round the lower bowl and into the diagonal again; each of its two edges is one chain of curves (lines on the diagonal), and the outline is where the ribbon crosses itself and where the arm leaves the diagonal: every corner is two edges meeting, found, not placed. Weights from the same master's letters (`amp.readings`): the diagonal and the loop's left side v's thick (one stroke, one weight), the lower bowl's left side o's side (the round thick), the loop's top and the spine where it crosses o's hairline, the loop's right side half way between (the stroke runs from the top's hairline into the spine's), the bowl's bottom and the tail a's lower stroke (a bottom that runs into a stem), the arm v's thin stroke ending in v's serif on its thin arm, point for point (the arm is a thin up-right diagonal as v's is; every reference but Literata ends it level). The tail ends in the drawn cut. The skeleton (`amp.REG`): the loop's counter over the lower counter (+21, references' median +12), the spine crossing the diagonal at 28 degrees below level so the bowl's upper-left turns as a full quarter (at 38 degrees its outside ran straight and turned in a 31-unit handle: a chin), the bowl's left extreme at 160. Handles solved: one curvature on both sides of every smooth node, a curve leaving a straight at under 0.30 of its mean, no flat place, no inflection inside a curve. Each master runs the construction again at its own letters' weights, the skeleton stretched level as o's counter changes (the loop's white), then the outer parts (the bowl's left side and bottom out to the left, the tail and the arm to the right) spread until the ink widens as n's advance does (`amp.widen`; the references' & widen 0.98 to 1.05 of their own n's growth at 700, median 1.02; towards the Light the stretch alone gives 1.008, no spread). The 550 mid master is the construction at the readings half way (0.427). In `normalize` after every node rule (`amp.regular`) and in `bold.bold_font` after the signs (`amp.master`) | Regular: diagonal 90 > 74, loop top 62 > 43, loop left 81 > 74, bowl left 93 > 82, bowl bottom 60 > 50; upper / lower counter area 0.45 > 0.58, centres +59 > +21; counters 137 / 299 > 208 / 326 across. Light: upper / lower 0.59, +18.5. Bold: upper counter 69 > 167 across, lower 278, upper / lower 0.51, +35.5, loop right 99.6, bowl left 143. curvecheck on the whole glyph: Regular worst node 1.02 (no fault), Light 1.03, Bold 1.03 (the previous worker's construction, unbuilt, worst 1.02 in the Regular but the chin). Advances: Regular 810 = 810 (ink 38 to 774 as before), Light 788 > 796, Bold 885 > 872 (mid 842 > 836). audit_rays: ok at every default stop (was the 48.8 > 30.8 thinning and the 300 thickening) |
+| 91 | 11. ÷ | Its dots took the i's dot law (1.51 at the Bold): 178 across and 33 from a 72 bar at 700 (74 at 400) | Towards the Bold the dots take the sign law, the minus's own (1 + 0.37 ft, as the bar), about their centres, and each stands at least the bar's thickness off the bar (the references' gap at 700 is 0.45 to 1.11 of their bar, median 0.99; their dots grow 1.08 to 1.43, median 1.24). The Light keeps the engine's (dots 96, gap 90). `bold.bold_font` after the signs | dots 96 / 118 / 137 / 162 (were 96 / 118 / 144 / 178) at 300 / 400 / 550 / 700; gaps 90-91 / 73-74 / 73-74 / 72-73 (were 90 / 73 / 56 / 33); bar 40 / 52 / 60 / 72; advance unchanged |
+
+Every glyph that moved (`amp/diff-b.txt`; three masters, the Bold's mid layer, the Regular TTF, the variable font at
+300, 400, 550, 700): the ampersand everywhere and the division sign in the Bold (and so the variable font at 550 and
+700); nothing else. Kerning: only keys with the ampersand (Light 26, Bold 34; the collision passes on the new outline);
+the fit refit is left to the end of the round.
+
+What was kept and what was not of the first attempt (an earlier worker's uncommitted `amp.py` and hook-up, which built
+the Regular and then failed in the Bold): kept the construction (the ribbon, the corners found, the readings, v's serif
+on the arm, the handle solver, the mid master) and the division-sign rule as written. Changed: the spine's angle
+(38 > 28 degrees) and the bowl's left extreme (150 > 160), which took the chin out of the bowl at every weight; the
+master's width (o's counter alone left the Bold & 0.97 of n's growth and its lower counter cramped; stretching it whole
+to n's width ran the loop's inside back past the diagonal's edge, so only the outer parts spread); the error message.
+The Bold failure was not the construction: it does not recur.
+
+Looked at, honestly. At 300 and 400 the & now reads as one stroke: thick down the diagonal and the loop's left side,
+thin over the top and through the spine, the bowl's left the o's round thick, the bottom easing into the diagonal; the
+loop stands over the bowl. At 550 and 700 the upper counter is open (it was a slit) and the bowl round. Still not
+right: at 700 the loop's outer top is broad and flat from the heavy left shoulder (the loop's left side is v's thick,
+133, against a 53 hairline over a 218-unit quarter); the bowl's bottom (a's lower stroke, 55 at the Bold) reads lighter
+than the references' at 700; the bowl's outer left extreme turns tighter at 700 than at 400 (radius about 0.6 of the
+Regular's, read on the figure). These are the next things to change if the owner wants the Bold heavier at the base.
+
+Checks on `build/snap082b` against the build before: audit_rays on & and ÷ ok (the & was the worst glyph in it);
+audit_axis Bold the same thin list (@, ₵, ogonek, one.ss01, the radical) and one new note: & curve 22 (the upper
+counter's top-left quarter) gained an x extreme between 400 and 550, because the mid master's construction rounded a
+handle one unit off the upright at the counter's left extreme. The handle rounding (`amp._round_handles`) now keeps an
+extreme's handles on its axis; the Regular is unchanged by it and the fix lands in the next build (the item 10 build).
+audit_axis Light, curvecheck (three masters; the hooks' lists unchanged), even, evaluate (& and ÷ clean), pathlint
+(0 / 0 / 0), audit_charset (0 errors; the & ink rule holds), interpolation: pass. `audit_axis.py` takes
+AREA_AXIS_ROWS to print more than six rows a check.
+
+### Owner round 8, item 10 (16 November 2026): the other symbols
+
+Measured first on `build/snap082s5b` (audit_rays on the variable font, the masters read upright where a stroke is
+level; `build/owner8/amp/rays-before.txt`, `ring.py`). The rules are `symbols.py`, run in `bold.bold_font` after the
+ampersand; the Regular is unchanged. Build: `build/snap082d` (then `snap082e`, which differs only in the & mid master,
+below), kerning refit in the same round (`AREA_KERN_FIT=1`: fit_kerning.json unchanged; only collision keys with Ə,
+Light 12 and Bold 12, moved).
+
+| # | Glyph | Cause (measured) | Rule | Before > after (300 / 400 / 700) |
+|---|---|---|---|---|
+| 92 | Ə | Its bar (a capital's level middle stroke, 67 in the Regular) was read as white between two counters: 79 / 67 / 48, thinner at every step to the Bold (audit_rays 67 > 62 > 56 > 48 near (410, 224)) and thicker towards the Light | `symbols.schwa_bar`: the Regular's bar times E's middle-arm law in the master (0.879, 1.192), about the bar's middle as the engine left it; the bar's top line and the counter's top move level, the left end's corner and the curve into the bowl fading over 30 and 40 units | bar 79 / 67 / 48 > 59 / 67 / 80; audit_rays ok |
+| 93 | ɂ | The hook's lower stroke into the stem (99 in the Regular, as ?'s) thinned towards the Bold and thickened towards the Light: 110 / 99 / 80 upright right of the stem (audit_rays 97.2 > 74.3 at (224, 254)), while the upper stroke grew 71 / 83 / 126 | `symbols.glottal_small`: the lower stroke the Regular's times ?'s law for the same stroke (? is the same drawing at another size: 0.962, 1.038); the counter's floor moves level, each handle with its node. The ceiling is left: moving it to ?'s law for the upper stroke (89) bent the neck from the ball into an S at the Bold | lower stroke 110 / 99 / 80 > 95 / 99 / 103; audit_rays ok; curvecheck on the whole glyph as many faults as the engine's (4 Light, 7 Bold) |
+| 94 | œ | Towards the Light the engine read the joins of o and e as strokes of their own and filled the upper one (audit_rays 58.2 at 350 and 62.8 > 70.2 at 300 against 65.7 at 400, near (542, 452) to (555, 464)) | `symbols.oe_joined`: towards the Light œ is the master's o and e joined as the Regular joins them (`charset.diphthongs`), used only where the union keeps the Regular's structure (it does in the Light; in the Bold the e's 119-unit left stroke meets the o's counter in three more nodes, so the Bold keeps the engine's) | audit_rays ok; Light advance 935 > 940 (o's and e's own) |
+| 95 | ɽ | Its tail's drawing jumps in curvature across nodes (Regular 1.81 and 2.14), which the Bold made 2.31 and 2.66 (13 faults on the whole glyph; the qa hook list's node 28 off one line 2.6 degrees) | `symbols.even_curves` (`loops.even_nodes`: handle lengths only) towards the Bold and in the mid master. Not in the Light: evened there the tail read 34.4 at 300 where the Regular has 52.4 (audit_rays) | Bold worst 2.31 > 1.75, faults 13 > 4 (mid 2.08 > 1.59, 10 > 4); hook list Bold 15 > 14. The Regular's own 2.14 at (297, -186) and the flat place in its flag's curve (28-31) stay: the Regular's hook drawings wait on the owner (hand-over, open item 5) |
+
+Not changed, with numbers (each is a different or larger job than one stroke's law):
+
+- @ (first in the brief's order). Its ring is a c-like stroke, thick on the left: across it every 30 degrees from the
+  right, 39 40 47 49 57 68 74 69 58 51 42 45 at 400; it grows 1.38 on the right and 1.77 on the left at 700 (54 to
+  131), 0.82 and 0.72 at 300, so the left grows and shrinks most, as a thick stroke should; the profile is smooth. The
+  faults are in the a: audit_axis Bold 41 > 35 and 34 at 675 and 700 (thin), audit_rays at 300 47.4 where 400 has
+  71.1 at (641, 143) (the a's stem turning into its foot: 0.667 of the Regular against the stem's 0.705) and thicker at
+  300 at (510, 170) (47.5 against 41.0). The a is one contour with the ring, so the ®-style fit cannot place it; the
+  rule it needs is the ampersand's: the ring as one stroke at o's laws and the a as Area's a.ss03 drawn into it,
+  joined where the a's stem meets the ring. Not done this round.
+- $: thicker at 300 at (207, 4), 59.7 against 55.3 at 400 (the stroke's lower stub where it leaves the S's bottom
+  curve; 8%). Its own ball-ended drawing (owner, 0.80); left.
+- ð: thicker at 300 at (279, 697), 53.1 against 50.4 at 400 (the bar across the ascender, 5%); left.
+- ¢: follows c (item 2) by construction (c plus a stroke in every master). Stroke 34 / 43 / 49 / 57 at 300 / 400 / 550 /
+  700 (o's hairline 37 / 43 / 53 at 300 / 400 / 700); it stands 116 above the c and 107 below at every weight. No
+  axis fault; the 9-unit difference is the Regular's drawing.
+- ®: the ring is ©'s point for point: 40 at the sides and 52 at top and bottom at 400 (53 / 66 at 700), a horizontal
+  stress against the letters' upright one (o: sides 82, top 43). Changing it changes ©, which is outside this brief.
+- The hook mark (U+0309): curvecheck on the whole glyph, Regular 1.53 at node 9, Light 2.01, Bold 1.95 and two flat
+  places. In the variable font's masters it is two overlapping parts (`overlap.curl_master`), and every Vietnamese
+  composite carries it; evening its handles is one call (`loops.even_nodes`: Regular 1.53 > 1.18, Bold 1.95 > 1.17 in a
+  trial) but was not built, because it moves some 100 composites and the curl parts were not checked against it.
+
+Every glyph that moved (`amp/diff-d.txt`, against `snap082b`): Light Ə ɂ œ; Bold Ə ɂ ɽ; the Bold's mid layer ɽ and
+the & (item 9's rounding fix); the Regular and its TTF byte-identical; the variable font at 300 to 700 Ə ɂ œ ɽ (and the
+& at 550). Checks: audit_rays on & ÷ Ə ɂ œ ɽ ok (still failing: @ $ ð, as above); interpolation pass; curvecheck pass
+(three masters), hook lists Light 6 (unchanged), Bold 15 > 14; audit_charset 0 errors; even 0; pathlint 0 errors (the
+4 warnings on ɂ and ɽ are the Regular's, unchanged). audit_axis: the Bold's thin list unchanged; turns flagged the &'s
+mid master once more (curve 21, the loop's inside off the diagonal, an inflection at 544 and 550: the rounding put the
+short handle's curve through a turn). `amp._round_handles` now refuses a rounding that makes a control polygon turn
+both ways; checked on every instance from 300 to 700 every 5% before building `snap082e`.
+Figures: `build/owner8/item10-schwa-glottal.png`, `item10-oe.png`, `item10-rtail.png`.
+
+`build/snap082e` against `snap082d`: only the &'s mid master (and so the variable font at 550) moved. audit_axis turns
+ok in both masters (the & no longer listed), thin unchanged; audit_rays & ok; interpolation pass; `audit_kern.py`
+passes (least 8.3 / 8.4 / 7.9 at 400 / 550 / 700, 0 fail). Pages not rebuilt.
+
+### Owner round 8, items 12 to 14 (16 November 2026): glyphs that did not gain weight evenly on both sides
+
+The owner, on the overlays: some glyphs lean "to the left or right, or [are] not evenly getting wider" (S and 3 among
+the examples). Measured first with `build/weightscale/balance.py` (part B; `build/owner8/rebalance.py`,
+`compare.py` against the seven references' range, `ends.py`, `refends.py` for the references' four ends about their
+centre at Area's stem step). The build before is `build/snap082e`; each item was built, diffed (all three masters, the
+Bold's mid layer, the Regular TTF, the variable font at 300 / 400 / 550 / 700), audited and looked at before the next.
+Figures: `build/owner8/item12-*.png`, `item13-*.png`, `item14-*.png` (the Regular grey under 300 / 550 / 700 in red,
+before | after, 640 px a glyph); numbers in `build/owner8/item12/`, `item13/`, `item14/`.
+
+| # | Item | Cause | Rule | Before > after |
+|---|---|---|---|---|
+| 96 | 12. The flat bars of 2, 5, 7 did not change weight (73 at 300, 400 and 700; the references' 7: Serrif 68 / 82 / 138, Georgia Pro 63 / 82 / 145) | `bold.bold` read each bar (two level edges, 326 to 354 long) as a stroke and then dropped it with every level reading of 64 or more that is not a pair of facing extremes ("a thick level thing that is not a stroke", meant for balls and blobs); `y_target` would have returned None for it too. Left to the slack, the bar kept 73. Then 2 grew only on top (TB +0.39 / +0.36 at 300 / 700, references -0.11..+0.04), 5 only at the bottom (TB -0.43 / -0.51), 7's bar was frozen (LR +0.26 / +0.30, TB +0.09 / +0.06, references TB +0.16..+0.87) | A figure's flat stroke (straight, both edges level, longer than twice its thickness) is a stroke: it keeps its Regular share of the capital stem (0.85, `balance.fig_flats`) in every master, `bold.fig_flat` = t x `cap_stem` / 86, where `cap_stem` is the straight thick law (86 > 148 towards the Bold, 86 x 55 / 78 towards the Light): bar / stem growth 0.96 at 700 (references Serrif 0.92, Georgia Pro 1.00, Source Serif 4 0.80) and 1.00 at 300 (1.05, 1.22, 0.99). Two consequences found by the audits and ruled: (a) 2's diagonal left the base at a corner the engine lifted with the base's edge but kept at its x, so its foot thinned at the Bold (audit_axis 51 > 34 at 700): `bold.fig_joins` slides that corner (and the bar's corner 2 units under it) along the Regular's tangent by the bar's change, its handle on that tangent at its own height (Bold +73, Light -30); the small figures, which take their figure's moves (`kin_parts`), take the slid figure. (b) The Light 7's bar end (a 9-unit cut once the bar thinned) was lengthened by `keep_taper`'s cut-end rule upward through the cap height (the 7 stood 716): a cut end's corner on a zone line now holds its height (`white.ZONE_Y`); the same guard puts the Light Z's two corners back on 712 and 0 (they stood at 713 and -1 since the cut rule) | bars 73 / 73 / 73 / 73 > 51 / 73 / 96 / 126 at 300 / 400 / 550 / 700 (2, 5, 7, 7.ss06, the .tf forms); superiors and inferiors 39-40 > 27 / 40 / 51 / 68. 2: TB +0.39 / +0.36 > -0.07 / -0.05 (in), DIAG +0.27 / +0.21 > +0.12 / -0.03. 5: TB -0.43 / -0.51 > -0.07 / -0.14 (in). 7: LR +0.26 / +0.30 > +0.09 / +0.06, TB +0.09 / +0.06 > +0.58 / +0.65, DIAG +0.34 / +0.26 > +0.09 / -0.03 (all in). Heights and alignment unchanged (2 0..721, 5 -9..712, 7 0..712 at every weight) |
+
+Item 12, what moved (against `snap082e`): in both masters two, five, seven, seven.ss06 and the small 2, 5, 7 (superior and
+inferior); in the Light also Z and Zstroke (the zone guard, above); the Regular and its TTF byte-identical, the Bold's mid
+layer unchanged. In the variable font the .tf forms and the fractions with a 2, 5 or 7 follow (onehalf, ⅔, ⅖, ⅗, ⅘, ⅕,
+⅚, ⅛, ⅝, ⅞, ⅐); Ƶ follows Z at 300. Advances: Light seven 573 > 571 (seven.tf 625 > 623), nothing else. 4 was
+not changed (see below).
+
+Item 12, checks against `snap082e` (`build/owner8/item12/after4/`): audit_axis (Bold and Light), audit_bold (both),
+parts, even, evaluate, curvecheck (three masters; hook lists 6 / 14) unchanged; audit_rays the same 4 glyphs (ð ʕ @ $;
+27,288 > 27,151 places: the bars' upright rays now meet a level edge that moves); interpolation passes; audit_lean 48 >
+45 flags (5's and 7's lean flags and 2's centre flag at 700 cured; one new: 2 leans -0.029 at 700 against the
+references' -0.006..+0.006). Two faults the first builds of this item had, both found by the audits and cured: 2's foot
+thinning (audit_axis, 51 > 34 at 700, and the small 2s 32 > 24) and the Light 7 standing 716. ⅔ read thicker at 350
+than 400 at (136, 491) in one build: the fraction's slash over the small 2's base end (two overlapping components), a
+place that is no stroke; it went with the join rule. Looked at (`item12-figures.png`, `item12-derived.png`): the bars
+now thicken and thin with the figure; 2's diagonal leaves the thicker base cleanly; 5's upright and 7's beak hang
+from the bar's underside, so the 7's beak drops by the bar's gain (it grows with the bar, as the references' do). Left,
+with numbers: 2's LR at 700 +0.33 (references +0.13..+0.29) and DIAG -0.03 (+0.01..+0.19); 5's ends (bar against bowl,
+dRd -0.50, dLd +0.52 at 700: the bowl and ball grow out under a bar whose ends stay, the Z's case; not this item's
+bar weight); 7's dRd -0.27 at 700 (-0.18 before; references -0.14..+0.06: the bar's thickening lowers the diagonal's
+outer corner, which runs the diagonal's edge 5 units further right at the band); 4's top-left reach unchanged (dLd
+-0.70 at 300 and -0.45 at 700, references -0.30..+0.21 and -0.27..+0.16: the diagonal's outer edge at 60% height moves
+out as the diagonal thickens while the bar's left end stays; a bar-end rule as Z's would close it, not written); the
+small figures' bars go 0.68 / 1.70 (their stems 0.78 / 1.63 by the small-figure rule).
+
+| # | Item | Cause | Rule | Before > after |
+|---|---|---|---|---|
+| 97 | 13. S, s and 3: "S's bottom right end reaches out", "3's bottom-left terminal reaches out" | Measured as the four ends' outward growth about their centre (`ends.py`; the seven references within 1 to 13 of each other at Area's stem step, `refends.py`). S at 700: top-left +42, top-right (the top barb) +20, bottom-left (the bottom barb) +23, bottom-right +45: the bowls' outer sides grew twice what the terminals did (the round strokes' outward share; `s_terminal` had already moved the top barb +20 and only restored the bowls' width ratio). 3 at 700: top ball +12, bottom ball +39: the engine reads the two balls on interleaved knots (top 78..166, bottom 52..140, both centres on 122) and the top ball rode the counter's knot inward; at 300 the top ball moved outward (+8 while the rest shrank). s was already within 4 | `bold.round_ends`, in every master after the S bowls and the figures' joins: on each side the top end and the bottom end keep the Regular's difference, each moving half the gap (as `c_terminals` holds C's two terminals). Each band's nodes move level: within 0.3 of the band's width from an end, with that end whole (the barb, the ball, the bowl's outer stroke keep their shape and thickness); between, by their share of the run (the counter takes it up); handles with their node; the nodes between the bands (the spine, the 3's middle bar) stay. Composites on S, s, 3 take the letter's new advance; the small 3s take the 3's moves | four ends about their centre at 300 / 700, spread: S 8 / 25 > 1 / 1, s 2 / 4 > 0 / 0, 3 11 / 27 > 1 / 1 (700: S +33 +33 +32 +32, 3 +26 +25 +25 +25). balance.py at 700: S dRd -0.40 > +0.02, dLd -0.31 > -0.02, DIAG -0.36 > -0.29 (references -0.30..-0.14); 3 dLd +0.44 > -0.02, dRd -0.19 > 0.00; at 300 S dRd -0.35 > 0.00, 3 dLd +0.48 > +0.04. Advances: Bold S 646 > 638, s 519 > 517, 3 669 > 649; Light S 562 > 563, s 456 > 457, 3 577 > 585 |
+
+Item 13, what moved (against item 12's build, `build/owner8/item13/diff-final.txt`): in both masters S, s, 3, the small
+3s (³ ₃, advances Light 312 > 316, Bold 350 > 340) and the fractions holding them (⅓ ⅔ ¾ ⅜ ⅗), and the composites on S
+and s (Ś Ṥ Š Ṧ Ş Ŝ Ș Ṡ Ṣ Ṩ and their lowercase), which now take the letter's new advance; the Regular, its TTF and the
+Bold's mid layer unchanged. The accents keep their placed offsets: over S they now stand up to 4 units right of the
+ink centre at 700 (S's ink centre moved 4; the same as Ž over Z since item 4). $ and § are their own drawings (the
+dollar is the owner's ball-ended one) and were not changed: four ends' spread at 700 $ 6, § 10 (the § grows its middle
+left at 700). 8 shares no rule with S (it is closed); its ends are even (spread 1 at 300 and 700) and its DIAG at 300
+(+0.19, references -0.21..+0.01) and TB (-0.17, -0.09..-0.03) were measured and left: at 300 the 8's lower bowl gives
+up more ink on its left than the upper does (the overlays show no lean; the reading is the junction where the two
+bowls cross, as part B's own note on 8 says). Checks against item 12 (`item13/after/`): audit_axis (both), audit_bold
+(both), parts, even, evaluate, curvecheck (three masters; hooks 6 / 14) unchanged; audit_rays the same 4 glyphs;
+audit_lean 45 > 44 flags (S's lean at 700, -0.042 against -0.027..+0.002, cured; nothing new). The spine: at the S's
+middle height its centre stands where the Regular's does (17 > 18 units right of the ink centre at 700; it was 6.5,
+off by 10.5), but it stands more upright at 700 than in the Regular (centre travel 104 against 138 per tenth of the
+height, 112 before this rule: the bowls now move level with the ends and the spine between keeps the engine's
+points). balance.py at 700, left outside: S LR +0.02 (references -0.05..+0.01) and TB +0.03 (-0.08..-0.01: the
+references grow more at the bottom); s DIAG -0.29 (-0.25..-0.05) and at 300 TB +0.07, DIAG -0.36; 3 TB -0.03
+(-0.19..-0.07). Looked at (`item13-S-s-3.png`, `item13-derived.png`): the S's top barb now reaches out with its lower
+bowl and the bottom barb with its upper bowl; the 3's top ball no longer runs in at 700 nor out at 300; the letters
+stand as the Regular does. Figure for 8, $ and §: `item13-eight-dollar-section.png`.
+
+| # | Item | Cause | Rule | Before > after |
+|---|---|---|---|---|
+| 98 | 14. g (the default, double-storey): the upper bowl grows to the left against the lower loop (balance.py dLd -62 units at 700, references -8..+1; +22 at 300; LR -0.37 at 700, references -0.06..+0.01) | Read on the masters (`build/owner8/gprobe.py`, `item14/gmeasure.py`): the bowl stays where it should; the loop moves. The loop's centre stands 15.5 right of the bowl's in the Regular, 79 at the Bold, -4.5 at the Light. The engine reads the g on shared knots: the loop counter's right edge (441) sits two units from the bowl's outer right (439), the loop's outer right (511) on the ear ball's centre (511), and the ear's neck node on 441; so the loop's right side, growing as a loop side (+67 a side), carries the ear's ball right with it (ear reach 118 > 201 at 700, 1.70, where the ball law is 1.40) and the loop with it, while the link's turn into the loop (a 56-unit curved stroke read as a loop side, +67: 56 > 123, the hand-over's "2.20") pushes the bowl's left out | After the engine, in each master (`bold.g_loop_place`, `g_ear`; the 550 master follows, being built from the Bold): the loop (its counter and the outer outline under the counter's top) moves level so its centre keeps the Regular's offset from the bowl's; the link between by its share of the run from the bowl counter's left to the loop counter's right; the notch where the link's turn meets the loop keeps the Regular's depth from the turn (without it the moved loop made a spur there); handles by their share of their curve. Then the ear's ball (nodes more than a third of the ear's reach past the bowl) moves level until the ear reaches past the bowl by the Regular's reach times the ball law; the neck takes up the change (moving the neck's node too folded it into the bowl: audit_axis turns and thin). Composites take the new advance and keep their mark over the moved ink; ǥ's stroke follows the loop. Tried and refused: the turn's own law (the ladder interpolated at 56, 56 > 81 at the Bold): it took the push off the bowl but the turn's top then thinned between the masters (audit_axis 38 > 30 at 550 to 650, the hole's left edge and the crotch moving apart at different rates); the turn keeps the engine's growth | loop centre less bowl centre, Light / Regular / Bold: -4.5 / 15.5 / 79.0 > 17.0 / 15.5 / 15.0. balance.py: dLd -0.96 / -1.00 > -0.00 / +0.03 at 300 / 700 (references -0.21..+0.07, -0.12..+0.02), LR at 700 -0.37 > -0.21, at 300 -0.13 > -0.05, DIAG at 700 -0.13 > +0.08 (in). Ear reach 118: Light 90 > 100 (0.85, the ball law 0.85), Bold 201 > 165 (1.40). Link 81: 73 / 128 > 72 / 134 (the curved level law, 1.57; unchanged in kind). Advances: Light 552 > 563, Bold 700 > 664 (n's growth would give 648), mid 637 > 622 |
+
+Item 14, what moved (against item 13's build, `build/owner8/item14/diff.txt`): in both masters and the Bold's mid layer g and
+ǥ; the composites on g (ĝ ğ ġ ģ ǧ ǵ ḡ), new advance and marks moved with the ink (Bold only: in the Light the ink centre
+moved under a unit); and, by the same mark rule, the marks over S and s at the Bold (Ś Ṥ Š Ṧ Ş Ŝ Ș Ṡ Ṣ Ṩ and lowercase), 2
+to 4 units back over the ink item 13 moved. g.ss02 and ɡ are byte-identical. The Regular, its TTF unchanged. Checks against
+item 13 (`item14/after3/`): audit_axis (both), audit_bold (both), parts, even, evaluate, curvecheck (three masters: g's
+worst node 1.13 / 1.23 / 1.21 Regular / Light / Bold, no fault; hooks 6 / 14) unchanged; audit_rays the same 4 glyphs;
+audit_lean 44 > 43 (g's lean at 700, -0.040 against -0.008..+0.002, cured; g's sides and stress readings still outside,
+as before, now on the ear side). Left, with numbers: the ear. balance.py's top-right end is the ear's ball, so dRd reads
++0.91 / +0.74 at 300 / 700 (references -0.22..+0.81, -0.20..+0.24) and the four ends' spread is 21 / 46 (TL +41.5, TR
++65.5, BL +43.5, BR +19.5 at 700): the ear reaches out at the ball law while the loop's right side grows 20; the
+references' ears are not balls of Area's size. LR at 700 -0.21 is still outside (-0.06..+0.01): the bowl's left side and
+the link's turn still grow 2.0 times where the stem grows 1.8. TB at 300 +0.15 and at 700 -0.09 just outside. Looked at
+(`item14-g.png`): the loop now stands under the bowl at 300, 550 and 700 as in the Regular; the ear is shorter at 700 and
+its neck tighter; the link's turn at the left still grows heavier than the rest.
+
+Kerning, once at the end of items 12 to 14 (`AREA_KERN_FIT=1 build.py`; the advances of 7, S, s, 3, g and their families
+changed): the fit pairs are unchanged; the per-master table changed only in pairs with an S, s, g (or their classes) on
+one side (Light 220 > 217 fitted, 15 changed; Bold 521 > 512, 57 changed; nothing outside those families). The masters'
+fonts are otherwise byte-identical to item 14's build. `audit_kern.py` passes at 300, 350, 400, 550, 700 and at every 25
+units from 300 to 700 (`build/owner8/kern-082f*.txt`; least 7.9 at 700, idieresis Itilde, as before). The final build is
+saved as `build/snap082f`; `build/owner8/compare-082f.txt` holds part B's readings for 2 5 7 3 S s g on it against the
+seven references. Pages not rebuilt.
+
+## Owner round 8, axis (17 November 2026)
+
+The owner: the family should read less bold and step more finely. The weight axis becomes 100 to 800; the new 800
+(ExtraBold) is exactly the 0.81 axis's 700 (stem 140, the Bold master unchanged); the Regular at 400 and the Light at
+300 (stem 55) do not change; the light end runs to 100 (Thin). Two stages, each built, checked and committed before
+the next. Build before: `build/snap082f`.
+
+The scale (`weightaxis.py`, one place for every conversion; the design axis is the lowercase stem, as before):
+
+| weight | name | stem | / 400 | on the 0.81 axis |
+|---:|---|---:|---:|---:|
+| 100 | Thin | 32.0 | 0.410 | (none) |
+| 200 | ExtraLight | 41.95 | 0.538 | (none) |
+| 300 | Light | 55.0 | 0.705 | 300 |
+| 400 | Regular | 78.0 | 1.000 | 400 |
+| 500 | Medium | 90.28 | 1.157 | 475 |
+| 600 | SemiBold | 104.50 | 1.340 | 550 |
+| 700 | Bold | 120.95 | 1.551 | 625 |
+| 800 | ExtraBold | 140.0 | 1.795 | 700 |
+
+Above 400 geometric to 140 at 800 (1.157 a step); 300 to 400 geometric to the Light (as before); under 300 geometric
+to the Thin: 200 = sqrt(32 x 55) = 41.95, so 100 > 200 > 300 is one ratio (1.311 a step) and 300 > 400 is 1.418, as
+even as 32 / 55 / 78 allow. The brief's "474 / 552 / 625" for the new 500 / 600 / 700 on the old axis are, exactly,
+475 / 550 / 625 (0.81's axis was geometric too: 400 + (w - 400) x 3/4); 552 would be stem 104.9, not 104.5.
+
+### Stage A: 300 to 800, no new master
+
+Only the axis changed: `bold.WEIGHTS` 400 to 800 every 50, `bold.axis_map` on `weightaxis.stem` (exponent (w - 400)
+/ 400 where it was / 300: the same stems), `bold.MID_WEIGHT` 550 > 600 (the same design place, stem 104.50, so every
+glyph's sparse master is where it was), `bold.variable` (axis 300 to 800, the Bold master a source at 140 named
+ExtraBold, one instance per named weight at its stem on the designspace map), `build.py`'s STAT (one axis value per
+named weight, Regular elidable and linked to Bold 700), `spacing.BETWEEN` (the Bold's between-masters pass at 600,
+the mid master, where it was at 550). The kerning fit's reference weights (Georgia Pro Light / Bold, Serrif 300 / 700)
+are the references' and did not change.
+
+The designspace map is the formula sampled every 50 (300 ... 800); the font interpolates linearly between samples, so
+the avar (normalized user > design) is: -1 > -1, -0.5 > -0.5436, 0 > 0, 0.125 > 0.0955, 0.25 > 0.1981, 0.375 >
+0.3085, 0.5 > 0.4274, 0.625 > 0.5552, 0.75 > 0.6928, 0.875 > 0.8408, 1 > 1 (the 0.81 font's: -1, -0.5 > -0.5436, 0,
+0.1667 > 0.1288, 0.3333 > 0.2708, 0.5 > 0.4274, 0.6667 > 0.6, 0.8333 > 0.7903, 1). fvar: wght 300 / 400 / 800; named
+instances Light 300, Regular 400, Medium 500, SemiBold 600, Bold 700, ExtraBold 800 (in order). STAT format 1 values
+at 300, 500, 600, 700, 800 and Regular 400 format 3 (elidable, linked to 700); elided fallback "Regular".
+OS/2.usWeightClass 400 on the variable font; the name table unchanged (family "Area Serif", subfamily "Regular").
+
+Proofs (`build/axis082/`):
+
+- Masters (`diff-082f-082g.txt`): Light, Regular (with its overlap layer), Bold (with its mid layer): 0 glyphs differ;
+  kerning 0 keys differ; groups, features, fontinfo and lib byte-identical; the Regular TTF 0 glyphs differ. The
+  notes files differ only where they name the mid master's weight (550 > 600).
+- Instances (`proofA.txt`, TrueType points and advances of all 1,102 glyphs): the new font at 300 / 400 / 800 is
+  identical to the old at 300 / 400 / 700; at 600 identical to the old at 550; at 500 and 700 the new font is on the
+  formula's stems (90.28, 120.95) where the old font's chords gave 90.39 and 121.10 at 475 and 625: 251 and 433
+  glyphs differ by 1 unit at most. At every 0.81 25-unit stop's design place (`weightaxis.place`: 433.7, 466.3, 500.8,
+  532.9, 567.1, 600, 633.7, 666.3, 700.8, 732.9, 767.1, 800) the new font equals the old except at 425, 650 and 675:
+  2, 8 and 17 glyphs by 1 unit (the avar's 14-bit rounding of a different set of segment ends).
+- Audits, the 0.81 tools on `snap082f` against today's tools on `snap082g` (`old-on-082f/`, `new-on-082g/`): audit_rays
+  at the default stops the same 4 glyphs, 27,161 places, the same numbers; at the 25-unit stops the same 2 glyphs
+  (27,008 > 27,009 places: one place kept at 650 / 732.9 by the 1-unit rounding); audit_kern pass at both, every stop's
+  nn white, floor and least pair the same (under-the-floor counts at 650 and 675: 1,671 > 1,654, 2,094 > 2,091, none
+  failing); audit_axis the same lists (Bold thin: @, cedi, ogonek, ogonekcomb, one.ss01; Light ok; the two held for
+  the owner), only the weights renamed (0.81's 650 is 733.3); audit_bold --sweep identical line for line apart from
+  the weight labels; audit_lean --refs, today's tool on both fonts, 43 flags each, identical (the 0.81 tool run from
+  another directory could not find Source Serif 4, so that baseline is not used). fontbakery check-universal on the
+  variable font: 0 FAIL, 0 ERROR (1 WARN, overlapping path segments, as before). The googlefonts checks asked for:
+  varfont/bold_wght_coord, opentype/fvar/regular_coords_correct, mandatory_avar_table, varfont/instances_in_order,
+  STAT_strings, opentype/varfont/STAT_axis_record_for_each_axis, the valid name-id checks: PASS; googlefonts/fvar_instances,
+  googlefonts/weightclass and the two axis-registry checks ERROR in fontbakery itself (the `axisregistry` package is
+  not installed; nothing was installed) on both builds.
+
+The tools (each prints which axis its weights are on; `weightaxis.AXIS_NOTE`):
+
+| Tool | 0.81 stops | now (0.82 axis) |
+|---|---|---|
+| audit_rays (`AREA_RAY_WEIGHTS`) | 300 350 400 500 600 700 | 300 350 400 532.9 666.3 800 (`place`); lightest-stop floor at the lowest stop's stem ratio |
+| audit_kern (`AREA_KERN_WEIGHTS`) | 300 350 400 550 700 | 300 350 400 600 800 |
+| audit_lean | 300 to 700 every 50 | 300 350 400 466.3 532.9 600 666.3 732.9 800; with --refs Area 300 / 800 against the references' 300 / 700 |
+| audit_axis | 400 to 700 every 25; 375 to 300 | 400 to 800 every 33.3 (`from_old`); 375 to 300 |
+| audit_bold --sweep | 375 to 325; 400 to 700 every 25 | the same stems, labelled on the 0.82 axis |
+| spacing.BETWEEN | Light 350, Bold 550 | Light 350, Bold 600 |
+| qa.py | names 300 to 700 | names 300 to 800 |
+
+A list given as `old:300,325,...` is on the 0.81 axis and converted; a font on the 0.81 axis is read at the same design
+places (`weightaxis.user`), so today's tools audit the old snapshots. `curvecheck`, the bearing lookups and the
+per-master kerning read masters, not weights: nothing to convert. The 0.81 25-unit stops on the 0.82 axis are
+`old:300,325,...,700`. Saved as `build/snap082g`; `build/qa-082g.log`.
+
+### Stage B: a master under the Light. Not landed; the font stays 300 to 800
+
+Two trial builds, both from the Stage A code plus the rules below, built in a copy of the code (the worktree's
+`build/` kept Stage A): a Thin at 100 (stem 32), then the brief's fallback, an ExtraLight at 200 (stem 42). Neither is
+sound, so neither ships: `weightaxis.THIN` is off, the axis is 300 to 800 and every rule below acts only under the
+Light's stem (55), where no master stands. A rebuild with them in is identical to `snap082g` (below). Results and
+figures: `build/axis082/trial100/`, `trial200/`.
+
+The rules written (kept, gated):
+
+- **The letters' thin strokes under the Light** (`bold.thin_law`, `K_THIN` 0.95). Run on to stem 32 the present law
+  (a thin part's Bold gain run backwards, ft = 1.72 f) gives the hairline 30.2: stem / hairline 1.06. Under 55 a
+  hairline, every curved thin, H's and E's bars and arms, e's bar, the upright and slanted thins and the arm-crotch
+  and neck floors that read the hairline are the Light's value times (stem / 55) ** 0.95: continuous with the Light at
+  55 (which does not move) and monotone to the Thin. 0.95 from the contrast wanted, 1.46 (half way between the
+  references' lightest median 1.42 and Serrif 100's 1.50). Ends keep the present law, which already lands on the
+  references' own exponent below 300 (`build/weightscale/thinparts.py`, k = ln(part ratio) / ln(stem ratio), their
+  300 to lightest): serif tip (Area 0.67; references median 0.57, 0.33 to 0.92), branch neck (0.33; 0.33), dot (0.49;
+  0.49), period (0.44; 0.60, 0.47 to 0.72), sign strokes (0.68; 0.77, 0.39 to 1.07). The references' hairline exponent
+  is lower (median 0.54) because their 300 has contrast to give (Serrif 2.27, Source Serif 4 1.69, Newsreader 1.95)
+  where Area's Light has 1.50; at 0.54 Area's Thin would be 1.17, the collapse the owner asked to avoid.
+- **Sides under the Light** (`bold.bearing_change`, `thin_bearings.json` from `tools/weight/bold_bearings.py thin`):
+  the Light's change plus the references' own from their 300 to their lightest (Serrif 100; Source Serif 4, Literata,
+  Newsreader, Crimson Pro 200), each times Area's stem loss 55 > 32 over its own, median per side: lowercase +2.6 a side
+  (median; -1.6 to +7.6), capitals +2.1, figures +4.2, punctuation +2.4; in proportion to the stem's way from 55 to 32.
+- **A slanted stroke's end under the Light** keeps its share of the stroke across (`bold`, "slanted end"): its level
+  gain, an amount, took more than the end's width at the Thin (ð's bar ends 27 > -16), so the solve turned the end
+  over and ↕ ð ⌫ ⌦ × fell back to "upright parts only" (↕'s heads and ð's bar kept the Regular's weight). With it no
+  glyph falls back at 32 or 42.
+- Kerning for the lighter master by the existing rule (the Regular's carried by the white rule, collisions at its own
+  floor; no same-weight fit: Georgia Pro has nothing under 300 and Serrif alone is not "both references"); the
+  between-masters pass between the Light and it (`spacing.BETWEEN_BASE`). `audit_axis` reads the Light-to-lightest pair,
+  `qa.py` the master's audit, curvecheck and sides, all keyed on `weightaxis.LOW_NAME`.
+
+What the Thin (100, stem 32) measured (variable font at 100, `thinparts.py`; references at their lightest):
+
+| part / stem | Area 100 | references' lightest |
+|---|---:|---|
+| stem / o's thinnest (contrast) | 1.47 (hairline 21.8) | 1.22 to 1.95, median 1.42; Serrif 100 1.50 |
+| serif tip | 16.4 (0.51) | 0.42 to 0.76 |
+| e's bar | 21.0 (0.66) | 0.61 to 0.80 |
+| H's bar | 23.0 (0.72) | 0.66 to 0.85 |
+| v's thin diagonal | 19.3 (0.60) | 0.53 to 0.83 |
+| i's dot | 72 (2.25) | 1.73 to 2.31 |
+| period | 80 (2.50) | 1.88 to 2.43 |
+| hyphen | 26 (0.81) | 0.84 to 1.04 |
+
+The laws hold; the glyphs do not. At 100 (`trial100/`): audit_rays on 100 to 400 every 50 fails 49 glyphs (33,573
+places); 75 glyphs have a place under 16 units. The thinnest places at 100 (glyph, position, the same place at 300 /
+400): § 1.1 at (92, -68) (22.9 / 44.4); s_p 1.3, 2.6, 3.2, 3.7, 4.9 round (123 to 184, 438 to 467) (19.5 to 27.4 /
+22.9 to 30.9); ɠ 6.1 at (502, 30) and 8.8 at (487, 22) (30.5, 32.9 / 42.4, 43.4); then the small figure 1's hairline,
+8.9, in ¹ ₁ ⁴ and every fraction that holds them (½ ¼ ⅓ ⅕ ⅙ ⅐ ⅛ ⅑ ⅘, at (175 to 285, 390) and (174, 9); 12.9 / 16.9).
+Seen (`trial100/img/set-100.png`, `faults.png`): the small 2 (², and the 2 in every fraction) throws its base out into
+a long wedge (`fig_flat` / `fig_joins` on a small figure under the Light); 8, $, Q's tail and y's crotch grow heavier
+than at 300 (audit_rays: Q 52.0 > 90.8 from 400 to 100 at (474, -13), y 50.4 > 71.6 at (204, 132), œ's join 45.8 >
+80.4 at (555, 464), ⱳ 60.8 > 92.9, $ thicker at every step down); ƴ's tail collapses (1.5 at 200); 7 stands 734 high
+(audit_bold 32: height 0..712 > 0..734) and g's neck misses (37.1 > 20.1, target 26.7); curvecheck on the Thin master
+4 faults (yhook 1.75 and 1.42), hooks 13. Kerning passes at 100 to 250 (least 10.3, itilde Uacute, floor 14.2).
+
+The ExtraLight (200, stem 42; `trial200/`) is better but not sound either: the small 2 holds; 0 fallbacks; audit_rays
+on 200 to 400 every 25 fails 33 glyphs: ƴ's tail 9.4 at (245, -96) where 400 has 62.7, thicker at 225 than 250 (1.2 <
+15.0); § 10.6 at (94, -69) (45.4 at 400); r's ball neck 13.4 at (269, 461) (31.8); ⁹ 17.0, ƒ 15.0; 8's right side
+24.4 at (449, 683) (55.6: the 8 tips heavy on its other side, seen); Q's tail, $ and @ thicker at every step down;
+45 glyphs have a place under 16 (the small figures' hairline 10.9 from 16.9 at 400, ª º 9.4 to 10.6). audit_bold 42:
+g's neck 37.1 > 26.1 (target 28.9), w's upright stroke at 704..744 40 > 26 (24.6), 7 0..721. curvecheck 2 faults, hooks
+7. Kerning passes (least 10.2, dcaron Ibreve). interpolatable: nothing reported. The masters 300 / 400 / 600 / 800 are
+unchanged by it, but a fourth master makes cu2qu pick other quadratic splits on 97 glyphs, so the 300 to 800 instances
+move by up to 2.6 units on those (Ohorn, ¡ !, ɠ, ₲, Ǥ), measured by `build/axis082/hausdorff.py`.
+
+What blocks a lighter master, in order: (1) the small figures' flat bars and joins under the Light (² ₂ and the
+fractions); (2) the parts that grow towards the light end (Q's tail, $, @, œ's join, y's crotch, ⱳ): read as thick
+by the engine and run backwards past the Light, as Q and $ already do mildly from 400 to 300; (3) the hooks and tails
+that thin to nothing (ƴ, ɠ, §, s_p, r's ball neck, ƒ): `keep_taper`'s laws stop at the Light's JND moves; (4) the small
+figures' and ordinals' hairlines (16.9 in the Regular, 0.52 of it at 100) need their own floor; (5) 8's two sides; 7's
+height; g's neck; w's upright. Each is a rule, not a point edit; none was written in this pass.
+
+Checks on the landed state (`build/snap082h`, Stage A plus the gated rules, axis 300 to 800): rebuilt from source, the
+three masters (with the Regular's overlap layer and the Bold's mid layer), their kerning and notes, the Regular TTF
+and the variable font's glyf, gvar, fvar, avar, STAT, HVAR, GPOS, hmtx, name and OS/2 tables are identical to
+`snap082g` (`build/axis082/diff-082g-082h.txt`), so every Stage A audit and qa result above stands for it
+(`build/qa-082g.log`). The trial fonts in `trial100/` and `trial200/` are records, not builds to ship. audit_axis on
+the trials' new pair wrote nothing (its runs in the copy ended without output); the rays, kerning, audit_bold and
+curvecheck readings above are the trials' audits of that range.
+
+## Owner round 8, items 15 to 18 (17 November 2026): the symbols left open
+
+The owner, on the symbols item 10 left open: "uneven thicks and thins, non smooth curves, and visual/optical imbalance".
+Taken in the brief's order, each built, diffed (all three masters, the Bold's mid layer, the Regular TTF, the variable
+font at 300 / 400 / 600 / 800 on the 0.82 axis: `build/owner8/diffall8.py`), audited (`qa.py --skip-build`, plus
+`evaluate.py`) and looked at before the next. The build before is `build/snap082h`. Figures: `build/owner8/item15-*.png`
+to `item18-*.png` (before row over after row, 300 / 400 / 600 / 800, 749 px a tile); numbers and scripts in
+`build/owner8/item15/` to `item18/`.
+
+### Item 15: @
+
+Measured first (`item15/refat.py`, `refo.py`, `refo2.txt`: Georgia Pro, Source Serif 4, Serrif, Literata, Newsreader,
+Merriweather, Crimson Pro at 300 / 400 / 700, numbers only; Area on snap082h, `area-before.txt`). Area's @ was Libre
+Baskerville's: its ring thick on the left (74) and thin on the right (39) with top and bottom 49 / 51 at 400, its a an
+italic a drawn into the ring as one contour, the ring's top on the cap overshoot (721) and its bottom at -122. Every
+reference's ring has the letters' upright stress: top and bottom at their o's top (1.05 / 1.02 at 400, 1.05 / 1.03 at
+300, 0.96 / 1.09 at 700), the left side 0.86 of the stem at 400, the right 0.883 of the left (0.866 / 0.874 at 300 /
+700); the contrast stays along the axis (left over top 1.74 / 1.85 / 1.74) and the ring grows as their hairline does
+(left 0.83 / 1.27 of the 400 at 300 / 700, top 0.88 / 1.25). None is even all round; Area's © ring (52 top, 40 sides)
+has the opposite stress (item 16). Their box: top 0.985 of the cap, bottom -0.231, width over height 0.941 / 0.968 /
+1.012. The inner letter: height 0.545 / 0.558 / 0.597 of the ring's counter, its centre 0.011 of the ring's height
+over the ring's, its stem 0.984 / 0.841 / 0.778 of the stem, its top and bottom 1.18 / 1.21 / 1.26 of the ring's thin,
+the white right of its stem 1.24 times the white left of its bowl.
+
+| # | Item | Cause | Rule | Before > after |
+|---|---|---|---|---|
+| 99 | 15. @ | The a was one contour with the ring, so no rule could place or weight it: towards the Bold its thinnest place thinned (audit_axis 41 > 35 / 34 at 766.7 / 800), towards the Light a place fell to 0.667 of the Regular (47.4 against 71.1 at (641, 143); the stem's law 0.705) and another grew (47.5 > 41.0 > 32.3 from 300 to 400 at (510, 170)); it grew more on the left at 300 (LR -0.38). The ring's weight changed where it turned into the a; the a was italic | `at.py`, one construction in every master. The ring is one stroke out of the a's foot: up the right side, over the top, down the left, along the bottom, out to the tail's cut; each edge one chain of curves (`at.Ring`: the bowl's tensions 0.57 outside / 0.61 inside where nothing else asks, curvature across every smooth node within 1.2, a curve easing off the stem's straight). Thickness (vertical stress, the references' and the letters'): top and bottom the master's hairline (o's top), the left side 0.86 of the Regular's stem and the right 0.883 of the left, carried into each master by the hairline's law (the references' ring keeps its contrast); the tail's cut 0.853 of the hairline (the drawn). The ring's right extremes stand 0.107 of its height over its centre (the drawn @'s), so the stroke out of the foot climbs as one long turn. Box: top 701, bottom -164 (the references' 0.985 / -0.231 of the cap), width 0.941 / 0.968 / 1.012 of the height. The a is Area's a.ss03 (upright, single-storey) in that master, scaled to the references' share of the ring's counter, its strokes then made the references' weight: level by the stem's share, upright by the inner letter's share of the ring's thin (`at.embolden`: each node along its normal, a convex corner on its true mitre so a straight edge moves parallel, a crotch's cusp held to 1.0); white right of its stem 1.24 times the white left of its bowl, its centre 0.011 of the ring's height over the ring's. The a's foot keeps a.ss03's own two curves; the ring is solved on from them, then every smooth node evened to one curvature (`loops.even_nodes`, handles only). In the masters the shares are interpolated on the stem's logarithm between the references' 300 / 400 / 700 (Area's 55 / 78 / 140); the mid master is the construction at the readings that far (0.427). In `normalize` after the ampersand (`at.regular`) and at the end of `bold.bold_font` after the curvature evening (`at.master`), so the a.ss03 it reads is the master's finished one | ring left / right / top / bottom at 300 / 400 / 600 / 800 (rays from its centre): 53.1 / 74.1 / 98.0 / 131.0 > 58 / 67 / 74 / 83 left; 31.8 / 38.7 / 45.2 / 53.6 > 53 / 62 / 66 / 73 right; top 41.9 / 49.2 / 54.7 / 62.8 > 37 / 43 / 47 / 53; bottom 40.5 / 50.8 / 58.2 / 68.2 > 37 / 43 / 47 / 53; top / side 0.99 / 0.87 / 0.76 / 0.68 > 0.66 / 0.67 / 0.67 / 0.68 (references 0.67). The a's stem / bowl on the level over the stem 1.57 / 1.07 / 1.08 / 1.08 > 0.98 / 0.85 / 0.83 / 0.79 (references 0.98 / 0.84 / 0.78). Box 721 / -122 > 701 / -164. audit_axis Bold thin: @ listed (41 > 35, 34) > not listed; audit_rays @: 3 faults > ok at the default stops and at every 25 to 50 units from 300 to 800 (273 places). curvecheck on the whole glyph: Light inf (8 faults) / Regular 1.36 (3) / mid 2.58 (10) / Bold inf (10) > 1.18 / 1.16 / 1.19 / 1.23, no fault. balance.py (`build/owner8/rebalance8.py`, the 0.81 weights at their design places): LR at 300 -0.377 > -0.048, at 800 -0.177 > -0.006; TB -0.049 / -0.129 > +0.010 / +0.018; DIAG +0.107 / +0.121 > +0.028 / +0.009. Advances: Light 943 > 941, Regular 955 > 960, mid 967 > 972, Bold 984 > 988 (+0.5% at most) |
+
+Item 15, what moved (`item15/diff3.txt`, against snap082h; the build saved as `build/snap082j15c`): @ in every master,
+the Bold's mid layer, the Regular TTF and the variable font at 300 / 400 / 600 / 800; nothing else. Kerning: only the
+collision keys with @ (Light 19, Regular 1 (ldot @ 8 > 7), Bold 17, each a unit). The point structure changed (57 / 12
+> 52 / 13 points), the same in every master. Checks (`item15/after3/`, `qa2.log`): audit_axis Bold thin 6 glyphs > 5
+(@ gone; cedi, ogonek, ogonekcomb, one.ss01 as before), Light ok, turns and crossings ok; audit_rays 4 glyphs > 3 (@
+gone; ð, ʕ, $ as before); audit_charset 0 errors; evaluate: @ no longer listed (the drawn @ had a pinched quarter); even
+0; curvecheck (Regular, Light, Bold; hooks 6 / 14 as before) unchanged; pathlint 0 errors, 139 > 138 warnings (@'s);
+interpolatable nothing reported; audit_kern pass (no advance moved by more than 5). Before building, two trial faults
+were found on the figures and cured in the rule: the made-heavier a's crotch under the bowl ran 40 units down at the
+Bold (an uncapped mitre on a cusp; held to 1.0), and its stem leaned 3 units in the Light (a convex corner's mitre
+capped too; convex corners now keep their true mitre); the a's foot turned boxy (handles kept their length while the
+foot shortened; they now keep their share of the curve).
+
+Looked at (`item15-at.png`, before row over after row; `item15-at-refs.png`, Area before and after beside the seven
+references at 400 and at their bold): the a now stands upright, the a.ss03 of the text, joined to the ring at its foot
+by one turn that climbs into the ring's right side; the ring is thin at top and bottom and full at both sides, as the
+references' and as the letters' o; the sign sits lower (701 / -164 against the cap's 712), as every reference's does,
+and keeps Area's tail. Still not right, honestly: at 800 the a is heavy against the ring (a stem 110, ring side 83:
+the references' median 1.33 times, Area 1.33, but Area's bold a is a wide bowl, so the a reads darker than Georgia
+Pro's); the a's spur on the stem's top (a.ss03's) reads small at 300; evaluate still reads two quarters at its limits
+(the a's foot 0.82 / 0.62 of its run after whole-unit rounding, a.ss03's own 0.74 / 0.62, and at the Bold the stroke
+out of the foot 0.42 / 0.78, lopsided 1.86) without a curvecheck fault.
+
+Item 15, the owner's note on the published page (17 November): "the a in the @ looks much sharper / not as smooth at
+thicker weights": at the heavy end the a's crotches (the spur's into the bowl's top, the bowl's bottom into the foot)
+read as a sharp notch and a pinched point. Two changes in `at.py`, built with item 16 (`build/snap082j16b`): each
+crotch is rounded by a fillet of 0.30 the a's stem (`at.fillet`: both curves cut back by that length along themselves,
+one cubic along their tangents, handles 0.55 of its chord; 0.20 left a notch at 800, 0.45 ran the bottom one into a
+wave, curvecheck 2.03); and the made-heavier a moves a run of segments under 20 units (a soft corner, a serif's step,
+a crotch's short line) as one corner on that corner's mitre (`at.embolden`, `SHORT`: needed by item 16's letters, it
+leaves the @'s a as it was apart from the fillets). Each master gains six points (58 / 13). curvecheck on the @ read
+from the masters as the variable font interpolates them (`item15/instcomb.py`, combs in `item15-at-combs.png`): 600 /
+700 / 800 worst ratio 1.18 / 1.21 / 1.24, no node fault (one flat place in the ring's lower left at 700, a reading
+between masters); Light 1.20, Regular 1.22. Looked at, at 800 large (`item15-at-800-large.png`, before over after):
+the top crotch is a rounded dip, the bottom one a rounded cleft; neither is a point. Still not right: the bottom
+cleft still reads as a cleft at 800 (the bowl's bottom and the foot are two lobes; a larger fillet waved), and the
+counter's right side is the stem's straight edge, as a.ss03's is.
+
+### Item 16: (C) (R) (P)
+
+Measured first (`item16/refring.py`, `refs.txt`; Area `area-before.txt`). Area's ©, and ® and ℗ with it, carried Libre
+Baskerville's ring with the horizontal stress: side 32 / 40 / 53 against top 44.5 / 52.5 / 65 at 300 / 400 / 800 (top
+over side 1.39 / 1.31 / 1.23); its C was Libre Baskerville's small C, ®'s R a drawn R, ℗'s P Area's P at 0.52 lightened;
+in the masters the ring's box grew (the Bold's top 775 against 761). The references (seven faces, medians): top over
+side 0.872 / 0.864 / 0.876 (every face 0.79 to 0.95: a mild upright stress, none horizontal); side 0.714 / 0.557 / 0.406
+of the stem; the letter's height 0.626 / 0.636 / 0.651 of the counter (R 0.598 / 0.616 / 0.633, P 0.621 / 0.628 /
+0.652), its box's centre off the counter's -0.025 / -0.024 / -0.019 of its width for C, +0.027 / +0.023 / +0.023 for R,
++0.024 / +0.026 / +0.029 for P, and up 0.002 to 0.010; its thick 1.43 / 1.47 / 2.23 the ring's side (C), 1.21 / 1.25 /
+1.43 (R), 1.22 / 1.29 / 1.60 (P); its thin 1.06 / 1.12 / 1.22 the ring's top.
+
+| # | Item | Cause | Rule | Before > after |
+|---|---|---|---|---|
+| 100 | 16. © ® ℗ | The ring was drawn with its weight at top and bottom; © held a C that is not this round's C; the masters grew the ring's box and its letter as loose parts | `circled.py`, in `normalize` after the @ and at the end of `bold.bold_font`: one ring for all three, the Regular's © outer outline in every master (its box and the advance do not move), the counter its four extremes moved in by the side and the top, each quarter at the outer quarter's own tension; side the references' share of the stem (interpolated on the stem's logarithm at 55 / 78 / 140), top 0.87 of the side (upright stress, the references' 0.864 to 0.888). The letter is Area's own C, R or P of the master, scaled about its box's centre to the references' share of the counter and placed off the counter's centre by their offsets (© so carries this round's C, both terminals on one vertical); in the Regular its strokes are made the references' weights relative to the ring (`at.embolden`, level for the thick, upright for the thin); in a master the Regular's additions times the stem's law (each master's own additions put the same amount on every stroke, and a thin upright one, C's barb, came out thicker at 300 than at 400: audit_rays 49.2 > 42.0 in the first build). The old "letter in a ring" rule leaves glyphs this rule builds | ring side / top at 300 / 400 / 800: 32 / 44.5, 40 / 52.5, 53 / 65 > 39 / 34, 43 / 38, 58 / 50 (top / side 1.39 / 1.31 / 1.23 > 0.87 / 0.88 / 0.86). ©'s C thick 52.9 / 73.9 / 130.9 > 44.9 / 63.9 / 105.9 (references' share of the ring 56 / 64 / 129; of the stem 0.96 / 0.95 / 0.94 > 0.82 / 0.82 / 0.76, references 1.03 / 1.00 / 0.87); C centre off the counter -0.027 / -0.033 / -0.049 > -0.025 / -0.023 / -0.019 of its width. ®'s R stem 41 / 60 / 89 > 38 / 54 / 91 (0.69 / 0.69 / 0.65 of the stem, references 0.81 / 0.73 / 0.45), centre +0.023 / +0.009. ℗'s P stem 37 / 47 / 62 > 40 / 57 / 94; height 0.533 / 0.557 / 0.594 > 0.622 / 0.627 / 0.653 of the counter. Advances: © ® ℗ 868 in every master (Light ℗ 858, Bold ℗ 876 before) |
+
+Item 16 (and the @'s fillets), what moved (`item16/diff3.txt`, against item 15's build; saved as `build/snap082j16c`): ©
+® ℗ and @ in every master, the Regular TTF and the variable font; the Bold's mid layer only @ (© ® ℗ have none);
+nothing else. Advances: © ® 867 > 868 in the Light and Bold, ℗ 858 > 868 (Light), 876 > 868 (Bold), 871 > 868 at
+600. Kerning: only collision keys with © and ® (Light 26, Bold 29; the Bold's ring is now the Regular's box, so V ©
+-11 > -17). Checks (`item16/after3/`): audit_axis Bold and Light unchanged (turns ok: a first build of item 16 listed
+©'s barb corners, "a corner's fillet grew to 20", where every node took its own mitre; runs of short segments now
+move as one corner, and a stroke's end as two, `at.SHORT`); audit_rays the same 3 glyphs (ð, ʕ, $; a first build had
+© thicker at 300 at its barb, 49.2 > 42.0, cured by carrying the Regular's additions by the stem's law); audit_charset
+0 errors; evaluate lists none of the four; even 0; curvecheck unchanged (three masters, hooks 6 / 14); pathlint 0
+errors (a first build had ®'s R crossing itself at its leg's crotch, cured by the same corner rule), warnings 138 >
+148, all on the scaled R and P: seven smooth nodes 1.7 to 2.9 degrees off one line after whole-unit rounding, two
+handles past their meeting point in R's leg; interpolatable nothing. Looked at (`item16-copyright.png`,
+`item16-registered.png`, `item16-uni2117.png`, `item16-copyright-refs.png`): the rings now read as the letters' o
+does, a touch heavier at the sides; © holds this round's C with both barbs on one vertical; the R and P are Area's,
+optically centred. Still not right: the Light letters are lighter than the references' (C 0.82 of the stem against
+1.03): the Regular's additions carried by the stem's law keep every stroke monotone but do not reach the references'
+heavier small letters at 300; the Bold's R and P serifs read slab-like (the upright addition, 27, on a letter at 0.56
+size); seven smooth nodes in the scaled R and P bend 2 to 3 degrees after rounding.
+
+### Item 17: $ and ð (and §'s ends)
+
+The brief: $ thicker at 300 than at 400 at (207, 4) (59.7 against 55.3), ð at (279, 697) (53.1 against 50.4); $'s
+four ends spread 6 at the Bold and §'s 10. Then the owner, on the published page: "misalignment on the $": where the
+S's strokes pass behind the bar, the edge leaving the bar on one side is at a different height and angle from the edge
+entering on the other (worse at the heavy end, the upper-left counter pinched), the stubs not centred on the S.
+
+Measured (`item17/dollarx.py`, `dollar.check`: each of the S's six edges that cross the bar carried on along its
+osculating circle to the bar's middle from both sides, the difference; the bar's middle against the S's ink centre).
+$ is its own drawing (owner, 0.80), one contour with its bar, so each crossing edge is two pieces ending on the bar's
+edges. Regular: steps within 0.9, the bar 8.5 right of the S's ink centre (308 against 299.5). Light: steps -16.3,
++7.3, +8.4, +23.3 (the top stroke's inside, the spine's two edges, the bottom stroke's inside), bar 10 right. Bold:
++4.6, -41.4, -19.4, bar 5.5 right; the 600 master 7.9 and 6.8. The cause in the masters: the engine moved the
+counters' corners on the bar's edges as the bar's knots, which also thickened the strokes there towards the Light
+(the bottom stroke's inside at the bar 63 / 41 left and right of it at 300 where the Regular has 44 / 46 over -8 / -7):
+the audit_rays fault. ð's place (279, 697) is the ascender's curve past the crossing, up to its cut end at the top
+left (item 10's "bar"): 51.7 at 300 against 48.4 at 400 at its middle, 53.0 at the Bold (1.10): read as part of the
+ascender's thick.
+
+| # | Item | Cause | Rule | Before > after |
+|---|---|---|---|---|
+| 101 | 17. $ | As above: the crossing pieces moved apart in the masters; the bar off the S's centre in every master | `dollar.py`, `true_crossing`, in `normalize` and at the end of `bold.bold_font` (each master and the mid master): the bar (its edges and stubs) moves level so its middle is the S's ink centre; each crossing edge is refitted as one curve through the bar (two cubics joined under the bar's middle at one tangent and one curvature, from the far node of the left piece to the far node of the right one, both far nodes' tangents kept, their handles within a fifth of their own length and their curvature met; every handle inside its curve's triangle; least squares on the pieces' own points, the half nearer the bar a fifth; an edge that is the S's top or bottom or a stroke's inside, near level at the bar and with its drawn extreme under the bar, gets a level node at that extreme's height, so the S keeps its height and no extreme or inflection appears between masters) and cut at the bar's edges, so the two pieces are one curve; the stubs one length, the mean of the two. The first rule written for the thickness (each crossing corner moved to S's law for its stroke) was dropped: it left the pieces as far apart as before. And `bold.round_ends` on $ and § (`ROUND_SIGNS`; $'s bar kept upright, centred after) | steps across the bar, Light / Regular / mid / Bold, largest: 23.3 / 0.9 / 7.9 / 41.4 > 1.1 / 0.5 / 0.6 / 1.5 (read along each piece's osculating circle to the bar's middle; the pieces are cut from one curve, so the rest is that reading's error where the spine's curvature changes under the bar); bar off the S's centre 10.0 / 8.5 / 7.0 / 5.5 > -0.5 / 0.5 / 0.0 / -0.5; stubs 94 / 94 (Regular), 95 / 95 (Bold). Four ends about their centre, spread at 300 / 600 / 800: $ 2 / 3 / 6 > 1 / 1 / 1, § 4 / 4 / 10 > 2 / 1 / 3. curvecheck on the whole $: Light 2.64 (6 faults) / Regular 1.36 (4) / Bold 3.59 (5) > 1.43 (3) / 1.36 (3) / 2.20 (4); audit_rays $: thicker at 300 (59.7 against 55.3) > ok at every 25 to 50 units from 300 to 800. Advances: Light 582 > 581, mid 624 > 626, Bold 652 > 656; § Bold 610 > 615 |
+| 102 | 17. ð | The ascender's curve past the crossing grew towards the Light (read with the ascender's thick) | `symbols.eth_bar`: in each master the stroke between the crossing and its cut end keeps the Regular's thickness times the hairline's law (o's top: 0.860 / 1.233), about its centreline as the engine left it, the junction's corners sliding along their own edges | pairs across it (junction to cut end), Light 71 / 59 / 48 / 43 > 58 / 47 / 39 / 36, Bold 72 / 60 / 50 / 43 > 82 / 69 / 55 / 52 (Regular 70 / 57 / 48 / 42) |
+
+Item 17, what moved (`item17/diff3.txt`, against item 16's build; saved as `build/snap082j17c`): $ in every master, the
+mid layer, the Regular TTF and the variable font; ð and § in the Light and Bold (and so the variable font at 300, 600,
+800); nothing else; ð and § are byte-identical in the Regular. Kerning: § j / jdotless (Light) and ldot § (Bold), a
+unit each. Checks (`item17/after3/`): audit_rays 3 glyphs > 1 (ʕ, as before: $ and ð cured); audit_axis Bold thin
+unchanged (5 glyphs, none of these), turns ok; Light turns: one new note, $ curve 10 at 314.6 (the bottom stroke's
+outer edge right of the bar gains a y extreme at its very start: in the Light the S's lowest point lies right of the
+bar, in the Regular under it); audit_charset 0 errors; evaluate lists none of the three; even 0; curvecheck unchanged;
+pathlint 0 errors, warnings 148 > 147 (one handle on $'s refitted counter top past its meeting point by under a unit,
+whole-unit rounding); interpolatable nothing. Two first builds, refused: one moved each crossing corner to S's law (the
+pieces stayed apart); one refitted the far handles freely (audit_axis then listed $ thin at the Bold, 41 > 37, and two
+turns, and audit_rays a new place at (164, 94)); the far handles now stay within a fifth of their own length.
+
+Looked at (`item17-dollar.png`, `item17-eth.png`, `item17-section.png`): the S now runs through the bar at every weight
+(the Light's upper counter lost its shelf, the Bold spine's two halves meet), the bar stands on the S's middle and its
+stubs are one length. Still not right: at 800 the upper counter left of the bar is pinched (58 units of white at its
+middle against 99 right of the bar; the lower counter 150 / 93): the S's own bowls are uneven at the Bold (the upper
+bowl's left side grows inward), which no bar position balances (the best shift is 4 units); ð's ascender curve at 300
+now reads lighter than its crossbar; § at 800 keeps its lumpy left side (the engine's; only its ends were moved).
+
+### Item 18: the hook above (U+0309)
+
+Measured (curvecheck on the whole mark, snap082h / item 17's build): Regular hookabovecomb worst ratio 1.53 (node 9, the
+eye's top-left), Light 2.01 (node 18), Bold 1.95 (node 9) and two flat places; the capital form 1.30 / 1.38 / 1.72. In
+the variable font's masters the mark is two overlapping parts (`overlap.curl_master`: the curl, closed by a line inside
+the stem, and the stem); the static Regular keeps the merged outline. It is carried by 27 composites (the brief's "about
+100" counts the Vietnamese letters with any tone mark; 27 hold this one, ả ẳ ẩ ẻ ể ỉ ỏ ổ ở ủ ử ỷ and their capitals and
+ss03 forms).
+
+| # | Item | Cause | Rule | Before > after |
+|---|---|---|---|---|
+| 103 | 18. ̉ | The mark's first drawing (charset.hook_above, a union of an arc, a ball and a stem, then the node rules) meets at its nodes with jumps; the masters' curl carried them and the engine's knots made them worse | Every smooth node at one curvature, handle lengths only (`symbols.even_curves`, `HOOKS`): on the Regular's merged outline in `normalize` (after the letters in a ring), so the variable font's default curl and stem (`overlap.vf_source`) come from it; and on each master's curl and stem right after `curl_master` builds them, kept only where the faults fall. The curl's last node (the eye's foot, where the closing line runs inside the stem) is a corner (`overlap.curl_parts`): curvecheck read it as a smooth node bent 126 to 138 degrees | worst ratio / faults, Light / Regular / Bold: hookabovecomb 2.01 (4) / 1.53 (2) / 1.95 (5) > 1.21 (1) / 1.18 (1) / 1.23 (3); hookabovecomb.case 1.38 (2) / 1.30 (1) / 1.72 (6) > 1.23 (0) / 1.11 (0) / 1.14 (4). Left: flat places (the Bold's curl 2, the capital's 4 at the Bold, the Light's 1) and the Regular's eye foot leaving the stem's straight at 1.00 of its tightest (the stem's top is a corner by design) |
+
+Item 18, what moved (`item18/diff.txt`, against item 17's build; `build/snap082j18` = `build/snap082i`): the two marks in
+every master, the Regular TTF (hookabovecomb) and the variable font; in the Light four capitals with two marks (Ẩ Ẳ Ể
+Ổ), whose hook the Light's mark placement set 1 to 2 units lower over the changed ink (419, 100 > 419, 98 on Ẩ); $ in
+the Light and the 600 master: a follow-up of item 17 (`dollar.true_crossing`: the S's outer top and bottom leave the bar
+level when both pieces are within 4 degrees of level; it did not reach the Light's bottom, whose lowest point lies right
+of the bar, so the Light turn note stands). No composite collides: the least white between the hook and the rest of
+each of the 27 composites at 300 / 400 / 600 / 800 is 54.0 / 54.0 / 46.6 / 32.5 (Ỏ, Ỏ, Ẳ, ẳ), before 54.0 / 54.0 /
+46.6 / 32.5 (`item18/hookgap.py`, `gap-before.txt`, `gap-after.txt`). Checks (`item18/after/`): audit_axis Bold and
+Light as item 17 (turns ok in the Bold; the Light's $ note), crossings ok; audit_rays 1 glyph (ʕ); audit_charset 0;
+even 0; curvecheck unchanged (hooks with a ball 6 / 14: the IPA hooks, not this mark); pathlint 0 errors, 147 warnings;
+interpolatable nothing. Figures: `item18-hookabove.png` (both forms, 300 / 400 / 600 / 800, before over after),
+`item18-uni1EA3.png`, `item18-uni1EA8.png`, `item18-uni1EB3.png`, `item18-uni1EDF.png`.
+
+Kerning, once at the end (`AREA_KERN_FIT=1 build.py`; the advances of @, © ® ℗, $ and § moved): fit_kerning.json
+unchanged; the masters' keys moved only in collision pairs with those glyphs (and Ể / Ổ in the Light, a unit).
+`audit_kern.py` passes at 300 / 350 / 400 / 600 / 800 and at every 25 units from 300 to 800 (least 10.4 / 9.3 / 8.3 /
+8.4 / 7.9, as before; `item18/kern.txt`, `kern-every25.txt`). The final build is saved as `build/snap082i`; against
+`snap082h` (`item18/diff-082h-082i.txt`) only @, © ® ℗, $, ð, §, the two hook marks and the four Light capitals moved.
+Pages not rebuilt.
+
+## Regular pass (0.83, 18 November 2026)
+
+The owner: "Focus on how to bring more consistency, cohesiveness, visual clarity, smoothness, and evenness to the whole
+glyph set ... let's get the regular weight in a good place first." Five items, each designed and judged at the Regular
+(400), built with `AREA_BOLD=0 build.py`, diffed against the build before (`build/owner8/reg/diffreg.py`: the Regular UFO,
+its overlap layer, kerning and the TTF), checked with `evaluate`, `even`, `curvecheck` (and `--hooks`), `pathlint`,
+`parts`, `audit_charset` (`build/owner8/reg/checks.sh`; baseline `chk-082i/`), looked at large (before beside after at
+1000 px per 1000 units, combs, a line of text: `build/owner8/reg/item*-*.png`) and committed before the next. The masters
+follow by the existing rules; they were not tuned. The build before is `build/snap082i`.
+
+The previous worker's uncommitted files (`build/owner8/reg/stopped/`): `sigma.py` kept as the base of item A and
+corrected (below); `amp.py`'s loop rule kept for item C; `figs.py` split (item D, item E).
+
+### Item A: the summation (U+2211) and Esh (U+01A9)
+
+Measured (`build/owner8/reg/a/refsum2.py`, `tip.py`; Georgia Pro, Serrif, Source Serif 4, Literata, Merriweather,
+Crimson Pro at 400, PP Kyoto Medium beside them; numbers only). Area's ∑ was Libre Baskerville's Esh: each bar's
+underside ran into its diagonal through an S-shaped bracket of five curves; the point a 36-unit upright flat (four
+nodes); hooked heels at the two left corners (heel 33 against the references' -3); the top serif's beak 3.57 of its bar,
+the bottom's 3.98, at different angles; the point 0.746 across where the references put it at 0.637 (it leaned right),
+0.542 up (0.523); width 0.964 of E's ink; the upper diagonal 1.14 of the stem (98.5) against the references' 0.98; and
+it stood on the baseline where every reference hangs the sign from the cap height to -0.119 to -0.292 of it (median
+-0.200, PP Kyoto -0.189).
+
+| # | Item | Cause | Rule | Before > after (Regular) |
+|---|---|---|---|---|
+| 104 | A. ∑ Ʃ | As above: a drawn letter read as loose parts, no part from Area's capitals | `sigma.py`: one closed outline of straight edges from the master's capitals. Bars E's top arm across (46), each ending in E's top-arm beak (the bottom one E's turned over, so both one size and angle); upper diagonal Z's diagonal across (89), lower A's thin diagonal (49). The bars' left ends a square cut on one vertical; the upper diagonal's outer edge leaves the top bar's left end at its underside, the lower diagonal's inner edge the bottom bar's at its top, meeting in the inner notch (a point); the other edges meet the bars in plain corners (Z's joins, no bracket) and each other in a sharp point (four references of six have no flat; Georgia Pro 0.13 and Literata 0.16 of the stem; the capitals' 0.42 flat stands in for an overshoot on a zone line and read "chipped" mid-height). Places from the references' medians: ink 0.982 of E's ink (589), the top bar's end 0.974 of the bottom bar's, the point 0.637 across and 0.523 up; ∑ from 712 to -142 (-0.200 of the cap), Ʃ (a capital letter) from 0 to 712 on the same construction. In each master the same construction at that master's capitals, width 0.982 of its E (replaces `charset.sum_vertex` in `bold.bold_font`; the Regular's `sum_vertex` is overwritten). In `normalize` after the ampersand | point 0.746 / 0.542 > 0.637 / 0.523 of the ink; bottom 0 > -142 (∑); upper / lower diagonal 98.5 / 54.1 > 89 / 49 (Z's / A's); bars 46.5 / 46.0 > 46 / 46; beaks 3.57 / 3.98 > 2.96 / 2.96 of the bar (E's); heel 33 > 0; joins: 2 S-brackets of 5 curves > plain corners; point flat 36 > 0 (sharp); width 589 (0.982 E); points 53 > 38 (on-curve 27 > 22). Advances ∑ 638 > 650, Ʃ 665 > 677 (sides kept) |
+
+What moved (`a/build-a1.log`, `diffreg.py`): Esh and summation in the Regular UFO and TTF, nothing else; the overlap
+layer unchanged. Kerning: 19 collision keys with ∑ (the pass that keeps ink 13 apart: ∑ now hangs below the baseline,
+so ∑ j 123, ∑ ƒ 54, ſ ∑ 39 > 72, f ∑ 32; K ∑ 5 dropped). Checks against snap082i: evaluate, even, curvecheck (both),
+parts, audit_charset unchanged (0 errors); pathlint 147 > 144 warnings, 31 > 29 infos (the three handles past their
+meeting point and the overlap note on Ʃ and ∑ are gone). The master construction was run on snap082i's Light and Bold:
+structure matches (38 points), bars 36 / 61, thick 67 / 149, thin 40 / 65, width 571 / 630.
+
+Looked at (`reg/itemA-summation.png`, `itemA-Esh.png`, `-combs`, `itemA-text.png`): the ∑ now reads as Area's E and Z
+put together: straight, upright, one weight per stroke, the two beaks one size, the left side one vertical, a clean
+point. Still not right, honestly: the bars (E's 46) read light beside the 89 diagonal at text size; every reference
+makes the bottom bar heavier (1.6 of the top, median), which the owner's "capitals' arm weight" does not; the long
+level runs of the bars' undersides show the beak's bracket (E's own curve from 463) as the only curve in the glyph; and
+the hanging ∑ needs ∑ j kerned open by 123 (a collision pass value, not a fit).
+
+### Item B: the arrows
+
+The owner: "arrow both shouldn't have the middle line go through the arrows?" Measured (`b/arrownum.py` on Area;
+`b/refarrows.py`, `refcentre.py`, `sysarrows.py` on Serrif, Source Serif 4, Literata, Merriweather, PP Kyoto Medium,
+Times New Roman; Georgia Pro, Crimson Pro and Newsreader have no arrows). In ← → ↑ ↓ the shaft stopped at the head's
+crotch and the head ran solid to a sharp point (end flat 0): sound. ↔ and ↕ were → and its mirror unioned: each shaft ran
+on through the other end's head to the arrow's end, so both points were cut square (a 52-unit flat at each tip, 22
+units of shaft past the head's edges): the owner's "middle line through the arrows". The heads were one construction
+everywhere except the slanted four, made 0.92 as long with a 0.92 head (the references' slanted arrows are the level one
+turned: length and head 1.00 in Serrif, Source Serif 4, Merriweather and PP Kyoto). The vertical and slanted arrows
+stood 13 to 15 units over the maths axis (30 under the cap height's middle); the references centre theirs on their
+level arrow's axis (the up arrow's middle -0.033 to +0.109 of the arrow's length, median +0.010). Lengths: ↔ the same
+as → (Times New Roman 1.00, Merriweather 1.66; the others have none); ↑ the same as → (every reference 1.00).
+
+| # | Item | Cause | Rule | Before > after (Regular) |
+|---|---|---|---|---|
+| 105 | B. ↔ ↕ | Two arrows unioned: each shaft ran through the far head | `charset.arrows.east(both=True)`: one shaft from crotch to crotch, the right head and the same head turned over about the arrow's middle; the shaft stops at each head's crotch as in → | tip flats 52 / 52 > 0 / 0; on-curve points 28 > 22; length 490 = →'s; advance 578 / 612 kept |
+| 106 | B. ↖ ↗ ↘ ↙ | Made 0.92 as long, head 0.92 | The arrow turned whole (`east()`): the same head and length as → | head run 162 > 176 (→'s); advance 428 > 455 (sides 35 kept) |
+| 107 | B. ↑ ↓ ↕ ↖ ↗ ↘ ↙ (⌃) | Placed 30 under the cap height's middle | Every arrow's ink centred on the maths axis (313), as the level arrows' shafts; ⌃'s point follows ↑'s | ink middle 326 > 313 (↑ ↓ ↕), 324-328 > 311-315 (slanted: whole-unit rounding of the turn); ⌃ 13 lower |
+
+The family after (`b/arrownum.py`): every arrow's shaft the minus (52) on the axis, every head the same two strokes
+(run 176, spread 376, sharp point), the shaft ending in the head's crotch; ↵ ⇤ ⇥ were already built from ← → and are
+unchanged (heads identical); lengths: → ← ↑ ↓ ↔ ↕ and the slanted arrows along their axis 490. What moved: ↔ ↕ ↑ ↓ ↖ ↗ ↘
+↙ ⌃ in the Regular UFO and TTF, nothing else; kerning: three collision keys with ŀ (ldot ↔ 17 > 15, ldot ↖ 22 > 21, ldot
+↙ 19 > 20). Checks against item A: evaluate, even, curvecheck (both), pathlint, parts, audit_charset identical.
+Looked at (`reg/itemB-arrowboth.png`, `itemB-arrowupdn.png`, `itemB-uni2197.png`, `itemB-arrowup.png`, the families
+`itemB-family-before.png` / `-after.png`, `itemB-text.png`): ↔ and ↕ now end in the same points as ← and →; the slanted
+arrows are the same size as the level ones. Not right yet: ↔ at →'s length leaves 310 units of shaft between the
+crotches, which reads short at text size beside → (one reference, Merriweather, makes it 1.66 as long; the advance
+would grow); the masters were not looked at (the engine reads the new ↔ / ↕ outlines).
+
+#### Item A, second pass: the operator (the reference study's numbers)
+
+The reference study (`build/refstudy/spec.md`, Georgia Pro, Serrif, PP Kyoto) came in after the first pass: Area's ∑
+was still the Greek capital's proportions on an operator's extent. Its numbers, taken for the summation only (Ʃ stays
+the letter of the first pass): extent -0.25 to 1.00 of the cap (-178 to 712; references' height 1.23 to 1.29 cap, the
+centre 0.04 to 0.13 cap under the maths axis: Area's now 267, 0.065 under); width 0.79 cap (562, 0.9375 of E's ink in
+any master); the bottom bar 0.90 of n's stem (70; Georgia Pro 0.96, Serrif 0.89: the operator's heavy foot; this
+overrides the brief's "both at the arm weight" for the summation, the coordinator's instruction), its beak E's moved
+down with the bar's inner edge so both serifs stand as far past their bars; the diagonals' long edges at 55 and 52
+degrees from level, the point where their inner and outer edges meet (VX 0.662, VY 0.525 result); the point's flat 0.13
+of the capital stem across the bisector (11; Georgia Pro's 0.127 measured, Serrif sharp; the study's 0.42 is the
+capitals' zone-line flat, which the owner read as chipped mid-height). ∏ takes the same extent: its stems run down to
+-178, feet whole (`charset.maths`).
+
+| | first pass | second pass | references (study) |
+|---|---|---|---|
+| ∑ extent | -142 to 712 | -178 to 712 | -0.19 to -0.29 cap |
+| width / cap | 0.827 | 0.790 | 0.69 to 0.96, rule 0.79 |
+| bottom bar | 46 | 70 | 0.89 to 0.96 stem |
+| diagonals from level | 53.7 / 52.0 | 55.0 / 52.0 | 53/50, 59/53, 65/67 |
+| point flat | 0 | 11 | Georgia 13, Serrif 0 |
+| ∏ extent | 0 to 712 | -178 to 712 | G -0.29, K -0.19, S 0 |
+
+What moved against item B's build: summation (advance 650 > 623) and product in the Regular UFO and TTF, nothing else;
+kerning: collision keys with ∏ and ∑ and j / ƒ (∏ j 132, ∏ ƒ 64, ∑ j 126). Checks identical to item B's. In the
+masters the same rule gives a bottom bar of 49.5 / 126 at 300 / 800 and the point rising to 0.59 of the height at 800
+(the angles fixed while the bottom bar grows): reported, not tuned. Figures `reg/itemA2-summation.png`,
+`itemA2-product.png`, `-combs`, `itemA2-text.png`. Looked at: the ∑ now reads as an operator beside x and ∏, its heavy
+foot balancing the thick diagonal; still, ∏'s and ∑'s descent needs ∏ j / ∑ j opened by 126 to 132 units (the collision
+pass), and ∏ x sits close (its sides are 30, a sign's).
+
+#### Item B, second pass (the reference study)
+
+The study (`build/refstudy/spec.md`) confirms the rule for ↔ ↕ (no reference has them; in every single arrow the
+shaft's end never shows outside the head) and asks that this item change no length, head angle or stroke style (a
+later pass restyles the family from the spec), and that the slanted arrows' arms lie level and upright (the turned copy
+put them 4.9 degrees off; PP Kyoto's 1). So the first pass's lengthening of ↖ ↗ ↘ ↙ to 1.00 is undone: they keep 0.92 of
+the level arrow's length, take the level arrow's arm (centreline 231, weight 52) and open it to 45 degrees off the shaft
+(`east(half=45)`), so turned 45 degrees one arm is level and the other upright. ↔ ↕ and the axis placement stand.
+
+| | 0.82i | first pass | second pass |
+|---|---|---|---|
+| ↖ ↗ ↘ ↙ length along the arrow | 451 (0.92) | 490 (1.00) | 451 (0.92) |
+| their arms off level / upright | 4.9 deg | 4.9 deg | 0.0 deg (edges at 0, 45, 90 deg) |
+| their arm (outer edge) | 230 | 250 | 250 (→'s) |
+| advance | 428 | 455 | 407 |
+| ink middle (axis 313) | 324 to 328 | 311 to 315 | 310.5 to 315.5 |
+
+What moved against item A's second build: ↖ ↗ ↘ ↙ only (kerning: ldot ↖ 21 > 26, ldot ↙ 20 > 26). Checks identical.
+Figures `reg/itemB2-uni2197.png`, `itemB2-uni2198.png`, `itemB2-family-after.png`, `itemB2-text.png`. Still not right:
+the slanted arrows' heads are now a 90-degree chevron beside the level arrows' 99 degrees (the study's 45-degree
+half-angle for every arrow is for the later restyle); the family is short against the references (0.94 x-height
+against 1.21 to 1.32), left for that pass.
+
+### Item C: the ampersand
+
+Measured with the reference study's reader (`build/refstudy/ampm.py`, run read-only by `reg/c/ampref.py`; Georgia Pro,
+Serrif, PP Kyoto Medium; table `reg/c/ampref-final.txt`). The 0.82 & had a flat lid and an angular upper-left shoulder
+(the loop's outer upper-left quarter 1.50 as wide as tall, references 1.14; its left extreme at 0.70 of the counter's
+height, references 0.52); the loop's left side and the diagonal light (0.80 / 0.95 of n's stem, references 1.04 /
+1.05); the loop counter tall (0.86 of the bowl counter's height, references 0.80); the crossing and the bowl's top low
+(0.59 / 0.49 cap, references 0.61 / 0.51); the glyph wide (1.03 cap, references 0.98); the diagonal steep (53 degrees
+from level, references 50.5).
+
+The stopped worker's `amp.py` (two candidates in `build/owner8/item19-candidates.png`) was kept: the loop by rule
+(`loop_rule`: the outer extremes at the references' share of the counter's height, the outer quarter's width over its
+height `kappa`, the counter's upper-left quarter never under `il_min`, the left side leaving the diagonal's straight on
+a circular turn of the quarter's own radius, an Euler-like ease twice the circle's height), the bowl's outer left at a
+radius 0.89 of its lower quarter, the bowl's bottom e's bottom, the arm's crotch filleted (0.30 stem, the @'s), the
+solver's no-peak and rise terms, the whole-unit rounding guard against new inflections. Candidate A (kappa 1.01 /
+1.085 at 400 / 800) and B (0.88 / 0.97, a narrower loop) are kept in `LOOP["kappa"]` with C (0.974 / 1.054, a first
+interpolation). Read against the study, A was nearer the references (B's loop 0.41 of the width against 0.48, counter
+area 0.51 against 0.62), but both kept the old skeleton's faults above. So a fourth, D, from A:
+
+| # | Item | Rule | 0.82i > 0.83 (Regular) | references (median) |
+|---|---|---|---|---|
+| 108 | C. & | Weights as shares of n's stem (`amp.STUDY`): diagonal 1.05, loop's left 1.04, loop's right 0.77 (they were v's thick, 0.89 of it and 0.895 of the left); skeleton (`amp._study_skeleton`): x narrowed 0.952 about the left (ink 0.98 cap), the diagonal at 50.5 degrees from level, the spine's crossing raised 18; the loop's kappa 1.08 (`LOOP["kappa"]["D"]`, Bold 1.16), between A's 1.01 (counter area 0.50, width 0.57, offset 0.014 on this skeleton) and 1.12 (0.62, 0.69, 0.046): the value that puts the loop's outer width over the bowl's and its counter width on the medians with the offset inside the references' range | width / cap 1.033 > 0.987 | 0.98 |
+| | | | loop counter / bowl counter: area 0.575 > 0.573, width 0.637 > 0.651, height 0.858 > 0.774 | 0.62, 0.63, 0.80 |
+| | | | loop outer / bowl outer 0.817 > 0.886; loop width / ink 0.447 > 0.492 | 0.89; 0.48 |
+| | | | loop offset / width 0.029 > 0.033 | 0.017 to 0.052 |
+| | | | loop foot / cap 0.586 > 0.612; bowl counter top 0.485 > 0.506 | 0.61; 0.51 |
+| | | | stations / stem: loop left 0.80 > 1.04, loop right 0.78 > 0.77, loop top 0.55 = 0.55, bowl left 1.00 > 1.01, bowl bottom 0.58 > 0.64, diagonal 0.95 > 1.05 | 1.04, 0.77, 0.47, 1.07, 0.72, 1.05 |
+| | | | curvecheck on the glyph: worst 1.02 > 1.09, 0 faults; advance 810 > 777 | ratio within 1.2 |
+
+What moved against item B's second build: the ampersand only (advance 810 > 777); kerning unchanged. Checks: evaluate,
+even, curvecheck, parts unchanged; audit_charset 0 errors (the & ink rule 2.44 > 2.50, limit 3.0); pathlint one
+warning more: the arm's crotch fillet has its leftmost point inside the curve (x 506, t 0.53), no node there (adding it
+must happen in every master's construction too; left). The master construction was run on snap082i's Light and Bold
+with this Regular: no curvecheck fault (worst 1.17 / 1.05). Figures `reg/itemC-ampersand.png`,
+`itemC-ampersand-combs.png`, `itemC-text.png`; the k = 1.08 / 1.12 trials in `reg/c/k1.08`, `k1.12`.
+
+Looked at: the loop is a round teardrop, its curvature changing smoothly all round (no lid, no shoulder), standing over
+the bowl; the diagonal carries the weight; the glyph sits narrower in text. Still not right: the thinnest place is
+0.80 of the hairline where the references keep 0.97 to 1.00 (it is in the bowl's bottom as it runs into the diagonal
+and at the tail's join, not on the stroke rising into the loop as theirs); the bowl's bottom 0.64 of the stem against
+0.72; the loop's top 0.55 against 0.47 (o's hairline, heavier than theirs); the bowl's outer left extreme still reads
+a little tighter than the arcs either side in the comb.
+
+The owner's clarification on the references (after item C was committed): they show how glyphs appear, they are not
+targets; the test is Area's own system, the references only catch a glyph plainly outside normal practice or choose
+between equal options. Item C's proportional moves (width, the diagonal's angle, the crossing's height, the loop's kappa
+to the medians) are therefore revisited after item E (below, "Item C, second pass"); items D and E take their places from
+Area's own glyphs first.
+
+### Item D: the figure 3, and the other round figures
+
+Measured (`reg/d/figcomb.py`: curvecheck on each whole figure; `ref3x.py`; `thick.py`: radial rays from each bowl's
+counter centre; Area's 8 and S for the extremes' places). The 3: 8 faults, worst ratio 2.00: the top's two arcs met
+with a 1.25 jump (inner) and 1.30 at the ball's left, because the top stood at 0.451 of the upper bowl's width (Area's 8
+0.493, S 0.498; references 0.487 to 0.550), so the left quarter was 200 wide and the right 243 for one height; each
+quarter's handles unequal (top-left 0.64 / 0.48 of their sides: long at the top, short at the ball, so the arc ran
+flat and then turned tight into the ball, the owner's "flattens toward the ball"; bottom-left 0.59 / 0.49, the owner's
+"longer and flatter"); three flat places, two of them in the inner curves into the waist; the upper ball's neck a second
+upright node 6 units left of the ball's right extreme (an S of 21 units, 1.59 and 1.33 jumps), where the lower ball runs
+straight into its inner curve. The thick sits right: on the right of each bowl at mid-height (thickest at 0 degrees in
+both bowls, 92.1 / 92.3, as the references' 0 to +5 and Area's 2 and 5).
+
+| # | Item | Rule (`figs.py`, in normalize before spacing, so ³ ₃ and the fractions follow) | Before > after (Regular) |
+|---|---|---|---|
+| 109 | D. 3 | (1) the upper ball's neck is one curve, as the lower ball's: the node between the ball's right extreme and the inner top dropped, the two curves refitted as one quarter with the lower ball's handle shares (`neck`); (2) the top and bottom extremes, outer and inner together, moved level with their handles to the places nearest the middle of each bowl (Area's 8 and S) at which every node meets at one curvature with no flat place: top 0.51, bottom 0.445 (scanned: top 0.49 to 0.505 left a flat place in the inner curve into the waist, bottom 0.452 / 0.449 one in the lower bowl's; both inside the references' ranges); (3) every smooth node between two curves at one curvature (`loops.even_nodes`, handles only, target 1.05) | curvecheck worst 2.00 > 1.09, faults 8 > 0 (flat places 3 > 0); top at 0.451 > 0.510, bottom 0.452 > 0.445 of their bowls; points 60 > 57; thick at 0 degrees both bowls (unchanged); width unchanged |
+| 110 | D. 5 | The same evening (`even_figs`), and a handle the rounding left off its node's line turned back onto it (`collinear`) | curvecheck worst 2.95 > 1.05, faults 6 > 0 |
+
+The comb table over the Regular's round figures after (`d/figcomb-after.txt`; worst ratio at a smooth node, faults,
+thickest place): 2 1.43, 1 fault (node 9 at the ball's neck: the ball's own drawing, left; thick at -5 degrees); 3 1.09, 0
+(thick 0 / 0); 5 1.05, 0 (thick +5); 6 4.56, 2 and 9 2.51, 1 (where the long stroke enters the bowl: the same evening
+cures them, 1.15 / 1.06, but undoes even.py's thickness round their counters, strays 2.4 / 2.6 > 4.7 / 3.7 against 2.75,
+so left until one solve holds both; listed); 8 1.21, 0; 0 1.07, 0. Thick placement: 2 3 5 at 0 to +5 degrees (right,
+mid-height); 6 9 read at their junction (the ray runs into the long stroke), 0 symmetric (87.9 left, 87.0 right).
+
+What moved against item C's build: 3, 5 and their superiors and inferiors (³ ₃ ⁵ ₅), the fractions built from them
+(⅓ ⅔ ¾ ⅜ ⅗ ⅝ ⅚ ⅕ ⅖ ⅘ as composites; advances of ⅓ ⅔ ¾ ⅜ ⅗ ⅝ ⅚ by 2 to 3 units through the fraction spacing),
+nothing else; kerning: five collision keys with ď / ľ. Checks: curvecheck, parts, audit_charset, even unchanged;
+evaluate jumps 35 > 33 (the 3 lists two "curvature flips sign" at its ball necks and a lopsided quarter at the lower
+ball's left, 0.52 / 0.86: the evening's; the 5 lost two); pathlint 145 > 146 warnings (⁵: one handle past its meeting
+point after scaling), 29 > 27 infos. Figures `reg/itemD-three.png`, `itemD-three-combs.png` and `itemD-c4k-three-combs.png`
+(a finer comb scale), `itemD-five*.png`, `itemD-text.png`. Looked at: the top bowl's upper-left arc now turns evenly
+into the ball (no flat run then a tight turn), the top a level meeting of two arcs of one curvature, the bottom-left arc
+no longer long and flat; the upper ball meets its bowl as the lower does. Not right yet: 6 and 9 as above; the 2's ball
+neck; the lower ball's left quarter reads slightly lopsided in evaluate's handle test.
+
+### Item E: g's ear and bowl
+
+The owner: "is the ear of the g supposed to have the round part of the top story of the g be misaligned?" It is not.
+Measured (`reg/e/gdent.py`: the drawn outline either side of the ear, E to D below the ear's lower root and U to T above
+its upper root, against one cubic from the bowl's right extreme E (upright) to its top T (level); + outside): the
+Regular's pieces stand +2.8 at D and +4.9 at U, a 2-unit step across the ear, too small to see at 400 (the stopped
+worker's ellipse reading: U / D 1.034 / 1.020); snap082i's Bold +25.3 at U and -10.5 at D (the outline above the ear
+stands out, the bowl below resumes inside: the notch the owner saw at the heavy weights, made by `bold.g_ear` moving the
+ear's ball and roots without the bowl), the Light -7.4 / +8.0. The ear itself is sound in the Regular: it leaves as a
+branch, thin at the root and swelling to the ball.
+
+| # | Item | Rule | Before > after |
+|---|---|---|---|
+| 111 | E. g | `figs.g_oval` (the stopped worker's, kept, with one change): the bowl's outer upper-right quarter is one cubic from E to T, its two handles fitted (least squares, end tangents fixed) to the drawn pieces either side of the ear; the ear's roots D and U slide to the nearest places on it and the pieces E-D and U-T become that cubic's own pieces, so the outline either side of the ear lies on one curve; the ear's curves keep their shape, their ends moving with D and U. The stopped worker's cubic took the bowl's upper-left tensions, which made it another oval (a 1.73 curvature jump at E); matching E's curvature alone bulged it 8 units out; the fit keeps E's join (no new fault). In the Regular (`normalize`, with the 3's rule, before spacing: ǥ follows). In the masters it was tried right after `bold.g_ear` and withdrawn (full build, below) | Regular: step across the ear 2.1 > 0 (the two pieces one cubic); roots moved D (+0.6, 0), U (-1.0, -0.5); curvecheck on the whole g 9 faults, worst 2.57 > 9, 2.42 (the ear's ball top; the faults are the g's own drawing: the link, the loop's ends, none at the bowl) |
+
+What moved against item D's build: g and ǥ (gstroke, also its overlap layer) in the Regular UFO and TTF; ğ ĝ ġ ģ ǧ ǵ ḡ
+follow as composites; g.ss02 and ɡ byte-identical; nothing else; kerning unchanged. Checks identical to item D's.
+Figures `reg/itemE-g.png`, `itemE-g-combs.png`, `itemE-text.png`. Looked at: at 400 the change is a unit (the dent the
+owner saw is a heavy-weight one, which the masters' rule now holds: numbers in the full build below). Not done: the
+ear's angle and position against the references (only a sanity check: inside their range by eye); the g's other
+whole-glyph curvature faults (link, loop ends) are its existing drawing.
+
+### Item C, second pass: the ampersand in Area's own terms
+
+After the owner's clarification (the references show how glyphs appear; they are not targets), item C's moves onto the
+references' medians are undone and what was uneven or awkward in Area's own terms is kept fixed. Undone: the skeleton's
+narrowing to 0.98 cap, the diagonal's turn to 50.5 degrees and the crossing's 18-unit rise (`amp._study_skeleton` kept,
+not applied), the diagonal and the loop's sides as shares of n's stem (`amp.STUDY` kept, unused), kappa 1.08. Kept:
+the stopped worker's loop rule (round teardrop, no flat lid, no angular shoulder), the bowl's left radius, e's bottom,
+the arm's crotch fillet. In Area's terms: the diagonal and the loop's left side are one stroke at v's thick diagonal (74:
+the ladder's thick diagonal; the stopped worker's 0.89 of it left the loop's left side light, 66), the loop's right side
+half way between o's side and the hairline (62.5, the 0.82 rule: a round stroke running from the top's hairline into
+the spine's), the top o's hairline (43). The loop's form: A (kappa 1.01 / 1.085) against C (0.974 / 1.054) on this
+skeleton, looked at large and in text (`reg/c/AvsC-ampersand.png`, `second-text.png`): A's loop is the rounder teardrop
+and passes curvecheck (worst 1.05, 0 faults); C's narrower loop has a 1.33 jump. A is taken. B (0.88 / 0.97) stays
+in `LOOP` for the record (its loop reads small: 0.41 of the width).
+
+| | 0.82i | first pass (D) | second pass (A) |
+|---|---|---|---|
+| advance / width over cap | 810 / 1.033 | 777 / 0.987 | 810 / 1.033 |
+| loop counter / bowl counter: area, width, height | 0.575, 0.637, 0.858 | 0.573, 0.651, 0.774 | 0.598, 0.628, 0.879 |
+| loop outer / bowl outer; offset | 0.817; 0.029 | 0.886; 0.033 | 0.850; 0.073 |
+| diagonal; loop left; loop right; loop top (units) | 74; 74; 62.5; 43 (drawn loop) | 82; 81; 60; 43 | 74; 74; 62.5; 43 |
+| loop's outer upper-left quarter, width over height | 1.50 (lid) | 1.08 | 1.01 |
+| curvecheck on the glyph, worst / faults | 1.02 / 0 | 1.09 / 0 | 1.05 / 0 |
+
+What moved against item E's build: the ampersand only (advance 777 > 810, its 0.82 advance again). Checks identical to
+item E's but audit_charset's & ink 2.50 > 2.45 and the fillet's no-node warning moving with the fillet (520, 153).
+Figures `reg/itemC2-ampersand.png`, `itemC2-ampersand-combs.png`, `itemC2-text.png`. Looked at: the &'s Baskerville
+character and width are back; the loop is round, its curvature smooth all round, the left side the diagonal's weight.
+Still: the loop sits 0.073 of the width right of the bowl's counter (the 0.82 drawing 0.029: the loop's left side
+leaves the diagonal on a turn of its own radius, which carries it right); the thinnest places are the bowl's bottom into
+the diagonal and the tail's join (0.78 of the hairline).
+
+### Full build (all masters), the audits, `build/snap083a`
+
+One full build (`AREA_KERN_FIT=1 build.py`, `reg/build-083a2.log`), the audit set on it and on `snap082i` with the same
+script (`reg/fullaudit.sh`; `reg/audit-082i/`, `reg/audit-083a2/`), the masters reported and not tuned. The first full
+build stopped in the Bold engine: `bold.HINTS["summation"]` named the old drawing's knots (0 / 46, 666 / 712); the
+summation is now a construction run again in each master (`sigma.master`), so the engine reads it without hints. A
+second build carried `figs.g_oval` into the masters after `g_ear`; at the Bold it slid the ear's lower root 16 units into
+the ear and crossed the ear's first handle (audit_axis turns: an inflection in g's curve 7 at 565 and 369), so it was
+withdrawn (`reg/snap083a-try1/`). The third is `build/snap083a`.
+
+What moved against snap082i (`reg/diff-082i-083a.txt`): in every master, the Regular TTF and the variable font at 300 /
+400 / 600 / 800, exactly the items' glyphs: Ʃ ∑ ∏; ← ↑ ↓ ↔ ↕ ↖ ↗ ↘ ↙ ⌃ (← → ↵ ⇤ ⇥ unchanged); &; 3 5 and ³ ₃ ⁵ ₅, the
+fractions built from them; g and ǥ (the accented g as composites); the Bold's mid layer: &, g and ǥ (g and ǥ no longer
+need a mid master: their crotch's neck now interpolates within `MID_MISS`). Advances (Light / Regular / Bold): Ʃ 658 /
+665 / 684 > 663 / 677 / 708; ∑ 630 / 638 / 659 > 610 / 623 / 653; ↖ ↗ ↘ ↙ 415 / 428 / 445 > 390 / 407 / 430; ↔ 550 / 578 /
+618 > 542 / 578 / 630; ↕ 580 / 612 / 658 > 582 / 612 / 656; 3 and 5 by a unit in the Light; fractions 2 to 3. Kerning
+refit: fit_kerning.json unchanged; the masters' keys moved only in collision pairs with these glyphs (Light 79, Regular
+34, Bold 381, most with ∏ and ∑ now hanging below the baseline).
+
+| Audit | snap082i | snap083a |
+|---|---|---|
+| audit_axis (Bold and Light: counter, drift, symmetry, mirror, seam, thin, monotone, composite, turns, crossings) | ok | ok (identical) |
+| audit_rays (300 to 800) | 1 glyph (ʕ) | 1 glyph (ʕ), 27,229 > 27,063 places (∑ Ʃ ∏ arrows have fewer, straighter parts) |
+| audit_bold (Bold) | 432 / 432 | 431 / 432: g's neck "missed": the reader looks for the Bold's crotch within 0.75 of where the Regular's maps, and the Regular's root moved a unit (item E); read directly, the Bold neck is 44.8 > 46.1 against the target 45.9 (on target) |
+| audit_bold (Light) | 432 / 432 | 432 / 432 |
+| audit_kern (300 / 350 / 400 / 600 / 800) | pass, least 10.4 / 9.3 / 8.3 / 8.4 / 7.9 | pass, the same |
+| curvecheck regions (Light, Bold) | pass | pass |
+| curvecheck hooks (Light, Bold) | 6 / 14 faults | 6 / 14 (unchanged) |
+| interpolation (varLib.interpolatable on the default layers) | 61 struck glyphs listed (the overlap layer is the VF source) | the same 61, nothing new |
+| fallbacks in the variable font | ® ℗ (Bold), ℗ (Light) | the same |
+
+The masters, as the existing rules give them (curvecheck on the whole glyph, faults / worst ratio, Light and Bold,
+snap082i > snap083a): 3 11 / 2.11 > 2 / 1.38 and 9 / 2.33 > 5 / 1.54; 5 7 / 3.13 > 0 / 1.24 and 7 / 3.01 > 1 / 1.38; &
+0 / 1.03 > 0 / 1.03 and 0 / 1.03 > 1 / 2.07 (the Bold's loop form A: one jump to look at); ∑ 6 / 249 > 0 / 1.00 and 6 /
+160 > 0 / 1.00; Ʃ 5 / 166 > 0 and 4 / 162 > 0; g 11 / 2.25 > 10 / 2.00 and 12 / 3.01 = 12 / 3.01. The g's bowl through
+the ear in the masters (`e/gdent.py`): Bold U +24.3 / D -9.6 (snap082i +25.3 / -10.5), Light D +8.9 / U -10.1: the
+dent the owner saw at the heavy weights is still there; its rule (move the ear with the bowl in `g_ear`) is open. The
+∑'s bottom bar at the Bold is 126 (0.9 of the Bold n stem) and its point rises to 0.59 of the height (the diagonals'
+angles fixed while the bar grows). Pages not rebuilt.
+
+### Symbols 1: accuracy (the symbol system's rules, every non-letter glyph against them)
+
+The owner: "the arrows and symbols definitely need another style and consistency pass, making sure everything is
+mathematically, optically, and visually accurate first". The references (Georgia Pro, Serrif, PP Kyoto; the study
+`build/refstudy/spec.md`) are a sanity range, never a target: each rule below is stated in Area's own parts. Census of
+all 147 non-letter glyphs of the Regular (`build/owner8/sym/census.py`: advance, sides, ink box over the x-height, the
+line or axis each is centred on or stands on, the strokes across themselves by rays from the outline, straight
+strokes by angle, sharp and softened corners, the worst curvature ratio across a smooth node, mirror partners by the
+area of their XOR): `build/owner8/sym/census-before.txt` (snap083a), `census-after-stage1.txt`.
+
+The rules (one table for the symbol system):
+
+| | Rule | Glyphs |
+|---|---|---|
+| Axes | The maths axis (313, the minus's middle) for every sign that is not a letter, a figure or punctuation: operators, arrows, interface signs, geometric shapes, ~ ≈ ∞. The dash line (278) for hyphen and dashes; the baseline and cap height for the letter-like signs | |
+| The + box | The minus's width (424; 94 to 518 in the maths' 612 advance) is every operator's width; the + is that square | + − ± × ÷ = ≠ < > ≤ ≥ ¬ ~ ≈; ∞'s height |
+| Arrow | Length twice the axis (626, so ↑ stands on the baseline); one head: arms 240 along their centrelines at 45 degrees off the shaft; every arrow that one turned or turned over, whole; ↔ ↕ the single arrow plus one head's depth (the shaft between the crotches the single arrow's shaft) | ← → ↑ ↓ ↔ ↕ ↖ ↗ ↘ ↙ ↵ ⇤ ⇥ ⌃ |
+| Key box | 0.80 cap (570) tall, centred on the axis | ⌘ ⌥ ⇧ ⇪ (the erase keys 0.80 of it), ⌃'s point at its top, ✓ centred |
+| Shapes | The circle is the key box; the square's area the circle's; the pointed shapes' 0.70 of it; triangles centred half way between their box's middle and their centroid; the small triangles 0.55 | ● ○ ■ □ ▲ ▼ ▶ ◀ ▴ ▾ ▸ ◂ ◆ ★ ☆ |
+| Letter-like signs | Baseline to cap height (and the operators' descent, -0.25 cap, for ∏ ∑), the capitals' weights | ∂ ∆ ∏ ∑ ◊ # € and the currencies |
+| Reference marks | One arm: from the asterisk's centre (521), 22 where it leaves, swelling to a round end of 78, the asterisk's length (200); the dagger's lower arm down to the baseline's overshoot; the double dagger's second crossing the first's mirror about half the cap | * † ‡ |
+| Weights | The plain stroke (the minus, 52) in every straight sign; the check 1.25 of it; the radical's thick 0.96 of the stem; the curved maths signs the damped upright stress, 47 level and 57 upright (52 on average); the letter-signs' strokes the case's hairline (47, 43), their level bars H's crossbar (49); the fraction bar 48 level | |
+| Ends and corners | A plain stroke's free end cut square, both corners on radius 7 (the letters' cut ends; kept, as the owner chose in 0.79); a meeting stays sharp; a vertex's outside a flat 0.42 of the stroke across the bisector (✓, the radical's foot); a chevron's point an upright flat 0.79 of the stroke (< > ≤ ≥ ^); arrow heads and frames mitred | |
+| Partners | A mirrored pair is one drawing turned over (the brackets, guillemets, < >, ≤ ≥, ⇤ ⇥, ⌫ ⌦, now ← →, ↗ ↖, ↘ ↙); turned ones the same drawing turned (the arrows, the triangles); ≈ is two ~; ≠ is = and a slash centred on it | |
+
+What broke a rule, and what changed (Regular; census before > after):
+
+| # | Glyphs | Was | Now |
+|---|---|---|---|
+| 112 | + = ≠ ± ¬ < > ≤ ≥ | + 424 wide, 430 tall; = 412 wide, centred 22 over the axis (≠'s slash 43 over, 20 left of the ='s middle); ± 55 over; ≤ ≥ 26 over; < > ¬ 416 / 414 wide | every one 424 wide, centred on the axis (¬ its bar on it); + 424 square |
+| 113 | ~ ≈ | ~ 349 wide (0.82 of the box), on the dash line, 25 to 78 across (thinnest 0.58 hairline), curvature jumps 1.54 (≈ 99: a node's handle collapsed); ≈ two of it 0.75 of their height apart | `signs.tilde`: one period of a sine wave from inflection to inflection, the + box wide (418 after the soft corners), on the axis, wave height 54 (40 degrees at the inflections), each end run on along its edge's tangent and cut square, the damped stress 46 to 52 across; ≈ two on the equals' lines (154 apart); 0 curvature faults |
+| 114 | ∞ | two o's (outer sides 72, tops 52), 248 tall (0.58 of the + box), 600 wide | `signs.infinity`: one stroke round a lemniscate of Gerono, the + box tall (424), 1.85 of it wide (784), the damped stress (47 over the tops, 57 at the ends, about 52 through the crossing); nodes at every extreme and the crossing; 0 faults |
+| 115 | ^ | 0.35 x-height tall, centred on the axis, arms tapering 35 to 66 | the < chevron turned up (its angle, its upright flat), 0.60 x-height tall, point at the cap height, 52 across |
+| 116 | arrows | 490 long (0.94 x-height); level heads 99 degrees, slanted 90; slanted arrows 0.92 of the length; ↔ ↕ the single arrow's length (the shaft between its heads 310); ← not exactly → turned over (arms 51.7 against 52.5: audit_charset error) | 626 long; one 90-degree head; every arrow → turned; ↔ ↕ 728 (shaft between crotches 400, →'s); ← ↖ ↙ the mirror of → ↗ ↘ (MIRRORS); advances → 578 > 714, ↔ 578 > 816, ↖ 407 > 531, ⇤ ⇥ 630 > 766, ↵ 578 > 714 (riser to ↑'s point) |
+| 117 | ⌘ ⌥ ⇧ ⇪ ⌫ ⌦ ⌃ ✓ ● ○ ■ □ ▲ ▼ ▶ ◀ ◆ ★ ☆ | key signs on the baseline (⌥ 490 tall where the others are 570), the erase keys centred at 285, the shapes at 343, ✓ at 350, ⌃'s point at ↑'s (558); ▲ 0.56 of the circle's area beside ■ 0.98; ◆ 0.64 | all on the axis; ⌥ 570; ⌃'s point at the key box's top (598); ■ the circle's area (side 505), ▲ ◆ 0.70 of it (▲ 642 wide, 556 tall; ◆ 598); stars on their centre point |
+| 118 | † ‡ | a spear to -238 (0.33 cap under the baseline), 1.84 x-heights tall, heaviest (137) under the crossing, ball ends 102 | `signs.dagger`: the asterisk's arm (22 to 78) on a cross at the asterisk's centre; -9 to 721; ‡ crossings at 521 and 191, its upright 50 at the middle; 22 at the crossings, 78 at the ends |
+| 119 | √ | the foot a sharp point (0.33 hairline thinnest) | a vertex: a flat 31.5 (0.42 of the 75 thick) across the bisector |
+| 120 | % ‰ | figures 25 to 40 from the bar (the fractions keep 66): % 1.06 x-heights wide | set as the fractions (each figure 66 from the bar, level moves only): % 1.22 x-heights (advance 640 > 719), ‰ 885 > 924 |
+| 121 | € | its own narrow C (1.04 x-heights) with flat-cut terminals | Area's C and two bars of H's crossbar (centres 0.43 and 0.60 cap, from 0.9 of the capital stem left of the C to 0.66 of its width; struck in the variable font as ₡ is): 1.31 x-heights, advance 655 > 746 |
+| 122 | ✓ | its 65 ends sharp (soft_ends stopped at 62: audit_charset error) | radius 7 as every plain end (`charset.SOFT_WIDE`) |
+
+Checked and in rule, unchanged: − × ÷ (dots over the bar's middle), / \ | ¦ _, the dashes, ∆ ∏ ∑ (∏ and ∑ against j are
+already opened by the collision pass, ∏ j +132, ∑ j +126: no ink closer than 13), ∂ ∫, the brackets, quotes,
+guillemets, ¶ § # © ® ℗ ™ and the letter currencies, ⋯ ⋮ • ∙ °, ◊ (left at 0.55 wide over tall: the frame's rule;
+the study's 0.65 is a reference number, not a fault in Area's terms), ✕ (on the axis, 1.1 of the plain stroke by
+design). The stage changes no stroke style: maths stay monoline, ends keep radius 7.
+
+What moved (`build/owner8/reg/diffreg.py` snap083a > `build/owner8/sym/b6`): exactly the 55 glyphs above (and € in
+the overlap layer); no letter or figure. Kerning: 29 collision keys with € % ‰ and the moved signs (ldot, longs,
+jcircumflex). Checks against snap083a: evaluate, even, curvecheck (both), parts unchanged; audit_charset 2 errors >
+0 (← and ✓); pathlint 146 > 140 warnings (the old ~ † € handles gone), 27 > 33 info (2.1-degree bends where the ~'s
+19-unit end runs meet the wave, whole-unit rounding). Figures: `build/owner8/sym/before-sheet1.png`, `-sheet2.png`,
+`s1/stage1-sheet-pair.png` (before over after by family), `s1/stage1-big-1.png`, `-big-2.png` (before beside
+after, nodes), `s1/stage1-text.png` (14, 18, 28 and 96 px at 2x).
+
+Looked at, honestly: the arrows now read as arrows beside letters (→ was the length of an x), ↔ is clearly longer
+than →; the operators line up on one axis (= and ≤ no longer float); ∞ reads as one stroke; † and ‡ now belong with
+*. Not right yet: ▲ ▼ ◆ look large beside ● in a line (the 0.70 area share is a first number); ~ at text size still
+reads light and small next to ≈'s pair; ↕ at 728 runs from -51 to 677 (under the baseline); ⌃ high on its own.
+
+### Symbols 2: the gentle taper (the owner's B for the arrows and open keys, A for the closed keys)
+
+The owner chose the study's "gentle taper" and asked for "something very subtle". Built in `signs.py` from the
+centreline construction, so every tapered sign is one rule: a stroke from its join A to its free end F is `_Taper`
+(w0 at A, a round end of w1 across whose tip is F; each edge one straight line from A ± w0/2 tangent to the end's
+circle; every corner two edges meeting, found). Each glyph is one contour whose round ends are drawn on their placed
+circles split at every extreme, so every point of the outline is a point of the construction (`corners`), and a master
+builds the same points at its own weights: w0 at the master's hairline (o's top over the Regular's, `bold._hair_ratio`),
+w1 and the A strokes at the plain stroke's law (`bold.construction_signs`, which now passes both).
+
+| # | Glyphs | Rule (numbers as built) | Before (symbols 1) > after |
+|---|---|---|---|
+| 123 | → ← ↑ ↓ ↖ ↗ ↘ ↙ (`signs.tarrow`) | B: the shaft from a round tail (w1 60 = 1.15 plain strokes) to the hairline (w0 43) where it runs into the head; each arm from the hairline at the head's meeting to a round end (60); the point cut flat 0.5 w0 (21.5) across its bisector; the skeleton of symbols 1 kept (626, arms 240 at 45 degrees) | 52 monoline, square ends at r 7 > 44.5 to 59 across, median 53; ink area 1.007 of before |
+| 124 | ↔ ↕ | the same heads at both ends; the shaft w0 at each head and w1 at the middle, each edge two quadratic quarters meeting level at the middle (a node at the extreme) | 1.032 |
+| 125 | ⇤ ⇥ (`kind="bar"`) | the bar at the point a stroke across it: its back straight, its face from round ends (w1) to w0 where the arms' outsides run into it (one contour) | 0.985 |
+| 126 | ↵ (`kind="ret"`) | the shaft runs back to a mitred corner and up into a riser to the up arrow's point; the width from w0 at the head to w1 at the riser's round end, linear along the centreline | 1.002 |
+| 127 | ✓ (`tcheck`) | both strokes from the hairline at the vertex to round ends; the vertex's outside cut 0.5 w0 across the bisector, its inside a point | 65 (1.25 plain strokes) all along > 44 to 59; area 0.794 (now the family's colour) |
+| 128 | ✕ (`tcross`) | four arms from the crossing (w0) to round ends (w1); its ink box kept (394) | 57 > 46 to 60; 0.963 |
+| 129 | ⌘ ⌥ ⇧ ⇪ ⌃ ⌫ ⌦ □ ◊ ○ ☆ | A: uprights 57, level strokes 47, slanted ones 47 + 10 sin^2 of their slope (`signs.stress_w`, `stress_frame`, `option`; ⌘'s loops and ○ as rings 57 at the sides and 47 at top and bottom, ○'s outside the circle, its counter an ellipse as o's); outer corners rounded on 7 as the letters' cut ends (`signs.soften`), inner corners (meetings) sharp | 52 monoline > 47 / 57; areas 0.98 to 1.04 |
+| 130 | ● ■ ▲ ▼ ▶ ◀ ▴ ▾ ▸ ◂ ◆ ★ | their outer corners soft on 7, so □ and ■ (and ☆, ★) are one family | sharp > r 7 |
+
+Final numbers against the study's starting ones: w0 43 (the hairline, as started), w1 60 (1.15 plain strokes, as
+started), the cap's radius 30, the flat 21.5 (0.5 w0), A 57 / 47: the starting numbers held when looked at in lines of
+text at 14, 18, 28 and 96 px; nothing was nudged. At 14 to 28 px the change is below a pixel (the signs keep their
+colour: ink areas within 4% but ✓), at 96 px the arrows' round ends and their thinning into the head read as drawn
+strokes beside the letters, and the key frames' upright/level difference reads as the letters' stress, quietly. The
+maths operators stay monoline; † ‡ * were made one family in symbols 1 (the asterisk's arm).
+
+What moved (Regular, snap083a > `build/owner8/sym/c4`): the 57 glyphs of both stages (39 in this stage, all signs;
+no letter or figure). Advances (symbols 1 > 2): ↖ ↗ ↘ ↙ 531 > 538, ↵ 714 > 717, ⇤ ⇥ 766 > 757, ✓ 573 > 545, ✕ 500 > 494,
+⌃ 612 > 626, the key and shape signs 1 to 7 units narrower (their soft corners shorten the ink; sides kept). Checks
+against snap083a: evaluate, even, curvecheck (both), parts unchanged; audit_charset 0 errors (its caps-lock rule now
+reads A's level stroke, 47); pathlint 0 errors, 146 > 156 warnings: 16 "no node at extreme, t = 0.03" on the four slanted
+arrows, where a round end's tangent point stands 2.3 degrees from its extreme (the taper's angle): the end is drawn
+from the extreme and `clean.true_joins` turns the 16-unit handle onto the side's line, so the extreme lies half a unit
+inside the curve (whole units; not visible). Figures: `build/owner8/sym/symbols-sheet-pair.png` (snap083a over
+after, every family), `after-sheet1.png`, `-sheet2.png`, `s2/stage2-big-arrows.png`, `s2/stage2-big-keys.png`
+(symbols 1 beside 2, nodes), `text-before-after.png` (snap083a, symbols 1, symbols 2 at 14, 18, 28, 96 px). Census:
+`census-after.txt`.
+
+Looked at, honestly: the arrows feel drawn rather than ruled, and ↔'s shaft swells slightly to its middle (reads as a
+lens at 96 px; at text size it is invisible); ⇤ ⇥'s bar, thin where the arms run in, reads at 96 px as two short strokes
+meeting in a shallow wedge; the check is lighter than it was (by design: 1.25 plain strokes was its own exception).
+A is barely visible, as asked: ⇧'s uprights against its level foot are the only place it shows at text size.
+
+### Symbols, full build (all masters), the audits, `build/snap083b`
+
+`AREA_KERN_FIT=1 build.py` (`build/snap083b/build-083b.log`), the audit set by `build/owner8/reg/fullaudit.sh` on
+snap083a (`reg/audit-083a2/`) and snap083b (`build/owner8/sym/audit-083b2/`). The masters build the symbols by the
+existing rules and the two stages' constructions; they were looked at (`build/owner8/sym/masters-1.png`, `-2.png`: the
+tapered and A signs, ~ ∞ † at 300 / 400 / 600 / 800) and not tuned. Three engine fixes were needed to build:
+the tapered signs' round ends now take the Regular's arc decisions in a master (`signs._PLANS`: which ends snap to an
+extreme, where the arcs are cut), so a master has the Regular's points (the first build stopped on a point-count
+mismatch); `bold.construction_signs` picks, among the best-voted placements, the one that lays every point nearest its
+corner (soft corners put many points 7 from a corner, and ≤ was left to the engine) and clears the engine's stale
+fallback note once a construction replaces it (↕ was listed on a fallback it no longer had); ~ and ≈ are kept as
+constructions in the masters too (the engine gave their near-straight quarters an inflection between masters).
+
+What moved against snap083a: the 57 glyphs of the two stages in every master (Light, Regular, Bold; the mid layer
+unchanged), nothing else. Kerning refit: `fit_kerning.json` unchanged; the masters' collision keys with the moved signs
+only. Fallbacks in the variable font: ® ℗ (Bold), ℗ (Light), as before (↕'s note gone).
+
+| Audit | snap083a | snap083b |
+|---|---|---|
+| audit_axis Bold: turns, symmetry, thin | ok, ok, 5 glyphs (cedi, ogonek ×2, one.ss01, radical) | ok; ‡ symmetry 0.8 unit at 800 (whole-unit rounding of the arm-sign rule, `arms.master`); thin 4 glyphs (the radical left the list: its foot is a vertex now) |
+| audit_axis Light | ok | ‡ symmetry 0.7 to 0.8 unit at 300 |
+| audit_rays (300 to 800) | 1 glyph (ʕ), 27,063 places | 1 glyph (ʕ), 28,210 places (the tapered signs have more straight places) |
+| audit_bold Bold / Light | 431 / 432, 432 / 432 | the same |
+| audit_kern | pass (least 8.3 / 8.4 / 7.9) | pass, the same |
+| curvecheck regions Light, Bold | pass | pass |
+| curvecheck hooks Light / Bold | 6 / 14 | 6 / 14 |
+| interpolation (default layers) | 61 struck glyphs | 62: € is now struck (Area's C and bars), its overlap layer the VF source |
+
+The masters as the rules give them, honestly: at 800 the taper's contrast grows (the free ends take the plain stroke's
+law, 1.37, the joins the hairline's, 1.23: 53 to 82 across), so the Bold arrows read more Kyoto-like than the
+Regular's; ↔'s swelling shaft is plain at 800; ⌘ (built by the engine from its rings) and ∞ (the engine) grow heavy
+at 800, ∞'s right lobe heavier than its left; ⇧'s A frame keeps 57 / 47 times the law. None tuned.
+
+## Regular pass, consistency (0.83, 18 November 2026)
+
+The owner: bring "more consistency, cohesiveness, visual clarity, smoothness, and evenness to the whole glyph set" to
+the Regular before any weight tuning. Worked at 400 with `AREA_BOLD=0 build.py` (78 s), each step diffed against the
+one before (`build/owner8/reg/diffreg.py`), checked with `build/owner8/reg/checks.sh` (evaluate, even, curvecheck and
+`--hooks`, pathlint, parts, audit_charset; `build/owner8/cons/chk-s0` .. `chk-s3`), looked at large with nodes and in text at
+14 / 18 / 28 / 96 px (`build/owner8/cons/*.png`, made by `cons/big.py` and `cons/text.py`), committed before the next.
+The work list is the read-only audit `build/regaudit/report.md`. The masters were not tuned.
+
+### 0. Symbol follow-ups (the coordinator's check of snap083b)
+
+| Glyphs | Was | Rule | Now |
+|---|---|---|---|
+| ↔ ↕ | the shaft between two heads swelled from the hairline at each crotch to 60 at the middle: a lens | A shaft with no free end is straight, one width crotch to crotch (`signs.tarrow(shaft=)`, `charset.SHAFT_BOTH`): the hairline (43, the head's join): it reads in text at 14 to 96 px as the same stroke the heads leave, so no other value was needed (48 and 52 not tried) | shaft 43 all along |
+| ↕ | the two-headed level arrow turned (728 long): -51 to 677, hanging 51 under the baseline | ↕ keeps the up arrow's extent (2 axes, 0 to 626, centred on 313), the shared head; its shaft between the crotches shortens | 0 to 626 |
+| ⇤ ⇥ | the bar at the point 60 at its ends thinning to 43 where the arms run in: a shallow wedge | the bar a straight stroke (`bar_w`, `charset.TAB_BAR`): A's upright (57, the stop's weight beside the arrow's 60 round tail; 52 not tried), half-round ends of its own width, its face upright through the head's point | 57 constant; advance 757 > 771 |
+| ∞ | 784 x 424 (the + box's height, 1.85 of it wide): read oversized beside + = < | `INF_H` 0.78 of the + box tall, `INF_W` 1.50 of the minus wide; the stress unchanged | 636 x 330; advance 852 > 704 |
+| ▲ ▼ ▶ ◀ ◆ (and the small triangles) | 0.70 of the circle's area: larger than ■ ● in a line | `POINTED` 0.60 (by eye in a line of ■ ● ▲ ▼ ◆ at 18 to 96 px) | ▲ 642 > 590 wide; ◆ 598 > 548 |
+| ~ ≈ | mean width along the centreline 49.9 (thinnest 47 over the crests) against the minus's 52 | the damped stress scaled so the mean is the plain stroke's (`TILDE_K` 1.04: 48.9 level, 59.3 upright) | 52 mean |
+| † ‡ | arms leaving the crossing at the asterisk's 22: a long arm at 22 read light beside § ¶ * | `DAGGER_W0`: the arms leave at the ladder's least stroke (the branch neck, 32); the round end the asterisk's 78. They did not vanish at 14 px; their colour per advance is the asterisk's (0.148 against 0.150 before the change). ‡'s crossings on whole units (the asterisk's centre rounded), so they mirror exactly | 22 > 32 |
+
+What moved: ↔ ↕ ⇤ ⇥ ∞ ▲ ▴ ▶ ▸ ▼ ▾ ◀ ◂ ◆ ~ ≈ † ‡ (18 glyphs), nothing else; kerning one collision key (ŀ ~ 14 > 15).
+Checks unchanged but pathlint's ~ / ≈ bend notes (2.1 > 1.5 degrees). Images `cons/0-big.png`, `0-big2.png`,
+`0-text.png`, `0-text2.png`. Still: ~ reads small at text size (it is the + box wide; its colour now matches −).
+
+### 1. Defects (audit list A)
+
+| Glyph | Was | Rule | Now |
+|---|---|---|---|
+| Ŋ | a detached 55 x 30 piece of the old left foot's serif on the baseline (`eng_capital`'s cut box caught it) | the cut keeps only what hangs under the baseline; pathlint warns on any contour under 3,000 square units (`STRAY_AREA`) | gone; the new check also lists Ⱥ Ⱦ ₩ (their struck strokes' stubs, 1,966 to 2,408: drawn, left) |
+| 1 | right white 164.5 against its left 123.6 (fit.py), every pair with 1 among the lightest | the 1 is an upright stroke and shows the same white each side, as I does (`spacing.OPTICAL_MORE`) | 123.6 / 123.5; advance 444 > 403 (¹ ₁ and the fractions follow) |
+| ? ¿ | ball 105.2 across, the heaviest in the face | the capitals' round end (`BALL_CAP` 1.10 x 88 = 96.8), the ball scaled about the stroke's top node, the neck's handle with its node (`charset.question_ball`); ¿ is ? turned | 96.8 |
+| ! ? ¡ ¿ | the i's dot (116) where . , : ; … carry the period's (124) | one punctuation dot, the period's | 124 |
+| ẞ | a 15-unit level step between the lower stroke's foot and the bowl's outer curve | a stroke's foot is one corner (`charset.no_steps`) | the curve leaves the foot's corner |
+
+Not done, honestly: the 6 and 9 curvature (4.56 / 2.51: one solve holding curvecheck and even.py together was not
+written); Q's tail root (6.89x; it needs a tail construction); the extended capitals' serifs (88 to 117) and stems
+(101 to 103) and the glottal stops' balls (106 to 112): first drawings, to be rebuilt from their base letters.
+
+### 2. Consistency (audit list B)
+
+Not reached in this pass, except the punctuation dot (B11, above). Looked at and left for the owner's call: F's middle
+arm 17 under E's (355 against 372) and P's bowl closing 13 under R's: both inherited and both usual in the
+references' practice (F's arm lowered because F has no foot to balance it); stated here as the rule until the owner
+chooses otherwise.
+
+### 3. Optical ink (Regular)
+
+fit.py first, against the 0 / n / H controls and both references. Moved: the 4 105.6 / 128.7 > 117.6 / 117.7 and the
+5 91.9 / 114.7 > 102.9 / 103.7 (both references keep these figures' whites equal; the same rule as the 1). Left, with
+the reason: the 3's open left (Serrif's too); U (10.5 right; its sides inside both references), M (8.5 left; inside
+both), B +34%, R and S +18%, 8 +17% (two bowls, the letters' structure), 7 -31%, y -22%, v and L -20% (open shapes), a
++13% and g +16% (their own drawings: B3 and B2, not reached). Kerned pairs keep their distance (`rekern`); the full
+build refits with `AREA_KERN_FIT=1`.
+
+### Full build (all masters), the audits, `build/snap083c`
+
+`AREA_KERN_FIT=1 build.py` (17 min 23 s, `build/snap083c/build-083c.log`), the audit set by `build/owner8/reg/fullaudit.sh`
+(`build/owner8/cons/audit-083c/`) against snap083b's (`build/owner8/sym/audit-083b2/`), and the Regular's checks
+(`cons/chk-083c/` against `cons/chk-s0/`, which is snap083b's Regular). The Regular in snap083c is the last
+Regular-only build's, glyph for glyph and key for key. The masters build every change by the existing rules; looked at
+(`cons/4-masters.png`: ↔ ↕ ⇥ ∞ ? 1 at 300 / 400 / 550 / 700), not tuned.
+
+What moved against snap083b: Regular 41 glyphs (the 18 signs; Eng, ẞ; ! ? ¡ ¿; 1 4 5 and their small forms, tabular
+forms and the fractions built from them), the Light 43 and the Bold 49 (the same, with one.tf in both, and in the Bold
+the five / four small forms and fractions and glottalstopsmall through the engine), no mid layer, no overlap layer.
+fit_kerning.json refit (101 lines in, 61 out: pairs with 1 4 5); kerning keys moved Light 262, Regular 124, Bold 501.
+Fallbacks in the variable font: ® ℗ (Bold), ℗ (Light), as before.
+
+| Audit | snap083b | snap083c |
+|---|---|---|
+| audit_axis Bold / Light: symmetry | ‡ 0.7 to 0.8 unit at 300 | ok (‡'s crossings whole) |
+| audit_axis thin (Bold) | cedi, ogonek x 2, one.ss01 | the same |
+| audit_rays (300 to 800) | 1 glyph (ʕ), 28,210 places | 1 glyph (ʕ), 27,600 places (the straight shafts and bar have fewer) |
+| audit_bold Bold / Light | 431 / 432, 432 / 432 | the same |
+| audit_kern | pass, 800 least 7.9, 1,687 under the floor | pass, least 7.9, 1,683 |
+| curvecheck regions Light, Bold | pass | pass |
+| curvecheck hooks Light / Bold | 6 / 14 | 6 / 14 |
+| interpolation | 62 struck glyphs | the same |
+| Regular: evaluate, even, curvecheck, parts, audit_charset | | unchanged |
+| Regular: pathlint | 0 / 156 / 38 | 0 / 159 / 39: the new stray-piece check lists Ⱥ Ⱦ ₩ (struck strokes' stubs); ₁'s flag bends 14 degrees (0.7 unit, whole-unit rounding) |
+
+In the masters, honestly: ↔ ↕'s shaft takes the hairline's law, so at 700 to 800 it is thin beside the round ends that
+take the plain stroke's (the heads' joins do the same: one family); ∞ at 800 keeps its right lobe heavier (the engine).
+
+## Regular pass, letters (0.83, 18 November 2026)
+
+The letter items of the audit (`build/regaudit/report.md`) the consistency pass left: worked at 400 with `AREA_BOLD=0
+build.py`, each item built, diffed (`build/owner8/reg/diffreg.py`), checked (`build/owner8/reg/checks.sh`:
+evaluate, even, curvecheck and `--hooks`, pathlint, parts, audit_charset; `build/owner8/let/chk-s*`), looked at large
+with nodes and combs and in text at 14 / 18 / 28 / 96 px (`build/owner8/let/big.py`, `cons/text.py`; images
+`build/owner8/let/*.png`), committed before the next. The masters were not tuned. Every change is a rule in the engine
+(`figs.py`, `charset.py`, `parts.py`); no point was moved by hand.
+
+| # | Item | Rule | Before > after (Regular) |
+|---|---|---|---|
+| 1 | 6 and 9 | `figs.nine_even`: the 9's counter handles, the outer bowl's handles either side of its lowest node under the counter, and those two lowest nodes (level), solved together for curvecheck (aim 1.15, no other fault) and even.py (shelf under 2.3, rate jump under 1.0, mean thickness within 0.6), least change; the 6 the 9 turned half round, point for point (they had drifted apart by up to 18 units of handle) | 9 2.51 > 1.15, 6 4.56 > 1.15, faults 1 / 2 > 0; even.py 2.6 / 2.4 > 2.4 / 2.4 (jump 0.4 / 0.5 > 0.5); ⁶ ⁹ 5.22 / 2.47 > 1.37 / 1.42; ∂ 4.56 > 1.15. The outer bottom moved 5 units left, the counter's 1 right |
+| 2 | Q's tail | `figs.q_tail`: the start is a round end of the stroke's own width (54 across), tangent to the straight upper edge, its leftmost where the drawing's was; three arcs at the circle's handle; the underside's inflection on a node; its level top solved for one curvature, the stroke never under 0.9 of the end | 6.89 > 1.17, faults 5 > 0 (an inflection inside two curves and a flat place gone). A first solve without the neck guard made a ball on a neck: withdrawn |
+| 3 | extended capitals, glottal stops | `charset.ext_capitals` (EXT_CAPS): a serif slab reaching 80 to 130 from its stem's edge, read by a scan inside the slab, is 77; an upright stem 6 or more over 86 is 86. `charset.glottal_balls`: ?'s ball rule (scaled about the stroke's top), the capitals' 96.8 at cap height, the lowercase's 88 at the x-height, then the nodes evened | heads 90-94 > 77, feet 100-114 > 77 (Ɓ Ɗ Ǝ Ƒ Ɦ Ɥ Ɩ Ƙ Ƥ Ɽ Ƭ), Ƭ Ʈ stems 101 > 86; ʔ ʕ 111.3 > 96.8, Ɂ 105.9 > 96.8, ɂ 110.9 > 88; hook faults (drawn) 41 > 33 |
+| 4 | hooked lowercase | `charset.ext_lowercase` (EXT_LOWER): a stem (two upright straight edges, 100 long, facing) between n's stem and 92 is n's; an edge shared by two runs moves once; a foot slab of 74 to 130 is n's 70 | ɦ ɥ ɩ ƥ ɾ ɽ ﬆ ƭ ʈ ʋ c_t s_p 80-83 > 78, Ʋ 103 > 86; ɦ ƙ ɲ feet 78-96 > 70 |
+| 5 | shared bowls, B P R, E F | `parts.bowl`: the branch's and run-in's handle at the bowl's extreme solved for the far quarter's curvature. `figs.cap_bowls`: F's middle arm (edges and beak) on E's centre; P's bowl closing where R's does (lower quarters scaled about the right extremes); B P evened by `even_glyph` | b d p q 1.48 > 1.03; F +17 (355 > 372, its beak 243-466 > 260-483 as E's 260-484); P closes 322 / 369 > 335 / 382 (R's); B 2.11 > 1.10, P 1.22 > 1.12 |
+| 6 | curves | `figs.even_glyph` on EVEN_LETTERS: handle lengths only (`loops.even_nodes`) at aim 1.25, else 1.5, else 1.8, kept only where curvecheck's faults do not grow, even.py holds and parts.check's crotches hold | e 2.66 > 1.24, d's foot bracket 4.70 > 1.18, G 1.61 > 1.17, J 2.66 > 1.58, 2's ball neck 1.43 > 1.20 (œ æ ǥ ₂ ² follow) |
+| 7 | small alignments | `charset.turned_v`: Ʌ is V turned half round on the baseline; Y and Ƴ read by `ext_capitals` under the arms (`FOOT_ONLY`); `figs.f_foot`: f's right foot n's | Ʌ feet -11 > 0, point 710 > 721; Y Ƴ feet 102 > 77 (Ɏ ¥ follow); f 87 > 70 (every f ligature and ſ follow) |
+| 8 | ink | measured (`build/owner8/let/ink8.py`: ink in the x-zone over advance x 520, as the audit's grey) | a +12.9% and g +15.7% over the lowercase mean before and after: the curve work did not touch their weight (a's evening was refused, g was left). Not adjusted |
+
+Tried and withdrawn or left, honestly:
+- 1: the earlier one-sided solves (even_nodes alone; even.py alone) were not used; the joint solve holds both.
+- 2: the first q_tail chose, among three starts, one whose end swelled into a ball on a neck; the 0.9 stroke guard
+  removed it.
+- 5: R's evening (2.00 > 1.01) broke even.py's limit (2.7 > 4.3): R is left at 2.00 / 1.86. b and p's thickness stray
+  rose 3.0 > 3.4 (audited, no limit for the constructed bowl). The first F move left the arm's beak behind (a lopsided
+  bracket, evaluate's lopsided count 3 > 7); the second moves the whole arm.
+- 6: a (3.74) and r (2.18): every evening that cures them moves their crotch off parts.check's neck (r 29.4, a 24.5) or
+  leave, so both are left; U's evening raises its worst ratio (1.01 > 1.20); g left (its Regular handles feed the
+  masters' `g_ear`); R as above. J's evening leaves two lopsided quarters (handles 0.46 / 0.78 and 0.38 / 0.67).
+- 7: r's long foot (131) kept by eye (`7-feet-trial.png`: shortened, the r stands on a stub with a hole after it);
+  y's tail (-209) and μ (-193) left: their depths are rules (round_tail keeps y's, `MU_DESC` 0.86 of p's from the
+  references); Œ's seam (3.01) and c_t's link (infinite): `even_glyph` cannot reach either without a new join
+  construction.
+- 4: ɗ ᶑ ɠ keep 81 (their stem's inner edge is the counter's, not a straight 100 long); the hooked letters' flags are
+  untouched.
+- 8: a and g are still the two darkest lowercase letters; a rule (their strokes' weights against n's, or their
+  advances) is the next step, not taken here.
+
+### Full build (all masters), the audits, `build/snap083d`
+
+`AREA_KERN_FIT=1 build.py` (19 min 42 s, `build/snap083d/build-083d.log`), the audit set by
+`build/owner8/reg/fullaudit.sh` (`build/owner8/let/audit-083d/`) against snap083c's (`build/owner8/cons/audit-083c/`), and
+the Regular's checks (`build/owner8/let/chk-083d/` against `build/owner8/cons/chk-083c/`). A first full build was
+discarded: it showed F's middle arm moved without its beak (evaluate: a lopsided bracket); `cap_bowls` now moves the
+whole arm, and the second build is snap083d. Its Regular is the last Regular-only build's but F.
+
+What moved against snap083c: Regular 97 glyphs (the items' letters and what is built from them: the f ligatures and ſ,
+þ Þ ƀ Ƀ Ᵽ, ǥ Ɏ ¥ ₱ ₲ ₽ ₿ ℗ @ ɑ g.ss02, the small 2 6 9, ∂, the fractions as composites), 15 in the overlap layer; Light
+106, Bold 124 (with the accented Y's, and through the engine's laws read on the letters ∗ † ‡ " ⌦ ⌫ and five accent
+composites), the mid layer 6 (@ ɦ œ ƥ ɽ s_p). fit_kerning.json refit (92 lines in, 87 out); kerning keys moved Regular 1
+(ſ ı), Light 755, Bold 222. Fallbacks in the variable font: ® ℗ (Bold), ℗ (Light), as before.
+
+| Audit | snap083c | snap083d |
+|---|---|---|
+| audit_axis Bold / Light | ok (thin: cedi, ogonek x 2, one.ss01) | the same |
+| audit_rays (300 to 800) | 1 glyph (ʕ), 27,600 places | 1 glyph (6: 40.0 > 37.7 at (255, 406), thinner at 800 than at 666), 27,435 places; ʕ cured by its round end |
+| audit_bold Bold / Light | 431 / 432, 432 / 432 | the same (g's neck missed, as before) |
+| audit_kern | pass, 600 least 8.4, 757 under the floor; 800 least 7.9 | pass, 600 least 8.3, 864 under the floor; 800 least 7.7 (f ł.ss04) |
+| curvecheck regions Light, Bold | pass | pass (Bold g.ss02 1.65 > 1.60) |
+| curvecheck hooks Light / Bold | 6 / 14 | 5 / 16 (Bold: ɂ an inflection at its neck, s_p a flat place; Ghook, Nhookleft cured) |
+| interpolation | 62 struck glyphs | the same |
+| Regular: curvecheck, curvecheck hooks (drawn faults) | pass, 41 drawn | pass, 33 drawn |
+| Regular: evaluate | jumps 33, lopsided 3 | jumps 27, lopsided 6 (J two quarters, 6 the 9's turned, the 9 as before) |
+| Regular: even, parts, audit_charset | 0 errors | 0 errors (b p stray 3.0 > 3.4, 9 2.6 > 2.4, P 1.7 > 2.0, e 1.1 > 1.5) |
+| Regular: pathlint | 0 / 159 / 39 | 0 / 157 / 38 |
+
+Not right yet, honestly: the 6 in the masters (one place 2.3 units thinner at 800 than at 666, where the long stroke
+meets the counter: the 6 is now exactly the 9 turned, and the engine reads the turned junction differently); the Bold's
+hook faults 14 > 16 (ɂ's scaled ball, s_p's evened stem); the items' leftovers listed above.

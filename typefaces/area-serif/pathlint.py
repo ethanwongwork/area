@@ -297,6 +297,8 @@ def crossings(names):
                 a = abs(sum(pts[i][0] * pts[(i + 1) % len(pts)][1] - pts[(i + 1) % len(pts)][0] * pts[i][1] for i in range(len(pts))) / 2)
                 if a < MIN_AREA:
                     found.append(("ERROR", f"{name} (built)", "a contour of %.0f square units: debris" % a))
+                elif a < STRAY_AREA:
+                    found.append(("WARNING", f"{name} (built)", "a contour of %.0f square units: a stray piece?" % a))
             c = _crossing(polys)
             composite = ttf["glyf"][name].isComposite()      # components may overlap one another in TrueType
             if c and (c[0] != "overlap" or not composite) and not (composite and c[0] == "self"):
@@ -305,6 +307,7 @@ def crossings(names):
 
 
 SLIVER = 400           # square units: a self-crossing that closes less than this is a fault, not a drawn overlap
+STRAY_AREA = 3000      # 0.83 (Regular pass, consistency 1): Eng's stray 55 x 30 serif piece (1,650) passed MIN_AREA
 MIN_AREA = 60          # square units; the smallest real contour in the set is a period's dot, about 9000
 
 

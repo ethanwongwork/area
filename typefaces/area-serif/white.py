@@ -989,7 +989,8 @@ def _straight_nodes(R, N, seg_of, eR, turns0, thR, stem_ratio):
     return N, log
 
 
-SLIDE_REACH = 1.5          # axis round 3: a straight-node slide reaches at most this many times the Regular's stroke
+ZONE_Y = (0, 520, 712, 780, -224)   # bold.ZONES: heights a master never moves
+SLIDE_REACH = 1.5         # axis round 3: a straight-node slide reaches at most this many times the Regular's stroke
 NODE_JND = 0.03            # a place left short of its law by more than this share of it (the just-noticeable
                            # difference in weight, audit_rays' JND) after the handles moves its nodes
 
@@ -1052,6 +1053,10 @@ def _taper_places(R, N, short, seg_of, eR, turns0, thR, cut_only=False):
                     L_ = math.dist(P[o][:2], q[:2])
                     cut = ((q[0] - P[o][0]) / L_, (q[1] - P[o][1]) / L_)
             if cut is None:
+                continue
+            if abs(cut[1]) > 0.5 and q[1] in ZONE_Y:
+                # owner round 8 (0.82), item 12: a cut end's corner on a zone line holds its height (the Light 7's
+                # bar end, 13 once its bar thins, grew its top corner 712 > 716 and the figure stood 4 units tall)
                 continue
             hs = handles_of(P, m)
             level = False

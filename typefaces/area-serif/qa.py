@@ -8,7 +8,9 @@ Runs, in order, and reports each validator's own outcome (a run that finishes is
   3c. parts.py                     one construction per join and bowl: necks, pointed crotches, b d p q, u from n
   3c2. curvecheck.py               curvature continuity along g's loop, the tails of g.ss02 j y, a.ss03 and l.ss04
   3d. audit_charset.py             beyond a-z A-Z 0-9: mark placement, plain strokes, signs from letters, mirrors
-  3e. audit_kern.py                (0.81) every pair's least white at 300 350 400 550 700, against the weight's floor
+  3e. audit_kern.py                (0.81) every pair's least white at 300 350 400 600 800, against the weight's floor
+Weights are on the 0.82 axis (300 to 800, or 200 to 800 with the ExtraLight; weightaxis.py): the Bold master is 800, the
+mid master 600; the audits' default stops are 0.81's at the same stems.
   4. fontbakery check-universal    font engineering (names, tables, metrics, glyphs, features)
   5. diffenator2 diff (--diff)     before/after renders and table diffs against build/previous/
 Proof sheets (proof.py, overlay.py) are separate: they are for eyes, not exit codes.
@@ -83,7 +85,21 @@ def main():
                                            ufoLib2.Font.open(os.path.join(HERE, "build", "AreaSerif-Light.ufo")))
             print("\n== light side bearings (bold.check_light_bearings)\n" + (f"{len(miss)} sides off: {miss[:12]}" if miss else "every named side as light_bearings.json sets it"))
             results.append(("light side bearings (light_bearings.json, one path)", not miss))
-        for style in ("Light", "Bold"):                        # 0.81 (owner): the tails and loops in every master
+            import weightaxis as _W0
+            tp = os.path.join(HERE, "build", f"AreaSerif-{_W0.LOW_NAME}.ufo")
+            if os.path.exists(tp):                             # 0.82 (axis B): the Thin's, light + thin_bearings.json
+                import weightaxis as _W
+                tmiss = _B.check_light_bearings(ufoLib2.Font.open(os.path.join(HERE, "build", "AreaSerif-Regular.ufo")),
+                                                ufoLib2.Font.open(tp), _W.THIN_STEM)
+                print("\n== thin side bearings\n" + (f"{len(tmiss)} sides off: {tmiss[:12]}" if tmiss else "every named side as light_bearings.json and thin_bearings.json set it"))
+                results.append(("thin side bearings (light_bearings.json + thin_bearings.json)", not tmiss))
+        import weightaxis as _W1
+        if os.path.exists(os.path.join(HERE, "build", f"AreaSerif-{_W1.LOW_NAME}.ufo")):   # 0.82 (axis B): the lightest master
+            code, out = run(_W1.LOW_NAME.lower(), [PY, "audit_bold.py", str(_W1.THIN_STEM)])
+            print("\n".join(out.splitlines()[:2] + [l for l in out.splitlines() if l.startswith("  ")][:20]))
+            results.append(("thin audit (each part on its target, letters and figures)", code == 0))
+            code, out = run("bold again (leaves build/weight/audit-bold.txt as the Bold's)", [PY, "audit_bold.py"])
+        for style in (_W1.LOW_NAME, "Light", "Bold"):                # 0.81 (owner): the tails and loops in every master
             mp = os.path.join(HERE, "build", f"AreaSerif-{style}.ufo")
             if os.path.exists(mp):
                 code, out = run(f"curves, {style}", [PY, "curvecheck.py", mp])
@@ -95,7 +111,7 @@ def main():
                 results.append((f"curve continuity of the hooks with a ball in the {style} master", code == 0))
         code, out = run("axis", [PY, "audit_bold.py", "--sweep"])
         print(out)
-        results.append(("weight axis (the same audit every 25 units)", code == 0))
+        results.append(("weight axis (the same audit at 0.81's every 25 units: 400 to 800 every 33.3)", code == 0))
         code, out = run("axis, every glyph", [PY, "audit_axis.py"])
         print(out)
         results.append(("weight axis, all glyphs (moved, turns, crossings, thin, monotone, composites)", code == 0))
@@ -104,11 +120,11 @@ def main():
             awaiting.extend(held)
         code, out = run("axis, second method (rays across the stroke on the variable font's instances)", [PY, "audit_rays.py"])
         print(out[-3000:])
-        results.append(("weight axis, second method (audit_rays: stroke across itself at 300 to 700)", code == 0))
+        results.append(("weight axis, second method (audit_rays: stroke across itself at 300 to 800)", code == 0))
         code, out = run("interpolation", [os.path.join(BIN, "fonttools"), "varLib.interpolatable", "--kinkiness", "1.0", vf])
         print(out[:2000] or "nothing reported")
         results.append(("variable font (fontTools interpolatable, kinkiness 1.0)", code == 0 and not out.strip()))
-        code, out = run("kerning along the axis (audit_kern: least white of every pair at 300 350 400 550 700)", [PY, "audit_kern.py", vf])
+        code, out = run("kerning along the axis (audit_kern: least white of every pair at 300 350 400 600 800)", [PY, "audit_kern.py", vf])
         print(out)
         results.append(("kerning along the axis (no pair under the weight's floor)", code == 0))
     code, out = run("charset", [PY, "audit_charset.py"])

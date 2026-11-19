@@ -1176,6 +1176,7 @@ def normalize(font):
     print("joins: diagonals", JOINS.steep_diagonals(font), JOINS.even_fillets(font))   # 0.53, 0.54
     print("joins: G", JOINS.G_lower(font, cap=D.CAP_HEIGHT))             # 0.54
     print("joins: C end", JOINS.C_end(font, cap=D.CAP_HEIGHT))          # 0.52, on the trued and tidied outline
+    print("joins: terminals on one line", JOINS.terminal_line(font))    # 0.82 (owner round 8): C c, before the extremes
     print("joins: u heads", JOINS.u_flags(font, xh=D.X_HEIGHT))          # 0.67: i's flag on both of u's stems
     print("balance: capital thins", BALANCE.cap_thins(font))             # 0.67: arms 46, crossbars 49, closing strokes 47
     print("balance: B", BALANCE.B_lower(font))                           # 0.67: the lower bowl at the O's weight
@@ -1191,6 +1192,8 @@ def normalize(font):
     print("clean: S curves", CLEAN.even_s(font, HARMONIZE_SET))          # 0.70: 3's hook
     print("clean: curve joins", CLEAN.true_curves(font, HARMONIZE_SET))  # 0.70: u's tail, y's tail
     print("even: thickness round the counters", EVEN.run(font))         # 0.77: before the letters are copied into others
+    import figs as FIGS                               # 0.83 (Regular pass, letters 1): the 9 by one solve of curvature and
+    print("figs: 9 and 6", FIGS.nine_even(font))      # thickness together; the 6 the 9 turned
     import loops as LOOPS
     print("loops:", LOOPS.g_loop(font))                                  # 0.81: g's lower loop, one construction
     nodes = CLEAN.add_nodes(font, HARMONIZE_SET)                         # 0.69: extremes and inflections get a node
@@ -1198,6 +1201,14 @@ def normalize(font):
     # 0.81 round 3: j's and y's tails by g.ss02's rule, the a's exit (after the node rule: they read the extremes)
     if os.environ.get("AREA_081_TAILS", "1") != "0":     # 0: the comparison build without them
         print("loops:", LOOPS.round_tail(font, "j"), LOOPS.round_tail(font, "y"), LOOPS.a_exit(font))
+    import figs as FIGS                               # 0.83 (Regular pass, item D): the 3's bowls: the upper ball's
+    print("figs:", FIGS.regular(font))                # neck one curve, extremes at the references' shares, one
+    print("g's ear:", FIGS.g_regular(font))           # 0.83 (Regular pass, item E): the ear's roots on the bowl's oval
+    print("figs: Q", FIGS.q_tail(font))               # 0.83 (letters 2): the tail starts in a round end
+    print("figs: B P R, E F", FIGS.cap_bowls(font))   # 0.83 (letters 5): F's arm E's, P closes as R; one curvature
+    print("figs: curves", FIGS.even_letters(font))     # 0.83 (letters 6): a e d G J r 2 at one curvature
+    print("figs: f", FIGS.f_foot(font))               # 0.83 (letters 7): f's right foot n's
+    #                                                   curvature; before spacing and the charset, so ³ ₃ ¾ follow
     delta, moved, opened = SPACING.run(font)          # last: it reads the finished outlines
     CLEAN.owner_final(font, json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "owner_edits.json"))))
     print(f"spacing: {len(delta)} letters re-spaced, {moved} kerning pairs carried over, {len(opened)} near-touches opened")
@@ -1247,6 +1258,26 @@ def normalize(font):
     print(f"arms: {len(signs)} signs drawn from one half or one arm", sorted(signs))
     CHARSET.turned_pairs(font)                        # 0.74: after the node rules, the turned glyphs once more
     CHARSET.mirrors(font)
+    import amp as AMP                                 # 0.82 (owner round 8, item 9): the ampersand, one construction
+    print("amp:", AMP.regular(font))                  # on the finished o, a and v; after every node rule
+    import sigma as SIGMA                             # 0.83 (Regular pass, item A): the summation and Esh, one
+    print("sigma:", SIGMA.regular(font))              # construction from E's arm and beak, Z's and A's diagonals
+    import at as AT                                   # 0.82 (owner round 8, item 15): the @, one construction: a ring
+    print("at:", AT.regular(font))                    # of one stroke and Area's a.ss03 in it, joined at its foot
+    import circled as CIRCLED                         # 0.82 (owner round 8, item 16): one ring for (C) (R) (P), the
+    print("circled:", CIRCLED.regular(font))          # letters Area's C R P at the references' size and weight
+    import symbols as SYMBOLS                         # 0.82 (owner round 8, item 18): the hook above's curves meet at
+    for n_ in SYMBOLS.HOOKS:                          # one curvature (handle lengths only; its ~30 composites follow)
+        print("hook above:", SYMBOLS.even_curves(font, n_))
+    import dollar as DOLLAR                           # 0.82 (owner round 8, item 17): $'s S one outline through its
+    if "dollar" in font:                              # bar, the bar centred on the S, its stubs one length
+        cs_ = [[(p.x, p.y, p.type, p.smooth) for p in c.points] for c in font["dollar"].contours]
+        new_, log_ = DOLLAR.true_crossing(cs_)
+        if new_ is not cs_:
+            from ufoLib2.objects import Point as _Pt
+            for c, P in zip(font["dollar"].contours, new_):
+                c.points = [_Pt(x, y, t, smooth=sm) for x, y, t, sm in P]
+        print("dollar:", log_)
     joined, promoted, copied, opened_all = SPACING.finish(font, CHARSET.COVERAGE)   # 0.73: beyond the core
     alts = sorted({b for pairs in alt_subs.values() for _a, b in pairs} | {"g.ss02", "one.ss01"} | ({"uni0261"} & set(font.keys())))
     order = font.lib.get("public.glyphOrder", [])

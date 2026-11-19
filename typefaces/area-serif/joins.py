@@ -804,3 +804,141 @@ def round_ends2(font):
         c.points[st + 1:s] = new
         done.append(f"y end r {r}")
     return done
+
+
+# Owner round 8, item 2 (0.82): "the c top part is way longer than the bottom part, which should be fixed for both c
+# and C. the top and bottom parts should be aligned." The open round letters' two terminals end on one vertical: the
+# rightmost ink of the top terminal and of the bottom terminal stand on one line. Measured on the 0.81 Regular (at
+# 1000 units, the ink's rightmost x in the top and bottom 40% of the glyph, as build/weightscale/balance.py reads it):
+# C top 33 units past the bottom, c bottom 10 past the top; in all seven references (Serrif, Georgia Pro, Source Serif
+# 4, Literata, Newsreader, Merriweather, Crimson Pro) the bottom reaches as far as the top or further (C -30 to +2).
+# The line: the references' median reach of the rightmost terminal from the letter's left edge, as a share of its round
+# letter's ink width (C over O 0.887 to 0.901, median 0.891; c over o 0.820 to 0.923, median 0.882; build/owner8/
+# cshare.py). Both terminals move level to it, each as one piece with its handles; the arcs into them stretch. On the
+# 0.81 Regular: C's top barb in 11, its lower end out 22; c's ball out 10, its lower end stays. The advance follows the
+# rightmost ink (spacing.run reads the finished outline).
+TERMINAL_LINE = {"C": ("O", 0.891), "c": ("o", 0.882)}
+
+
+def terminal_nodes(P, part):
+    """Indices of a terminal's points in P [(x, y, type, ...)]: the on-curve nodes in the top (or bottom) 40% of the
+    contour's height lying right of the outer extreme by over a quarter of the way to the band's rightmost node, and
+    the handles next to them. The outer top (bottom) extreme and the counter's stay, so the arcs between stretch."""
+    on = [i for i, q in enumerate(P) if q[2]]
+    ys = [P[i][1] for i in on]
+    y0, y1 = min(ys), max(ys)
+    H = y1 - y0
+    band = [i for i in on if (P[i][1] >= y0 + 0.6 * H if part == "top" else P[i][1] <= y0 + 0.4 * H)]
+    ext = max(on, key=lambda i: P[i][1]) if part == "top" else min(on, key=lambda i: P[i][1])
+    xr = max(P[i][0] for i in band)
+    cut = P[ext][0] + 0.25 * (xr - P[ext][0])
+    sel = {i for i in band if P[i][0] > cut}
+    n = len(P)
+    out = set(sel)
+    for i in sel:
+        for j in ((i - 1) % n, (i + 1) % n):
+            if not P[j][2]:
+                out.add(j)
+    return sorted(out)
+
+
+def terminal_reach(contours, part, step=40):
+    """The rightmost ink x in the top (bottom) 40% of the glyph's height, read on the flattened outline."""
+    from fontTools.pens.basePen import BasePen
+
+    pts = []
+
+    class _Pen(BasePen):
+        def _moveTo(s, p):
+            pts.append(p)
+
+        def _lineTo(s, p):
+            pts.append(p)
+
+        def _curveToOne(s, a, b, c):
+            p0 = s._getCurrentPoint()
+            for k in range(1, step + 1):
+                t = k / step
+                u = 1 - t
+                pts.append(tuple(u ** 3 * p0[d] + 3 * u * u * t * a[d] + 3 * u * t * t * b[d] + t ** 3 * c[d] for d in (0, 1)))
+    pen = _Pen(None)
+    for P in contours:
+        on = [i for i, q in enumerate(P) if q[2]]
+        first = on[0]
+        n = len(P)
+        pen.moveTo(P[first][:2])
+        buf = []
+        for k in range(1, n + 1):
+            i = (first + k) % n
+            if not P[i][2]:
+                buf.append(P[i][:2])
+                continue
+            if len(buf) == 2:
+                pen.curveTo(buf[0], buf[1], P[i][:2])
+            else:
+                pen.lineTo(P[i][:2])
+            buf = []
+        pen.closePath()
+    ys = [p[1] for p in pts]
+    y0, y1 = min(ys), max(ys)
+    H = y1 - y0
+    keep = [p for p in pts if (p[1] >= y0 + 0.6 * H if part == "top" else p[1] <= y0 + 0.4 * H)]
+    return max(p[0] for p in keep)
+
+
+def move_terminal(P, part, dx):
+    """The terminal's nodes move level by dx, and the half of the letter it ends is stretched level to meet it, as a
+    lengthened part keeps its pieces (charset.restretch_x): each other node of the band (the outer and the counter's
+    extreme) by its share of the run from the letter's left extreme (which stays) to the terminal's reach, each handle
+    by its own share between its curve's two ends. The extremes keep their share of the span and every arc its shape."""
+    n = len(P)
+    sel = {i for i in terminal_nodes(P, part) if P[i][2]}
+    on = [i for i, q in enumerate(P) if q[2]]
+    ys = [P[i][1] for i in on]
+    y0, y1 = min(ys), max(ys)
+    H = y1 - y0
+    inband = lambda i: P[i][1] >= y0 + 0.6 * H if part == "top" else P[i][1] <= y0 + 0.4 * H   # noqa: E731
+    xL = min(P[i][0] for i in on)
+    xT = max(P[i][0] for i in sel) if sel else max(P[i][0] for i in on if inband(i))
+    move = {}
+    for i in on:
+        if i in sel:
+            move[i] = dx
+        elif inband(i) and xT > xL:
+            move[i] = dx * min(1.0, max(0.0, (P[i][0] - xL) / (xT - xL)))
+        else:
+            move[i] = 0.0
+    for k, i in enumerate(on):
+        j = on[(k + 1) % len(on)]
+        hs = [(i + d) % n for d in range(1, (j - i) % n)]
+        if len(hs) != 2:
+            continue
+        run = P[j][0] - P[i][0]
+        for h in hs:
+            t = (0.0 if h == hs[0] else 1.0) if abs(run) < 1e-9 else min(1.0, max(0.0, (P[h][0] - P[i][0]) / run))
+            move[h] = move[i] + (move[j] - move[i]) * t
+    return [(round(q[0] + move.get(i, 0.0)), q[1]) + tuple(q[2:]) for i, q in enumerate(P)]
+
+
+def terminal_line(font, names=TERMINAL_LINE):
+    """The Regular: both terminals of C and c to the references' line (TERMINAL_LINE)."""
+    done = []
+    for name, (round_, share) in names.items():
+        g = font[name]
+        if len(g.contours) != 1:
+            done.append(f"{name}: not one contour; left")
+            continue
+        o = [p.x for c in font[round_].contours for p in c.points if p.type]
+        P = [(p.x, p.y, p.type, p.smooth) for p in g.contours[0].points]
+        x0 = min(q[0] for q in P if q[2])
+        line = x0 + share * (max(o) - min(o))
+        moves = []
+        for part in ("top", "bottom"):
+            dx = round(line - terminal_reach([P], part))
+            if dx:
+                P = move_terminal(P, part, dx)
+            moves.append(f"{part} {dx:+d}")
+        for p, q in zip(g.contours[0].points, P):
+            p.x = q[0]
+        done.append(f"{name} at {line:.0f} ({', '.join(moves)})")
+    return done

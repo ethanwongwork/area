@@ -53,6 +53,7 @@ def variable(ufo):
     structure); the glyphs that have them are flagged for the rasteriser."""
     import bold as BOLD
     import spacing as SPACING
+    import weightaxis as WAX
     stem = int(os.environ.get("AREA_BOLD_STEM", BOLD.STEM))
     bold_ufo, reports, notes = BOLD.bold_font(ufo, stem)
     # 0.80: the Light master, the same engine run below the Regular (bold.LIGHT_STEM); it has no mid master.
@@ -60,11 +61,26 @@ def variable(ufo):
     light_ufo, lreports, lnotes = BOLD.bold_font(ufo, BOLD.LIGHT_STEM)
     if "mid" in light_ufo.layers:
         del light_ufo.layers["mid"]
+    # 0.82 (owner round 8, axis B): the lightest master (weightaxis: the ExtraLight at 200, stem 42), the same engine
+    # run further (bold.thin_law for the letters' thin strokes, thin_bearings.json for the sides); no mid master
+    thin_ufo, treports, tnotes = (BOLD.bold_font(ufo, WAX.THIN_STEM) if WAX.THIN else (None, {}, []))
+    if thin_ufo is not None and "mid" in thin_ufo.layers:
+        del thin_ufo.layers["mid"]
     import overlap as OVERLAP
     reg_vf = OVERLAP.vf_source(ufo)             # 0.81: struck glyphs as letter and strokes, overlapping
-    kern = kern_masters(ufo, {"Light": (light_ufo, 300), "Bold": (bold_ufo, 700)}, reg_vf)
+    # the weight beside each master is the references' weight its same-weight fit is measured against (Georgia Pro
+    # Light / Bold, Serrif 300 / 700), not an Area axis value: the Bold master is 800 on the 0.82 axis (weightaxis.py)
+    km = {"Light": (light_ufo, 300), "Bold": (bold_ufo, 700)}
+    if thin_ufo is not None:                    # its same-weight fit: none stored (Georgia Pro has nothing under 300)
+        km[WAX.LOW_NAME] = (thin_ufo, WAX.THIN_WEIGHT)
+    kern = kern_masters(ufo, km, reg_vf)
     notes.append(kern["Bold"])
     lnotes.append(kern["Light"])
+    if thin_ufo is not None:
+        tnotes.append(kern[WAX.LOW_NAME])
+        thin_ufo.save(os.path.join(OUT, f"AreaSerif-{WAX.LOW_NAME}.ufo"), overwrite=True)
+        with open(os.path.join(OUT, f"{WAX.LOW_NAME.lower()}-notes.txt"), "w") as f:
+            f.write("\n".join(tnotes + [f"{n}: {r['fallback']}" for n, r in sorted(treports.items()) if r.get("fallback")]))
     bold_ufo.save(os.path.join(OUT, "AreaSerif-Bold.ufo"), overwrite=True)
     with open(os.path.join(OUT, "bold-notes.txt"), "w") as f:
         f.write("\n".join(notes + [f"{n}: {r['fallback']}" for n, r in sorted(reports.items()) if r.get("fallback")]))
@@ -73,17 +89,20 @@ def variable(ufo):
         f.write("\n".join(lnotes + [f"{n}: {r['fallback']}" for n, r in sorted(lreports.items()) if r.get("fallback")]))
     lfb = [n for n, r in lreports.items() if r.get("fallback")]
     if os.environ.get("AREA_MASTER_KERN", "1") != "0":
-        print(f"kerning: {SPACING.equalize([reg_vf, light_ufo, bold_ufo])} keys made explicit so the three masters share one set")
-    for u in (reg_vf, bold_ufo, light_ufo):
+        print(f"kerning: {SPACING.equalize([reg_vf, light_ufo, bold_ufo] + ([thin_ufo] if thin_ufo is not None else []))} keys made explicit so the masters share one set")
+    for u in (reg_vf, bold_ufo, light_ufo) + ((thin_ufo,) if thin_ufo is not None else ()):
         u.lib["public.truetype.overlap"] = True
         for name in OVERLAP.struck_names(ufo):               # 0.81: the glyf flag, per glyph (ufo2ft reads it there)
             if name in u:
                 u[name].lib["public.truetype.overlap"] = True
-    vf = BOLD.variable(reg_vf, bold_ufo, stem, light_ufo)
+    vf = BOLD.variable(reg_vf, bold_ufo, stem, light_ufo, thin_ufo)
     from fontTools.otlLib.builder import buildStatTable
-    buildStatTable(vf, [dict(tag="wght", name="Weight", values=[          # each named weight, Regular linked to Bold
-        dict(value=300, name="Light"), dict(value=400, name="Regular", flags=0x2, linkedValue=700), dict(value=500, name="Medium"),
-        dict(value=600, name="SemiBold"), dict(value=700, name="Bold")])], macNames=False)
+    # 0.82 (owner round 8, axis): one axis value per named weight on the font's axis, Regular elidable and linked to
+    # Bold 700 (weightaxis.NAMES)
+    low = min(a.minValue for a in vf["fvar"].axes if a.axisTag == "wght")
+    buildStatTable(vf, [dict(tag="wght", name="Weight", values=[
+        dict(value=w, name=n, **(dict(flags=0x2, linkedValue=700) if w == 400 else {}))
+        for w, n in WAX.named() if w >= low])], macNames=False)
     unhinted(vf)
     head = vf["head"]
     vf["OS/2"].usWinAscent = max(head.yMax, vf["hhea"].ascent)
@@ -93,8 +112,10 @@ def variable(ufo):
     vf.flavor = "woff2"
     vf.save(os.path.join(OUT, "AreaSerif[wght].woff2"))
     fb = [n for n, r in reports.items() if r.get("fallback")]
+    tfb = [n for n, r in treports.items() if r.get("fallback")]
     print("built", path, f"(Bold stem {stem}; {len(fb)} glyphs on a fallback: {', '.join(sorted(fb))}; Light stem {BOLD.LIGHT_STEM}; "
-          f"{len(lfb)} on a fallback: {', '.join(sorted(lfb))})")
+          f"{len(lfb)} on a fallback: {', '.join(sorted(lfb))}"
+          + (f"; {WAX.LOW_NAME} stem {WAX.THIN_STEM}; {len(tfb)} on a fallback: {', '.join(sorted(tfb))}" if thin_ufo is not None else "") + ")")
 
 
 def kern_masters(reg, masters, reg_shapes=None):
@@ -116,7 +137,8 @@ def kern_masters(reg, masters, reg_shapes=None):
     out, table = {}, {}
     for style, (m, weight) in masters.items():
         rep = SPACING.kern_master(reg, m, style, CHARSET.COVERAGE, reg_shapes=reg_shapes,
-                                  fit_fn=(lambda f, w=weight: fit_fn(f, w)) if fit_fn else None)
+                                  fit_fn=(lambda f, w=weight: fit_fn(f, w)) if fit_fn and style not in ("Thin", "ExtraLight") else None,
+                                  base=masters["Light"][0] if style in ("Thin", "ExtraLight") else None)
         table[style] = rep["fit"]
         out[style] = (f"kerning ({style}): {rep['transferred']} keys from the Regular's by the rule (white x "
                       f"{rep['scale']['ll']:.3f} lowercase, {rep['scale']['uu']:.3f} capitals; {rep['blind']} scaled, sharing no row), "
@@ -127,7 +149,7 @@ def kern_masters(reg, masters, reg_shapes=None):
     if fit_fn:
         path = os.path.join(HERE, SPACING.FIT)
         data = json.load(open(path))
-        data[SPACING.MASTER_FIT] = {s: sorted(v) for s, v in table.items()}
+        data[SPACING.MASTER_FIT] = {s: sorted(v) for s, v in table.items() if v or s not in ("Thin", "ExtraLight")}
         data["masters_note"] = ("0.81, AREA_KERN_FIT=1 python build.py: per master, the change after the Regular's fit is "
                                 "carried by the rule (spacing.transfer) that brings each pair outside both references at "
                                 "the same weight (Georgia Pro Light / Bold, Serrif 300 / 700) by 8 or more to the nearer")

@@ -41,6 +41,13 @@ TAILS = {"g.ss02", "j", "y"}
 # Faults found on parts 0.81 did not change (default letters stay point for point as 0.80's), listed so the check
 # fails on anything new. Each goes when its part is redrawn. (glyph, words of the fault): reason
 EXPECTED = {
+    # owner round 8 (0.82): "the g from 0.80 is the best one": g.ss02's tail is 0.80's again (charset form E), and
+    # 0.80's quarter turns read so, the owner's eye over this check. Regular 1.42 / 1.45 / 1.38, Light 1.45 / 1.65 /
+    # 1.30, Bold 1.65 and a 49% valley (the Bold ball the engine's, as 0.80's)
+    ("g.ss02", "node 11 "): "0.80's tail by the owner's choice: the ball's left side",
+    ("g.ss02", "node 14 "): "0.80's tail by the owner's choice: the outside's lowest point",
+    ("g.ss02", "node 2 "): "0.80's tail by the owner's choice: the inside's lowest point",
+    ("g.ss02", "tail 5-17"): "0.80's tail by the owner's choice: the Bold's inside into the engine's ball",
 }
 
 # glyph: (contours, y range) of the part checked: every contour; a node, curve or join counts when its curves lie in

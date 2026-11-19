@@ -1,6 +1,8 @@
 """Collision and near-touch audit along the weight axis (0.81). Usage:  .venv/bin/python audit_kern.py [font] [--list N]
 
-On the variable font (build/AreaSerif[wght].ttf unless named) at 300, 350, 400, 550 and 700: for every pair of a
+On the variable font (build/AreaSerif[wght].ttf unless named) at 300, 350, 400, 600 and 800 on the 0.82 axis (0.81's
+300, 350, 400, 550 and 700, the same design places; AREA_KERN_WEIGHTS on the 0.82 axis, "old:..." on the 0.81 one;
+weightaxis.py): for every pair of a
 broad set, the least white between the two glyphs' ink at the pair's kerned distance (HarfBuzz at that weight,
 ligatures off, an alternate by its own feature on its own character), read as spacing.open_all reads it: every 10
 units from -280 to 1080, the second glyph's left edge the least of three rows.
@@ -28,7 +30,8 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 import spacing as SP  # noqa: E402
 
-WEIGHTS = tuple(int(w) for w in os.environ.get("AREA_KERN_WEIGHTS", "300,350,400,550,700").split(","))   # 0.81
+import weightaxis as W  # noqa: E402
+WEIGHTS = W.parse(os.environ.get("AREA_KERN_WEIGHTS"), (300, 350, 400, 550, 700))   # 0.81; 0.82: on the 0.82 axis
 TOL = 5                      # the collision passes open a pair short by 4 or more, read on the UFO's cubics; the
 #                              TrueType build's quadratics stand up to 1 unit off them
 YS = list(range(-280, 1081, SP.STEP))
@@ -85,9 +88,10 @@ def edges(cs, y):
 class Instance:
     def __init__(self, path, w):
         self.tt = TTFont(path)
-        self.gs = self.tt.getGlyphSet(location={"wght": w})
+        u = W.user(self.tt, w)                         # the same design place on a 0.81-axis font
+        self.gs = self.tt.getGlyphSet(location={"wght": u})
         self.hbf = hb.Font(hb.Face(open(path, "rb").read()))
-        self.hbf.set_variations({"wght": w})
+        self.hbf.set_variations({"wght": u})
         self.prof = {}
 
     def rows(self, name):
@@ -233,14 +237,15 @@ def main():
     n_list = int(sys.argv[sys.argv.index("--list") + 1]) if "--list" in sys.argv else 12
     res, fl, nn, npairs = audit(path)
     bad = 0
-    print(f"kerning audit: {npairs} pairs at {', '.join(map(str, WEIGHTS))}; floor = MIN_GAP x nn white over the Regular's, "
+    print(f"kerning audit: {npairs} pairs at {', '.join(map(W.short, WEIGHTS))} ({W.AXIS_NOTE}; the font is on the "
+          f"{W.font_axis(TTFont(path))} axis); floor = MIN_GAP x nn white over the Regular's, "
           f"fail under floor - {TOL}")
     for w in WEIGHTS:
         rows = res[w]
         under = [r for r in rows if r[0] < fl[w]]
         fail = [r for r in rows if r[0] < fl[w] - TOL]
         bad += len(fail)
-        print(f"  {w}: nn {nn[w]:.1f}, floor {fl[w]:.1f}: {len(fail)} fail, {len(under)} under the floor, least "
+        print(f"  {W.label(w)}: nn {nn[w]:.1f}, floor {fl[w]:.1f}: {len(fail)} fail, {len(under)} under the floor, least "
               f"{rows[0][0]} ({rows[0][1]} {rows[0][2]})")
         for r in fail[:n_list]:
             print(f"      {r[0]:7.1f}  {r[1]} {r[2]}  (kern {r[3]})")

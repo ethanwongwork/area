@@ -1,0 +1,541 @@
+<!--p082-->
+<style>
+/*__FONTS82__*/
+/* 0.82 sections: the base page's tokens and card classes, plus panels, the viewer and the live whole set */
+.p82nav{display:flex;flex-wrap:wrap;gap:4px 6px;padding-block:14px 0}
+.p82nav a{padding:5px 10px;border-radius:7px;border:1px solid var(--line);background:var(--surface);color:var(--ink2);text-decoration:none;font-size:13px;font-weight:500}
+.p82nav a:hover{color:var(--ink);background:var(--sunk)}
+.p82 .finding .vis{gap:14px}
+.p82 p.why{border-left-color:var(--medium)}
+.prow{display:grid;gap:6px}
+.prow>.eyebrow{font-size:10.5px}
+.pgrp{display:flex;flex-wrap:wrap;gap:10px 14px}
+.pg{display:grid;gap:3px;min-width:0}
+.pg>.gl{font:500 11px var(--mono);color:var(--ink3)}
+.pg>.pp{display:flex;flex-wrap:wrap;gap:4px}
+.pan{position:relative;border:1px solid var(--line);background:var(--surface);border-radius:7px;padding:0;cursor:zoom-in;overflow:hidden;display:block}
+.pan:hover{border-color:var(--ink3)}
+.pan svg{display:block;height:var(--ph,78px);width:auto}
+.pan .pf{display:flex;justify-content:space-between;gap:6px;padding:1px 5px 2px;border-top:1px solid var(--line);font:500 9.5px/1.3 var(--mono);color:var(--ink3);background:var(--surface)}
+.pan .d{font-weight:600;color:var(--ref)}
+.pan .d.same{color:var(--ink3);font-weight:500}
+.seg:empty{display:none}
+.p82v [hidden]{display:none!important}
+.p82v .seg{flex-wrap:wrap}
+svg .gl82{stroke:var(--line);vector-effect:non-scaling-stroke;stroke-width:1}
+svg .gl82t{fill:var(--ink3);font-family:var(--ui)}
+.c82-filters{display:flex;gap:6px;flex-wrap:wrap}
+/* viewer */
+.p82v{position:fixed;inset:0;z-index:50;background:var(--bg);display:grid;grid-template-rows:auto minmax(0,1fr) auto}
+.p82v[hidden]{display:none}
+.p82v-bar{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;padding:10px max(16px,env(safe-area-inset-left,0px));border-bottom:1px solid var(--line);background:var(--surface)}
+.p82v-bar{position:relative;padding-right:56px!important}
+.p82v-bar #v-x{position:absolute;right:max(16px,env(safe-area-inset-right,0px));top:10px}
+.p82v-bar .ttl{font:400 20px/1.2 var(--serif);margin-right:auto;min-width:0}
+.p82v-bar .ttl small{font:500 11px var(--mono);color:var(--ink3);margin-left:8px}
+.p82v-bar button.ic{border:1px solid var(--line);background:var(--surface);border-radius:7px;min-width:32px;height:30px;cursor:pointer;color:var(--ink2);font-size:14px;padding:0 8px}
+.p82v-bar button.ic:hover{color:var(--ink);background:var(--sunk)}
+.p82v-bar label{display:inline-flex;gap:6px;align-items:center;font-size:13px;color:var(--ink2)}
+.p82v-stage{position:relative;overflow:hidden;touch-action:none;cursor:grab;background:var(--surface)}
+.p82v-stage.drag{cursor:grabbing}
+.p82v-stage svg{position:absolute;inset:0;width:100%;height:100%;display:block}
+.p82v-foot{display:flex;flex-wrap:wrap;gap:6px 16px;padding:8px max(16px,env(safe-area-inset-left,0px));border-top:1px solid var(--line);font-size:12px;color:var(--ink3);background:var(--surface)}
+.p82v-foot b{color:var(--ink2);font-weight:600}
+svg .vg-a{fill:var(--glyph)} svg .vg-e{fill:none;stroke:var(--ink);vector-effect:non-scaling-stroke;stroke-width:1}
+svg .vg-b{fill:none;stroke:var(--ref);vector-effect:non-scaling-stroke;stroke-width:1.4}
+svg .vg-bf{fill:color-mix(in srgb,var(--ref) 14%,transparent)}
+svg .vh{stroke:var(--ok);vector-effect:non-scaling-stroke;stroke-width:1;fill:none}
+svg .vn{fill:var(--ink)} svg .vo{fill:var(--surface);stroke:var(--ok);vector-effect:non-scaling-stroke;stroke-width:1}
+svg .vnb{fill:var(--ref)} svg .vob{fill:var(--surface);stroke:var(--ref);vector-effect:non-scaling-stroke;stroke-width:1}
+svg .vlab{fill:var(--ink3);font-family:var(--mono)}
+svg .vt-a{fill:var(--glyph);stroke:var(--ink);stroke-width:1;vector-effect:non-scaling-stroke}
+svg .vt-b{fill:none;stroke:var(--ref);stroke-width:1.4;vector-effect:non-scaling-stroke}
+/* live whole set */
+.p82live{--fa:"Area Serif now";--fb:"Area Serif 082";--wga:400;--wgb:400;--e4a:400;--e7a:700;--e4b:400;--e7b:700}
+.p82live[data-mode="r82"]{--fa:"Area Serif 082"}
+.p82live[data-mode="before"]{--fa:"Area Serif 081"}
+.p82live[data-mode="ov81"]{--fb:"Area Serif 081"}
+.p82live[data-mode="v080"]{--fa:"Area Serif 080"}
+.p82live[data-mode="ov80"]{--fb:"Area Serif 080"}
+.p82live .la,.p82live .lb{font-family:var(--fa),"Adobe NotDef",serif;font-variation-settings:"wght" var(--wga);font-kerning:normal}
+.p82live .lb{font-family:var(--fb),"Adobe NotDef",serif;font-variation-settings:"wght" var(--wgb);display:none;color:transparent;-webkit-text-stroke:1px var(--ref);pointer-events:none}
+.p82live[data-mode^="ov"] .lb{display:block}
+.p82live[data-mode^="ov"] .la{color:color-mix(in srgb,var(--ink) 30%,transparent)}
+.ws-ctl{position:sticky;top:0;z-index:4;background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(8px);padding-block:8px;border-bottom:1px solid var(--line)}
+.ws-ctl input[type=range]{width:min(180px,40vw)}
+.ws-grp{display:grid;gap:8px}
+.ws-grid{display:flex;flex-wrap:wrap;gap:4px;font-size:var(--ws,44px)}
+.ws-c{position:relative;height:1.42em;min-width:.9em;border:1px solid var(--line);background:var(--surface);border-radius:6px;padding:0;cursor:zoom-in;font-size:inherit;line-height:1.3;color:var(--ink)}
+.ws-c:hover{border-color:var(--ink3)}
+.ws-c .la,.ws-c .lb{position:absolute;left:.12em;top:0;white-space:pre}
+.ws-c i{position:absolute;right:3px;bottom:3px;width:6px;height:6px;border-radius:50%;background:var(--accent);display:none}
+.p82live[data-chg="82"] .ws-c.c82 i,.p82live[data-chg="81"] .ws-c.chg i{display:block}
+.ws-c .nb{position:absolute;left:3px;bottom:1px;font:500 9px var(--mono);color:var(--medium);display:none}
+.p82live[data-mode="before"] .ws-c.m1 .la,.p82live[data-mode="ov81"] .ws-c.m1 .lb,
+.p82live[data-mode="v080"] .ws-c.m2 .la,.p82live[data-mode="ov80"] .ws-c.m2 .lb,
+.p82live[data-mode="r82"] .ws-c.m3 .la,.p82live[data-mode="ov82"] .ws-c.m3 .lb{visibility:hidden}
+.p82live[data-mode="before"] .ws-c.m1 .nb,.p82live[data-mode="ov81"] .ws-c.m1 .nb,
+.p82live[data-mode="v080"] .ws-c.m2 .nb,.p82live[data-mode="ov80"] .ws-c.m2 .nb,
+.p82live[data-mode="r82"] .ws-c.m3 .nb,.p82live[data-mode="ov82"] .ws-c.m3 .nb{display:block}
+.ws-only[data-chg="82"] .ws-c:not(.c82),.ws-only[data-chg="81"] .ws-c:not(.chg){display:none}
+.p83top{padding-block:28px 4px;display:grid;gap:8px}
+.p83top h1{font:400 clamp(34px,7vw,56px)/1.05 var(--serif);margin:0;letter-spacing:-.01em}
+.p83top p{margin:0;color:var(--ink2);max-width:72ch}
+.c83-intro{color:var(--ink2);max-width:72ch;margin:-4px 0 4px}
+.finding ul.rules{margin:4px 0 0;padding-left:18px;display:grid;gap:4px;color:var(--ink2);font-size:14px}
+.p82 .finding.nodraw{grid-template-columns:minmax(0,1fr)}
+.p82 h3.round.big{font:400 28px/1.2 var(--serif);letter-spacing:0;text-transform:none;color:var(--ink);margin-top:26px}
+.finding p.later{border-left:3px solid var(--medium);padding-left:10px;color:var(--ink2)}
+.smp{position:relative;padding:10px 18px;border-bottom:1px solid var(--line)}
+.smp:last-child{border-bottom:0}
+.smp .k{font:500 11px var(--mono);color:var(--ink3);margin-bottom:4px;display:block}
+.smp .box{position:relative}
+.smp .la{outline:0;line-height:1.3;overflow-wrap:anywhere}
+.smp .lb{position:absolute;inset:0;line-height:1.3;overflow-wrap:anywhere}
+.smp b{font-weight:inherit}
+.p82live .smp.emph .la{font-variation-settings:"wght" var(--e4a)}
+.p82live .smp.emph .lb{font-variation-settings:"wght" var(--e4b)}
+.p82live .smp.emph .la b{font-variation-settings:"wght" var(--e7a)}
+.p82live .smp.emph .lb b{font-variation-settings:"wght" var(--e7b)}
+.wsc-row{display:grid;grid-template-columns:150px minmax(0,1fr);gap:12px;align-items:baseline;padding:8px 18px;border-bottom:1px solid var(--line)}
+.wsc-row:last-child{border-bottom:0}
+.wsc-row .n{font-size:12px;color:var(--ink2);display:grid}
+.wsc-row .n small{color:var(--ink3);font:500 11px var(--mono)}
+.wsc-row .t{font-family:"Area Serif now",serif;white-space:nowrap;overflow:hidden;line-height:1.25;outline:0}
+.wsc-row.off .t{color:var(--ink3);font:italic 13px var(--ui)}
+.chart82 svg{display:block;width:100%;height:auto}
+.chart82 .ref{fill:none;stroke:var(--ink3);stroke-width:1.2;opacity:.55}
+.chart82 .ref:hover,.chart82 g.rf:hover .ref{opacity:1;stroke:var(--ink);stroke-width:2}
+.chart82 .refp{fill:var(--ink3)}
+.chart82 .ar{fill:none;stroke:var(--accent);stroke-width:2.2}
+.chart82 .an{fill:none;stroke:var(--accent);stroke-width:2;stroke-dasharray:5 4}
+.chart82 .arp{fill:var(--accent);stroke:var(--surface);stroke-width:2}
+.chart82 .anp{fill:var(--surface);stroke:var(--accent);stroke-width:2}
+.chart82 text{fill:var(--ink2);font:11px var(--ui)}
+.chart82 .grid{stroke:var(--line);stroke-width:1}
+.chart82 .tip{pointer-events:none}
+.legend82{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--ink2)}
+.legend82 i{display:inline-block;width:20px;height:0;border-top:2px solid var(--accent);vertical-align:middle;margin-right:5px}
+.legend82 i.n{border-top-style:dashed}
+.legend82 i.r{border-top-color:var(--ink3)}
+.bal-g{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px 16px;padding:14px 18px;border-bottom:1px solid var(--line);align-items:start}
+.bal-g:last-child{border-bottom:0}
+.bal-g h4{margin:0;font:400 20px/1.2 var(--serif);display:flex;gap:10px;align-items:baseline;flex-wrap:wrap}
+.bal-g h4 small{font:500 11px var(--mono);color:var(--ink3)}
+.bal-g table{font-size:12px;margin-top:6px}
+.bal-g td,.bal-g th{padding:3px 8px}
+.bal-g .pp{display:flex;gap:4px;flex-wrap:wrap}
+.okv{color:var(--ok);font-weight:600}.badv{color:var(--medium);font-weight:600}
+@media (max-width:860px){
+  .wsc-row{grid-template-columns:minmax(0,1fr);gap:2px}
+  .bal-g{grid-template-columns:minmax(0,1fr)}
+  .pan svg{height:var(--phm,60px)}
+  .p82v-bar .ttl{flex-basis:100%}
+  .p82v-bar{gap:6px 8px}
+  .ws-ctl{position:static}
+  .p82v .seg button{padding:4px 7px;font-size:12px}
+  .p82v-foot .hint{display:none}
+  .pan svg{height:var(--phm,60px)}
+}
+</style>
+
+<div class="wrap p82">
+<header class="p83top">
+  <span class="eyebrow">Area Serif · review page · build __AFTER__ (__AFTERSNAP__)</span>
+  <h1>Area Serif __AFTER__</h1>
+  <p>The Regular pass. You asked for more consistency, cohesion, clarity, smoothness and evenness across the whole set, with the Regular settled first. So the work below was designed and judged at 400; the other weights follow by the existing rules and will be tuned after. The 0.82 round stays below it.</p>
+</header>
+<nav class="p82nav" aria-label="Sections"><a href="#c-sec-83">What changed in __AFTER__</a><a href="#c-sec-82">0.82, item by item</a><a href="#wholeset">Whole set</a><a href="#weightscale">Weight scale</a><a href="#balance">Growth balance</a><a href="#changed-081">0.81, in words</a><a href="#findings">Findings (base page)</a></nav>
+
+<section id="changed-082">
+  <div class="sec-head">
+    <h2>What changed</h2>
+    <p class="lede">The __AFTER__ work first, then your eighth round (0.82) as it was written. Each drawing is the glyph's own outline from the variable font at that weight, filled grey with a thin dark edge; the build it is compared with is a red line (each row says which: 0.82 for the __AFTER__ cards, __BEFORE__ for the 0.82 cards). The small red number is the furthest the outline moved, in units of 1,000 per em; "same" means no change. Click any drawing to open it large, with weights, modes, nodes and zoom.</p>
+  </div>
+  <p class="keyline"><span><i style="border-color:var(--ref)"></i>the build compared with (red line)</span><span><i style="border-color:var(--ink)"></i>the build shown (grey fill)</span><span><i style="border-color:var(--line)"></i>baseline, x-height, cap height</span></p>
+  <p class="note" id="c82-wnote" hidden></p>
+  <div class="c82-filters" id="c82-filters" role="group" aria-label="Filter"></div>
+  <div id="c82-list" style="display:grid;gap:14px"></div>
+</section>
+
+<section id="wholeset">
+  <div class="sec-head">
+    <h2>Whole set</h2>
+    <p class="lede">Every character of the font as live text, set in the project's own variable fonts (this build, __AFTER__ (__AFTERSNAP__), and __R82__, __BEFORE__ and 0.80), embedded whole. Move the weight across the axis, switch between the builds, or lay an earlier build over this one (red outline over grey, same metrics). A blue dot marks a glyph whose outline changed<span id="ws-nchg-lede"></span>. Click any glyph to open it large.</p>
+  </div>
+  <div class="ws-ctl"><div class="controls">
+    <label>Size <input type="range" id="ws-size" min="16" max="160" value="44"> <span class="num" id="ws-size-v">44</span></label>
+    <label>Weight <input type="range" id="ws-wght" min="300" max="800" value="400" step="1"> <span class="num" id="ws-wght-v">400</span></label>
+    <span class="seg" id="ws-wstops" role="group" aria-label="Named weights"></span>
+    <span class="seg" id="ws-mode" role="group" aria-label="Build"></span>
+    <span class="seg" id="ws-chg" role="group" aria-label="Mark what changed since"></span>
+    <label><input type="checkbox" id="ws-only"> Only what changed <span class="num" id="ws-nchg"></span></label>
+  </div></div>
+  <div class="p82live" id="ws-live" data-mode="now" data-chg="82">
+    <div class="card" id="ws-samples"></div>
+    <div id="ws-groups" style="display:grid;gap:22px;margin-top:20px"></div>
+  </div>
+</section>
+
+<section id="weightscale">
+  <div class="sec-head">
+    <h2>Weight scale</h2>
+    <p class="lede" id="wsc-lede"></p>
+  </div>
+  <div class="grid2">
+    <div class="card pad chart82"><div class="eyebrow" style="margin-bottom:8px">Lowercase stem over x-height, by named weight</div><div id="wsc-chart"></div>
+      <div class="legend82" id="wsc-legend" style="margin-top:8px"></div>
+      <p class="note" style="margin-top:6px">Numbers measured on each family's own outlines (n stem at 0.45 x-height, x-height = top of x). The reference families appear here as numbers only.</p></div>
+    <div class="card pad" style="display:grid;gap:10px;align-content:start" id="wsc-decision"></div>
+  </div>
+  <div class="card scroll"><table id="wsc-table"></table></div>
+  <div class="card scroll"><table id="wsc-stems"></table></div>
+  <div class="card">
+    <div class="controls" style="padding:12px 18px;border-bottom:1px solid var(--line)"><span class="eyebrow">The named weights, live, in this build</span>
+      <label>Size <input type="range" id="wsc-size" min="14" max="120" value="40"> <span class="num" id="wsc-size-v">40</span></label></div>
+    <div id="wsc-spec"></div>
+  </div>
+</section>
+
+<section id="balance">
+  <div class="sec-head">
+    <h2>Growth balance</h2>
+    <p class="lede" id="bal-lede"></p>
+  </div>
+  <div class="c82-filters" id="bal-filters" role="group" aria-label="Filter"></div>
+  <div class="card" id="bal-list"></div>
+  <p class="note" id="bal-note"></p>
+</section>
+</div>
+
+<div class="p82v" id="p82v" role="dialog" aria-modal="true" aria-label="Glyph viewer" hidden>
+  <div class="p82v-bar">
+    <span class="ttl" id="v-ttl"></span>
+    <span class="seg" id="v-w" role="group" aria-label="Weight"></span>
+    <label id="v-wl" hidden><input type="range" id="v-wr" min="300" max="800" step="1"><span class="num" id="v-wrv"></span></label>
+    <span class="seg" id="v-m" role="group" aria-label="Mode"></span>
+    <span class="seg" id="v-cmp" role="group" aria-label="Compare with"></span>
+    <label id="v-nl"><input type="checkbox" id="v-nodes"> Nodes and handles</label>
+    <span style="display:inline-flex;gap:4px"><button class="ic" id="v-zo" aria-label="Zoom out">&#8722;</button><button class="ic" id="v-fit" aria-label="Fit">Fit</button><button class="ic" id="v-zi" aria-label="Zoom in">+</button></span>
+    <span style="display:inline-flex;gap:4px"><button class="ic" id="v-prev" aria-label="Previous glyph">&#8592;</button><button class="ic" id="v-next" aria-label="Next glyph">&#8594;</button></span>
+    <button class="ic" id="v-x" aria-label="Close">&#10005;</button>
+  </div>
+  <div class="p82v-stage" id="v-stage"><svg id="v-svg" xmlns="http://www.w3.org/2000/svg"></svg></div>
+  <div class="p82v-foot" id="v-foot"></div>
+</div>
+
+<script>
+(function(){
+"use strict";
+const P = __DATA82__;
+const $q=(s,r=document)=>r.querySelector(s), $qa=(s,r=document)=>[...r.querySelectorAll(s)];
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const mk=(t,a={},h)=>{const e=document.createElement(t);for(const k in a){if(k==='class')e.className=a[k];else e.setAttribute(k,a[k]);}if(h!=null)e.innerHTML=h;return e;};
+const LS={get(k){try{return localStorage.getItem('p82.'+k);}catch(e){return null;}},set(k,v){try{localStorage.setItem('p82.'+k,v);}catch(e){}}};
+const SNAPLABEL=P.snaps; // key -> label
+const GUIDES=[[0,'baseline'],[P.xh,'x-height'],[P.cap,'cap height']];
+/* weights: page weights are the after font's own axis; ownW(k,w) is snapshot k's own value with the same stem (null: none) */
+function ownW(k,w){ const m=P.wmap[k]; if(!m) return w;
+  for(let i=0;i<m.length-1;i++){ const [a,fa]=m[i],[b,fb]=m[i+1]; if(w<a||w>b) continue;
+    if(fa==null||fb==null) return w===b?fb:(w===a?fa:null); return fa+(fb-fa)*(w-a)/(b-a); }
+  return null; }
+function cssW(k,w){ const v=ownW(k,w), r=P.own[k]||P.axis; return v==null?(w<=r[0]?r[0]:r[1]):Math.round(v*10)/10; }
+function ownNote(k,w){ const v=ownW(k,w); if(v===w) return ''; return v==null?' (no design at '+w+'; nearest: its '+cssW(k,w)+')':' (its own '+(Math.round(v*10)/10)+', the same stem)'; }
+
+/* ---------- outlines ---------- */
+function out(s,g,w){ const a=P.O[s]&&P.O[s][g]; if(!a||a[w]==null) return null; return P.pool[a[w]]; }
+function weightsOf(s,g){ const a=P.O[s]&&P.O[s][g]; return a?Object.keys(a).map(Number).sort((x,y)=>x-y):[]; }
+function ttPath(o,dx=0){ let d='';
+  o[1].forEach((c,ci)=>{ const f=o[2][ci], n=c.length/2; let s=f.indexOf('1'); if(s<0||!n) return;
+    const X=i=>c[2*i]+dx, Y=i=>-c[2*i+1];
+    const x0=X(s),y0=Y(s); d+='M'+x0+' '+y0; let ox=null,oy=null;
+    for(let k=1;k<=n;k++){ const i=(s+k)%n, x=X(i), y=Y(i);
+      if(f[i]==='1'){ d+= ox===null ? 'L'+x+' '+y : 'Q'+ox+' '+oy+' '+x+' '+y; ox=null; }
+      else { if(ox!==null) d+='Q'+ox+' '+oy+' '+(ox+x)/2+' '+(oy+y)/2; ox=x; oy=y; } }
+    d+='Z'; });
+  return d; }
+function bboxOf(o){ let a=[1e9,1e9,-1e9,-1e9]; for(const c of o[1]) for(let i=0;i<c.length;i+=2){ a[0]=Math.min(a[0],c[i]);a[2]=Math.max(a[2],c[i]);a[1]=Math.min(a[1],c[i+1]);a[3]=Math.max(a[3],c[i+1]); }
+  if(a[0]>a[2]) a=[0,0,o[0],0]; return a; }
+function nodesSVG(o,dx,u,cls){ let hd='',pts='';
+  o[1].forEach((c,ci)=>{ const f=o[2][ci], n=c.length/2;
+    for(let i=0;i<n;i++){ const x=c[2*i]+dx,y=-c[2*i+1], j=(i+1)%n, x2=c[2*j]+dx, y2=-c[2*j+1];
+      if(f[i]==='0'||f[j]==='0') hd+='M'+x+' '+y+'L'+x2+' '+y2;
+      if(f[i]==='1'){ const r=3*u; pts+='<rect class="'+(cls?'vnb':'vn')+'" x="'+(x-r)+'" y="'+(y-r)+'" width="'+2*r+'" height="'+2*r+'"/>'; }
+      else pts+='<circle class="'+(cls?'vob':'vo')+'" cx="'+x+'" cy="'+y+'" r="'+2.6*u+'"/>'; } });
+  return '<path class="vh" d="'+hd+'"'+(cls?' style="stroke:var(--ref);opacity:.6"':'')+'/>'+pts; }
+
+/* ---------- small panels ---------- */
+function panelSVG(g,w,fill,line,box){
+  const a=out(fill,g,w); if(!a) return '<svg viewBox="0 0 10 10"></svg>';
+  const b=line?out(line,g,w):null;
+  const [x0,y0,x1,y1]=box, W=x1-x0, H=y1-y0;
+  let s='<svg viewBox="'+x0+' '+(-y1)+' '+W+' '+H+'" role="img" aria-label="'+esc(g+' '+w)+'">';
+  for(const [y] of GUIDES) if(y>y0&&y<y1) s+='<line class="gl82" x1="'+x0+'" x2="'+x1+'" y1="'+(-y)+'" y2="'+(-y)+'"/>';
+  const d=ttPath(a); s+='<path class="gf" d="'+d+'"/>';
+  if(b) s+='<path class="ob" d="'+ttPath(b)+'"/>';
+  s+='<path class="go" d="'+d+'"/></svg>'; return s; }
+function rowBox(card){ // one vertical range per card; one horizontal range per glyph
+  let ylo=-40, yhi=P.cap+40; const hx={};
+  for(const r of card.rows) for(const g of r.g) for(const w of r.w) for(const s of [r.f,r.l]){ if(!s) continue; const o=out(s,g,w); if(!o) continue; const b=bboxOf(o);
+    ylo=Math.min(ylo,b[1]-30); yhi=Math.max(yhi,b[3]+30); const h=hx[g]||(hx[g]=[1e9,-1e9]); h[0]=Math.min(h[0],b[0],0); h[1]=Math.max(h[1],b[2],o[0]); }
+  return {y:[ylo,yhi], x:hx}; }
+function devLabel(g,w,f,l){ const v=P.dev[g+'|'+w+'|'+f+'|'+l]; if(v==null) return ''; return v===0?'<span class="d same">same</span>':'<span class="d">'+(v<1?v.toFixed(1):Math.round(v))+'</span>'; }
+function glyphLabel(g){ const c=P.ch[g]; return (c&&c!==g&&c.length<=2)?c+'  '+g:g; }
+
+/* ---------- 0.82 cards ---------- */
+const SEV={high:'Largest',medium:'Visible at display sizes',low:'Minor'};
+const STL=(c)=>{ const v=c.ver||P.after; return {fixed:'Fixed in '+v,part:'Partly fixed in '+v,open:'Still open'}[c.status]; };
+const SECS={'83':['c-sec-83','What changed in '+P.after+': the Regular first','The Regular (400) is being settled first; the weights come after. Every number below was measured on the Regular unless a card says otherwise, on '+P.refSnap+'. The drawings: this build ('+P.afterSnap+') filled grey, 0.82 as a red line, at 400; where a card shows 300 and 800, those are the Light and ExtraBold as the existing rules build them, not tuned.'],
+  '82':['c-sec-82','0.82: owner round 8, item by item','As written for 0.82. The drawings here are 0.82 over '+P.before+', so they show what that round did, not the '+P.after+' changes above.'],
+  '82open':['c-sec-82o','Left open after 0.82, as written then','Some of these have since moved in '+P.after+' (the cards above say which).']};
+let cFilter=LS.get('cf')||'all';
+function renderCards(){
+  const box=$q('#c82-list'); box.innerHTML='';
+  let lastSec=null;
+  P.cards.filter(c=>cFilter==='all'||(cFilter==='open'?c.status==='open':c.status!=='open')).forEach(c=>{
+    const isOpen=c.status==='open';
+    if(c.sec!==lastSec){ const S=SECS[c.sec]; box.appendChild(mk('h3',{class:'round'+(c.sec==='82open'?'':' big'),id:S[0]},esc(S[1]))); if(S[2]) box.appendChild(mk('p',{class:'c83-intro'},esc(S[2]))); lastSec=c.sec; }
+    const card=mk('article',{class:'card finding',id:'c82-'+c.id});
+    const ev=(c.ev||[]).map(e=>'<dt>'+esc(e[0])+'</dt><dd>'+esc(e[1])+'</dd>').join('');
+    const lst=(c.list&&c.list.length)?'<ul class="rules">'+c.list.map(t=>'<li>'+esc(t)+'</li>').join('')+'</ul>':'';
+    const later=c.later?'<p class="later"><b>Moved again since '+esc(P.refSnap)+'. </b>'+esc(c.later.map(g=>P.ch[g]||g).join(' '))+' changed in this build ('+esc(P.afterSnap)+') after these notes were written. The numbers are '+esc(P.refSnap)+'\'s; the drawings are this build\'s, so look at them for what is true now.</p>':'';
+    const drop=c.dropped?'<p class="note">'+c.dropped+' further note'+(c.dropped>1?'s are':' is')+' left out here because the glyphs '+(c.dropped>1?'they name':'it names')+' changed in this build ('+esc(P.afterSnap)+'); see the cards above and the whole set.</p>':'';
+    card.innerHTML='<div class="txt"><div class="meta"><span class="st '+(isOpen?'open':c.status)+'">'+STL(c)+'</span><span class="sev '+c.sev+'"><i class="dot '+c.sev+'"></i>'+SEV[c.sev]+'</span><span>'+esc(c.cls)+'</span></div>'+
+      '<h3>'+esc(c.title)+'</h3><p style="color:var(--ink2)">'+esc(c.body)+'</p>'+(isOpen?lst+drop:'')+(!isOpen&&c.list?'<div class="eyebrow" style="margin-top:2px">The rules</div>'+lst:'')+
+      (c.changed?'<p class="fix"><b>'+(isOpen?'This round. ':'What changed. ')+'</b>'+esc(c.changed)+'</p>':'')+
+      (c.now?'<p class="after"><b>Now. </b>'+esc(c.now)+'</p>':'')+
+      (c.still?'<p class="why"><b>'+(isOpen?'What it needs. ':'Still not right. ')+'</b>'+esc(c.still)+'</p>':'')+
+      later+(ev?'<dl class="ev" style="margin:0">'+ev+'</dl>':'')+'</div><div class="vis"></div>';
+    const vis=$q('.vis',card), bx=rowBox(c);
+    if(!c.rows.length){ card.classList.add('nodraw'); vis.remove(); }
+    const np=c.rows.reduce((n,r)=>n+r.g.length*r.w.length,0), ph=np<=8?124:np<=16?100:np<=32?82:66;
+    vis.style.setProperty('--ph',ph+'px'); vis.style.setProperty('--phm',Math.round(ph*0.72)+'px');
+    const seq=[]; // the viewer's list for this card
+    c.rows.forEach((r,ri)=>{
+      const row=mk('div',{class:'prow'}); row.appendChild(mk('div',{class:'eyebrow'},esc(r.label)));
+      const grp=mk('div',{class:'pgrp'});
+      r.g.forEach(g=>{ if(!P.O[r.f]||!P.O[r.f][g]) return;
+        const pg=mk('div',{class:'pg'}); pg.appendChild(mk('span',{class:'gl'},esc(glyphLabel(g))));
+        const pp=mk('div',{class:'pp'}); const hx=bx.x[g]||[0,600], box=[hx[0]-40,bx.y[0],hx[1]+40,bx.y[1]];
+        const ix=seq.length; seq.push({g,f:r.f,l:r.l,row:r.label});
+        r.w.forEach(w=>{ const b=mk('button',{class:'pan',type:'button','aria-label':'Open '+g+' at '+w});
+          b.innerHTML=panelSVG(g,w,r.f,r.l,box)+'<span class="pf"><span>'+w+'</span>'+(r.l?devLabel(g,w,r.f,r.l):'')+'</span>';
+          b.onclick=()=>V.openVec(seq,ix,w,c.title); pp.appendChild(b); });
+        pg.appendChild(pp); grp.appendChild(pg); });
+      row.appendChild(grp); vis.appendChild(row); });
+    box.appendChild(card); });
+}
+[['all','All'],['fixed','Changed'],['open','Still open']].forEach(([k,l])=>{
+  const b=mk('button',{class:'chip',type:'button','aria-pressed':String(k===cFilter)},l);
+  b.onclick=()=>{cFilter=k;LS.set('cf',k);$qa('#c82-filters .chip').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));renderCards();};
+  $q('#c82-filters').appendChild(b); });
+
+/* ---------- viewer ---------- */
+const V=(function(){
+  const root=$q('#p82v'), svg=$q('#v-svg'), stage=$q('#v-stage');
+  let st=null, view={x:0,y:-400,s:1}, lastFocus=null;
+  const MODES=[['after','This build'],['before','Before'],['overlay','Overlay'],['side','Side by side']];
+  let mode=LS.get('vm')||'overlay', nodes=LS.get('vn')==='1';
+  function seg(el,items,cur,fn){ el.innerHTML=''; items.forEach(([k,l])=>{ const b=mk('button',{type:'button','aria-pressed':String(String(k)===String(cur))},esc(l)); b.onclick=()=>fn(k); el.appendChild(b); }); }
+  function size(){ const r=stage.getBoundingClientRect(); return [Math.max(1,r.width),Math.max(1,r.height)]; }
+  function apply(){ const [W,H]=size(); const w=W/view.s, h=H/view.s; svg.setAttribute('viewBox',(view.x-w/2)+' '+(view.y-h/2)+' '+w+' '+h); drawLabels(); drawNodes(); }
+  function drawNodes(){ const g=$q('#v-nodes',svg); if(!g) return; if(!nodes||!st||!st.nl){ g.innerHTML=''; return; } const u=1/view.s;
+    g.innerHTML=st.nl.map(([o,dx,red])=>nodesSVG(o,dx,u,red)).join(''); }
+  function drawLabels(){ const g=$q('#v-lab',svg); if(!g) return; const [W]=size(), w=W/view.s, u=1/view.s, left=view.x-w/2+8*u;
+    g.innerHTML=GUIDES.map(([y,l])=>'<text class="vlab" x="'+left+'" y="'+(-y-4*u)+'" font-size="'+11*u+'">'+l+' '+y+'</text>').join('')+(st&&st.labels?st.labels.map(t=>'<text class="vlab" x="'+t[0]+'" y="'+(t[1]+16*u)+'" font-size="'+12*u+'">'+esc(t[2])+'</text>').join(''):''); }
+  function fit(){ const b=st&&st.box; if(!b) return; const [W,H]=size(); view.x=(b[0]+b[2])/2; view.y=(b[1]+b[3])/2; view.s=Math.min(W/(b[2]-b[0]),H/(b[3]-b[1]))*0.86; apply(); }
+  function zoom(f,cx,cy){ const [W,H]=size(); if(cx==null){cx=W/2;cy=H/2;} const px=view.x+(cx-W/2)/view.s, py=view.y+(cy-H/2)/view.s;
+    view.s=Math.max(0.02,Math.min(80,view.s*f)); view.x=px-(cx-W/2)/view.s; view.y=py-(cy-H/2)/view.s; apply(); }
+  function guides(x0,x1){ return GUIDES.map(([y])=>'<line class="gl82" x1="'+x0+'" x2="'+x1+'" y1="'+(-y)+'" y2="'+(-y)+'"/>').join(''); }
+  /* vector mode */
+  function drawVec(refit){ const it=st.seq[st.i], w=st.w, fs=it.f, ls=st.cmp||it.l;
+    const a=out(fs,it.g,w), b=ls?out(ls,it.g,w):null; let s='', box=null, labels=[], nl=[];
+    const m=(!b&&mode!=='after')?'after':mode;
+    const add=(o,dx,kind)=>{ const bb=bboxOf(o); const bx=[Math.min(bb[0],0)+dx,Math.min(-bb[3],-P.cap),Math.max(bb[2],o[0])+dx,Math.max(-bb[1],0)];
+      box=box?[Math.min(box[0],bx[0]),Math.min(box[1],bx[1]),Math.max(box[2],bx[2]),Math.max(box[3],bx[3])]:bx;
+      const d=ttPath(o,dx);
+      if(kind==='a') s+='<path class="vg-a" d="'+d+'"/><path class="vg-e" d="'+d+'"/>';
+      else if(kind==='bf') s+='<path class="vg-bf" d="'+d+'"/><path class="vg-b" d="'+d+'"/>';
+      else s+='<path class="vg-b" d="'+d+'"/>'; };
+    if(a&&(m==='after'||m==='overlay')) add(a,0,'a');
+    if(b&&m==='before') add(b,0,'bf');
+    if(b&&m==='overlay') add(b,0,'b');
+    if(m==='side'&&a&&b){ add(b,0,'bf'); const dx=Math.max(b[0],bboxOf(b)[2])+120; add(a,dx,'a'); labels=[[0,0,SNAPLABEL[ls]],[dx,0,SNAPLABEL[fs]]]; nl=[[b,0,1],[a,dx,0]]; }
+    else if(m==='before'&&b) nl=[[b,0,1]]; else { if(a) nl.push([a,0,0]); if(m==='overlay'&&b) nl.push([b,0,1]); }
+    if(!box) box=[0,-P.cap,600,0];
+    const pad=120; box=[box[0]-pad,box[1]-pad,box[2]+pad,box[3]+pad*1.4];
+    svg.innerHTML='<g>'+guides(-20000,20000)+'</g>'+s+'<g id="v-nodes"></g><g id="v-lab"></g>';
+    st.box=box; st.labels=labels; st.nl=nl; if(refit) fit(); else apply();
+    let dv=b?P.dev[it.g+'|'+w+'|'+fs+'|'+ls]:null; if(dv===undefined) dv=null;
+    $q('#v-ttl').innerHTML=esc(P.ch[it.g]||it.g)+'<small>'+esc(it.g)+(P.uni[it.g]?' &middot; U+'+P.uni[it.g]:'')+' &middot; '+w+'</small>';
+    $q('#v-foot').innerHTML='<span><b>'+esc(st.title)+'</b> &middot; '+(st.i+1)+' of '+st.seq.length+'</span><span>Grey: '+esc(SNAPLABEL[fs])+(a?', advance '+a[0]:'')+'</span>'+(b?'<span style="color:var(--ref)">Red: '+esc(SNAPLABEL[ls])+esc(ownNote(ls,w))+', advance '+b[0]+'</span>':'')+(dv!=null?'<span>Furthest move '+(dv===0?'none':dv+' units')+'</span>':'')+'<span>TrueType points of the variable font at '+w+' (squares on the curve, circles off)</span><span class="hint">Wheel or pinch to zoom, drag to pan, arrows step, Esc closes</span>';
+    seg($q('#v-w'),weightsOf(fs,it.g).map(x=>[x,String(x)]),w,k=>{st.w=+k;drawVec(false);});
+    const SHORT={r82:P.r82,before:P.before,v080:'0.80',prev:'082e',now:P.after};
+    const cm=(it.l?[['base',SHORT[it.l]||(SNAPLABEL[it.l]||'').split(' (')[0]]]:[]);
+    if(it.l) ['r82','before','v080'].forEach(k=>{ if(k!==it.l&&k!==fs&&P.O[k]&&P.O[k][it.g]&&P.O[k][it.g][w]!=null) cm.push([k,SHORT[k]]); });
+    seg($q('#v-cmp'),cm.length>1?cm:[],st.cmp||'base',k=>{st.cmp=k==='base'?null:k;drawVec(false);});
+    seg($q('#v-m'),b?MODES:[['after','This build']],m,k=>{mode=k;LS.set('vm',k);drawVec(true);});
+    $q('#v-nl').hidden=false; $q('#v-wl').hidden=true; }
+  /* live-font mode */
+  function drawLive(refit){ const it=st.seq[st.i], w=st.w, m=mode;
+    const ff=(f,k)=>'font-family:\''+f+'\';font-variation-settings:\'wght\' '+cssW(k,w)+';'+(it.feat?'font-feature-settings:\''+it.feat+'\' 1;':'');
+    const A=st.fa, B=st.fb, KA=st.ka, KB=st.kb; const t=esc(it.t);
+    let s='<g>'+guides(-20000,20000)+'</g>';
+    if(m==='side') s+='<text id="v-tb" class="vt-b" x="0" y="0" font-size="1000" style="'+ff(B,KB)+'">'+t+'</text><text id="v-ta" class="vt-a" x="0" y="0" font-size="1000" style="'+ff(A,KA)+'">'+t+'</text>';
+    else { if(m!=='before') s+='<text id="v-ta" class="vt-a" x="0" y="0" font-size="1000" style="'+ff(A,KA)+'">'+t+'</text>';
+      if(m==='before'||m==='overlay') s+='<text id="v-tb" class="vt-b" x="0" y="0" font-size="1000" style="'+ff(B,KB)+(m==='before'?'fill:color-mix(in srgb,var(--ref) 14%,transparent);':'')+'">'+t+'</text>'; }
+    svg.innerHTML=s+'<g id="v-lab"></g>';
+    let labels=[];
+    if(m==='side'){ const tb=$q('#v-tb',svg), ta=$q('#v-ta',svg); let wb=1000; try{ wb=tb.getComputedTextLength(); }catch(e){} ta.setAttribute('x',String(Math.round(wb+120))); labels=[[0,0,st.lb],[Math.round(wb+120),0,st.la]]; }
+    let bb=null; try{ const g=[...svg.querySelectorAll('text[id]')].map(e=>e.getBBox()); if(g.length) bb=[Math.min(...g.map(r=>r.x)),Math.min(...g.map(r=>r.y)),Math.max(...g.map(r=>r.x+r.width)),Math.max(...g.map(r=>r.y+r.height))]; }catch(e){}
+    if(!bb) bb=[0,-P.cap-200,800,250];
+    st.box=[bb[0]-80,bb[1]-60,bb[2]+80,bb[3]+60]; st.labels=labels; if(refit) fit(); else apply();
+    $q('#v-ttl').innerHTML=esc(it.t)+'<small>'+esc(it.g)+(it.u?' &middot; U+'+it.u:'')+(it.feat?' &middot; '+it.feat:'')+' &middot; '+w+'</small>';
+    $q('#v-foot').innerHTML='<span><b>'+esc(st.title)+'</b> &middot; '+(st.i+1)+' of '+st.seq.length+'</span><span>Live text in the embedded fonts at 1,000 units: grey '+esc(st.la)+esc(ownNote(KA,w))+(m!=='after'?', red '+esc(st.lb)+esc(ownNote(KB,w)):'')+'</span><span class="hint">Nodes are shown only on the cards\' drawings</span><span class="hint">Wheel or pinch to zoom, drag to pan, arrows step, Esc closes</span>';
+    seg($q('#v-w'),P.stops.map(x=>[x,String(x)]),w,k=>{st.w=+k;$q('#v-wr').value=k;$q('#v-wrv').textContent=k;drawLive(false);});
+    $q('#v-wl').hidden=false; $q('#v-wr').value=w; $q('#v-wrv').textContent=w;
+    seg($q('#v-cmp'),[],'',()=>{});
+    seg($q('#v-m'),MODES,m,k=>{mode=k;LS.set('vm',k);drawLive(true);});
+    $q('#v-nl').hidden=true; }
+  function draw(refit){ if(st.kind==='vec') drawVec(refit); else drawLive(refit); }
+  function show(){ lastFocus=document.activeElement; root.hidden=false; document.documentElement.style.overflow='hidden'; requestAnimationFrame(()=>{ draw(true); $q('#v-x').focus(); }); }
+  function close(){ root.hidden=true; document.documentElement.style.overflow=''; svg.innerHTML=''; if(lastFocus&&lastFocus.focus) lastFocus.focus(); }
+  function step(d){ if(!st) return; st.i=(st.i+d+st.seq.length)%st.seq.length; if(st.kind==='vec'){ const ws=weightsOf(st.seq[st.i].f,st.seq[st.i].g); if(!ws.includes(st.w)) st.w=ws.reduce((p,x)=>Math.abs(x-st.w)<Math.abs(p-st.w)?x:p,ws[0]); } draw(true); }
+  $q('#v-nodes').checked=nodes; $q('#v-nodes').onchange=e=>{nodes=e.target.checked;LS.set('vn',nodes?'1':'0');draw(false);};
+  $q('#v-wr').oninput=e=>{ st.w=+e.target.value; $q('#v-wrv').textContent=st.w; drawLive(false); };
+  $q('#v-wr').min=P.axis[0]; $q('#v-wr').max=P.axis[2];
+  $q('#v-x').onclick=close; $q('#v-zi').onclick=()=>zoom(1.4); $q('#v-zo').onclick=()=>zoom(1/1.4); $q('#v-fit').onclick=fit;
+  $q('#v-prev').onclick=()=>step(-1); $q('#v-next').onclick=()=>step(1);
+  document.addEventListener('keydown',e=>{ if(root.hidden) return;
+    if(e.key==='Escape'){ e.preventDefault(); close(); }
+    else if(e.key==='ArrowRight'){ e.preventDefault(); step(1); } else if(e.key==='ArrowLeft'){ e.preventDefault(); step(-1); }
+    else if(e.key==='+'||e.key==='='){ zoom(1.25); } else if(e.key==='-'){ zoom(0.8); } else if(e.key==='0'){ fit(); } });
+  stage.addEventListener('wheel',e=>{ e.preventDefault(); const r=stage.getBoundingClientRect(); zoom(Math.max(0.6,Math.min(1.6,Math.exp(-e.deltaY*(e.ctrlKey?0.01:0.0022)))),e.clientX-r.left,e.clientY-r.top); },{passive:false});
+  const ptr=new Map(); let pinch=null;
+  stage.addEventListener('pointerdown',e=>{ stage.setPointerCapture(e.pointerId); ptr.set(e.pointerId,[e.clientX,e.clientY]); stage.classList.add('drag');
+    if(ptr.size===2){ const [p,q]=[...ptr.values()]; pinch={d:Math.hypot(p[0]-q[0],p[1]-q[1])}; } });
+  stage.addEventListener('pointermove',e=>{ if(!ptr.has(e.pointerId)) return; const prev=ptr.get(e.pointerId); ptr.set(e.pointerId,[e.clientX,e.clientY]);
+    if(ptr.size===2&&pinch){ const [p,q]=[...ptr.values()], d=Math.hypot(p[0]-q[0],p[1]-q[1]), r=stage.getBoundingClientRect(); zoom(d/pinch.d,(p[0]+q[0])/2-r.left,(p[1]+q[1])/2-r.top); pinch.d=d; }
+    else if(ptr.size===1){ view.x-=(e.clientX-prev[0])/view.s; view.y-=(e.clientY-prev[1])/view.s; apply(); } });
+  const up=e=>{ ptr.delete(e.pointerId); if(ptr.size<2) pinch=null; if(!ptr.size) stage.classList.remove('drag'); };
+  stage.addEventListener('pointerup',up); stage.addEventListener('pointercancel',up);
+  window.addEventListener('resize',()=>{ if(!root.hidden) apply(); });
+  return {
+    openVec(seq,i,w,title){ st={kind:'vec',seq,i,w,title,cmp:null}; show(); },
+    openLive(seq,i,w,title,fa,fb,la,lb,ka,kb){ st={kind:'live',seq,i,w:Math.round(w),title,fa,fb,la,lb,ka,kb}; if(mode==='overlay'&&!fb) mode='after'; show(); },
+    state:()=>st, mode:()=>mode
+  };
+})();
+window.P82V=V;
+
+/* ---------- whole set ---------- */
+const FAM={now:'Area Serif now',r82:'Area Serif 082',before:'Area Serif 081',v080:'Area Serif 080'};
+const HAS82=P.k82==='r82';
+const WMODES=[['now','This build ('+P.after+')']].concat(HAS82?[['r82',P.r82]]:[],[['before',P.before],['v080','0.80']],HAS82?[['ov82','Over '+P.r82]]:[],[['ov81','Over '+P.before],['ov80','Over 0.80']]);
+const live=$q('#ws-live');
+let wsMode=LS.get('wm')||'now'; if(!WMODES.some(m=>m[0]===wsMode)) wsMode='now';
+let wsW=400, wsSize=44;
+const MKEYS={now:['now',HAS82?'r82':'before'],r82:['r82','r82'],before:['before','before'],v080:['v080','v080'],ov82:['now','r82'],ov81:['now','before'],ov80:['now','v080']};
+function applyW(){ const [ka,kb]=MKEYS[wsMode]||MKEYS.now, ls=live.style, [e4,e7]=P.emphW;
+  ls.setProperty('--wga',cssW(ka,wsW)); ls.setProperty('--wgb',cssW(kb,wsW));
+  ls.setProperty('--e4a',cssW(ka,e4)); ls.setProperty('--e7a',cssW(ka,e7)); ls.setProperty('--e4b',cssW(kb,e4)); ls.setProperty('--e7b',cssW(kb,e7)); }
+function setMode(k){ wsMode=k; LS.set('wm',k); live.dataset.mode=k; $qa('#ws-mode button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.k===k))); applyW(); }
+WMODES.forEach(([k,l])=>{ const b=mk('button',{type:'button','data-k':k},esc(l)); b.onclick=()=>setMode(k); $q('#ws-mode').appendChild(b); });
+setMode(wsMode);
+const NAMES=P.names;
+function setW(w){ wsW=+w; applyW(); $q('#ws-wght').value=wsW; $q('#ws-wght-v').textContent=wsW; $qa('#ws-wstops button').forEach(b=>b.setAttribute('aria-pressed',String(+b.dataset.w===wsW))); }
+$q('#ws-wght').min=P.axis[0]; $q('#ws-wght').max=P.axis[2];
+P.stops.forEach(w=>{ const b=mk('button',{type:'button','data-w':w},String(w)); const bo=ownW('before',w); b.title=(NAMES[w]||'')+(bo===w?'':bo==null?' ('+P.before+' has no such weight; it shows its '+cssW('before',w)+')':' ('+P.before+' at its '+Math.round(bo)+', the same stem)'); b.onclick=()=>setW(w); $q('#ws-wstops').appendChild(b); });
+$q('#ws-wght').oninput=e=>setW(e.target.value); setW(400);
+function setSize(v){ wsSize=+v; $q('#ws-groups').style.setProperty('--ws',wsSize+'px'); $q('#ws-size-v').textContent=wsSize; $q('#ws-samples').style.fontSize=Math.max(16,Math.min(72,wsSize*0.7))+'px'; }
+$q('#ws-size').oninput=e=>setSize(e.target.value); setSize(44);
+$q('#ws-only').onchange=e=>live.classList.toggle('ws-only',e.target.checked);
+const CHB=HAS82?[['82',P.r82,16,P.nchanged82],['81',P.before,1,P.nchanged]]:[['81',P.before,1,P.nchanged]];
+let chg=LS.get('wc')||CHB[0][0]; if(!CHB.some(x=>x[0]===chg)) chg=CHB[0][0];
+function setChg(k){ chg=k; LS.set('wc',k); live.dataset.chg=k; const [,lab,bit,n]=CHB.find(x=>x[0]===k);
+  $qa('#ws-chg button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.k===k)));
+  const ce=P.set.filter(e=>e[5]&bit), ng=new Set(ce.map(e=>e[3])).size; $q('#ws-nchg').textContent='('+ce.length+' cells)';
+  $q('#ws-nchg-lede').textContent=' since '+lab+' ('+n+' glyphs of the font; '+ng+' of them have a cell below, the rest are forms no cell shows, such as the tabular figures)'; }
+CHB.forEach(([k,lab])=>{ const b=mk('button',{type:'button','data-k':k},'Since '+esc(lab)); b.onclick=()=>setChg(k); $q('#ws-chg').appendChild(b); });
+setChg(chg);
+function wsOpen(list,i,title){ const m=wsMode; let ka='now', kb=HAS82?'r82':'before', la='this build ('+P.after+')', lb=HAS82?P.r82:P.before;
+  if(m==='r82'){ ka='r82'; la=P.r82; }
+  if(m==='before'||m==='ov81'){ kb='before'; lb=P.before; } if(m==='before'){ ka='before'; la=P.before; }
+  if(m==='v080'){ ka='v080'; la='0.80'; }
+  if(m==='ov80'||m==='v080'){ kb='v080'; lb='0.80'; }
+  V.openLive(list,i,wsW,title,FAM[ka],FAM[kb],la,lb,ka,kb); }
+(function(){
+  const host=$q('#ws-groups');
+  P.groups.forEach(([k,label])=>{ const items=P.set.filter(e=>e[2]===k); if(!items.length) return;
+    const g=mk('div',{class:'ws-grp'}); g.appendChild(mk('h3',{},esc(label)+' <span class="note" style="font-weight:400">'+items.length+'</span>'));
+    const grid=mk('div',{class:'ws-grid'}); const seq=items.map(e=>({t:e[0],feat:e[1],g:e[3],u:e[6]}));
+    const frag=document.createDocumentFragment();
+    items.forEach((e,i)=>{ const [t,feat,,gname,adv,fl]=e;
+      const b=mk('button',{class:'ws-c'+(fl&1?' chg':'')+(fl&16?' c82':'')+(fl&2?' m1':'')+(fl&4?' m2':'')+(fl&8?' m3':''),type:'button',title:(e[6]?'U+'+e[6]+' ':'')+gname+(feat?' ('+feat+')':'')+(fl&16?' - changed since '+P.r82:(fl&1?' - changed since '+P.before:''))});
+      b.style.width=Math.max(0.9,adv/1000+0.26)+'em';
+      const fs=feat?' style="font-feature-settings:\''+feat+'\' 1"':'';
+      b.innerHTML='<span class="la"'+fs+'>'+esc(t)+'</span><span class="lb"'+fs+' aria-hidden="true">'+esc(t)+'</span><i></i><span class="nb">new</span>';
+      b.onclick=()=>wsOpen(seq,i,label); frag.appendChild(b); });
+    grid.appendChild(frag); g.appendChild(grid); host.appendChild(g); });
+  // samples
+  const S=$q('#ws-samples');
+  P.samples.forEach(([k,txt,cls])=>{ const d=mk('div',{class:'smp'+(cls?' '+cls:'')});
+    d.innerHTML='<span class="k">'+esc(k)+'</span><div class="box"><div class="la" contenteditable="true" spellcheck="false">'+txt+'</div><div class="lb" aria-hidden="true">'+txt+'</div></div>';
+    const a=$q('.la',d), b=$q('.lb',d); a.addEventListener('input',()=>{ b.innerHTML=a.innerHTML; }); S.appendChild(d); });
+})();
+
+/* ---------- weight scale ---------- */
+(function(){
+  const WS=P.ws; $q('#wsc-lede').innerHTML=WS.lede;
+  // chart: stem / x-height against named weight
+  const [X0,X1]=WS.chartX, Wd=560,Hd=320,L=46,R=16,T=14,B=34, xs=w=>L+(w-X0)/(X1-X0)*(Wd-L-R), ymax=0.45, ys=v=>T+(1-v/ymax)*(Hd-T-B);
+  let s='<svg viewBox="0 0 '+Wd+' '+Hd+'" role="img" aria-label="Stem over x-height by weight">';
+  for(let v=0;v<=ymax+1e-9;v+=0.05){ s+='<line class="grid" x1="'+L+'" x2="'+(Wd-R)+'" y1="'+ys(v)+'" y2="'+ys(v)+'"/><text x="'+(L-6)+'" y="'+(ys(v)+4)+'" text-anchor="end">'+v.toFixed(2)+'</text>'; }
+  for(let w=X0;w<=X1;w+=100) s+='<text x="'+xs(w)+'" y="'+(Hd-12)+'" text-anchor="middle">'+w+'</text>';
+  const line=pts=>pts.map((p,i)=>(i?'L':'M')+xs(p[0]).toFixed(1)+' '+ys(p[1]).toFixed(1)).join('');
+  WS.refs.forEach(([name,pts])=>{ s+='<g class="rf"><title>'+esc(name)+': '+pts.map(p=>p[0]+' '+p[1].toFixed(3)).join(', ')+'</title><path class="ref" d="'+line(pts)+'"/>'+pts.map(p=>'<circle class="refp" cx="'+xs(p[0])+'" cy="'+ys(p[1])+'" r="2.2"/>').join('')+'<path d="'+line(pts)+'" stroke="transparent" stroke-width="10" fill="none"/></g>'; });
+  s+='<path class="an" d="'+line(WS.areaNew)+'"/>'+WS.areaNew.map(p=>'<circle class="anp" cx="'+xs(p[0])+'" cy="'+ys(p[1])+'" r="4"><title>'+esc(WS.chartLab[1])+' '+p[0]+': '+p[1].toFixed(3)+'</title></circle>').join('');
+  s+='<path class="ar" d="'+line(WS.areaNow)+'"/>'+WS.areaNow.map(p=>'<circle class="arp" cx="'+xs(p[0])+'" cy="'+ys(p[1])+'" r="4.5"><title>'+esc(WS.chartLab[0])+' '+p[0]+': '+p[1].toFixed(3)+'</title></circle>').join('');
+  const ln=WS.areaNow[WS.areaNow.length-1], nn=WS.areaNew[WS.areaNew.length-1];
+  s+='<text x="'+(xs(ln[0])+8)+'" y="'+(ys(ln[1])+16)+'" style="fill:var(--ink)">'+esc(WS.chartLab[0])+'</text><text x="'+(xs(nn[0])+8)+'" y="'+(ys(nn[1])+4)+'" style="fill:var(--ink)">'+esc(WS.chartLab[1])+'</text>';
+  s+='<text x="'+L+'" y="'+(T-2)+'" style="font-size:10px;fill:var(--ink3)">stem / x-height</text></svg>';
+  $q('#wsc-chart').innerHTML=s;
+  $q('#wsc-legend').innerHTML='<span><i></i>'+esc(WS.legend[0])+'</span><span><i class="n"></i>'+esc(WS.legend[1])+'</span><span><i class="r"></i>'+esc(WS.legend[2])+'</span>';
+  $q('#wsc-decision').innerHTML=WS.decision;
+  $q('#wsc-table').innerHTML=WS.table; $q('#wsc-stems').innerHTML=WS.stems;
+  const spec=$q('#wsc-spec'); let txt=LS.get('wst')||'Handgloves, quality type 0123';
+  WS.spec.forEach(([nw,name,at,note])=>{ const r=mk('div',{class:'wsc-row'});
+    r.innerHTML='<div class="n"><span>'+nw+' '+esc(name)+'</span><small>'+esc(note)+'</small></div><div class="t" contenteditable="true" spellcheck="false" style="font-variation-settings:\'wght\' '+at+'"></div>';
+    $q('.t',r).textContent=txt; $q('.t',r).addEventListener('input',e=>{ txt=e.target.textContent; LS.set('wst',txt); $qa('#wsc-spec .t').forEach(x=>{ if(x!==e.target) x.textContent=txt; }); }); spec.appendChild(r); });
+  if(WS.off){ const off=mk('div',{class:'wsc-row off'}); off.innerHTML='<div class="n"><span>'+esc(WS.off[0])+'</span></div><div class="t">'+esc(WS.off[1])+'</div>'; spec.insertBefore(off,spec.firstChild); }
+  const sz=v=>{ $qa('#wsc-spec .wsc-row:not(.off) .t').forEach(x=>x.style.fontSize=v+'px'); $q('#wsc-size-v').textContent=v; };
+  $q('#wsc-size').oninput=e=>sz(e.target.value); sz(40);
+})();
+
+/* ---------- growth balance ---------- */
+(function(){
+  const BL=P.bal; $q('#bal-lede').innerHTML=BL.lede; $q('#bal-note').innerHTML=BL.note;
+  let f=LS.get('bf')||'all';
+  const V82=HAS82?P.r82:P.after, K82=P.k82;
+  const STB={fixed:['fixed','Fixed in '+V82],part:['part','Partly fixed in '+V82],changed:['part','Changed in '+V82+', not re-measured'],open:['open','Open']};
+  function render(){ const box=$q('#bal-list'); box.innerHTML='';
+    BL.glyphs.filter(g=>f==='all'||(f==='open'?g.status==='open':g.status!=='open')).forEach(g=>{
+      const d=mk('div',{class:'bal-g',id:'bal-'+g.rank});
+      const rows=g.reads.map(r=>'<tr><td>'+r.w+'</td><td style="text-align:left">'+esc(r.m)+'</td><td>'+r.area+'</td><td>'+esc(r.ref)+'</td><td>'+r.score+'</td><td>'+(r.units==null?'':r.units)+'</td><td style="text-align:left">'+esc(r.side)+'</td><td>'+(r.after==null?'':'<span class="'+(r.inside?'okv':'badv')+'">'+r.after+'</span>')+'</td></tr>').join('');
+      const [sc,sl]=STB[g.status];
+      d.innerHTML='<div style="min-width:0"><h4><span style="font-family:\'Area Serif now\',var(--serif)">'+esc(g.ch)+'</span><small>#'+g.rank+' &middot; worst score '+g.score+'</small><span class="st '+sc+'">'+sl+'</span></h4>'+
+        '<div class="scroll"><table><thead><tr><th>Weight</th><th style="text-align:left">Reading</th><th>Area</th><th>References (median)</th><th>Score</th><th>Units</th><th style="text-align:left">Which way</th><th>After</th></tr></thead><tbody>'+rows+'</tbody></table></div>'+(g.note?'<p class="note" style="margin-top:6px">'+esc(g.note)+'</p>':'')+'</div><div class="pp"></div>';
+      if(g.gname&&P.O[K82][g.gname]&&P.O.before[g.gname]&&g.status!=='open'){ const pp=$q('.pp',d); const seq=[{g:g.gname,f:K82,l:'before'}];
+        let ylo=-40,yhi=P.cap+40,x0=0,x1=600; P.balW.forEach(w=>[K82,'before'].forEach(s=>{ const o=out(s,g.gname,w); if(o){ const b=bboxOf(o); ylo=Math.min(ylo,b[1]-30); yhi=Math.max(yhi,b[3]+30); x0=Math.min(x0,b[0]); x1=Math.max(x1,b[2]); }}));
+        P.balW.forEach(w=>{ const b=mk('button',{class:'pan',type:'button','aria-label':'Open '+g.gname+' at '+w}); b.style.setProperty('--ph','70px');
+          b.innerHTML=panelSVG(g.gname,w,K82,'before',[x0-40,ylo,x1+40,yhi])+'<span class="pf"><span>'+w+'</span>'+devLabel(g.gname,w,K82,'before')+'</span>'; b.onclick=()=>V.openVec(seq,0,w,'Growth balance: '+g.ch); pp.appendChild(b); }); }
+      box.appendChild(d); }); }
+  [['all','All'],['done','Changed this round'],['open','Open']].forEach(([k,l])=>{ const b=mk('button',{class:'chip',type:'button','aria-pressed':String(k===f)},l);
+    b.onclick=()=>{ f=k; LS.set('bf',k); $qa('#bal-filters .chip').forEach(x=>x.setAttribute('aria-pressed',String(x===b))); render(); }; $q('#bal-filters').appendChild(b); });
+  render();
+})();
+if(P.wnote){ $q('#c82-wnote').textContent=P.wnote; $q('#c82-wnote').hidden=false; }
+renderCards();
+})();
+</script>
+<!--/p082-->

@@ -3,7 +3,8 @@
     .venv/bin/python audit_rays.py [glyph ...]
 
 audit_axis.py and audit_bold.py read the UFO masters and the engine's own notion of a stroke. This reads neither:
-it instances build/AreaSerif[wght].ttf with fontTools at 300, 350, 400, 500, 600 and 700 (the TrueType outlines a
+it instances build/AreaSerif[wght].ttf with fontTools at 300, 350, 400, 532.9, 666.3 and 800 on the 0.82 axis (0.81's
+300, 350, 400, 500, 600 and 700: the same design places, weightaxis.place; the TrueType outlines a
 reader gets, quadratic, overlaps kept), and at a fixed set of places round every outline (each segment cut at the
 same parameters at every weight, so a place is the same place at every weight) it casts a ray from the edge into
 the ink, along the edge's normal, to where the ink ends. That length is the stroke across itself there. Only rays
@@ -14,10 +15,11 @@ a junction where a tail or a bar meets a bowl); a place inside the ink (where tw
 ray.
 
 It fails when, at any kept place:
-  bold    the stroke is thinner at a heavier stop than at the lighter one before it (400, 500, 600, 700), by more
+  bold    the stroke is thinner at a heavier stop than at the lighter one before it (400 and up), by more
           than 3% (the just-noticeable difference in weight) and a unit;
-  light   the stroke is thicker at 350 or 300 than at the stop above it (by as much), or thinner at 300
-          than the stem's own ratio allows, less 3% (no part thins noticeably faster than the stem, 55 / 78).
+  light   the stroke is thicker at a stop under 400 than at the stop above it (by as much), or thinner at the
+          lightest stop than the stem's own ratio allows, less 3% (no part thins noticeably faster than the stem:
+          55 / 78 at 300, 32 / 78 at 100).
 A place is compared across weights only where its ray leaves through the same edge at every weight.
 Writes build/weight/audit-rays.txt.
 """
@@ -33,8 +35,11 @@ from fontTools.varLib.instancer import instantiateVariableFont
 import bold as B
 
 import os as _os
-# 0.81: AREA_RAY_WEIGHTS="300,325,..." runs the same test at more stops (every neighbouring pair is compared)
-WEIGHTS = tuple(int(w) for w in _os.environ.get("AREA_RAY_WEIGHTS", "300,350,400,500,600,700").split(","))
+import weightaxis as W
+# 0.81: AREA_RAY_WEIGHTS="300,325,..." runs the same test at more stops (every neighbouring pair is compared).
+# 0.82: the weights are on the 0.82 axis (300 to 800; "old:300,325,..." names them on the 0.81 axis); the default is
+# 0.81's six stops at their design places (weightaxis.place). A font on the 0.81 axis is read at the same places.
+WEIGHTS = W.parse(_os.environ.get("AREA_RAY_WEIGHTS"), (300, 350, 400, 500, 600, 700))
 N_SEG = 6                    # places per curve piece
 FACE_DEG = 40
 TOL = 1.0
@@ -43,8 +48,10 @@ JUNCTION = 1.0               # round 3: a junction zone reaches one local stroke
 
 
 def instance(path, w):
+    """The variable font at w on the 0.82 axis (a font on the 0.81 axis at the same design place)."""
     buf = io.BytesIO()
-    instantiateVariableFont(TTFont(path), {"wght": w}).save(buf)
+    tt = TTFont(path)
+    instantiateVariableFont(tt, {"wght": W.user(tt, w)}).save(buf)
     buf.seek(0)
     return TTFont(buf)
 
@@ -295,7 +302,9 @@ def main():
     gss = {w: f.getGlyphSet() for w, f in fonts.items()}
     glyf = fonts[400]["glyf"]
     names = names or [n for n in fonts[400].getGlyphOrder() if glyf[n].numberOfContours > 0]
-    q300 = B.LIGHT_STEM / B.REG_STEM                        # the stem's own ratio, 300 over 400
+    lo, hi = min(WEIGHTS), max(WEIGHTS)
+    q300 = W.vf_stem(lo) / B.REG_STEM                       # the stem's own ratio, the lightest stop over 400
+    S = W.short
     fails, rows, n_rays = [], [], 0
     for name in names:
         th, ex = {}, {}
@@ -340,24 +349,26 @@ def main():
             d = T[WEIGHTS.index(b)] - T[WEIGHTS.index(a)] + JND * T[WEIGHTS.index(a)]
             if (d < -TOL).any():
                 k = int(np.argmin(d))
-                worst.append(f"thinner at {b} than at {a}: {T[WEIGHTS.index(a), k]:.1f} > {T[WEIGHTS.index(b), k]:.1f}{at_(k)}")
+                worst.append(f"thinner at {S(b)} than at {S(a)}: {T[WEIGHTS.index(a), k]:.1f} > {T[WEIGHTS.index(b), k]:.1f}{at_(k)}")
         for a, b in zip(down, down[1:]):
             d = T[WEIGHTS.index(b)] - T[WEIGHTS.index(a)] - JND * T[WEIGHTS.index(a)]
             if (d > TOL).any():
                 k = int(np.argmax(d))
-                worst.append(f"thicker at {b} than at {a}: {T[WEIGHTS.index(a), k]:.1f} < {T[WEIGHTS.index(b), k]:.1f}{at_(k)}")
+                worst.append(f"thicker at {S(b)} than at {S(a)}: {T[WEIGHTS.index(a), k]:.1f} < {T[WEIGHTS.index(b), k]:.1f}{at_(k)}")
         floor = T[i400] * q300 * (1 - JND) - TOL
-        d = T[WEIGHTS.index(300)] - floor
-        if (d < 0).any():
+        d = T[WEIGHTS.index(lo)] - floor
+        if lo < 400 and (d < 0).any():
             k = int(np.argmin(d))
-            worst.append(f"at 300 {T[WEIGHTS.index(300), k]:.1f} where 400 has {T[i400, k]:.1f}{at_(k)} (no part thins faster than the stem, x {q300:.3f})")
-        rows.append((name, T.shape[1], float(T[i400].min()), float(T[WEIGHTS.index(300)].min()), float(T[WEIGHTS.index(700)].min())))
+            worst.append(f"at {S(lo)} {T[WEIGHTS.index(lo), k]:.1f} where 400 has {T[i400, k]:.1f}{at_(k)} (no part thins faster than the stem, x {q300:.3f})")
+        rows.append((name, T.shape[1], float(T[i400].min()), float(T[WEIGHTS.index(lo)].min()), float(T[WEIGHTS.index(hi)].min())))
         if worst:
             fails.append(f"{name}: " + "; ".join(worst))
     with open(_os.environ.get("AREA_RAYS_OUT", "build/weight/audit-rays.txt"), "w") as f:
         f.writelines(f"{r}\n" for r in fails)
-        f.writelines(f"{n}\t{k} rays\tthinnest 400 {a:.1f}  300 {b:.1f}  700 {c:.1f}\n" for n, k, a, b, c in rows)
-    print(f"rays across the stroke, variable font at {', '.join(map(str, WEIGHTS))}: {len(rows)} glyphs, {n_rays} places")
+        f.write(f"# {W.AXIS_NOTE}: " + ", ".join(W.label(w) for w in WEIGHTS) + "\n")
+        f.writelines(f"{n}\t{k} rays\tthinnest 400 {a:.1f}  {S(lo)} {b:.1f}  {S(hi)} {c:.1f}\n" for n, k, a, b, c in rows)
+    print(f"rays across the stroke, variable font at {', '.join(map(S, WEIGHTS))} ({W.AXIS_NOTE}; "
+          f"{'the font is on the ' + W.font_axis(TTFont(vf)) + ' axis'}): {len(rows)} glyphs, {n_rays} places")
     print(f"  {'ok' if not fails else str(len(fails)) + ' glyphs: ' + ' | '.join(fails[:8])}")
     sys.exit(1 if fails else 0)
 
