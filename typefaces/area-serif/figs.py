@@ -663,3 +663,102 @@ def q_tail(font):
         return "Q left: " + note + "; " + "; ".join(bad)
     _put(g, [P] + rest)
     return "Q: " + note
+
+
+# ------------------------------------------------------------------ 0.83 Regular pass, letters 5: B P R, E F
+# The audit (B7, B18): F's middle arm stood 17 under E's (centre 355 against 372) and P's bowl closed 13 under R's
+# (345.5 against 358); B's upper counter met its right extreme at 2.11 times the curvature, R's outer and inner right
+# extremes 1.86 and 2.00. Looked at in "FERN PREP FRESH REPAIR" at 28 to 160 px with both aligned
+# (build/owner8/let/5-FERN-PREP*.png): neither alignment hurts; F's arm reads as E's and P's bowl as R's. The rules
+# (`cap_bowls`): F's middle arm is E's, its centre on E's (the arm moves whole, level); P's bowl closes where R's does,
+# its lower quarters (outside and counter) scaled upright about their right extremes so the hairline under the counter
+# keeps its thickness; then every smooth node of B P R at one curvature (`loops.even_nodes`, handle lengths only), kept
+# where curvecheck's faults on the glyph do not grow.
+def _band(g, lo, hi, x_min):
+    return [p for c in g.contours for p in c.points if lo <= p.y <= hi and p.x > x_min]
+
+
+def _arm(g):
+    """The middle arm's two level edges (bottom y, top y), and the stem's edge they leave: the level straights
+    between 250 and 450 that start at the stem."""
+    ys, xs = set(), set()
+    for c in g.contours:
+        P, n = c.points, len(c.points)
+        for i in range(n):
+            a, b = P[i - 1], P[i]
+            if a.type and b.type == "line" and a.y == b.y and 250 < a.y < 450 and min(a.x, b.x) < 260:
+                ys.add(a.y)
+                xs.add(min(a.x, b.x))
+    return ((min(ys), max(ys)), min(xs)) if len(ys) >= 2 else (None, None)
+
+
+def _closure(g):
+    """(outer contour, counter, outer closure y, counter closure y, outer right extreme y, counter right extreme y):
+    the closure is where the bowl's lower stroke meets the stem's right edge (its on-curve point there)."""
+    out = max(g.contours, key=lambda c: len(c.points))
+    inn = min(g.contours, key=lambda c: len(c.points))
+    edge = min(p.x for p in inn.points if p.type)
+    ro = max((q for q in out.points if q.type and q.y > 400), key=lambda q: q.x)
+    ri = max((q for q in inn.points if q.type), key=lambda q: q.x)
+    ob = min(p.y for p in out.points if p.type and abs(p.x - edge) <= 1 and 250 < p.y < 450)
+    ib = min(p.y for p in inn.points if p.type and abs(p.x - edge) <= 1 and 250 < p.y < 450)
+    return out, inn, ob, ib, ro.y, ri.y
+
+
+def cap_bowls(font):
+    import curvecheck as K
+    import loops as LOOPS
+    notes = []
+    e_arm, _x = _arm(font["E"])
+    f_arm, f_stem_r = _arm(font["F"])
+    if e_arm and f_arm:
+        d = round((e_arm[0] + e_arm[1]) / 2 - (f_arm[0] + f_arm[1]) / 2)
+        if d:
+            for p in _band(font["F"], f_arm[0] - 3, f_arm[1] + 3, f_stem_r - 1):
+                p.y += d
+            notes.append(f"F's arm {d:+d} (centre {(f_arm[0] + f_arm[1]) / 2:.1f} > E's {(e_arm[0] + e_arm[1]) / 2:.1f})")
+    *_, rob, rib, _a, _b = _closure(font["R"])
+    out, inn, ob, ib, oy, iy = _closure(font["P"])
+    for c, bot, yx, want in ((out, ob, oy, rob), (inn, ib, iy, rib)):
+        if bot == want:
+            continue
+        k = (yx - want) / (yx - bot)
+        for p in c.points:
+            if bot - 1 <= p.y < yx and p.x > 200:
+                p.y = round(yx - (yx - p.y) * k)
+        notes.append(f"P's bowl closes {bot} > {want}")
+    for name in ("B", "P", "R"):
+        notes.append(even_glyph(font, name))
+    return "; ".join(notes)
+
+
+EVEN_TARGETS = (1.25, 1.5, 1.8)
+
+
+def even_glyph(font, name):
+    """Every smooth node of the glyph at one curvature (`loops.even_nodes`, handle lengths only), at the first target
+    (1.25 = curvecheck's ratio, then 1.5, 1.8) whose result lowers the worst ratio without adding a curvecheck fault
+    and keeps even.py's two readings (the stroke's thickness round each counter) under its limits, or under what they
+    were where the drawing already passed them."""
+    import curvecheck as K
+    import loops as LOOPS
+    import even as EVEN
+    from ufoLib2.objects import Glyph
+    g = font[name]
+    yr = (-1000, 2000)
+    cs = _pts(g)
+    b0, w0 = K.report(name, cs, yr)[:2]
+    e0 = EVEN.worst(g)
+    lim = (max(EVEN.SHELF_LIMIT, e0[0]), max(EVEN.LIMIT, e0[1]))
+    for t in EVEN_TARGETS:
+        new = [[(round(q[0]), round(q[1]), q[2], q[3]) for q in LOOPS.even_nodes(P, yr, target=t)[0]] for P in cs]
+        b1, w1 = K.report(name, new, yr)[:2]
+        if len(b1) > len(b0) or w1 >= w0 - 0.01:
+            continue
+        _put(g, new)
+        e1 = EVEN.worst(g)
+        if e1[0] <= lim[0] + 1e-6 and e1[1] <= lim[1] + 1e-6:
+            return (f"{name} worst ratio {w0:.2f} > {w1:.2f} (aim {t}), faults {len(b0)} > {len(b1)}, "
+                    f"thickness {e0[0]:.1f}/{e0[1]:.1f} > {e1[0]:.1f}/{e1[1]:.1f}")
+        _put(g, cs)
+    return f"{name} left ({w0:.2f}, faults {len(b0)})"

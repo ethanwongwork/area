@@ -53,6 +53,7 @@ LEAVE = (53, 64)                      # the outer curve's handle at a branch's c
                                       # the bowls: 0.33 x 161 and 0.65 x 98): it leaves the stem at 40 degrees
 SPUR_TIP, SPUR_BASE = (-23, 66), (-65, 0)     # from the stem's bowl-side edge; negative is into the stem
 SPUR_H = (0.45, (19, 20))
+BOWL_EXTREME_ONE = True               # 0.83 (letters 5): the branch's and run-in's handle at the extreme solved (below)
 
 
 def bez(p, n=160):
@@ -181,6 +182,14 @@ def bowl(font, name, s, top, bottom):
         K.x, K.y = xe, Y(yk)
         h1.x, h1.y = round(xe + s * DXO_T * (1 - shares[0])), E.y
         h2.x, h2.y = round(xe + s * shares[1] * DXO_T), round(Y(yk + shares[2] * (Y_TOP - yk)))
+        if BOWL_EXTREME_ONE:
+            # 0.83 (letters 5): the extreme meets its two curves at one curvature. The far quarter's curvature at the
+            # extreme is (2/3) far * rise / far^3; the branch's (or run-in's) curve has its far handle `rise_b` off the
+            # extreme's level, so its handle at the extreme is sqrt((2/3) rise_b / k): the 0.40 share left the branch
+            # side 1.48 times flatter (radius 268 against 181)
+            k_far = (2 / 3) * (Y_TOP - Y_MID - dy) / far ** 2
+            L = math.sqrt((2 / 3) * abs(h2.y - E.y) / k_far)
+            h1.x = round(E.x - s * L)
         K.smooth = False
         # the stem's edge beyond the crotch: straight, on xe
         i = P.index(K)
