@@ -1,5 +1,9 @@
 // Shared-part tables, recorded as snapshots today so any drift fails, and tightened by the plan items that write the
 // rules: header bars (B4.1, VN7, G6), marks (B5.1, VS2), corners (A2, B1, VC3). Light; the lengths are the same in dark.
+// Snapshots are of the shipped defaults: check.mjs skips them at any other settings (a length or corner that follows a
+// setting is meant to change there). `perFamily`: the values are keyed "<family> · …" and depend on that family alone,
+// so a run over some families compares just theirs. Marks (one table across families) and corners (a part belongs to
+// another family only when that family is in the run) are skipped on a family subset.
 
 // The header bars: a bar across the top of a surface that holds its title, search or controls. (The Nav sidebar demo's
 // header is an unclassed div and is not collected.)
@@ -18,7 +22,7 @@ const corner = radius => radius.every(r => r === radius[0]) ? radius[0] : radius
 
 export const rules = [
   {
-    id: "header-bars", item: "B4.1", finding: "VN7, G6", kind: "snapshot", expectedToday: "snapshot",
+    id: "header-bars", item: "B4.1", finding: "VN7, G6", kind: "snapshot", perFamily: true, expectedToday: "snapshot",
     title: "Each family's header bar heights (B4.1's two-bar rule is not built yet: the set is a snapshot)",
     run(families) {
       const values = {};

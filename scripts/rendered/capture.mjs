@@ -5,7 +5,9 @@
 //   node scripts/rendered/capture.mjs [options] [slug …]          (no slug: every family)
 //     --theme light|dark|both     (both)
 //     --set axis=value            a Canvas setting for the Area system's Default theme, repeatable: --set type=12
-//                                 --set density=28 for Compact. Axis names are the Inspector's (src/gallery-controls).
+//                                 --set density=28 for Compact. Ids and values are the registry's; an unknown one fails
+//                                 before the browser opens, and one the page did not apply fails after (settings.mjs).
+//     --families a,b,c            only these families (the same as listing slugs); a slug not on the Overview fails
 //     --no-png                    measures only (what check:rendered does)
 //     --layout shipped|fit        shipped: the Overview's own two-column grid (check:rendered); fit (the default for
 //                                 pictures): a family whose tiles are cut by their cards gets one card per row, and one
@@ -15,13 +17,14 @@
 //     --cap <n>                   most elements measured per tile (700)
 //     --dist <dir>                the built app (apps/desktop/dist)
 // Then `node scripts/rendered/merge.mjs [--out <dir>]` joins light and dark into measure.json and index.json.
-import { cpSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { cpSync, existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { launch } from "./cdp-lib.mjs";
 import { serve, DIST } from "./serve.mjs";
 import { FLOATING } from "./rules/dark-edge.mjs";
+import { describe, moved, validateSet } from "./settings.mjs";
 
 const HERE = fileURLToPath(new URL(".", import.meta.url));
 export const ROOT = resolve(HERE, "../..");
@@ -40,7 +43,8 @@ export function parseArgs(argv, defaults = {}) {
     const arg = argv[i];
     const next = () => argv[++i];
     if (arg === "--theme") options.theme = next();
-    else if (arg === "--set") { const [k, v] = next().split("="); options.set[k] = v; }
+    else if (arg === "--set") { const pair = next() ?? ""; const at = pair.indexOf("="); options.set[at < 0 ? pair : pair.slice(0, at)] = at < 0 ? undefined : pair.slice(at + 1); }
+    else if (arg === "--families") options.slugs.push(...(next() ?? "").split(",").map(slug => slug.trim()).filter(Boolean));
     else if (arg === "--no-png") options.png = false;
     else if (arg === "--png") options.png = true;
     else if (arg === "--layout") options.layout = next();
@@ -84,6 +88,21 @@ export async function openOverview(browser, url, { theme, set = {}, width = 1440
   }
   await page.eval(`document.fonts.ready.then(() => true)`);
   await page.eval(MEASURE);
+  // Every moved setting must have reached the specimens' scope (specimen-scope.tsx writes data-area-<axis> for the
+  // values that differ from Area's defaults): the app drops a value it doesn't know without a word.
+  const expected = await moved(set);
+  if (Object.keys(expected).length) {
+    const missing = await page.eval(`(() => {
+      const want = ${JSON.stringify(expected)};
+      const norm = v => String(v).split(/\s+/).filter(Boolean).sort().join(" ");
+      return Object.entries(want).filter(([axis, value]) => {
+        if (axis === "contrast" && value === "system") return false;
+        const els = [...document.querySelectorAll("[data-area-" + axis + "]")];
+        return !els.some(el => norm(el.getAttribute("data-area-" + axis)) === norm(value));
+      }).map(([axis, value]) => axis + "=" + value);
+    })()`);
+    if (missing.length) throw new Error(`${theme}: the app did not apply ${missing.join(", ")} (no element carries data-area-<axis> with that value; was it dropped by restoreCanvas?)`);
+  }
   page.theme = theme;
   return page;
 }
@@ -253,9 +272,32 @@ async function clearLayout(page) {
   if (page.width !== 1440) await page.size(1440, page.height);
 }
 
+/**
+ * One capture at a time per checkout: captures side by side starve the machine (families went from 6–15 s to 100–200 s
+ * on 2026-11-18), so a second one fails at once, naming the first. A lock whose process is gone is taken over.
+ */
+const LOCK = join(OUT, "capture.lock");
+function takeLock() {
+  mkdirSync(OUT, { recursive: true });
+  if (existsSync(LOCK)) {
+    const held = JSON.parse(readFileSync(LOCK, "utf8") || "{}");
+    let alive = false;
+    try { process.kill(held.pid, 0); alive = held.pid !== process.pid; } catch {}
+    if (alive) throw new Error(`Another rendered capture is running (pid ${held.pid}, since ${held.since}, ${held.what}). Captures run one at a time; wait for it, or stop it.`);
+  }
+  writeFileSync(LOCK, JSON.stringify({ pid: process.pid, since: new Date().toISOString(), what: process.argv.slice(1).join(" ") }));
+  return () => { try { if (JSON.parse(readFileSync(LOCK, "utf8")).pid === process.pid) rmSync(LOCK); } catch {} };
+}
+
 /** Captures `options.slugs` (or every family) in each theme. Resolves to { families, themes, ms }. */
 export async function capture(options, log = console.log) {
   const started = Date.now();
+  await validateSet(options.set ?? {});
+  const release = takeLock();
+  try { return await captureLocked(options, log, started); } finally { release(); }
+}
+
+async function captureLocked(options, log, started) {
   const sharp = (await import("sharp")).default;
   const server = await serveCopy(options.dist);
   const themes = options.theme === "both" ? ["light", "dark"] : [options.theme];
@@ -269,8 +311,14 @@ export async function capture(options, log = console.log) {
       const page = await openOverview(browser, server.url, { theme, set: options.set });
       const all = await familiesOn(page);
       const slugs = options.slugs.length ? options.slugs : all;
+      // A slug not on the Overview fails before any family is captured.
+      const absent = slugs.filter(slug => !all.includes(slug));
+      if (options.strict && absent.length) throw new Error(`not families on the Overview: ${absent.join(", ")} (${all.length} families; see .studio-section ids)`);
       for (const slug of slugs) {
-        if (!all.includes(slug)) { log(`${slug}: not on the Overview`); continue; }
+        if (!all.includes(slug)) {
+          if (options.strict) throw new Error(`${slug}: not a family on the Overview (families: ${all.join(", ")})`);
+          log(`${slug}: not on the Overview`); continue;
+        }
         const t0 = Date.now();
         await openSection(page, slug);
         let data = await page.eval(`window.areaRendered.section(${JSON.stringify(slug)}, { cap: ${options.cap} })`);
@@ -310,6 +358,7 @@ export async function capture(options, log = console.log) {
 
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
   const options = parseArgs(process.argv.slice(2));
+  if (Object.keys(options.set).length) console.log(`settings: ${describe(options.set)}`);
   const { families, ms } = await capture(options);
   console.log(`${Object.keys(families).length} families in ${(ms / 1000).toFixed(1)} s → ${options.out}`);
 }

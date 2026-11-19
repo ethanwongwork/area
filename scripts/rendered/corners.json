@@ -1,0 +1,14 @@
+{
+ "about": "The settings corners check:rendered:corners runs, one after another, light and dark (scripts/rendered/corners.mjs). Each corner's assert-rule baseline is known-failures/<id>.json; defaults keep known-failures.json and the snapshots. `fast` is the family subset for routine runs and CI: overlays, marks, rows and controls. Values are the registry's (packages/tokens config); an unknown one fails before a browser opens.",
+ "fast": ["button", "kbd", "badge", "count", "tag", "menu", "popover", "dialog", "toast", "tooltip", "command-palette", "select", "custom-select", "checkbox", "radio", "switch", "slider", "table", "tabs", "segmented", "input"],
+ "corners": [
+  { "id": "defaults", "about": "The shipped defaults", "set": {} },
+  { "id": "small-tight-square", "about": "Smallest type, Compact, square corners", "set": { "type": "12", "density": "28", "radius": "0" } },
+  { "id": "large-comfy-pill", "about": "Largest type, Comfy, pill corners", "set": { "type": "16", "density": "36", "radius": "pill" } },
+  { "id": "heavy-edges", "about": "Thickest line, strongest edges, bold focus ring, thickest selected edge", "set": { "surface": "2", "stroke": "8", "focus-ring": "bold", "selected-stroke": "3" } },
+  { "id": "no-edges", "about": "No line, no edge contrast, no floating shadow", "set": { "surface": "0", "stroke": "0", "elevation": "0" } },
+  { "id": "grounds", "about": "Greyest light page with flat layers; greyest dark page with the farthest layers", "set": { "ground-light": "90", "layers-light": "0", "ground-dark": "24", "layers-dark": "100" } },
+  { "id": "accent-yellow", "about": "Accent buttons and selection, 30% strength, yellow", "set": { "selection": "accent", "action": "accent", "accent-strength": "30", "accent": "yellow" } },
+  { "id": "tones", "about": "Lowest tone contrast, richest tone tints", "set": { "tone-contrast": "2.5", "tone-tint": "160" } }
+ ]
+}

@@ -22,16 +22,28 @@ export function browserPath() {
 
 const wait = ms => new Promise(done => setTimeout(done, ms));
 
+/**
+ * Never without these: Edge signs a fresh profile into the owner's account unless it runs as a guest with implicit
+ * sign-in off (2026-10). launch() refuses to start a browser whose arguments lack either.
+ */
+export const REQUIRED_FLAGS = ["--guest", "--disable-features=msImplicitSignin"];
+const assertSafe = args => {
+  if (!args.includes("--guest") || !args.some(arg => /^--disable-features=(.*,)?msImplicitSignin(,|$)/.test(arg))) throw new Error(`Refusing to launch Edge without ${REQUIRED_FLAGS.join(" ")}`);
+  return args;
+};
+
 /** Starts a headless browser in a fresh profile. Resolves to { newPage, close, version }. */
 export async function launch({ profileRoot = process.env.AREA_RENDERED_PROFILE_ROOT || tmpdir() } = {}) {
   const profile = mkdtempSync(join(profileRoot, "area-rendered-edge-"));
-  const proc = spawn(browserPath(), [
+  const proc = spawn(browserPath(), assertSafe([
     "--headless=new", "--guest", "--disable-features=msImplicitSignin,Translate,MediaRouter", "--disable-sync",
     "--disable-extensions", "--no-first-run", "--no-default-browser-check", "--disable-background-networking",
     "--disable-component-update", "--hide-scrollbars", "--mute-audio", "--force-color-profile=srgb",
     "--disable-renderer-backgrounding", "--disable-background-timer-throttling", "--disable-backgrounding-occluded-windows",
     "--font-render-hinting=none", `--user-data-dir=${profile}`, "--remote-debugging-port=0", "about:blank",
-  ], { stdio: "ignore" });
+    // CI's Linux runner (as root in a container, no user namespace sandbox) sets AREA_RENDERED_NO_SANDBOX=1.
+    ...(process.env.AREA_RENDERED_NO_SANDBOX ? ["--no-sandbox"] : []),
+  ]), { stdio: "ignore" });
   let exited = false;
   const killOnExit = () => { try { proc.kill("SIGKILL"); } catch {} };
   process.once("exit", killOnExit);

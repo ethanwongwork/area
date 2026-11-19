@@ -32,6 +32,8 @@
     "capture:compare": "node scripts/capture-compare.mjs",
     "capture:rendered": "node scripts/rendered/capture.mjs",
     "check:rendered": "node scripts/rendered/check.mjs",
+    "check:rendered:corners": "node scripts/rendered/corners.mjs",
+    "check:rendered:corners:fast": "node scripts/rendered/corners.mjs --fast",
     "audit:page": "node scripts/audit-page.mjs",
     "icons:pilot": "node packages/icons/scripts/generate.mjs",
     "icons:find": "node packages/icons/scripts/find.mjs",

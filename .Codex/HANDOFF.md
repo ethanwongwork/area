@@ -1,6 +1,20 @@
 # Handoff
 
-## Current state (2026-11-15)
+## Current state (2026-11-19)
+- **System status and plan step A (worktree `variable-serif-typeface-df1f42`, branch
+  `claude/design-system-refinement-c3351f`, 2026-11-19, uncommitted).** `docs/research/system-status-2026-11-18/README.md`
+  is the evaluation (status, the 62 settings and what fails when they move, components against the settings, what open
+  source systems do, work plan A–J, owner decisions). Step A built: cross-setting sweeps in
+  `packages/tokens/src/sweeps/` (colour 5,400 combinations, geometry 36,450, a ratchet over `known-failures.ts`: 21
+  entries, defects for plan B and owner decisions); `check:rendered` takes `--set`, `--corner`, `--families`, `--fast`,
+  unknown settings fail loudly, MAX_BOX follows the page's large control, per-corner baselines in
+  `scripts/rendered/known-failures/`, `check:rendered:corners` (eight corners, one at a time, a capture lock); CI gains
+  `changes`, `behaviour`, `rendered`, `rendered-corners` and `output` jobs. Not verified: the new CI jobs have never
+  run on a runner (baselines were recorded with macOS Edge); corner runs over every family (only the 21-family fast
+  subset ran). Next: plan B (tone borders and hue icons follow the ground, dark secondary inks at Layers extremes,
+  accent selection apart from hover), each fix deleting its known-failures entries. Phase 3 below merged as PR #235.
+
+## Earlier state (2026-11-15)
 - **Project evaluation and Phase 3 start (worktree `area-project-eval-3594b0`, 2026-11-15, uncommitted).** Where it
   stands: origin/main through #234 holds Phases 0–2 of the system evaluation (PR #233) and CI split (#234); no open PRs.
   6 families are owner-Complete, 119 In review with reasons (Phases 1–2 reopened them), 1 intentionally unrefined, 2
