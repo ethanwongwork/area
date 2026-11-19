@@ -2008,7 +2008,7 @@ discarded: it showed F's middle arm moved without its beak (evaluate: a lopsided
 whole arm, and the second build is snap083d. Its Regular is the last Regular-only build's but F.
 
 What moved against snap083c: Regular 97 glyphs (the items' letters and what is built from them: the f ligatures and ſ,
-þ Þ ƀ ɃꝐ Ᵽ, ǥ Ɏ ¥ ₱ ₲ ₽ ₿ ℗ @ ɑ g.ss02, the small 2 6 9, ∂, the fractions as composites), 15 in the overlap layer; Light
+þ Þ ƀ Ƀ Ᵽ, ǥ Ɏ ¥ ₱ ₲ ₽ ₿ ℗ @ ɑ g.ss02, the small 2 6 9, ∂, the fractions as composites), 15 in the overlap layer; Light
 106, Bold 124 (with the accented Y's, and through the engine's laws read on the letters ∗ † ‡ " ⌦ ⌫ and five accent
 composites), the mid layer 6 (@ ɦ œ ƥ ɽ s_p). fit_kerning.json refit (92 lines in, 87 out); kerning keys moved Regular 1
 (ſ ı), Light 755, Bold 222. Fallbacks in the variable font: ® ℗ (Bold), ℗ (Light), as before.
