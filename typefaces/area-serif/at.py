@@ -55,9 +55,17 @@ TAIL = (0.0865, 0.1293)             # the tail's outer end: in from the ring's r
 TAIL_DIR = (107.0, 74.0)            # the tail's direction at its cut (drawn)
 WHITE_RL = 1.24                     # white right of the a's stem over white left of its bowl
 LIFT = 0.011                        # the a's centre over the ring's, of the ring's height
+# 0.84 (Regular pass 2, second pass): the ring's dive into the a's foot (construct). The right extreme 0.02 of the
+# height over the centre (RISE; it was 0.107); the outer edge from there down a spiral whose radius falls steadily from
+# "re" of the ring's height at the extreme (400 at the Regular, the right quarter's own) to the foot, which stands "dx"
+# of the ring's width left of the extreme (200 at the Regular). Tried at the Regular: re 400 / 450, dx 200 / 205 / 220;
+# 450 and 220 dropped the a's foot 30 under its bowl with a tight inner hook, 205 broke the foot's curve. The inner
+# edge's foot stands "in" of the a's own offset right of the outer's (0 left a boxy hook, 1 a near-straight inner run
+# and a 1.9 jump; 0.3 to 0.6 clean)
+DIVE = {"re": 400.0 / 865.0, "dx": 200.0 / 816.0, "in": 0.5}
 EVEN_WHITE = True                   # 0.84: the white between the a and the ring one width all round (construct)
-RISE = 0.107                        # the ring's right extremes over its centre, of its height (the drawn: 90 over 843),
-                                    # so the stroke out of the a's foot climbs as one long turn
+RISE = 0.02                         # the ring's right extremes over its centre, of its height (0.84 pass 2; it was the
+                                    # drawn 0.107, 90 over 843: the owner read the right side as protruding)
 # the references' medians at their 300 / 400 / 700, placed at Area's stems 55 / 78 / 140
 SHARES = {55.0: {"ah": 0.545, "athin": 1.18, "astem": 0.984, "wh": 0.941},
           78.0: {"ah": 0.558, "athin": 1.21, "astem": 0.841, "wh": 0.968},
@@ -262,6 +270,11 @@ class Ring(A.Chain):
                 ak = [abs(k) for k in ks]
                 dip = max(min(max(ak[:m + 1]), max(ak[m:])) - ak[m] for m in range(17)) / top_
                 out.append(20 * max(0.0, dip - 0.04))
+            for i, sg in getattr(self, "mono", {}).items():
+                # 0.84 pass 2: |k| only rising (sg 1) or only falling (sg -1) along this curve
+                ak = [abs(A.curvature(S[i], t / 16)) for t in range(17)]
+                top_ = max(ak) or 1e-9
+                out.append(40 * sum(max(0.0, -sg * (b_ - a_)) for a_, b_ in zip(ak, ak[1:])) / top_)
             for n in range(1, len(self.nodes) - 1):
                 if not self.smooth[n]:
                     continue
@@ -269,7 +282,8 @@ class Ring(A.Chain):
                 ka, kb = ("C" if ka == "F" else ka), ("C" if kb == "F" else kb)     # a fixed curve is a curve
                 if ka == "C" and kb == "C":
                     k1, k2 = A.curvature(S[n - 1], 1.0), A.curvature(S[n], 0.0)
-                    out.append(8 * max(0.0, abs(math.log((abs(k1) + 1e-6) / (abs(k2) + 1e-6))) - math.log(1.2)))
+                    tol = getattr(self, "tight", {}).get(n, 1.2)
+                    out.append((30 if n in getattr(self, "tight", {}) else 8) * max(0.0, abs(math.log((abs(k1) + 1e-6) / (abs(k2) + 1e-6))) - math.log(tol)))
                 elif ka != kb and (self.kinds[n - 1] != "F" and self.kinds[n] != "F"):
                     s, at = (S[n], 0.0) if kb == "C" else (S[n - 1], 1.0)
                     u0 = A.unit((s[1][0] - s[0][0], s[1][1] - s[0][1]))
@@ -284,6 +298,51 @@ class Ring(A.Chain):
         put(r.x)
         self.cost = float(np.sum(r.fun ** 2))
         return self.cost
+
+
+def SG_g2(p0, T0, k0, p3, T1, k1):
+    import signs as SG
+    c = SG._g2_cubic(p0, T0, k0, p3, T1, k1, balanced=True)
+    if c is None:
+        raise ValueError("at: no G2 cubic for the dive")
+    return c
+
+
+def _spiral(p_end, k_end, k_start, s, n=2000):
+    """A spiral run backwards from p_end (travelling up, upright there) for arc length s, curvature linear in arc
+    length from k_start (at the start, the foot) to k_end (at p_end); the curve turns left (counter-clockwise) as it
+    runs forward. Returns the points from the start to p_end with their tangent angles and curvatures."""
+    pts = [(p_end[0], p_end[1], math.pi / 2, k_end)]
+    x, y, th = p_end[0], p_end[1], math.pi / 2
+    ds = s / n
+    for i in range(n):
+        u = 1 - (i + 0.5) / n
+        k = k_start + (k_end - k_start) * u
+        th_mid = th - k * ds / 2
+        x, y = x - math.cos(th_mid) * ds, y - math.sin(th_mid) * ds
+        th -= k * ds
+        pts.append((x, y, th, k_start + (k_end - k_start) * (1 - (i + 1) / n)))
+    return pts[::-1]
+
+
+def _dive(p_ext, re, dx):
+    """The spiral from a level foot to the upright right extreme p_ext, curvature 1/re at the extreme, its foot dx to
+    the left: (foot, mid point, mid tangent, k mid, k foot, k extreme)."""
+    ke = 1.0 / re
+    def run(kf):
+        s = (math.pi / 2) / ((kf + ke) / 2)                  # a quarter turn
+        return _spiral(p_ext, ke, kf, s)
+    lo_, hi_ = ke, 0.2
+    for _ in range(60):
+        kf = (lo_ + hi_) / 2
+        pts = run(kf)
+        if p_ext[0] - pts[0][0] > dx:                      # too wide: the foot tighter
+            lo_ = kf
+        else:
+            hi_ = kf
+    pts = run(kf)
+    m = pts[len(pts) // 2]
+    return (pts[0][0], pts[0][1]), (m[0], m[1]), (math.cos(m[2]), math.sin(m[2])), m[3], kf, ke
 
 
 # ------------------------------------------------------------------ the construction
@@ -335,12 +394,37 @@ def construct(R):
     d14 = A.unit((c0[15][0] - c0[14][0], c0[15][1] - c0[14][1]))
     # the a's foot (crotch to the foot's lowest point, the stem's edge to the exit's lowest point) keeps the a's own
     # curves (kind "F"); the ring is solved on from them
-    P = Ring([(pt(14), d14), (pt(17), Rt), (Po["r"], U), (Po["t"], L), (Po["l"], D), (Po["b"], Rt), (T1, td)],
-             ["F"] + ["C"] * 5, [False, True, True, True, True, True, False], OUT_T)
-    Q = Ring([(pt(0), D), (pt(27), D), (pt(24), Rt), (Pi["r"], U), (Pi["t"], L), (Pi["l"], D), (Pi["b"], Rt), (T2, td)],
-             ["L", "F"] + ["C"] * 5, [False, True, True, True, True, True, True, False], IN_T)
-    P.lens[0] = [math.dist(pt(14), pt(15)), math.dist(pt(17), pt(16))]
-    Q.lens[1] = [math.dist(pt(27), pt(26)), math.dist(pt(24), pt(25))]
+    if DIVE:
+        # 0.84 (Regular pass 2, second pass; the owner: "the right side appears to protrude more, it should be flatter
+        # and/or the tail can move slightly to make the arc appear not as steep/dramatic of a turn"): the ring's outer
+        # edge from the right extreme down into the a's foot is one spiral, its curvature rising steadily (linear in
+        # arc length) from the right quarter's (DIVE["re"]) to the foot's, turning a quarter; it ends where it is level,
+        # DIVE["dx"] left of the extreme: the ring leaves the a there (lower than the a's own foot, so the turn is wider).
+        # Two cubics (a node half way along), each G2 at both ends; the a's foot curve re-solved into it
+        foot, mid, tm_, km, kf, ke = _dive((Wd, ry), DIVE["re"] * H, DIVE["dx"] * Wd)
+        wf_ = DIVE.get("w", 1.0) * (pt(24)[1] - pt(17)[1])        # the stroke out of the foot: the a's own exit
+        nm = (-tm_[1], tm_[0])                                      # the mid node's inward normal (left of travel)
+        wm = (wf_ + tr) / 2
+        midi = (mid[0] + nm[0] * wm, mid[1] + nm[1] * wm)
+        f24 = (foot[0] + DIVE.get("in", 0.5) * (pt(24)[0] - pt(17)[0]), foot[1] + wf_)   # the inner foot: half way between the parallel and the a's own
+        P = Ring([(pt(14), d14), (foot, Rt), (mid, tm_), (Po["r"], U), (Po["t"], L), (Po["l"], D), (Po["b"], Rt), (T1, td)],
+                 ["C", "F", "F"] + ["C"] * 4, [False, True, True, True, True, True, True, False], OUT_T)
+        cd1 = SG_g2(foot, Rt, kf, mid, tm_, km)
+        cd2 = SG_g2(mid, tm_, km, Po["r"], U, ke)
+        P.lens[1] = [math.dist(cd1[0], cd1[1]), math.dist(cd1[3], cd1[2])]
+        P.lens[2] = [math.dist(cd2[0], cd2[1]), math.dist(cd2[3], cd2[2])]
+        P.mono = {0: -1, 3: -1}                # the a's foot curve and extreme to top: the curvature only falls
+        P.tight = {3: 1.03, 1: 1.1}            # one curvature at the extreme (and nearly at the foot)
+        Q = Ring([(pt(0), D), (pt(27), D), (f24, Rt), (midi, tm_), (Pi["r"], U), (Pi["t"], L), (Pi["l"], D), (Pi["b"], Rt), (T2, td)],
+                 ["L"] + ["C"] * 7, [False, True, True, True, True, True, True, True, False], IN_T)
+        Q.tight = {3: 1.1, 7: 1.05}            # the inner edge's middle node and bottom at one curvature
+    else:
+        P = Ring([(pt(14), d14), (pt(17), Rt), (Po["r"], U), (Po["t"], L), (Po["l"], D), (Po["b"], Rt), (T1, td)],
+                 ["F"] + ["C"] * 5, [False, True, True, True, True, True, False], OUT_T)
+        Q = Ring([(pt(0), D), (pt(27), D), (pt(24), Rt), (Pi["r"], U), (Pi["t"], L), (Pi["l"], D), (Pi["b"], Rt), (T2, td)],
+                 ["L", "F"] + ["C"] * 5, [False, True, True, True, True, True, True, False], IN_T)
+        P.lens[0] = [math.dist(pt(14), pt(15)), math.dist(pt(17), pt(16))]
+        Q.lens[1] = [math.dist(pt(27), pt(26)), math.dist(pt(24), pt(25))]
     P.solve()
     Q.solve()
     sP, sQ = P.segs(), Q.segs()
@@ -355,9 +439,13 @@ def construct(R):
             outer.append(("L", (pt(i), pt(i), pt(i + 1), pt(i + 1))))
             i += 1
     outer += [("C", s) for s in sP]
+    k_cut = len(outer)
     outer.append(("L", (T1, T1, T2, T2)))
     for kind, s in reversed(list(zip(Q.kinds, sQ))):
         outer.append(("L" if kind == "L" else "C", (s[3], s[2], s[1], s[0])))
+    # 0.84 (Regular pass 2, second pass; the corner rule, item 5): the tail's cut is a free end, both its corners on the
+    # letters' serif-tip radius (it was left sharp)
+    outer = A.soft_cut(outer, k_cut, A.SOFT)
     # the a's two crotches (the spur's into the bowl's top, the bowl's bottom into the foot) rounded: each a fillet of
     # FILLET the a's stem (owner, 17 November: "the a in the @ looks much sharper / not as smooth at thicker weights";
     # at 800 the made-heavier a's crotches read as a notch and a pinch). Bottom first, so the top's index holds

@@ -505,9 +505,11 @@ WAVE_INFL_R = 4000.0   # 0.84 (pass 2): an edge's radius where it reaches an inf
                        # rounding, at most 0.6e-4, leaves its sign)
 
 
-def _g2_cubic(p0, T0, k0, p3, T1, k1):
+def _g2_cubic(p0, T0, k0, p3, T1, k1, balanced=False):
     """The cubic from p0 (leaving along T0, signed curvature k0) to p3 (arriving along T1, curvature k1): both
-    handle lengths solved so the curvature at each end is the one asked (G2 Hermite). None if no positive pair."""
+    handle lengths solved so the curvature at each end is the one asked (G2 Hermite). None if no positive pair. Of
+    several solutions the first (shortest first handle), or with `balanced` the one whose two handles are nearest
+    equal (a near-zero handle is a solution too, and a cusp)."""
     cr = lambda a, b: a[0] * b[1] - a[1] * b[0]                 # noqa: E731
     D = (p3[0] - p0[0], p3[1] - p0[1])
     c = cr(T0, T1)
@@ -520,6 +522,7 @@ def _g2_cubic(p0, T0, k0, p3, T1, k1):
     span = math.hypot(*D)
     grid = [span * (i + 1) / 400 for i in range(400)]
     vals = [fa(a) for a in grid]
+    sols = []
     for i in range(len(grid) - 1):
         if vals[i] * vals[i + 1] > 0:
             continue
@@ -533,8 +536,13 @@ def _g2_cubic(p0, T0, k0, p3, T1, k1):
         a = (lo_ + hi_) / 2
         b = (cr(T0, D) - 1.5 * k0 * a * a) / c
         if a > 0 and b > 0:
-            return (p0, (p0[0] + T0[0] * a, p0[1] + T0[1] * a), (p3[0] - T1[0] * b, p3[1] - T1[1] * b), p3)
-    return None
+            sols.append((a, b))
+            if not balanced:
+                break
+    if not sols:
+        return None
+    a, b = min(sols, key=lambda ab: abs(math.log(ab[0] / ab[1]))) if balanced else sols[0]
+    return (p0, (p0[0] + T0[0] * a, p0[1] + T0[1] * a), (p3[0] - T1[0] * b, p3[1] - T1[1] * b), p3)
 
 
 def wave_sides(C, nodes, width, extremes, r_infl=WAVE_INFL_R):
