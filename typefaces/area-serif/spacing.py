@@ -85,6 +85,11 @@ OPTICAL_MORE = {
     # +25.8 left; Georgia Pro's +124): the right side moves in by the difference. Every pair with 1 was among the
     # lightest of the 100 figure pairs
     "one": [0, -41],
+    # 0.83 (Regular pass, consistency 3): the same rule where a figure's two whites differ by KERN_MIN or more and
+    # both references keep that figure's two whites equal (fit.py, rel to the 0: Serrif 4 27.7 / 27.2, 5 7.1 / 6.1):
+    # the 4 105.6 / 128.7 (its ink 32 right of the advance's middle), the 5 91.9 / 114.7. The 3 (120.5 / 108.1) is
+    # left: Serrif's 3 is open on the left too (12.8 / 5.4), the letter's own shape
+    "four": [12, -11], "five": [11, -11],
 }
 
 
