@@ -416,8 +416,10 @@ def bowl_sides(font, control="P"):
 # its corner on the diagonal sliding along the diagonal.
 CAP_THICK_DIAG = 86
 DIAG_HALVES = [   # glyph, direction, target, (band low, band high): only edges with their middle inside
-    ("x", 1, 39, (0, 260)), ("x", 1, 39, (260, 520)), ("x", -1, 74, (0, 260)), ("x", -1, 74, (260, 520)),
-    ("X", 1, 48, (0, 356)), ("X", 1, 48, (356, 712)),
+    # x and X withdrawn (0.84): their halves set to 39 / 74 and 48 put an inflection into X's curve 21 between the
+    # masters (audit_axis turns at 551.7 and 372.3), x's nodes off their lines by 1.34 half way (drift), and the Bold x's
+    # slanted stroke widening -0.2 per 100 against the Regular's -2.2 (audit_bold); the crossing's own rules
+    # (bold.cross_ends, crossing_openings) read the Regular's halves as they were
     ("A", -1, CAP_THICK_DIAG, (0, 712)), ("V", -1, CAP_THICK_DIAG, (0, 712)), ("W", -1, CAP_THICK_DIAG, (0, 712)),
     ("M", -1, CAP_THICK_DIAG, (0, 712)), ("N", -1, CAP_THICK_DIAG, (0, 712)), ("K", -1, CAP_THICK_DIAG, (0, 712)),
     ("Y", -1, CAP_THICK_DIAG, (356, 712)), ("Z", 1, CAP_THICK_DIAG, (0, 712)),

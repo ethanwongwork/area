@@ -196,6 +196,7 @@ def sweep(stem=B.STEM, names=None):
     the Light side too, 375 down to 300 (towards the Light master at bold.LIGHT_STEM)."""
     names = names or list(string.ascii_lowercase + string.ascii_uppercase) + FIGURES
     reg = ufoLib2.Font.open("build/AreaSerif-Regular.ufo")
+    B.open_tail_knots(reg)              # 0.84: c's and e's open-tail hints read on this Regular, as bold_font does
     fail = 0
     # 0.82 (owner round 8, axis): weights on the 0.82 axis; the stops are 0.81's (375 to 325, then 400 to 700 every 25),
     # at the same stems (weightaxis.from_old): 400 to 800 every 33.3
@@ -230,6 +231,7 @@ if __name__ == "__main__":
     stem = int(args.pop(0)) if args and args[0].isdigit() else B.STEM
     names = args or list(string.ascii_lowercase + string.ascii_uppercase) + FIGURES
     reg = ufoLib2.Font.open("build/AreaSerif-Regular.ufo")
+    B.open_tail_knots(reg)              # 0.84: c's and e's open-tail hints read on this Regular, as bold_font does
     v = B.vector(stem)
     allrows, allbad = [], []
     for n in names:
