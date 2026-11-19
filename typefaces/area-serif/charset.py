@@ -2989,8 +2989,8 @@ def marks_on_anchors(font):
                 combos.add(mk.name)                        # its letters put it (nested lower than the ring alone);
                 for q in mk.anchors:                       # its anchor goes there, as align_anchors sets a letter's
                     if q.name == "_" + side:
-                        q.x, q.y = q.x - dx, q.y - dy
-                done.append(f"{mk.name} anchor ({-dx:+d}, {-dy:+d})")
+                        q.x, q.y = q.x + dx, q.y + dy
+                done.append(f"{mk.name} anchor ({dx:+d}, {dy:+d})")
                 continue
             if side == "top" and marks[0].baseGlyph in DROP_MARKS and (dx, dy) == (0, -MARK_DROP):
                 continue                                 # an ascender's dropped mark: kept where it was (MARK_DROP)
