@@ -861,6 +861,7 @@ def metrics(font):
     i.openTypeOS2TypoLineGap = i.openTypeHheaLineGap = 0
     i.openTypeOS2Selection = [7]
     i.openTypeOS2WeightClass = 400
+    i.openTypeOS2Type = []                             # 0.84: fsType 0, installable (the OFL allows it; it was 4)
     from version import BUILD                          # 0.74: the font's version is the build's (it said 0.003)
     i.versionMajor, i.versionMinor = int(BUILD.split('.')[0]), int(BUILD.split('.')[1].ljust(3, '0'))
     i.copyright = ("Copyright 2012 The Libre Baskerville Project Authors (https://github.com/impallari/Libre-Baskerville). "
