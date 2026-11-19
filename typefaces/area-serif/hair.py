@@ -530,3 +530,94 @@ def across(g, sign, lo, hi, min_len=60):
             if 25 < w < 120 and (best is None or l1 + l2 > best[0]):
                 best = (l1 + l2, w)
     return round(best[1], 1) if best else None
+
+
+# ------------------------------------------------------------------------------------------ dots and commas (item 6)
+# The census and the stroke audit read seven dot sizes where the construction has three: i 116 and j 118; the
+# lowercase marks' dots 110 (dieresis), 112 (dot accent), 114 (dot below), the dieresis below 110 by 118; ḃ ḋ an oval
+# 113 by 121; the capital forms 90 (dieresis), 94 (dot accent), 110 (dot below); and the high quotes' heads 116.4
+# against the comma's 123.7. The family (`dots`):
+#   the text dot, i's (the control, 116): j's dot, and every lowercase mark's dot (a dot accent on dotless i is i; the
+#     dot below and the dieresis below are the same dot turned under), ḃ ḋ's dot, exactly round;
+#   the capital marks' dot, the dot accent's case form (94): the dieresis's case form takes it; the dot below keeps
+#     one form under both cases (0.84 placement), so its case form is the text dot;
+#   the punctuation dot, the period's 124 (already: . : ; ! ? and the comma's head);
+#   the comma head: , ‚ „ the comma; ’ (and ‘ “ ” ʼ, which are ’ turned or doubled) the comma scaled so its head is the
+#     text dot: QUOTE_SCALE = 116 / 124 = 0.935 (the high quotes sit with the letters' dots, the low ones with the
+#     period), its top and its sides kept.
+# Each dot keeps its centre; a dot below keeps its bottom (charset.BELOW, -215).
+TEXT_DOT_SRC = "i"
+LC_MARK_DOTS = ("j", "dieresiscomb", "dieresis", "dotaccentcomb", "dotaccent", "dotbelowcomb", "dotbelow",
+                "dieresisbelowcomb", "uni1E03", "uni1E0B", "dotbelowcomb.case")
+CASE_DOT_SRC = "dotaccentcomb.case"
+CASE_MARK_DOTS = ("dieresiscomb.case", "dieresis.case", "dotaccent.case")
+PUNCT_DOT = 124
+
+
+def _dots_of(g):
+    import charset as CH
+    return [c for c in g.contours if CH._is_dot(c)]
+
+
+def _dot_d(g):
+    c = max(_dots_of(g), key=lambda c: min(p.y for p in c.points))
+    xs = [p.x for p in c.points]
+    return max(xs) - min(xs)
+
+
+def dots(font, which="all"):
+    import charset as CH
+    log = []
+    d_text = _dot_d(font[TEXT_DOT_SRC])
+    d_case = _dot_d(font[CASE_DOT_SRC]) if CASE_DOT_SRC in font else None
+    groups = []
+    if which in ("all", "letters"):
+        groups.append((("j",), d_text))
+    if which in ("all", "marks"):
+        groups += [(tuple(n for n in LC_MARK_DOTS if n != "j"), d_text), (CASE_MARK_DOTS, d_case)]
+    for names, d in groups:
+        if d is None:
+            continue
+        r = d // 2
+        for name in names:
+            if name not in font:
+                continue
+            g = font[name]
+            ds = _dots_of(g)
+            if not ds:
+                # an oval too tall for _is_dot (ḃ ḋ): the small closed contour above the letter
+                ds = [c for c in g.contours if len(c.points) == 12 and all(p.type != "line" for p in c.points)
+                      and max(p.y for p in c.points) - min(p.y for p in c.points) < 140
+                      and min(p.y for p in c.points) > 520]
+            was = []
+            for c in ds:
+                xs, ys = [p.x for p in c.points], [p.y for p in c.points]
+                was.append(f"{max(xs) - min(xs)}x{max(ys) - min(ys)}")
+                cy = min(ys) + r if "below" in name else round((min(ys) + max(ys)) / 2)   # the dot below holds its
+                CH._circle_into(c, round((min(xs) + max(xs)) / 2), cy, r)                  # depth (charset.BELOW)
+            if ds:
+                log.append(f"{name} {'/'.join(sorted(set(was)))}>{2 * r}")
+    return log
+
+
+def quote_head(font):
+    """’ is the comma scaled about nothing in particular by text dot / punctuation dot, its top and sides kept."""
+    import charset as CH
+    from fontTools.pens.transformPen import TransformPen
+    from fontTools.misc.transform import Transform
+    if "comma" not in font or "quoteright" not in font:
+        return "no comma or quote"
+    k = _dot_d(font[TEXT_DOT_SRC]) / PUNCT_DOT
+    g = font["quoteright"]
+    b = CH.bounds(CH.gp(font, "quoteright"))
+    lsb, rsb, top = b[0], g.width - b[2], b[3]
+    g.clearContours()
+    font["comma"].draw(TransformPen(g.getPen(), Transform(k, 0, 0, k, 0, 0)))
+    nb = CH.bounds(CH.gp(font, "quoteright"))
+    dx, dy = lsb - nb[0], top - nb[3]
+    for c in g.contours:
+        for p in c.points:
+            p.x, p.y = round(p.x + dx), round(p.y + dy)
+    nb = CH.bounds(CH.gp(font, "quoteright"))
+    g.width = round(nb[2] + rsb)
+    return f"quoteright the comma x {k:.3f} ({b[3] - b[1]:.0f} > {nb[3] - nb[1]:.0f} tall), top {top:.0f}"

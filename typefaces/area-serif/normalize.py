@@ -1214,6 +1214,7 @@ def normalize(font):
     print("hair: spines", HAIR.spines(font))         # 0.84 (pass 2, strokes 3): S s one swell, widest at the middle
     print("hair: bowls", HAIR.bowl_sides(font))      # 0.84 (pass 2, strokes 4): B's upper bowl P's side
     print("hair: diagonals", HAIR.diagonals(font))   # 0.84 (pass 2, strokes 5): X x halves, capital thick 86, Z arms
+    print("hair: dots", HAIR.dots(font, "letters"), HAIR.quote_head(font))   # 0.84 (pass 2, item 6): j's dot i's; ’
     #                                                   curvature; before spacing and the charset, so ³ ₃ ¾ follow
     delta, moved, opened = SPACING.run(font)          # last: it reads the finished outlines
     CLEAN.owner_final(font, json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "owner_edits.json"))))
@@ -1221,6 +1222,7 @@ def normalize(font):
     print("spacing: symmetric letters, equal sides", SPACING.symmetric_sides(font))   # 0.84: before the letters built on them
     import charset as CHARSET                         # 0.47: the full character set, on the finished letters
     n_light, tab = CHARSET.run(font, letters)
+    print("hair: mark dots", HAIR.dots(font, "marks"))   # 0.84 (pass 2, item 6): one dot per case on the marks
     print(f"charset: lightened {n_light} more glyphs; tabular figures {tab}")
     print("clean: flags' undersides", CLEAN.flag_unders(font))            # 0.80: n's and k's, one curve as i's
     print("charset: single-storey g", CHARSET.single_g(font))    # 0.77: g.ss02, from q and j
