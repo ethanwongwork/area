@@ -57,12 +57,12 @@ WHITE_RL = 1.24                     # white right of the a's stem over white lef
 LIFT = 0.011                        # the a's centre over the ring's, of the ring's height
 # 0.84 (Regular pass 2, second pass): the ring's dive into the a's foot (construct). The right extreme 0.02 of the
 # height over the centre (RISE; it was 0.107); the outer edge from there down a spiral whose radius falls steadily from
-# "re" of the ring's height at the extreme (400 at the Regular, the right quarter's own) to the foot, which stands "dx"
+# "re" of the ring's half width at the extreme (400 at the Regular, the right quarter's own) to the foot, which stands "dx"
 # of the ring's width left of the extreme (200 at the Regular). Tried at the Regular: re 400 / 450, dx 200 / 205 / 220;
 # 450 and 220 dropped the a's foot 30 under its bowl with a tight inner hook, 205 broke the foot's curve. The inner
 # edge's foot stands "in" of the a's own offset right of the outer's (0 left a boxy hook, 1 a near-straight inner run
 # and a 1.9 jump; 0.3 to 0.6 clean)
-DIVE = {"re": 400.0 / 865.0, "dx": 200.0 / 816.0, "in": 0.5}
+DIVE = {"re": 400.0 / 408.0, "dx": 200.0 / 816.0, "in": 0.5}
 EVEN_WHITE = True                   # 0.84: the white between the a and the ring one width all round (construct)
 RISE = 0.02                         # the ring's right extremes over its centre, of its height (0.84 pass 2; it was the
                                     # drawn 0.107, 90 over 843: the owner read the right side as protruding)
@@ -401,7 +401,7 @@ def construct(R):
         # arc length) from the right quarter's (DIVE["re"]) to the foot's, turning a quarter; it ends where it is level,
         # DIVE["dx"] left of the extreme: the ring leaves the a there (lower than the a's own foot, so the turn is wider).
         # Two cubics (a node half way along), each G2 at both ends; the a's foot curve re-solved into it
-        foot, mid, tm_, km, kf, ke = _dive((Wd, ry), DIVE["re"] * H, DIVE["dx"] * Wd)
+        foot, mid, tm_, km, kf, ke = _dive((Wd, ry), DIVE["re"] * Wd / 2, DIVE["dx"] * Wd)
         wf_ = DIVE.get("w", 1.0) * (pt(24)[1] - pt(17)[1])        # the stroke out of the foot: the a's own exit
         nm = (-tm_[1], tm_[0])                                      # the mid node's inward normal (left of travel)
         wm = (wf_ + tr) / 2
@@ -417,7 +417,7 @@ def construct(R):
         P.tight = {3: 1.03, 1: 1.1}            # one curvature at the extreme (and nearly at the foot)
         Q = Ring([(pt(0), D), (pt(27), D), (f24, Rt), (midi, tm_), (Pi["r"], U), (Pi["t"], L), (Pi["l"], D), (Pi["b"], Rt), (T2, td)],
                  ["L"] + ["C"] * 7, [False, True, True, True, True, True, True, True, False], IN_T)
-        Q.tight = {3: 1.1, 7: 1.05}            # the inner edge's middle node and bottom at one curvature
+        Q.tight = {3: 1.1, 4: 1.1, 7: 1.05}    # the inner edge's middle node, side and bottom at one curvature
     else:
         P = Ring([(pt(14), d14), (pt(17), Rt), (Po["r"], U), (Po["t"], L), (Po["l"], D), (Po["b"], Rt), (T1, td)],
                  ["F"] + ["C"] * 5, [False, True, True, True, True, True, False], OUT_T)
@@ -426,6 +426,14 @@ def construct(R):
         P.lens[0] = [math.dist(pt(14), pt(15)), math.dist(pt(17), pt(16))]
         Q.lens[1] = [math.dist(pt(27), pt(26)), math.dist(pt(24), pt(25))]
     P.solve()
+    if DIVE:
+        # 0.84 pass 2: the ring's upper right quarter inside takes the outside's shares of its reach (with the right
+        # extreme lower, the inside solved alone went boxier than the outside and thinned the Bold's ring 25 to 40
+        # degrees off the top to 43 against 53 at the top); the ring then thins steadily from the side to the top
+        ra, rb = P._reach(3)
+        qa, qb = Q._reach(4)
+        Q.kinds[4] = "F"
+        Q.lens[4] = [P.lens[3][0] / ra * qa, P.lens[3][1] / rb * qb]
     Q.solve()
     sP, sQ = P.segs(), Q.segs()
     outer = []
