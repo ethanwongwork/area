@@ -3884,7 +3884,7 @@ def _hair_ratio(reg, font):
     return out[1] / out[0]
 
 
-def construction_signs(reg, font, v, law, resided=None):
+def construction_signs(reg, font, v, law, resided=None, reports=None):
     """owner round 8 (0.82): each glyph whose Regular carries a construction (signs.LIB) takes the construction at
     this master's stroke weights. Every point of the Regular's outline (corners, the rounding points soft_ends put
     by a corner, their handles) moves as its nearest corner of the construction moves. Returns notes."""
@@ -3908,7 +3908,11 @@ def construction_signs(reg, font, v, law, resided=None):
             for c in C0:
                 k = (round(q[0] - c[0]), round(q[1] - c[1]))
                 votes[k] = votes.get(k, 0) + 1
-        dx, dy = max(votes, key=lambda k: (votes[k] + sum(votes.get((k[0] + a, k[1] + b), 0) for a in (-1, 0, 1) for b in (-1, 0, 1)), -abs(k[0]) - abs(k[1])))
+        score = lambda k: (votes[k] + sum(votes.get((k[0] + a, k[1] + b), 0) for a in (-1, 0, 1) for b in (-1, 0, 1)), -abs(k[0]) - abs(k[1]))
+        # 0.83 (symbols 2): of the best-voted shifts, the one that lays every point nearest its corner (soft corners
+        # put many points 7 from a corner, and a shift of 7 could win the vote: lessequal at 0.83)
+        cands = sorted(votes, key=score, reverse=True)[:8]
+        dx, dy = min(cands, key=lambda k: max(min(math.hypot(c[0] + k[0] - q[0], c[1] + k[1] - q[1]) for c in C0) for q in ons))
         out, far = [], 0.0
         for P in R:
             Q = []
@@ -3930,6 +3934,8 @@ def construction_signs(reg, font, v, law, resided=None):
         for c, P in zip(font[g.name].contours, out):
             c.points = [Point(x, y, t_, smooth=sm) for x, y, t_, sm in P]
         done.append(f"{g.name} x{s:.3f}")
+        if reports is not None and g.name in reports:          # 0.83: the engine's reading is replaced whole, so
+            reports[g.name].pop("fallback", None)              # its fallback no longer stands
     return done
 
 def bold_font(reg, stem=STEM, **over):
@@ -4790,7 +4796,7 @@ def bold_font(reg, stem=STEM, **over):
     # Regular's final points corner by corner; its sides as the engine sets them. The engine's reading grew the
     # erase keys' slanted sides 52 > 110 to 129 at the Bold (level 71) and the check 65 > 124, and left the radical's
     # thick stroke unread
-    built_ = construction_signs(reg, font, v, law, resided)
+    built_ = construction_signs(reg, font, v, law, resided, reports)
     notes.append(f"signs from their construction: {len(built_)} ({'; '.join(built_)})")
     # owner round 8 (0.82, item 9): the ampersand is one construction (amp.py) run again here at this master's
     # letters' weights (v's thick and thin and its serif, o's side and hairline, a's lower stroke), its skeleton

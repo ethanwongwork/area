@@ -1503,10 +1503,12 @@ def tilde_signs(font, m, adv):
         if abs(d) < 0.01:
             break
         x0, x1 = x0 - d, x1 + d
-    put(font, "asciitilde", built_path(tilde_info([cy], x0, x1)), 0, [0x7E],
-        lsb=(font["asciitilde"].width - want) / 2, rsb=(font["asciitilde"].width - want) / 2)
-    put(font, "approxequal", built_path(tilde_info([cy - EQUAL_GAP / 2, cy + EQUAL_GAP / 2], x0, x1)), 0, [0x2248],
-        lsb=(adv - want) / 2, rsb=(adv - want) / 2)
+    # kept as constructions (put_built): each master builds the same wave at its own stroke (the engine read the
+    # wave's near-straight quarters and gave them an inflection between the masters)
+    put_built(font, "asciitilde", tilde_info([cy], x0, x1), 0, [0x7E],
+              lsb=(font["asciitilde"].width - want) / 2, rsb=(font["asciitilde"].width - want) / 2)
+    put_built(font, "approxequal", tilde_info([cy - EQUAL_GAP / 2, cy + EQUAL_GAP / 2], x0, x1), 0, [0x2248],
+              lsb=(adv - want) / 2, rsb=(adv - want) / 2)
     H = want                                             # the + box's height
     b_ = (H - SIGN_LO) / 2                               # the centreline's half height (thin over the tops)
     a_ = (INF_WIDTH * H - SIGN_HI) / 2                   # its half width (thick at the outer ends)

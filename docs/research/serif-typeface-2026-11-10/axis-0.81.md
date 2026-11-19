@@ -1841,3 +1841,36 @@ Looked at, honestly: the arrows feel drawn rather than ruled, and ↔'s shaft sw
 lens at 96 px; at text size it is invisible); ⇤ ⇥'s bar, thin where the arms run in, reads at 96 px as two short strokes
 meeting in a shallow wedge; the check is lighter than it was (by design: 1.25 plain strokes was its own exception).
 A is barely visible, as asked: ⇧'s uprights against its level foot are the only place it shows at text size.
+
+### Symbols, full build (all masters), the audits, `build/snap083b`
+
+`AREA_KERN_FIT=1 build.py` (`build/snap083b/build-083b.log`), the audit set by `build/owner8/reg/fullaudit.sh` on
+snap083a (`reg/audit-083a2/`) and snap083b (`build/owner8/sym/audit-083b2/`). The masters build the symbols by the
+existing rules and the two stages' constructions; they were looked at (`build/owner8/sym/masters-1.png`, `-2.png`: the
+tapered and A signs, ~ ∞ † at 300 / 400 / 600 / 800) and not tuned. Three engine fixes were needed to build:
+the tapered signs' round ends now take the Regular's arc decisions in a master (`signs._PLANS`: which ends snap to an
+extreme, where the arcs are cut), so a master has the Regular's points (the first build stopped on a point-count
+mismatch); `bold.construction_signs` picks, among the best-voted placements, the one that lays every point nearest its
+corner (soft corners put many points 7 from a corner, and ≤ was left to the engine) and clears the engine's stale
+fallback note once a construction replaces it (↕ was listed on a fallback it no longer had); ~ and ≈ are kept as
+constructions in the masters too (the engine gave their near-straight quarters an inflection between masters).
+
+What moved against snap083a: the 57 glyphs of the two stages in every master (Light, Regular, Bold; the mid layer
+unchanged), nothing else. Kerning refit: `fit_kerning.json` unchanged; the masters' collision keys with the moved signs
+only. Fallbacks in the variable font: ® ℗ (Bold), ℗ (Light), as before (↕'s note gone).
+
+| Audit | snap083a | snap083b |
+|---|---|---|
+| audit_axis Bold: turns, symmetry, thin | ok, ok, 5 glyphs (cedi, ogonek ×2, one.ss01, radical) | ok; ‡ symmetry 0.8 unit at 800 (whole-unit rounding of the arm-sign rule, `arms.master`); thin 4 glyphs (the radical left the list: its foot is a vertex now) |
+| audit_axis Light | ok | ‡ symmetry 0.7 to 0.8 unit at 300 |
+| audit_rays (300 to 800) | 1 glyph (ʕ), 27,063 places | 1 glyph (ʕ), 28,210 places (the tapered signs have more straight places) |
+| audit_bold Bold / Light | 431 / 432, 432 / 432 | the same |
+| audit_kern | pass (least 8.3 / 8.4 / 7.9) | pass, the same |
+| curvecheck regions Light, Bold | pass | pass |
+| curvecheck hooks Light / Bold | 6 / 14 | 6 / 14 |
+| interpolation (default layers) | 61 struck glyphs | 62: € is now struck (Area's C and bars), its overlap layer the VF source |
+
+The masters as the rules give them, honestly: at 800 the taper's contrast grows (the free ends take the plain stroke's
+law, 1.37, the joins the hairline's, 1.23: 53 to 82 across), so the Bold arrows read more Kyoto-like than the
+Regular's; ↔'s swelling shaft is plain at 800; ⌘ (built by the engine from its rings) and ∞ (the engine) grow heavy
+at 800, ∞'s right lobe heavier than its left; ⇧'s A frame keeps 57 / 47 times the law. None tuned.

@@ -350,7 +350,22 @@ def build(info, s=1.0, white=None, sh=None):
     """(outer contours, holes, more outer contours) for a stored recipe {"build": name, "params": {...}}. sh: the
     hairline's law, for the tapered signs (their join is the hairline); s the plain stroke's."""
     if info["build"] in TAPERED:
-        return BUILDERS[info["build"]](info["params"], s, white, sh=s if sh is None else sh)
+        import json as _json
+        key = _json.dumps(info, sort_keys=True)
+        regular = s == 1.0 and (sh is None or sh == 1.0)
+        if regular:
+            _PLAN.clear()
+            _PLAN["record"] = []
+        elif key in _PLANS:
+            _PLAN.clear()
+            _PLAN["replay"] = [list(x) for x in _PLANS[key]]
+        try:
+            out = BUILDERS[info["build"]](info["params"], s, white, sh=s if sh is None else sh)
+        finally:
+            if regular:
+                _PLANS[key] = _PLAN.get("record", [])
+            _PLAN.clear()
+        return out
     return BUILDERS[info["build"]](info["params"], s, white)
 
 
@@ -691,6 +706,8 @@ class _Taper:
         return self.sides[sg][2]
 
 
+_PLAN = {}                   # the Regular's arc decisions (snaps, cuts) per recipe, replayed in a master
+_PLANS = {}
 SNAP = math.radians(4)       # an arc's end this near an extreme is drawn from the extreme (no sliver of a curve
                              # past it, which whole units would fold into the line before it)
 
@@ -701,10 +718,21 @@ def _arc_via(c, r, p0, p1, via, snap=False, start=False):
     tau = 2 * math.pi
     a0 = math.atan2(p0[1] - c[1], p0[0] - c[0])
     a1r = math.atan2(p1[1] - c[1], p1[0] - c[0])
+    rec = _PLAN.get("replay")
     if snap:
         q_ = math.pi / 2
-        a0 = round(a0 / q_) * q_ if abs(a0 - round(a0 / q_) * q_) < SNAP else a0
-        a1r = round(a1r / q_) * q_ if abs(a1r - round(a1r / q_) * q_) < SNAP else a1r
+        if rec is not None and rec:                    # a master: the Regular's decisions, so the points match
+            k0, k1, _cuts = rec.pop(0)
+            a0 = k0 * q_ if k0 is not None else a0
+            a1r = k1 * q_ if k1 is not None else a1r
+        else:
+            k0 = round(a0 / q_) if abs(a0 - round(a0 / q_) * q_) < SNAP else None
+            k1 = round(a1r / q_) if abs(a1r - round(a1r / q_) * q_) < SNAP else None
+            a0 = k0 * q_ if k0 is not None else a0
+            a1r = k1 * q_ if k1 is not None else a1r
+            _cuts = None
+            if _PLAN.get("record") is not None:
+                _PLAN["record"].append([k0, k1, None])
     av = math.atan2(via[1] - c[1], via[0] - c[0])
     ccw = (av - a0) % tau <= (a1r - a0) % tau
     a1 = a0 + (a1r - a0) % tau if ccw else a0 - (a0 - a1r) % tau
@@ -723,6 +751,10 @@ def _arc_via(c, r, p0, p1, via, snap=False, start=False):
                 cuts.append(k * q)
             k -= 1
     cuts.append(a1)
+    if snap and rec is not None and _cuts is not None:   # a master: the Regular's cuts, in turn
+        cuts = [a0] + [k * q for k in _cuts] + [a1]
+    elif snap and _PLAN.get("record") is not None:
+        _PLAN["record"][-1][2] = [round(c_ / q) for c_ in cuts[1:-1]]
     out = []
     for b0, b1 in zip(cuts, cuts[1:]):
         if abs(b1 - b0) < 1e-6:
