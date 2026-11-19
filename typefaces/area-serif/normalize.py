@@ -1202,6 +1202,8 @@ def normalize(font):
     if os.environ.get("AREA_081_TAILS", "1") != "0":     # 0: the comparison build without them
         print("loops: tail law", LOOPS.tail_law(font))   # 0.84 (pass 2, strokes 2): depth and ball
         print("loops:", LOOPS.round_tail(font, "j"), LOOPS.round_tail(font, "y"), LOOPS.a_exit(font))
+        import figs as _FIGS                         # 0.84 (pass 2, strokes 2): y's larger ball meets its top at one
+        print("loops: y evened", _FIGS.even_glyph(font, "y"))   # curvature (the guarded evening, handles only)
     import figs as FIGS                               # 0.83 (Regular pass, item D): the 3's bowls: the upper ball's
     print("figs:", FIGS.regular(font))                # neck one curve, extremes at the references' shares, one
     print("g's ear:", FIGS.g_regular(font))           # 0.83 (Regular pass, item E): the ear's roots on the bowl's oval
