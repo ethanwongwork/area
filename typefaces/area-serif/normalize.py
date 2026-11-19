@@ -1192,6 +1192,8 @@ def normalize(font):
     print("clean: S curves", CLEAN.even_s(font, HARMONIZE_SET))          # 0.70: 3's hook
     print("clean: curve joins", CLEAN.true_curves(font, HARMONIZE_SET))  # 0.70: u's tail, y's tail
     print("even: thickness round the counters", EVEN.run(font))         # 0.77: before the letters are copied into others
+    import figs as FIGS                               # 0.83 (Regular pass, letters 1): the 9 by one solve of curvature and
+    print("figs: 9 and 6", FIGS.nine_even(font))      # thickness together; the 6 the 9 turned
     import loops as LOOPS
     print("loops:", LOOPS.g_loop(font))                                  # 0.81: g's lower loop, one construction
     nodes = CLEAN.add_nodes(font, HARMONIZE_SET)                         # 0.69: extremes and inflections get a node

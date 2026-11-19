@@ -350,3 +350,145 @@ def g_regular(font):
         _put(font[name], [new] + cs[1:])
         notes.append(f"{name}: ear roots on the bowl's oval (U / D {before} > {oval_reading(new)}; moved D {dD}, U {dU})")
     return "; ".join(notes)
+
+
+# ------------------------------------------------------------------ 0.83 Regular pass, letters 1: the 9 and the 6
+# The audit (build/regaudit/report.md, A2): where the 9's long stroke leaves the bowl, the counter's lowest node met its
+# two curves at 2.51 times the curvature (radius 330 into 132), the 6 (the same place turned) 4.56. Evening that node's
+# handles alone (loops.even_nodes) cured the ratio but undid even.py's thickness round the counter (strays 2.6 > 3.7,
+# 2.4 > 4.7, limit 2.75); even.py's handle lengths alone left the jump. The two rules read the same curves, so they are
+# solved together (`nine_even`): the counter's handle lengths (directions kept), the lengths of the outer bowl's
+# handles on the two curves either side of its lowest node under the counter, and those two lowest nodes moved level
+# with their handles (an extreme stays an extreme). Asked of the solve: every smooth node at one curvature (curvecheck,
+# aim NINE_RATIO), no other curvecheck fault, the stroke's thickness round the counter one smooth change (even.py's
+# shelf under NINE_SHELF, its rate jump under NINE_JUMP), the stroke's mean thickness round the counter within
+# NINE_MEAN of the drawing's (the weight stays), no handle further past its tangents' meeting point than it was;
+# among those, the least change. The 6 is then the 9 turned half round, point for point (as `clean.nine_six` builds it:
+# the turn about the middle of the 6's box), so the two are one drawing.
+NINE_RATIO = 1.15
+NINE_SHELF = 2.3
+NINE_JUMP = 1.0
+NINE_MEAN = 0.6
+
+
+def _past_meeting(P):
+    """How far, summed, the handles of P's curves reach past where the curve's two end tangents meet."""
+    n = len(P)
+    on = [i for i, q in enumerate(P) if q[2]]
+    k = 0.0
+    for a, i in enumerate(on):
+        j = on[(a + 1) % len(on)]
+        if (i + 3) % n != j:
+            continue
+        p0, h1, h2, p3 = P[i], P[(i + 1) % n], P[(i + 2) % n], P[j]
+        d1 = (h1[0] - p0[0], h1[1] - p0[1])
+        d2 = (h2[0] - p3[0], h2[1] - p3[1])
+        den = d1[0] * d2[1] - d1[1] * d2[0]
+        if abs(den) < 1e-9:
+            continue
+        t = ((p3[0] - p0[0]) * d2[1] - (p3[1] - p0[1]) * d2[0]) / den
+        u = ((p3[0] - p0[0]) * d1[1] - (p3[1] - p0[1]) * d1[0]) / den
+        if t > 0 and u > 0 and (t > 1.0 or u > 1.0):
+            k += max(t, u) - 1
+    return k
+
+
+def _even_reading(cs):
+    import even as EVEN
+    polys = [EVEN.flatten(c) for c in cs]
+    rs = [run for ci in EVEN.counters(polys) for run in EVEN.runs(polys, ci)]
+    if not rs:
+        return 0.0, 0.0, 0.0
+    return (max(EVEN.shelf(r)[0] for r in rs), max(EVEN.rate_jump(r)[0] for r in rs),
+            sum(r[3] for run in rs for r in run) / sum(len(run) for run in rs))
+
+
+def _level_bottom(P, lo, hi):
+    n = len(P)
+    on = [i for i, q in enumerate(P) if q[2] and lo <= q[1] <= hi and P[i - 1][2] is None and P[(i + 1) % n][2] is None
+          and P[i - 1][1] == q[1] == P[(i + 1) % n][1]]
+    return min(on, key=lambda i: P[i][1]) if on else None
+
+
+def nine_solve(cs0, name="nine"):
+    """cs0: the 9's contours [(x, y, type, smooth)], outer first, counter second. Returns (new contours, note) or
+    (None, note) when the solve does not hold every rule."""
+    import curvecheck as K
+    from scipy.optimize import minimize
+    yr = (-1000, 2000)
+    cb = _level_bottom(cs0[1], -1e9, 1e9)
+    ob = _level_bottom(cs0[0], cs0[1][cb][1] - 120, cs0[1][cb][1]) if cb is not None else None
+    if cb is None or ob is None:
+        return None, "no level bottom under the counter"
+    n0 = len(cs0[0])
+    H = []                                               # (contour, handle, its node)
+    for ci, P in enumerate(cs0):
+        n = len(P)
+        for i, q in enumerate(P):
+            if q[2] is not None:
+                continue
+            own = i - 1 if P[i - 1][2] else (i + 1) % n
+            if ci == 1 or (ci == 0 and min((i - ob) % n0, (ob - i) % n0) <= 2):
+                H.append((ci, i, own))
+    NODES = [(1, cb), (0, ob)]
+    bad0, w0 = K.report(name, cs0, yr)[:2]
+    sh0, jp0, m0 = _even_reading(cs0)
+    past0 = [_past_meeting(P) for P in cs0]
+
+    def build(x):
+        cs = [[list(q) for q in P] for P in cs0]
+        for (ci, j), dx in zip(NODES, x[len(H):]):
+            n = len(cs[ci])
+            for k in (j - 1, j, j + 1):
+                cs[ci][k % n][0] += dx
+        for (ci, i, own), s in zip(H, x[:len(H)]):
+            o, P0 = cs[ci][own], cs0[ci]
+            cs[ci][i][0] = o[0] + (P0[i][0] - P0[own][0]) * s
+            cs[ci][i][1] = o[1] + (P0[i][1] - P0[own][1]) * s
+        return [[tuple(q) for q in P] for P in cs]
+
+    def reading(cs):
+        bad, worst, N = K.report(name, cs, yr)[:3]
+        rs = [r for i, xy, g1, ka, kb, r, flip, kinds in N if kinds == "CC" and r is not None and not flip]
+        return bad, worst, rs, _even_reading(cs)
+
+    def cost(x):
+        cs = build(x)
+        bad, worst, rs, (sh, jp, m) = reading(cs)
+        pen = 200 * sum(max(0.0, r - NINE_RATIO) ** 2 for r in rs)
+        pen += 20 * max(0.0, sh - NINE_SHELF) ** 2 + 20 * max(0.0, jp - NINE_JUMP) ** 2
+        pen += 50 * max(0.0, abs(m - m0) - NINE_MEAN) ** 2
+        pen += 10 * len([b for b in bad if "x across it" not in b])
+        pen += 10 * sum(max(0.0, _past_meeting(P) - p0) for P, p0 in zip(cs, past0))
+        pen += 0.5 * sum((s - 1) ** 2 for s in x[:len(H)]) + 0.002 * sum(d * d for d in x[len(H):])
+        return pen
+
+    x = [1.0] * len(H) + [0.0] * len(NODES)
+    for meth in ("Nelder-Mead", "Powell", "Nelder-Mead", "Powell"):
+        x = minimize(cost, x, method=meth, options={"maxiter": 6000}).x
+    cs = [[(round(q[0]), round(q[1]), q[2], q[3]) for q in P] for P in build(x)]
+    bad, worst, rs, (sh, jp, m) = reading(cs)
+    import even as EVEN
+    note = (f"worst ratio {w0:.2f} > {worst:.2f}, faults {len(bad0)} > {len(bad)}; thickness strays {sh0:.2f} > {sh:.2f}, "
+            f"rate jump {jp0:.2f} > {jp:.2f}, mean {m0:.1f} > {m:.1f}; bottoms moved {x[-2]:+.1f} (counter), {x[-1]:+.1f} (outer)")
+    if bad or worst > K.RATIO or sh > EVEN.SHELF_LIMIT or jp > EVEN.LIMIT or abs(m - m0) > 1.0:
+        return None, "left: " + note
+    return cs, note
+
+
+def nine_even(font):
+    """The solve on the 9; the 6 the 9 turned half round about the middle of its box."""
+    if "nine" not in font or "six" not in font:
+        return "no 9 or 6"
+    g9, g6 = font["nine"], font["six"]
+    cs, note = nine_solve(_pts(g9))
+    if cs is None:
+        return "9: " + note
+    _put(g9, cs)
+    sx, sy = g6.width + 1, 712
+    turned = [[(sx - q[0], sy - q[1], q[2], q[3]) for q in P] for P in cs]
+    six = _pts(g6)
+    if [[q[2] for q in P] for P in six] != [[q[2] for q in P] for P in turned]:
+        return "9: " + note + "; 6 left (its points are not the 9's turned)"
+    _put(g6, turned)
+    return "9: " + note + "; 6 the 9 turned"
