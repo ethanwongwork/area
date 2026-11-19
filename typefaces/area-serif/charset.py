@@ -2472,6 +2472,37 @@ MIRRORS = [("parenleft", "parenright"), ("bracketleft", "bracketright"), ("brace
            ("arrowright", "arrowleft"), ("uni2197", "uni2196"), ("uni2198", "uni2199")]   # 0.83: the arrows too
 
 
+# 0.84 (Regular pass 2, placement). The three bracket pairs had three extents: ( ) -176 to 767, [ ] -137 to 758, { }
+# -137 to 767. One top and one bottom for all six: the top 767 (four of the six), the bottom at Georgia Pro's ratio of
+# bottom to top (-160 / 748; its ( [ { stand within 12 of one another) on that top, -164. A square bracket's arms move
+# whole (its stem lengthens, the arms keep their thickness); a parenthesis and a brace, all curves, are scaled upright
+# onto the extent (their strokes are upright: their thickness across does not change). The right forms follow
+# (mirrors).
+BRACKET_TOP = 767
+BRACKET_BOTTOM = -164
+
+
+def bracket_extent(font):
+    done = []
+    for name in ("parenleft", "bracketleft", "braceleft"):
+        if name not in font or not font[name].contours:
+            continue
+        pts = [p for c in font[name].contours for p in c.points]
+        lo, hi = min(p.y for p in pts), max(p.y for p in pts)
+        if (lo, hi) == (BRACKET_BOTTOM, BRACKET_TOP):
+            continue
+        if name == "bracketleft":
+            mid = (lo + hi) / 2
+            for p in pts:
+                p.y += (BRACKET_TOP - hi) if p.y > mid else (BRACKET_BOTTOM - lo)
+        else:
+            k = (BRACKET_TOP - BRACKET_BOTTOM) / (hi - lo)
+            for p in pts:
+                p.y = round(BRACKET_BOTTOM + (p.y - lo) * k)
+        done.append(f"{name} {lo} to {hi} > {BRACKET_BOTTOM} to {BRACKET_TOP}")
+    return done
+
+
 def _name(font, key):
     if isinstance(key, str):
         return key
@@ -3852,6 +3883,7 @@ def run(font, lightened):
     interface(font, m, adv)
     print("charset: plain strokes", plain_strokes(font, m))            # 0.71
     print("charset: signs from letters", letter_signs(font, m))        # 0.71
+    print("charset: brackets", bracket_extent(font))                   # 0.84 (placement)
     print("charset: mirrored pairs", mirrors(font))                    # 0.71
     print("charset: sign weights", cap_strokes(font))                  # 0.71
     print("charset: Eng", eng_capital(font))                           # 0.75
