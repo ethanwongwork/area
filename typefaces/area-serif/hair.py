@@ -637,3 +637,92 @@ EVEN_MORE = ("germandbls", "schwa", "Schwa", "oopen", "Oopen", "s_p", "copyright
 def even_more(font):
     import figs as FIGS
     return [FIGS.even_glyph(font, n) for n in EVEN_MORE if n in font and font[n].contours]
+
+
+# ------------------------------------------------------------------------------------------------ a seam (item 8)
+# Ƭ (Thook, U+01AC) is T's arm and a hook drawn as two contours meeting along one upright cut, each cut end with its
+# two corners on 7: the outline runs the same 40-unit segment twice (pathlint, the stroke audit), and the two rounded
+# corners leave a notch above and below the seam. The rule (`seams`): where two contours of a glyph each end in an
+# upright cut on the same line over the same span, the cuts' corners are made square there and the two are one
+# outline (the union); the outer corners elsewhere keep their 7.
+SEAM_GLYPHS = ("Thook",)
+
+
+def seams(font):
+    import charset as CH
+    log = []
+    for name in SEAM_GLYPHS:
+        if name not in font or len(font[name].contours) < 2:
+            continue
+        g = font[name]
+        cuts = []
+        for ci, c in enumerate(g.contours):
+            P, n = c.points, len(c.points)
+            for i in range(n):
+                a_, b_ = P[i], P[(i + 1) % n]
+                if b_.type == "line" and a_.type and a_.x == b_.x and abs(a_.y - b_.y) >= 20:
+                    cuts.append((ci, a_.x, min(a_.y, b_.y), max(a_.y, b_.y)))
+        pair = next(((a, b) for a in cuts for b in cuts if a[0] < b[0] and a[1] == b[1]
+                     and abs(a[2] - b[2]) <= 1 and abs(a[3] - b[3]) <= 1), None)
+        if not pair:
+            log.append(f"{name}: no seam"); continue
+        x0 = pair[0][1]
+        c_lo, c_hi = min(pair[0][2], pair[1][2]), max(pair[0][3], pair[1][3])
+        near = [p for ci in (pair[0][0], pair[1][0]) for p in g.contours[ci].points if abs(p.x - x0) <= 8]
+        lo = min(p.y for p in near if p.y <= c_lo)        # the corners' far ends (on 7 if soft, the cut's own if not)
+        hi = max(p.y for p in near if p.y >= c_hi)
+        for ci in (pair[0][0], pair[1][0]):
+            for p in g.contours[ci].points:
+                for yc in (lo, hi):
+                    if abs(p.x - x0) <= 8 and abs(p.y - yc) <= 8:
+                        p.x, p.y = x0, yc
+        w = g.width
+        path = CH.gp(font, name)
+        CH.put(font, name, path, w)
+        log.append(f"{name}: one outline across the seam at x {x0} ({lo} to {hi}), {len(font[name].contours)} contour(s)")
+    return log
+
+
+# ------------------------------------------------------------------------------------------ ↔ ↕ shafts (item 8)
+# A shaft between two heads is one width, the hairline (43; charset.SHAFT_BOTH): built about the maths axis, the two
+# edges at 291.5 and 334.5 rounded apart to 42 (↔) and 44 (↕). The rule (`shafts`): the whole-unit width is the
+# hairline exactly; the edge moved is the one that keeps the shaft's middle nearer the axis; its two corners slide
+# along the head's inner edges they end on.
+SHAFTS = {"arrowboth": 43, "arrowupdn": 43}
+
+
+def shafts(font):
+    log = []
+    for name, want in SHAFTS.items():
+        if name not in font:
+            continue
+        P = font[name].contours[0].points
+        n = len(P)
+        long_ = [(i, (i + 1) % n) for i in range(n) if P[i].type and P[(i + 1) % n].type == "line"
+                 and math.hypot(P[i].x - P[(i + 1) % n].x, P[i].y - P[(i + 1) % n].y) > 200
+                 and (P[i].x == P[(i + 1) % n].x or P[i].y == P[(i + 1) % n].y)]
+        if len(long_) != 2:
+            log.append(f"{name}: shaft not found"); continue
+        lev = P[long_[0][0]].y == P[long_[0][1]].y
+        k = (lambda p: p.y) if lev else (lambda p: p.x)
+        e = sorted(long_, key=lambda ij: k(P[ij[0]]))
+        w = k(P[e[1][0]]) - k(P[e[0][0]])
+        d = want - w
+        if not d:
+            continue
+        mid = (k(P[e[0][0]]) + k(P[e[1][0]])) / 2
+        axis = 313 if lev else mid
+        # move the lower (left) edge out by d, or the upper (right) one: whichever leaves the middle nearer the axis
+        lowmove = abs((mid - d / 2) - axis) <= abs((mid + d / 2) - axis)
+        edge, sgn = (e[0], -1) if lowmove else (e[1], 1)
+        for i in edge:
+            p = P[i]
+            nb = P[(i - 1) % n] if (i - 1) % n not in edge else P[(i + 1) % n]   # the head's inner edge it ends on
+            if lev:
+                dy = sgn * d
+                p.x = round(p.x + dy * (nb.x - p.x) / (nb.y - p.y)); p.y += dy
+            else:
+                dx = sgn * d
+                p.y = round(p.y + dx * (nb.y - p.y) / (nb.x - p.x)); p.x += dx
+        log.append(f"{name} shaft {w} > {want}")
+    return log

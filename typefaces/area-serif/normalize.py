@@ -1223,6 +1223,8 @@ def normalize(font):
     import charset as CHARSET                         # 0.47: the full character set, on the finished letters
     n_light, tab = CHARSET.run(font, letters)
     print("hair: mark dots", HAIR.dots(font, "marks"))   # 0.84 (pass 2, item 6): one dot per case on the marks
+    print("hair: seams", HAIR.seams(font))           # 0.84 (pass 2, item 8): Ƭ one outline across its seam
+    print("hair: shafts", HAIR.shafts(font))         # 0.84 (pass 2, item 8): ↔ ↕ shaft the hairline in whole units
     print(f"charset: lightened {n_light} more glyphs; tabular figures {tab}")
     print("clean: flags' undersides", CLEAN.flag_unders(font))            # 0.80: n's and k's, one curve as i's
     print("charset: single-storey g", CHARSET.single_g(font))    # 0.77: g.ss02, from q and j
