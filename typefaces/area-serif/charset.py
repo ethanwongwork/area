@@ -3605,6 +3605,7 @@ def run(font, lightened):
     print("charset: no steps", no_steps(font))                         # 0.83
     print("charset: extended capitals", ext_capitals(font))            # 0.83 (letters 3)
     print("charset: hooked lowercase", ext_lowercase(font))            # 0.83 (letters 4)
+    print("charset: turned V", turned_v(font))                         # 0.83 (letters 7)
     print("charset: glottal stops", glottal_balls(font))               # 0.83 (letters 3)
     print("charset: macron", macron_weight(font))                      # 0.74
     dotless(font)
@@ -3689,8 +3690,13 @@ EXT_CAPS = ("Bhook", "Dhook", "Eturned", "Fhook", "Hhook", "Hturned", "Iota-lati
             "Rtail", "Thook", "Tretroflexhook", "Vhook", "Yhook", "Glottalstopsmall")
 
 
+# 0.83 (letters 7): Y's foot (102 from the stem, Libre Baskerville's) takes the capital serif too; its stem stands
+# only under the arms, so it is read at FOOT_ONLY's shares of the height, and only the foot is read
+FOOT_ONLY = {"Y": (0.12, 0.28), "Yhook": (0.12, 0.28)}
+
+
 def _ext_capitals(font):
-    return [n for n in EXT_CAPS if n in font and font[n].contours]
+    return [n for n in EXT_CAPS + ("Y",) if n in font and font[n].contours]
 
 
 def ext_capitals(font):
@@ -3718,11 +3724,13 @@ def ext_capitals(font):
                         p.x = round(p.x + sg * d)
             notes.append(f"stem {w:.0f}>{CAP_STEM_W}")
         fl = flatten(g)
-        for yq, line in ((0.3 * h, 0), (0.7 * h, h)):
+        reads = ([(FOOT_ONLY[name][0] * h, 0, FOOT_ONLY[name][1] * h)] if name in FOOT_ONLY else
+                 [(0.3 * h, 0, 0.7 * h), (0.7 * h, h, 0.3 * h)])
+        for yq, line, y_other in reads:
             for a, b in spans_at(fl, yq):
                 if not 60 <= b - a <= 125:
                     continue
-                if not any(abs(a - a2) <= 1.5 and abs(b - b2) <= 1.5 for a2, b2 in spans_at(fl, h - yq)):
+                if not any(abs(a - a2) <= 1.5 and abs(b - b2) <= 1.5 for a2, b2 in spans_at(fl, y_other)):
                     continue
                 for edge, sg in ((a, -1), (b, 1)):
                     tip = [p for p in pts if abs(p.y - line) <= 30 and EXT_SERIF_MIN - 20 <= (p.x - edge) * sg <= EXT_SERIF_MAX]
@@ -3930,3 +3938,19 @@ def ext_lowercase(font):
         if notes:
             done.append(f"{name}: " + ", ".join(notes))
     return done
+
+
+
+# ---------------------------------------------------------------- 0.83 Regular pass, letters 7: small alignments
+def turned_v(font):
+    """Ʌ is V turned half round (it was its own drawing standing 2 low: feet at -11, apex at 710): V's points turned,
+    its serifs on the baseline, its point at the capitals' overshoot (721), as Ǝ is E turned."""
+    if "V" not in font or "Vturned" not in font:
+        return "no V or Vturned"
+    _turned(font, "V", "Vturned")
+    g = font["Vturned"]
+    lo = min(p.y for c in g.contours for p in c.points)
+    for c in g.contours:
+        for p in c.points:
+            p.y -= lo
+    return f"Vturned: V turned, feet on 0 (were {lo}), top {max(p.y for c in g.contours for p in c.points)}"

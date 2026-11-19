@@ -796,3 +796,30 @@ EVEN_LETTERS = ("a", "e", "d", "G", "J", "r", "two")
 
 def even_letters(font):
     return "; ".join(even_glyph(font, n) for n in EVEN_LETTERS if n in font)
+
+
+# ------------------------------------------------------------------ 0.83 Regular pass, letters 7: f's foot
+# The audit (B17): f's right foot reached 85 from the stem (every f ligature and ſ with it) against n's 70, Libre
+# Baskerville's. Looked at in "fir rift refer offer" at 28 to 160 px with f's and r's right feet at n's
+# (build/owner8/let/7-feet-trial.png): f's reads as i's foot and nothing is lost; r's long foot (131) carries the
+# arm's weight over it and, shortened, leaves the r standing on a stub with a hole after it: kept, by eye. The rule
+# (`f_foot`): f's right foot reaches as far as n's (read on n, the stem's right edge to the slab's end at the
+# baseline), its end moving in level.
+def _foot_right(g):
+    from normalize import flatten, spans_at
+    fl = flatten(g)
+    a, b = spans_at(fl, 150)[0]
+    slab = [sp for sp in spans_at(fl, 8) if sp[0] <= a + 1 and sp[1] >= b - 1]
+    return b, (slab[0][1] - b) if slab else None
+
+
+def f_foot(font):
+    _b, want = _foot_right(font["n"])
+    b, proj = _foot_right(font["f"])
+    if want is None or proj is None or proj - want < 3:
+        return f"f left ({proj} against {want})"
+    pts = [p for c in font["f"].contours for p in c.points]
+    for p in pts:
+        if abs(p.y) <= 30 and p.x > b + proj - 8:
+            p.x -= round(proj - want)
+    return f"f's right foot {proj:.0f} > {want:.0f}"

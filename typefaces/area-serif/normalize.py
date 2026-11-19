@@ -1207,6 +1207,7 @@ def normalize(font):
     print("figs: Q", FIGS.q_tail(font))               # 0.83 (letters 2): the tail starts in a round end
     print("figs: B P R, E F", FIGS.cap_bowls(font))   # 0.83 (letters 5): F's arm E's, P closes as R; one curvature
     print("figs: curves", FIGS.even_letters(font))     # 0.83 (letters 6): a e d G J r 2 at one curvature
+    print("figs: f", FIGS.f_foot(font))               # 0.83 (letters 7): f's right foot n's
     #                                                   curvature; before spacing and the charset, so ³ ₃ ¾ follow
     delta, moved, opened = SPACING.run(font)          # last: it reads the finished outlines
     CLEAN.owner_final(font, json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "owner_edits.json"))))
