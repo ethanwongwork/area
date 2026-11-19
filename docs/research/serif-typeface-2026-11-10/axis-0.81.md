@@ -1874,3 +1874,88 @@ The masters as the rules give them, honestly: at 800 the taper's contrast grows 
 law, 1.37, the joins the hairline's, 1.23: 53 to 82 across), so the Bold arrows read more Kyoto-like than the
 Regular's; ↔'s swelling shaft is plain at 800; ⌘ (built by the engine from its rings) and ∞ (the engine) grow heavy
 at 800, ∞'s right lobe heavier than its left; ⇧'s A frame keeps 57 / 47 times the law. None tuned.
+
+## Regular pass, consistency (0.83, 18 November 2026)
+
+The owner: bring "more consistency, cohesiveness, visual clarity, smoothness, and evenness to the whole glyph set" to
+the Regular before any weight tuning. Worked at 400 with `AREA_BOLD=0 build.py` (78 s), each step diffed against the
+one before (`build/owner8/reg/diffreg.py`), checked with `build/owner8/reg/checks.sh` (evaluate, even, curvecheck and
+`--hooks`, pathlint, parts, audit_charset; `build/owner8/cons/chk-s0` .. `chk-s3`), looked at large with nodes and in text at
+14 / 18 / 28 / 96 px (`build/owner8/cons/*.png`, made by `cons/big.py` and `cons/text.py`), committed before the next.
+The work list is the read-only audit `build/regaudit/report.md`. The masters were not tuned.
+
+### 0. Symbol follow-ups (the coordinator's check of snap083b)
+
+| Glyphs | Was | Rule | Now |
+|---|---|---|---|
+| ↔ ↕ | the shaft between two heads swelled from the hairline at each crotch to 60 at the middle: a lens | A shaft with no free end is straight, one width crotch to crotch (`signs.tarrow(shaft=)`, `charset.SHAFT_BOTH`): the hairline (43, the head's join): it reads in text at 14 to 96 px as the same stroke the heads leave, so no other value was needed (48 and 52 not tried) | shaft 43 all along |
+| ↕ | the two-headed level arrow turned (728 long): -51 to 677, hanging 51 under the baseline | ↕ keeps the up arrow's extent (2 axes, 0 to 626, centred on 313), the shared head; its shaft between the crotches shortens | 0 to 626 |
+| ⇤ ⇥ | the bar at the point 60 at its ends thinning to 43 where the arms run in: a shallow wedge | the bar a straight stroke (`bar_w`, `charset.TAB_BAR`): A's upright (57, the stop's weight beside the arrow's 60 round tail; 52 not tried), half-round ends of its own width, its face upright through the head's point | 57 constant; advance 757 > 771 |
+| ∞ | 784 x 424 (the + box's height, 1.85 of it wide): read oversized beside + = < | `INF_H` 0.78 of the + box tall, `INF_W` 1.50 of the minus wide; the stress unchanged | 636 x 330; advance 852 > 704 |
+| ▲ ▼ ▶ ◀ ◆ (and the small triangles) | 0.70 of the circle's area: larger than ■ ● in a line | `POINTED` 0.60 (by eye in a line of ■ ● ▲ ▼ ◆ at 18 to 96 px) | ▲ 642 > 590 wide; ◆ 598 > 548 |
+| ~ ≈ | mean width along the centreline 49.9 (thinnest 47 over the crests) against the minus's 52 | the damped stress scaled so the mean is the plain stroke's (`TILDE_K` 1.04: 48.9 level, 59.3 upright) | 52 mean |
+| † ‡ | arms leaving the crossing at the asterisk's 22: a long arm at 22 read light beside § ¶ * | `DAGGER_W0`: the arms leave at the ladder's least stroke (the branch neck, 32); the round end the asterisk's 78. They did not vanish at 14 px; their colour per advance is the asterisk's (0.148 against 0.150 before the change). ‡'s crossings on whole units (the asterisk's centre rounded), so they mirror exactly | 22 > 32 |
+
+What moved: ↔ ↕ ⇤ ⇥ ∞ ▲ ▴ ▶ ▸ ▼ ▾ ◀ ◂ ◆ ~ ≈ † ‡ (18 glyphs), nothing else; kerning one collision key (ŀ ~ 14 > 15).
+Checks unchanged but pathlint's ~ / ≈ bend notes (2.1 > 1.5 degrees). Images `cons/0-big.png`, `0-big2.png`,
+`0-text.png`, `0-text2.png`. Still: ~ reads small at text size (it is the + box wide; its colour now matches −).
+
+### 1. Defects (audit list A)
+
+| Glyph | Was | Rule | Now |
+|---|---|---|---|
+| Ŋ | a detached 55 x 30 piece of the old left foot's serif on the baseline (`eng_capital`'s cut box caught it) | the cut keeps only what hangs under the baseline; pathlint warns on any contour under 3,000 square units (`STRAY_AREA`) | gone; the new check also lists Ⱥ Ⱦ ₩ (their struck strokes' stubs, 1,966 to 2,408: drawn, left) |
+| 1 | right white 164.5 against its left 123.6 (fit.py), every pair with 1 among the lightest | the 1 is an upright stroke and shows the same white each side, as I does (`spacing.OPTICAL_MORE`) | 123.6 / 123.5; advance 444 > 403 (¹ ₁ and the fractions follow) |
+| ? ¿ | ball 105.2 across, the heaviest in the face | the capitals' round end (`BALL_CAP` 1.10 x 88 = 96.8), the ball scaled about the stroke's top node, the neck's handle with its node (`charset.question_ball`); ¿ is ? turned | 96.8 |
+| ! ? ¡ ¿ | the i's dot (116) where . , : ; … carry the period's (124) | one punctuation dot, the period's | 124 |
+| ẞ | a 15-unit level step between the lower stroke's foot and the bowl's outer curve | a stroke's foot is one corner (`charset.no_steps`) | the curve leaves the foot's corner |
+
+Not done, honestly: the 6 and 9 curvature (4.56 / 2.51: one solve holding curvecheck and even.py together was not
+written); Q's tail root (6.89x; it needs a tail construction); the extended capitals' serifs (88 to 117) and stems
+(101 to 103) and the glottal stops' balls (106 to 112): first drawings, to be rebuilt from their base letters.
+
+### 2. Consistency (audit list B)
+
+Not reached in this pass, except the punctuation dot (B11, above). Looked at and left for the owner's call: F's middle
+arm 17 under E's (355 against 372) and P's bowl closing 13 under R's: both inherited and both usual in the
+references' practice (F's arm lowered because F has no foot to balance it); stated here as the rule until the owner
+chooses otherwise.
+
+### 3. Optical ink (Regular)
+
+fit.py first, against the 0 / n / H controls and both references. Moved: the 4 105.6 / 128.7 > 117.6 / 117.7 and the
+5 91.9 / 114.7 > 102.9 / 103.7 (both references keep these figures' whites equal; the same rule as the 1). Left, with
+the reason: the 3's open left (Serrif's too); U (10.5 right; its sides inside both references), M (8.5 left; inside
+both), B +34%, R and S +18%, 8 +17% (two bowls, the letters' structure), 7 -31%, y -22%, v and L -20% (open shapes), a
++13% and g +16% (their own drawings: B3 and B2, not reached). Kerned pairs keep their distance (`rekern`); the full
+build refits with `AREA_KERN_FIT=1`.
+
+### Full build (all masters), the audits, `build/snap083c`
+
+`AREA_KERN_FIT=1 build.py` (17 min 23 s, `build/snap083c/build-083c.log`), the audit set by `build/owner8/reg/fullaudit.sh`
+(`build/owner8/cons/audit-083c/`) against snap083b's (`build/owner8/sym/audit-083b2/`), and the Regular's checks
+(`cons/chk-083c/` against `cons/chk-s0/`, which is snap083b's Regular). The Regular in snap083c is the last
+Regular-only build's, glyph for glyph and key for key. The masters build every change by the existing rules; looked at
+(`cons/4-masters.png`: ↔ ↕ ⇥ ∞ ? 1 at 300 / 400 / 550 / 700), not tuned.
+
+What moved against snap083b: Regular 41 glyphs (the 18 signs; Eng, ẞ; ! ? ¡ ¿; 1 4 5 and their small forms, tabular
+forms and the fractions built from them), the Light 43 and the Bold 49 (the same, with one.tf in both, and in the Bold
+the five / four small forms and fractions and glottalstopsmall through the engine), no mid layer, no overlap layer.
+fit_kerning.json refit (101 lines in, 61 out: pairs with 1 4 5); kerning keys moved Light 262, Regular 124, Bold 501.
+Fallbacks in the variable font: ® ℗ (Bold), ℗ (Light), as before.
+
+| Audit | snap083b | snap083c |
+|---|---|---|
+| audit_axis Bold / Light: symmetry | ‡ 0.7 to 0.8 unit at 300 | ok (‡'s crossings whole) |
+| audit_axis thin (Bold) | cedi, ogonek x 2, one.ss01 | the same |
+| audit_rays (300 to 800) | 1 glyph (ʕ), 28,210 places | 1 glyph (ʕ), 27,600 places (the straight shafts and bar have fewer) |
+| audit_bold Bold / Light | 431 / 432, 432 / 432 | the same |
+| audit_kern | pass, 800 least 7.9, 1,687 under the floor | pass, least 7.9, 1,683 |
+| curvecheck regions Light, Bold | pass | pass |
+| curvecheck hooks Light / Bold | 6 / 14 | 6 / 14 |
+| interpolation | 62 struck glyphs | the same |
+| Regular: evaluate, even, curvecheck, parts, audit_charset | | unchanged |
+| Regular: pathlint | 0 / 156 / 38 | 0 / 159 / 39: the new stray-piece check lists Ⱥ Ⱦ ₩ (struck strokes' stubs); ₁'s flag bends 14 degrees (0.7 unit, whole-unit rounding) |
+
+In the masters, honestly: ↔ ↕'s shaft takes the hairline's law, so at 700 to 800 it is thin beside the round ends that
+take the plain stroke's (the heads' joins do the same: one family); ∞ at 800 keeps its right lobe heavier (the engine).
