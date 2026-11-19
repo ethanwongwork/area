@@ -987,6 +987,10 @@ def zero_weight(font):
 ZONE_FLAT, ZONE_ROUND = 2, 1
 ZONES = {"low": ((0, 520, 780, -224), (-10, 530, 780, -233)), "up": ((0, 712), (-9, 721))}
 FLAG_REACH = 15                 # a flag's corner this far from i's is a head serif to level (r with a tail's: 14)
+# Held at their own height (full build 084b): r's corner at 530 left its ball (528, its own rule) 2 under the glyph's
+# top, outside the masters' height pin (bold.ZONES: within 1 of the top), and the Bold's ball rose to 534 (audit_bold:
+# r's height 530 > 534); r with a tail raised gained a curvature fault at its shoulder in the Bold (1.26 > 1.25)
+FLAG_KEEP = ("r", "rtail", "rstroke")
 
 
 def _zone_kind(font, g):
@@ -1088,7 +1092,7 @@ def flag_line(font):
     ref = max(C.y for _, C, _ in JOINS._flags(font["i"], 5, 12, xh))     # i: the control
     done = []
     for g in font:
-        if not g.contours or _zone_kind(font, g) != "low":
+        if not g.contours or _zone_kind(font, g) != "low" or g.name in FLAG_KEEP:
             continue
         for T, C, group in _head_flags(g, xh):
             P = next(c.points for c in g.contours if any(q is C for q in c.points))
