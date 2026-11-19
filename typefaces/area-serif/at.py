@@ -55,6 +55,7 @@ TAIL = (0.0865, 0.1293)             # the tail's outer end: in from the ring's r
 TAIL_DIR = (107.0, 74.0)            # the tail's direction at its cut (drawn)
 WHITE_RL = 1.24                     # white right of the a's stem over white left of its bowl
 LIFT = 0.011                        # the a's centre over the ring's, of the ring's height
+EVEN_WHITE = True                   # 0.84: the white between the a and the ring one width all round (construct)
 RISE = 0.107                        # the ring's right extremes over its centre, of its height (the drawn: 90 over 843),
                                     # so the stroke out of the a's foot climbs as one long turn
 # the references' medians at their 300 / 400 / 700, placed at Area's stems 55 / 78 / 140
@@ -291,9 +292,7 @@ def construct(R):
     sh = shares(R["stem"])
     h = R["h"]
     H = TOP - BOTTOM
-    Wd = sh["wh"] * H
     tl, tr, tt, tb = LEFT * h, RIGHT * h, h, h
-    cx, cy = Wd / 2, (TOP + BOTTOM) / 2
     # the a: height the references' share of the ring's counter, strokes their weights
     ah = sh["ah"] * (H - tt - tb)
     athin = sh["athin"] * h
@@ -303,9 +302,22 @@ def construct(R):
     a = [[(q[0] * k, q[1] * k) + tuple(q[2:]) for q in P] for P in R["a"]]
     a = embolden(a, dx, dy)
     c0 = a[0]
-    left_in, right_in = tl, Wd - tr
     a_w = c0[0][0] - c0[8][0]                    # bowl's left extreme to the stem's right edge
-    white = (right_in - left_in - a_w) / (1 + WHITE_RL)
+    if EVEN_WHITE:
+        # 0.84 (Regular pass 2, item 3; the owner: the right side "comes out too much ... it can be flatter"): the white
+        # between the a and the ring the same all round: each side's white the white over and under the a (the ring's
+        # counter less the a's height, halved), so the ring's width follows from the a's (it was the references' 0.968
+        # of the height, with the white right of the stem 1.24 of the left: the right stood 245 per mille of the
+        # height off the a at 20 to 30 degrees, the top 189)
+        white = ((H - tt - tb) - ah) / 2
+        Wd = tl + white + a_w + white + tr
+        right_white = white
+    else:
+        Wd = sh["wh"] * H
+        white = (Wd - tr - tl - a_w) / (1 + WHITE_RL)
+        right_white = white * WHITE_RL
+    cx, cy = Wd / 2, (TOP + BOTTOM) / 2
+    left_in = tl
     ox = left_in + white - c0[8][0]
     oy = cy + LIFT * H - (c0[5][1] + c0[11][1]) / 2
     a = [[(q[0] + ox, q[1] + oy) + tuple(q[2:]) for q in P] for P in a]
@@ -353,7 +365,7 @@ def construct(R):
     outer = fillet(outer, 5, r_f)
     outer = fillet(outer, 1, r_f)
     info = {"k": k, "dx": dx, "dy": dy, "width": Wd, "ring": (tl, tr, tt, tb), "a_stem": sh["astem"] * R["stem"],
-            "a_thin": athin, "a_h": ah, "white": (white, white * WHITE_RL), "shares": sh}
+            "a_thin": athin, "a_h": ah, "white": (white, right_white), "shares": sh}
     return outer, c1, info
 
 
