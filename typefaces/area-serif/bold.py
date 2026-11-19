@@ -2292,6 +2292,26 @@ HINTS = {
 # bold_font), which replaces what the engine makes of it; the engine reads it with no hint (the 0.82 hints named the
 # old drawing's knots, 0 / 46 and 666 / 712, which the operator's bars no longer have)
 HINTS["summation"] = {}
+
+
+def open_tail_knots(reg):
+    """0.84 (pass 2, strokes 1): hair.hairlines moves c's and e's counter bottom (their lower stroke to the hairline),
+    so the open-tail hints name the Regular's own knots: the outside's bottom and the counter's, read on the Regular
+    (the pair of level extremes facing across the ink), the stroke's Regular height between them."""
+    import hair as HAIR
+    for name in ("c", "e"):
+        if name not in reg or name not in HINTS:
+            continue
+        cs = [[(p.x, p.y, p.type, p.smooth) for p in c.points] for c in reg[name].contours]
+        prs = [p for p in HAIR.pairs(cs) if p[2] == "bottom"]
+        if not prs:
+            continue
+        outer, inner, _k = min(prs, key=lambda p: p[0][3])
+        lo, hi = outer[3], inner[3]
+        ys = HINTS[name]["y"]
+        for i, h in enumerate(ys):
+            if h[3] == "open tail":
+                ys[i] = (lo, hi, (lambda t: (lambda v: open_tail(t, v)))(hi - lo), "open tail")
 # owner round 8 (0.82): the increment is drawn with A's weights (thin left, thick right, a level base): it takes the
 # capitals' laws, as A does, not the plain strokes' sign law
 HINTS["increment"] = {}
@@ -3949,6 +3969,7 @@ def bold_font(reg, stem=STEM, **over):
     import arms as ARMS
     import white as WHITE
     signs = [g.name for g in reg if ARMS.is_sign(g)]          # 0.81 round 3: signs of arms, after the letters
+    open_tail_knots(reg)                                       # 0.84: c's and e's lower stroke as the Regular now has it
     law = None
     for g in [g for g in reg if g.name not in signs] + [reg[n] for n in signs]:
         if not g.contours:
