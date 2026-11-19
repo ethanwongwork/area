@@ -970,3 +970,135 @@ def zero_weight(font):
                 q.x -= sg * d
             done.append(f"0 side {was}>{ZERO_SIDE}")
     return done
+
+
+# 0.84 (Regular pass 2, placement). The census (build/owner9/place/report.md, 2.1) found edges a unit or two off their
+# line: a and ae's bowls -9, b-hook's -11 (o's -10), the Schwa 722 (O's 721), fi's and ffi's bar 519 (f's 520), the
+# turned v's point 531, q-hook-tail's spur 518 (q's 520); and the head serifs of n m p r (and eng, n with a left hook,
+# p and r struck, h with a hook) with their stem corner at 529 where i's, j's and u's are at 530, r with a tail's at
+# 516. The rules, run on every letter once every letter is drawn:
+#   a level edge (two on-curve points, a straight between them, 5 units or longer) within ZONE_FLAT of a line's flat
+#   value stands on it, or within ZONE_ROUND of its round value (a vertex's flat) stands on that; a round extreme (a
+#   node whose two handles are level with it) within ZONE_ROUND of a round value stands on it; the points move with
+#   their handles. Lowercase: flat 0 520 780 -224, round -10 530 780 -233; capitals and figures: flat 0 712, round
+#   -9 721. r's ball (528, two under) is its own rule and is outside ZONE_ROUND.
+#   every x-height head serif's stem corner stands on i's (the control), the flag moving whole (level_flags' rule,
+#   which held p and r to n, now holds every letter to i).
+ZONE_FLAT, ZONE_ROUND = 2, 1
+ZONES = {"low": ((0, 520, 780, -224), (-10, 530, 780, -233)), "up": ((0, 712), (-9, 721))}
+FLAG_REACH = 15                 # a flag's corner this far from i's is a head serif to level (r with a tail's: 14)
+
+
+def _zone_kind(font, g):
+    import unicodedata
+    us = g.unicodes or (font[g.name.split(".")[0]].unicodes if g.name.split(".")[0] in font else [])
+    cat = unicodedata.category(chr(us[0])) if us else ""
+    return "low" if cat == "Ll" else "up" if cat in ("Lu", "Nd") else None
+
+
+def zone_lines(font):
+    done = []
+    for g in font:
+        if not g.contours:
+            continue
+        kind = _zone_kind(font, g)
+        if kind is None:
+            continue
+        flats, rounds = ZONES[kind]
+        moved = []
+        for c in g.contours:
+            P, n = c.points, len(c.points)
+            hit = {}
+            for i, p in enumerate(P):
+                q = P[(i + 1) % n]
+                if p.type and q.type == "line" and p.y == q.y and abs(p.x - q.x) >= 5:
+                    t = next((v for v in flats if 0 < abs(p.y - v) <= ZONE_FLAT), None)
+                    if t is None:
+                        t = next((v for v in rounds if 0 < abs(p.y - v) <= ZONE_ROUND), None)
+                    if t is not None:
+                        hit[i] = hit[(i + 1) % n] = t - p.y
+                a, b = P[i - 1], P[(i + 1) % n]
+                if p.type and p.smooth and a.type is None and b.type is None and a.y == p.y == b.y:
+                    t = next((v for v in rounds if 0 < abs(p.y - v) <= ZONE_ROUND), None)
+                    if t is not None:
+                        hit[i] = t - p.y
+            for i, d in hit.items():
+                for j in (i - 1, i, (i + 1) % n):
+                    if j == i or P[j].type is None:
+                        P[j].y += d
+                moved.append(f"{P[i].y - d}>{P[i].y}")
+        if kind == "low":                                # a foot cut short of the baseline (pi's left leg, -1 to -3)
+            for c in g.contours:
+                P, n = c.points, len(c.points)
+                for i, p in enumerate(P):
+                    q = P[(i + 1) % n]
+                    if p.type and q.type == "line" and -3 <= min(p.y, q.y) and max(p.y, q.y) < 0 and \
+                            10 <= abs(p.x - q.x) <= 80:
+                        moved.append(f"cut {p.y}/{q.y}>0")
+                        p.y = q.y = 0
+        if g.name == "s_t":                              # the ligature's s at s's height (its top stood 6 over)
+            top = max(p.y for p in font["s"].contours[0].points)
+            join = max(p.x for c in g.contours for p in c.points if p.type and p.y == top and not p.smooth) \
+                if any(p.type and p.y == top and not p.smooth for c in g.contours for p in c.points) else None
+            over = max(p.y for c in g.contours for p in c.points if p.y <= top + 8 and join is not None and p.x < join) - top
+            for c in g.contours:
+                for p in c.points:
+                    if top < p.y <= top + 8 and join is not None and p.x < join:
+                        moved.append(f"s top {p.y}>{p.y - over}")
+                        p.y -= over
+        if moved:
+            done.append(f"{g.name} " + " ".join(sorted(set(moved))))
+    return done
+
+
+def _head_flags(g, xh, lo=5, hi=15, tol=3):
+    """joins._flags, reading a stem edge that leans up to `tol` (r with a tail's first drawing: 125 to 127)."""
+    import math
+    from joins import segs
+    out = []
+    for c in g.contours:
+        P, n = c.points, len(c.points)
+        for kind, i0, _, _, i3 in segs(c):
+            if kind != "line":
+                continue
+            t, k = (i0, i3) if P[i0].x < P[i3].x else (i3, i0)
+            T, C = P[t], P[k]
+            run, rise = C.x - T.x, C.y - T.y
+            if not (80 <= run <= 170 and T.y > 0.8 * xh and rise > 0 and lo <= math.degrees(math.atan2(rise, run)) <= hi):
+                continue
+            step = 1 if (t + 1) % n != k else -1
+            group, i = [T], t
+            for _ in range(14):
+                i = (i + step) % n
+                p = P[i]
+                group.append(p)
+                if p.type:
+                    j = (i + step) % n
+                    while not P[j].type:
+                        j = (j + step) % n
+                    if abs(P[j].x - p.x) <= tol and p.y - P[j].y > 100:
+                        out.append((T, C, group))
+                        break
+    return out
+
+
+def flag_line(font):
+    import joins as JOINS
+    xh = 520
+    ref = max(C.y for _, C, _ in JOINS._flags(font["i"], 5, 12, xh))     # i: the control
+    done = []
+    for g in font:
+        if not g.contours or _zone_kind(font, g) != "low":
+            continue
+        for T, C, group in _head_flags(g, xh):
+            P = next(c.points for c in g.contours if any(q is C for q in c.points))
+            k = next(i for i, q in enumerate(P) if q is C)
+            far = P[(k + 1) % len(P)] if P[k - 1] is T else P[k - 1]
+            if far.y >= C.y:
+                continue                                 # the stroke runs on level or up from the corner: f's bar end
+            up = ref - C.y
+            if up and abs(up) <= FLAG_REACH:
+                for p in group + [C]:
+                    p.y += up
+                done.append(f"{g.name} {C.y - up}>{C.y}")
+    return done

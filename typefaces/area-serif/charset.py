@@ -2202,6 +2202,11 @@ def plain_strokes(font, m):
         g = font[name]
         boxes = [bounds(_contour_path(c)) for c in g.contours]
         cx = (boxes[0][0] + boxes[0][2]) / 2
+        if name == "brokenbar" and len(boxes) == 2:      # 0.84 (placement): the bar's extent (it stood -174 to 732,
+            lo_, hi_ = sorted(boxes, key=lambda q: q[1])  # the bar -229 to 758), its gap kept and centred on the bar
+            bb_ = bounds(gp(font, "bar"))
+            gap, mid = hi_[1] - lo_[3], (bb_[1] + bb_[3]) / 2
+            boxes = [(0, bb_[1], 0, round(mid - gap / 2)), (0, round(mid + gap / 2), 0, bb_[3])]
         put(font, name, union(*[rect(cx - w / 2, q[1], cx + w / 2, q[3]) for q in boxes]), g.width)
     g = font["slash"]
     lo, hi = _level_cut(g.contours[0])
@@ -3097,6 +3102,9 @@ def fraction_gap(font, g, comp):
     return min(_seg_dist(p, bar_[i], bar_[(i + 1) % len(bar_)]) for p in pts for i in range(len(bar_)))
 
 
+FIG_ROUND = (-9, 721)    # the figures' round baseline and top (0 and 4's flats at 0 / 712)
+
+
 def percent_fit(font):
     """0.83 (symbols 1): the percent and per-mille signs are set as the fractions are: their figures (a superior zero
     over the bar, inferior zeros under it) each FRAC_GAP from the bar, moved level only (they keep their heights);
@@ -3113,6 +3121,13 @@ def percent_fit(font):
         if not sup or not inf:
             continue
         near = min(inf, key=lambda c: c.transformation[4])
+        # 0.84 (placement): on the figures' lines, as a figure stands: the superior zero's top on the figures' round
+        # top (721), the inferior zeros' bottom on their round baseline (-9) (% stood 735 / -13, per mille 770 / -5)
+        for group, edge, line in ((sup, 3, FIG_ROUND[1]), (inf, 1, FIG_ROUND[0])):
+            for c in group:
+                t = c.transformation
+                d = round(line - (bounds(gp(font, c.baseGlyph))[edge] + t[5]))
+                c.transformation = (1, 0, 0, 1, t[4], t[5] + d)
         was = []
         for group, sign, probe in ((sup, -1, sup[0]), (inf, 1, near)):
             was.append(round(fraction_gap(font, g, probe)))
@@ -4132,10 +4147,15 @@ def turned_v(font):
     its serifs on the baseline, its point at the capitals' overshoot (721), as Ǝ is E turned."""
     if "V" not in font or "Vturned" not in font:
         return "no V or Vturned"
-    _turned(font, "V", "Vturned")
-    g = font["Vturned"]
-    lo = min(p.y for c in g.contours for p in c.points)
-    for c in g.contours:
-        for p in c.points:
-            p.y -= lo
-    return f"Vturned: V turned, feet on 0 (were {lo}), top {max(p.y for c in g.contours for p in c.points)}"
+    out = []
+    for src, dst in (("V", "Vturned"), ("v", "vturned")):    # 0.84 (placement): ʌ is v turned too (its own
+        if dst not in font:                                   # drawing stood with its point at 531)
+            continue
+        _turned(font, src, dst)
+        g = font[dst]
+        lo = min(p.y for c in g.contours for p in c.points)
+        for c in g.contours:
+            for p in c.points:
+                p.y -= lo
+        out.append(f"{dst}: {src} turned, feet on 0 (were {lo}), top {max(p.y for c in g.contours for p in c.points)}")
+    return out

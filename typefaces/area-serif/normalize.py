@@ -1221,6 +1221,8 @@ def normalize(font):
     alt_rep, alt_subs = ALTERNATES.run(font)
     print("alternates:", alt_rep)
     print("balance: descender feet", BALANCE.desc_feet(font))
+    print("balance: flags on i's line", BALANCE.flag_line(font))        # 0.84 (placement)
+    print("balance: edges on their line", BALANCE.zone_lines(font))     # 0.84 (placement)
     print("clean: uncrossed", CLEAN.uncross(font))        # 0.65: every glyph, last of all
     # a base drawing whose path laps over itself, and (0.70) every letter with a stroke or bar drawn across it: merged
     # here, in the source. Left to the TrueType build's overlap removal, a stroke that meets the letter within a unit
