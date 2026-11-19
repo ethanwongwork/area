@@ -1211,7 +1211,9 @@ def normalize(font):
     print("figs: f", FIGS.f_foot(font))               # 0.83 (letters 7): f's right foot n's
     import hair as HAIR                               # 0.84 (pass 2, strokes): a round stroke's thin place on the
     print("hair: thin places", HAIR.hairlines(font))  # ladder's hairline (J f 5 G 6 9 8 C c e), the inner node moves
-    print("hair: spines", HAIR.spines(font))         # 0.84 (pass 2, strokes 3): S s one swell, widest at the middle
+    # hair.spines (0.84, pass 2, strokes 3): withdrawn. Handle lengths and node moves alone gave S one swell at 93.4
+    # but broke the curvature at the bowls' counter extremes (14.9 at (457, 159), 4.1 at (147, 570)); holding those,
+    # the spine cannot reach one swell (S 94.4 to 96.3, s widest off the middle). It needs a spine construction.
     print("hair: bowls", HAIR.bowl_sides(font))      # 0.84 (pass 2, strokes 4): B's upper bowl P's side
     print("hair: diagonals", HAIR.diagonals(font))   # 0.84 (pass 2, strokes 5): X x halves, capital thick 86, Z arms
     print("hair: dots", HAIR.dots(font, "letters"), HAIR.quote_head(font))   # 0.84 (pass 2, item 6): j's dot i's; ’
