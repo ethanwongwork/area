@@ -1290,12 +1290,17 @@ def arrows(font, m, adv):
         return dict(build="tarrow", params=d)
     put_built(font, "arrowright", tap(at=[L / 2, cy]), 0, [0x2192], lsb=side, rsb=side)
     put_built(font, "arrowleft", tap(at=[L / 2, cy], rot=180), 0, [0x2190], lsb=side, rsb=side)
-    put_built(font, "arrowboth", tap(L=L + depth, kind="both", at=[(L + depth) / 2, cy]), 0, [0x2194], lsb=side, rsb=side)
+    put_built(font, "arrowboth", tap(L=L + depth, kind="both", shaft=SHAFT_BOTH * m.hair, at=[(L + depth) / 2, cy]), 0, [0x2194],
+              lsb=side, rsb=side)
     up = built_path(tap(at=[0, cy], rot=90))
     vside = (adv - (bounds(up)[2] - bounds(up)[0])) / 2          # vertical arrows: centred in the maths' width
     for name, u, rot in (("arrowup", 0x2191, 90), ("arrowdown", 0x2193, -90)):
         put_built(font, name, tap(at=[0, cy], rot=rot), 0, [u], lsb=vside, rsb=vside)
-    put_built(font, "arrowupdn", tap(L=L + depth, kind="both", at=[0, cy], rot=90), 0, [0x2195], lsb=vside, rsb=vside)
+    # 0.83 (Regular pass, consistency 0a): the up-down arrow keeps the up arrow's extent (its length, 2 axes: from the
+    # baseline to 626, centred on the axis), its heads the shared head; at the two-headed level arrow's length (728) it
+    # hung 51 under the baseline
+    put_built(font, "arrowupdn", tap(L=L, kind="both", shaft=SHAFT_BOTH * m.hair, at=[0, cy], rot=90), 0, [0x2195],
+              lsb=vside, rsb=vside)
     for name, u, rot in (("uni2197", 0x2197, 45), ("uni2196", 0x2196, 135), ("uni2199", 0x2199, -135),
                          ("uni2198", 0x2198, -45)):
         put_built(font, name, tap(at=[0, cy], rot=rot), 0, [u], lsb=side * 0.8, rsb=side * 0.8)
@@ -1303,6 +1308,8 @@ def arrows(font, m, adv):
 
 TAPER_END = 60 / 52                # the free end's round cap across, over the plain stroke (the study's B: 1.15)
 TAPER_FLAT = 0.5                   # a head's point cut flat, over the hairline (the study's B)
+SHAFT_BOTH = 1.0                   # 0.83 (consistency 0a): a shaft between two heads, one width, of the hairline (43)
+TAB_BAR = 57 / 52                  # 0.83 (consistency 0b): the tab arrows' bar, one width, of the plain stroke (A's upright 57)
 
 
 def maths(font, m, adv):
@@ -1471,7 +1478,15 @@ VERTEX_CAP = 0.42                 # parts.VERTEX
 SIGN_LO, SIGN_HI = 47, 57         # the signs' damped stress: a stroke running level, upright (mean 52, the plain stroke)
 EQUAL_GAP = 154                    # the equals sign's two bars, centre to centre (as drawn)
 TILDE_AMP = 54                     # the tilde's wave, its centreline's height over the axis (slope 40 degrees at its inflections)
-INF_WIDTH = 1.85                   # infinity's ink width over its height (the references 1.58 to 2.2)
+INF_WIDTH = 1.85                   # infinity's ink width over its height (the references 1.58 to 2.2); 0.82 to symbols 2
+# 0.83 (Regular pass, consistency 0c): infinity sized as an operator's colour, not the + box's full height (784 x 424
+# read oversized beside + = <): its height INF_H of the + box, its width INF_W of the minus's
+TILDE_K = 1.04                     # 0.83 (consistency 0d): ~'s mean width along its centreline was 49.9 against the
+                                   # minus's 52 (thinnest 47 over the crests; ink 23,799 over a 494-unit centreline):
+                                   # the damped stress scaled so the mean is the plain stroke's (48.9 level, 59.3 upright)
+INF_H = 0.78
+INF_W = 1.50
+POINTED = 0.60                     # 0.83 (consistency 0d): the pointed shapes' area over the circle's (symbols 1: 0.70)
 
 
 def built_path(info):
@@ -1495,7 +1510,8 @@ def tilde_signs(font, m, adv):
     want = mb[2] - mb[0]
 
     def tilde_info(cys, x0, x1):
-        return dict(build="tilde", params=dict(x0=x0, x1=x1, cys=cys, amp=TILDE_AMP, lo=SIGN_LO, hi=SIGN_HI))
+        return dict(build="tilde", params=dict(x0=x0, x1=x1, cys=cys, amp=TILDE_AMP, lo=SIGN_LO * TILDE_K,
+                                               hi=SIGN_HI * TILDE_K))
     x0, x1 = mb[0], mb[2]
     for _ in range(30):                                  # the centreline's ends so the ink is the minus's width
         b = bounds(built_path(tilde_info([cy], x0, x1)))
@@ -1509,9 +1525,9 @@ def tilde_signs(font, m, adv):
               lsb=(font["asciitilde"].width - want) / 2, rsb=(font["asciitilde"].width - want) / 2)
     put_built(font, "approxequal", tilde_info([cy - EQUAL_GAP / 2, cy + EQUAL_GAP / 2], x0, x1), 0, [0x2248],
               lsb=(adv - want) / 2, rsb=(adv - want) / 2)
-    H = want                                             # the + box's height
+    H = INF_H * want                                     # its height, a share of the + box's (consistency 0c)
     b_ = (H - SIGN_LO) / 2                               # the centreline's half height (thin over the tops)
-    a_ = (INF_WIDTH * H - SIGN_HI) / 2                   # its half width (thick at the outer ends)
+    a_ = (INF_W * want - SIGN_HI) / 2                    # its half width (thick at the outer ends), a share of the minus's
     p = built_path(dict(build="infinity", params=dict(a=a_, b=b_, cx=0, cy=cy, lo=SIGN_LO, hi=SIGN_HI)))
     put(font, "infinity", p, 0, [0x221E], lsb=34, rsb=34)
 
@@ -3069,6 +3085,8 @@ def letter_currencies(font, m):
 
 
 DAGGER = dict(w0=22, d=78)          # the asterisk's arm where it leaves its centre, and its round end (as read)
+DAGGER_W0 = 32                      # 0.83 (consistency 0e): the daggers' arms leave their crossings at the ladder's least
+                                    # stroke (the branch neck, 32), not the asterisk's 22: a long arm at 22 read light
 
 
 def dagger_info(font, name):
@@ -3076,14 +3094,15 @@ def dagger_info(font, name):
     if "asterisk" not in font:
         return None
     ab = bounds(gp(font, "asterisk"))
-    acy = (ab[1] + ab[3]) / 2                            # its centre (its arms' junction)
+    acy = round((ab[1] + ab[3]) / 2)                     # its centre (its arms' junction); whole, so the double
+                                                         # dagger's two crossings mirror exactly (it was 0.5 off)
     arm = ab[3] - acy
     over = -9                                            # the capitals' and figures' overshoot under the baseline
     top = ab[3]
     xs = [acy]
     if name == "daggerdbl":
         xs = [CAP_HEIGHT - acy, acy]
-    return dict(build="dagger", params=dict(cx=0, crossings=xs, top=top, bottom=over, reach=arm, w0=DAGGER["w0"],
+    return dict(build="dagger", params=dict(cx=0, crossings=xs, top=top, bottom=over, reach=arm, w0=DAGGER_W0,
                                             d=DAGGER["d"]))
 
 
@@ -3125,9 +3144,9 @@ def more_symbols(font, m, adv):
     # arrow's point, the stroke widening from the head along shaft and riser to the riser's round end
     L_ = ARROW_LENGTH * cy
     tp = dict(L=L_, arm=ARROW_ARM, half=ARROW_HALF, w0=m.hair, w1=TAPER_END * w, flat=TAPER_FLAT)
-    put_built(font, "uni21E5", dict(build="tarrow", params=dict(tp, kind="bar", at=[L_ / 2, cy])), 0, [0x21E5], lsb=44, rsb=44)
+    put_built(font, "uni21E5", dict(build="tarrow", params=dict(tp, kind="bar", bar_w=TAB_BAR * w, at=[L_ / 2, cy])), 0, [0x21E5], lsb=44, rsb=44)
     made.append("uni21E5")
-    put_built(font, "uni21E4", dict(build="tarrow", params=dict(tp, kind="bar", at=[L_ / 2, cy], rot=180)), 0, [0x21E4],
+    put_built(font, "uni21E4", dict(build="tarrow", params=dict(tp, kind="bar", bar_w=TAB_BAR * w, at=[L_ / 2, cy], rot=180)), 0, [0x21E4],
               lsb=44, rsb=44)
     made.append("uni21E4")
     put_built(font, "uni21B5", dict(build="tarrow", params=dict(tp, kind="ret", rise=ub[3] - cy, at=[L_ / 2, cy], mirror=True)),
@@ -3147,7 +3166,7 @@ def more_symbols(font, m, adv):
     R = D / 2
     oy = cy
     A_c = math.pi * R * R
-    th_ = math.sqrt(0.70 * A_c * math.sqrt(3))              # the triangle's height: h^2 / sqrt(3) = 0.70 of the circle
+    th_ = math.sqrt(POINTED * A_c * math.sqrt(3))              # the triangle's height: h^2 / sqrt(3) = 0.70 of the circle
     sd_ = 2 * th_ / math.sqrt(3)
     lift = -(th_ / 2 + th_ / 3) / 2                         # the base below the axis: half way, box middle and centroid
     import signs as SG                                      # 0.83 (symbols 2): every shape's outer corners soft (7)
@@ -3162,7 +3181,7 @@ def more_symbols(font, m, adv):
     put_built(font, "uni25A1", dict(build="frame", params=dict(t=w, outer=[list(v) for v in sq_], stress=list(SIGN_A), soft=True)),
               0, [0x25A1], lsb=50, rsb=50)
     made.append("uni25A1")
-    dg = math.sqrt(0.70 * A_c * 2) / 2
+    dg = math.sqrt(POINTED * A_c * 2) / 2
     add("uni25C6", 0x25C6, shape(SG.soften([(0, oy - dg), (dg, oy), (0, oy + dg), (-dg, oy)])))
 
     def star_pts(r_out, r_in):

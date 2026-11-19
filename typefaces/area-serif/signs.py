@@ -842,7 +842,10 @@ def tarrow(p, s=1.0, white=None, sh=1.0):
         # and w1 at the middle, each edge one cubic (level at the middle)
         mx = L / 2
         mir = lambda q: (2 * mx - q[0], q[1])
-        S1 = meet(((Qx, w0 / 2), (-1, 0)), H["in1"])                 # the shaft's top meets arm 1's inside
+        # 0.83 (Regular pass, consistency 0a): a shaft with no free end is straight, one width from crotch to crotch
+        # (`shaft`, of the hairline's law: it was w0 at the heads swelling to w1 at the middle, a lens)
+        ws = p["shaft"] * sh if p.get("shaft") else None
+        S1 = meet(((Qx, (ws or w0) / 2), (-1, 0)), H["in1"])         # the shaft's top meets arm 1's inside
         S2 = (S1[0], -S1[1])
 
         def edge(p0, p3, y_mid):
@@ -855,10 +858,10 @@ def tarrow(p, s=1.0, white=None, sh=1.0):
                              (b_[0] + 2 / 3 * (Q_[0] - b_[0]), b_[1] + 2 / 3 * (Q_[1] - b_[1])), b_))
             return out_
         right = [a1.T(1)] + _cap(a1) + [H["f1"], H["f2"], a2.T(1)] + _cap(a2) + [S2]
-        P = [S1] + right + edge(S2, mir(S2), -w1 / 2)
+        P = [S1] + right + ([mir(S2)] if ws else edge(S2, mir(S2), -w1 / 2))
         left_ = [mir(a2.T(-1))] + _xf([("a", a2.E, a2.r, a2.T(-1), a2.T(1), a2.F)], mir) + \
             [mir(H["f2"]), mir(H["f1"]), mir(a1.T(-1))] + _xf([("a", a1.E, a1.r, a1.T(-1), a1.T(1), a1.F)], mir) + [mir(S1)]
-        P += left_ + edge(mir(S1), S1, w1 / 2)
+        P += left_ + ([] if ws else edge(mir(S1), S1, w1 / 2))
     else:
         # the shaft: from the tail (x = 0, a free end, w1) to Q (w0)
         tail = _Taper((Qx, 0.0), (0.0, 0.0), w0, w1)           # A at Q, F at the tail's tip; its +1 side is below
@@ -868,18 +871,33 @@ def tarrow(p, s=1.0, white=None, sh=1.0):
         if kind == "bar":
             # the bar at the point: a stroke across it, its back straight (x = L + w0), its face thinning from the
             # round ends (w1) to w0 where the arrow meets it; the arms' outsides run into its face
-            xr = L + w0
             span = max(a1.E[1] + a1.r, 0)
-            topE = (xr - w1 / 2, span - w1 / 2)
-            face_top = ((L, 0.0), unit((L, 0.0), _tangent((L, 0.0), topE, w1 / 2, (1, 0), -1)))
-            Tt = _tangent((L, 0.0), topE, w1 / 2, (1, 0), -1)
-            K1 = meet(H["out1"], ((L, 0.0), face_top[1]))
-            botE = (topE[0], -topE[1])
-            Tb = (Tt[0], -Tt[1])
-            K2 = (K1[0], -K1[1])
-            head_steps += [K1, Tt, ("a", topE, w1 / 2, Tt, (xr, topE[1]), (topE[0], topE[1] + 1))]
-            head_steps += [(xr, botE[1]), ("a", botE, w1 / 2, (xr, botE[1]), Tb, (botE[0], botE[1] - 1))]
-            head_steps += [K2]
+            if p.get("bar_w"):
+                # 0.83 (Regular pass, consistency 0b): the bar a straight stroke, one width (`bar_w`, of the plain
+                # stroke's law) from end to end, its ends half circles of its own width (the family's round ends); its
+                # face upright through the head's point. It was w1 at the ends thinning to w0 where the arms run in, a
+                # wedge
+                wb = p["bar_w"] * s
+                xr = L + wb
+                topE = (L + wb / 2, span - wb / 2)
+                botE = (topE[0], -topE[1])
+                K1 = meet(H["out1"], ((L, 0.0), (0.0, 1.0)))
+                K2 = (K1[0], -K1[1])
+                head_steps += [K1, (L, topE[1]), ("a", topE, wb / 2, (L, topE[1]), (xr, topE[1]), (topE[0], topE[1] + 1))]
+                head_steps += [(xr, botE[1]), ("a", botE, wb / 2, (xr, botE[1]), (L, botE[1]), (botE[0], botE[1] - 1))]
+                head_steps += [(L, botE[1]), K2]
+            else:
+                xr = L + w0
+                topE = (xr - w1 / 2, span - w1 / 2)
+                face_top = ((L, 0.0), unit((L, 0.0), _tangent((L, 0.0), topE, w1 / 2, (1, 0), -1)))
+                Tt = _tangent((L, 0.0), topE, w1 / 2, (1, 0), -1)
+                K1 = meet(H["out1"], ((L, 0.0), face_top[1]))
+                botE = (topE[0], -topE[1])
+                Tb = (Tt[0], -Tt[1])
+                K2 = (K1[0], -K1[1])
+                head_steps += [K1, Tt, ("a", topE, w1 / 2, Tt, (xr, topE[1]), (topE[0], topE[1] + 1))]
+                head_steps += [(xr, botE[1]), ("a", botE, w1 / 2, (xr, botE[1]), Tb, (botE[0], botE[1] - 1))]
+                head_steps += [K2]
         else:
             head_steps += [H["f1"], H["f2"]]
         head_steps += [a2.T(1)] + _cap(a2) + [S2]
