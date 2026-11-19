@@ -982,17 +982,13 @@ def zero_weight(font):
 #   node whose two handles are level with it) within ZONE_ROUND of a round value stands on it; the points move with
 #   their handles. Lowercase: flat 0 520 780 -224, round -10 530 780 -233; capitals and figures: flat 0 712, round
 #   -9 721. r's ball (528, two under) is its own rule and is outside ZONE_ROUND.
-#   every x-height head serif's stem corner stands on i's (the control), the flag moving whole (level_flags' rule,
-#   which held p and r to n, now holds every letter to i).
+#   Withdrawn after the full build (084b): the head serifs on i's line (n m p r eng ... from 529 to 530, the flag moved
+#   whole). With the corner on 530 the masters' height pin read n's and m's arch differently: the Bold's counter top
+#   464 > 469 (the arch 5 thinner), the Light's 490 > 487, audit_bold lost n's and m's level stroke, r's ball rose to
+#   534. The head serifs keep 529 until the masters pin a flag corner apart from an arch's overshoot (or i's family
+#   takes 529, not tried in a full build).
 ZONE_FLAT, ZONE_ROUND = 2, 1
 ZONES = {"low": ((0, 520, 780, -224), (-10, 530, 780, -233)), "up": ((0, 712), (-9, 721))}
-FLAG_REACH = 15                 # a flag's corner this far from i's is a head serif to level (r with a tail's: 14)
-# Held at their own height (full build 084b): r's corner at 530 left its ball (528, its own rule) 2 under the glyph's
-# top, outside the masters' height pin (bold.ZONES: within 1 of the top), and the Bold's ball rose to 534 (audit_bold:
-# r's height 530 > 534); r with a tail raised gained a curvature fault at its shoulder in the Bold (1.26 > 1.25)
-FLAG_KEEP = ("r", "rtail", "rstroke")
-
-
 def _zone_kind(font, g):
     import unicodedata
     us = g.unicodes or (font[g.name.split(".")[0]].unicodes if g.name.split(".")[0] in font else [])
@@ -1052,57 +1048,4 @@ def zone_lines(font):
                         p.y -= over
         if moved:
             done.append(f"{g.name} " + " ".join(sorted(set(moved))))
-    return done
-
-
-def _head_flags(g, xh, lo=5, hi=15, tol=3):
-    """joins._flags, reading a stem edge that leans up to `tol` (r with a tail's first drawing: 125 to 127)."""
-    import math
-    from joins import segs
-    out = []
-    for c in g.contours:
-        P, n = c.points, len(c.points)
-        for kind, i0, _, _, i3 in segs(c):
-            if kind != "line":
-                continue
-            t, k = (i0, i3) if P[i0].x < P[i3].x else (i3, i0)
-            T, C = P[t], P[k]
-            run, rise = C.x - T.x, C.y - T.y
-            if not (80 <= run <= 170 and T.y > 0.8 * xh and rise > 0 and lo <= math.degrees(math.atan2(rise, run)) <= hi):
-                continue
-            step = 1 if (t + 1) % n != k else -1
-            group, i = [T], t
-            for _ in range(14):
-                i = (i + step) % n
-                p = P[i]
-                group.append(p)
-                if p.type:
-                    j = (i + step) % n
-                    while not P[j].type:
-                        j = (j + step) % n
-                    if abs(P[j].x - p.x) <= tol and p.y - P[j].y > 100:
-                        out.append((T, C, group))
-                        break
-    return out
-
-
-def flag_line(font):
-    import joins as JOINS
-    xh = 520
-    ref = max(C.y for _, C, _ in JOINS._flags(font["i"], 5, 12, xh))     # i: the control
-    done = []
-    for g in font:
-        if not g.contours or _zone_kind(font, g) != "low" or g.name in FLAG_KEEP:
-            continue
-        for T, C, group in _head_flags(g, xh):
-            P = next(c.points for c in g.contours if any(q is C for q in c.points))
-            k = next(i for i, q in enumerate(P) if q is C)
-            far = P[(k + 1) % len(P)] if P[k - 1] is T else P[k - 1]
-            if far.y >= C.y:
-                continue                                 # the stroke runs on level or up from the corner: f's bar end
-            up = ref - C.y
-            if up and abs(up) <= FLAG_REACH:
-                for p in group + [C]:
-                    p.y += up
-                done.append(f"{g.name} {C.y - up}>{C.y}")
     return done
