@@ -1616,7 +1616,6 @@ def primes(font, m):
     q = gp(font, "quotesingle")
     x0, y0, x1, y1 = bounds(q)
     p = moved(q, 0, 0, 1, 1, -14, ((x0 + x1) / 2, y0))
-    p = moved(p, 0, y1 - bounds(p)[3])                   # 0.84 (placement): the top on the quotes' (leaning, it fell 7)
     put(font, "minute", p, 0, [0x2032], lsb=40, rsb=40)
     w = bounds(p)[2] - bounds(p)[0]
     put(font, "second", union(p, moved(p, w + 40)), 0, [0x2033], lsb=40, rsb=40)
