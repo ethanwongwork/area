@@ -323,8 +323,9 @@ def audit(font):
                      if c.points[(i + 1) % len(c.points)].type == "line" and p.y == c.points[(i + 1) % len(c.points)].y
                      and abs(p.x - c.points[(i + 1) % len(c.points)].x) >= 60})
         thick = [b - a for a, b in zip(ys, ys[1:]) if 40 <= b - a <= 70]
-        if any(abs(t - m.cap_bar) > 1.5 for t in thick[:1]):
-            bad.append(f"{g.name}: bar {thick[0]:.0f}, H's crossbar {m.cap_bar:.0f}")
+        want_bar = C.CURRENCY_BAR if g.name == "euro" else m.cap_bar      # 0.84: a currency sign's bar, one value
+        if any(abs(t - want_bar) > 1.5 for t in thick[:1]):
+            bad.append(f"{g.name}: bar {thick[0]:.0f}, want {want_bar:.0f}")
     kr = next((g for g in font if 0x138 in g.unicodes), None)
     if kr is not None:
         K, G = on_points(font, "k"), set(on_points(font, kr.name))

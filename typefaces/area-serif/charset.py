@@ -1645,7 +1645,9 @@ def primes(font, m):
 
 
 def currencies(font, m):
-    cb, lb = m.cap_bar, m.low_bar
+    # 0.84 (pass 2, leftovers): every currency bar one value, the capitals' hairline (STROKE_UP 47); they were H's
+    # crossbar (49) here; the tenge keeps T's arm (46), its lower bar is T's own
+    cb, lb = CURRENCY_BAR, CURRENCY_BAR
     S = m.cap_stem
     # ruble: P with a second bar across its stem below the bowl
     P = gp(font, "P")
@@ -1676,7 +1678,7 @@ def currencies(font, m):
     STRUCK["dong"] = ("dcroat", [rect(x0 + 20, -150 - lb, x1 - 20, -150)])
     put(font, "dong", union(db, rect(x0 + 20, -150 - lb, x1 - 20, -150)), font["d"].width, [0x20AB])
     # rupee: a level top bar, a second bar under it, and the bowl's stroke turning into a long diagonal leg
-    r = m.cap_bar
+    r = CURRENCY_BAR
     w = 0.78 * CAP_HEIGHT
     top = CAP_HEIGHT
     bowl = ring(0.40 * w, 0.73 * CAP_HEIGHT, 0.24 * w, 0.27 * CAP_HEIGHT * 0.62, S * 0.95, r)
@@ -2428,6 +2430,7 @@ def _contour_path(c):
 # with the capitals (0.94). The stroke is the case's hairline (47 capitals, 43 lowercase), where and as long as
 # Libre Baskerville had it; the yen's bars are H's crossbar, as the won's, the ruble's and the lira's.
 STROKE_UP, STROKE_LOW = 47, 43          # the ladder's hairlines (balance.CAP_THIN, clean.THIN_ARCH x stem)
+CURRENCY_BAR = STROKE_UP                # 0.84 (pass 2, leftovers): every currency sign's bar, one value
 
 
 def letter_signs(font, m):
@@ -2479,12 +2482,12 @@ def letter_signs(font, m):
         stem = scan_h(Y, 100)[0]
         cx = (stem[0] + stem[1]) / 2
         half = (max(xs) - min(xs)) / 2
-        bars_ = [rect(cx - half, band((a + b) / 2, m.cap_bar)[0], cx + half, band((a + b) / 2, m.cap_bar)[1])
+        bars_ = [rect(cx - half, band((a + b) / 2, CURRENCY_BAR)[0], cx + half, band((a + b) / 2, CURRENCY_BAR)[1])
                  for a, b in ((ys[0], ys[1]), (ys[2], ys[3]))]
         w0 = g.width
         STRUCK["yen"] = ("Y", list(bars_))
         put(font, "yen", union(Y, *bars_), 0, lsb=ob[0], rsb=w0 - ob[2])
-        done.append(f"yen: Y + bars {ys[1] - ys[0]:.0f}>{m.cap_bar:.0f}")
+        done.append(f"yen: Y + bars {ys[1] - ys[0]:.0f}>{CURRENCY_BAR:.0f}")
     else:
         done.append(f"yen: bars not found ({ys})")
     return done
@@ -3202,6 +3205,20 @@ def percent_fit(font):
         near = min(inf, key=lambda c: c.transformation[4])
         # 0.84 (placement): on the figures' lines, as a figure stands: the superior zero's top on the figures' round
         # top (721), the inferior zeros' bottom on their round baseline (-9) (% stood 735 / -13, per mille 770 / -5)
+        # 0.84 (pass 2, leftovers): the bar's ends on the figures' flat lines (0 and the cap, 712), as %'s: the per
+        # mille's stood 752 at its top. The end's points move along the bar's own direction, the bar's weight kept
+        Pb = g.contours[0].points
+        ys_ = [q.y for q in Pb]
+        for edge_y, line, sel in ((max(ys_), CAP_HEIGHT, lambda q, e: q.y > e - 25), (min(ys_), 0, lambda q, e: q.y < e + 25)):
+            if edge_y == line:
+                continue
+            top_ = [q for q in Pb if q.y > max(ys_) - 25]
+            bot_ = [q for q in Pb if q.y < min(ys_) + 25]
+            ux = (sum(q.x for q in top_) / len(top_) - sum(q.x for q in bot_) / len(bot_))
+            uy = (sum(q.y for q in top_) / len(top_) - sum(q.y for q in bot_) / len(bot_))
+            dy = line - edge_y
+            for q in [q for q in Pb if sel(q, edge_y)]:
+                q.x, q.y = round(q.x + dy * ux / uy), q.y + dy
         for group, edge, line in ((sup, 3, FIG_ROUND[1]), (inf, 1, FIG_ROUND[0])):
             for c in group:
                 t = c.transformation
@@ -3246,7 +3263,7 @@ def euro_sign(font, m):
     cb = bounds(C)
     x0 = cb[0] - 0.9 * m.cap_stem
     x1 = cb[0] + 0.66 * (cb[2] - cb[0])
-    bars_ = [rect(x0, band(y * CAP_HEIGHT, m.cap_bar)[0], x1, band(y * CAP_HEIGHT, m.cap_bar)[1]) for y in (0.43, 0.60)]
+    bars_ = [rect(x0, band(y * CAP_HEIGHT, CURRENCY_BAR)[0], x1, band(y * CAP_HEIGHT, CURRENCY_BAR)[1]) for y in (0.43, 0.60)]
     STRUCK["euro"] = ("C", list(bars_))
     lsb, rsb = cb[0], font["C"].width - cb[2]
     put(font, "euro", union(C, *bars_), 0, list(font["euro"].unicodes) or [0x20AC], lsb=lsb, rsb=rsb)
@@ -3293,8 +3310,8 @@ def fraction_fit(font):
 
 def letter_currencies(font, m):
     """Naira, peso, tenge, bitcoin, kip, tugrik, guarani, colon: a capital and strokes, as the won, ruble and lira.
-    Level bars are H's crossbar; upright and leaning strokes the capital hairline."""
-    cb, S, hair = m.cap_bar, m.cap_stem, STROKE_UP
+    Level bars are H's crossbar; upright and leaning strokes the capital hairline. 0.84: level bars too (CURRENCY_BAR)."""
+    cb, S, hair = CURRENCY_BAR, m.cap_stem, STROKE_UP
     made = []
 
     def done(name, cp, path, letter):
@@ -3319,7 +3336,8 @@ def letter_currencies(font, m):
                                   rect(ps[0] - 0.9 * S, lev(0.78)[0], px1 + 0.25 * S, lev(0.78)[1])), "P")  # 0.756, 0.810
     T = gp(font, "T")
     tb = bounds(T)
-    arm = max(s[1] - s[0] for s in scan_v(T, tb[0] + 0.25 * (tb[2] - tb[0])))       # the arm's thickness
+    arm = max(s[1] - s[0] for s in scan_v(T, tb[0] + 0.25 * (tb[2] - tb[0])))       # the arm's thickness (0.84: the
+    #                                                   tenge's two bars are T's arm, its lower one T's own: kept 46)
     low = cut_out(T, 200, round((1 - 0.83) * CAP_HEIGHT))                            # T's top at 0.83 (Georgia Pro 0.829)
     done("uni20B8", 0x20B8, union(low, rect(tb[0], CAP_HEIGHT - arm, tb[2], CAP_HEIGHT)), "T")
     B = gp(font, "B")

@@ -2359,3 +2359,76 @@ Not done, beyond the withdrawals above: $ ₡ ₿ and S's ink (they wait on a sp
 (judgements); ß, ə, © ® ℗'s breaks (the guard left them), r ɍ's waves, a r R U Œ c_t; most of item 8 (list above).
 Images: `build/owner9/pass3/item1` .. `item9` (`big*.png` before in red over after, `text*.png` at 14 / 18 / 32 / 72 px;
 `item9/all.png` and one sheet per set).
+
+## Regular pass 2 (0.84), spine, tail and diagonal constructions (19 November 2026)
+
+The three rules the strokes pass withdrew (the spine, the tails, x's and X's halves) failed because they moved finished
+points and the masters' engine could not follow. Each is now tried as a construction (a centreline and a width law, or
+lines and a width) run in the Regular and again in every master on the master's own values. Built with the full build
+each time (`build/owner9/pass4/full-i1`, `full-i13`), measured with the stroke audit's reader and
+`build/owner9/pass4/tools/` (`sview.py`: before in red over after with curvature combs, node ratios and the width's
+extremes per edge; `ink.py`; `refspine.py`, `refsides.py`, `refink.py`: the references measured, numbers only, nothing
+saved). Images: `build/owner9/pass4/item1` (S s), `item2` (the tail study), `item3` (x X): `big-*.png` Light | Regular
+| Bold before over after, `text-masters.png` at 14 / 18 / 32 / 72 px at 300 / 400 / 800, before over after.
+
+| # | Item | Was (snap084d) | Construction | Now (snap084e) |
+|---|---|---|---|---|
+| 1 | S s spine | S 99.4 > 95.0 > 101.5 along the spine (two thicks, a thin middle); s 81 > 84 > 89 > 84 > 81; stroke audit: 4 width bumps / dips and 2 thicks off a node on each | `spine.py`: the stroke from the top pair of level extremes to the bottom pair is one ribbon. Centreline: the drawn stroke's medial axis (balls between the stroke's own two edges), a quintic smoothing spline, level through each end pair. Width: the end pairs' own hairlines (kept), one maximum at the centreline's inflection, w = w_end + (W - w_end) sin(pi x / 2) ** 1.5. W = the class's round widest x the ladder's thick-diagonal share, O 92 x 0.949 = **87.3**, o 82 x 0.949 = **77.8**: a diagonal-running curved thick weighs as the class stem (86 / 78) when it carries the round letter's overweight less the diagonal's; the references read S's spine 0.92 to 1.02 of O's side (Georgia Pro 0.965, Source Serif 4 0.921) and s's 0.89 to 0.98 of o's (0.948, 0.909); Area's were 1.047 and 1.086. The shape exponent 1.5: flat at the ends (the hairline runs on into the terminal as the drawing's did for 90 units) and the bowls' sides at 0.85 of the spine (Georgia Pro's left side 0.848; references 0.78 to 0.94). Edges: the parallels at w / 2, each fitted by the outline's own four cubics (nodes at the edge's two bowl extremes and its inflection), handles solved for position and one curvature at each node, the kept terminal's curvature at the ends, a quarter's two handles within 1.5 of each other (evaluate's lopsided), the inflection's handles rounded onto one line. Every master: the same on its own S and s after `s_terminal` and `round_ends`, W its own O / o side x 0.949 (Light 61.7 / 55.0, Bold 148.0 / 138.5) | one swell, S 86.8 and s 77.8 at the middle (Light 61.6 / 54.9, Bold 147.4 / 138.7), falling steadily to 48 / 47 and 43 / 44; no node ratio over 1.15 in any master; stroke audit: S and s no fault (S was the capitals' worst, 6.52). The spine–bowl joins: no curvature jump (the withdrawn rule's 14.9 and 4.1). Ink: S +15.6% > **+10.4%** of the median capital, s -9.5% > -12.8% of the lowercase |
+| 2 | j y tails | y thinnest 33.9 (j 38.6), y to -209 (j -233), balls j 80.7 y 82.4 (a c f 88) | `tail.py` (a study, **withdrawn**, not called): a spiral centreline from the straight (curvature rising, piecewise linear) to the ball's centre, the outside's lowest point on -233; width the straight's, THIN 39 at the lowest point, the ball's 88 at the end; the ball a circle (88 x the ball law in a master); the inside the outside's parallel at the law; the neck where that parallel meets the ball | not shipped: j and y keep snap084d's tails (below) |
+| 3 | x X diagonals | x thin 36.1 / 38.0, thick 72.6 / 72.3 (v 39.2 / 74.3); X thin 42.2 / 43.1 (A V W M Y 48) | `cross.py`: each stroke a direction and a width, its two sides two lines each one line through the crossing, the four corners where the strokes' sides meet. Widths the class's read on the same font across v's and V's parallel edges (Regular x 74.0 / 39.4, X 85.9 / 47.8; Light 52.4 / 33.0, 63.9 / 38.2; Bold 133.2 / 50.0, 146.1 / 62.8). Of each side's two arm pieces the one facing the top or bottom white keeps its serif end where it was (the serif-end opening, the owner's choice); the direction follows from it, the other side's and the width; the other ends slide along their line at their own height, each bracket's first handle turned onto the line and both kept short of the handles' meeting point (pathlint). Every master the same after the engine and its crossing rules; the mid master (600) takes it at the readings that far along (`cross.mid`: without it the first full build's audit_axis read X's corners 1.41 and 1.23 and x's 1.32 off their sides half way to the Bold). No optical offset of the thin stroke: the rules table has none | x thick 74.4 / 74.2, thin 39.5 / 39.2 (v 39.2 / 74.3); X thin 47.6 / 47.8, thick 86.2 / 85.9; each side's four ends on one line within 0.46 units, its pieces within 0.39 degrees, in all three masters. audit_bold reads each diagonal whole now (one stroke, not two halves: slanted strokes 37 > 34 measured, all on target). x's opening kept (its serif ends facing the whites do not move) |
+| 4 | leftovers | | the currency bars one value, `charset.CURRENCY_BAR` = 47 (€ ¥ ₽ ₺ ₩ ₦ ₱ ₭ ₮ ₫ ₹; ₸ keeps T's arm, its lower bar is T's own); ‰'s bar ends on 0 and 712 as %'s, moved along the bar | stroke audit currency bars € ¥ ₩ ₽ ₫ ₹ ₦ ₱ 47.0 (₺ 46.0 across its leaning bars, ₡ 46.6, ₸ 46.0; £ 49 its own drawing); ‰'s bar 0 to 712. The rest of item 4 not done (below) |
+
+**Why the tails were withdrawn again.** In the Regular the construction met everything asked: j and y both reach
+-233, balls 88.3 / 87.8 (circle fit), thinnest 39.0 / 38.5, curvecheck clean; the Bold's j and y were clean too (ball
+123, thinnest 49). The Light's y was not: its outside from the ball to the lowest point fell and rose again (curvecheck
+valley 56%). Every re-weighting of the fit that cleared one master broke another (the outside's two cubics cannot hold
+a rising curvature, G2 into the ball and the width law's parallels at once), the Bold y could only be solved by moving
+its ball 40 units left of its reach, and at every weight the ball's neck became a narrow pocket (images
+`item2/study-*.png`). That is not yet a construction that holds; `tail.py` stays as the study (its docstring records
+the state), and the build keeps `loops.round_tail` and the masters' `master_ball`. What it needs next: a third cubic on
+the outside (between the lowest point and the ball's side) so the curvature can rise there, and a rule for the ball's
+height in a master (the pocket under the ball is the white law's, not a leftover).
+
+**S's and the currency signs' ink.** S came to +10.4% of the median capital (the census's reading), not within 8%. The
+spine law alone cannot bring it: even the raised cosine (exponent 2, the bowls' sides at 0.80 of the spine, under every
+reference) leaves +9.5%; the rest sits in the terminals (two barbs 38 x 228), which the brief kept. The references put S
+between -1.3% and +13.1% of their capitals (Georgia Pro +13.1, Source Serif 4 +1.7; median +9.3). s fell from -9.5% to
+-12.8% of the lowercase (its spine 89 > 77.8 by the same law; references s/n 1.005 to 1.076, Area now 1.00): past the
+census's 12% line, a judgement for the owner. $ ₡ ₿ were not brought into the figures' range: $ is its own ball-ended
+drawing (not built from S), ₡ is C and two strokes, ₿ B and stubs; their bars are already the hairline (47). The rules
+table says the dollar's stroke crosses its counters ("A sign's letter through its bar"), ₿'s stubs already stop at the
+letter, and ₡'s strokes cross C: none breaks through a counter by rule. Every reference has ₡ and ₿ past its figures
+(₡ +22 to +54%, ₿ +38 to +61% of the figures' median; Area +47 / +45%).
+
+**√.** No rule sets its size: the operator box (+'s, 424) and ∑ ∏'s extent (-0.25 to 1.00 cap) are for those signs;
+√ is its own construction (`signs.radical`), 0.97 cap tall standing on the baseline. The references' radical is 1.07 to
+1.46 cap tall (median 1.29) and goes 0 to 0.23 cap under the baseline: it does read small beside ∑ ∏ ∆, and a size rule
+for it is the owner's call; not changed.
+
+Not done (item 4): ↔'s head reading 66.7; ⇤ ⇥ shafts (50.4, a tapered stroke cut by the stop bar); ɦ ƥ ɽ (80) and
+ɗ ᶑ ɠ (81) stems (`ext_lowercase`'s stem pairs do not find them: their stems are not two upright lines facing each
+other); the stacked marks' gaps; ✓ ✕ ⇧ ⇪ ink; a's hairline (parts.check's join rule holds it at 41.1); £'s bar (49, its
+own drawing).
+
+### Full build, the audits, `build/snap084e`
+
+`AREA_KERN_FIT=1 caffeinate -i build.py` (the masters' kerning measured again against the references at their weight,
+`fit_kerning.json`), then a plain full build after the tenge was put back on T's arm (`build/snap084e/full-084e*.log`).
+Audits against snap084d's (`build/owner9/pass3/audit-084d-v3`, `chk-084d-v3`, `stroke-084d`): `build/owner9/pass4/audit-084e`,
+`chk-084e`, `build/owner9/stroke-084e/`, the census `build/owner9/place-084e/`.
+
+| Audit | snap084d | snap084e |
+|---|---|---|
+| stroke audit entries / glyphs with a fault / like-part comparisons over tolerance | 1302 / 287 / 27 | 1280 / 286 / 25 (capitals 63 > 50; lowercase 163 > 156; currency 58 > 56) |
+| audit_axis Bold / Light | as before | the same (no drift: the mid master carries x X) |
+| audit_rays | 1 glyph (6) | the same |
+| audit_bold Bold / Light | 431 / 432, 432 / 432 | 428 / 429, 429 / 429 (x's and X's diagonals each read whole: 3 fewer slanted strokes measured, all on target; the one miss is g's neck, as before) |
+| audit_kern | pass; under the floor at 300 / 350 / 600 / 800: 81 / 102 / 733 / 1733 | pass; 89 / 110 / 732 / 1709, least at 300 10.1 (R Z; was 10.4): the refit moved 519 Bold and the Light's pairs to the nearer reference |
+| curvecheck regions and hooks, Light / Bold | pass; 9 + 5 / 6 + 16 | the same |
+| interpolation | 62 struck glyphs | the same |
+| Regular: evaluate | jumps 27, lopsided 6 | jumps 25, lopsided 6 (S and s one finding each, the curvature sign change at the spine's inflection node) |
+| Regular: even, parts, curvecheck, hooks, audit_charset | | unchanged (audit_charset checks the euro's bar against the currency bar) |
+| Regular: pathlint | 0 / 150 / 29 | 0 / 150 / 29 (₩'s stray-piece warning reads 2552 for 2480: its bars 47) |
+
+Advances: S and its 10 accented forms 586 > 580, s and its 10 forms 474 > 472 (the bowls' outer extremes come in as the
+stroke thins); x, X, ‰ and the currency signs unchanged.
