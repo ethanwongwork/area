@@ -877,6 +877,11 @@ def _arm(J, u, L, w0, d, a0, lead=0.5, enter=1.6, hold=0.55):
         lu = (u[0] * math.cos(l_) + n[0] * sg * math.sin(l_), u[1] * math.cos(l_) + n[1] * sg * math.sin(l_))
         tp = (c[0] + r * (n[0] * sg * math.cos(b) - u[0] * math.sin(b)), c[1] + r * (n[1] * sg * math.cos(b) - u[1] * math.sin(b)))
         td = (u[0] * math.cos(b) + n[0] * sg * math.sin(b), u[1] * math.cos(b) + n[1] * sg * math.sin(b))
+        if abs(phi) < 1e-9:                             # 0.84 pass 4: an arm of one width, its sides straight
+            h1 = (s0[0] + (tp[0] - s0[0]) / 3, s0[1] + (tp[1] - s0[1]) / 3)
+            h2 = (s0[0] + (tp[0] - s0[0]) * 2 / 3, s0[1] + (tp[1] - s0[1]) * 2 / 3)
+            sides.append((s0, h1, h2, tp))
+            continue
         m = meet((s0, lu), (tp, td))
         h1 = (s0[0] + (m[0] - s0[0]) * hold, s0[1] + (m[1] - s0[1]) * hold)
         h2 = (tp[0] + (m[0] - tp[0]) * hold, tp[1] + (m[1] - tp[1]) * hold)
@@ -910,13 +915,15 @@ def _arc(c, r, p0, p1, ccw):
     return out
 
 
-def _between(A, B, a, mid_w, side, k=0.55):
+def _between(A, B, a, mid_w, side, k=0.55, ay=None):
     """The double dagger's upright between its two crossings, one side: from the crotch by A to the crotch by B,
-    a from the axis at both, mid_w across at the middle; two cubics, upright at the crotches and at the middle."""
+    a from the axis at both (ay up or down from the crossing, a when not given), mid_w across at the middle; two
+    cubics, upright at the crotches and at the middle."""
+    ay = a if ay is None else ay
     x, ym = A[0], (A[1] + B[1]) / 2
     sgn = -1 if B[1] < A[1] else 1
-    p0 = (x + side * a, A[1] + sgn * a)
-    p1 = (x + side * a, B[1] - sgn * a)
+    p0 = (x + side * a, A[1] + sgn * ay)
+    p1 = (x + side * a, B[1] - sgn * ay)
     m = (x + side * mid_w / 2, ym)
     d0, d1 = ym - p0[1], p1[1] - ym
     return [("c", (p0[0], p0[1] + d0 * k), (m[0], m[1] - d0 * k), m),
@@ -932,20 +939,27 @@ def dagger(p, s=1.0, white=None):
     cx, ys = p["cx"], sorted(p["crossings"])
     w0, d = p["w0"] * s, p["d"] * s
     lead, enter, hold = p.get("lead", 0.5), p.get("enter", 1.6), p.get("hold", 0.55)
-    a = w0 / 2
+    # 0.84 (Regular pass 4, item 7): the upright and the side arms each their own weights. The upright: up (its width
+    # at the crossing and at its round head, the lowercase stem), foot (its round end at the foot: it tapers down);
+    # the side arms: side (where they leave), side_d (their round end). Without them every arm is w0 to d
+    up = p.get("up", w0 / s) * s
+    foot = p.get("foot", d / s) * s
+    head = p.get("up_d", d / s) * s if "up" not in p else up
+    sw, sd = p.get("side", w0 / s) * s, p.get("side_d", d / s) * s
+    a, ay = up / 2, sw / 2                              # a side arm leaves half the upright out; the upright half an arm
     yt, yb = ys[-1], ys[0]
     R = p["reach"]
-    parts = [_arm((cx, yt), (0, 1), p["top"] - yt, w0, d, a, lead, enter, hold),
-             _arm((cx, yt), (1, 0), R, w0, d, a, lead, enter, hold)]
+    parts = [_arm((cx, yt), (0, 1), p["top"] - yt, up, head, ay, lead, enter, hold),
+             _arm((cx, yt), (1, 0), R, sw, sd, a, lead, enter, hold)]
     if yt != yb:
-        mid = (w0 + 0.9 * d) / 2                        # half way from the leaving width to the end's: the arms' law
-        parts.append(_between((cx, yt), (cx, yb), a, mid, 1))
-        parts.append(_arm((cx, yb), (1, 0), R, w0, d, a, lead, enter, hold))
-    parts.append(_arm((cx, yb), (0, -1), yb - p["bottom"], w0, d, a, lead, enter, hold))
-    parts.append(_arm((cx, yb), (-1, 0), R, w0, d, a, lead, enter, hold))
+        mid = up if "up" in p else (w0 + 0.9 * d) / 2   # the upright's width (before: half way from the leaving width
+        parts.append(_between((cx, yt), (cx, yb), a, mid, 1, ay=ay))   # to the end's, the arms' law)
+        parts.append(_arm((cx, yb), (1, 0), R, sw, sd, a, lead, enter, hold))
+    parts.append(_arm((cx, yb), (0, -1), yb - p["bottom"], up, foot, ay, lead, enter, hold))
+    parts.append(_arm((cx, yb), (-1, 0), R, sw, sd, a, lead, enter, hold))
     if yt != yb:
-        parts.append(_between((cx, yb), (cx, yt), a, mid, -1))
-        parts.append(_arm((cx, yt), (-1, 0), R, w0, d, a, lead, enter, hold))
+        parts.append(_between((cx, yb), (cx, yt), a, mid, -1, ay=ay))
+        parts.append(_arm((cx, yt), (-1, 0), R, sw, sd, a, lead, enter, hold))
     contour = []
     for P in parts:
         for q in P:
