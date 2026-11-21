@@ -383,6 +383,17 @@ def section_joins(font, name="section"):
         if (A.signed_area(Pn) > 0) != (A.signed_area(P) > 0):
             Pn = A._reverse(Pn)
         new.append(Pn)
+    # then every smooth node at one curvature (loops.even_nodes, handle lengths only), kept where curvecheck's faults
+    # on the glyph fall (the fillets meet their curves tangent only)
+    import curvecheck as K
+    import loops as LP
+    yr = (-1000, 2000)
+    b0, w0 = K.report(name, new, yr)[:2]
+    ev = [[(round(q[0]), round(q[1]), q[2], q[3]) for q in LP.even_nodes(P, yr)[0]] for P in new]
+    b1, w1 = K.report(name, ev, yr)[:2]
+    if (len(b1), w1) < (len(b0), w0):
+        new = ev
+        log.append(f"evened ({len(b0)} > {len(b1)} faults, worst {w0:.2f} > {w1:.2f})")
     from ufoLib2.objects import Point
     for c, Pn in zip(g.contours, new):
         c.points = [Point(x, y, t, smooth=s_) for x, y, t, s_ in Pn]
