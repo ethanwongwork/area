@@ -1809,6 +1809,75 @@ def interface(font, m, adv):
                                                                arm=th_ * 0.22 * math.sqrt(2))), 0, [0x232B], lsb=50, rsb=50)
 
 
+# 0.84 (Regular pass 3, the owner's visual notes, item 8: "Æ should have a larger A, the balance/width of the A and E
+# should be more or less equal"). The A half (A's left leg, its crossbar and foot, cut at the apex) was 326 wide against
+# the E half's 522 (its stem to its arms' farthest end): 0.62. The A half now reaches AE_BALANCE of the E half: its leg
+# leans out about the apex (every point above the foot moved left by its height's share of the way down from the
+# apex, the foot serif with the leg's bottom whole; what lies right of the leg stretched about the apex, so the
+# crossbar runs on to the E's stem), the leg's outer edge moved out a little more so the leg keeps its thickness
+# across at the new lean (its level width times cos of the old lean over cos of the new); the E stays. æ is a and e joined at a's stem (no such fault: left).
+AE_BALANCE = 0.9      # "more or less equal": at 1.0 the leg leant 36 degrees, an italic stroke beside upright E (looked at)
+AE_FOOT = 30            # under this height the A half moves whole (the foot serif; its brackets lean with the leg: at 100
+                        # the inner bracket met the steeper leg with a corner, curvecheck infinite)
+
+
+def ae_wide(A_cut, E_part, apex_x, e_stem_x):
+    """A_cut widened as the rule above: (new path, shift that puts it back left of the apex)."""
+    from fontTools.pens.filterPen import FilterPen
+    a0, _, _, ytop = bounds(A_cut)
+    _, _, e1, _ = bounds(E_part)
+    a_half, e_half = apex_x - a0, e1 - e_stem_x
+    d = AE_BALANCE * e_half - a_half
+    if d <= 1:
+        return A_cut, 0.0
+    # the leg's lean before and after, read on its leftmost span's middle at two heights
+    y1, y2 = AE_FOOT + 40, ytop - 200
+    c1, c2 = [sum(scan_h(A_cut, y)[0]) / 2 for y in (y1, y2)]
+    w_h = scan_h(A_cut, (y1 + y2) / 2)[0]
+    w_h = w_h[1] - w_h[0]
+    f = lambda y: min(1.0, max(0.0, (ytop - y) / (ytop - AE_FOOT)))      # noqa: E731
+    run0 = c2 - c1
+    run1 = run0 + d * (f(y1) - f(y2))
+    phi0, phi1 = math.atan2(abs(run0), y2 - y1), math.atan2(abs(run1), y2 - y1)
+    e = w_h * (math.cos(phi0) / math.cos(phi1) - 1)
+
+    # the leg's two edges as lines (read under the crossbar and over it, where the leftmost span is the leg alone)
+    ya, yb = AE_FOOT + 40, ytop - 250
+    (oa, ia), (ob, ib) = scan_h(A_cut, ya)[0], scan_h(A_cut, yb)[0]
+    edge = lambda p, q, y: p + (q - p) * (y - ya) / (yb - ya)          # noqa: E731
+
+    def mapx(x, y):
+        sp = (edge(oa, ob, y), edge(ia, ib, y))
+        if x >= apex_x - 1 and abs(x - sp[1]) < 3 and y > AE_FOOT:
+            # the counter's top corner, where the leg's inner edge meets the stem's line: slid down the new inner edge
+            # to where it meets that line again (bisection on the height)
+            lo_, hi_ = AE_FOOT, y
+            for _ in range(40):
+                mid = (lo_ + hi_) / 2
+                if edge(ia, ib, mid) - d * f(mid) < x:
+                    lo_ = mid
+                else:
+                    hi_ = mid
+            return x, lo_
+        if x > sp[1] + 1.0 and y > AE_FOOT:
+            # right of the leg (the crossbar, the counter, the cut by the apex): stretched about the apex, nothing at
+            # or right of it moves
+            k = max(0.0, (apex_x - x) / max(apex_x - sp[1], 1e-6))
+            return x - d * f(y) * min(1.0, k), y
+        outer = x < (sp[0] + sp[1]) / 2 and y > AE_FOOT
+        return x - d * f(y) - (e * f(y) if outer else 0.0), y
+
+    class _P(FilterPen):
+        def moveTo(self, p): self._outPen.moveTo(mapx(*p))
+        def lineTo(self, p): self._outPen.lineTo(mapx(*p))
+        def curveTo(self, *ps): self._outPen.curveTo(*[mapx(*p) for p in ps])
+        def qCurveTo(self, *ps): self._outPen.qCurveTo(*[mapx(*p) if p else p for p in ps])
+    out = pathops.Path()
+    A_cut.draw(_P(out.getPen()))
+    out = op(out, out)                          # simplified
+    return out, d
+
+
 def diphthongs(font, m):
     """ae and oe: the e's left stroke is the a's stem or the o's right stroke. AE and OE: E's stem takes the place of
     A's right leg or O's right side, without E's serifs on that side."""
@@ -1829,7 +1898,9 @@ def diphthongs(font, m):
     apex = scan_h(A, CAP_HEIGHT - 40)[0]                      # the apex near the top
     dx = apex[0] - es[0] + 8
     A_cut = op(A, rect(apex[0] + 30, -100, 2000, 2000), pathops.PathOp.DIFFERENCE)
-    put(font, "AE", union(A_cut, moved(E_noserif, dx)), dx + font["E"].width)
+    A_cut, d_ = ae_wide(A_cut, E_noserif, apex[0], es[0])
+    dx += d_
+    put(font, "AE", union(moved(A_cut, d_), moved(E_noserif, dx)), dx + font["E"].width)
     E_bare = op(E, union(rect(-100, CAP_HEIGHT - 80, es[0], 1000), rect(-100, -100, es[0], 80)),
                 pathops.PathOp.DIFFERENCE)
     ox0, _, ox1, _ = bounds(O)
