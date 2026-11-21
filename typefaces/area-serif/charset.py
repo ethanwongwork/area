@@ -2655,6 +2655,36 @@ def _name(font, key):
     return next((g.name for g in font if key in g.unicodes), None)
 
 
+# 0.84 (Regular pass 4, item 4; the cohesion study: « » ‹ › read small and light beside the lowercase, ink 0.36 of
+# the lowercase median, top at 0.78 of the x-height). The guillemets are letters: each chevron v's two diagonals
+# (signs.guillemet: the arm running down from the point v's thick, GUIL_THICK, the arm running up v's thin, GUIL_THIN;
+# an upright flat of the letters' vertex, 0.42 of the stem, at the point), its ends cut level on GUIL_TOP and
+# GUIL_BOTTOM of the x-height (the top near the x-height; the middle 0.52 of it, the references' median, where the
+# drawing's stood at 0.50); the outer edges' run over the height GUIL_RUN (the drawing's 0.55, a little narrowed so
+# the heavier strokes keep its ink width's share of the height); « the two chevrons GUIL_GAP of the height apart (the
+# drawing's 155 over 299). Sides the drawing's (46 before the point, 82 after). › » are these turned over (MIRRORS).
+GUIL_THICK, GUIL_THIN = 74, 39       # v's diagonals as read on the Regular (74.0, 39.4)
+GUIL_TOP, GUIL_BOTTOM = 0.96, 0.08
+GUIL_RUN = 0.38
+GUIL_GAP = 0.40
+
+
+def guillemets(font, m):
+    done = []
+    top, bot = round(GUIL_TOP * X_HEIGHT), round(GUIL_BOTTOM * X_HEIGHT)
+    H = top - bot
+    for name, n, cp in (("guilsinglleft", 1, 0x2039), ("guillemetleft", 2, 0xAB)):
+        if name not in font:
+            continue
+        info = dict(build="guillemet", params=dict(x0=0, cy=(top + bot) / 2, top=top, bottom=bot,
+                                                   run=round(GUIL_RUN * H), thick=GUIL_THICK, thin=GUIL_THIN,
+                                                   flat=VERTEX_CAP * m.stem, n=n, gap=round(GUIL_GAP * H)))
+        g = put_built(font, name, info, 0, list(font[name].unicodes) or [cp], lsb=46, rsb=82)
+        b = bounds(gp(font, name))
+        done.append(f"{name} {b[2] - b[0]:.0f} x {b[3] - b[1]:.0f}, advance {g.width}")
+    return done
+
+
 def mirrors(font):
     done = []
     for a, b in MIRRORS:
@@ -4075,6 +4105,7 @@ def run(font, lightened):
     print("charset: plain strokes", plain_strokes(font, m))            # 0.71
     print("charset: signs from letters", letter_signs(font, m))        # 0.71
     print("charset: brackets", bracket_extent(font))                   # 0.84 (placement)
+    print("charset: guillemets", guillemets(font, m))                 # 0.84 (pass 4, item 4)
     print("charset: mirrored pairs", mirrors(font))                    # 0.71
     print("charset: sign weights", cap_strokes(font))                  # 0.71
     print("charset: Eng", eng_capital(font))                           # 0.75

@@ -1276,3 +1276,45 @@ def tcross(p, s=1.0, white=None, sh=1.0):
 
 BUILDERS.update({"tarrow": tarrow, "tcheck": tcheck, "tcross": tcross})
 TAPERED = {"tarrow", "tcheck", "tcross"}
+
+
+# 0.84 (Regular pass 4, item 4): the guillemets as letters. A chevron is v's two diagonals turned to point left: the
+# arm running down from the point (as v's left stroke) is v's thick diagonal, the arm running up its thin; their outer
+# edges meet in an upright flat 0.42 of the stem (the letters' vertex, 33), their inner edges in a point; each end cut
+# level on its zone (top, bottom). In a master the two weights take v's own laws (the thick the stem's, 1 + 0.80 f;
+# the thin the thin diagonal's, 1 + 0.27 ft: v's 74.0 / 39.4 at 400 read 133.2 / 50.0 at the Bold and 52.4 / 33.0 at
+# the Light), recovered from the sign law's s (bold.SIGN 1.37, LIGHT_THIN 1.72); the flat the stem's. « is two, `gap`
+# apart (vertex to vertex).
+GUIL_THICK_LAW, GUIL_THIN_LAW, GUIL_FLAT_LAW = 0.80, 0.27, 0.795
+_SIGN, _LIGHT_THIN = 1.37, 1.72
+
+
+def guillemet(p, s=1.0, white=None):
+    ft = (s - 1) / (_SIGN - 1)
+    f = ft if ft >= 0 else ft / _LIGHT_THIN
+    thick = p["thick"] * (1 + GUIL_THICK_LAW * f)
+    thin = p["thin"] * (1 + GUIL_THIN_LAW * ft)
+    flat = p["flat"] * (1 + GUIL_FLAT_LAW * f)
+    top, bot, cy, R = p["top"], p["bottom"], p["cy"], p["run"]
+    H = top - bot
+    out = []
+    for k in range(p.get("n", 1)):
+        x0 = p["x0"] + k * p.get("gap", 0)
+        # outer edges: (x0, cy) to (x0 + R, top) and to (x0 + R, bot)
+        du = (R, top - cy)
+        dl = (R, bot - cy)
+        Lu, Ll = math.hypot(*du), math.hypot(*dl)
+        nu = (du[1] / Lu, -du[0] / Lu)                  # into the ink: right and down from the upper outer edge
+        nl = (-dl[1] / Ll, dl[0] / Ll)                  # right and up from the lower
+        pu = (x0 + nu[0] * thin, cy + nu[1] * thin)     # a point on each inner edge
+        pl = (x0 + nl[0] * thick, cy + nl[1] * thick)
+        xt = pu[0] + (top - pu[1]) * du[0] / du[1]       # the inner edges on the level cuts
+        xb = pl[0] + (bot - pl[1]) * dl[0] / dl[1]
+        ip = meet((pu, du), (pl, dl))
+        xf = x0 + flat * R / H
+        out.append([(x0 + R, top), (xt, top), ip, (xb, bot), (x0 + R, bot),
+                    (xf, cy + (xf - x0) * (bot - cy) / R), (xf, cy + (xf - x0) * (top - cy) / R)])
+    return out, [], []
+
+
+BUILDERS.update({"guillemet": guillemet})
