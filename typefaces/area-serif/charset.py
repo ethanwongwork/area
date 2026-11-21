@@ -1316,6 +1316,12 @@ def spine_across(path):
 # and the slanted ones' 90), each arm's centreline ARROW_ARM long (the head's outer span 0.60 of the arrow, as
 # before). Every arrow is this one turned or turned over, at its full length (the slanted ones were 0.92 of it).
 ARROW_LENGTH = 2.0                 # of the maths axis
+# 0.84 (Regular pass 4, item 12; the cohesion study: → read short, 1.20 x-heights where the references' run 1.55 to
+# 1.88). The arrow's length follows the + box: it keeps its share of the minus's width (626 over 424, 1.476), so with
+# the box at the figures' ink (MATH_INK, item 11) → is 729 long. The taper, the round free ends and the head are as
+# they were. The up and down arrows keep their extent (the baseline to two axes, ARROW_LENGTH): at the new length
+# they would hang 51 under the baseline
+ARROW_PER_BOX = 626 / 424
 ARROW_ARM = 240                    # an arm's centreline, from the shaft's end to its free end
 ARROW_HALF = 45.0                  # degrees off the shaft
 
@@ -1324,7 +1330,9 @@ def arrows(font, m, adv):
     """Arrows on the maths' axis and weight: the shaft is the minus, the head two strokes of the same weight meeting
     in a point (Serrif's open head; Georgia Pro has none)."""
     w = m.math
-    L = ARROW_LENGTH * m.math_y
+    mb_ = bounds(gp(font, "minus"))
+    L = round(ARROW_PER_BOX * (mb_[2] - mb_[0]))
+    Lv = ARROW_LENGTH * m.math_y                       # the up and down arrows' extent
     cy = m.math_y
 
     def east(length=L, both=False):
@@ -1373,14 +1381,14 @@ def arrows(font, m, adv):
     put_built(font, "arrowleft", tap(at=[L / 2, cy], rot=180), 0, [0x2190], lsb=side, rsb=side)
     put_built(font, "arrowboth", tap(L=L + depth, kind="both", shaft=SHAFT_BOTH * m.hair, at=[(L + depth) / 2, cy]), 0, [0x2194],
               lsb=side, rsb=side)
-    up = built_path(tap(at=[0, cy], rot=90))
+    up = built_path(tap(L=Lv, at=[0, cy], rot=90))
     vside = (adv - (bounds(up)[2] - bounds(up)[0])) / 2          # vertical arrows: centred in the maths' width
     for name, u, rot in (("arrowup", 0x2191, 90), ("arrowdown", 0x2193, -90)):
-        put_built(font, name, tap(at=[0, cy], rot=rot), 0, [u], lsb=vside, rsb=vside)
+        put_built(font, name, tap(L=Lv, at=[0, cy], rot=rot), 0, [u], lsb=vside, rsb=vside)
     # 0.83 (Regular pass, consistency 0a): the up-down arrow keeps the up arrow's extent (its length, 2 axes: from the
     # baseline to 626, centred on the axis), its heads the shared head; at the two-headed level arrow's length (728) it
     # hung 51 under the baseline
-    put_built(font, "arrowupdn", tap(L=L, kind="both", shaft=SHAFT_BOTH * m.hair, at=[0, cy], rot=90), 0, [0x2195],
+    put_built(font, "arrowupdn", tap(L=Lv, kind="both", shaft=SHAFT_BOTH * m.hair, at=[0, cy], rot=90), 0, [0x2195],
               lsb=vside, rsb=vside)
     for name, u, rot in (("uni2197", 0x2197, 45), ("uni2196", 0x2196, 135), ("uni2199", 0x2199, -135),
                          ("uni2198", 0x2198, -45)):
