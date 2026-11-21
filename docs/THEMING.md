@@ -460,6 +460,8 @@ Contrast, Selection) keeps working over it in CSS.
 ## System tokens outside the axes
 
 - `opacity-disabled`: 0.5, a whole disabled control. Fields use their own disabled paint.
+- `opacity-pending`: 0.6, the words of an item still on its way (a Message or a Queue row being sent). Not a disabled
+  state: the item is live and its actions stay at full opacity.
 - `scrim`: the modal backdrop, 13% black in light and `bg-overlay` in dark. It is derived,
   so a themed subtree re-derives it.
 - `hue-<hue>-<role>` (components audit D5, 2026-11-07): every label hue's roles, `text`, `icon`, `border`, `bg`,

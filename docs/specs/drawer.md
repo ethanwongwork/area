@@ -68,6 +68,8 @@ Area's lift is the Elevation axis's modal role, as Dialog (`--area-shadow-modal`
 | non-modal | `modal={false}`: a manual popover in the top layer spanning the viewport, pointer passing through everywhere but the surface (drawer.css:166-167) | Owner 2026-10-06; Notion's side peek | `dialog.show()` painted under the gallery's rail |
 | motion | `translate` 100% from the edge, in on `duration-slow` (250), out on `duration-moderate` (200), `ease-drawer` both ways; scrim fade `moderate` ease-out; instant under reduced motion (2026-10-07, below) | docs/MOTION.md, "Drawer / sheet"; Vaul's curve | shadcn 200ms ease-in-out; was `duration-base` ease-out |
 
+- Drawer's sm and md read the modal family's widths in `dialog.css` (`--_modal-sm` 384, `--_modal-md` 480), fixed at every type and density.
+
 ## Behavior and accessibility
 
 Modal (default): a native modal `<dialog>` (focus trapped, Escape closes, focus returns to the
@@ -227,3 +229,7 @@ Compact / Default / Comfortable; each is whole at type 12 to 16 and every densit
 - B4.2: a bottom drawer's close is a corner control (9 in, corner 7 in 16 at the defaults); a side drawer's top corners meet the window, so its close keeps its own corner.
 - 2026-11-14 · system evaluation B6.5 (correction) · Dialog's rule: the close at the corner-control distance, the title's cap centre on the close's centre (cap top 19 at type 13, 20 at 12 and 16). A side drawer sets no `--_cc-inset`, so its close's distance comes from the control's pull alone (the same place).
 - 2026-11-14 · system evaluation B6.5 (final) · Dialog's rule restored and written as the corner control's one named exception: the title's cap on the inset, the close centred on it with its glyph on the side column, its corner from the nearer distance (a side drawer's close keeps its own corner).
+
+## System status step C, 2026-11-18 (shared sources)
+
+The 384 default and sm, and md's 480, now read Dialog's shared modal widths. Nothing moved.

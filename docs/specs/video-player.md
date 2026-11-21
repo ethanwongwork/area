@@ -76,6 +76,8 @@ Every button is an Area Button (ghost, neutral, md, icon-only) inside an Area To
 | narrow | floating under 400: one row, play · track · −remaining · full screen, inset all round, the same corner; bar under 400: no volume range, no captions or picture in picture; under 280: no duration | round 40; round 47 (not a pill); Video.js, Vidstack small |
 | `controls` | `auto` (hide when idle) or `always` | Kibo's always-visible bar |
 
+- The glass's paint is one recipe, `:where(.area-video-player, .area-attachment)` in `video-player.css`: `--_media-glass-fill` 72%, `-blur` 16px, `-saturate` 150%, `-edge` and `-hover` white 12%, `-selected` 16%, `-press` 20%, and `--_media-ground` black behind letterboxing. It is no theme role: it sits over media in every theme. Attachment reads it.
+
 ## Behavior and accessibility
 
 Keys (on the player or a control): Space / K play, ← → 5 s, J / L 10 s, ↑ ↓ volume 5%, M mute, F full screen, C captions,
@@ -388,3 +390,7 @@ The scrim (the bar's fade) is removed with its part. `floating` (QuickTime's pan
 ## State paint (plan B7.2, B7.3), 2026-11-14
 
 - The start button presses to the glass at 20%, as the controls; an on control presses to 20% (was its 16%).
+
+## System status step C, 2026-11-18 (shared sources)
+
+Media glass became one shared recipe, so the white tints and #000 are written once; `state-paint.test.mjs` no longer lists this sheet as pending. Nothing moved.

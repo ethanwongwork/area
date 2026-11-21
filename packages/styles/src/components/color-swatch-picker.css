@@ -66,6 +66,10 @@
   /* Palette: contiguous cells filling the width, like the iOS color grid. The outer edge is
      rounded like a color area; selection is the swatch rows' ring, drawn inside the cell. */
   .area-color-swatch-picker--palette {
+    /* Local layers (DESIGN_SYSTEM.md, "Local stacking"): the palette's ring is 1, the chosen cell's outline over it and
+       the focused cell's ring over both. */
+    --_layer-chosen: 2;
+    --_layer-focus: 3;
     display: grid;
     grid-template-columns: repeat(var(--_columns), minmax(0, 1fr));
     gap: 0;
@@ -105,7 +109,7 @@
       transition-duration: var(--area-hover-in);
     }
   }
-  .area-color-swatch-picker--palette > .area-color-swatch-picker__cell:has(input:checked) { z-index: 2; background: none; box-shadow: none; }
+  .area-color-swatch-picker--palette > .area-color-swatch-picker__cell:has(input:checked) { z-index: var(--_layer-chosen); background: none; box-shadow: none; }
   .area-color-swatch-picker--palette > .area-color-swatch-picker__cell:has(input:checked) > .area-color-swatch {
     --_radius: var(--area-radius-min); /* spec: iOS's lightly rounded outline; 2, so the colour's corners barely move */
     --_inner-radius: var(--_radius);
@@ -113,6 +117,6 @@
     box-shadow: 0 0 0 1px #fff, inset 0 0 0 1px #fff, inset 0 0 0 2px rgb(0 0 0 / 0.15); /* spec: iOS white, 10% of the cell */
     transition-duration: var(--area-hover-in);
   }
-  .area-color-swatch-picker--palette > .area-color-swatch-picker__cell:has(input:focus-visible) { outline-offset: calc(var(--area-focus-width) * -1); z-index: 3; }
+  .area-color-swatch-picker--palette > .area-color-swatch-picker__cell:has(input:focus-visible) { outline-offset: calc(var(--area-focus-width) * -1); z-index: var(--_layer-focus); }
 
 }

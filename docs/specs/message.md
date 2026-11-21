@@ -64,6 +64,8 @@ actions     six 32 × 32 buttons, radius 8, no gap, icons 20 (16 for regenerate 
 | status line | 4 under the bubble (the person's actions' gap), a control-sm row (24) so it is one height with or without Retry, at the column's end | Message's own user gap | — |
 | stack | 2 apart; where two of the person's bubbles meet, their end corners (top-end of the lower, bottom-end of the upper) are a quarter of the bubble's corner: 4 at 16, 3 at compact 12; a bubble with a status line under it keeps them | gap: the reference's `--cds-message-bubble-stack-gap: 2px`; the meeting corner is set per look there with no default (chat-apps.md), so Area derives it from its own corner and the Radius setting | the person's bubbles line up on the column's end, so only the end corners meet |
 
+- Sending dims the bubble by `opacity-pending` (0.6), the role Queue shares. The status line's icon gap is `gap-md` (6, Compact 4, Comfortable 8 at type 13).
+
 ## Visual pass
 
 2026-09-28 (batch 19), live in Claude in Chrome on an existing conversation (read only):
@@ -187,3 +189,7 @@ Owner, "Apply both" on Kit Type Decisions (artifact KeEDPx5sUTQXE6iKtu6sw1; docs
 ## State paint (plan B7.11), 2026-11-14
 
 - The person's actions hide only inside `@media (hover: hover)`; the `(hover: none)` rule is gone.
+
+## System status step C, 2026-11-18 (shared sources)
+
+0.6 became the `opacity-pending` role; the status gap took `gap-md` (off the density waiting list). Nothing moved at the defaults.

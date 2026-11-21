@@ -81,7 +81,7 @@ area-plan                 the agent card: card edge at stroke-width, container c
 | mark slot / gap | 16 square, gap-row (12, compact 8) | Menu's row gap; Area's icon slot | the text lands on the list column at every density (audit 2026-10-19; was 8 everywhere, Claude Code's item gap) |
 | current | default ink, Spinner sm | cursor (in progress primary) | — |
 | pending | muted ink, a 1px ring on the control hover edge | cursor quaternary; codex □; peer: Checkbox's rest edge | the control edge vanished on the Plan's subtle fill (L 0.913 on 0.976, browser check 2026-10-19) |
-| done | muted ink, struck through; the 12 ring and Checkbox's tick (1.25 line) in the muted ink; with meta (a phase), not struck | cursor done struck, `check-circle`; codex ✔; the references' phases (a check and "Completed") | owner 2026-10-25: a strike on a phase reads as removed; one mark silhouette (was a bare check glyph) |
+| done | muted ink, struck through; the 12 ring and Checkbox's tick (1.25 line at type 13, following the icon weight) in the muted ink; with meta (a phase), not struck | cursor done struck, `check-circle`; codex ✔; the references' phases (a check and "Completed") | owner 2026-10-25: a strike on a phase reads as removed; one mark silhouette (was a bare check glyph) |
 | cancelled | muted ink, struck through, the ring and a cross; with meta, not struck | cursor cancelled todos, `x-circle` | round 49; owner 2026-10-25 |
 | steps box | from the item's text column to the item row's edge; recessed (bg-subtle), the block corner (`radius-container`, 16 at the default), padding 4 0; 8 under the item's line, taking the item's end padding and the last step's 2 below (a negative margin; 2026-11-02, was 4 extra); rows 2 shorter each side, muted unless current | the agent panel reference (box on the label column, results 30 apart under steps 38, ~8 padding) | owner 2026-10-25: containers back "as long as the padding, alignment and visual balance is right" |
 | tracker room | with a bar or a rail: the agent card column (12 in, 13 from the outer edge, as the plain tray), head 8 taller (title 14 from the top), bar 12 under the title's line and 12 above the bottom, rail rows 4 apart | Claude's Context panel (8 text to bar); the agent chat's card column | owner 2026-10-25: "the padding/margins for the timeline and also the gap between the text and the indicators looks too small" (measured 12 / 7 / 6 / 12, unbalanced); owner 2026-10-28, chat set review: the column back to 12 ("move them to 13 anyway"), so the boxes in a chat start their text on one edge (it was Card's 16) |
@@ -356,3 +356,20 @@ Plain is its own block formatting context (`display: flow-root`, 2026-11-04 kit 
 - The single and segmented head's top, the open bar's bottom, an item's meta start and the words-to-detail gap are `ui-cluster` (6 / 8 / 10). Values at type 13 Compact / Default / Comfortable; unchanged at the default.
 - Why: docs/research/system-evaluation-2026-11-11 (plan B6.1, B6.5, B8.2, B2.2; README §5, phase2/leftovers.md); the owner took every recommendation on 2026-11-11. Fix the rule, not the instance.
 - Verdict: awaiting the owner.
+
+## Settings pass, 2026-11-21 (step C: icon weight and size tiers)
+
+From docs/research/system-status-2026-11-18 (section 3, step C1–C2). At the shipped defaults (type 13, density 32) nothing moves: every box, mask and stroke measured the same before and after, and 2x screenshots of every part are pixel-identical in light and dark.
+
+### Icon weight
+
+The done tick and the cancelled cross are masks, so their line can't read `--area-weight-icon`. They are now private
+properties on the mark (`--_plan-tick`, `--_plan-cross`) restated under `@container style(--area-type-base: N)` at types
+12, 14, 15 and 16, their 1.25 line times Glyph's change in the icon slot (the weight's ratio to type 13's, and 0.8846
+from type 15 where the slot is 20): 1.153 / 1.25 / 1.346 / 1.275 / 1.361. The ring is a border at the stroke width, as
+before; the current item's Spinner follows the Spinner's rule.
+
+## Review note, 2026-11-21
+
+- **What changed:** the done tick and the cancelled cross get heavier and lighter with the type size, as icons do.
+- **Why:** their line was fixed, so it drifted from the icons and text around them at type 12 and 16.

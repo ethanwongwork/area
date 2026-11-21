@@ -37,13 +37,53 @@
     cursor: pointer;
     outline: none;
 
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='%23888' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round' d='M4.5 6.5L8 10l3.5-3.5'/%3E%3C/svg%3E");
+    /* The drawings (docs/specs/select.md, "Icon weight"): the native picker's #888 chevron, the base-select chevron and
+       the chosen option's check, each a mask a stroke can't reach, so their line follows the type's icon weight by the
+       ladder below (as Glyph's line does), and is these values at the default type 13. */
+    --_chevron-fallback: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='%23888' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round' d='M4.5 6.5L8 10l3.5-3.5'/%3E%3C/svg%3E"); /* spec */
+    --_chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='black' stroke-width='1.125' stroke-linecap='round' stroke-linejoin='round' d='M3.5 5.5L8 10L12.5 5.5'/%3E%3C/svg%3E"); /* spec */
+    --_checkmark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='black' stroke-width='1.125' stroke-linecap='round' stroke-linejoin='round' d='M3 8L6.5 11.5L13.5 4.5'/%3E%3C/svg%3E"); /* spec */
+    background-image: var(--_chevron-fallback);
     background-repeat: no-repeat;
     /* Position and padding come from the inset contract (inset.css), which loads later (audit B-27). */
     background-size: var(--_icon);
   }
 
   .area-select--full-width { inline-size: 100%; }
+
+  /* Icon weight (docs/specs/select.md; DESIGN_SYSTEM.md, "Drawn marks follow the icon weight"): a mask can't take a
+     variable stroke, so each drawing is restated at the other type steps, its line its type-13 line times Glyph's: the
+     icon weight's ratio to type 13's (0.964 / 1.045 / 1.125 / 1.205 / 1.286 at types 12-16) and, as these sit in the
+     type's icon slot (16, 20 from type 15), the slot's line ratio (0.8846 at 15 and 16). The weight follows the type
+     axis alone, so the five steps are every value it takes; packages/react/tests/icon-weight.test.mjs checks them. */
+  @container style(--area-type-base: 12) {
+    .area-select {
+      --_chevron-fallback: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='%23888' stroke-width='1.384' stroke-linecap='round' stroke-linejoin='round' d='M4.5 6.5L8 10l3.5-3.5'/%3E%3C/svg%3E");
+      --_chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='black' stroke-width='1.038' stroke-linecap='round' stroke-linejoin='round' d='M3.5 5.5L8 10L12.5 5.5'/%3E%3C/svg%3E");
+      --_checkmark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='black' stroke-width='1.038' stroke-linecap='round' stroke-linejoin='round' d='M3 8L6.5 11.5L13.5 4.5'/%3E%3C/svg%3E");
+    }
+  }
+  @container style(--area-type-base: 14) {
+    .area-select {
+      --_chevron-fallback: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='%23888' stroke-width='1.615' stroke-linecap='round' stroke-linejoin='round' d='M4.5 6.5L8 10l3.5-3.5'/%3E%3C/svg%3E");
+      --_chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='black' stroke-width='1.211' stroke-linecap='round' stroke-linejoin='round' d='M3.5 5.5L8 10L12.5 5.5'/%3E%3C/svg%3E");
+      --_checkmark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='black' stroke-width='1.211' stroke-linecap='round' stroke-linejoin='round' d='M3 8L6.5 11.5L13.5 4.5'/%3E%3C/svg%3E");
+    }
+  }
+  @container style(--area-type-base: 15) {
+    .area-select {
+      --_chevron-fallback: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='%23888' stroke-width='1.53' stroke-linecap='round' stroke-linejoin='round' d='M4.5 6.5L8 10l3.5-3.5'/%3E%3C/svg%3E");
+      --_chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='black' stroke-width='1.148' stroke-linecap='round' stroke-linejoin='round' d='M3.5 5.5L8 10L12.5 5.5'/%3E%3C/svg%3E");
+      --_checkmark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='black' stroke-width='1.148' stroke-linecap='round' stroke-linejoin='round' d='M3 8L6.5 11.5L13.5 4.5'/%3E%3C/svg%3E");
+    }
+  }
+  @container style(--area-type-base: 16) {
+    .area-select {
+      --_chevron-fallback: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='%23888' stroke-width='1.633' stroke-linecap='round' stroke-linejoin='round' d='M4.5 6.5L8 10l3.5-3.5'/%3E%3C/svg%3E");
+      --_chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='black' stroke-width='1.225' stroke-linecap='round' stroke-linejoin='round' d='M3.5 5.5L8 10L12.5 5.5'/%3E%3C/svg%3E");
+      --_checkmark: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='black' stroke-width='1.225' stroke-linecap='round' stroke-linejoin='round' d='M3 8L6.5 11.5L13.5 4.5'/%3E%3C/svg%3E");
+    }
+  }
 
   /* An empty-value option chosen is a placeholder: placeholder ink, as Input's (audit B-19). */
   .area-select:not(:disabled):has(option:checked[value=""]) { color: var(--area-input-placeholder); }
@@ -53,8 +93,8 @@
    * Unsupported browsers keep the ordinary native picker above. */
   @supports (appearance: base-select) {
     .area-select, .area-select::picker(select) { appearance: base-select; }
-    /* The chevron and the check are the Area glyphs (chevron-down, check: the paths in glyphs.ts
-       at the default 1.125 icon weight); the chevron in the field's chevron ink (`input-chevron`,
+    /* The chevron and the check are the Area glyphs (chevron-down, check: the paths in glyphs.ts,
+       drawn at 1.125, the icon weight of type 14, where Glyph draws 1.045 at the default type 13); the chevron in the field's chevron ink (`input-chevron`,
        custom-select.md Q5, owner 2026-10-08), as Combobox and Custom select draw it; the #888
        data URI above stays only for the native picker (audit B-3 B, owner 2026-09-30). */
     .area-select { position: relative; background-image: none; }
@@ -67,8 +107,8 @@
       block-size: var(--_icon);
       margin-block: auto;
       background-color: var(--area-input-chevron);
-      -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='black' stroke-width='1.125' stroke-linecap='round' stroke-linejoin='round' d='M3.5 5.5L8 10L12.5 5.5'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
-      mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='black' stroke-width='1.125' stroke-linecap='round' stroke-linejoin='round' d='M3.5 5.5L8 10L12.5 5.5'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
+      -webkit-mask: var(--_chevron) center / 100% 100% no-repeat;
+      mask: var(--_chevron) center / 100% 100% no-repeat;
     }
     .area-select:disabled::picker-icon { background-color: var(--area-fg-disabled); }
     /* The browser anchors the native picker; it follows the Combobox list's rules (audit B-5,
@@ -158,8 +198,8 @@
       margin-inline-start: auto;
       /* A state mark: the Selection role's ink, as Menu's check (plan B7.7). */
       background-color: var(--area-fg-selection);
-      -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='black' stroke-width='1.125' stroke-linecap='round' stroke-linejoin='round' d='M3 8L6.5 11.5L13.5 4.5'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
-      mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='black' stroke-width='1.125' stroke-linecap='round' stroke-linejoin='round' d='M3 8L6.5 11.5L13.5 4.5'/%3E%3C/svg%3E") center / 100% 100% no-repeat;
+      -webkit-mask: var(--_checkmark) center / 100% 100% no-repeat;
+      mask: var(--_checkmark) center / 100% 100% no-repeat;
     }
     /* A group label is Menu's (plan A9.4, a heading over a run of rows): the rows' size at 500 in the muted ink, a row
        tall (13/18 on 30 at type 13); the options reset their own weight. */

@@ -557,3 +557,13 @@ Plan B5.1 (and B5.2, B5.3 where they apply; docs/research/system-evaluation-2026
 ## Shared bars and corners (plan B4), 2026-11-14
 
 - B2.2 leftover: the anchored-tab demo's label is the Tabs `__label` / `__text` parts, as a real tab's.
+
+## Settings pass, 2026-11-21 (step C: icon weight and size tiers)
+
+From docs/research/system-status-2026-11-18 (section 3, step C1–C2). At the shipped defaults (type 13, density 32) nothing moves: every box, mask and stroke measured the same before and after, and 2x screenshots of every part are pixel-identical in light and dark.
+
+### Presence sizes
+
+Presence sm stays 12 at every type, marked so: md and lg are the mark ladder's 16 and 20 (`mark-sm`, `mark-md`), which
+hold at every type, and sm is the step under them; no mark role is 12 (a `mark-xs` would name it; not added, as tokens
+are outside this pass). The glyph and ring already draw at `--area-weight-icon`.

@@ -17,7 +17,21 @@
   decisions remain; light tone outlines are slightly darker at defaults; built CSS grew 11% (area.css 3.51 → 3.90 MB),
   worth a shortening pass. CI: first run's browser jobs failed to launch Edge in time and hung; launchers now wait 60 s,
   print Edge's stderr, time out every call, and Linux has its own baselines in `scripts/rendered/platforms/linux/`
-  (the rendered jobs fail and upload `proposed-baseline/` until one is read and committed). Next: plan C. Phase 3 below merged as PR #235.
+  (the rendered jobs fail and upload `proposed-baseline/` until one is read and committed).
+  **Step C built (2026-11-21, uncommitted at the time of writing):** drawn icons (Select chevron and check, Checkbox
+  check, Plan tick, Spinner) follow the type's icon weight through `@container style(--area-type-base: N)` steps
+  (Stroke width is the frame width, not icon weight, so the audit's "ignores Stroke width" was wrong); Spinner, Slider
+  thumb and Switch travel scale with type; one figure scale for the five file families, named plot heights, modal
+  widths and palette top; a media glass recipe (video-player.css) read by Attachment; `--area-opacity-pending` (the
+  one new token); the density waiting list is empty; named local layers for z-index (DESIGN_SYSTEM "Local stacking");
+  new ratchet tests icon-weight, size-tiers, literal-paint, z-index, opacity. Nothing moves at the defaults (full
+  `check:rendered` unchanged, 429/429 behaviour). Touched families stay In review; their reasons were not rewritten
+  in `component-status.mjs`. Owner decisions open: whether file figures, plot heights, modal widths scale with type;
+  a `mark-xs` role for Presence sm; Select's chevron weight (1.125 against Glyph's 1.045 at type 13); Switch travel
+  proportion; Spinner lg's role. CI second run: behaviour 420/429 on Linux (headless Linux reports no mouse, so
+  `@media (hover: hover)` is false: both launchers now pass a mouse via `--blink-settings`; Ctrl+N/P test scoped to
+  macOS, the browser keeps those keys elsewhere); rendered captures hang mid-run on Linux only (being hardened).
+  Next: plan D (simplify the settings; needs the owner's picks). Phase 3 below merged as PR #235.
 
 ## Earlier state (2026-11-15)
 - **Project evaluation and Phase 3 start (worktree `area-project-eval-3594b0`, 2026-11-15, uncommitted).** Where it

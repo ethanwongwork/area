@@ -102,7 +102,7 @@
     text-align: start;
     /* The width is the size's (below); md, 480, when no size class is set, or the public `--area-dialog-inline-size`
        (plan B6.3), which a size class still overrides. */
-    --_dialog-size: var(--area-dialog-inline-size, calc(var(--area-space-96) * 5));
+    --_dialog-size: var(--area-dialog-inline-size, var(--_modal-md));
     inline-size: min(calc(100vw - var(--area-space-32)), var(--_dialog-size));
     font-size: var(--area-ui-size);
     line-height: var(--area-ui-leading);
@@ -123,11 +123,18 @@
    * md 480, the width Dialog always had (between shadcn 384 and Primer 640). lg and xl are the two wide widths a chat
    * app's dialogs measure, lg 720 for a table or two columns and xl 880 for a settings dialog with its own sidebar
    * (chat-apps.md: sm 400, md 520, lg 720, xl 880). Every size stops at the screen less 32, as before.
+   * The widths are fixed at every type and density: a modal's width is a measured panel width, set against the window,
+   * never the text (whether they should follow type is open, the owner's decision). The two widths Dialog and Drawer
+   * share are named once (system status 2026-11-18, step C3), so one name is one width in both.
    */
-  .area-dialog--sm { --_dialog-size: 384px; /* spec: Drawer sm, shadcn 384 */ }
-  .area-dialog--md { --_dialog-size: calc(var(--area-space-96) * 5); }
-  .area-dialog--lg { --_dialog-size: 720px; /* spec: chat-apps.md lg 720 */ }
-  .area-dialog--xl { --_dialog-size: 880px; /* spec: chat-apps.md xl 880 */ }
+  :where(.area-dialog, .area-drawer) {
+    --_modal-sm: 384px; /* spec: shadcn's dialog and sheet 384, at every type */
+    --_modal-md: calc(var(--area-space-96) * 5); /* 480, the width Dialog always had, at every type */
+  }
+  .area-dialog--sm { --_dialog-size: var(--_modal-sm); /* spec: Drawer sm, shadcn 384 */ }
+  .area-dialog--md { --_dialog-size: var(--_modal-md); }
+  .area-dialog--lg { --_dialog-size: 720px; /* spec: chat-apps.md lg 720, at every type */ }
+  .area-dialog--xl { --_dialog-size: 880px; /* spec: chat-apps.md xl 880, at every type */ }
 
   /* The title group, Dialog's and Drawer's one part (system gaps C7, 2026-11-07; drawer.css restated it line for line). */
   :is(.area-dialog__header, .area-drawer__header) {

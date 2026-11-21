@@ -54,6 +54,8 @@ Excluded for now: the framed "card" layout (Figma, ChatGPT: edge, radius 13–16
 | paint | ListBox's grid plates; hover changes the plate only | PRODUCT_UI rules 2 and 11 |
 | row alignment | tiles start at the top of their row | owner: "arent correctly positioned" |
 
+- The figure and the grid's sizes read Folder's figure scale (`--_figure-sm` / `-md` / `-lg`, folder.css); `--area-file-tile-figure` still replaces it. Fixed at every type and density.
+
 ## Measurements
 
 | Value | Area | Source |
@@ -163,3 +165,7 @@ card's images sit inside a frame).
 ## Selection paint (plan B7.6), 2026-11-14
 
 - A chosen tile in a File grid draws the shared selected edge (was the List box grid's plate, a 2.7% step in light); its focus ring moves outside, at `focus-offset`.
+
+## System status step C, 2026-11-18 (shared sources)
+
+The tile's and the grid's 48 / 64 / 96 literals now read Folder's shared figure scale. Nothing moved.

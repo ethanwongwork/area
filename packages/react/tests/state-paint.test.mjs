@@ -41,10 +41,10 @@ const STATE = /:hover|:active|\[data-selected\]|\[aria-selected="true"\]|\[aria-
 const PAINT = /^(background(-color|-image)?|box-shadow|border(-[a-z-]+)?-color|outline-color|color|fill|stroke)$/;
 const STATE_PROP = /^--_[\w-]*(hover|active|pressed|selected|checked|current)[\w-]*$/;
 const LITERAL = /#[0-9a-f]{3,8}\b|\brgba?\(\s*[\d.]|\bhsla?\(\s*[\d.]|\boklch\(\s*[\d.]+%?\s|\boklab\(\s*[\d.]|\b(white|black)\b/i;
-// Media chrome, a material's paint and the neutral solid's dark press (white, in Button and Calendar's selected day) are
-// justified literals their owners mark `/* spec */` (plan B7.4); until then they are named here, so a new unmarked
-// literal anywhere else fails.
-const PENDING_SPEC_MARKS = new Set(['components/video-player.css', 'material.css', 'components/button.css', 'components/calendar.css']);
+// A material's paint and the neutral solid's dark press (white, in Button and Calendar's selected day) are justified
+// literals their owners mark `/* spec */` (plan B7.4); until then they are named here, so a new unmarked literal anywhere
+// else fails. Media chrome left the list when Video player's glass became one recipe (step C4, 2026-11-18).
+const PENDING_SPEC_MARKS = new Set(['material.css', 'components/button.css', 'components/calendar.css']);
 
 test('no state rule paints a literal: a fill a setting should move reads a role, a justified literal is marked spec (plan B7.4)', () => {
   const found = [];

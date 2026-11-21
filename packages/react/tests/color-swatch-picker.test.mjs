@@ -31,6 +31,8 @@ test("the palette ring paints over the cells, under the selected and focused cel
   assert.match(ring, /z-index: 1;/);
   assert.match(ring, /box-shadow: inset 0 0 0 var\(--area-stroke-width\) var\(--area-token-swatch-ring\)/);
   assert.doesNotMatch(css.match(/\.area-color-swatch-picker--palette \{([^}]*)\}/)[1], /outline:/);
-  assert.match(css, /__cell:has\(input:checked\) \{ z-index: 2;/);
-  assert.match(css, /__cell:has\(input:focus-visible\) \{[^}]*z-index: 3;/);
+  // Named local layers (DESIGN_SYSTEM.md, "Local stacking"): chosen 2 over the ring, focus 3 over both.
+  assert.match(css.match(/\.area-color-swatch-picker--palette \{([^}]*)\}/)[1], /--_layer-chosen: 2;\s*--_layer-focus: 3;/);
+  assert.match(css, /__cell:has\(input:checked\) \{ z-index: var\(--_layer-chosen\);/);
+  assert.match(css, /__cell:has\(input:focus-visible\) \{[^}]*z-index: var\(--_layer-focus\);/);
 });

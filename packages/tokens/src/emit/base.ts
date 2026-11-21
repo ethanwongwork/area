@@ -105,6 +105,9 @@ export function baseTokens(): Record<string, string> {
   // The one disabled dimming, for controls that dim rather than repaint (audit S21b; was 0.5
   // written in 17 rules). Text fields repaint instead (DESIGN_SYSTEM "Shared state paint").
   out[`${PREFIX}opacity-disabled`] = "0.5";
+  // The one pending dimming (system status 2026-11-18, step C4): an item that is on its way and not yet there, a message
+  // or a queued prompt being sent, dims its words to 0.6 (Codex's opacity-60). It was 0.6 written in Message and Queue.
+  out[`${PREFIX}opacity-pending`] = "0.6";
 
   // The scale an overlay enters from and leaves to (docs/MOTION.md, "Overlays"; owner 2026-11-07, system gaps C7): Dialog,
   // Command palette, Popover, Menu, Select's list, Tooltip and Hover card. Was 0.97 written in each (Radix Themes 0.97;

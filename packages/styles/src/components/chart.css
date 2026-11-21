@@ -15,8 +15,14 @@
 @layer area.components {
   .area-chart {
     /* spec: the plot's height (axis labels included), the data views kit's 192 at md (data-views.tsx, plots 192 tall);
-       sm 128 and lg 256 are the code-hosting product's chart heights (data views README, "Heights by size"). */
-    --_chart-height: 192px;
+       sm 128 and lg 256 are the code-hosting product's chart heights (data views README, "Heights by size"). Fixed at
+       every type and density: a plot's height is the data's room, measured; whether it should follow type is open. The
+       three are named once (system status 2026-11-18, step C3): the bar, line and area sizes and the donut's ends read
+       them, and Chart.tsx draws in the same numbers (HEIGHT, RING). */
+    --_plot-sm: 128px; /* spec: at every type */
+    --_plot-md: 192px; /* spec: at every type */
+    --_plot-lg: 256px; /* spec: at every type */
+    --_chart-height: var(--_plot-md);
     /* The ground under the plot: Card's fill (its public hook), else the card ground. Stacked areas part on it and a
        point's ring is drawn in it. */
     --_chart-ground: var(--area-card-fill, var(--area-bg-card));
@@ -29,18 +35,18 @@
     font-size: var(--area-text-base-size);
     line-height: var(--area-text-base-leading);
   }
-  .area-chart--sm { --_chart-height: 128px; /* spec */ }
+  .area-chart--sm { --_chart-height: var(--_plot-sm); }
   .area-chart--md {}
-  .area-chart--lg { --_chart-height: 256px; /* spec */ }
+  .area-chart--lg { --_chart-height: var(--_plot-lg); }
   /* Kind: bar, line and area share the axes and the gridlines; each kind's marks are drawn by React. */
   .area-chart--bar {}
   .area-chart--line {}
   .area-chart--area {}
   /* A donut's plot is the ring's height: 160 across at md, 128 and 192 (derived: the data views ring, 160, a step of 32
      either side). */
-  .area-chart--donut { --_chart-height: 160px; /* spec */ }
-  .area-chart--donut.area-chart--sm { --_chart-height: 128px; /* spec */ }
-  .area-chart--donut.area-chart--lg { --_chart-height: 192px; /* spec */ }
+  .area-chart--donut { --_chart-height: 160px; /* spec: the data views ring, at every type */ }
+  .area-chart--donut.area-chart--sm { --_chart-height: var(--_plot-sm); }
+  .area-chart--donut.area-chart--lg { --_chart-height: var(--_plot-md); }
 
   /* The plot: one tab stop, the arrow keys move across x. Its font is the data label style, read by the drawing to size
      the axis gutter. */

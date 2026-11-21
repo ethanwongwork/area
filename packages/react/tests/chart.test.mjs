@@ -128,9 +128,10 @@ test("paint: gridlines the Dividers group's line, the baseline the divider, labe
   assert.match(ruleFor(".area-chart__mark"), /fill:\s*var\(--_chart-fill\)/);
   assert.match(ruleFor(".area-chart__band[data-active]"), /fill:\s*var\(--area-bg-hover\)/);
   assert.match(ruleFor(".area-chart__key"), /border-radius:\s*2px/);
-  assert.match(ruleFor(".area-chart"), /--_chart-height:\s*192px/);
-  assert.match(ruleFor(".area-chart--sm"), /--_chart-height:\s*128px/);
-  assert.match(ruleFor(".area-chart--lg"), /--_chart-height:\s*256px/);
+  // The plot heights are named once (system status 2026-11-18, step C3): 128 / 192 / 256.
+  assert.match(ruleFor(".area-chart"), /--_plot-sm:\s*128px;[^}]*--_plot-md:\s*192px;[^}]*--_plot-lg:\s*256px;[^}]*--_chart-height:\s*var\(--_plot-md\)/);
+  assert.match(ruleFor(".area-chart--sm"), /--_chart-height:\s*var\(--_plot-sm\)/);
+  assert.match(ruleFor(".area-chart--lg"), /--_chart-height:\s*var\(--_plot-lg\)/);
   // No draw-in: nothing in the family animates or transitions.
   for (const { selector, body } of rules) if (/\.area-chart/.test(selector)) assert.doesNotMatch(body, /animation|transition/, `${selector} moves`);
 });

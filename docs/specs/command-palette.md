@@ -70,6 +70,8 @@ highlight  5% warm black (rgba 33,27,23 / 0.05)
 | shortcut | Kbd small, quiet, at the end; renders like Menu's string shortcut (UI font 12/16 400, muted, unboxed; kbd.css:89-102) | Kbd; Menu | Was the keyboard face at 500 until audit S12a |
 | footer | key hints (↑ ↓ Move, ⏎ Open, Esc Close) as static text: small keycaps one ui-cluster from their words, ↑ and ↓ 2 apart, 16 between hints (compact 12), the keycaps on the rows' icon column, the footer padded by that column (12) all round | Raycast, Linear, VS Code quick open, Spotlight | owner round 68: static, not buttons (they were buttons from 2026-09-28) |
 
+- Notion's 77 from the top is named once, `--_palette-top`, read by the modal's margin and both block caps; 600, 700 and 1006 stay on their lines, each marked fixed at every type (a placement and extents in the window).
+
 ## Visual pass
 
 2026-10-28 (round 81; desktop app, the Stage at 100%, 2x, light and dark): a row's description sat 0.6px above the
@@ -331,3 +333,7 @@ Backspace and Escape, the preview's container query and the marks; not checked i
 ## Shared bars and corners (plan B4), 2026-11-14
 
 - B4.1: the search row is the tool bar and its rule (`--_hb-tool`, inset.css): 39 / 47 / 55 at type 13 Compact / Default / Comfortable. It was 48 less 8 a density step (40 / 44 / 52), on no ladder beside Panel's bar.
+
+## System status step C, 2026-11-18 (shared sources)
+
+The three 77s became `--_palette-top`. Nothing moved.

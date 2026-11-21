@@ -98,6 +98,8 @@ more.
 | create row | "Create" + the neutral Tag it would make, 6 apart | Notion; Combobox's create row | — |
 | removal | Backspace in an empty field; the Tag's × | Notion; Tag remove | — |
 
+- The Create row's gap is `gap-md` (6, Compact 4, Comfortable 8 at type 13).
+
 ## States
 
 | State | Change | Evidence |
@@ -279,3 +281,7 @@ The hidden status span is replaced by `announce` (`announce` / `useAnnouncement`
 
 ## Behaviour engine (plan C2.3), 2026-11-15
 - Tags reached with ← from the empty field, not Tab; Backspace / Delete on a focused tag removes it; Tag's `onDismiss` / `dismissLabel` replace the deprecated `onRemove` / `removeLabel`.
+
+## System status step C, 2026-11-18 (shared sources)
+
+Its density holdout took `gap-md`; off the waiting list. Nothing moved at the defaults.

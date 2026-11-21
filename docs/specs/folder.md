@@ -111,6 +111,8 @@ Area:
 | open | pocket top 88 → 152, flaring 16 past each side; back's edge follows it down; sheet to 30 (24 up) | owner 2026-10-19 ("more obvious that its open") |
 | motion | open on `base`, close on `fast`, `ease-in-out` (pocket path, rim path, sheet transform) | coherence pass 2026-10-19 (MOTION.md: shape moving while visible) |
 
+- The figure sizes are one scale for the five file families (`folder.css`, `:where(.area-folder, .area-file-page, .area-file-image, .area-file-tile, .area-file-grid)`): `--_figure-sm` / `-md` / `-lg` read the space ramp's 48 / 64 / 96. Fixed at every type and density; whether figures follow type is the owner's open question.
+
 ## Measurements
 
 | Value | Area | Source |
@@ -190,3 +192,7 @@ rules 1–3 and 11, MOTION.md and the tokens; in both themes; in a 2× capture.
 - **What changed:** the count is documented as artwork: drawn to the folder's scale (6 to 12 px), it may sit under the 10 px text floor because the Folder is an image (role img, named by its own label) or aria-hidden, so the count is never read as text (plan A9.9, finding T22).
 - **Why:** the system evaluation's type rules (docs/research/system-evaluation-2026-11-11, section 5, A9), owner-approved
   2026-11-11; the rules are in DESIGN_SYSTEM.md ("Ink and weight", "Size and shape", "Text pairs") and the type skill.
+
+## System status step C, 2026-11-18 (shared sources)
+
+The five file families' 48 / 64 / 96 literals became one shared scale in Folder's sheet on the space ramp (no new token). Nothing moved at any setting.

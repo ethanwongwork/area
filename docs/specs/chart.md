@@ -129,6 +129,8 @@ at the top (half a label line clears the top tick), and 4 + one label line (14 a
 | Empty | `emptyText` "No values yet", fg-muted, centred in the plot's height | WRITING.md (name what is missing) | — |
 | Loading | Skeleton block filling the plot's box, with `delay`; root `aria-busy` | Skeleton `delay` (V6); Table's loading | — |
 
+- The plot heights are named once on the root, `--_plot-sm` / `-md` / `-lg` (128 / 192 / 256); the donut's sm and lg read them (its md, 160, is its own). Fixed at every type and density, marked so on their lines; `Chart.tsx` draws in the same numbers (`HEIGHT`, `RING`) and says so.
+
 ## States
 
 | State | Slot · property changes | Evidence |
@@ -228,3 +230,7 @@ the repository.
 - Body blocks are `gap-row` apart (8 / 12 / 16); the tooltip row's columns, the value's start, a legend item's swatch gap and the change row's gap are `ui-cluster` (6 / 8 / 10); legend items are `2 × ui-cluster` apart (12 / 16 / 20). Values at type 13 Compact / Default / Comfortable; unchanged at the default.
 - Why: docs/research/system-evaluation-2026-11-11 (plan B6.1, B6.5, B8.2, B2.2; README §5, phase2/leftovers.md); the owner took every recommendation on 2026-11-11. Fix the rule, not the instance.
 - Verdict: awaiting the owner.
+
+## System status step C, 2026-11-18 (shared sources)
+
+The repeated 128 and 192 became named plot heights. Nothing moved. Open for the owner: whether plot heights should follow type.

@@ -45,6 +45,8 @@ words in the danger ink and Retry; pending: a skeleton over the tile).
 | video | the poster (`src`) under a 20 round play mark at the middle (play-filled at 12; the remove control's 20, so it clears the length under it), hidden with the length while it uploads or failed and its length (`badge`) in the bottom-end corner, 4 in, a 16 tall label 4 across on the tile's corner less the inset, text-sm with tabular figures; both on Video player's glass, which the remove control wears too; no poster shows the ground | the reference's Video tile (play over the poster); Video player's glass | it does not play in the composer, so the mark is not a button |
 | upload result | said through the shared announcer when the upload ends: "{name}: Complete" or "{name}: {error}" ("Upload failed" by default), politely | File upload item's announcement; DESIGN_SYSTEM.md "Announcements" | — |
 
+- The glass over a picture (the remove control, a video's mark and length) reads Video player's media glass recipe (`video-player.css`, `--_media-glass-*`): fill 72%, blur 16 saturate 150%, white 12% hairline and hover, 20% press. The head's icon-to-name gap is `gap-md` (6, Compact 4, Comfortable 8 at type 13).
+
 ## Behavior and accessibility
 
 A group named by the file (a file's visible name is `aria-hidden`, so it is said once); the remove button is named by
@@ -155,3 +157,7 @@ the attachment stands with the buttons it sits beside, so it stays on theirs.
 ## State paint (plan B7.11), 2026-11-14
 
 - The remove hides only inside `@media (hover: hover)`; the `(hover: none)` rule is gone.
+
+## System status step C, 2026-11-18 (shared sources)
+
+The glass literals moved to the shared media glass recipe, and the head's 6 gap to `gap-md` (off the density waiting list). Nothing moved at the defaults.

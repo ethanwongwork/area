@@ -44,7 +44,7 @@
   .area-description-list__term {
     display: flex;
     align-items: center;
-    gap: var(--area-space-6); /* spec: Notion's icon to name, 6 */
+    gap: var(--area-gap-md); /* spec: Notion's icon to name, 6 (compact 4): the md control's icon-to-label gap */
     flex: none;
     box-sizing: border-box;
     inline-size: var(--_term);
@@ -73,7 +73,7 @@
     --_row: auto;
     --_row-gap: 0px;
     --_pad-block: var(--area-gap-row);
-    --_inset: var(--area-space-16);
+    --_inset: calc(var(--area-ui-cluster) * 2); /* spec: ChatGPT's 16 at the default (Compact 12, Comfortable 20) */
   }
   .area-description-list--justified > .area-description-list__item { justify-content: space-between; gap: var(--area-gap-section); /* spec: 24 at the default */ padding-inline: var(--_inset); }
   /* The term at its start, its value at the end. Layout moves a label, not its role (plan A9.13): the term keeps the
@@ -159,7 +159,7 @@
     --_term-inset: var(--area-space-6); /* spec: the columns layout's term inset, at every density */
     display: flex;
     align-items: center;
-    gap: var(--area-space-6); /* spec: the term's icon gap */
+    gap: var(--area-gap-md); /* spec: the term's icon gap */
     min-block-size: var(--area-ui-row); /* spec: a list row (30, compact 28) */
     margin-block-start: max(0px, calc(4px - 4px * var(--area-ui-gap-step))); /* spec: the list's row gap, as if a row (4, compact 0) */
     padding: 0 var(--_term-inset);
@@ -175,7 +175,7 @@
     user-select: none;
   }
   .area-description-list--columns + .area-description-list__more { --_term-inset: 0px; min-block-size: var(--area-ui-leading); margin-block-start: var(--area-ui-cluster); } /* a row of the list's rhythm */
-  .area-description-list--justified + .area-description-list__more { --_term-inset: var(--area-space-16); margin-block-start: 0; min-block-size: calc(var(--area-ui-leading) + var(--area-space-24)); }
+  .area-description-list--justified + .area-description-list__more { --_term-inset: calc(var(--area-ui-cluster) * 2); margin-block-start: 0; min-block-size: calc(var(--area-ui-leading) + var(--area-space-24)); }
   .area-description-list__more > .area-description-list__icon > svg { transition: rotate var(--area-duration-fast) var(--area-ease-out); }
   .area-description-list__more[aria-expanded="true"] > .area-description-list__icon > svg { rotate: 180deg; }
   @media (hover: hover) {

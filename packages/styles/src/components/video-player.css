@@ -19,6 +19,20 @@
  * paused or while focus is inside.
  * ------------------------------------------------------------------------- */
 @layer area.components {
+  /* Media glass (system status 2026-11-18, step C4): the paint over a picture or a video, one recipe that Video player
+     and Attachment (its remove control, a video's play mark and length) read. It is no theme role: it sits over media in
+     every theme, so it never pairs light and dark (a role does), and it is white tints of Area's dark surface. The
+     literals are measured (round 45-51) and live here once. */
+  :where(.area-video-player, .area-attachment) {
+    --_media-glass-fill: 72%; /* spec: the dark surface at Apple's 72% */
+    --_media-glass-blur: 16px; /* spec: Video.js blur 16; Apple saturate 180, Glass 137.5 */
+    --_media-glass-saturate: 150%; /* spec */
+    --_media-glass-edge: rgb(255 255 255 / 0.12); /* spec: over media, the glass's white 12% hairline */
+    --_media-glass-hover: rgb(255 255 255 / 0.12); /* spec: over media, hover is the hairline's white 12% */
+    --_media-glass-selected: rgb(255 255 255 / 0.16); /* spec: over media, an on control's white 16% */
+    --_media-glass-press: rgb(255 255 255 / 0.2); /* spec: over media, press white 20% (Vidstack's hover) */
+    --_media-ground: #000; /* spec: over media, black behind letterboxing (every source) */
+  }
   .area-video-player {
     position: relative;
     display: block;
@@ -29,7 +43,7 @@
     /* A standalone viewer takes the container corner, as Figure's image (DESIGN_SYSTEM, Image corners; Figure moved to it
        2026-10-18; was radius-small): the frame recipe's block corner (surface.css); black behind letterboxing (every source). */
     border-radius: var(--_fr-block);
-    background-color: #000; /* spec */
+    background-color: var(--_media-ground);
     user-select: none;
   }
   .area-video-player:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-gap); }
@@ -48,22 +62,22 @@
   }
   .area-video-player__surface {
     --_inset: var(--area-ui-cluster); /* spec: the surface Toolbar's inset (8, compact 6) */
-    --_blur: 16px; /* spec: Video.js blur 16; Apple saturate 180, Glass 137.5 */
-    background-color: color-mix(in srgb, var(--area-bg-surface) 72%, transparent); /* spec: Apple's 72% */
-    -webkit-backdrop-filter: blur(var(--_blur)) saturate(150%); /* spec */
-    backdrop-filter: blur(var(--_blur)) saturate(150%);
-    box-shadow: var(--_m-layers, 0 0 0 0 transparent), inset 0 0 0 var(--area-border-width) rgb(255 255 255 / 0.12), var(--area-shadow-float); /* spec: the transparent stroke; a material's layers first (material.css) */
+    --_blur: var(--_media-glass-blur);
+    background-color: color-mix(in srgb, var(--area-bg-surface) var(--_media-glass-fill), transparent);
+    -webkit-backdrop-filter: blur(var(--_blur)) saturate(var(--_media-glass-saturate));
+    backdrop-filter: blur(var(--_blur)) saturate(var(--_media-glass-saturate));
+    box-shadow: var(--_m-layers, 0 0 0 0 transparent), inset 0 0 0 var(--area-border-width) var(--_media-glass-edge), var(--area-shadow-float); /* the media glass hairline */
   }
   /* Plates on the controls are tints of the glass (round 46): hover white 12% (the panel's stroke), press 20%
      (Vidstack's hover), selected 16%. */
   .area-video-player__controls .area-button.area-button--ghost {
-    --_bg-hover: rgb(255 255 255 / 0.12); /* spec */
-    --_bg-active: rgb(255 255 255 / 0.2); /* spec */
+    --_bg-hover: var(--_media-glass-hover);
+    --_bg-active: var(--_media-glass-press);
   }
   .area-video-player__controls .area-button.area-button--ghost[data-selected] {
-    --_bg: rgb(255 255 255 / 0.16); /* spec */
-    --_bg-hover: rgb(255 255 255 / 0.16);
-    --_bg-active: rgb(255 255 255 / 0.2); /* spec: a press on an on control still shows, the glass's press (plan B7.2) */
+    --_bg: var(--_media-glass-selected);
+    --_bg-hover: var(--_media-glass-selected);
+    --_bg-active: var(--_media-glass-press); /* a press on an on control still shows, the glass's press (plan B7.2) */
   }
 
   /* The round play: before the first play in every layout, and minimal's only control. The glass, the large control. */
@@ -85,9 +99,9 @@
   .area-video-player__start > svg { inline-size: var(--area-icon-md); block-size: var(--area-icon-md); }
   .area-video-player__start:focus-visible { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); }
   /* The glass a step lighter under the pointer, as the buttons' plates. */
-  @media (hover: hover) { .area-video-player__start:hover { transition-duration: var(--area-hover-in); box-shadow: var(--_m-layers, 0 0 0 0 transparent), inset 0 0 0 999px rgb(255 255 255 / 0.12), inset 0 0 0 var(--area-border-width) rgb(255 255 255 / 0.12), var(--area-shadow-float); /* spec */ } }
+  @media (hover: hover) { .area-video-player__start:hover { transition-duration: var(--area-hover-in); box-shadow: var(--_m-layers, 0 0 0 0 transparent), inset 0 0 0 999px var(--_media-glass-hover), inset 0 0 0 var(--area-border-width) var(--_media-glass-edge), var(--area-shadow-float); } }
   /* Held, the glass's press, 20% as the controls' (plan B7.3). */
-  .area-video-player__start:active { transition-duration: var(--area-press-in); box-shadow: var(--_m-layers, 0 0 0 0 transparent), inset 0 0 0 999px rgb(255 255 255 / 0.2), inset 0 0 0 var(--area-border-width) rgb(255 255 255 / 0.12), var(--area-shadow-float); /* spec */ }
+  .area-video-player__start:active { transition-duration: var(--area-press-in); box-shadow: var(--_m-layers, 0 0 0 0 transparent), inset 0 0 0 999px var(--_media-glass-press), inset 0 0 0 var(--area-border-width) var(--_media-glass-edge), var(--area-shadow-float); }
 
   /* The time: Area's muted UI text, tabular (Apple's secondary time; the references' 400). */
   .area-video-player__clock {

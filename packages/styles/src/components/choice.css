@@ -781,17 +781,54 @@
      1.5px stroke (Figma's 16px check, figma--checkbox-checked: 1.5px), the dash a 2px bar
      centred on whole pixels, 6 wide at 16 and 8 at 20; the radio dot 6 / 8. */
   .area-checkbox, .area-checkbox--md {
-    --_grid: var(--area-space-16); /* spec: the drawing's own grid */
+    --_grid: var(--area-space-16); /* spec, at every type: the drawing's own grid, drawn 1:1 so the mark stays on whole pixels (MOTION.md, crispness) */
     --_check: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='%23000' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round' d='M5 8.5l2 2 4-5'/%3E%3C/svg%3E"); /* spec */
     --_dash: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' d='M6 8h4'/%3E%3C/svg%3E"); /* spec */
   }
-  .area-radio, .area-radio--md { --_dot: 6px; /* spec */ }
+  .area-radio, .area-radio--md { --_dot: 6px; /* spec, at every type: the dot on the 16 grid, even so it centres on whole pixels */ }
   .area-checkbox--lg {
-    --_grid: var(--area-space-20); /* spec: the drawing's own grid */
+    --_grid: var(--area-space-20); /* spec, at every type: the drawing's own grid, drawn 1:1 (above) */
     --_check: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath fill='none' stroke='%23000' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round' d='M6.5 10.5l2.5 2.5 4.5-6'/%3E%3C/svg%3E"); /* spec */
     --_dash: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath fill='none' stroke='%23000' stroke-width='2' stroke-linecap='round' d='M7 10h6'/%3E%3C/svg%3E"); /* spec */
   }
-  .area-radio--lg { --_dot: 8px; /* spec */ }
+  .area-radio--lg { --_dot: 8px; /* spec, at every type: the dot on the 20 grid */ }
+  /* Icon weight (docs/specs/checkbox.md, "Icon weight"; DESIGN_SYSTEM.md, "Drawn marks follow the icon weight"): the check
+     is a mask, which can't take a variable stroke, so it is restated at the other type steps, its line the type-13 1.5
+     times the icon weight's ratio to type 13's (0.964 / 1.045 / 1.125 / 1.205 / 1.286 at types 12-16), as a Glyph drawn
+     at a fixed size (16, 20) changes. The dash stays a 2px bar at every type: it is centred on whole pixels, and the
+     ratio (1.85 to 2.46) rounds to 2 at each step. packages/react/tests/icon-weight.test.mjs checks the ladder. */
+  @container style(--area-type-base: 12) {
+    .area-checkbox, .area-checkbox--md {
+      --_check: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='%23000' stroke-width='1.384' stroke-linecap='round' stroke-linejoin='round' d='M5 8.5l2 2 4-5'/%3E%3C/svg%3E");
+    }
+    .area-checkbox--lg {
+      --_check: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath fill='none' stroke='%23000' stroke-width='1.384' stroke-linecap='round' stroke-linejoin='round' d='M6.5 10.5l2.5 2.5 4.5-6'/%3E%3C/svg%3E");
+    }
+  }
+  @container style(--area-type-base: 14) {
+    .area-checkbox, .area-checkbox--md {
+      --_check: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='%23000' stroke-width='1.615' stroke-linecap='round' stroke-linejoin='round' d='M5 8.5l2 2 4-5'/%3E%3C/svg%3E");
+    }
+    .area-checkbox--lg {
+      --_check: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath fill='none' stroke='%23000' stroke-width='1.615' stroke-linecap='round' stroke-linejoin='round' d='M6.5 10.5l2.5 2.5 4.5-6'/%3E%3C/svg%3E");
+    }
+  }
+  @container style(--area-type-base: 15) {
+    .area-checkbox, .area-checkbox--md {
+      --_check: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='%23000' stroke-width='1.73' stroke-linecap='round' stroke-linejoin='round' d='M5 8.5l2 2 4-5'/%3E%3C/svg%3E");
+    }
+    .area-checkbox--lg {
+      --_check: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath fill='none' stroke='%23000' stroke-width='1.73' stroke-linecap='round' stroke-linejoin='round' d='M6.5 10.5l2.5 2.5 4.5-6'/%3E%3C/svg%3E");
+    }
+  }
+  @container style(--area-type-base: 16) {
+    .area-checkbox, .area-checkbox--md {
+      --_check: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='%23000' stroke-width='1.846' stroke-linecap='round' stroke-linejoin='round' d='M5 8.5l2 2 4-5'/%3E%3C/svg%3E");
+    }
+    .area-checkbox--lg {
+      --_check: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath fill='none' stroke='%23000' stroke-width='1.846' stroke-linecap='round' stroke-linejoin='round' d='M6.5 10.5l2.5 2.5 4.5-6'/%3E%3C/svg%3E");
+    }
+  }
   /* The box follows the type size at both sizes (owner, 2026-10-12): md is the type's box (14 at
      type 12-13, 16 at 14, 18, 20 at 16), lg four larger (20 at type 14, as before). The size classes
      set fixed 16 and 20 until 2026-10-14, which overrode the type-following base rule above. */

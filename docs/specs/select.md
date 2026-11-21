@@ -108,7 +108,7 @@ size-sm trigger radius was 8 at capture; since audit S4 it is 6.
 |---|---|---|---|
 | trigger · chrome | Input's: 32 / 28 / 40, radius per tier 8 / 6 / 10 (`navigation.css:231`, `:310-312`), `input-edge`, `bg-surface`, no shadow (since 2026-09-29, audit B-2) | Peer: [Input](input.md); Figma's outline selects (1px rgb(230), white) | ChatGPT 36 pill with a fill; Figma 24, radius 5; no product select has a shadow (was `shadow-1`, kept with Input until both dropped it) |
 | trigger · soft | **`input-bg-soft` fill, transparent edge, no shadow; hover edge `input-edge`** (`.area-select--soft`, `navigation.css:250-255`); `variant` in the manifest (`manifest.ts:206, 211`) and React (`forms.tsx:12, 43`) | Third pass: the one field without soft, so a Panel mixed two field styles; peer Input soft (`input.css:52-57`) | — |
-| trigger · chevron | 16px, 8px from the outer end at sm and md, 12 at lg (owner 2026-10-08). With `appearance: base-select`: the Area `chevron-down` glyph (1.125 weight) as a `::picker-icon` mask in `input-chevron` ink (`stroke-control`, rgb(131) / dark rgb(147); 3:1 on every field fill; was `input-icon` #666), `fg-disabled` when disabled (`navigation.css:326-338`). Native picker only: the #888 1.5-stroke data URI (`navigation.css:251`) | Notion rgb(142,139,134) 8px from the end; ChatGPT 16px rgb(143); UUI 16px; audit B-3 B (owner) | The #888 literal stays where the browser draws the picker; Figma 50–90% black |
+| trigger · chevron | 16px, 8px from the outer end at sm and md, 12 at lg (owner 2026-10-08). With `appearance: base-select`: the Area `chevron-down` glyph (1.125 line at type 13; it follows the icon weight, "Icon weight" below) as a `::picker-icon` mask in `input-chevron` ink (`stroke-control`, rgb(131) / dark rgb(147); 3:1 on every field fill; was `input-icon` #666), `fg-disabled` when disabled (`navigation.css:326-338`). Native picker only: the #888 1.5-stroke data URI at type 13 (`--_chevron-fallback`) | Notion rgb(142,139,134) 8px from the end; ChatGPT 16px rgb(143); UUI 16px; audit B-3 B (owner) | The #888 literal stays where the browser draws the picker; Figma 50–90% black |
 | trigger · text | 14/20 400 `fg-default`, 11.03 from the edge | Notion 14 400, ChatGPT 14/18 400 | Notion's permission select uses muted ink as an inline trigger; Figma 11/16 450 |
 | picker · offset | 4 from the field, below; `position-try-fallbacks: flip-block` with `position-try-order: normal`, so it flips only when below doesn't fit (`navigation.css:347-348`) | Audit B-5 B (owner 2026-09-30): Combobox list rules; UUI 4px offset | Was no flip (pre-2026-09-24 owner decision, superseded). Chrome's UA default (`most-block-size`) opened it on the roomier side |
 | picker · size | min width max(trigger, 160; plan B2.3, was 224); max height min(324, 100%), then scrolls | Combobox list (Menu's 160; Figma's 324 font list) | Was the trigger's width and at most 288 |
@@ -117,7 +117,7 @@ size-sm trigger radius was 8 at capture; since audit S4 it is 6.
 | option · row | Menu's row (audit B-4): 32 at every trigger size; text start on the inset contract round((row − 1cap) / 2), 10 at the default (plan A11.1; was 10.38 unrounded); check edge 8 from the end; gap `--area-ui-cluster` 8 (plan B2.3; was `gap-row`); corner the select's own (sm 6, md 8, lg 10; was Menu's 8 at every size); 2px apart (`navigation.css:356-378`) | Peer: Menu rows 32px | Figma 24px rows; UUI 36, radius 6. Was min 32, padding 6 8, radius `radius-row` |
 | optgroup · label | 32 row, 12/16 `fg-muted`, regular weight (`navigation.css:403-412`) | Peer: Menu group label | — |
 | option · hover / focus | `bg-component-hover` #f3; keyboard focus is the plate alone, as Menu and Combobox rows | Audit row-plate rule; audit B-5 | Was the plate plus a 2px inset focus ring |
-| option · checked | no plate (owner 2026-10-08; was `bg-component-active` #eee); the Area `check` glyph (1.125 weight) as a `::checkmark` mask at the end in `currentColor` (`navigation.css:391-402`) | Audit: selection one step above hover | Figma's check sits before the label; UUI one fill for both |
+| option · checked | no plate (owner 2026-10-08; was `bg-component-active` #eee); the Area `check` glyph (1.125 line at type 13, following the icon weight) as a `::checkmark` mask at the end in `currentColor` (`navigation.css:391-402`) | Audit: selection one step above hover | Figma's check sits before the label; UUI one fill for both |
 | disabled | field paint only (`navigation.css:281-287`) | Audit "Disabled" rule for text fields | Was field paint and 50% opacity |
 
 ## States
@@ -327,3 +327,26 @@ Gap: Select sets `gap: var(--_gap)`, its size's tier (6 at md; 4 at Compact 13).
 ## State paint (plan B7.3), 2026-11-14
 
 - Options press to `bg-component-pressed`, one step past their hover.
+
+## Settings pass, 2026-11-21 (step C: icon weight and size tiers)
+
+From docs/research/system-status-2026-11-18 (section 3, step C1–C2). At the shipped defaults (type 13, density 32) nothing moves: every box, mask and stroke measured the same before and after, and 2x screenshots of every part are pixel-identical in light and dark.
+
+### Icon weight
+
+The chevron (base-select and the native picker's #888 one) and the chosen option's check are masks, so their line
+can't read `--area-weight-icon`. Each is a private property on `.area-select` (`--_chevron`, `--_chevron-fallback`,
+`--_checkmark`) restated under `@container style(--area-type-base: N)` at types 12, 14, 15 and 16 with its line times
+Glyph's change in the icon slot: the weight's ratio to type 13's and the slot's line ratio (0.8846 from type 15, where
+the slot is 20). The chevron's line: 1.038 / 1.125 / 1.211 / 1.148 / 1.225 drawing units at types 12-16 (1.53 px at type
+16 in its 20 box); Glyph's goes 0.964 / 1.045 / 1.125 / 1.066 / 1.138 in the same slot, the same ratios. Stroke width
+(the frame setting) moves neither: it isn't the icon weight. A native `<select>` without React keeps its chevron, the
+ladder being CSS. `icon-weight.test.mjs` checks each step against the type axis's tokens.
+
+- **Open (owner):** the chevron and check are drawn at 1.125, type 14's weight, where Glyph draws 1.045 at type 13; the
+  ladder keeps that offset. Matching Glyph exactly would thin them by 0.08 at the defaults.
+
+## Review note, 2026-11-21
+
+- **What changed:** the chevron and the check now get heavier and lighter with the type size, as every other icon does.
+- **Why:** they were drawn with a fixed line, so at type 16 they read lighter than the icons beside them, and at type 12 heavier.

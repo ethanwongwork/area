@@ -17,11 +17,12 @@
     --_attachment-radius: var(--area-radius-control-md);
     --_attachment-edge: var(--area-edge-cards);
     /* The on-media glass, Video player's (round 51): the remove control, a video's play mark and its length wear it. */
-    --_glass: 72%; /* spec: Video player's glass, Apple's 72% */
-    --_glass-blur: blur(16px) saturate(150%); /* spec: Video player */
-    --_glass-edge: rgb(255 255 255 / 0.12); /* spec: Video player's hairline */
-    --_glass-hover: rgb(255 255 255 / 0.12); /* spec: Video player hover */
-    --_glass-press: rgb(255 255 255 / 0.2); /* spec: Video player press */
+    /* Video player's media glass recipe (video-player.css): its fill, blur, hairline, hover and press. */
+    --_glass: var(--_media-glass-fill);
+    --_glass-blur: blur(var(--_media-glass-blur)) saturate(var(--_media-glass-saturate));
+    --_glass-edge: var(--_media-glass-edge);
+    --_glass-hover: var(--_media-glass-hover);
+    --_glass-press: var(--_media-glass-press);
     --_glass-in: var(--area-space-4); /* a control or mark over the picture sits 4 inside its corner */
     --_glass-radius: max(var(--area-radius-min), calc(var(--_attachment-radius) - var(--_glass-in) * var(--area-radius-concentric)));
     position: relative;
@@ -88,7 +89,7 @@
   }
   /* A file: its icon on the name's first line (one font reference, inset.css), the name up to three lines, two when the
      type's badge sits under it. */
-  .area-attachment__head { display: flex; align-items: flex-start; gap: var(--area-space-6); min-inline-size: 0; }
+  .area-attachment__head { display: flex; align-items: flex-start; gap: var(--area-gap-md); /* the md control's icon-to-label gap: 6, compact 4 */ min-inline-size: 0; }
   .area-attachment__icon {
     display: inline-flex;
     flex: none;

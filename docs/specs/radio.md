@@ -364,3 +364,10 @@ and media options keep the container corner, the recipe's *block* value.
 ## State paint (plan B7.2, B7.3), 2026-11-14
 
 - Soft rows press to `bg-component-pressed`, the checked row included.
+
+## Settings pass, 2026-11-21 (step C: icon weight and size tiers)
+
+From docs/research/system-status-2026-11-18 (section 3, step C1–C2). At the shipped defaults (type 13, density 32) nothing moves: every box, mask and stroke measured the same before and after, and 2x screenshots of every part are pixel-identical in light and dark.
+
+Nothing changes for Radio: its dot is a filled disc (no line) and stays 6 / 8 on the 16 / 20 grid at every type, so it
+centres on whole pixels; the size lines now say "at every type" for the size lint (`size-tiers.test.mjs`).

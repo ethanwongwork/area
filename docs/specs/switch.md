@@ -98,7 +98,7 @@ Captures: `area--sizesm`, `area--sizemd`, `area--sizelg`, `area--long`, `area--d
 
 | Slot · property | Area value | Basis | Reason when it differs from the basis |
 |---|---|---|---|
-| travel | **12px at every size** (`--_travel`, switch.css:8-9) | ChatGPT (32 − 16 − 4) and Notion (30 − 14 − 4) agree on 12 | Was width = 40 / 32 / 48 − 4, which gave 16px travel at md |
+| travel | **12px at every size at type 13**, two thirds of the type's toggle track at every type (`--_travel`: 12 / 13 / 15 / 16 at types 14-16; "Settings pass, 2026-11-21") | ChatGPT (32 − 16 − 4) and Notion (30 − 14 − 4) agree on 12 | Was width = 40 / 32 / 48 − 4, which gave 16px travel at md |
 | track · md | **`--area-mark-toggle` tall** (18 at type 12–13, 20 at 14, 22 at 15, 24 at 16), width height + 12; **32 × 20** at type 14, thumb 16, inset 2 (switch.css:12, 50) | ChatGPT 32 × 20, 16, 2 | Was 36 × 20 (Untitled sm); was 20 at every type size until 2026-10-12 / 10-14 |
 | track · sm / lg | mark-toggle − 4 / + 4: **28 × 16 / 36 × 24** at type 14 (switch.css:49, 51) | Same 12px travel | Notion's 30 × 18 sits between sm and md; Untitled md 44 × 24 is longer |
 | track · long | 2 × height + 4 (44 at md, type 14), thumb +8 (switch.css:54) | Area composition | — |
@@ -297,3 +297,22 @@ In a dense row, a Checkbox md and a Switch sm stand one height (14). No size is 
 - The thumb lists the flag too, so it is `radius-full` at a pill.
 - Why: docs/research/system-evaluation-2026-11-11 (plan B6.1, B6.5, B8.2, B2.2; README §5, phase2/leftovers.md); the owner took every recommendation on 2026-11-11. Fix the rule, not the instance.
 - Verdict: awaiting the owner.
+
+## Settings pass, 2026-11-21 (step C: icon weight and size tiers)
+
+From docs/research/system-status-2026-11-18 (section 3, step C1–C2). At the shipped defaults (type 13, density 32) nothing moves: every box, mask and stroke measured the same before and after, and 2x screenshots of every part are pixel-identical in light and dark.
+
+### Sizes
+
+The thumb's travel was 12 at every size and type, so the track grew squatter as the type made it taller (36 × 24 at
+type 16). It is now two thirds of the type's toggle track (`mark-toggle`), whole pixels: 12 at types 12-13, 13 at 14, 15
+at 15, 16 at 16, every tier alike (sm and lg tracks are 4 either side of the toggle; their travel is the same). md is
+30 × 18 at the defaults as before, 40 × 24 at type 16.
+
+- **Open (owner):** the 2/3 is Notion's 30 × 18 proportion; ChatGPT's 32 × 20 is 0.6. `icon-xs` (12, 16 at type 16)
+  was the role equal to 12 at the defaults, but it jumps only at type 16.
+
+## Review note, 2026-11-21
+
+- **What changed:** the switch keeps its shape at every type size: its thumb travels further on the taller tracks.
+- **Why:** the travel was fixed, so at type 16 the switch looked stubby next to its peers.

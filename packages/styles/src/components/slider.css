@@ -28,9 +28,11 @@
 @layer area.components {
   .area-slider {
     --_height: var(--area-control-md);
-    /* The thumb is on the fixed mark ladder, as Checkbox's glyph: 16 / 16 / 20, so compact
-       density no longer splits it from the glyphs beside it (audit C-29; was icon-sm/md). */
-    --_thumb: var(--area-space-16);
+    /* The thumb is the type's icon slot, as the glyphs beside it: 16 / 16 / 20 at type 12-14 and 20 / 20 / 24 from type
+       15 (docs/specs/slider.md, "Sizes"). Density never moves it: the icon slots follow the type alone since 2026-10-22,
+       so audit C-29's split (compact took 4 off icon-sm) can't return. It was 16 / 16 / 20 at every type until 2026-11-21,
+       so at type 16 the knob was smaller than the glyphs and the Checkbox beside it. */
+    --_thumb: var(--area-icon-md);
     --_track: var(--area-space-4);
     --_gap: var(--area-gap-md);
     --_text: var(--area-control-md-text);
@@ -352,9 +354,9 @@
 
   /* --- Sizes -------------------------------------------------------------- */
 
-  .area-slider--sm { --_height: var(--area-control-sm); --_thumb: var(--area-space-16); --_gap: var(--area-gap-sm); --_text: var(--area-control-sm-text); --_leading: var(--area-control-sm-leading); --_bar-radius: var(--area-radius-control-sm); }
-  .area-slider--md { --_height: var(--area-control-md); --_thumb: var(--area-space-16); --_gap: var(--area-gap-md); --_text: var(--area-control-md-text); --_leading: var(--area-control-md-leading); --_bar-radius: var(--area-radius-control-md); }
-  .area-slider--lg { --_height: var(--area-control-lg); --_thumb: var(--area-space-20); --_gap: var(--area-gap-lg); --_text: var(--area-control-lg-text); --_leading: var(--area-control-lg-leading); --_bar-radius: var(--area-radius-control-lg); }
+  .area-slider--sm { --_height: var(--area-control-sm); --_thumb: var(--area-icon-sm); --_gap: var(--area-gap-sm); --_text: var(--area-control-sm-text); --_leading: var(--area-control-sm-leading); --_bar-radius: var(--area-radius-control-sm); }
+  .area-slider--md { --_height: var(--area-control-md); --_thumb: var(--area-icon-md); --_gap: var(--area-gap-md); --_text: var(--area-control-md-text); --_leading: var(--area-control-md-leading); --_bar-radius: var(--area-radius-control-md); }
+  .area-slider--lg { --_height: var(--area-control-lg); --_thumb: calc(var(--area-icon-lg) + var(--area-space-4)); --_gap: var(--area-gap-lg); --_text: var(--area-control-lg-text); --_leading: var(--area-control-lg-leading); --_bar-radius: var(--area-radius-control-lg); }
 
   /* --- Variants ------------------------------------------------------------ */
 
@@ -476,6 +478,9 @@
     --_grip-ink: #fff; /* spec: ColorPicker's thumb ring */
     /* spec (owner 2026-10-31: "tone down or remove the dropshadow"): half a pixel down at 10%, the least that keeps the
        pill on Temperature's near-white middle, where with none it vanished; was 0 1px 2px at 20%. No hairline. */
+    /* Outside the depth settings on purpose (docs/specs/slider.md, "Grip"): it is the white grip's edge, not a lift, so it
+       holds at Elevation 0 and every Shadow setting, as ColorPicker's ring's does; no shadow role is this at the defaults
+       (the control and field roles are a 1px lip plus a lift, the rest edge is 0 by default). */
     --_grip-shadow: 0 0.5px 1px rgb(0 0 0 / 0.1); /* spec */
   }
   /* Every bar's fill ends rounded with its grip inside (owner 2026-10-26, "consistent"): the accent bar's end is its
@@ -561,7 +566,7 @@
     --_range-fill: var(--area-selection-solid);
     --_range-track-fill: var(--area-fill-track); /* spec (audit S5): as the single rail */
     --_range-height: var(--area-control-md);
-    --_range-thumb: var(--area-space-16);
+    --_range-thumb: var(--area-icon-md); /* Slider's thumb (above) */
     --_range-rail: var(--area-space-4);
     --_range-radius: var(--area-radius-full);
     --_range-fill-radius: var(--_range-radius);
@@ -588,7 +593,7 @@
   }
   .area-slider-range--sm { --_range-height: var(--area-control-sm); }
   .area-slider-range--md { --_range-height: var(--area-control-md); }
-  .area-slider-range--lg { --_range-height: var(--area-control-lg); --_range-thumb: var(--area-space-20); }
+  .area-slider-range--lg { --_range-height: var(--area-control-lg); --_range-thumb: calc(var(--area-icon-lg) + var(--area-space-4)); }
   .area-slider-range[data-disabled] .area-slider-range__track { cursor: not-allowed; opacity: var(--area-opacity-disabled); }
   .area-slider-range[data-disabled] .area-slider-range__track .area-slider { opacity: 1; }
   .area-slider-range__track::after {

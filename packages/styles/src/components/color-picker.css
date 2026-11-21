@@ -29,7 +29,7 @@
     --_thumb-inner: var(--area-token-swatch-ring);
     /* A functional shadow, not an elevation role: it keeps the handle visible on a full-colour gradient, so the
        Elevation setting doesn't move it, step 0 included (docs/research/elevation-2026-10-14.md). */
-    --_thumb-lift: 0 1px 3px -2px rgb(0 0 0 / 0.1), 0 5px 12px -2px rgb(0 0 0 / 0.13); /* spec */
+    --_thumb-lift: 0 1px 3px -2px rgb(0 0 0 / 0.1), 0 5px 12px -2px rgb(0 0 0 / 0.13); /* spec: outside depth, the handle's lift on any colour */
     /* The alpha track is a range input (no layers inside it): the same checker as a gradient, three
        rows meeting its top and bottom (Figma's track checker, ~5px cells; batch 10 side by side). */
     --_checker: repeating-conic-gradient(var(--_checker-ink) 0% 25%, var(--area-bg-surface) 0% 50%) 0 0 / calc(var(--_track) * 2 / 3) calc(var(--_track) * 2 / 3);
@@ -63,7 +63,7 @@
   /* The pure white/black and spectral stops are color-coordinate data, not UI paint. */
   .area-color-picker__area {
     position: relative; aspect-ratio: 1; touch-action: none; cursor: crosshair;
-    background: linear-gradient(to top, #000, transparent), linear-gradient(to right, #fff, transparent), hsl(var(--_hue) 100% 50%);
+    background: linear-gradient(to top, #000, transparent), linear-gradient(to right, #fff, transparent), hsl(var(--_hue) 100% 50%); /* spec: the colour space's own black and white, in every theme */
     border-radius: var(--area-radius-control-sm);
     box-shadow: inset 0 0 0 var(--area-stroke-width) var(--_hairline);
   }
@@ -76,7 +76,7 @@
   .area-color-picker__thumb {
     box-sizing: border-box;
     inline-size: var(--_track); block-size: var(--_track);
-    border: var(--_thumb-ring) solid #fff; border-radius: var(--area-radius-full);
+    border: var(--_thumb-ring) solid #fff; border-radius: var(--area-radius-full); /* spec: the handle's white ring over any colour, in every theme */
     background: var(--_thumb-color, var(--_swatch-color));
     box-shadow: 0 0 0 var(--area-stroke-width) var(--_thumb-edge), inset 0 0 0 var(--area-stroke-width) var(--_thumb-inner), var(--_thumb-lift);
   }
@@ -84,7 +84,7 @@
     appearance: none;
     box-sizing: border-box;
     inline-size: var(--_track); block-size: var(--_track);
-    border: var(--_thumb-ring) solid #fff; border-radius: var(--area-radius-full);
+    border: var(--_thumb-ring) solid #fff; border-radius: var(--area-radius-full); /* spec: the handle's white ring over any colour, in every theme */
     background: var(--_thumb-color, var(--_swatch-color));
     box-shadow: 0 0 0 var(--area-stroke-width) var(--_thumb-edge), inset 0 0 0 var(--area-stroke-width) var(--_thumb-inner), var(--_thumb-lift);
   }
@@ -120,13 +120,13 @@
   }
   .area-color-picker__slider::-moz-range-thumb {
     box-sizing: border-box; inline-size: var(--_track); block-size: var(--_track);
-    border: var(--_thumb-ring) solid #fff; border-radius: var(--area-radius-full); background: var(--_thumb-color, var(--_swatch-color));
+    border: var(--_thumb-ring) solid #fff; border-radius: var(--area-radius-full); background: var(--_thumb-color, var(--_swatch-color)); /* spec: the handle's white ring over any colour, in every theme */
     box-shadow: 0 0 0 var(--area-stroke-width) var(--_thumb-edge), inset 0 0 0 var(--area-stroke-width) var(--_thumb-inner), var(--_thumb-lift);
   }
   .area-color-picker__slider:focus-visible { outline: none; }
   .area-color-picker__slider:focus-visible::-moz-range-thumb { outline: var(--area-focus-width) solid var(--area-focus-color); outline-offset: var(--area-focus-offset); }
   .area-color-picker__hue {
-    background: linear-gradient(90deg, #f00 calc(var(--_track) / 2), #ff0, #0f0, #0ff, #00f, #f0f, #f00 calc(100% - var(--_track) / 2));
+    background: linear-gradient(90deg, #f00 calc(var(--_track) / 2), #ff0, #0f0, #0ff, #00f, #f0f, #f00 calc(100% - var(--_track) / 2)); /* spec: the hue wheel's own colours */
   }
   .area-color-picker__alpha {
     --_thumb-color: var(--_swatch-color);
@@ -136,17 +136,17 @@
      held at the current color, from custom properties the component sets as numbers. RGB,
      HSB (drawn as HWB) and HSL saturation are linear in sRGB, so two stops are exact. */
   .area-color-picker__slider[data-channel] { --_half: calc(var(--_track) / 2); }
-  .area-color-picker__slider[data-channel="rgb-r"] { background: linear-gradient(90deg, rgb(0 var(--_g) var(--_b)) var(--_half), rgb(255 var(--_g) var(--_b)) calc(100% - var(--_half))); }
+  .area-color-picker__slider[data-channel="rgb-r"] { background: linear-gradient(90deg, rgb(0 var(--_g) var(--_b)) var(--_half), rgb(255 var(--_g) var(--_b)) calc(100% - var(--_half))); } /* spec: the channel's own range */
   .area-color-picker__slider[data-channel="rgb-g"] { background: linear-gradient(90deg, rgb(var(--_r) 0 var(--_b)) var(--_half), rgb(var(--_r) 255 var(--_b)) calc(100% - var(--_half))); }
   .area-color-picker__slider[data-channel="rgb-b"] { background: linear-gradient(90deg, rgb(var(--_r) var(--_g) 0) var(--_half), rgb(var(--_r) var(--_g) 255) calc(100% - var(--_half))); }
-  .area-color-picker__slider[data-channel="hsl-h"] { background: linear-gradient(90deg, hsl(0 var(--_hsl-s) var(--_hsl-l)) var(--_half), hsl(60 var(--_hsl-s) var(--_hsl-l)), hsl(120 var(--_hsl-s) var(--_hsl-l)), hsl(180 var(--_hsl-s) var(--_hsl-l)), hsl(240 var(--_hsl-s) var(--_hsl-l)), hsl(300 var(--_hsl-s) var(--_hsl-l)), hsl(360 var(--_hsl-s) var(--_hsl-l)) calc(100% - var(--_half))); }
+  .area-color-picker__slider[data-channel="hsl-h"] { background: linear-gradient(90deg, hsl(0 var(--_hsl-s) var(--_hsl-l)) var(--_half), hsl(60 var(--_hsl-s) var(--_hsl-l)), hsl(120 var(--_hsl-s) var(--_hsl-l)), hsl(180 var(--_hsl-s) var(--_hsl-l)), hsl(240 var(--_hsl-s) var(--_hsl-l)), hsl(300 var(--_hsl-s) var(--_hsl-l)), hsl(360 var(--_hsl-s) var(--_hsl-l)) calc(100% - var(--_half))); } /* spec: the channel's own range */
   .area-color-picker__slider[data-channel="hsl-s"] { background: linear-gradient(90deg, hsl(var(--_hue) 0% var(--_hsl-l)) var(--_half), hsl(var(--_hue) 100% var(--_hsl-l)) calc(100% - var(--_half))); }
   .area-color-picker__slider[data-channel="hsl-l"] { background: linear-gradient(90deg, hsl(var(--_hue) var(--_hsl-s) 0%) var(--_half), hsl(var(--_hue) var(--_hsl-s) 50%), hsl(var(--_hue) var(--_hsl-s) 100%) calc(100% - var(--_half))); }
   .area-color-picker__slider[data-channel="hsb-h"] { background: linear-gradient(90deg, hwb(0 var(--_hwb-w) var(--_hwb-b)) var(--_half), hwb(60 var(--_hwb-w) var(--_hwb-b)), hwb(120 var(--_hwb-w) var(--_hwb-b)), hwb(180 var(--_hwb-w) var(--_hwb-b)), hwb(240 var(--_hwb-w) var(--_hwb-b)), hwb(300 var(--_hwb-w) var(--_hwb-b)), hwb(360 var(--_hwb-w) var(--_hwb-b)) calc(100% - var(--_half))); }
   .area-color-picker__slider[data-channel="hsb-s"] { background: linear-gradient(90deg, hwb(var(--_hue) var(--_hsv-v) var(--_hwb-b)) var(--_half), hwb(var(--_hue) 0% var(--_hwb-b)) calc(100% - var(--_half))); }
   .area-color-picker__slider[data-channel="hsb-b"] { background: linear-gradient(90deg, hwb(var(--_hue) 0% 100%) var(--_half), hwb(var(--_hue) var(--_hwb-w-top) 0%) calc(100% - var(--_half))); }
   /* OKLCH tracks interpolate in OKLCH; colors past sRGB are drawn at the display's nearest. */
-  .area-color-picker__slider[data-channel="ok-l"] { background: linear-gradient(90deg in oklch, oklch(0 var(--_ok-c) var(--_ok-h)) var(--_half), oklch(1 var(--_ok-c) var(--_ok-h)) calc(100% - var(--_half))); }
+  .area-color-picker__slider[data-channel="ok-l"] { background: linear-gradient(90deg in oklch, oklch(0 var(--_ok-c) var(--_ok-h)) var(--_half), oklch(1 var(--_ok-c) var(--_ok-h)) calc(100% - var(--_half))); } /* spec: the channel's own range */
   .area-color-picker__slider[data-channel="ok-c"] { background: linear-gradient(90deg in oklch, oklch(var(--_ok-l) 0 var(--_ok-h)) var(--_half), oklch(var(--_ok-l) 0.4 var(--_ok-h)) calc(100% - var(--_half))); }
   .area-color-picker__slider[data-channel="ok-h"] { background: linear-gradient(90deg in oklch, oklch(var(--_ok-l) var(--_ok-c) 0) var(--_half), oklch(var(--_ok-l) var(--_ok-c) 60), oklch(var(--_ok-l) var(--_ok-c) 120), oklch(var(--_ok-l) var(--_ok-c) 180), oklch(var(--_ok-l) var(--_ok-c) 240), oklch(var(--_ok-l) var(--_ok-c) 300), oklch(var(--_ok-l) var(--_ok-c) 360) calc(100% - var(--_half))); }
   .area-color-picker__channel-row { display: grid; grid-template-columns: var(--area-icon-md) minmax(0, 1fr); grid-template-rows: var(--_track); align-items: center; gap: var(--area-ui-cluster); }
@@ -171,8 +171,8 @@
   .area-color-picker__band { position: absolute; inset: 0; inline-size: 100%; block-size: 100%; pointer-events: none; border-radius: inherit; overflow: hidden; }
   /* Figma dots the failing side of its contrast curve. The region's fill is the dot pattern. */
   .area-color-picker__band-region { stroke: none; }
-  .area-color-picker__band pattern circle { fill: rgb(255 255 255 / 0.55); } /* spec */
-  .area-color-picker__band-edge { fill: none; stroke: #fff; stroke-width: 1px; vector-effect: non-scaling-stroke; filter: drop-shadow(0 0 1px rgb(0 0 0 / 0.5)); }
+  .area-color-picker__band pattern circle { fill: rgb(255 255 255 / 0.55); } /* spec: the band's white dots over any colour */
+  .area-color-picker__band-edge { fill: none; stroke: #fff; stroke-width: 1px; vector-effect: non-scaling-stroke; filter: drop-shadow(0 0 1px rgb(0 0 0 / 0.5)); } /* spec: the band's white edge and its dark halo over any colour */
   /* Preview: the new color over the original, which restores it (Photoshop's new/current). */
   .area-color-picker__preview {
     display: grid; grid-template-rows: 1fr 1fr; flex: none; align-self: stretch;
@@ -202,7 +202,7 @@
   /* The opacity part is Color field's (batch 9): as wide as three tabular digits and "%", the number
      at the inset and "%" 8 from the end. A fixed 54 (Figma's, at 11px) squeezed "100" under the "%" at
      Area's 14px. */
-  .area-color-picker__fields.area-input-group > .area-color-picker__opacity { flex: 0 0 auto; inline-size: max-content; padding-inline-end: var(--area-space-8); /* spec: "%" 8 from the end */ }
+  .area-color-picker__fields.area-input-group > .area-color-picker__opacity { flex: 0 0 auto; inline-size: max-content; padding-inline-end: var(--area-ui-cluster); /* spec: "%" 8 from the end (compact 6) */ }
   .area-color-picker__fields.area-input-group > .area-color-picker__opacity > .area-number-field__control { flex: 0 0 auto; field-sizing: content; min-inline-size: 3.1ch; /* three tabular digits: they run ~3% wider than ch, so every row is the same width */ }
   .area-color-picker__fields.area-input-group > .area-color-picker__opacity > .area-number-field__unit { margin-inline: 0; }
   .area-color-picker__fields.area-input-group[data-model="hex"] > .area-color-picker__text-field { flex-grow: 2; }

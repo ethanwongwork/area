@@ -287,6 +287,7 @@ const ENTRIES: Entry[] = [
   [/^(hover-in|press-in)$/, m => ({ kind: "role", usage: `How a ${m[1] === "hover-in" ? "hover" : "press"} arrives (the Feedback setting).` })],
   [/^feedback-(hover|press|scale|scale-sm|scale-lg|scale-wide)$/, m => ({ kind: "role", usage: `The Feedback setting's ${m[1]!.replace("-", " at ")}.` })],
   [/^opacity-disabled$/, () => ({ kind: "role", usage: "The opacity of a disabled control's parts." })],
+  [/^opacity-pending$/, () => ({ kind: "role", usage: "The opacity of an item still on its way: a message or a queued prompt being sent." })],
 ];
 
 function cap(text: string): string {

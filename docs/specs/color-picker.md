@@ -163,6 +163,8 @@ foreground/background popover (the background is a prop).
 | grid view · selected cell | ColorSwatchPicker `palette`'s: a white outline straddling the cell edge with a 15% line inside (color-swatch-picker.md, round 20) | owner rounds 18–20 | — |
 | type | control-sm 12/16 400 | Type ramp (small controls 12/16) | Figma 11/16 450 |
 
+- The opacity field's "%" side is `ui-cluster` (8, Compact 6, Comfortable 10). The thumb's lift stays outside the depth settings (no shadow role equals it; it keeps the handle visible on any colour); its line and every colour-space literal name their reason.
+
 ## States
 
 | State | Changes | Evidence |
@@ -397,3 +399,7 @@ hidden text beside the visible ratio, which is `aria-hidden`. No visible change.
 - Listed, not moved: the opacity field's "%" side 8 (the field's text side is 9 at the default).
 - Why: docs/research/system-evaluation-2026-11-11 (plan B6.1, B6.5, B8.2, B2.2; README §5, phase2/leftovers.md); the owner took every recommendation on 2026-11-11. Fix the rule, not the instance.
 - Verdict: awaiting the owner.
+
+## System status step C, 2026-11-18 (shared sources)
+
+The "%" side took `ui-cluster` (off the density waiting list); the lift and the colour-space literals gained reasons for `literal-paint.test.mjs`. Nothing moved at the defaults.

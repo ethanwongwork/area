@@ -32,6 +32,10 @@
    * Type is three roles at every size: title, description, value.
    */
   .area-card {
+    /* Local layers (DESIGN_SYSTEM.md, "Local stacking"): the stretched link is 1, every control and the overlay above it,
+       and an immersive card's picture under its scrim (-1). */
+    --_layer-controls: 2;
+    --_layer-media: -2;
     /* spec: md, the default. The media inset (8 at type 14, as measured on a promo card; 7 at the default) for media;
        text and controls share one column the card's space in (below), with or without media (owner 2026-09-28:
        "the padding for text and buttons being 16 total distance shouldnt only apply when there is an image or
@@ -218,7 +222,7 @@
     inset: calc(var(--_card-inset) - var(--_card-border));
     border-radius: var(--_card-media-radius);
   }
-  .area-card--immersive > .area-card__media { aspect-ratio: auto; z-index: -2; }
+  .area-card--immersive > .area-card__media { aspect-ratio: auto; z-index: var(--_layer-media); }
   .area-card--immersive::before {
     content: "";
     background: linear-gradient(180deg, transparent 25%, var(--area-bg-card) 70%);
@@ -547,9 +551,9 @@
      buttons, a carousel, a slider in the content; audit F-29; was four named slots). */
   .area-card:has(.area-card__link) :is(a, button, input, select, textarea, [tabindex]):not(.area-card__link) {
     position: relative;
-    z-index: 2;
+    z-index: var(--_layer-controls);
   }
-  .area-card:has(.area-card__link) .area-card__overlay { z-index: 2; }
+  .area-card:has(.area-card__link) .area-card__overlay { z-index: var(--_layer-controls); }
   .area-card:has(.area-card__link:focus-visible) {
     outline: var(--area-focus-width) solid var(--area-focus-color);
     outline-offset: var(--area-focus-gap);

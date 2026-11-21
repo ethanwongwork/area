@@ -19,7 +19,7 @@
        actions sit as far from its end as from its top (a corner control, inset.css, plan B4.2; it was never under 4, 2 from
        the top and 4 from the end). */
     --_card-end: calc((var(--area-ui-row) - var(--area-control-sm)) / 2);
-    --_sending-opacity: 0.6; /* spec: Codex sending opacity-60 */
+    --_sending-opacity: var(--area-opacity-pending); /* Codex sending opacity-60 */
     min-inline-size: 0;
     overflow: hidden;
     border: var(--_chat-edge) solid var(--area-edge-blocks); /* no shadow under it: a required frame */

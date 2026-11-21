@@ -14,7 +14,9 @@
   .area-presence[data-solid] { background: var(--_ink); }
   /* Out of office always shows its mark on the surface, including busy (Fluent's mapping). */
   .area-presence[data-out-of-office] { background: var(--area-bg-surface); }
-  .area-presence--sm { --_size: var(--area-space-12); }
+  /* sm is the step under the mark ladder's 16 / 20, which hold at every type (mark-sm, mark-md), so it holds too: no mark
+     role is 12 (docs/specs/indicator.md, Decisions, "presence sm"). */
+  .area-presence--sm { --_size: var(--area-space-12); } /* spec, at every type: under mark-sm, as md and lg hold */
   .area-presence--md { --_size: var(--area-mark-sm); }
   .area-presence--lg { --_size: var(--area-mark-md); }
   .area-presence--available { --_ink: var(--area-success-solid); }

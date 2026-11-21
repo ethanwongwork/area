@@ -160,7 +160,7 @@ test('every surface takes its depth from its elevation role', () => {
   const disabled = material.find(rule => /:is\(:disabled, \[data-disabled\], \[aria-disabled="true"\]\)/.test(rule.selector));
   assert.match(disabled?.body ?? '', /box-shadow:\s*var\(--_m-rest, none\)/, 'a disabled part under a material drops its own shadow');
   assert.ok(disabled.selector.includes('.area-nav__item[aria-current]:not([aria-current="false"])'), 'the disabled rule no longer outweighs the plain parts\' painter');
-  assert.match(ruleFor('.area-video-player__surface')?.body ?? '', /box-shadow:\s*var\(--_m-layers, 0 0 0 0 transparent\), inset 0 0 0 var\(--area-border-width\) rgb\(255 255 255 \/ 0\.12\), var\(--area-shadow-float\)/, 'the Video player lost its ring or its material slot');
+  assert.match(ruleFor('.area-video-player__surface')?.body ?? '', /box-shadow:\s*var\(--_m-layers, 0 0 0 0 transparent\), inset 0 0 0 var\(--area-border-width\) var\(--_media-glass-edge\), var\(--area-shadow-float\)/, 'the Video player lost its ring or its material slot');
   // The surface Calendar and Color picker take the one floating stack on the float role (popup.css, plan B6.1), their
   // material's layers included (they had none).
   for (const block of ['.area-calendar:not(.area-calendar--plain)', '.area-color-picker:not(.area-color-picker--plain)']) {
