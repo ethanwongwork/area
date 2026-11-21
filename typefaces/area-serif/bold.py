@@ -5073,6 +5073,9 @@ def bold_font(reg, stem=STEM, **over):
         if "dollar" in f_ and (f_ is font or v["f"] > 0):
             cs_ = glyph_contours(f_["dollar"])
             new_, log_ = _DOL.true_crossing(cs_)
+            if new_ is not cs_:                       # 0.84 (pass 3, owner item 3): S's construction at this master's zero
+                new2_, log2_ = _DOL.spine_s(new_, f_)
+                new_, log_ = new2_, log_ + "; " + log2_
             if new_ is not cs_:
                 for c, P in zip(f_["dollar"].contours, new_):
                     c.points = [Point(x, y, t, smooth=s_) for x, y, t, s_ in P]

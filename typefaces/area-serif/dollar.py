@@ -183,7 +183,7 @@ def _at_x(B, x):
     return None
 
 
-def true_crossing(cs):
+def true_crossing(cs, bridges=None):
     """cs: [[(x, y, type, smooth)]] of $ (a master's or the Regular's). Returns (new contours, log) or (cs, reason)."""
     P = [[list(q) for q in C] for C in cs]
     xs = _lines_x(P)
@@ -244,6 +244,8 @@ def true_crossing(cs):
         (B1, B2), rms = _bridge(fl, tl, fr, tr, xm, samples, weights, y0, math.atan2(d[1], d[0]), kl, kr, lev,
                                 (math.dist(ls[2], ls[3]), math.dist(rs[2], rs[3])))
         t1, t2 = _at_x(B1, nbl), _at_x(B2, nbr)
+        if bridges is not None:
+            bridges.append((l, r, B1, B2))
         if t1 is None or t2 is None:
             return cs, "a crossing edge does not reach the bar, left"
         Lp = A.sub(B1, 0.0, t1)                                 # fl -> the left bar edge
@@ -301,3 +303,202 @@ def check(cs):
         steps.append(round(_run_on(l[5], xm) - _run_on(r[5], xm), 1))     # where each meets the bar's middle
     sx = [q[0] for C in P for q in C if q[2] and not (bl - 1 <= q[0] <= br + 1)]
     return {"steps": steps, "bar_off": (bl + br) / 2 - (min(sx) + max(sx)) / 2, "pairs": len(prs)}
+
+
+# ------------------------------------------------------------------ 0.84 (Regular pass 3, the owner's visual notes, item 3)
+# The owner: "$ still looks a bit thick/heavy, base the shape more on the current S". The $ keeps its own drawing's
+# path and its ball ends (the owner's 0.80 choice) but its stroke is now S's construction (`spine.py`): the stroke from
+# the top pair of level extremes (on the bar's middle) to the bottom pair is one ribbon, the drawn stroke's centreline
+# and one width law, the ends' hairlines kept and one maximum at the spine's middle, W = the figures' round widest (the
+# zero's side) times the ladder's thick-diagonal share, as S's is O's times it: the $ sits among the figures. Built on
+# the S the bar hides: each of the six crossing edges is the one curve `true_crossing` made of its two pieces (a node
+# on the bar's middle), the S one closed contour through them; after the construction each crossing edge is cut at the
+# bar's edges again and every piece written back (a piece that spans two of the S's cubics is one cubic again, its end
+# tangents kept, its handles fitted), then `true_crossing` once more. In the Regular (normalize) and in every master
+# (bold.bold_font, after the engine and the dollar's own end rule), each at its own zero.
+SPINE_ROUND = "zero"
+
+
+def _walk_s(P, prs, bridges):
+    """The S the bar hides, as one closed list of cubics [(ctrl (4 points), end tag, smooth)]: tags ('o', ci, i) for a
+    node of the $ and ('m', k) for the node on the bar's middle of crossing k; handles tagged alongside."""
+    far = {}
+    for k, (l, r, B1, B2) in enumerate(bridges):
+        far.setdefault((l[0], l[2]), []).append((k, "l", (l[0], l[1])))
+        far.setdefault((r[0], r[2]), []).append((k, "r", (r[0], r[1])))
+    nxt = {}
+    for ci, C in enumerate(P):
+        on = [i for i, q in enumerate(C) if q[2]]
+        for a, i in enumerate(on):
+            j = on[(a + 1) % len(on)]
+            offs = [(ci, (i + m) % len(C)) for m in range(1, (j - i) % len(C))]
+            nxt[(ci, i)] = ((ci, j), offs)
+    prv = {v[0]: (k, v[1]) for k, v in nxt.items()}
+
+    def step(node, fwd):
+        if fwd:
+            to, offs = nxt[node]
+            return to, offs
+        frm, offs = prv[node]
+        return frm, list(reversed(offs))
+    l, r, B1, B2 = bridges[0]
+    start = (l[0], l[2])
+    node, fwd = start, nxt[start][0] == (l[0], l[1])         # facing pair 0's own bar node: the first move a bridge
+    pt = lambda t: tuple(P[t[0]][t[1]][:2])                   # noqa: E731
+    out, seen = [], 0
+    while True:
+        seen += 1
+        if seen > 200:
+            raise ValueError("the S does not close")
+        hit = [e for e in far.get(node, ()) if step(node, fwd)[0] == e[2]]
+        if hit:                                                # the piece into the bar: take the bridge
+            k, side, bar_node = hit[0]
+            l, r, B1, B2 = bridges[k]
+            if side == "l":
+                out.append((B1, ("m", k), ("b", k, 0), "C"))
+                out.append((B2, ("o", r[0], r[2]), ("b", k, 1), "C"))
+                node, ob = (r[0], r[2]), (r[0], r[1])
+            else:
+                out.append(((B2[3], B2[2], B2[1], B2[0]), ("m", k), ("b", k, 1), "C"))
+                out.append(((B1[3], B1[2], B1[1], B1[0]), ("o", l[0], l[2]), ("b", k, 0), "C"))
+                node, ob = (l[0], l[2]), (l[0], l[1])
+            fwd = nxt[node][0] != ob
+        else:
+            to, offs = step(node, fwd)
+            if len(offs) == 2:
+                out.append(((pt(node), pt(offs[0]), pt(offs[1]), pt(to)), ("o",) + to, (offs[0], offs[1]), "C"))
+            else:
+                out.append(((pt(node), pt(node), pt(to), pt(to)), ("o",) + to, None, "L"))
+            node = to
+        if node == start and out:
+            break
+    return out
+
+
+def _fit_one(segs, p0, p3):
+    """One cubic from p0 to p3 along a run of cubics (their end tangents kept), handle lengths fitted."""
+    from scipy.optimize import least_squares
+    pts = np.array([A.bez(s_, k / 30) for s_ in segs for k in range(31)])
+    s0, s1 = segs[0], segs[-1]
+    t0 = A.unit((s0[1][0] - s0[0][0], s0[1][1] - s0[0][1])) if math.dist(s0[1], s0[0]) > 1e-6 else A.unit((s0[3][0] - s0[0][0], s0[3][1] - s0[0][1]))
+    t3 = A.unit((s1[3][0] - s1[2][0], s1[3][1] - s1[2][1])) if math.dist(s1[3], s1[2]) > 1e-6 else A.unit((s1[3][0] - s1[0][0], s1[3][1] - s1[0][1]))
+    ch = math.dist(p0, p3)
+
+    def cub(v):
+        return (p0, (p0[0] + t0[0] * v[0], p0[1] + t0[1] * v[0]), (p3[0] - t3[0] * v[1], p3[1] - t3[1] * v[1]), p3)
+
+    def res(v):
+        c = cub(v)
+        q = np.array([A.bez(c, k / 60) for k in range(61)])
+        return np.min(np.hypot(pts[:, None, 0] - q[None, :, 0], pts[:, None, 1] - q[None, :, 1]), axis=1)
+    v = least_squares(res, [ch / 3, ch / 3], bounds=([1, 1], [ch, ch])).x
+    return cub(v)
+
+
+def spine_s(cs, font, W=None):
+    """The rule above on $'s contours cs (after true_crossing). Returns (new contours, log) or (cs, reason)."""
+    import spine as SP
+    bridges = []
+    new_, log0 = true_crossing(cs, bridges)
+    if new_ is cs or len(bridges) != 6:
+        return cs, "spine: crossing not found, left"
+    P = [[list(q) for q in C] for C in new_]
+    # the bridges were solved on the bar centred: their far nodes are the written ones
+    try:
+        segs = _walk_s(P, [(l, r, B1, B2) for l, r, B1, B2 in bridges], bridges)
+    except (KeyError, ValueError) as e:
+        return cs, f"spine: {e}, left"
+    # the S as a UFO point list
+    S, tags = [], []
+    for ctrl, tag, htags, kind in segs:
+        if kind == "C":
+            S += [(ctrl[1][0], ctrl[1][1], None, False), (ctrl[2][0], ctrl[2][1], None, False)]
+            tags += [None, None]
+        sm = True if tag[0] == "m" else bool(P[tag[1]][tag[2]][3])
+        S.append((ctrl[3][0], ctrl[3][1], "curve" if kind == "C" else "line", sm))
+        tags.append(tag)
+    if A.signed_area(S) * A.signed_area(P[0]) < 0:
+        pass
+    if W is None:
+        save = dict(SP.NAMES)
+        SP.NAMES["dollar"] = SPINE_ROUND
+        try:
+            W, side = SP.wide(font, "dollar")
+        finally:
+            SP.NAMES.clear(); SP.NAMES.update(save)
+    info = {}
+    tried = []
+    for cand in (S, A._reverse(S)):
+        try:
+            out = SP.construct([cand], 0, W, info)[0]
+            S_used = cand
+            break
+        except ValueError as e:
+            tried.append(str(e))
+    else:
+        return cs, "spine: " + "; ".join(tried) + ", left"
+    rev = S_used is not S
+    if rev:
+        out = A._reverse(out)                               # back to the walk's order (points correspond again)
+    # the new S's cubics in the walk's order
+    on = [i for i, q in enumerate(out) if q[2]]
+    cub = []
+    for a_, i in enumerate(on):
+        j = on[(a_ + 1) % len(on)]
+        p0 = out[i][:2]
+        if (j - i) % len(out) == 3:
+            cub.append((p0, out[(i + 1) % len(out)][:2], out[(i + 2) % len(out)][:2], out[j][:2]))
+        else:
+            cub.append((p0, p0, out[j][:2], out[j][:2]))
+    # walk index of each segment ends: segs[m] ends at node tag; the new cubic ending there is the one ending at the
+    # m-th on-curve point of out
+    ends = [i for i, q in enumerate(out) if q[2]]
+    seg_new = {}
+    for m in range(len(segs)):
+        e = ends[m]
+        k_ = on.index(e)
+        seg_new[m] = cub[(k_ - 1) % len(cub)]
+    # write back the $'s own nodes and handles from the S
+    for m, (ctrl, tag, htags, kind) in enumerate(segs):
+        c = seg_new[m]
+        if tag[0] == "o":
+            P[tag[1]][tag[2]][0], P[tag[1]][tag[2]][1] = c[3]
+        if htags and htags[0] != "b" and kind == "C":
+            (a1, a2), (b1, b2) = htags
+            P[a1][a2][0], P[a1][a2][1] = c[1]
+            P[b1][b2][0], P[b1][b2][1] = c[2]
+    # each crossing: the two new cubics either side of its middle node, cut at the bar's edges, the pieces written
+    xs = _lines_x(P)
+    bl, br = xs[0], xs[-1]
+    for k, (l, r, B1, B2) in enumerate(bridges):
+        m = next(m for m, sg in enumerate(segs) if sg[1] == ("m", k))
+        c1, c2 = seg_new[m], seg_new[(m + 1) % len(segs)]
+        run = [c1, c2]
+        x0 = c1[0][0]
+        # the run from its far start to its far end; which end is the left far node
+        if x0 > c2[3][0]:
+            run = [(s_[3], s_[2], s_[1], s_[0]) for s_ in reversed(run)]
+        # sample the run, find the bar edges' crossings (parameter along the run)
+        def cut_at(x):
+            for q, s_ in enumerate(run):
+                t = _at_x(s_, x)
+                if t is not None:
+                    return q, t
+            return None
+        cl, cr = cut_at(bl), cut_at(br)
+        if cl is None or cr is None:
+            return cs, f"spine: crossing {k} misses the bar, left"
+        # left piece: far start -> the left bar edge; right piece: the right bar edge -> far end
+        lp = [run[q] if q < cl[0] else A.sub(run[q], 0.0, cl[1]) for q in range(cl[0] + 1)]
+        rp = [A.sub(run[q], cr[1], 1.0) if q == cr[0] else run[q] for q in range(cr[0], len(run))]
+        L1 = lp[0] if len(lp) == 1 else _fit_one(lp, lp[0][0], lp[-1][3])
+        R1 = rp[0] if len(rp) == 1 else _fit_one(rp, rp[0][0], rp[-1][3])
+        (lci, li, lfar, lh, _, _ls, _), (rci, ri, rfar, rh, _, _rs, _) = l, r
+        newl = (L1[3], L1[2], L1[1], L1[0])                         # bar node first, as true_crossing writes
+        for ci, i, (hn, hf), piece in ((lci, li, lh, newl), (rci, ri, rh, R1)):
+            P[ci][i][0], P[ci][i][1] = piece[0]
+            P[ci][hn][0], P[ci][hn][1] = piece[1]
+            P[ci][hf][0], P[ci][hf][1] = piece[2]
+    out_cs = [[(round(q[0]), round(q[1]), q[2], q[3]) for q in C] for C in P]
+    out_cs, log1 = true_crossing(out_cs)
+    return out_cs, f"spine {W:.1f} ({SPINE_ROUND}'s side x {SP.DIAG_SHARE:.3f}), ends {info.get('w0', 0):.0f} / {info.get('w1', 0):.0f}; {log1}"

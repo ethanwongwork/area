@@ -1294,6 +1294,9 @@ def normalize(font):
     if "dollar" in font:                              # bar, the bar centred on the S, its stubs one length
         cs_ = [[(p.x, p.y, p.type, p.smooth) for p in c.points] for c in font["dollar"].contours]
         new_, log_ = DOLLAR.true_crossing(cs_)
+        if new_ is not cs_:                           # 0.84 (pass 3, owner item 3): its S S's construction at the zero
+            new2_, log2_ = DOLLAR.spine_s(new_, font)
+            new_, log_ = new2_, log_ + "; " + log2_
         if new_ is not cs_:
             from ufoLib2.objects import Point as _Pt
             for c, P in zip(font["dollar"].contours, new_):
