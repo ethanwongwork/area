@@ -428,7 +428,10 @@ def nine_solve(cs0, name="nine"):
             if q[2] is not None:
                 continue
             own = i - 1 if P[i - 1][2] else (i + 1) % n
-            if ci == 1 or (ci == 0 and min((i - ob) % n0, (ob - i) % n0) <= 2):
+            # 0.84 (pass 3, owner item 4): with the tail g.ss02's (`nine_tail`), its own handles (the outline under the
+            # bowl: the lowest point, the ball) join the solve, so the ball's node keeps one curvature too
+            tail = ci == 0 and P[own][1] < cs0[1][cb][1] - 120
+            if ci == 1 or (ci == 0 and min((i - ob) % n0, (ob - i) % n0) <= 2) or tail:
                 H.append((ci, i, own))
     NODES = [(1, cb), (0, ob)]
     bad0, w0 = K.report(name, cs0, yr)[:2]
@@ -831,3 +834,100 @@ def f_foot(font):
         if abs(p.y) <= 30 and p.x > b + proj - 8:
             p.x -= round(proj - want)
     return f"f's right foot {proj:.0f} > {want:.0f}"
+
+
+# ------------------------------------------------------------------ 0.84 Regular pass 3 (the owner's visual notes, item 4)
+# The owner: "the 9 bottom right part is slanted too much, the bottom part should be more like the single storey g";
+# earlier "the 6 and the 9 ... the bottom right part suddenly became more steep of a curve". The 9's tail was one long
+# quarter from the bowl's right extreme (400 up) to a lowest point far left (0.27 of the way from the ball's outer
+# side to the right side): its middle ran as a slanted line (`clean.nine_six`'s 0.90 quarter and 23.5-degree lean). It
+# now takes g.ss02's tail, read on the same font (`g_tail_shape`): the lowest point (outside and inside on one upright)
+# at g's share of the way from the ball's outer side to the stem's outer edge; each edge leaves the right side upright
+# and turns round into the lowest point as g's runs down its stem and turns its quarter, in one cubic (its upright
+# handle reaches down past the right side to where g's quarter would start, for that quarter's width at g's height over
+# width, plus g's quarter handle share of that height; its level handle g's share of the width); the ball and the
+# bowl stay; then every smooth node of the tail at one curvature (loops.even_nodes, handle lengths only). The 6 is the 9
+# turned half round, point for point, as before.
+G_TAIL = (0.460, 0.92, 0.95, 0.55)
+
+
+def g_tail_shape(font):
+    """g.ss02's tail read on the font: (lowest point's share from the ball's outer side to the stem's outer edge,
+    outside quarter height over width, inside quarter height over width, quarter handle share)."""
+    P = _pts(font["g.ss02"])[0]
+    on = [q for q in P if q[2]]
+    lo = min(on, key=lambda q: (q[1], q[0]))
+    lows = [q for q in on if q[1] < 0]
+    ball_x = min(q[0] for q in lows)
+    stem_x = max(q[0] for q in on if q[1] < 10)
+    # the outside quarter: from the stem's last node (upright tangent) to the lowest point
+    n = len(P)
+    i_lo = P.index(lo)
+    # the stem's lowest node on the outside: the on-curve node at stem_x nearest the baseline
+    qo = min((q for q in on if q[0] == stem_x), key=lambda q: abs(q[1]))
+    # the inside lowest: the level node right above the outside's lowest point
+    inner = [q for q in on if q[1] < 0 and abs(q[0] - lo[0]) < 3 and q[1] > lo[1] + 10]
+    li = min(inner, key=lambda q: q[1])
+    si = min((q for q in on if q[1] < 0.5 and q[0] < stem_x and q[0] > li[0] + 50), key=lambda q: -q[0])
+    share = (lo[0] - ball_x) / (stem_x - ball_x)
+    ho = (qo[1] - lo[1]) / (qo[0] - lo[0])
+    hi = (si[1] - li[1]) / (si[0] - li[0])
+    # the handle share at the lowest point (outside)
+    nb = [P[(i_lo + 1) % n], P[(i_lo - 1) % n]]
+    h = max(abs(q[0] - lo[0]) for q in nb if q[2] is None)
+    return share, ho, hi, h / (qo[0] - lo[0])
+
+
+def nine_tail(font):
+    import loops as LOOPS
+    if "nine" not in font:
+        return "no 9"
+    # g.ss02 is finished later (the charset, single_g_points and the tail rule); here, before it is, its finished tail
+    # as `g_tail_shape` reads it on the build (snap084f: 0.460, 0.92 / 0.95, 0.55). At this point in normalize the
+    # source's own g.ss02 reads 0.505, 0.69 / 0.58, 0.64: not the drawing the owner compares with
+    share, ho, hi, hk = G_TAIL
+    out = [f"g.ss02: lowest at {share:.3f}, quarters {ho:.2f} / {hi:.2f} high over wide, handles {hk:.2f}"]
+    for name, turned in (("nine", False), ("six", True)):
+        g = font[name]
+        cs = _pts(g)
+        sx, sy = g.width + 1, 712
+        if turned:
+            cs = [[(sx - q[0], sy - q[1], q[2], q[3]) for q in P] for P in cs]
+        P = [list(q) for q in cs[0]]
+        n = len(P)
+        on = [i for i, q in enumerate(P) if q[2]]
+        lo = min(on, key=lambda i: (P[i][1], P[i][0]))
+        rt = max(on, key=lambda i: P[i][0])
+        level = [i for i in on if P[(i - 1) % n][2] is None and P[(i + 1) % n][2] is None
+                 and P[(i - 1) % n][1] == P[i][1] == P[(i + 1) % n][1]]
+        ilo = min((i for i in level if P[lo][1] + 10 < P[i][1] < P[rt][1] - 100), key=lambda i: P[i][1])
+        # the cubic lo -> rt (outside), and the inside's cubic into ilo from the tail's top (the bowl's crotch)
+        if (lo + 3) % n != rt or P[(ilo - 3) % n][2] is None:
+            out.append(f"{name}: the tail is not one cubic each side; left")
+            continue
+        top_i = (ilo - 3) % n
+        ball_x = min(P[i][0] for i in on if P[i][1] < P[ilo][1] + 60)
+        xr, yr_ = P[rt][0], P[rt][1]
+        xl = round(ball_x + share * (xr - ball_x))
+        dx = xl - P[lo][0]
+        for i in (lo, ilo):                                  # the lowest points (outside, inside) move level with their
+            for k in (-1, 0, 1):                             # handles
+                P[(i + k) % n][0] += dx
+        # outside: rt's downward handle and lo's level handle
+        w = xr - xl
+        yq = P[lo][1] + ho * w
+        P[(rt - 1) % n][0], P[(rt - 1) % n][1] = xr, round(yr_ - ((yr_ - yq) + hk * (yq - P[lo][1])))
+        P[(lo + 1) % n][0], P[(lo + 1) % n][1] = round(xl + hk * w), P[lo][1]
+        # inside: from the tail's top (upright) down to ilo
+        xt, yt = P[top_i][0], P[top_i][1]
+        wi = xt - xl
+        yqi = P[ilo][1] + hi * wi
+        P[(top_i + 1) % n][0], P[(top_i + 1) % n][1] = xt, round(yt - ((yt - yqi) + hk * (yqi - P[ilo][1])))
+        P[(ilo - 1) % n][0], P[(ilo - 1) % n][1] = round(xl + hk * wi), P[ilo][1]
+        Q, log = LOOPS.even_nodes([tuple(q) for q in P], (-1000, 2000))
+        new = [[(round(q[0]), round(q[1]), q[2], q[3]) for q in Q]] + cs[1:]
+        if turned:
+            new = [[(sx - q[0], sy - q[1], q[2], q[3]) for q in Pc] for Pc in new]
+        _put(g, new)
+        out.append(f"{name}: lowest {xl - dx} > {xl}, right side down to {yq:.0f} (inside {yqi:.0f})")
+    return "; ".join(out)
