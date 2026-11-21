@@ -1218,6 +1218,7 @@ def normalize(font):
     import spine as SPINE                             # 0.84 (pass 2, spine construction): S and s one stroke from the
     print("spine:", SPINE.regular(font))              # top pair to the bottom pair, a centreline and one width law
     print("hair: bowls", HAIR.bowl_sides(font))      # 0.84 (pass 2, strokes 4): B's upper bowl P's side
+    print("hair: bowl feet", HAIR.bowl_foot(font))   # 0.84 (pass 3, owner item 7): B D's bottom inside corner
     print("hair: diagonals", HAIR.diagonals(font))   # 0.84 (pass 2, strokes 5): X x halves, capital thick 86, Z arms
     import cross as CROSS                             # 0.84 (pass 2, crossing construction): x and X two straight
     print("cross:", CROSS.regular(font))              # strokes, each one through the other, at v's and V's weights

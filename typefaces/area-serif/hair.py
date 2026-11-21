@@ -730,3 +730,78 @@ def shafts(font):
                 p.y = round(p.y + dx * (nb.y - p.y) / (nb.x - p.x)); p.x += dx
         log.append(f"{name} shaft {w} > {want}")
     return log
+
+
+# 0.84 (Regular pass 3, the owner's visual notes, item 7: "not sure if I like the bottom part of this opening on the B
+# and D, it's too steep of a curve and makes that part of the typeface extremely thick"). Where the bowl's bottom
+# runs into the stem inside, the counter left the stem's straight edge 98 to 104 units over the counter's floor (D:
+# from (215, 151) to the floor at (357, 47)), while the same counter's top corner turns in 11: a large lump of ink in
+# the bottom inside corner, the bowl's 47 hairline swelling to some 85 there. The rule (`bowl_foot`): that corner turns
+# on the stroke that runs into it, the bowl's bottom (the capitals' hairline, read as the counter floor's height over
+# the baseline): the node on the stem's edge stands FOOT_RISE such strokes over the floor; the floor node and
+# everything else stay; the turn a quarter (upright handle 0.55 of the radius), its level handle meeting the floor's
+# other curve at one curvature. B's
+# lower bowl and D; unchanged since 0.83 (snap083d and snap084f agree).
+FOOT_NAMES = ("B", "D")
+FOOT_RISE = 1.0     # the stem node over the floor, in bowl-bottom strokes (1.5, 70, tried: it kept most of the lump);
+                    # the turn off the stem is then a bracket's (radius 16), the floor's run into it one curvature
+
+
+def bowl_foot(font, names=FOOT_NAMES):
+    out = []
+    for name in names:
+        if name not in font:
+            continue
+        g = font[name]
+        cs = [[(p.x, p.y, p.type, p.smooth) for p in c.points] for c in g.contours]
+        # the counter whose floor is lowest: its level floor node and the node before it on the stem's edge
+        best = None
+        for ci, P in enumerate(cs[1:], 1):
+            n = len(P)
+            for i, q in enumerate(P):
+                if not q[2] or P[(i - 1) % n][2] is not None or P[(i + 1) % n][2] is not None:
+                    continue
+                if P[(i - 1) % n][1] == q[1] == P[(i + 1) % n][1] and (best is None or q[1] < best[2][1]):
+                    best = (ci, i, q)
+        if best is None:
+            out.append(f"{name}: no floor; left")
+            continue
+        ci, i, fl = best
+        P = [list(q) for q in cs[ci]]
+        n = len(P)
+        # the stem node: the on-curve node at the cubic's other end whose handle is upright (on the stem's edge)
+        for side in (1, -1):
+            j = (i + 3 * side) % n
+            h_j, h_i = (j - side) % n, (i + side) % n
+            if P[j][2] and P[(j - side) % n][2] is None and abs(P[h_j][0] - P[j][0]) < 0.5 and P[j][1] > fl[1] + 20:
+                break
+        else:
+            out.append(f"{name}: no stem node; left")
+            continue
+        r = fl[1] - min(q[1] for q in cs[0] if q[2])           # the bowl's bottom stroke (floor over the baseline)
+        y_new = round(fl[1] + FOOT_RISE * r)
+        was = P[j][1]
+        if y_new >= was:
+            out.append(f"{name}: already {was - fl[1]} over the floor")
+            continue
+        # the stem's straight edge runs on down to the new node; the turn is a quarter: its upright handle 0.55 of the
+        # radius (the quarter's tension), its level handle the length that meets the floor's other curve at one
+        # curvature (k = 2/3 (r - a) / b^2 for this cubic; the floor node and that curve stay)
+        P[j][1] = y_new
+        a_ = 0.55 * (y_new - fl[1])
+        P[h_j][0], P[h_j][1] = P[j][0], round(y_new - a_)
+        k_ = (i - side) % n                                     # the floor's other curve: its first handle
+        o_ = (i - 2 * side) % n
+        h1 = (P[k_][0] - fl[0], P[k_][1] - fl[1])
+        h2 = (P[o_][0] - P[k_][0], P[o_][1] - P[k_][1])
+        kf = (2 / 3) * abs(h1[0] * h2[1] - h1[1] * h2[0]) / max(math.hypot(*h1) ** 3, 1e-9)
+        dx = abs(fl[0] - P[j][0])
+        b_ = math.sqrt((2 / 3) * ((y_new - fl[1]) - (y_new - P[h_j][1])) / kf) if kf > 0 else 0.6 * dx
+        b_ = min(max(b_, 0.3 * dx), 0.9 * dx)
+        sg = 1 if fl[0] > P[j][0] else -1
+        P[h_i][0], P[h_i][1] = round(fl[0] - sg * b_), fl[1]
+        cs[ci] = [(round(q[0]), round(q[1]), q[2], q[3]) for q in P]
+        from ufoLib2.objects import Point
+        g.contours[ci].points = [Point(x, y, t, smooth=s_) for x, y, t, s_ in cs[ci]]
+        out.append(f"{name}: the stem node {was - fl[1]} > {y_new - fl[1]} over the floor (bottom stroke {r})")
+    return out
