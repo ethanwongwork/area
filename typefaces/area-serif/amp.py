@@ -158,6 +158,21 @@ ROUND_EASES = True      # `_round_eases`: a curve's handles where it meets a str
 INFL_W = 20.0
 ARM_END_R = 2500.0      # not 0: whole units would turn a curvature of 0 either way at the join
 ARM_R = 450.0
+# 0.84 (Regular pass 3, the owner's visual notes, item 1: "the bottom cross intersection of the ampersand should not be
+# like this"). The bowl's thin stroke was still turning (the ease above, curvature 1 / ARM_R at the diagonal's
+# centreline) while it crossed the diagonal: its edges came out of the diagonal about 17 degrees steeper than they went
+# in, and the eye, running each edge on across the thick stroke, read a step and a notch at each corner. It now crosses
+# as x's strokes cross (`cross.py`): through the diagonal both its edges are two straight parallel lines, from
+# THROUGH_LEAD before the diagonal's lower edge to THROUGH_LEAD past its upper edge, so each edge on one side lines up
+# with itself on the other. The straight's direction is half way between the bowl's own arrival (the counter's, REG
+# c2_deg) and the arm's (arm_dir): the turn the stroke makes between the bowl and the arm is shared, half in the bowl
+# before the diagonal, half in a short ease after it (each edge one cubic from the straight to the arm's line, both
+# handles on the corner where the two lines meet, THROUGH_EASE from it: curvature 0 at both ends). The crossing's
+# middle (the arm's centreline on the diagonal's) does not move, nor does the arm above the ease or its serif.
+THROUGH = True
+THROUGH_LEAD = 10.0
+THROUGH_EASE = 45.0
+THROUGH_TURN = 10.0     # degrees: the most the ease after the diagonal turns (the Regular's turn is 2.3)
 PEAK = 1.30             # 0.82 item 19: a node's curvature over the curves' a third in (a round turn, not a point)
 
 
@@ -829,7 +844,70 @@ def construct(R, G=None, sx=1.0, _pass=0):
         return (x_, y_), (math.cos(th), math.sin(th)), A_
     import signs as SG_
     N0, tN, A0 = _ease(AL)
-    for nm, C_ in (("P", P), ("Q", Q)):
+    if THROUGH:
+        # the straight through the diagonal, half way in direction between the counter's arrival and the arm; it meets
+        # the arm's centreline at the ease's corner Ic, beyond the diagonal's upper edge, so the arm above stays
+        a_arm = math.atan2(ad[1], ad[0])
+        # the bowl's own arrival: a circular turn from the counter's level bottom (LBi) to where the arm's counter-side
+        # line crosses the diagonal's lower edge arrives at twice its chord's angle (the Regular 51 degrees; at the
+        # Bold the counter's floor stands near the crossing and the turn is flatter)
+        _s = meet(AL, ad, L1p, dd)
+        _c = (AL[0] + ad[0] * _s, AL[1] + ad[1] * _s)
+        a_bowl = min(a_arm, 2 * math.atan2(_c[1] - LBi[1], _c[0] - LBi[0]))
+        # the ease's turn at most THROUGH_TURN: at the Bold the chord reads 16 degrees and a straight at half way
+        # (36) meets the arm's line only past v's serif
+        a_bowl = max(a_bowl, a_arm - 2 * math.radians(THROUGH_TURN))
+        dt = (math.cos((a_arm + a_bowl) / 2), math.sin((a_arm + a_bowl) / 2))
+        # the ease turns the rest: its cubic's handles on the corner, each ARM_R x the half turn (at least THROUGH_EASE)
+        ease_ = max(THROUGH_EASE, ARM_R * (a_arm - a_bowl) / 4)
+        nt = (dt[1], -dt[0])                                  # to the straight's right (the outside, Q)
+        s_c = meet(ac, ad, L2p, dd) + THROUGH_LEAD + ease_
+        _tail_top = Q.segs()[:3]
+        for _k in range(20):
+            Ic = (ac[0] + ad[0] * s_c, ac[1] + ad[1] * s_c)
+            lines = {}
+            for nm in ("P", "Q"):
+                off = (-0.5 if nm == "P" else 0.5) * W["arm"]
+                O_ = (Ic[0] + nt[0] * off, Ic[1] + nt[1] * off)           # this edge's straight through the diagonal
+                Lp_ = AL if nm == "P" else AR                              # this edge's arm line
+                s_I = meet(O_, dt, Lp_, ad)
+                lines[nm] = (O_, (O_[0] + dt[0] * s_I, O_[1] + dt[1] * s_I))
+            # parameters along dt from each edge's own corner I (negative: back towards the bowl)
+            lo_ = min(meet(lines[k][1], dt, L1p, dd) for k in lines) - THROUGH_LEAD
+            hi_ = max(meet(lines[k][1], dt, L2p, dd) for k in lines) + THROUGH_LEAD
+            # the outside edge leaves the tail's top (X2) on the straight too, in every master (so the outline has one
+            # structure): the straight runs on THROUGH_LEAD past where its line meets the tail's top as first drawn
+            IQ = lines["Q"][1]
+            far_ = ((IQ[0] - dt[0] * 2000, IQ[1] - dt[1] * 2000), None, None, (IQ[0] + dt[0] * 2000, IQ[1] + dt[1] * 2000))
+            far_ = [(far_[0], far_[0], far_[3], far_[3])]
+            hx = crossings(_tail_top, far_)
+            if hx:
+                hi_ = max(hi_, max((p_[0] - IQ[0]) * dt[0] + (p_[1] - IQ[1]) * dt[1] for _a, _b, p_ in hx) + 2 * THROUGH_LEAD)
+            # the ease ends ARM_STRAIGHT before v's serif leaves the arm (at the Bold the turn is longest)
+            sv_ = v_serif(R["v"], AR, AL, ad, G["arm_top"])
+            room = min(((sv_[0][0][0] - lines["Q"][1][0]) * ad[0] + (sv_[0][0][1] - lines["Q"][1][1]) * ad[1]),
+                       ((sv_[2][0] - lines["P"][1][0]) * ad[0] + (sv_[2][1] - lines["P"][1][1]) * ad[1])) - ARM_STRAIGHT
+            if ease_ > room:
+                ease_ = max(THROUGH_LEAD, room)
+            if hi_ <= -ease_ + 1e-6:
+                break
+            s_c += hi_ + ease_                                # the ease would start inside the diagonal: further out
+        for nm, C_ in (("P", P), ("Q", Q)):
+            I_ = lines[nm][1]
+            N_ = (I_[0] + dt[0] * lo_, I_[1] + dt[1] * lo_)
+            E_ = (I_[0] - dt[0] * ease_, I_[1] - dt[1] * ease_)
+            B_ = (I_[0] + ad[0] * ease_, I_[1] + ad[1] * ease_)
+            C_.nodes[10] = (N_, dt)
+            C_.nodes.insert(11, (E_, dt))
+            C_.nodes.insert(12, (B_, ad))
+            C_.kinds[9:10] = ["C", "L", "C"]
+            C_.smooth.insert(11, True)
+            C_.smooth.insert(12, True)
+            C_.lens[9:10] = [C_.lens[9], None, [ease_, ease_]]
+            C_.fixed = {11}
+            C_.dip_w = DIP_W
+            C_.infl_w = INFL_W * (1.0 - weight_share(R))
+    for nm, C_ in (("P", P), ("Q", Q)) if not THROUGH else ():
         N_, A_, kN_, kA_ = N0, A0, 1.0 / ARM_R, 1.0 / ARM_END_R
         if nm == "Q":
             # the outside edge is the counter edge's parallel at the arm's width: the stroke one width through the
@@ -852,7 +930,8 @@ def construct(R, G=None, sx=1.0, _pass=0):
         C_.infl_w = INFL_W * (1.0 - weight_share(R))
     # the taper reaches the arm's width TAPER_LEAD before the diagonal's lower edge
     _sin = abs(ad[0] * dd[1] - ad[1] * dd[0])
-    P.taper = ((8, 9), W["ll"], W["arm"], W["diag"] / 2 / _sin + TAPER_LEAD)
+    # (THROUGH: the bowl's curve ends THROUGH_LEAD before the lower edge, so the width is reached the rest of the way back)
+    P.taper = ((8, 9), W["ll"], W["arm"], TAPER_LEAD - THROUGH_LEAD if THROUGH else W["diag"] / 2 / _sin + TAPER_LEAD)
     P.solve()
     Q.solve()
     if G.get("even_ribbon", True) and _pass != 1:
@@ -876,7 +955,7 @@ def construct(R, G=None, sx=1.0, _pass=0):
     tq = ((X3[1] - sQ[iL2][0][1]) / (sQ[iL2][3][1] - sQ[iL2][0][1]))
     X3q = (iL2, tq)
     # X2: the arm's right edge (Q's, from the bowl) meets the tail's top (Q, before the line)
-    h2 = crossings(sQ[:3], sQ[10:12])
+    h2 = crossings(sQ[:3], sQ[10:13])
     if not h2:
         raise ValueError("ampersand: the arm's right edge does not meet the tail's top")
     h2 = max(h2, key=lambda z: z[0])
@@ -932,14 +1011,15 @@ def construct(R, G=None, sx=1.0, _pass=0):
     # arm (right edge, serif, left edge) to X3; Q up the diagonal to J2; P back over the loop to J; Q down the bowl
     lb_q = (8, 1.0)                                        # LBo is node 9: end of segment 8
     outer = []
-    outer += [("C", s) for s, _ in piece(sQ, lb_q, endQ)]
+    e_i, a_i = (11, 12) if THROUGH else (10, 11)       # the ease into the arm, the arm's line
+    outer += [("L" if THROUGH and i == 10 else "C", s) for s, i in piece(sQ, lb_q, endQ)]
     outer += [("C" if sP[i] is not None and i != 2 else "L", s) for s, i in piece(sP, tl1(X1), (0, 0.0))]
     k_cut = len(outer)
     outer += [("L", (T1, T1, T2, T2))]
     outer += [("C" if i != 2 else "L", s) for s, i in piece(sQ, (0, 0.0), X2q)]
-    outer += [("C" if i == 10 else "L", s_) for s_, i in piece(sQ, X2a, on_seg_line(sQ, 11, serif[0][0]))]
+    outer += [("C" if i == e_i else "L", s_) for s_, i in piece(sQ, X2a, on_seg_line(sQ, a_i, serif[0][0]))]
     outer += serif[1]
-    outer += [("C" if i == 10 else "L", s_) for s_, i in piece(sP, on_seg_line(sP, 11, serif[2]), X3p)]
+    outer += [("C" if i == e_i else "L", s_) for s_, i in piece(sP, on_seg_line(sP, a_i, serif[2]), X3p)]
     outer += [("C" if i != 2 else "L", s) for s, i in piece(sQ, X3q, J2[1])]
     outer += [("C" if i != 2 else "L", s) for s, i in piece(sP, J2[0], J[0])]
     outer += [("C" if i != 2 else "L", s) for s, i in piece(sQ, J[1], lb_q)]
@@ -948,7 +1028,7 @@ def construct(R, G=None, sx=1.0, _pass=0):
     # 0.84 (items 1 and 5): the tail's cut is a free end: both corners softened on the letters' serif-tip radius
     outer = soft_cut(outer, k_cut, SOFT)
     # lower counter: P from C1 (on the spine) down the counter to C2; the diagonal's lower edge back up to C1
-    lower = [("C", s) for s, _ in piece(sP, C1_hi, endP)]
+    lower = [("L" if THROUGH and i == 10 else "C", s) for s, i in piece(sP, C1_hi, endP)]
     lower += [("C" if i != 2 else "L", s) for s, i in piece(sP, tl1(C2), C1_lo)]
     # upper counter: Q from K on the diagonal's upper edge round the loop's inside to K on the spine
     upper = [("C" if i != 2 else "L", s) for s, i in piece(sQ, Kq_lo, Kq_hi)]
