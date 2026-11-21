@@ -859,7 +859,26 @@ MATH = ["plus", "minus", "multiply", "divide", "equal", "notequal", "greater", "
         "asciitilde", "asciicircum", "lessequal", "greaterequal", "approxequal", "infinity", "uni2219", "periodcentered"]
 
 
+# 0.84 (Regular pass 4, item 11; the cohesion study: the maths signs read narrow, their ink 424 wide where a figure's
+# is 470 to 505). The + box takes its width from the figures: the minus's ink is MATH_INK, the median ink width of the
+# ten figures (494: the tabular figures' ink, the maths' advance being theirs), centred in the maths' advance; every
+# operator built on the minus (+ square, so it grows in height with its width; = ± ¬ ÷ < > ≤ ≥, × its share of the
+# box, ~ ≈ ∞ theirs) follows, and ~ and ∞ take the operators' sides ((advance - MATH_INK) / 2). The stroke stays the
+# minus's 52, every sign on the maths axis.
+MATH_INK = None
+TIMES_BOX = 346 / 424   # ×'s ink box over the + box (the drawing's 346 in the 424 box)
+
+
+def math_ink(font):
+    ws = sorted(bounds(gp(font, f))[2] - bounds(gp(font, f))[0] for f in FIGS)
+    return round((ws[4] + ws[5]) / 2)
+
+
 def math_widths(font, adv):
+    global MATH_INK
+    MATH_INK = math_ink(font)
+    mb = bounds(gp(font, "minus"))
+    put(font, "minus", rect(0, mb[1], MATH_INK, mb[3]), font["minus"].width)
     for name in MATH:
         if name not in font or name in ("periodcentered", "uni2219", "asciicircum", "asciitilde"):
             continue
@@ -1388,7 +1407,8 @@ def maths(font, m, adv):
     # its height (arms 41 across beside a 52 bar). The box is the old one's: x 98 to 514, 244 each side of the axis
     # 0.83 (symbols 1): every maths operator is the minus's width (94 to 518 in the maths' advance, the + box) and
     # its ink centred on the maths axis; < was 98 to 514 and <= stood 26 over the axis (its ink 75 to 603)
-    x0_, x1_ = 94, 518
+    mb_ = bounds(gp(font, "minus"))                    # 0.84 pass 4: the + box from the minus (MATH_INK wide)
+    x0_, x1_ = mb_[0], mb_[2]
     put_built(font, "less", dict(build="chevron", params=dict(t=w, x0=x0_, x1=x1_, cy=cy, hh=244)), adv, [0x3C])
     le_cy, le_bar = 405, 101                          # the chevron over its bar as drawn, then the whole on the axis
     probe = dict(build="chevron_bar", params=dict(t=w, x0=x0_, x1=x1_, cy=le_cy, hh=200, bar_x0=x0_, bar_y=le_bar))
@@ -1400,10 +1420,17 @@ def maths(font, m, adv):
     put(font, "greaterequal", moved(gp(font, "lessequal"), adv, 0, -1, 1), adv, [0x2265])
     # the multiplication sign: two strokes of the minus's weight crossing square on the maths axis, arms equal (it
     # was Libre Baskerville's, 49.1 and 45.6 across); its ink box the old one's, 346 across
-    put_built(font, "multiply", dict(build="times", params=dict(t=w, c=[adv / 2, cy], arm=173 * math.sqrt(2) - w / 2)),
+    put_built(font, "multiply", dict(build="times", params=dict(t=w, c=[adv / 2, cy],
+                                                                arm=TIMES_BOX * (x1_ - x0_) / 2 * math.sqrt(2) - w / 2)),
               adv, [0xD7])
-    # the division sign's dots stand over the bar's middle (they stood 3 right of it)
+    # the division sign's dots stand over the bar's middle (they stood 3 right of it). 0.84 pass 4: its bar the minus
     g = font["divide"]
+    if len(g.contours) == 3:
+        bx_ = [bounds(_contour_path(c)) for c in g.contours]
+        k_ = max(range(3), key=lambda k: bx_[k][2] - bx_[k][0])
+        dots_ = [_contour_path(c) for k, c in enumerate(g.contours) if k != k_]
+        put(font, "divide", union(rect(x0_, bx_[k_][1], x1_, bx_[k_][3]), *dots_), g.width)
+        g = font["divide"]
     if len(g.contours) == 3:
         boxes = [(min(q.x for q in c.points), max(q.x for q in c.points)) for c in g.contours]
         bar_c = max(range(3), key=lambda k: boxes[k][1] - boxes[k][0])
@@ -1653,14 +1680,15 @@ def tilde_signs(font, m, adv):
     # kept as constructions (put_built): each master builds the same wave at its own stroke (the engine read the
     # wave's near-straight quarters and gave them an inflection between the masters)
     put_built(font, "asciitilde", tilde_info([cy], x0, x1), 0, [0x7E],
-              lsb=(font["asciitilde"].width - want) / 2, rsb=(font["asciitilde"].width - want) / 2)
+              lsb=(adv - want) / 2, rsb=(adv - want) / 2)  # 0.84 pass 4: the operators' sides (it kept its 510 advance)
     put_built(font, "approxequal", tilde_info([cy - EQUAL_GAP / 2, cy + EQUAL_GAP / 2], x0, x1), 0, [0x2248],
               lsb=(adv - want) / 2, rsb=(adv - want) / 2)
     H = INF_H * want                                     # its height, a share of the + box's (consistency 0c)
     b_ = (H - SIGN_LO) / 2                               # the centreline's half height (thin over the tops)
     a_ = (INF_W * want - SIGN_HI) / 2                    # its half width (thick at the outer ends), a share of the minus's
     p = built_path(dict(build="infinity", params=dict(a=a_, b=b_, cx=0, cy=cy, lo=SIGN_LO, hi=SIGN_HI)))
-    put(font, "infinity", p, 0, [0x221E], lsb=34, rsb=34)
+    put(font, "infinity", p, 0, [0x221E], lsb=(adv - want) / 2, rsb=(adv - want) / 2)   # 0.84 pass 4: the
+    # operators' sides (they were 34)
 
 
 def caret_sign(font, m):
