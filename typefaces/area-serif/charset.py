@@ -3726,34 +3726,21 @@ DAGGER_W0 = 32                      # 0.83 (consistency 0e): the daggers' arms l
                                     # stroke (the branch neck, 32), not the asterisk's 22: a long arm at 22 read light
 
 
-# 0.84 (Regular pass 4, item 7; the cohesion study: † ‡ read thin and short beside the letters, their ink 0.63 / 0.81 of
-# the references', their top on the cap height). The daggers as letters: the upright the lowercase stem (DAGGER_UP,
-# n's 78) from its round head down to the crossing, tapering below it to a round foot of the hairline (o's top, 43);
-# the side arms the capitals' thin strokes' weight, leaving at DAGGER_SIDE[0] (50, the A's and H's crossbar class)
-# and swelling to a round end of DAGGER_SIDE[1] (54); the head on the ascender line (b d h k l, 780), the foot on the
-# overshoot (-9). The cross keeps the asterisk's arm length (its reach), and the head is that far over the crossing,
-# so the head of the cross is square; the double dagger's two crossings mirror about the middle of its height.
-DAGGER_UP = 78
-DAGGER_SIDE = (50, 54)
-DAGGER_FOOT = 43
-DAGGER_TOP = 780
-
-
 def dagger_info(font, name):
-    """The dagger's construction: the asterisk's arm length (its reach), read from the finished asterisk."""
+    """The dagger's construction: the asterisk's centre, arm length and ball, read from the finished asterisk."""
     if "asterisk" not in font:
         return None
     ab = bounds(gp(font, "asterisk"))
-    acy = round((ab[1] + ab[3]) / 2)                     # its centre (its arms' junction)
+    acy = round((ab[1] + ab[3]) / 2)                     # its centre (its arms' junction); whole, so the double
+                                                         # dagger's two crossings mirror exactly (it was 0.5 off)
     arm = ab[3] - acy
     over = -9                                            # the capitals' and figures' overshoot under the baseline
-    top = DAGGER_TOP
-    xs = [top - arm]
+    top = ab[3]
+    xs = [acy]
     if name == "daggerdbl":
-        xs = [top + over - (top - arm), top - arm]       # whole units, mirrored about the middle of the height
+        xs = [CAP_HEIGHT - acy, acy]
     return dict(build="dagger", params=dict(cx=0, crossings=xs, top=top, bottom=over, reach=arm, w0=DAGGER_W0,
-                                            d=DAGGER["d"], up=DAGGER_UP, foot=DAGGER_FOOT, side=DAGGER_SIDE[0],
-                                            side_d=DAGGER_SIDE[1]))
+                                            d=DAGGER["d"]))
 
 
 def more_symbols(font, m, adv):
