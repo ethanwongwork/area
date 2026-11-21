@@ -5078,6 +5078,12 @@ def bold_font(reg, stem=STEM, **over):
     # stress (52 top against 40 sides at 400) and © carried Libre Baskerville's C
     import circled as _CIRC
     notes += _CIRC.master(reg, font, layer if v["f"] > 0 else None, tm_a)
+    # 0.84 (Regular pass 6, item 4): the engine's reading of © ® ℗ is replaced here whole by the construction, so a
+    # fallback the engine took on them (its own outline, now discarded) is not the glyph's: the report says what built it
+    for n_ in _CIRC.GLYPHS:
+        if n_ in reports and n_ in font and _CIRC.LIB in reg[n_].lib if n_ in reg else False:
+            fb_ = reports[n_].pop("fallback", None)
+            reports[n_]["construction"] = "circled.py" + (f" (the engine's reading had fallen back: {fb_})" if fb_ else "")
     # owner round 8 (0.82, item 17): $'s S one outline through its bar in this master (and its mid master): each of
     # the six edges crossing the bar refitted as one curve and cut at the bar's edges, the bar centred on the S, the
     # stubs one length (dollar.py). The engine moved the corners on the bar as its knots: the edges either side of

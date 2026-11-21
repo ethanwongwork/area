@@ -101,13 +101,15 @@ def letter_reading(cs, kind):
 def readings(font, ring):
     """The master's stem (n's, as amp reads v and o: here the a.ss03's stem, the same law), its letters C R P, and the
     ring's outer outline (the Regular's ©)."""
-    stem = AT.readings(font)["stem"]
-    return {"stem": stem, "ring": ring,
+    ra = AT.readings(font)
+    stem = ra["stem"]
+    return {"stem": stem, "h": ra["h"], "ring": ring,
             "letters": {k: [[(p.x, p.y, p.type, p.smooth) for p in c.points] for c in font[k].contours] for k in ("C", "R", "P")}}
 
 
 def _mix(R0, R1, t):
-    out = {"stem": R0["stem"] + (R1["stem"] - R0["stem"]) * t, "ring": R0["ring"], "letters": {}}
+    out = {"stem": R0["stem"] + (R1["stem"] - R0["stem"]) * t, "h": R0["h"] + (R1["h"] - R0["h"]) * t, "ring": R0["ring"],
+           "letters": {}}
     for k in R0["letters"]:
         out["letters"][k] = [[(p[0] + (q[0] - p[0]) * t, p[1] + (q[1] - p[1]) * t, p[2], p[3]) for p, q in zip(P, Q)]
                              for P, Q in zip(R0["letters"][k], R1["letters"][k])]
@@ -180,6 +182,11 @@ def construct(R, kind, R0=None):
         # thicker in the Light than in the Regular (audit_rays 49.2 > 42.0 at 300)
         _c, i0 = construct(R0, kind)
         law = stem / R0["stem"]
+        if stem < R0["stem"] and LETTER_OWN:
+            # 0.84 pass 6: towards the Light the Regular's larger additions (the small figures' weights) shrink by the
+            # hairline's law, not the stem's (by the stem's the R's serif ends read 0.69 of the Regular at 300, under
+            # the tip's law: audit_axis thin)
+            law = R["h"] / R0["h"]
         ex, ey = i0["dx"] * law, i0["dy"] * law
         k = (hs * chh - ey) / (y1 - y0)
     mx, my = (x0 + x1) / 2, (y0 + y1) / 2
