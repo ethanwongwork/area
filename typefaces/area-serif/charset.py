@@ -2488,34 +2488,30 @@ def plain_strokes(font, m):
 
 
 def numbersign(font, w):
-    """0.84 (Regular pass 6, item 3): # of four plain strokes at the sign stroke (it was the drawing's: level bars 52,
-    leaning strokes 48.5 to 49.6 across). Each stroke's centreline is the drawing's: the bars' heights and ends read
-    on their middle lines, the leaning strokes' middles near the baseline and the cap height, carried along their
-    slope to them; the bars w tall about their middles, the leaning strokes w across, cut level on 0 and the cap
-    height; one union. The ends are rounded by soft_ends with every plain stroke."""
+    """0.84 (Regular pass 6, item 3): # at the sign stroke (it was the drawing's: level bars 52, leaning strokes 48.5
+    to 49.6 across). The drawing's own outline made heavier, so its points keep their structure (a rebuilt union put
+    the bars' crossings off their lines between the masters: audit_axis drift at 628.8): the leaning strokes by a
+    level move (clean.lighten) of half their shortfall over the cosine of their lean, the bars by the same move turned
+    upright (lighten_upright). Both read on the drawing: the bars across on an upright through their right ends, the
+    leaning strokes' level span near the baseline and their lean between the baseline and the cap height."""
     if "numbersign" not in font:
         return "numbersign: none"
-    g = font["numbersign"]
     p = gp(font, "numbersign")
     b = bounds(p)
-    bars_ = [s for s in scan_v(p, b[2] - 40) if 30 <= s[1] - s[0] <= 80]
-    lo_y, hi_y = 12.0, CAP_HEIGHT - 12.0
-    los = [s for s in scan_h(p, lo_y) if s[1] - s[0] < 90]
-    his = [s for s in scan_h(p, hi_y) if s[1] - s[0] < 90]
+    bars_ = [s_ for s_ in scan_v(p, b[2] - 40) if 30 <= s_[1] - s_[0] <= 80]
+    lo_y, hi_y = 40.0, CAP_HEIGHT - 40.0
+    los = [s_ for s_ in scan_h(p, lo_y) if s_[1] - s_[0] < 90]
+    his = [s_ for s_ in scan_h(p, hi_y) if s_[1] - s_[0] < 90]
     if len(bars_) != 2 or len(los) != 2 or len(his) != 2:
         return f"numbersign: strokes not read ({len(bars_)} bars, {len(los)} / {len(his)} leaning)"
-    parts = []
-    for s in bars_:
-        cy = (s[0] + s[1]) / 2
-        sp = max(scan_h(p, cy), key=lambda q: q[1] - q[0])
-        parts.append(rect(sp[0], cy - w / 2, sp[1], cy + w / 2))
-    for a_, c_ in zip(los, his):
-        xa, xc = (a_[0] + a_[1]) / 2, (c_[0] + c_[1]) / 2
-        k = (xc - xa) / (hi_y - lo_y)                  # the centreline's run per unit of rise
-        x0, x1 = xa - k * lo_y, xc + k * (CAP_HEIGHT - hi_y)
-        parts.append(_slash((x0 - 10, x0 + 10, 0), (x1 - 10, x1 + 10, CAP_HEIGHT), w))
-    put(font, "numbersign", union(*parts), g.width, list(g.unicodes), lsb=b[0])        # its advance kept
-    return f"numbersign: four strokes at {w:.0f}"
+    bar_w = sum(s_[1] - s_[0] for s_ in bars_) / 2
+    lean = math.atan2(((his[0][0] + his[0][1]) - (los[0][0] + los[0][1])) / 2, hi_y - lo_y)
+    lean_w = sum(s_[1] - s_[0] for s_ in los) / 2 * math.cos(lean)
+    dx = (w - lean_w) / 2 / math.cos(lean)
+    dy = (w - bar_w) / 2
+    CLEAN.lighten(font, ["numbersign"], -dx)
+    lighten_upright(font, ["numbersign"], -dy)
+    return f"numbersign: bars {bar_w:.1f} > {w:.0f}, leaning strokes {lean_w:.1f} > {w:.0f} (lean {math.degrees(lean):.1f})"
 
 
 # 0.79 (owner, 2026-11-14, on the three options drawn in 0.78: option 1, soft corners). A plain stroke is two
