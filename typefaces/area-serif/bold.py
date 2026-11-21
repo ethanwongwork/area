@@ -5077,20 +5077,8 @@ def bold_font(reg, stem=STEM, **over):
     # the six edges crossing the bar refitted as one curve and cut at the bar's edges, the bar centred on the S, the
     # stubs one length (dollar.py). The engine moved the corners on the bar as its knots: the edges either side of
     # the bar missed each other by up to 24 units at 300 and 41 at 800
-    import dollar as _DOL
-    for f_, tag_ in ((font, ""), (layer, " (mid)")):
-        if "dollar" in f_ and (f_ is font or v["f"] > 0):
-            cs_ = glyph_contours(f_["dollar"])
-            new_, log_ = _DOL.true_crossing(cs_)
-            if new_ is not cs_:                       # 0.84 (pass 3, owner item 3): S's construction at this master's zero
-                # the mid master (a sparse layer, no zero) at the spine that far between the Regular's and this master's
-                w_ = None if f_ is font else _DOL.spine_width(reg) + (_DOL.spine_width(font) - _DOL.spine_width(reg)) * tm_a
-                new2_, log2_ = _DOL.spine_s(new_, f_, w_)
-                new_, log_ = new2_, log_ + "; " + log2_
-            if new_ is not cs_:
-                for c, P in zip(f_["dollar"].contours, new_):
-                    c.points = [Point(x, y, t, smooth=s_) for x, y, t, s_ in P]
-            notes.append(f"dollar{tag_}: {log_}")
+    import dollar as _DOL                       # 0.84 (Regular pass 5, item 2): $ is this master's S with round ends
+    notes += _DOL.master(reg, font, layer if v["f"] > 0 else None, tm_a)   # and the bar (the mid layer at tm_a)
     # 0.79: an f ligature's sides are its letters' (0.78: every one 4 wider on the left than f, ff 22 on the right)
     def _sides(f_, n):
         xs = [q.x for c in f_[n].contours for q in c.points]

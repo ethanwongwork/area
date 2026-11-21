@@ -524,10 +524,12 @@ def audit_079(font, bad, notes, bold=None):
     for name in ("S.ss03", "s.ss03", "dollar.ss03"):
         if name in font:
             bad.append(f"{name}: there is one S, one s and one dollar (0.79, 0.80)")
-    # 0.80: the one dollar ends in balls (the owner's pick), so it is not the S, whose ends are barbs
-    S_, D_ = on_points(font, "S"), set(on_points(font, "dollar"))
-    if max(sum(1 for (x, y) in S_ if (x + dx, y) in D_) / len(S_) for dx in range(-80, 81)) > 0.6:
-        bad.append("dollar: it is the S and a stroke (barb ends), not the ball-end dollar")
+    # 0.80: the one dollar ends in balls (the owner's pick). 0.84 (pass 5, item 2, owner): it is the real S with round
+    # ends, so none of the S's barb corners may be in it (the S's other points are, by construction)
+    D_ = set(on_points(font, "dollar"))
+    barbs = [(p.x, p.y) for c in font["S"].contours for p in c.points if p.type and not p.smooth]
+    if any(b in D_ for b in barbs):
+        bad.append("dollar: it carries the S's barb ends, not round ends")
     # 0.80: every flag's underside is one curve (n's and k's were two, 18 units shorter at the stem)
     for name, x, y in CLEAN.flag_unders(font, apply=False):
         bad.append(f"{name}: the flag at {x},{y} has a two-curve underside, not i's one curve")
