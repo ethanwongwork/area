@@ -835,6 +835,50 @@ def _slide(p, q, y):
     p.y = y
 
 
+# 0.84 (Regular pass 4, item 5; the cohesion study: the 7 read light among the figures, its mean stroke 0.82 of the
+# figures' median). Its diagonal was 46.6 across (a capital thin diagonal's weight, V's 48) where every other figure's
+# heavy stroke is a capital round's (92) or the capital stem: it takes the capitals' thick diagonal, SEVEN_DIAG of the
+# capital stem (the ladder's thick diagonal, 0.94 to 0.97: 82 of 86). The outer edge (the 7's right side, its top
+# corner and the foot's right corner) holds; the inner edge moves out parallel: its top end slides along the bar's
+# underside, its foot along the baseline.
+SEVEN_DIAG = 0.955
+CAP_STEM = 86
+
+
+def seven_diagonal(font):
+    import math
+    if "seven" not in font:
+        return "no 7"
+    P = font["seven"].contours[0].points
+    n = len(P)
+    # the diagonal's two edges: the longest straights running more up than across
+    lines = []
+    for i, q in enumerate(P):
+        a = P[i - 1]
+        if q.type == "line" and a.type and abs(q.y - a.y) > 400:
+            lines.append((abs(q.y - a.y), (i - 1) % n, i))
+    if len(lines) != 2:
+        return f"7: {len(lines)} long straights, left"
+    (_, i0, i1), (_, j0, j1) = lines
+    # the outer edge is the one further right at mid height
+    def x_at(a, b, y):
+        return P[a].x + (y - P[a].y) * (P[b].x - P[a].x) / (P[b].y - P[a].y)
+    if x_at(i0, i1, 356) > x_at(j0, j1, 356):
+        (i0, i1), (j0, j1) = (j0, j1), (i0, i1)
+    a, b = P[j0], P[j1]                                  # outer
+    ux, uy = b.x - a.x, b.y - a.y
+    L = math.hypot(ux, uy)
+    target = SEVEN_DIAG * CAP_STEM
+    out = []
+    for k in (i0, i1):                                   # the inner edge's two ends
+        q = P[k]
+        dist = abs((q.x - a.x) * uy - (q.y - a.y) * ux) / L
+        dx = (target - dist) * L / abs(uy)               # level move that adds (target - dist) across
+        out.append(f"{dist:.1f}")
+        q.x = round(q.x - dx)
+    return f"7 diagonal {' / '.join(out)} > {target:.1f}"
+
+
 def fig_flats(font, cap=CAP):
     done = []
     # 2: the base's top edge comes down; its left end and the diagonal's start slide down the diagonal

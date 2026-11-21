@@ -1182,6 +1182,7 @@ def normalize(font):
     print("balance: B", BALANCE.B_lower(font))                           # 0.67: the lower bowl at the O's weight
     print("joins: extremes", JOINS.even_extremes(font))                  # 0.68: C G S s, the arc into the spur
     print("balance: figures", BALANCE.fig_flats(font))                   # 0.68: 2 5 7 flat strokes 73; N, 1
+    print("balance: 7", BALANCE.seven_diagonal(font))                     # 0.84 (pass 4, item 5): the capitals' thick
     print("clean: joins to straights", CLEAN.true_joins(font, HARMONIZE_SET))   # 0.68
     print("clean: 5", CLEAN.five_heel(font))                             # 0.69
     print("clean: 5", CLEAN.five_bowl(font))                             # 0.79: the bowl's lowest and widest points
