@@ -840,8 +840,9 @@ def _slide(p, q, y):
 # heavy stroke is a capital round's (92) or the capital stem: it takes the capitals' thick diagonal, SEVEN_DIAG of the
 # capital stem (the ladder's thick diagonal, 0.94 to 0.97: 82 of 86). The outer edge (the 7's right side, its top
 # corner and the foot's right corner) holds; the inner edge moves out parallel: its top end slides along the bar's
-# underside, its foot along the baseline.
-SEVEN_DIAG = 0.955
+# underside, its foot along the baseline. Checked by eye in "7777" and "2.7": at 0.955 (82) the 7 stood out dark,
+# so it takes 0.79 (68), between the old thin and the capitals' thick.
+SEVEN_DIAG = 0.79
 CAP_STEM = 86
 
 
