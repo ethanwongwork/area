@@ -543,3 +543,37 @@ def section_necks(reg, font, v, name="section"):
         c_.points = [Point(x, y, t, smooth=s_) for x, y, t, s_ in Pn]
     return f"{name}: " + "; ".join(log)
 
+
+# 0.84 (Regular pass 4, item 5, in the masters). With the 7's diagonal the capitals' thick (balance.seven_diagonal),
+# the Light's thinner diagonal brought its outer edge's top corner over the bar's top (718 against 712): the bar's
+# right end, a straight cut, turned back on itself (audit_axis crossings at 317). In a master where the cut is
+# shorter than the Regular's share of the bar (33 of 73), the corner slides down the diagonal's outer edge to that
+# share of the master's bar, and the cut's top corner comes level with it (the cut stays upright; the bar is that much
+# shorter).
+def seven_end(reg, font, name="seven"):
+    if name not in reg or name not in font:
+        return None
+    R, P = reg[name].contours[0].points, font[name].contours[0].points
+    if len(R) != len(P):
+        return f"{name}: end left (structure)"
+    n = len(P)
+    top_r = max(q.y for q in R)
+    i19 = max((i for i, q in enumerate(R) if q.type and q.y == top_r), key=lambda i: R[i].x)
+    i18, i17 = (i19 - 1) % n, (i19 - 2) % n
+    under = [i for i, q in enumerate(R) if q.type and top_r - 120 < q.y < top_r - 20 and q.x > R[i19].x - 200]
+    if not under or R[i18].type != "line" or R[i17].type != "line":
+        return f"{name}: end not found, left"
+    iu = min(under, key=lambda i: R[i].y)                      # the bar's underside where the diagonal leaves it
+    bar_r = top_r - R[iu].y
+    share = (top_r - R[i18].y) / bar_r
+    top_m = P[i19].y
+    under_m = P[iu].y
+    want = top_m - share * (top_m - under_m)
+    if P[i18].y <= want:
+        return f"{name}: end kept ({top_m - P[i18].y:.0f} of {top_m - under_m:.0f})"
+    a, b = P[i17], P[i18]
+    x = a.x + (want - a.y) * (b.x - a.x) / (b.y - a.y)
+    was = (b.x, b.y)
+    b.x, b.y = round(x), round(want)
+    P[i19].x = b.x
+    return f"{name}: end corner {was} > ({b.x}, {b.y})"

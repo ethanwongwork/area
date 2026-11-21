@@ -5063,6 +5063,10 @@ def bold_font(reg, stem=STEM, **over):
     sec_ = _SYM.section_necks(reg, font, v)
     if sec_:
         notes.append(sec_)
+    for nm_ in ("seven", "seven.ss06", "sevensuperior", "seveninferior"):
+        sv_ = _SYM.seven_end(reg, font, nm_)                   # 0.84 (pass 4, item 5): the 7's bar end in the masters
+        if sv_:
+            notes.append(sv_)
     # owner round 8 (0.82, item 16): (C) (R) (P) take one ring (circled.py): the Regular's outer outline, the counter
     # at this master's side and top (the references' upright stress, side their share of the stem, top 0.87 of it),
     # and this master's C, R or P scaled and weighted as the references' letter in a ring. Their ring had the opposite
