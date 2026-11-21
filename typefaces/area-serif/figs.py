@@ -1099,3 +1099,215 @@ def nine_080(font):
             c.points = [Point(x, y, t, smooth=sm) for x, y, t, sm in P]
             g.contours.append(c)
     return "; ".join(log)
+
+
+# ------------------------------------------------------------------ 0.84 (Regular pass 5, item 3): the figures as one family
+# The owner (21 November): "The number set overall looks very inconsistent and the curves don't look very smooth or
+# mathematically precise/even. The 5 and 3 look a bit off especially." Read on build/snap084i (build/owner12/item3,
+# the quarters' handle shares and the extremes' strokes): 0 and 8 are even (every bowl quarter's two handles within
+# 0.03 of each other, outside 0.56 to 0.58, inside 0.58 to 0.62); the 3's and the 5's bowl quarters were lopsided, one
+# handle long and the other short on what is one arc (the 3's inside 0.44 / 0.58, 0.48 / 0.67, 0.62 / 0.46; the 5's
+# 0.66 / 0.52, 0.64 / 0.57, 0.50 / 0.58, 0.44 / 0.57, 0.51 / 0.64), so each arc ran flat and then turned tight: the
+# lumps. The 2's inside 0.55 / 0.64. Balls: 2 3 6 9 88 across, their far point 49 over the sides; the 5's 88 by 44.
+# Strokes at the extremes 92 except the 5's bowl side 91.
+# The rule (`figure_family`): (1) the 5's ball the others' (88 across, far point FIG_BALL_RISE over its sides, quarter
+# handles FIG_BALL_SIDE / FIG_BALL_APEX); (2) each bowl quarter of the listed edges (FAMILY_EDGES) takes one share on
+# both handles, near the family's tension (outside 0.57, inside 0.60, the o's and the 0's and 8's), solved together
+# with one curvature at every smooth node (curvecheck's ratio) and the least change, the quarters' shared extremes free
+# to slide along their own tangent a few units; quarters that run into a ball on the outside keep theirs (one cubic
+# cannot both be even and meet the ball's curvature: that is where they are lopsided by construction); (3) every
+# smooth node then at one curvature by handle lengths (`loops.even_nodes`, target 1.1); (4) the 5's bowl side on the
+# capital round (92: the counter's extreme moves level). Kept only where curvecheck's faults do not grow.
+FAMILY = {"outer": 0.57, "inner": 0.60}
+FAMILY_EDGES = {"three": ("inner",), "five": ("inner", "outer"), "two": ("inner",)}
+FIG_BALL_RISE, FIG_BALL_SIDE, FIG_BALL_APEX = 49 / 88, 0.55, 0.59
+FIG_ROUND = 92
+
+
+def _quarters(P, minsize=70):
+    m = len(P)
+    on = [i for i, q in enumerate(P) if q[2]]
+    out = []
+    for k, i in enumerate(on):
+        j = on[(k + 1) % len(on)]
+        if (j - i) % m != 3:
+            continue
+        a, h1, h2, b = P[i], P[(i + 1) % m], P[(i + 2) % m], P[j]
+        lev = lambda p, h: abs(h[1] - p[1]) < 0.6 and abs(h[0] - p[0]) > 0.6   # noqa: E731
+        up = lambda p, h: abs(h[0] - p[0]) < 0.6 and abs(h[1] - p[1]) > 0.6    # noqa: E731
+        w, hg = abs(b[0] - a[0]), abs(b[1] - a[1])
+        if max(w, hg) < minsize or min(w, hg) < 20:
+            continue
+        if (lev(a, h1) and up(b, h2)) or (up(a, h1) and lev(b, h2)):
+            out.append((i, j, lev(a, h1)))
+    return out
+
+
+def _shares(P, q):
+    i, j, la = q
+    m = len(P)
+    a, h1, h2, b = P[i], P[(i + 1) % m], P[(i + 2) % m], P[j]
+    w, hg = abs(b[0] - a[0]), abs(b[1] - a[1])
+    return math.dist(a[:2], h1[:2]) / (w if la else hg), math.dist(b[:2], h2[:2]) / (hg if la else w)
+
+
+def _set_shares(P, q, s1, s2):
+    i, j, la = q
+    m = len(P)
+    a, b = P[i], P[j]
+    w, hg = abs(b[0] - a[0]), abs(b[1] - a[1])
+    sx, sy = (1 if b[0] > a[0] else -1), (1 if b[1] > a[1] else -1)
+    if la:
+        P[(i + 1) % m] = (a[0] + sx * s1 * w, a[1], None, False)
+        P[(i + 2) % m] = (b[0], b[1] - sy * s2 * hg, None, False)
+    else:
+        P[(i + 1) % m] = (a[0], a[1] + sy * s1 * hg, None, False)
+        P[(i + 2) % m] = (b[0] - sx * s2 * w, b[1], None, False)
+
+
+def _edge_side(cs, P, q):
+    """'outer' when the quarter bulges away from the ink, 'inner' (a counter's edge) when into it."""
+    import hair as H
+    i, j, la = q
+    m = len(P)
+    a, h1, h2, b = P[i], P[(i + 1) % m], P[(i + 2) % m], P[j]
+    M = ((a[0] + 3 * h1[0] + 3 * h2[0] + b[0]) / 8, (a[1] + 3 * h1[1] + 3 * h2[1] + b[1]) / 8)
+    C = ((a[0] + b[0]) / 2, (a[1] + b[1]) / 2)
+    d = (M[0] - C[0], M[1] - C[1])
+    L = math.hypot(*d)
+    polys = [H._flat(Pc) for Pc in cs]
+    return "inner" if H._inside((M[0] + 4 * d[0] / L, M[1] + 4 * d[1] / L), polys) else "outer"
+
+
+def _fig_balls(P):
+    """(side, far point, side) index triples: two upright smooth nodes 60 to 120 apart at one height, a level node
+    between them under 70 off."""
+    n = len(P)
+    out = []
+    def kind(m, ax):
+        return (P[m - 1][2] is None and P[(m + 1) % n][2] is None and abs(P[m - 1][ax] - P[m][ax]) < 0.6
+                and abs(P[(m + 1) % n][ax] - P[m][ax]) < 0.6)
+    for i, q in enumerate(P):
+        j, k = (i + 3) % n, (i + 6) % n
+        if not (q[2] and P[j][2] and P[k][2]):
+            continue
+        if (kind(i, 0) and kind(k, 0) and kind(j, 1) and 60 < abs(P[k][0] - q[0]) < 120
+                and abs(P[k][1] - q[1]) < 2 and abs(P[j][1] - q[1]) < 70):
+            out.append((i, j, k))
+    return out
+
+
+def one_ball(P, d=88):
+    """Each ball the figures' ball: d across, its far point FIG_BALL_RISE x d over the sides, centred between them."""
+    P = [list(q) for q in P]
+    n = len(P)
+    log = []
+    for i, j, k in _fig_balls(P):
+        y = (P[i][1] + P[k][1]) / 2
+        cx = (P[i][0] + P[k][0]) / 2
+        sg = 1 if P[j][1] > y else -1
+        dirx = 1 if P[k][0] > P[i][0] else -1
+        rise = FIG_BALL_RISE * d
+        was = (abs(P[k][0] - P[i][0]), abs(P[j][1] - y))
+        for m, x in ((i, cx - dirx * d / 2), (k, cx + dirx * d / 2)):
+            dx = x - P[m][0]
+            for t in (-1, 0, 1):
+                P[(m + t) % n][0] += dx
+        ay = y + sg * rise
+        P[j][0], P[j][1] = cx, ay
+        P[(i + 1) % n][:2] = [P[i][0], y + sg * FIG_BALL_SIDE * rise]
+        P[(k - 1) % n][:2] = [P[k][0], y + sg * FIG_BALL_SIDE * rise]
+        P[(j - 1) % n][:2] = [cx - dirx * FIG_BALL_APEX * d / 2, ay]
+        P[(j + 1) % n][:2] = [cx + dirx * FIG_BALL_APEX * d / 2, ay]
+        if was != (d, round(rise)):
+            log.append(f"ball {was[0]:.0f}x{was[1]:.0f} > {d}x{rise:.0f}")
+    return [tuple(q) for q in P], log
+
+
+def family_solve(P0, sides, free, movew=0.05, maxmove=30):
+    """The free quarters' shares (one share both ends, near the family's) and their shared extremes' slides, solved
+    with one curvature at every smooth node and the least change (L-BFGS-B)."""
+    import numpy as np
+    from scipy.optimize import minimize
+    import curvecheck as K
+    Qall = _quarters(P0)
+    m = len(P0)
+    Q = [q for q in Qall if q[:2] in free]
+    s0 = np.array([s for q in Q for s in _shares(P0, q)])
+    ends = {}
+    for q in Qall:
+        for e in q[:2]:
+            ends.setdefault(e, []).append(q[:2] in free)
+    movable = [e for e, fl in ends.items() if len(fl) == 2 and all(fl)]
+    level = lambda e: abs(P0[(e + 1) % m][1] - P0[e][1]) < 0.6 and abs(P0[e - 1][1] - P0[e][1]) < 0.6  # noqa: E731
+    nv = len(s0)
+
+    def build(x):
+        P = list(P0)
+        for k, e in enumerate(movable):
+            P[e] = ((P0[e][0] + x[nv + k], P0[e][1]) if level(e) else (P0[e][0], P0[e][1] + x[nv + k])) + P0[e][2:]
+        for k, q in enumerate(Q):
+            _set_shares(P, q, x[2 * k], x[2 * k + 1])
+        return P
+
+    def cost(x):
+        P = build(x)
+        c = 0.0
+        for i, xy, g1, ka, kb, r, flip, kinds in K.nodes(P, (-1000, 2000)):
+            if kinds == "CC" and r is not None and not flip and math.isfinite(r):
+                c += 30 * math.log(r) ** 2
+        for k, q in enumerate(Q):
+            c += 40 * (x[2 * k] - x[2 * k + 1]) ** 2 + 10 * ((x[2 * k] + x[2 * k + 1]) / 2 - FAMILY[sides[q[:2]]]) ** 2
+        return c + np.sum((x[:nv] - s0) ** 2) + movew * np.sum(x[nv:] ** 2)
+    x0 = np.concatenate([s0, np.zeros(len(movable))])
+    r = minimize(cost, x0, method="L-BFGS-B", bounds=[(0.42, 0.75)] * nv + [(-maxmove, maxmove)] * len(movable))
+    return [(round(q[0]), round(q[1]), q[2], q[3]) for q in build(r.x)], [(q[:2], tuple(s0[2*k:2*k+2]), tuple(r.x[2*k:2*k+2])) for k, q in enumerate(Q)]
+
+
+def _round_side(cs, name):
+    """The 5's bowl side on the capital round: the counter's right extreme moves level (with its handles) until the
+    stroke across the outer right extreme is FIG_ROUND."""
+    P = [list(q) for q in cs[0]]
+    n = len(P)
+    up = [i for i, q in enumerate(P) if q[2] and q[3] and P[i - 1][2] is None and P[(i + 1) % n][2] is None
+          and abs(P[i - 1][0] - q[0]) < 0.6 and abs(P[(i + 1) % n][0] - q[0]) < 0.6]
+    o = max(up, key=lambda i: P[i][0])
+    inner = [i for i in up if i != o and abs(P[i][1] - P[o][1]) < 40 and P[i][0] < P[o][0]]
+    if not inner:
+        return cs, None
+    c = max(inner, key=lambda i: P[i][0])
+    w = P[o][0] - P[c][0]
+    dx = w - FIG_ROUND
+    for t in (-1, 0, 1):
+        P[(c + t) % n][0] += dx
+    return [[tuple(q) for q in P]] + cs[1:], (w, FIG_ROUND)
+
+
+def figure_family(font):
+    import curvecheck as K
+    import loops as L
+    out = []
+    for name, edges in FAMILY_EDGES.items():
+        if name not in font:
+            continue
+        cs = _pts(font[name])
+        bad0, w0 = K.report(name, cs, (-1000, 2000))[:2]
+        P0, blog = one_ball(cs[0]) if name == "five" else (cs[0], [])
+        sides = {q[:2]: _edge_side(cs, cs[0], q) for q in _quarters(P0)}
+        free = {k for k, s in sides.items() if s in edges}
+        P, shares_ = family_solve(P0, sides, free)
+        P = [(round(q[0]), round(q[1]), q[2], q[3]) for q in L.even_nodes(P, (-1000, 2000), target=1.1)[0]]
+        new = [P] + cs[1:]
+        side = None
+        if name == "five":
+            new, side = _round_side(new, name)
+        new = [[(round(q[0]), round(q[1]), q[2], q[3]) for q in _in_triangle([list(q) for q in Pc])] for Pc in new]
+        bad1, w1 = K.report(name, new, (-1000, 2000))[:2]
+        if len(bad1) > len(bad0):
+            out.append(f"{name}: left (faults {len(bad0)} > {len(bad1)})")
+            continue
+        _put(font[name], new)
+        sh = ", ".join(f"{a:.2f}/{b:.2f}>{c:.2f}/{d:.2f}" for _k, (a, b), (c, d) in shares_)
+        out.append(f"{name}: {'; '.join(blog)} quarters {sh}; side {side}; worst {w0:.2f} > {w1:.2f}, faults "
+                   f"{len(bad0)} > {len(bad1)}")
+    return "; ".join(out)
