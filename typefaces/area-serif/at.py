@@ -49,10 +49,18 @@ TOP = round(0.985 * CAP)            # 701: the references' ring top over the cap
 BOTTOM = round(-0.231 * CAP)        # -164
 REG_STEM, REG_H = 78.0, 43.0
 LEFT = 0.86 * REG_STEM / REG_H      # ring's left side over the hairline (67.1 at the Regular's 43)
-RIGHT = 0.883 * LEFT                # ring's right side (59.2)
+RIGHT = 0.883 * LEFT                # ring's right side (59.2); 0.84 pass 6: RIGHT_REG below
+# 0.84 (Regular pass 6, item 1, the owner: "the @ still needs work"). The right extreme 60 at the Regular, a share of
+# its hairline carried into each master as the left's is (RIGHT_REG / 43: the masters' right side moves from 59.2 by
+# the same 1.3%); the ring from the a's foot to it swells monotonically from the a's bottom stroke (43) to 60
+RIGHT = 60.0 / REG_H
 CUT = 36.7 / 43.0                   # the tail's cut over the hairline (the drawn tail)
 TAIL = (0.0865, 0.1293)             # the tail's outer end: in from the ring's right, up from its bottom (drawn), shares
 TAIL_DIR = (107.0, 74.0)            # the tail's direction at its cut (drawn)
+# 0.84 (Regular pass 6, item 1c): the tail's outer end on the ring's own oval, TAIL_ANGLE degrees round from its
+# centre (0 right, counter-clockwise; the drawn end stood at 318 and 1.11 of the radius, a spiral out of the ring), at
+# TAIL_R of the radius, leaving along the oval's tangent turned TAIL_TURN degrees outward; None keeps the drawn end
+TAIL_ANGLE, TAIL_R, TAIL_TURN = 305.0, 1.02, 3.0
 WHITE_RL = 1.24                     # white right of the a's stem over white left of its bowl
 LIFT = 0.011                        # the a's centre over the ring's, of the ring's height
 # 0.84 (Regular pass 2, second pass): the ring's dive into the a's foot (construct). The right extreme 0.02 of the
@@ -79,14 +87,30 @@ SHARES = {55.0: {"ah": 0.545, "athin": 1.18, "astem": 0.984, "wh": 0.941},
           140.0: {"ah": 0.597, "athin": 1.26, "astem": 0.778, "wh": 1.012}}
 
 
+# 0.84 (Regular pass 6, item 1b, the owner: the inner a "reads grey and monoline", stem 66, thins 53): at the Regular
+# the a takes its own contrast, the letters' ladder: stem the thick diagonal / figure flat (74), top and bottom the
+# lowercase hairline (43, the ring's own thin: share 1.0). Its height stays the references' share ("ah"), so its size
+# holds and the counter opens by what the strokes lose. Light and Bold keep the references' shares; the mid master
+# reads them on the stem's logarithm as before
+# The Light's thin takes the same share (1.0: the Light's a 37 against the references' 43.7), so the a's thin does
+# not stand heavier in the Light than in the Regular (audit_rays)
+A_OWN = {55.0: {"athin": 1.0}, 78.0: {"athin": 43.0 / REG_H, "astem": 74.0 / REG_STEM}}
+# 0.84 pass 6, item 1a: the ring leaves the a's foot at the a's thin (44 at the Regular; it was the a's exit stroke, 65,
+# heavier than the ring's right extreme, 59: a lump at 325 to 345 degrees), and swells from there to the right extreme
+FOOT = 44.0 / 43.0
+INNER_MONO = True
+MONO_W = 250
+
+
 def shares(stem):
     ks = sorted(SHARES)
     s = min(max(stem, ks[0]), ks[-1])
     for a, b in zip(ks, ks[1:]):
         if a <= s <= b:
             t = math.log(s / a) / math.log(b / a)
-            return {k: SHARES[a][k] + (SHARES[b][k] - SHARES[a][k]) * t for k in SHARES[a]}
-    return dict(SHARES[ks[-1]])
+            S0, S1 = dict(SHARES[a], **A_OWN.get(a, {})), dict(SHARES[b], **A_OWN.get(b, {}))
+            return {k: S0[k] + (S1[k] - S0[k]) * t for k in S0}
+    return dict(SHARES[ks[-1]], **A_OWN.get(ks[-1], {}))
 
 
 # ------------------------------------------------------------------ readings
@@ -281,7 +305,7 @@ class Ring(A.Chain):
                 # 0.84 pass 2: |k| only rising (sg 1) or only falling (sg -1) along this curve
                 ak = [abs(A.curvature(S[i], t / 16)) for t in range(17)]
                 top_ = max(ak) or 1e-9
-                out.append(40 * sum(max(0.0, -sg * (b_ - a_)) for a_, b_ in zip(ak, ak[1:])) / top_)
+                out.append(getattr(self, "mono_w", 40) * sum(max(0.0, -sg * (b_ - a_)) for a_, b_ in zip(ak, ak[1:])) / top_)
             for n in range(1, len(self.nodes) - 1):
                 if not self.smooth[n]:
                     continue
@@ -397,8 +421,16 @@ def construct(R):
     ry = cy + RISE * H
     Po = {"r": (Wd, ry), "t": (cx, TOP), "l": (0.0, cy), "b": (cx, BOTTOM)}
     Pi = {"r": (Wd - tr, ry), "t": (cx, TOP - tt), "l": (tl, cy), "b": (cx, BOTTOM + tb)}
-    td = A.unit(TAIL_DIR)
-    T1 = (Wd * (1 - TAIL[0]), BOTTOM + TAIL[1] * H)
+    if TAIL_ANGLE is None:
+        td = A.unit(TAIL_DIR)
+        T1 = (Wd * (1 - TAIL[0]), BOTTOM + TAIL[1] * H)
+    else:
+        th_ = math.radians(TAIL_ANGLE)
+        rx_, ry_ = Wd / 2, H / 2
+        T1 = (cx + TAIL_R * rx_ * math.cos(th_), cy + TAIL_R * ry_ * math.sin(th_))
+        tg = A.unit((-rx_ * math.sin(th_), ry_ * math.cos(th_)))          # the oval's tangent, counter-clockwise
+        tt_ = math.radians(-TAIL_TURN)                                     # turned outward (clockwise)
+        td = (tg[0] * math.cos(tt_) - tg[1] * math.sin(tt_), tg[0] * math.sin(tt_) + tg[1] * math.cos(tt_))
     nt = (-td[1], td[0])
     T2 = (T1[0] + nt[0] * CUT * h, T1[1] + nt[1] * CUT * h)
     d14 = A.unit((c0[15][0] - c0[14][0], c0[15][1] - c0[14][1]))
@@ -412,7 +444,10 @@ def construct(R):
         # DIVE["dx"] left of the extreme: the ring leaves the a there (lower than the a's own foot, so the turn is wider).
         # Two cubics (a node half way along), each G2 at both ends; the a's foot curve re-solved into it
         foot, mid, tm_, km, kf, ke = _dive((Wd, ry), DIVE["re"] * Wd / 2, DIVE["dx"] * Wd)
-        wf_ = DIVE.get("w", 1.0) * (pt(24)[1] - pt(17)[1])        # the stroke out of the foot: the a's own exit
+        if FOOT is None:
+            wf_ = DIVE.get("w", 1.0) * (pt(24)[1] - pt(17)[1])    # the stroke out of the foot: the a's own exit
+        else:
+            wf_ = FOOT * athin                                      # 0.84 pass 6: the a's thin (FOOT)
         nm = (-tm_[1], tm_[0])                                      # the mid node's inward normal (left of travel)
         wm = (wf_ + tr) / 2
         midi = (mid[0] + nm[0] * wm, mid[1] + nm[1] * wm)
@@ -428,6 +463,9 @@ def construct(R):
         Q = Ring([(pt(0), D), (pt(27), D), (f24, Rt), (midi, tm_), (Pi["r"], U), (Pi["t"], L), (Pi["l"], D), (Pi["b"], Rt), (T2, td)],
                  ["L"] + ["C"] * 7, [False, True, True, True, True, True, True, True, False], IN_T)
         Q.tight = {3: 1.1, 4: 1.1, 7: 1.05}    # the inner edge's middle node, side and bottom at one curvature
+        if INNER_MONO:
+            Q.mono = {2: -1, 3: -1}            # 0.84 pass 6: the inner edge from the foot up only loosens, as the outer
+            Q.mono_w = MONO_W
     else:
         P = Ring([(pt(14), d14), (pt(17), Rt), (Po["r"], U), (Po["t"], L), (Po["l"], D), (Po["b"], Rt), (T1, td)],
                  ["F"] + ["C"] * 5, [False, True, True, True, True, True, False], OUT_T)
