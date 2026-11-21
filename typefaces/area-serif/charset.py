@@ -3045,6 +3045,49 @@ def cap_strokes(font):
     return done
 
 
+# 0.84 (Regular pass 4, item 8; the cohesion study: ð stopped at 736, under b d h k l's ascender line). Its ascender
+# and its bar go up together to the ascender line (ASC, 780) as one piece: every point of the outline from where the
+# ascender's inner edge leaves the bowl (the crotch, the last corner over the bowl's right extreme) round to the
+# bowl's right extreme moves up by a share that rises from 0 at the crotch's height to 1 at the bar's lowest point,
+# so the bar, the crossing and the ascender's cut end move whole (no stroke over the bar changes) and only the
+# ascender's run between the bowl and the bar is drawn longer (a steep stroke: it gains some 7% across there, which
+# cap_strokes' 83 for ð then takes back). The bowl and its counter stay.
+def eth_ascender(font):
+    name = next((g.name for g in font if 0xF0 in g.unicodes), None)
+    if name is None:
+        return "no eth"
+    g = font[name]
+    c = max(g.contours, key=lambda c_: len(c_.points))
+    P, n = c.points, len(c.points)
+    top = bounds(gp(font, name))[3]
+    d = ASC - top
+    if d <= 0.5:
+        return f"{name}: top {top:.0f}, kept"
+    on = [i for i, q in enumerate(P) if q.type]
+    right = max(on, key=lambda i: (P[i].x, -P[i].y))   # the bowl's right extreme
+    # walking on from the right extreme: the ascender's outer edge, the bar, the cut, the inner edge, to the crotch
+    # (the first corner after the topmost point whose next on-curve node lies left and lower: the bowl's top)
+    run, k = [], (right + 1) % n
+    seen_top = False
+    while k != right:
+        run.append(k)
+        if P[k].y >= top - 1:
+            seen_top = True
+        nxt = next(j for j in on if (j - k) % n > 0) if k != on[-1] else on[0]
+        if seen_top and P[k].type and not P[k].smooth and P[k].y < P[right].y + 200 and P[nxt].x < P[k].x - 3:
+            break
+        k = (k + 1) % n
+    crotch = run[-1]
+    y0 = P[crotch].y
+    xc = P[crotch].x
+    y1 = min(P[i].y for i in run if P[i].x < xc - 150)     # the bar's and the cut end's lowest point
+    for i in run:
+        q = P[i]
+        t = min(1.0, max(0.0, (q.y - y0) / (y1 - y0)))
+        q.y = round(q.y + d * t)
+    return f"{name}: top {top:.0f} > {bounds(gp(font, name))[3]:.0f} (crotch at {y0}, whole over {y1})"
+
+
 # Greenlandic kra is k without its ascender (Libre Baskerville's was its own small capital K: 105 across at its
 # heaviest where k is 92, its own serifs and arm). k's arm and leg, the stem under dotless i's head.
 def kra(font):
@@ -4120,6 +4163,7 @@ def run(font, lightened):
     print("charset: brackets", bracket_extent(font))                   # 0.84 (placement)
     print("charset: guillemets", guillemets(font, m))                 # 0.84 (pass 4, item 4)
     print("charset: mirrored pairs", mirrors(font))                    # 0.71
+    print("charset: eth", eth_ascender(font))                          # 0.84 (pass 4, item 8)
     print("charset: sign weights", cap_strokes(font))                  # 0.71
     print("charset: Eng", eng_capital(font))                           # 0.75
     print("charset: degree", degree_ring(font))                        # 0.75
