@@ -744,7 +744,13 @@ def kern_like(font, name, left_as, right_as):
 # Pro's 0.66 and 1.33; Libre Baskerville's were 0.42 and 0.96, which read faint in a footnote mark.
 SUP_SCALE = 0.54
 SUP_TOP = 770           # superiors' figure top (the 1's flag); inferiors stand on the baseline (fractions use them)
-SUP_BOLD = 4.0          # units added on each side after scaling
+SUP_BOLD = 4.0          # units added on each side after scaling (the ordinals ª º)
+# 0.84 (Regular pass 3, the owner's visual notes, item 6: "½ ¾ slashed numbers appear much lighter, along with the %";
+# "the fractions are still very light looking"). At 4 the small figures' stem was 54 (0.63 of the figures' 86 at 0.54
+# of their size: 1.16 times heavier than scaled, Serrif's 1.15), its hairline 33. Now the heavier reference's share,
+# Georgia Pro's 1.33: stem 0.54 x 86 x 1.33 = 62, so 8 on each side (the hairline 25 + 16 = 41, the contrast a small
+# figure's). The fraction bar, % and ‰ follow (their figures are these; the bar below)
+SUP_BOLD_FIG = 8.0
 SUP_SIDE = 14           # each side bearing, after scaling
 FIGS = "zero one two three four five six seven eight nine".split()
 
@@ -763,7 +769,7 @@ def small_figures(font):
             u = list(g.unicodes)
             put(font, name, path, w, u, lsb=SUP_SIDE + lsb0 * 0.5, rsb=SUP_SIDE + lsb0 * 0.5)
     names = [f + s for f in FIGS for s in ("superior", "inferior")]
-    CLEAN.lighten(font, names, -SUP_BOLD)
+    CLEAN.lighten(font, names, -SUP_BOLD_FIG)
     for base, name in (("a", "ordfeminine"), ("o", "ordmasculine")):
         p = moved(gp(font, base), 0, 0, SUP_SCALE)
         x0, y0, x1, y1 = bounds(p)
@@ -2163,7 +2169,8 @@ def align_anchors(font):
 # minus and dashes are 52 (0.60 H stems); the plus had a 40 upright on a 52 bar (derive thickens level strokes for
 # contrast and lighten thins upright ones: Libre Baskerville's was 52 on 50), the not sign 39 on 50, the bar 65, the
 # underscore 72, the slash 41 at its top and 49 at its foot.
-FRACTION_BAR = 48       # the bar of the fraction slash, the percent sign and every fraction, level width (they ran 40 to 54)
+FRACTION_BAR = 56       # the bar of the fraction slash, the percent sign and every fraction, level width (they ran 40 to 54;
+                        # 48 until 0.84 pass 3: raised with the small figures' stem, 54 > 62, x 1.15)
 
 
 def _level_cut(c):
@@ -3224,6 +3231,12 @@ def percent_fit(font):
                 t = c.transformation
                 d = round(line - (bounds(gp(font, c.baseGlyph))[edge] + t[5]))
                 c.transformation = (1, 0, 0, 1, t[4], t[5] + d)
+        # 0.84 (pass 3, owner item 6): the per mille's inferior zeros stand one advance apart, as set (the heavier small
+        # figures, 8 a side, ran its two lower zeros into each other)
+        inf_s = sorted(inf, key=lambda c: c.transformation[4])
+        for c0, c1 in zip(inf_s, inf_s[1:]):
+            t0, t1 = c0.transformation, c1.transformation
+            c1.transformation = (1, 0, 0, 1, t0[4] + font[c0.baseGlyph].width, t1[5])
         was = []
         for group, sign, probe in ((sup, -1, sup[0]), (inf, 1, near)):
             was.append(round(fraction_gap(font, g, probe)))
