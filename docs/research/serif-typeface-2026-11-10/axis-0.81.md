@@ -2547,3 +2547,84 @@ kerning audit reads differently.
 Left open: item 7 (above); the 7 in a run ("7777") reads a little heavy at 82 where the figures' mean stroke would
 ask about 67 (the brief's number kept); the guillemets' and ¤'s ends are cut sharp (the plain stroke end's radius 7
 does not reach them); ~ and ≈ are 1.165 times taller (their slope kept).
+
+## Regular pass 5 (0.84), figures (21 November 2026)
+
+The owner looked at snap084i and asked for four things on the figures. Each is a construction that runs where the glyph
+is built, judged by eye on large renders (nodes and handles, before over after) and in lines at 16 to 48 px, and
+committed one by one. Images and tools: `build/owner12/<item>/`, `build/owner12/tools/` (`sheet.py` cells and
+overlays, `quarters.py` each quarter's handle shares, `thick.py` the stroke at every extreme, `proto_even.py` the
+first solves, `smalltry.py` and `ufotext.py` the small-figure trials). Reference faces not opened.
+
+| # | Item (owner) | What was wrong | Construction | Now |
+|---|---|---|---|---|
+| 1 | 9 and 6: "The 0.80 9 and 6 were much better from a shape and curve perspective... take those exact curves and tails" | four rounds had reshaped them (below) | `figs.nine_080`: 0.80's Regular 9 point for point (`NINE_080`), the tail's bottom on the figures' hairline 47 by hair.py's own reading (42.5 > 47.1, the inner lowest node +5), the crotch one corner (0.80's 7-unit step dropped, the tail's edge leaving from 0.80's curve end), the left extreme and the counter's side smooth, every smooth node at one curvature by handle lengths (2.51 > 1.17); the 6 the 9 turned. Withdrawn: `clean.nine_six`, `figs.nine_even`, `hair.hairlines` on 6 9, `figs.nine_tail`, `charset.fold_steps` | heights 721 / -9, sides 92, top 47, ball 88, advance 619 (as 0.80); curvecheck 1.17, 0 faults; the outline within 6.4 units of 0.80's (the tail's inside, raised to the hairline), elsewhere within a unit or two |
+| 2 | $: "the only difference between them should just be the round ends" | its S was the base's ball-ended drawing re-spined at the zero (narrower at the top, 603 wide) | `dollar.from_s`: the finished S point for point, the barbs replaced by the figures' ball (88 across, outer side on the barb's edge, far point at the barb's inner end), the bar 47 centred on the S's ink, union; every master the same on its own S (`dollar.master`) | $ 580 wide as S; looks right in "$42 S$S 5$"; at the S's weight it reads a little darker than the figures beside it (render `item2/text.png`), kept as asked |
+| 3 | "The number set overall looks very inconsistent... 5 and 3 look a bit off" | 3's and 5's bowl quarters lopsided (handles 0.44 / 0.58, 0.48 / 0.67, 0.62 / 0.46 on the 3's inside; 0.66 / 0.52, 0.44 / 0.57, 0.51 / 0.64 on the 5), so each arc ran flat then tight; the 5's ball 88 by 44 (the others 88 by 49); the 5's bowl side 91; the 2's inside 0.55 / 0.64 | `figs.figure_family` (below) | 3 inside 0.58 / 0.62 / 0.56 / 0.57 / 0.57 / 0.64 both handles; 5 0.61, 0.64, 0.57, 0.52 / 0.54, 0.58 / 0.59, 0.58 / 0.59; 2 inside 0.60; curvecheck 3 1.09 > 1.05, 5 1.06 > 1.02, 2 1.20 > 1.17, no faults |
+| 4 | "The fractions look better... perhaps they can be a bit thicker?" (at most 18% under the figures, 12 to 15% if the counters stay open) | stem 62 (28% under 86); `lighten` moves level only, so the hairlines stayed 25 (0.54 x 47) | `charset.SUP_STEM_FIG` 72 by `small_weights`: uprights by the level move (12.8 a side), level strokes by the same move turned upright (`lighten_upright`, 7.0 a side) so the hairline is 39 (47 / 86 of 72), the figure narrowed upright first so its lines hold; `FRACTION_BAR` 65 (56 x 72 / 62) | stem 72 to 76 at the sides (zero 73, 3 75), hairlines 38 to 42; tried 70, 72, 74: at 74 the counters of ⁸ ₈ fill in at 16 px, 72 is the heaviest that reads clean (16% under the figures) |
+
+**Why the 6 and 9 had moved away from 0.80** (git history and this record):
+
+1. 0.81, owner round 2 (de487eec, 15 November). The owner said the 9 read "too steep, slightly italicized". Measured
+   against Georgia Pro and Source Serif 4, the quarter from the right extreme to the lowest point was tall and narrow
+   (309 by 409, 0.76 against 0.92 to 0.94) and the lower right edge leaned 17.6 degrees against 24.5 to 25.8. The
+   rule `clean.nine_six` (`NINE_QUARTER` 0.90, `NINE_LEAN` 23.5) moved the lowest point left (249 > 191), the ball 32
+   left onto the bowl's left extreme and shortened the extreme's handle; the 6 the same turned. This is where the tail
+   lost 0.80's curve.
+2. 0.81, owner round 6: a reading fix in the Bold engine for the new ball position (no Regular change).
+3. 0.83, letters 1 (ddcc3e65, 18 November). The new shape failed curvecheck (9 2.51, 6 4.56); `figs.nine_even`
+   solved the counter's handles and the two lowest nodes together for curvature and even.py, and made the 6 exactly the 9
+   turned.
+4. 0.84, pass 2, strokes 1 (668f753f, 19 November). `hair.hairlines` moved the inner node of the 6's top and the 9's
+   bottom pair to the figures' hairline.
+5. 0.84, pass 3, owner item 4 (e535eb21, 20 November). The owner said they were "slanted too much, more like the
+   single storey g": `figs.nine_tail` reshaped the tail on g.ss02's (lowest point at 0.460, quarters 0.92 / 0.95,
+   handles 0.55), `nine_solve` re-solved it; pass 4 then needed `charset.fold_steps` for the small forms' crotch.
+So each move answered a measured reference gap or a remark at the time, and each later round corrected the previous
+one; 0.80's drawing was never the problem the record measured, only its steepness against the references.
+
+**The figures' bowl family (item 3), the rule.** Read on snap084i: 0 and 8 were already even (each quarter's two
+handles within 0.03, outside 0.56 to 0.58, inside 0.58 to 0.62); balls 88 across everywhere, the 5's 44 high where the
+others are 49; the strokes at the extremes 92 except the 5's side (91); the 8's extremes 67 to 79 (its stress is the
+spine's, not the sides: not a fault, left). `figure_family`: (1) the 5's ball the others' (88 by 49); (2) each bowl
+quarter of the 3's and 2's insides and both of the 5's edges one share on both handles near the family's tension
+(outside 0.57, inside 0.60), solved with one curvature at every smooth node and least change, shared extremes free to
+slide along their tangent (they moved under a unit); (3) every smooth node evened by handle lengths (target 1.1); (4)
+the 5's side 92. The 3's and 2's outside quarters that run into a ball were tried in the solve and left: a single
+cubic cannot hold one share and meet the ball's curvature (one ball shape forced them to 0.38 / 0.67 and 0.71 / 0.34,
+or the extremes moved 15 to 27 units); their lopsided handles there are the ease into the ball. A ball of one shape
+(handle shares) for 2 3 9 was refused for the same reason; one size holds.
+
+Light and Bold were looked at for every item (`build/owner12/masters/Light-figs.png`, `Bold-figs.png`: snap084i red
+over snap084j blue with nodes; `text-300-400-800.png` the variable font at 300 / 400 / 800). They hold: the 9 and 6
+come out of the engine as 0.80's did; the $ is each master's S with that master's ball (Light 75, Bold 123) and bar
+(37, 62); the evened 3 5 2 and the heavier small figures carry through. The $ no longer needs a glyph in the mid
+master's sparse layer (it interpolates from the Regular and the Bold; audit_axis and audit_rays clear).
+
+### Full build, the audits, `build/snap084j`
+
+`caffeinate -i build.py` twice: the first (kept as `build/owner12/snap084j-first`, audits `build/owner12/audit-084j-first`)
+showed one regression of this pass, audit_rays ⅑ thinner at 800 than at 666.3 (32.9 > 30.9 at (574, 176), the small
+9's bowl stroke by the crotch, where the first fold had slid the underside's end 7 up its tangent); the follow-up keeps
+0.80's curve end and only drops the step. The second is `build/snap084j` (`full-084j.log`), audited in
+`build/owner12/audit-084j2` (`build/owner11/tools/audits.sh`, then pathlint, curvecheck, curvecheck --hooks and
+audit_charset on the Regular), against snap084h's audits (`build/owner11/audit-084h`; snap084i differs from snap084h
+only in the 7's diagonal and the daggers' revert).
+
+| Audit | snap084h | snap084j |
+|---|---|---|
+| fallbacks | Bold registered, ℗; Light ℗ | the same |
+| audit_axis Bold / Light | daggerdbl turns at 396 / 425 (reverted since); thin: cedi, ogonek, one.ss01 | turns ok; thin the same four |
+| audit_bold Bold / Light | 428 / 429 on target; g's neck; Light seven 0..718 (the engine's 7) | the same (upright strokes 109 read, was 107) |
+| audit_rays | ok | ok (464 glyphs, 27,057 places); the first build: ⅑, cured |
+| audit_kern, curvecheck regions Light / Bold, hooks Light / Bold (5 / 16), interpolation | | unchanged |
+| Regular: audit_charset | 0 errors | 0 errors (the $ check now: no S barb corner in it) |
+| Regular: curvecheck, hooks | pass | pass |
+| Regular: pathlint | 0 / 154 / 30 | 0 / 152 / 27 |
+
+Left open: the $ at the S's full weight reads a little darker than the figures beside it in "$42" (the owner's choice
+of the S's shape kept); the outside quarters of the 3 and 2 that run into a ball stay lopsided (one cubic cannot be even
+and meet the ball); the 8's sides 67 to 79 (its weight is on the spine); the small figures at 72 are 16% under the
+figures, a point past the 12 to 15% aim (74 fills ⁸'s counters at 16 px); their sides now 4.8 units tighter each
+(their advances kept); `clean.nine_six`, `figs.nine_even`, `nine_solve`, `nine_tail` and `G_TAIL` stay in the code,
+uncalled; `bold.far_from_ball` (0.81 round 6, for the moved ball) is still read but finds nothing to rename.
