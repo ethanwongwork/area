@@ -474,6 +474,9 @@ SPANS = {
     # ß: the spine's inner edge ran nearly straight into a 45-unit curve of radius 78 (17.6 times) with an inflection
     # inside it; one curve from the counter's lowest left extreme to the lower bowl's inflection
     "germandbls": [((314, 364), (449, 225), "merge")],
+    # ə Ə: the counter's right extreme ran into a fillet of radius 30 / 49 down to the bar (11.0 / 6.7 times)
+    "schwa": [((424, 247), (407, 200), "ease")],
+    "Schwa": [((582, 346), (564, 291), "ease")],
 }
 
 
