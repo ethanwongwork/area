@@ -1289,6 +1289,7 @@ def normalize(font):
     import symbols as SYMBOLS                         # 0.82 (owner round 8, item 18): the hook above's curves meet at
     for n_ in SYMBOLS.HOOKS:                          # one curvature (handle lengths only; its ~30 composites follow)
         print("hook above:", SYMBOLS.even_curves(font, n_))
+    print("symbols: section", SYMBOLS.section_joins(font))   # 0.84 (pass 3, owner item 2): § joins, no points
     import dollar as DOLLAR                           # 0.82 (owner round 8, item 17): $'s S one outline through its
     if "dollar" in font:                              # bar, the bar centred on the S, its stubs one length
         cs_ = [[(p.x, p.y, p.type, p.smooth) for p in c.points] for c in font["dollar"].contours]

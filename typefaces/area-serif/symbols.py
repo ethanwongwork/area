@@ -272,3 +272,119 @@ def eth_bar(reg, font, name="eth"):
             P[idx].x, P[idx].y = round(t[0]), round(t[1])
     after = [round(((P[u].x - P[l_].x) ** 2 + (P[u].y - P[l_].y) ** 2) ** 0.5) for u, l_ in pairs]
     return f"{name}: bar x{law:.3f} (pairs across {before} > {after})"
+
+
+# 0.84 (Regular pass 3, the owner's visual notes, item 2: "§ has some rough parts that need smoothing"). The section
+# sign is Libre Baskerville's drawing: two S strokes whose middle loop is the upper stroke's spine and right side over
+# the lower stroke's spine and left side. Where each side runs into the other stroke the outline turned at a point:
+# the two crotches outside (left at the upper stroke's side, right at the lower's), a notch, and the counter's two ends
+# (top left, bottom right), a point between a curve and the spine's straight edge. Each is now a join, not a point:
+#   a crotch outside   a concave fillet of SECTION_CROTCH (the @'s a and the ampersand's arm: 0.30 of the stem; the
+#                      capitals' 86, figures and signs at cap size), as a branch leaves a stem;
+#   a counter's end    the counter is one smooth loop: its end is rounded where the two edges meet, cut back
+#                      SECTION_END along each (the turn there is some 60 degrees: a quarter of the loop's own side
+#                      radius, 0.5 of the counter's side's width across, so the end turns as the loop's sides do).
+# Both by `at.fillet` (both pieces cut back by arc length, one cubic along their tangents, handles 0.55 of the chord).
+# In the Regular only (normalize, before spacing): the masters' engine carries the Regular's points, as every other
+# point of this drawing.
+SECTION_CROTCH = 0.30 * 86
+SECTION_END = 0.5
+
+
+def _segs_of(P):
+    """A closed UFO point list [(x, y, type, smooth)] as [(kind, seg)] from its first on-curve point; seg the cubic
+    (lines as their thirds)."""
+    n = len(P)
+    s0 = next(i for i, q in enumerate(P) if q[2])
+    Q = P[s0:] + P[:s0]
+    out, offs, prev = [], [], Q[0]
+    for q in Q[1:] + [Q[0]]:
+        if q[2] is None:
+            offs.append(q)
+            continue
+        a, b = (prev[0], prev[1]), (q[0], q[1])
+        if len(offs) == 2:
+            out.append(("C", (a, (offs[0][0], offs[0][1]), (offs[1][0], offs[1][1]), b), prev[3]))
+        else:
+            out.append(("L", (a, (a[0] + (b[0] - a[0]) / 3, a[1] + (b[1] - a[1]) / 3),
+                              (a[0] + 2 * (b[0] - a[0]) / 3, a[1] + 2 * (b[1] - a[1]) / 3), b), prev[3]))
+        prev, offs = q, []
+    return out
+
+
+def _fillet(segs, k, r, share=0.55):
+    """at.fillet with its handles on the tangents' meeting point: the corner between segs[k] and segs[k + 1] cut back
+    by r along each, joined by one cubic whose handles run share of the way to where the two tangents meet (a sharp
+    notch would carry handles of a share of the chord past that point, a loop)."""
+    import at as AT
+    (ka, sa), (kb, sb) = segs[k], segs[k + 1]
+    a_kept, pa, ta = AT._cut(sa, r, True)
+    b_kept, pb, tb = AT._cut(sb, r, False)
+    t1 = A.meet(pa, ta, pb, (-tb[0], -tb[1]))
+    t2 = A.meet(pb, (-tb[0], -tb[1]), pa, ta)
+    ch = A.math.dist(pa, pb) if hasattr(A, "math") else 0
+    if t1 is None or t2 is None or t1 <= 0 or t2 <= 0:
+        t1 = t2 = 0.4 * ch
+    f = (pa, (pa[0] + ta[0] * share * t1, pa[1] + ta[1] * share * t1),
+         (pb[0] - tb[0] * share * t2, pb[1] - tb[1] * share * t2), pb)
+    if ka == "L":
+        a_kept = (sa[0], sa[0], pa, pa)
+    if kb == "L":
+        b_kept = (pb, pb, sb[3], sb[3])
+    return segs[:k] + [(ka, a_kept), ("C", f), (kb, b_kept)] + segs[k + 2:]
+
+
+def section_joins(font, name="section"):
+    """The rule above on the Regular's §. Corners found by geometry: on the outline every corner between two curves
+    that turns into the ink (a crotch), on the counter every corner (its ends)."""
+    import math
+    import at as AT
+    if name not in font:
+        return f"{name}: none"
+    g = font[name]
+    cs = [[(p.x, p.y, p.type, p.smooth) for p in c.points] for c in g.contours]
+    if len(cs) != 2 or g.lib.get("area.section_joins"):
+        return f"{name}: {len(cs)} contours; left"
+    outer_i = max(range(2), key=lambda k: abs(A.signed_area(cs[k])))
+    log = []
+    new = []
+    for ci, P in enumerate(cs):
+        segs = _segs_of(P)
+        sgn = 1 if A.signed_area(P) > 0 else -1
+        # the corner at the end of segs[k] (between segs[k] and segs[k + 1])
+        ks = []
+        for k in range(len(segs)):
+            (ka, sa, _), (kb, sb, _) = segs[k], segs[(k + 1) % len(segs)]
+            d_in = A.unit((sa[3][0] - sa[2][0], sa[3][1] - sa[2][1]))
+            d_out = A.unit((sb[1][0] - sb[0][0], sb[1][1] - sb[0][1]))
+            turn = math.degrees(math.asin(max(-1, min(1, d_in[0] * d_out[1] - d_in[1] * d_out[0]))))
+            ang = math.degrees(math.acos(max(-1, min(1, d_in[0] * d_out[0] + d_in[1] * d_out[1]))))
+            if ang < 20:
+                continue
+            if ci == outer_i and ka == kb == "C" and turn * sgn < 0:
+                ks.append((k, SECTION_CROTCH, "crotch"))
+            elif ci != outer_i:
+                ks.append((k, None, "end"))
+        segs2 = [(k_, s_) for k_, s_, _ in segs]
+        # start the list after a smooth node, so no corner sits at the wrap
+        if ks:
+            first = next(k for k in range(len(segs)) if k not in {kk for kk, _r, _n in ks})
+            rot = (first + 1) % len(segs)
+            segs2 = segs2[rot:] + segs2[:rot]
+            ks = [((k - rot) % len(segs), r, kind) for k, r, kind in ks]
+        for k, r, kind in sorted(ks, reverse=True):
+            if r is None:
+                # the counter's side across at its widest (the loop's stroke): half of it
+                xs = [q[0] for q in P if q[2]]
+                r = SECTION_END * (max(xs) - min(xs)) / 4
+            segs2 = _fillet(segs2, k, r)
+            log.append(f"{kind} {r:.0f}")
+        Pn = A.to_points(segs2)
+        if (A.signed_area(Pn) > 0) != (A.signed_area(P) > 0):
+            Pn = A._reverse(Pn)
+        new.append(Pn)
+    from ufoLib2.objects import Point
+    for c, Pn in zip(g.contours, new):
+        c.points = [Point(x, y, t, smooth=s_) for x, y, t, s_ in Pn]
+    g.lib["area.section_joins"] = 1
+    return f"{name}: " + ", ".join(log)
