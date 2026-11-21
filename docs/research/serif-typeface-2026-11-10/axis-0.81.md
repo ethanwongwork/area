@@ -2629,3 +2629,96 @@ figures, a point past the 12 to 15% aim (74 fills ⁸'s counters at 16 px); thei
 (their advances kept); `clean.nine_six`, `figs.nine_even`, `nine_solve`, `nine_tail` and `G_TAIL` stay in the code,
 uncalled; `bold.far_from_ball` (0.81 round 6, written for the moved ball) is still in the engine, not checked
 against the 0.80 ball this pass.
+
+## Regular pass 6 (0.84), the @ and the stroke ladder (21 November 2026)
+
+The owner looked at snap084j: "The @ still needs work"; the punctuation, maths symbols, arrows and fractions "still
+look much thinner optically than the rest of the glyph set", their lightness against the full figures to come within
+18% (12 to 15%); "the thickness of strokes should be defined to be a range of values and set as a specific number of
+values ... all the non-Latin-character glyphs to be more cohesive with the letters". A read-only study prepared the
+pass (`build/owner12/study/`: the @ sheets, the ladder census, the families against the figures; the reference faces
+for numbers only). Four items, each a construction where the glyph is built, judged by eye on large renders (snap084j
+red over the new grey, nodes blue) and in lines at 16 / 24 / 48 px, committed one by one. Renders and tools:
+`build/owner13/<item>/` (`at`, `ladder`, `sign`, `stray`), `build/owner13/tools/` (`atdev.py` the @ built on a
+snapshot's letters and drawn, `atdive.py` the ring's width by angle, `atq.py` the ring chains' handles and radii,
+`atgrid.py` / `atfaults.py` the dive trials, `atrays2.py` the @'s rays from 300 to 800, `circthin.py` the circled
+letters' Light against the Regular, `gsheet.py` before-over-after sheets, `reg.sh` the Regular build retried past a
+.DS_Store, `ladnum.py` and `fam.py` the census numbers). Reference faces not opened.
+
+| # | Item (owner) | What was wrong | Construction | Now |
+|---|---|---|---|---|
+| 1 | @ "still needs work" | (a) the ring left the a's foot at the a's exit stroke (65) and swelled past the ring's right extreme (59): a lump at 325 to 345 degrees, 62 to 69; (b) the a at 0.841 stems with thins 1.21 of the ring's hairline: stem 66, thins 52, grey and monoline; (c) the tail's outer end at 318 degrees and 1.11 of the radius, a spiral out of the ring | `at.py`: the ring leaves the foot at the a's thin (`FOOT` 44 / 43) and swells to the right extreme, 60 (`RIGHT`); the inner edge from the foot up only loosens (`INNER_MONO`, `MONO_W` 250); the a at the Regular stem 74, top and bottom 43 (`A_OWN`; the Light's thin the ring's too); the tail's outer end on the ring's oval at 305 degrees, 1.02 of the radius, along the tangent turned 3 degrees out (`TAIL_ANGLE`, `TAIL_R`, `TAIL_TURN`) | right side from the foot (snap084k): 41 to 47 at 312 to 325 degrees (one reading of 52 at 317 runs across the inside corner of the foot), 47 to 52 at 328 to 340, 53 to 60 at 341 to 360, never over 60, 43 at the top; the a 74 / 43, its height kept (435); the tail 43 to 38 at the cut, outer edge within 1.021 of the radius. curvecheck on the construction: Light 0, Regular 0, Bold 0 faults (before 0 / 0 / 1); its rays thicken everywhere from 300 to 800 |
+| 2 | "a specific number of values" | the Regular's steps were literals in five modules | `ladder.py`: tip 30, small-figure hairline 39 (72 x 47 / 86, the units of the thin diagonal), thin diagonal 39, hairlines 43 / 47, bar 52, sign stroke 58, small-figure stem 72, thick diagonal 74, stems 78 / 86, rounds 82 / 92; balance, charset, hair, amp, at and every pass-6 rule read it; the table in the construction skill | the Regular built identical (0 glyphs differ) |
+| 3 | signs "much thinner optically" | one stroke 52 for the plain signs, 55 to 57 for the key signs, the arrows three shafts (a 43 / 44 to 60 taper, ↔ ↕ 43, the slanted ones 59.4), # 48.5 to 52, the fraction slash 52.9 across | `ladder.SIGN` 58: the minus at it and every operator built on it; dashes, the figure dash, ÷'s bar; # made heavier on its own outline; the taper from the capitals' hairline 47 to 58, ↔ ↕ shafts 58; tab bar 58; key signs 47 level / 58 upright; the curved maths' stress 53 / 63; the fraction slash, every built fraction's bar and % ‰'s bars 58 across (71 level); `bold.SIGN_BAND` 50 to 60 takes the sign law ahead of the upright signs' bracket law; < keeps the letters' 33 flat; the plain end's face to 1.15 sign strokes | 60 tried (`build/owner13/sign/cmp-1.png`, `cmp-2.png`, `s60`): = ≠ ≤ ≈ stay open at 16 px at both, but at 48 px the fraction slash, # and \| at 60 read heavy beside the small figures and the letters; 58 kept |
+| 4 | strays (the study's off-ladder list) | 4's bar 57, Ə 67, ə 51; struck bars 53 to 62, slashes 49 to 71; ™ ℠ strokes 22 to 50; © ® ℗ letters 54 to 64; ° 47 light, ¶ 61 dark | `stray.py`, `circled.py`, `charset.STRUCK_W` (rows in the skill) | 4's bar 47 (57 shown red in `stray/sheet.png`, `text-1.png`: the 57 bar read heavier than the 4's own diagonal and the figures' hairlines), Ə 47, ə 41; every struck stroke 58 across; ™ ℠ T M S at the small figures' size and weights (advance 840 > 1015, 780 > 968); © ® ℗ letters 72 / 39, ring top 39; ° 58 / 47 (72 / 39 read as a bold o); ¶ stems 58 |
+
+**Item 1, the @ in detail.** The a's foot curve and the ring's inner edge from the foot are one chain solved for handle
+lengths. With the foot's stroke at the a's thin the inner lowest point drops 13 units and the counter between the a's
+stem and the ring narrows to a teardrop at its bottom; the inside's foot node stays half way between the parallel and
+the a's own place (`DIVE["in"]` 0.5, as before). Trials (`at/grid1.txt` to `grid3.txt`): the dive's foot share
+(0.20 to 0.28), its radius share (0.85 to 1.05) and the inner foot (0 to 1.2) each traded a fault in one master for
+one in another; the inside's monotone term at 250 (40 left a flat place in the Light, 400 a curvature step in the Bold)
+cleared all three. The a keeps its height (the references' share, 435), so the counter opens by what its thins lose.
+Light: the a's thin is the ring's (37) instead of the references' 1.18 (44), so it is never heavier than the
+Regular's; Bold unchanged in its shares. `audit_rays` on the @ (`atrays2.py`, 300, three stops to 400, 400, three to
+the mid master, the mid master, half way, 800): no place thins.
+
+**Item 3, which fraction slash.** The fraction slash is a plain stroke, so it takes the sign stroke across itself, 58,
+and with it every ready-made fraction's bar and the % ‰ bars (one level width, 71, at the fraction slash's slope; the
+built fractions lean within 0.3 degrees of it): ½ and 1⁄2 carry one bar. The small figures' 39 hairline was the
+other candidate; 58 keeps the bar with /, which it is.
+
+**Item 4, left as they were.** % ‰'s zeros are the small zeros (components) and already read 38 / 73 at snap084j: on
+the ladder. The small figures' thin diagonals: ⁴ ₄ and the fractions' 4s 40.9 (within 2 of 39), ⁷ ₇ ⅞ ⅐ 57.4 (the 7's
+thick diagonal scaled with its figure, the 7's own share of the stem, 0.80 / 0.79): one value per role already; no
+change. Đ Ħ Ŧ đ ħ ŧ keep H's and t's crossbar (49): their bars are the letters' own crossbars, not strokes across a
+letter. Ɲ's thick diagonal at 86 was built (99.8 > 85.7) and withdrawn: the first full build's Bold hook took a new curvature fault (curvecheck --hooks, node 53, 1.44x; 16 > 17 faults).
+
+### Full build, the audits, `build/snap084k`
+
+`caffeinate -i build.py` twice: the first (`build/owner13/full-084k.log`, audits `build/owner13/audit-084k-first`)
+showed three regressions of this pass: audit_axis Bold drift in # at 628.8 (the rebuilt union's crossings off their
+lines between the masters: # is now its own drawing made heavier); audit_axis Light thin in ® ℗ at 300 / 325 (29 > 21,
+the circled letters' larger Regular additions shrinking by the stem's law: now the hairline's) and the Light ® on an
+engine fallback (the engine's reading, which circled.py replaces whole: the report now names the construction, so the
+old Bold ® ℗ and Light ℗ fallbacks go too); curvecheck --hooks Bold one more fault, Ɲ (withdrawn). The second is
+`build/snap084k` (`full-084k.log`), audited in `build/owner13/audit-084k` (`build/owner11/tools/audits.sh`, then
+pathlint, curvecheck, curvecheck --hooks and audit_charset on the Regular), against `build/owner12/audit-084j2`.
+
+| Audit | snap084j | snap084k |
+|---|---|---|
+| fallbacks | Bold registered, ℗; Light ℗ | none (© ® ℗ reported as circled.py's construction; their outlines were always its) |
+| audit_axis Bold / Light | turns ok; thin cedi, ogonek, one.ss01 | the same (drift and Light thin clear in the second build) |
+| audit_bold Bold / Light | 432 / 433 on target; g's neck; Light seven 0..718 | the same |
+| audit_rays | ok (464 glyphs, 27,057 places) | ok (463 glyphs, 27,034 places: ≠ is no longer read, its junction zones now cover its every place at 58) |
+| audit_kern, curvecheck Light / Bold, hooks Light / Bold (5 / 16), interpolation (150 lines) | | unchanged |
+| Regular: audit_charset | 0 errors | 0 errors (the degree's ring now read against stray.DEGREE) |
+| Regular: curvecheck, hooks | pass | pass |
+| Regular: pathlint | 0 / 152 / 27 | 0 / 135 / 33 (↖ ↗ ↘ ↙'s warnings gone; no glyph newly warned) |
+
+**The census again** (the study's readings, `ladder.py` over `stroke/measures.json`, re-read on snap084j and snap084k
+with `build/owner13/tools/ladnum.py` against this pass's ladder; the study's own script writes into the study folder
+and was left as it was; `build/owner13/census/ladder-j-k.txt`):
+
+| | snap084j | snap084k |
+|---|---|---|
+| straight strokes (length 60 or more) | 1006 readings, 54 distinct whole-unit values | 1006 readings, 50 distinct |
+| within 2 of a ladder step, straight | 95.1% | 97.1% |
+| within 2 of a step, every reading (with free round extremes) | 85.0% | 86.7% |
+| by class, straight, on the ladder | accents 83%, interface 83%, punctuation 88%, capitals 97%, lowercase 98% | accents 100%, interface 85%, punctuation 100%, capitals 98%, lowercase 100% |
+
+Each family's mean stroke (ink over skeleton length) against the full figures' median, Area only (`fam.py`, the
+study's part-3 measure; `build/owner13/census/j-fam`, `k-fam`): maths operators 0.84 > 0.94, dashes 0.82 > 0.93,
+slashes and bars 0.79 > 0.88, arrows 0.87 > 0.90, percent 0.85 > 0.87, fractions 0.81 > 0.83, reference marks 0.89 >
+0.91, circled 0.74 > 0.76, trademark 0.51 > 0.74, small figures 0.79 (kept); brackets 0.98, guillemets 0.89, quotes
+1.03, maths other 0.93 unchanged. Every sign family but the trademark and the circled is now within 18% of the
+figures; maths, dashes and slashes within 12%. The main stroke (90th percentile) of the plain families 52 > 58, of the
+circled 56 > 70, of the trademark 51 > 69.
+
+Left open: the @'s counter between the a's stem and the ring comes to a narrow teardrop at its foot (the inside's
+lowest point is 44 over the outside's, 37 right of the a's stem: a round turn there needs the foot further right);
+™ ℠ are wider (840 > 1015, 780 > 968) at the superiors' size; the fraction slash's ends stay sharp (71 level, past the
+plain end's 67), as they were at 65; the plain end's wider face newly rounds ₺'s and ₱'s bar ends; Đ Ħ Ŧ đ ħ ŧ keep
+their crossbars (49); ≠ unread by audit_rays; the small figures stay 21% under the figures in mean stroke (pass 5's
+72 kept, its counters' limit at 16 px).
+
