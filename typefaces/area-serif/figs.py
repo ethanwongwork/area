@@ -421,6 +421,13 @@ def nine_solve(cs0, name="nine"):
     if cb is None or ob is None:
         return None, "no level bottom under the counter"
     n0 = len(cs0[0])
+    # the tail's own places: its lowest point and the ball's outer side (the neck's curve keeps its handles: solved,
+    # its handle ran under the inside's lowest point and made an extreme inside the curve)
+    P0_ = cs0[0]
+    on0 = [i for i, q in enumerate(P0_) if q[2]]
+    lo0 = min(on0, key=lambda i: (P0_[i][1], P0_[i][0]))
+    ball0 = min((i for i in on0 if P0_[i][1] < cs0[1][cb][1] - 120), key=lambda i: P0_[i][0])
+    tail_nodes = {lo0, ball0}
     H = []                                               # (contour, handle, its node)
     for ci, P in enumerate(cs0):
         n = len(P)
@@ -430,7 +437,7 @@ def nine_solve(cs0, name="nine"):
             own = i - 1 if P[i - 1][2] else (i + 1) % n
             # 0.84 (pass 3, owner item 4): with the tail g.ss02's (`nine_tail`), its own handles (the outline under the
             # bowl: the lowest point, the ball) join the solve, so the ball's node keeps one curvature too
-            tail = ci == 0 and P[own][1] < cs0[1][cb][1] - 120
+            tail = ci == 0 and own in tail_nodes
             if ci == 1 or (ci == 0 and min((i - ob) % n0, (ob - i) % n0) <= 2) or tail:
                 H.append((ci, i, own))
     NODES = [(1, cb), (0, ob)]
@@ -878,6 +885,31 @@ def g_tail_shape(font):
     return share, ho, hi, h / (qo[0] - lo[0])
 
 
+def _in_triangle(P, share=0.95):
+    """Every cubic's handles kept short of where its two end tangents meet (share of the way): a handle past it puts
+    an extreme inside the curve (pathlint)."""
+    n = len(P)
+    on = [i for i, q in enumerate(P) if q[2]]
+    for a, i in enumerate(on):
+        j = on[(a + 1) % len(on)]
+        if (i + 3) % n != j:
+            continue
+        p0, h1, h2, p3 = P[i], P[(i + 1) % n], P[(i + 2) % n], P[j]
+        d1 = (h1[0] - p0[0], h1[1] - p0[1])
+        d2 = (h2[0] - p3[0], h2[1] - p3[1])
+        den = d1[0] * d2[1] - d1[1] * d2[0]
+        if abs(den) < 1e-9:
+            continue
+        t = ((p3[0] - p0[0]) * d2[1] - (p3[1] - p0[1]) * d2[0]) / den
+        u = ((p3[0] - p0[0]) * d1[1] - (p3[1] - p0[1]) * d1[0]) / den
+        if t > 0 and u > 0:                                  # the meeting point t (u) handle lengths away
+            if t * share < 1:
+                h1[0], h1[1] = p0[0] + d1[0] * share * t, p0[1] + d1[1] * share * t
+            if u * share < 1:
+                h2[0], h2[1] = p3[0] + d2[0] * share * u, p3[1] + d2[1] * share * u
+    return P
+
+
 def nine_tail(font):
     import loops as LOOPS
     if "nine" not in font:
@@ -925,6 +957,7 @@ def nine_tail(font):
         P[(top_i + 1) % n][0], P[(top_i + 1) % n][1] = xt, round(yt - ((yt - yqi) + hk * (yqi - P[ilo][1])))
         P[(ilo - 1) % n][0], P[(ilo - 1) % n][1] = round(xl + hk * wi), P[ilo][1]
         Q, log = LOOPS.even_nodes([tuple(q) for q in P], (-1000, 2000))
+        Q = _in_triangle([list(q) for q in Q])
         new = [[(round(q[0]), round(q[1]), q[2], q[3]) for q in Q]] + cs[1:]
         if turned:
             new = [[(sx - q[0], sy - q[1], q[2], q[3]) for q in Pc] for Pc in new]
