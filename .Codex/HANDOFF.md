@@ -11,8 +11,13 @@
   `scripts/rendered/known-failures/`, `check:rendered:corners` (eight corners, one at a time, a capture lock); CI gains
   `changes`, `behaviour`, `rendered`, `rendered-corners` and `output` jobs. Not verified: the new CI jobs have never
   run on a runner (baselines were recorded with macOS Edge); corner runs over every family (only the 21-family fast
-  subset ran). Next: plan B (tone borders and hue icons follow the ground, dark secondary inks at Layers extremes,
-  accent selection apart from hover), each fix deleting its known-failures entries. Phase 3 below merged as PR #235.
+  subset ran). **Step B built (2026-11-20, PR #244):** tone and hue outlines, light marks,
+  dark vivid inks, dark secondary inks and the accent selected plate now hold their floors on every ground
+  (`color/layers.ts` HOLD, six `layer-*` helpers); 19 defect entries removed from `known-failures.ts`, four owner
+  decisions remain; light tone outlines are slightly darker at defaults; built CSS grew 11% (area.css 3.51 → 3.90 MB),
+  worth a shortening pass. CI: first run's browser jobs failed to launch Edge in time and hung; launchers now wait 60 s,
+  print Edge's stderr, time out every call, and Linux has its own baselines in `scripts/rendered/platforms/linux/`
+  (the rendered jobs fail and upload `proposed-baseline/` until one is read and committed). Next: plan C. Phase 3 below merged as PR #235.
 
 ## Earlier state (2026-11-15)
 - **Project evaluation and Phase 3 start (worktree `area-project-eval-3594b0`, 2026-11-15, uncommitted).** Where it

@@ -169,6 +169,13 @@ Ordered so each step makes the next one safer. Sizes are rough.
 Findings 1–4: make tone borders and hue icons follow the ground as the inks do; lift dark
 secondary inks at Layers extremes; give accent selection a floor against hover.
 
+*Built 2026-11-19 (uncommitted):* tone and hue outlines, light marks and dark vivid inks are held on the ground
+(`HOLD`, color/layers.ts: each scaled only as far as its floor needs on the deepest light / lightest dark ground);
+dark muted, subtle and disabled keep their APCA floors (`DARK_INK_APCA`); the accent selected plate keeps a state step
+from hover (`SELECTED_STEP`). Every defect entry in `sweeps/known-failures.ts` is gone (findings 1–4 and the vivid-code
+one); the four decision entries remain. At the defaults only the light tone and hue outlines move (they missed 1.3 / 1.9
+on the recessed grounds). docs/CONTRAST.md has the rules.
+
 ### C. Make every component follow every setting (medium)
 
 1. Redraw the four data-URI icons through `Glyph` or a stroke that follows icon weight.

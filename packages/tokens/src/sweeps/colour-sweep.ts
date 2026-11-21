@@ -20,9 +20,10 @@
 import { apcaMagnitude, wcagContrastHex } from "../color/contrast.ts";
 import { ASSERTIONS, type ContrastAssertion } from "../contrast/assertions.ts";
 import {
-  DEFAULT_LAYER_SELECTION, FILL_STEPS, FLOOR_ROLES, HUED_INKS, TONAL_Y, VIVID_Y, castChroma, castOf, layerLightness, tintedDarken,
-  toneFloorApca, toneFloorDarken, type Cast, type LayerSelection, type ToneFloor,
+  DEFAULT_LAYER_SELECTION, FILL_STEPS, FLOOR_ROLES, HOLD, HUED_INKS, TONAL_Y, VIVID_ROLES, VIVID_Y, castChroma, castOf, heldSelectedHex, holdDark,
+  holdLight, holdMargin, layerLightness, tintedDarken, toneFloorApca, toneFloorDarken, type Cast, type LayerSelection, type ToneFloor,
 } from "../color/layers.ts";
+import { SEMANTIC_ALIASES } from "../semantic/aliases.ts";
 import { MIN, alphaOver, mixOklab } from "../color/layer-checks.ts";
 import { NEUTRAL_SCALES } from "../color/presets.ts";
 import { type Oklab, type Rgb, SRGB, clampRgb, deltaEOk, oklchToRgb, parseHex, rgbToOklab } from "../color/oklab.ts";
@@ -86,17 +87,39 @@ export function lightDarkens(c: ColourCombo): { vivid: number; tonal: number; fl
   };
 }
 
-/** The tokens the browser paints for one combination: the resolver's, with the light hued inks darkened as the CSS does. */
+/** The tone and hue outlines the axes write as rungs (emit/base.ts holds each on the ground, color/layers.ts HOLD). */
+const STROKES = Object.entries(SEMANTIC_ALIASES).filter(([, a]) => a.kind === "stroke" || a.kind === "strokeHover").map(([name, a]) => ({ name, hover: a.kind === "strokeHover" }));
+
+/** The ground the held colours are solved on for one combination (color/layers.ts HOLD), with its tint margin, and the code ground. */
+export function holdGrounds(c: { theme: "light" | "dark"; neutral: string; ground: number; layers: number }): { hold: number; code: number } {
+  const m = layerLightness(c.theme, c.ground, c.layers), margin = holdMargin(castFor(c.neutral)[c.theme].chroma), sign = c.theme === "light" ? -1 : 1;
+  return { hold: m.hold + sign * margin, code: m.code + sign * margin };
+}
+
+/**
+ * The tokens the browser paints for one combination: the resolver's, with the light hued inks darkened as the CSS does,
+ * and the tone outlines, the light marks and the dark vivid inks held on the ground as the CSS holds them (HOLD).
+ */
 export function paintedTokens(c: ColourCombo): Record<string, string> {
   const tokens = { ...resolveTheme({
     theme: c.theme, neutral: c.neutral, accent: c.accent, accentStrength: c.strength, statusColours: c.status,
     toneFloor: c.floor, toneTint: c.tint as 0 | 100 | 160, layers: layerSelection(c),
   }).tokens };
+  const { hold, code } = holdGrounds(c);
+  for (const { name, hover } of STROKES) tokens[name] = c.theme === "light"
+    ? holdLight(tokens[name]!, hold, hover ? HOLD.light.strokeHover : HOLD.light.stroke)
+    : holdDark(tokens[name]!, hold, hover ? HOLD.dark.strokeHover : HOLD.dark.stroke, hover ? HOLD.dark.strokeHoverApca : undefined);
+  // A hue's outline is its tone's (semantic/hues.ts `hue-<hue>-border: var(--area-<tone>-border)`; gray's is the control edge).
+  for (const hue of LABEL_HUES) if (hue !== "neutral" && hue !== "gray") tokens[`hue-${hue}-border`] = tokens[`${HUE_TONE[hue]}-border`]!;
   if (c.theme === "light") {
     const d = lightDarkens(c);
     for (const { token, darken } of HUED_INKS) if (d[darken] > 0) tokens[token] = mixOklab(tokens[token]!, "black", d[darken]);
     // A hue's words are its tone's ink (semantic/hues.ts `hue-<hue>-text: var(--area-fg-<tone>)`), so they darken with it.
     for (const hue of LABEL_HUES) if (hue !== "neutral") tokens[`hue-${hue}-text`] = tokens[`fg-${HUE_TONE[hue]}`]!;
+    // A hue's icon is its tone's mark (`fg-<tone>-mark`, a palette rung in light), held at 3:1 on the deepest ground.
+    for (const hue of LABEL_HUES) if (hue !== "neutral") tokens[`hue-${hue}-icon`] = holdLight(tokens[`hue-${hue}-icon`]!, hold, HOLD.light.mark);
+  } else {
+    for (const role of VIVID_ROLES) tokens[`fg-${role}-vivid`] = holdDark(tokens[`fg-${role}-vivid`]!, code, HOLD.dark.vivid, HOLD.dark.vividApca);
   }
   return tokens;
 }
@@ -208,7 +231,7 @@ function washes(theme: "light" | "dark", ground: Rgb): { hover: Oklab; pressed: 
 export function stateFailures(c: ColourCombo, tokens: Record<string, string>): Failure[] {
   const out: Failure[] = [], min = STATE_STEP[c.theme], sign = c.theme === "light" ? -1 : 1;
   const m = layerLightness(c.theme, c.ground, c.layers), cast = castFor(c.neutral)[c.theme];
-  const accent = lab(tokens["accent-surface"]!);
+  const accentHex = tokens["accent-surface"]!;
   const base = { theme: c.theme, neutral: c.neutral, accent: c.accent, strength: c.strength, ground: c.ground, layers: c.layers };
   for (const plate of PLATE_GROUNDS) {
     const [restL, hoverL, activeL] = m.fill[plate];
@@ -222,7 +245,8 @@ export function stateFailures(c: ColourCombo, tokens: Record<string, string>): F
     if (sign * (hoverL - restL) <= 0) out.push({ rule: "hover is past rest", combo: at("any"), value: hoverL - restL, floor: 0 });
     check("selected differs from hover", active, hover, at("neutral"));
     if (sign * (activeL - hoverL) <= 0) out.push({ rule: "selected is past hover", combo: at("neutral"), value: activeL - hoverL, floor: 0 });
-    check("selected differs from hover", accent, hover, at("accent"));
+    // Selection Accent's plate on this ground: the accent surface held a state step from the hover plate (SELECTED_STEP).
+    check("selected differs from hover", lab(heldSelectedHex(c.theme, accentHex, hoverL, cast)), hover, at("accent"));
     const ground = clampRgb(oklchToRgb({ L: m[plate], C: castChroma(c.theme, m[plate], cast), h: cast.hue }, SRGB));
     const w = washes(c.theme, ground);
     check("pressed differs from hover", w.pressed, w.hover, at("any"));

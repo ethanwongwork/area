@@ -27,12 +27,27 @@ describe("colour sweep: the model it measures", () => {
     expect(sweep.pairs).toBe(5400 * (ASSERTIONS.length + GROUND_PAIRS.length));
   });
 
+  // The held colours (color/layers.ts HOLD: tone and hue outlines, hue icons, dark vivid inks) are the one other thing
+  // painted past the resolver; they move on a white page too, where a recessed ground or a well needs it.
+  const held = (name: string) => /-border(-strong)?$/.test(name) && !/^border/.test(name) || /^hue-[a-z]+-icon$/.test(name) || /^fg-[a-z]+-vivid$/.test(name);
   it("paints the resolver's tokens on a white page, where the hued inks never darken (layers.test.ts)", () => {
     for (const c of colourCombos()) {
       if (c.theme !== "light" || c.ground !== 100 || c.accent !== "blue" || c.tint !== 100) continue;
       expect(lightDarkens(c)).toEqual({ vivid: 0, tonal: 0, floor: 0 });
       const resolved = resolveTheme({ theme: c.theme, neutral: c.neutral, accent: c.accent, accentStrength: c.strength, statusColours: c.status, toneFloor: c.floor, layers: { ...DEFAULT_LAYER_SELECTION, groundLight: c.ground, layersLight: c.layers } }).tokens;
-      expect(paintedTokens(c)).toEqual(resolved);
+      const painted = paintedTokens(c);
+      for (const name of Object.keys(resolved)) if (!held(name)) expect(painted[name], name).toBe(resolved[name]);
+    }
+  });
+
+  it("holds a colour only where it misses its floor: the dark default moves nothing, light moves only the outlines", () => {
+    for (const theme of ["light", "dark"] as const) {
+      const c = [...colourCombos()].find(x => x.theme === theme && x.neutral === "neutral" && x.accent === "blue" && x.strength === 100 && x.status === "fixed" && x.floor === 4.5 && x.tint === 100 && x.ground === LAYERS[theme][0]!.ground && x.layers === LAYERS[theme][0]!.layers)!;
+      const resolved = resolveTheme({ theme, neutral: "neutral", accent: "blue" }).tokens, painted = paintedTokens(c);
+      const moved = Object.keys(resolved).filter(name => painted[name] !== resolved[name]);
+      // In light the outlines missed their floor on the recessed grounds at the defaults (1.22 on bg-well against 1.3).
+      expect(moved.every(name => /-border(-strong)?$/.test(name)), moved.join(", ")).toBe(true);
+      if (theme === "dark") expect(moved).toEqual([]);
     }
   });
 
