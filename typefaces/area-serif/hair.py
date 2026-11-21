@@ -694,7 +694,7 @@ def seams(font):
 # edges at 291.5 and 334.5 rounded apart to 42 (↔) and 44 (↕). The rule (`shafts`): the whole-unit width is the
 # hairline exactly; the edge moved is the one that keeps the shaft's middle nearer the axis; its two corners slide
 # along the head's inner edges they end on.
-SHAFTS = {"arrowboth": 43, "arrowupdn": 43}
+SHAFTS = {"arrowboth": LD.SIGN, "arrowupdn": LD.SIGN}   # 0.84 pass 6: the sign stroke (charset.SHAFT_BOTH)
 
 
 def shafts(font):

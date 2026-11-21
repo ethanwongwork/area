@@ -18,6 +18,8 @@ that is w in the Regular.
 """
 import math
 
+import ladder as LD
+
 LIB = "area.sign"
 
 # The references' outer flat at the point of < (upright, across the two outer edges), over the stroke across itself
@@ -31,7 +33,7 @@ VERTEX = 0.42
 # It was 21.5 at the arrows' points (0.5 of the hairline), 41 at < > ^ (LESS_FLAT 0.79 of the stroke, the references'
 # median), 31.5 at the radical's foot (0.42 of its thick), the control key's apex mitred and softened on 7
 LETTER_FLAT = VERTEX * 78.0                            # 32.8: v's outside flat
-LESS_FLAT = LETTER_FLAT / 52.0                         # 0.630 of the plain stroke (it was 0.79)
+LESS_FLAT = LETTER_FLAT / LD.SIGN                      # the letters' 33 at the plain stroke (0.630 of 52; it was 0.79); 0.84 pass 6: of the sign stroke
 
 
 # ---------------------------------------------------------------- geometry

@@ -15,6 +15,8 @@ import math
 
 import numpy as np
 
+import ladder as LD
+
 REG_STEM = 78
 STEM = 140                        # the Bold's lowercase stem: the one number (128 is `bold.vector(128)`)
 STEM_REF = 140                    # the stem the references' ratios were read at
@@ -49,6 +51,9 @@ LEVEL_THICK = 1.57                         # g's loop at its top, 81 > 127 (Geor
 # hyphen 1.39 and 1.44, dashes 1.28 and 1.44, plus 1.28 to 1.42, equals 1.29 and 1.43, slash 1.37 and 1.37, bar 1.35
 # and 1.43, less-than 1.33 and 1.43 (Georgia Pro, Serrif). Mean 1.37.
 SIGN = 1.37
+# 0.84 (Regular pass 6, item 3): a straight sign stroke is the ladder's sign stroke (58; it was the minus's 52, read
+# 50 to 55): the band the sign law reads, ahead of the upright signs' bracket law
+SIGN_BAND = (50, LD.SIGN + 2)
 # An upright stroke lighter than a stem in a sign (bracket 73, brace 73): bracket 1.76 and 1.75, brace 1.80 and 1.79.
 SIGN_UPRIGHT = 1.77
 BULLET = 1.22                              # the bullet's width: 1.20, 1.24
@@ -361,11 +366,11 @@ def x_target(t, straight, v):
     if v.get("sub") == "small sign" and THIN_READ <= t < 130:   # 0.81: SIGN_K
         return t * sign_ratio(v)
     if v.get("sub") == "sign":
-        if 56 <= t < 76:
-            return t * (1 + (SIGN_UPRIGHT - 1) * v["f"])
-        if 50 <= t <= 55:                        # owner round 8 (0.82): a straight one the minus's own law (ft), level
+        if SIGN_BAND[0] <= t <= SIGN_BAND[1]:    # owner round 8 (0.82): a straight one the minus's own law (ft), level
             return t * (1 + (SIGN - 1) * (v["ft"] if straight else v["f"]))   # or upright (the plus's upright stroke
             #                                      was 44 beside its level 40 at 300); a curved one as before
+        if 56 <= t < 76:
+            return t * (1 + (SIGN_UPRIGHT - 1) * v["f"])
     if v["f"] < 0 and (t >= 76 or (straight and t >= 64) or (t >= 56 and not straight)):
         # 0.81, towards the Light: a thick part loses in proportion to itself, as the stem does (78 > 55). The
         # Bold's gains are amounts (the stem's 62, s's turns 1.26 of the round stroke's 64, measured on Bold
@@ -474,7 +479,7 @@ def y_target(t, straight, v):
     if t >= 64:                                  # a thick level stroke: only a curved one (the top of g's loop,
         return None if straight or t > 130 else t * (v["stem"] / REG_STEM if v["f"] < 0 else 1 + (LEVEL_THICK - 1) * v["f"])   # Q's tail); bold() lets through
         #                                          only those between two facing extremes
-    if v.get("sub") == "sign" and straight and 50 <= t <= 55:
+    if v.get("sub") == "sign" and straight and SIGN_BAND[0] <= t <= SIGN_BAND[1]:
         return t * (1 + (SIGN - 1) * f)
     if v.get("sub") == "small sign" and THIN_READ <= t <= 130:
         return t * sign_ratio(v)
@@ -515,7 +520,7 @@ def diag_target(t, v):
     f = v["f"]
     if v.get("sub") == "small sign":
         return t * sign_ratio(v)
-    if v.get("sub") == "sign" and 50 <= t <= 55:
+    if v.get("sub") == "sign" and SIGN_BAND[0] <= t <= SIGN_BAND[1]:
         return t * (1 + (SIGN - 1) * v["ft"])    # owner round 8 (0.82): a slanted plain stroke takes the minus's law
     if v.get("sub") == "sign" and f < 0:
         # axis round 2: towards the Light every slanted stroke of a sign takes the sign law, as its plain strokes do

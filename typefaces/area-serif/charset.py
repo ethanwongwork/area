@@ -382,7 +382,7 @@ class M:
         self.low_bar = sp[0][1] - sp[0][0] if sp else 49           # t's bar
         m = gp(font, "minus")
         sp = scan_v(m, (bounds(m)[0] + bounds(m)[2]) / 2)
-        self.math = sp[0][1] - sp[0][0]                            # the minus's stroke
+        self.math = LD.SIGN                                        # 0.84 pass 6: the sign stroke (the minus was 52)
         self.math_y = (sp[0][0] + sp[0][1]) / 2
         o = gp(font, "o")                                           # 0.83: the hairline, o's top (43)
         ob = bounds(o)
@@ -841,7 +841,7 @@ MATH_ADV = None         # set to the tabular figure's advance
 
 
 def dashes(font, m):
-    w = DASH * m.stem
+    w = LD.SIGN                                     # 0.84 pass 6: the sign stroke (it was DASH x the stem, 51.5)
     for name in ("hyphen", "endash", "emdash"):
         g = font[name]
         x0, _, x1, _ = bounds(gp(font, name))
@@ -893,7 +893,8 @@ def math_widths(font, adv):
     global MATH_INK
     MATH_INK = math_ink(font)
     mb = bounds(gp(font, "minus"))
-    put(font, "minus", rect(0, mb[1], MATH_INK, mb[3]), font["minus"].width)
+    my_ = (mb[1] + mb[3]) / 2                       # 0.84 pass 6: the sign stroke, grown from the centreline
+    put(font, "minus", rect(0, my_ - LD.SIGN / 2, MATH_INK, my_ + LD.SIGN / 2), font["minus"].width)
     for name in MATH:
         if name not in font or name in ("periodcentered", "uni2219", "asciicircum", "asciitilde"):
             continue
@@ -1389,12 +1390,12 @@ def arrows(font, m, adv):
     depth = eb[2] - crotch_x
 
     def tap(**k):
-        d = dict(L=L, arm=ARROW_ARM, half=ARROW_HALF, w0=m.hair, w1=TAPER_END * w, flat=TAPER_FLAT)
+        d = dict(L=L, arm=ARROW_ARM, half=ARROW_HALF, w0=TAPER_JOIN, w1=TAPER_END * w, flat=TAPER_FLAT)
         d.update(k)
         return dict(build="tarrow", params=d)
     put_built(font, "arrowright", tap(at=[L / 2, cy]), 0, [0x2192], lsb=side, rsb=side)
     put_built(font, "arrowleft", tap(at=[L / 2, cy], rot=180), 0, [0x2190], lsb=side, rsb=side)
-    put_built(font, "arrowboth", tap(L=L + depth, kind="both", shaft=SHAFT_BOTH * m.hair, at=[(L + depth) / 2, cy]), 0, [0x2194],
+    put_built(font, "arrowboth", tap(L=L + depth, kind="both", shaft=SHAFT_BOTH * w, at=[(L + depth) / 2, cy]), 0, [0x2194],
               lsb=side, rsb=side)
     up = built_path(tap(L=Lv, at=[0, cy], rot=90))
     vside = (adv - (bounds(up)[2] - bounds(up)[0])) / 2          # vertical arrows: centred in the maths' width
@@ -1403,7 +1404,7 @@ def arrows(font, m, adv):
     # 0.83 (Regular pass, consistency 0a): the up-down arrow keeps the up arrow's extent (its length, 2 axes: from the
     # baseline to 626, centred on the axis), its heads the shared head; at the two-headed level arrow's length (728) it
     # hung 51 under the baseline
-    put_built(font, "arrowupdn", tap(L=Lv, kind="both", shaft=SHAFT_BOTH * m.hair, at=[0, cy], rot=90), 0, [0x2195],
+    put_built(font, "arrowupdn", tap(L=Lv, kind="both", shaft=SHAFT_BOTH * w, at=[0, cy], rot=90), 0, [0x2195],
               lsb=vside, rsb=vside)
     for name, u, rot in (("uni2197", 0x2197, 45), ("uni2196", 0x2196, 135), ("uni2199", 0x2199, -135),
                          ("uni2198", 0x2198, -45)):
@@ -1414,10 +1415,16 @@ def arrows(font, m, adv):
 
 
 TAPER_END = 60 / 52                # the free end's round cap across, over the plain stroke (the study's B: 1.15)
-TAPER_FLAT = 0.42 * 78.0 / 43.0    # a head's point cut flat, over the hairline: 0.84 (item 5) the letters' vertex
+# 0.84 (Regular pass 6, item 3; the owner approved the gentle taper and round free ends, and asked for one sign stroke):
+# the taper ends at the sign stroke (TAPER_END 1.0) and starts at the capitals' hairline (TAPER_JOIN, 47; it was the
+# lowercase's 43 at a 60 end): the thin end raised in proportion so no part is under 47; the shafts between two heads
+# the sign stroke (SHAFT_BOTH of it: they have no free end); the point's flat stays the letters' vertex (33)
+TAPER_END = 1.0
+TAPER_JOIN = LD.CAP_HAIR
+TAPER_FLAT = 0.42 * 78.0 / TAPER_JOIN   # a head's point cut flat, over the join: 0.84 (item 5) the letters' vertex
                                    # flat (v's 33, signs.LETTER_FLAT), 0.762 of the hairline; it was 0.5 (21.5)
-SHAFT_BOTH = 1.0                   # 0.83 (consistency 0a): a shaft between two heads, one width, of the hairline (43)
-TAB_BAR = 57 / 52                  # 0.83 (consistency 0b): the tab arrows' bar, one width, of the plain stroke (A's upright 57)
+SHAFT_BOTH = 1.0                   # 0.83 (consistency 0a): a shaft between two heads, one width; 0.84 pass 6: of the sign stroke
+TAB_BAR = 1.0                      # 0.83 (consistency 0b): the tab arrows' bar, one width; 0.84 pass 6: the sign stroke (was 57)
 
 
 def maths(font, m, adv):
@@ -1452,7 +1459,8 @@ def maths(font, m, adv):
         bx_ = [bounds(_contour_path(c)) for c in g.contours]
         k_ = max(range(3), key=lambda k: bx_[k][2] - bx_[k][0])
         dots_ = [_contour_path(c) for k, c in enumerate(g.contours) if k != k_]
-        put(font, "divide", union(rect(x0_, bx_[k_][1], x1_, bx_[k_][3]), *dots_), g.width)
+        bm_ = (bx_[k_][1] + bx_[k_][3]) / 2              # 0.84 pass 6: the bar the sign stroke about its middle
+        put(font, "divide", union(rect(x0_, bm_ - w / 2, x1_, bm_ + w / 2), *dots_), g.width)
         g = font["divide"]
     if len(g.contours) == 3:
         boxes = [(min(q.x for q in c.points), max(q.x for q in c.points)) for c in g.contours]
@@ -1611,7 +1619,8 @@ def sum_vertex(g, stem):
 VERTEX_CAP = 0.42                 # parts.VERTEX
 
 
-SIGN_LO, SIGN_HI = 47, 57         # the signs' damped stress: a stroke running level, upright (mean 52, the plain stroke)
+SIGN_LO, SIGN_HI = LD.SIGN - 5, LD.SIGN + 5   # the signs' damped stress: a stroke running level, upright (mean the
+                                   # plain stroke; 47 / 57 about the minus's 52 until 0.84 pass 6)
 EQUAL_GAP = 154                    # the equals sign's two bars, centre to centre (as drawn)
 TILDE_AMP = 54                     # the tilde's wave, its centreline's height over the axis (slope 40 degrees at its inflections)
 INF_WIDTH = 1.85                   # infinity's ink width over its height (the references 1.58 to 2.2); 0.82 to symbols 2
@@ -1815,10 +1824,12 @@ def spaces(font):
         g.unicodes = [u]
         g.width = font[adv].width if isinstance(adv, str) else adv
     w = font["zero.tf"].width
-    put(font, "figuredash", rect(30, DASH_Y - DASH * 39, w - 30, DASH_Y + DASH * 39), w, [0x2012])
+    put(font, "figuredash", rect(30, DASH_Y - LD.SIGN / 2, w - 30, DASH_Y + LD.SIGN / 2), w, [0x2012])   # 0.84 pass 6
 
 
 SIGN_A = (47, 57)                 # the A signs' level and upright strokes (the study's A: 0.90 and 1.10 plain strokes)
+# 0.84 (Regular pass 6, item 3): the uprights the sign stroke, the levels the capitals' hairline (the letters' stress)
+SIGN_A = (LD.CAP_HAIR, LD.SIGN)
 
 
 def interface(font, m, adv):
@@ -1833,7 +1844,7 @@ def interface(font, m, adv):
     import signs as SG
     # 0.83 (symbols 2): the check and the cross key of the gentle taper (B: signs.tcheck, tcross), from the hairline
     # at the vertex or crossing to round ends of TAPER_END; the check was 1.25 plain strokes all along, the cross 1.1
-    tw_ = dict(w0=m.hair, w1=TAPER_END * w, flat=TAPER_FLAT)
+    tw_ = dict(w0=TAPER_JOIN, w1=TAPER_END * w, flat=TAPER_FLAT)
     chk = dict(build="tcheck", params=dict(tw_, start=[40, 300], vertex=[185, 120], end=[480, 600]))
     cys_ = [q[1] for q in SG.corners(chk)]
     dy_ = m.math_y - (min(cys_) + max(cys_)) / 2
@@ -2332,6 +2343,12 @@ def align_anchors(font):
 # underscore 72, the slash 41 at its top and 49 at its foot.
 FRACTION_BAR = round(56 * SUP_STEM_FIG / 62)   # 0.84 pass 5: in proportion to the small figures' stem (56 at 62); the bar of the fraction slash, the percent sign and every fraction, level width (they ran 40 to 54;
                         # 48 until 0.84 pass 3: raised with the small figures' stem, 54 > 62, x 1.15)
+# 0.84 (Regular pass 6, item 3): the fraction slash is a plain stroke, so the family (the fraction slash, every
+# ready-made fraction's bar, % and ‰'s bars) takes the sign stroke across itself (it read 52.9 across at 65 level): the
+# level width that gives LD.SIGN across at the fraction slash's slope (508 run over 712 rise; the fractions' bars lean
+# within 0.3 degrees of it), so ½ and a built 1⁄2 carry one bar
+FRACTION_RUN = 508 / 712
+FRACTION_BAR = round(LD.SIGN * math.hypot(1, FRACTION_RUN))
 
 
 def _level_cut(c):
@@ -2463,7 +2480,39 @@ def plain_strokes(font, m):
                 mid = (l + r) / 2
                 p.x = round(mid - wh / 2) if p.x == l else round(mid - wh / 2) + wh
             done.append(f"{name} bar {lo[1] - lo[0]} / {hi[1] - hi[0]} > {wh}")
+    done.append(numbersign(font, w))
     return done
+
+
+def numbersign(font, w):
+    """0.84 (Regular pass 6, item 3): # of four plain strokes at the sign stroke (it was the drawing's: level bars 52,
+    leaning strokes 48.5 to 49.6 across). Each stroke's centreline is the drawing's: the bars' heights and ends read
+    on their middle lines, the leaning strokes' middles near the baseline and the cap height, carried along their
+    slope to them; the bars w tall about their middles, the leaning strokes w across, cut level on 0 and the cap
+    height; one union. The ends are rounded by soft_ends with every plain stroke."""
+    if "numbersign" not in font:
+        return "numbersign: none"
+    g = font["numbersign"]
+    p = gp(font, "numbersign")
+    b = bounds(p)
+    bars_ = [s for s in scan_v(p, b[2] - 40) if 30 <= s[1] - s[0] <= 80]
+    lo_y, hi_y = 12.0, CAP_HEIGHT - 12.0
+    los = [s for s in scan_h(p, lo_y) if s[1] - s[0] < 90]
+    his = [s for s in scan_h(p, hi_y) if s[1] - s[0] < 90]
+    if len(bars_) != 2 or len(los) != 2 or len(his) != 2:
+        return f"numbersign: strokes not read ({len(bars_)} bars, {len(los)} / {len(his)} leaning)"
+    parts = []
+    for s in bars_:
+        cy = (s[0] + s[1]) / 2
+        sp = max(scan_h(p, cy), key=lambda q: q[1] - q[0])
+        parts.append(rect(sp[0], cy - w / 2, sp[1], cy + w / 2))
+    for a_, c_ in zip(los, his):
+        xa, xc = (a_[0] + a_[1]) / 2, (c_[0] + c_[1]) / 2
+        k = (xc - xa) / (hi_y - lo_y)                  # the centreline's run per unit of rise
+        x0, x1 = xa - k * lo_y, xc + k * (CAP_HEIGHT - hi_y)
+        parts.append(_slash((x0 - 10, x0 + 10, 0), (x1 - 10, x1 + 10, CAP_HEIGHT), w))
+    put(font, "numbersign", union(*parts), g.width, list(g.unicodes), lsb=b[0])        # its advance kept
+    return f"numbersign: four strokes at {w:.0f}"
 
 
 # 0.79 (owner, 2026-11-14, on the three options drawn in 0.78: option 1, soft corners). A plain stroke is two
@@ -2477,6 +2526,9 @@ def plain_strokes(font, m):
 # level at the slash's slope measures 55; the heaviest plain stroke in the set (the long stroke overlay, 59 to 60).
 SOFT = 7                          # derive.SOFT, the letters' radius
 SOFT_FACE = (20, 62)
+# 0.84 (Regular pass 6, item 3): the sign stroke is 58; cut level at the slash's slope it measures 64: the face runs
+# to 1.15 sign strokes (67)
+SOFT_FACE = (20, round(1.15 * LD.SIGN))
 SOFT_WIDE = {"uni2713": 70}       # 0.83 (symbols 1): the check's ends (1.25 plain strokes, 65) are plain ends too
 SOFT_ANGLE = (54, 126)            # normalize.END_ANGLE is 70 to 125; a leaning stroke cut level has corners of its
                                   # slope and the rest of 180: the slash 65.6 / 114.4, the fraction bar 54.5 / 125.5
@@ -3795,7 +3847,7 @@ def more_symbols(font, m, adv):
     # the hairline where the arms run into it; the return key's shaft turns up at its tail into a riser to the up
     # arrow's point, the stroke widening from the head along shaft and riser to the riser's round end
     L_ = ARROW_LENGTH * cy
-    tp = dict(L=L_, arm=ARROW_ARM, half=ARROW_HALF, w0=m.hair, w1=TAPER_END * w, flat=TAPER_FLAT)
+    tp = dict(L=L_, arm=ARROW_ARM, half=ARROW_HALF, w0=TAPER_JOIN, w1=TAPER_END * w, flat=TAPER_FLAT)
     put_built(font, "uni21E5", dict(build="tarrow", params=dict(tp, kind="bar", bar_w=TAB_BAR * w, at=[L_ / 2, cy])), 0, [0x21E5], lsb=44, rsb=44)
     made.append("uni21E5")
     put_built(font, "uni21E4", dict(build="tarrow", params=dict(tp, kind="bar", bar_w=TAB_BAR * w, at=[L_ / 2, cy], rot=180)), 0, [0x21E4],
