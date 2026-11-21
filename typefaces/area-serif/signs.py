@@ -1312,11 +1312,14 @@ def guillemet(p, s=1.0, white=None):
     top, bot, cy, R = p["top"], p["bottom"], p["cy"], p["run"]
     H = top - bot
     out = []
+    du = (R, top - cy)
+    dl = (R, bot - cy)
+    # the second chevron keeps the Regular's white to the first: the gap grows by what the thick arm gains level
+    # (at the Bold the two touched at the foot)
+    gap = p.get("gap", 0) + (thick - p["thick"]) * math.hypot(*dl) / abs(dl[1])
     for k in range(p.get("n", 1)):
-        x0 = p["x0"] + k * p.get("gap", 0)
+        x0 = p["x0"] + k * gap
         # outer edges: (x0, cy) to (x0 + R, top) and to (x0 + R, bot)
-        du = (R, top - cy)
-        dl = (R, bot - cy)
         Lu, Ll = math.hypot(*du), math.hypot(*dl)
         nu = (du[1] / Lu, -du[0] / Lu)                  # into the ink: right and down from the upper outer edge
         nl = (-dl[1] / Ll, dl[0] / Ll)                  # right and up from the lower
