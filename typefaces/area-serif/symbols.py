@@ -291,6 +291,7 @@ SECTION_CROTCH = 0.30 * 86
 SECTION_END = 0.5
 
 
+
 def _segs_of(P):
     """A closed UFO point list [(x, y, type, smooth)] as [(kind, seg)] from its first on-curve point; seg the cubic
     (lines as their thirds)."""
@@ -334,17 +335,40 @@ def _fillet(segs, k, r, share=0.55):
     return segs[:k] + [(ka, a_kept), ("C", f), (kb, b_kept)] + segs[k + 2:]
 
 
-def section_joins(font, name="section"):
-    """The rule above on the Regular's §. Corners found by geometry: on the outline every corner between two curves
-    that turns into the ink (a crotch), on the counter every corner (its ends)."""
+def _round_end(segs, k, r):
+    """A counter's end where a curve meets the spine's straight edge: no new node. The corner slides r along the
+    straight and becomes smooth; the curve's handle there turns onto the straight's line, its length 0.55 of the way
+    to where the curve's other tangent meets that line (a fillet with new nodes left the Bold's counter ends bending
+    2.5 degrees half way, and the § fell back to its upright parts)."""
+    (ka, sa), (kb, sb) = segs[k], segs[(k + 1) % len(segs)]
+    if (ka == "L") == (kb == "L"):
+        return segs
+    if ka == "C":                                       # curve in, line out
+        c, ln = sa, sb
+        d = A.unit((ln[3][0] - ln[0][0], ln[3][1] - ln[0][1]))
+        p = (ln[0][0] + d[0] * r, ln[0][1] + d[1] * r)
+        t0 = A.unit((c[1][0] - c[0][0], c[1][1] - c[0][1]))
+        m = A.meet(c[0], t0, p, (-d[0], -d[1]))
+        L = 0.55 * (A.math.dist(p, (c[0][0] + t0[0] * m, c[0][1] + t0[1] * m)) if m and m > 0 else A.math.dist(c[0], p) / 3)
+        c2 = (c[0], c[1], (p[0] - d[0] * L, p[1] - d[1] * L), p)
+        ln2 = (p, ln[1], ln[2], ln[3])
+        out = list(segs); out[k] = (ka, c2); out[(k + 1) % len(segs)] = (kb, ln2)
+        return out
+    c, ln = sb, sa                                      # line in, curve out
+    d = A.unit((ln[0][0] - ln[3][0], ln[0][1] - ln[3][1]))   # from the corner back along the line
+    p = (ln[3][0] + d[0] * r, ln[3][1] + d[1] * r)
+    t3 = A.unit((c[2][0] - c[3][0], c[2][1] - c[3][1]))
+    m = A.meet(c[3], t3, p, (-d[0], -d[1]))
+    L = 0.55 * (A.math.dist(p, (c[3][0] + t3[0] * m, c[3][1] + t3[1] * m)) if m and m > 0 else A.math.dist(c[3], p) / 3)
+    c2 = (p, (p[0] - d[0] * L, p[1] - d[1] * L), c[2], c[3])
+    ln2 = (ln[0], ln[1], ln[2], p)
+    out = list(segs); out[k] = (ka, ln2); out[(k + 1) % len(segs)] = (kb, c2)
+    return out
+
+
+def _joins(cs, parts, name="section", evening=True):
+    """The joins on §'s contours cs: (new contours, log)."""
     import math
-    import at as AT
-    if name not in font:
-        return f"{name}: none"
-    g = font[name]
-    cs = [[(p.x, p.y, p.type, p.smooth) for p in c.points] for c in g.contours]
-    if len(cs) != 2 or g.lib.get("area.section_joins"):
-        return f"{name}: {len(cs)} contours; left"
     outer_i = max(range(2), key=lambda k: abs(A.signed_area(cs[k])))
     log = []
     new = []
@@ -362,8 +386,9 @@ def section_joins(font, name="section"):
             if ang < 20:
                 continue
             if ci == outer_i and ka == kb == "C" and turn * sgn < 0:
-                ks.append((k, SECTION_CROTCH, "crotch"))
-            elif ci != outer_i:
+                if "crotch" in parts:
+                    ks.append((k, SECTION_CROTCH, "crotch"))
+            elif ci != outer_i and "end" in parts:
                 ks.append((k, None, "end"))
         segs2 = [(k_, s_) for k_, s_, _ in segs]
         # start the list after a smooth node, so no corner sits at the wrap
@@ -377,7 +402,7 @@ def section_joins(font, name="section"):
                 # the counter's side across at its widest (the loop's stroke): half of it
                 xs = [q[0] for q in P if q[2]]
                 r = SECTION_END * (max(xs) - min(xs)) / 4
-            segs2 = _fillet(segs2, k, r)
+            segs2 = _fillet(segs2, k, r) if kind == "crotch" else _round_end(segs2, k, r)
             log.append(f"{kind} {r:.0f}")
         Pn = A.to_points(segs2)
         if (A.signed_area(Pn) > 0) != (A.signed_area(P) > 0):
@@ -391,11 +416,36 @@ def section_joins(font, name="section"):
     b0, w0 = K.report(name, new, yr)[:2]
     ev = [[(round(q[0]), round(q[1]), q[2], q[3]) for q in LP.even_nodes(P, yr)[0]] for P in new]
     b1, w1 = K.report(name, ev, yr)[:2]
-    if (len(b1), w1) < (len(b0), w0):
+    if evening and (len(b1), w1) < (len(b0), w0):
         new = ev
         log.append(f"evened ({len(b0)} > {len(b1)} faults, worst {w0:.2f} > {w1:.2f})")
+    return new, log
+
+
+def section_joins(font, name="section"):
+    """The rule above on the Regular's §. Corners found by geometry: on the outline every corner between two curves
+    that turns into the ink (a crotch), on the counter every corner (its ends). Guarded by the masters: of the forms
+    below, the first the Bold's and the Light's engine carry soundly (`bold.glyph_bold` with no fallback) is kept: the
+    counter's ends moved the engine's reading of the spine's straight edges (a node bending 1.8 to 2.5 degrees half
+    way, the § fell back to its upright parts at the Bold)."""
+    import bold as BOLD
     from ufoLib2.objects import Point
-    for c, Pn in zip(g.contours, new):
-        c.points = [Point(x, y, t, smooth=s_) for x, y, t, s_ in Pn]
-    g.lib["area.section_joins"] = 1
-    return f"{name}: " + ", ".join(log)
+    if name not in font:
+        return f"{name}: none"
+    g = font[name]
+    cs = [[(p.x, p.y, p.type, p.smooth) for p in c.points] for c in g.contours]
+    if len(cs) != 2 or g.lib.get("area.section_joins"):
+        return f"{name}: {len(cs)} contours; left"
+    tried = []
+    for parts, ev in ((("crotch", "end"), True), (("crotch", "end"), False), (("crotch",), True), (("crotch",), False)):
+        new, log = _joins(cs, parts, name, ev)
+        for c, Pn in zip(g.contours, new):
+            c.points = [Point(x, y, t, smooth=s_) for x, y, t, s_ in Pn]
+        bad = [st for st in (BOLD.STEM, 55.0) if BOLD.glyph_bold(g, BOLD.vector(st))[2].get("fallback")]
+        if not bad:
+            g.lib["area.section_joins"] = 1
+            return f"{name}: " + ", ".join(log) + (f" (masters refused: {'; '.join(tried)})" if tried else "")
+        tried.append("+".join(parts) + (" evened" if ev else "") + f" at {bad}")
+    for c, P in zip(g.contours, cs):
+        c.points = [Point(x, y, t, smooth=s_) for x, y, t, s_ in P]
+    return f"{name}: left ({'; '.join(tried)})"
