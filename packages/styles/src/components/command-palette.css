@@ -6,13 +6,19 @@
  * (combobox + listbox); rows are Menu's rows. docs/specs/command-palette.md.
  * ------------------------------------------------------------------------- */
 @layer area.components {
+  /* The palette's measured placement and extents (Notion's), named once (system status 2026-11-18, step C3): the modal's
+     top and the list's cap both read the top. Fixed at every type and density: a placement in the window, not a length
+     of text. */
+  :where(.area-command-palette__modal, .area-command-palette) {
+    --_palette-top: 77px; /* spec: Notion opens its palette 77 from the top, at every type */
+  }
   .area-command-palette__modal {
     /* spec: Notion opens its palette 77 from the top, not centred, so results grow downward. */
-    margin: 77px auto auto; /* spec: a measured placement, at every density */
+    margin: var(--_palette-top) auto auto; /* spec: a measured placement, at every density */
     padding: 0;
     border: 0;
     max-inline-size: calc(100vw - var(--area-space-32));
-    max-block-size: calc(100vh - 77px - var(--area-space-16)); /* spec */
+    max-block-size: calc(100vh - var(--_palette-top) - var(--area-space-16)); /* spec */
     background: transparent;
     overflow: visible;
   }
@@ -40,8 +46,8 @@
     display: flex;
     flex-direction: column;
     /* spec: Notion's list column is 600 wide; the public `--area-command-palette-inline-size` replaces it (plan B6.3). */
-    inline-size: min(calc(100vw - var(--area-space-32)), var(--area-command-palette-inline-size, 600px)); /* spec */
-    max-block-size: min(700px, calc(100vh - 77px - var(--area-space-16))); /* spec: Notion 700 */
+    inline-size: min(calc(100vw - var(--area-space-32)), var(--area-command-palette-inline-size, 600px)); /* spec: Notion 600, at every type */
+    max-block-size: min(700px, calc(100vh - var(--_palette-top) - var(--area-space-16))); /* spec: Notion 700, at every type */
     overflow: hidden;
     border-radius: var(--_palette-radius);
     /* The frame and the shadow stack are the one floating surface's on the modal role, as Dialog (popup.css, plan B6.1). */
@@ -156,7 +162,7 @@
      the results would fall under 384 and the pane hides, so the results take the width. An inline palette never
      overflows its host. */
   .area-command-palette[data-preview] {
-    inline-size: min(calc(100vw - var(--area-space-32)), 1006px); /* spec: Notion 1006 */
+    inline-size: min(calc(100vw - var(--area-space-32)), 1006px); /* spec: Notion 1006, at every type */
     container-type: inline-size;
   }
   .area-command-palette--inline[data-preview] { max-inline-size: 100%; }

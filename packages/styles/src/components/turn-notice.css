@@ -11,7 +11,7 @@
     --_notice-icon: var(--area-fg-muted);
     display: flex;
     align-items: center;
-    gap: var(--area-space-6); /* Step's icon gap: it sits among the steps */
+    gap: var(--area-gap-md); /* Step's icon gap, 6 (compact 4): it sits among the steps */
     min-inline-size: 0;
     color: var(--area-fg-muted);
     font-size: var(--area-text-base-size); /* the trackers' UI size (Step) */

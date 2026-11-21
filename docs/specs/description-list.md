@@ -88,6 +88,8 @@ card column; framed columns keep ChatGPT's 12 from the top.
 | framed · frame | Table's frame: `border-divider`, `radius-container`, `bg-surface` | Peer Table | ChatGPT's corner 16 and rgb(252) fill; Area's standalone data frame is Table's |
 | semantics | `dl` > `div` > `dt` + `dd` | HTML; Ant, Chakra | — |
 
+- The term's and More row's icon gaps are `gap-md` (6, Compact 4, Comfortable 8 at type 13); the justified layout's side inset and its More row's twin are `2 × ui-cluster` (16, Compact 12, Comfortable 20).
+
 ## States
 
 None of its own. Values can carry interactive components (Link, Button), which keep their own states.
@@ -259,3 +261,7 @@ Framed insets: the frame's stroke is counted once, so text and rules sit 16 from
 - The justified layout's row padding is `gap-row` (8 / 12 / 16) and its term-to-value gap `gap-section` (16 / 24 / 32). Values at type 13 Compact / Default / Comfortable; unchanged at the default. The cell's text inset 6 and the value cell's offset 8 hold at every density (row geometry beside a fixed term column). Listed, not moved: the term's icon gap 6 (twice) and the justified inset 16 (inset-surface-md is 14 at the default).
 - Why: docs/research/system-evaluation-2026-11-11 (plan B6.1, B6.5, B8.2, B2.2; README §5, phase2/leftovers.md); the owner took every recommendation on 2026-11-11. Fix the rule, not the instance.
 - Verdict: awaiting the owner.
+
+## System status step C, 2026-11-18 (shared sources)
+
+The four density holdouts took roles equal at the default and the family left the density waiting list. Nothing moved at type 13 / 32.

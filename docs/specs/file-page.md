@@ -73,6 +73,8 @@ and menus.
 | label | the extension in caps, 13% of the box (cap ≈ 9%), regular, line 1, cap-trimmed, no tracking: Folder's count type | owner 2026-10-18 |
 | content | glyph over label, one centred column, gap 6% of the box, padded 6% down to clear the fold | owner 2026-10-18 ("more centered together") |
 
+- Sizes read Folder's figure scale (`--_figure-sm` / `-md` / `-lg`, folder.css), fixed at every type and density.
+
 ## Behavior and accessibility
 
 Decorative by default (`aria-hidden`): the tile's name says what it is. With `aria-label` (or the deprecated `name`) it is `role="img"` with that name.
@@ -138,3 +140,7 @@ Finder's does in dark. Corners are part of the drawing (in proportion to the box
 - **What changed:** the extension label is documented as artwork, as Folder's count: drawn to the page's scale, under the 10 px floor, inside the page's image (role img) or an aria-hidden page (plan A9.9, finding T22).
 - **Why:** the system evaluation's type rules (docs/research/system-evaluation-2026-11-11, section 5, A9), owner-approved
   2026-11-11; the rules are in DESIGN_SYSTEM.md ("Ink and weight", "Size and shape", "Text pairs") and the type skill.
+
+## System status step C, 2026-11-18 (shared sources)
+
+The 48 / 64 / 96 literals now read Folder's shared figure scale. Nothing moved.

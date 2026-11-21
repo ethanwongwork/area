@@ -85,6 +85,7 @@ export interface ChartProps extends Omit<HTMLAttributes<HTMLDivElement>, "childr
 
 /* The data views system (apps/desktop/src/data-views.tsx; docs/specs/chart.md, Decisions). */
 const GAP = 2, LABEL_GAP = 4, TICK_GAP = 8, GUTTER = 40, TOP = 8, TIP = 12;
+// The drawing's heights are chart.css's plot heights (--_plot-sm / -md / -lg, the donut's 160): change them together.
 const HEIGHT = { sm: 128, md: 192, lg: 256 } as const;
 const RING = { sm: [128, 12], md: [160, 14], lg: [192, 16] } as const;
 const DEFAULT_WIDTH = 480, DEFAULT_FONT = 11;

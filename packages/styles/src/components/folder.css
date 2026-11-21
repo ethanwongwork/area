@@ -19,8 +19,17 @@
  *   sm 48 and lg 96 (Fluent's file-type icon sizes include 48, 64 and 96).
  * ------------------------------------------------------------------------- */
 @layer area.components {
+  /* The file figures' one size scale (system status 2026-11-18, step C3): Folder's sm 48, md 64 and lg 96, read by
+     Folder, File page, File image, File tile and the File grid, so the five share one source. Fixed at every type and
+     density: a figure is a picture of a file, measured at Finder's 64, as Asset card and Approval's pictures are fixed;
+     whether figures should scale with type is open (the owner's decision). The space ramp's own steps, no new token. */
+  :where(.area-folder, .area-file-page, .area-file-image, .area-file-tile, .area-file-grid) {
+    --_figure-sm: var(--area-space-48); /* spec: Fluent 48 */
+    --_figure-md: var(--area-space-64); /* spec: Finder iconSize 64 */
+    --_figure-lg: var(--area-space-96); /* spec: Fluent 96 */
+  }
   .area-folder {
-    --_size: var(--area-folder-size, 64px); /* spec: Finder iconSize 64 */
+    --_size: var(--area-folder-size, var(--_figure-md)); /* spec: Finder iconSize 64 */
     /* One whole-pixel edge for the outline style at every size to 191, 2px from 192 (Fluent's hand-drawn 1–2px at
        48–96; owner, 2026-10-18: "these strokes are very inconsistent, thickness"); fractional widths anti-aliased
        unevenly. */
@@ -39,9 +48,9 @@
     vertical-align: middle;
     color: var(--area-fg-default);
   }
-  .area-folder--sm { --_size: 48px; } /* spec: pick, Fluent 48 */
-  .area-folder--md { --_size: 64px; } /* spec: Finder iconSize 64 */
-  .area-folder--lg { --_size: 96px; } /* spec: pick, Fluent 96 */
+  .area-folder--sm { --_size: var(--_figure-sm); } /* spec: pick, Fluent 48 */
+  .area-folder--md { --_size: var(--_figure-md); } /* spec: Finder iconSize 64 */
+  .area-folder--lg { --_size: var(--_figure-lg); } /* spec: pick, Fluent 96 */
 
   /* The figure: 92% of the cell wide (Finder's 92%), its height from the drawing's 470 × 420, both rounded to even pixels
      and centred, so its outer edges land on whole pixels (owner, 2026-10-18: "make sure the size of everything is correct

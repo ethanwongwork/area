@@ -25,6 +25,8 @@ landscape drawn in it. Decorative unless named. Not this: a document or any othe
 | look | the control fill, a whole-pixel edge (the solid look is archived, round 57) | File page's paint |
 | content | `src`: the picture covers the frame · none: two hills and a sun | the survey: every product shows an image as itself |
 
+- Sizes read Folder's figure scale (`--_figure-sm` / `-md` / `-lg`, folder.css), fixed at every type and density.
+
 ## Anatomy
 
 ```
@@ -76,3 +78,7 @@ CanvasText edge and lines, no shadow.
 - **What changed:** the lit solid frame is archived; every image figure is the outline one. The old props are accepted and ignored.
 - **Why:** you asked to remove the solid variant from every file figure and archive it
   (docs/archive/solid-file-figures-2026-10-19.md).
+
+## System status step C, 2026-11-18 (shared sources)
+
+The 48 / 64 / 96 literals now read Folder's shared figure scale. Nothing moved.

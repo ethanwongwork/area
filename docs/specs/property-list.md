@@ -38,6 +38,8 @@ everywhere in Area. Not TreeView (hierarchy), not Menu (commands), not PanelRow 
 | names | each item's `label` names its handle; the component adds the position ("Reorder 00A797 fill, position 2 of 3") | Labels should name content, not index, since index changes on move (the gallery passes "<hex> fill", "Drop shadow effect") |
 | list name | a consumer's `aria-label` names the list, else `PropertyList` `label` (PropertyList.tsx, the `ul`) | Audit S17: the consumer's attribute wins, as in every Area group |
 
+- The dragged row's place dims to 0.4, its own meaning (neither pending nor disabled), with the reason on its line.
+
 ## Visual pass
 
 2026-09-28 (batch 9, owner screenshots: clipped hex, wrapped effect names): the gallery's Fills, One
@@ -126,3 +128,7 @@ The move's own `aria-live` span is replaced by `announce` (`announce` / `useAnno
 ## State paint (plan B7.11), 2026-11-14
 
 - The drag handle hides only inside `@media (hover: hover)`; the `(hover: none)` rule is gone.
+
+## System status step C, 2026-11-18 (shared sources)
+
+Kept 0.4 distinct from `opacity-pending`; its line names the reason for `opacity.test.mjs`. Nothing moved.

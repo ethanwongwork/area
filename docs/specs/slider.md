@@ -132,7 +132,7 @@ Disabled shell opacity 0.5 (`area--disabled`); vertical shell 32 wide (`area--ve
 | rail · thickness | `space-4` 4px (slider.css:21) | Figma's usage bar is 4 | Untitled 8; Figma's 16px channel tracks are a different job |
 | rail · colour | **`edge-control` #e2e2e2** (slider.css:29; range rail slider.css:94) | Audit S5 (owner 2026-09-30): one off-track grey for Switch, Slider and Progress | Figma's rail #e6 and Untitled's #e5; was `fill-toggle` mixed 20% toward `bg-surface` ≈ #dd |
 | fill | **`selection-solid`** (slider.css:25; range slider.css:95): `neutral-solid` by default, the accent when a scope turns the Selection role on | Owner; Selection emphasis role (`emit/base.ts:140-142`) | Untitled brand; Figma's usage fill is its blue |
-| thumb · size | **16 / 16 / 20** (`icon-sm`, `icon-md`, `space-20`; slider.css:299-301) | Second pass: the choice glyph ladder (Checkbox, Radio); Figma 16 | Was the icon ramp, 16 at every tier. Untitled 24 |
+| thumb · size | **16 / 16 / 20** at types 12-14, 20 / 20 / 24 from 15 (`icon-sm`, `icon-md`, `icon-lg` + 4; "Settings pass, 2026-11-21") | Second pass: the choice glyph ladder (Checkbox, Radio); Figma 16 | Was the icon ramp, 16 at every tier. Untitled 24 |
 | thumb · construction | **plain knob**: `light-dark(bg-surface, bg-component-active)`, 1px `edge-control-hover` #d4 (the Checkbox and Radio glyph edge, audit S5) | Owner 2026-10-21 ("B"); Figma's adjustment thumb (white, 1px ring); dark paint is Segmented's raised thumb | Was a fill-colour dot to 42% of the radius, which read as a selected Radio on the rail; in dark the surface knob read as a hole in the fill |
 | fill · end | the thumb's centre: `thumb/2 + (100% − thumb) × --_slider-ratio` (slider.css `--_stop`), `--_pct` when no ratio is given | Figma's fill runs under its knob | Was `--_pct` of the whole rail, up to half a thumb off; hidden by a 4px rail, visible on a full-height track |
 | track variant | track = thumb 16 / 16 / 20, `bg-component` | `figma--adjustment-slider`: 16 track, 16 thumb, #f5 (`bg-component` #f7 is the nearest role; Segmented's trough) | — |
@@ -531,3 +531,26 @@ in ≈120ms with a decelerating curve; a press sets `data-pressed` and the knob 
 - The end labels' gap is `ui-cluster` (6 / 8 / 10). Values at type 13 Compact / Default / Comfortable; unchanged at the default.
 - Why: docs/research/system-evaluation-2026-11-11 (plan B6.1, B6.5, B8.2, B2.2; README §5, phase2/leftovers.md); the owner took every recommendation on 2026-11-11. Fix the rule, not the instance.
 - Verdict: awaiting the owner.
+
+## Settings pass, 2026-11-21 (step C: icon weight and size tiers)
+
+From docs/research/system-status-2026-11-18 (section 3, step C1–C2). At the shipped defaults (type 13, density 32) nothing moves: every box, mask and stroke measured the same before and after, and 2x screenshots of every part are pixel-identical in light and dark.
+
+### Sizes
+
+The thumb (Slider and SliderRange) is the type's icon slot: `icon-sm` / `icon-md` / `icon-lg` + 4, 16 / 16 / 20 at types
+12-14 and 20 / 20 / 24 from type 15, as Switch's thumb follows its track. It was 16 / 16 / 20 at every type (audit C-29
+put it there when compact density took 4 off the icon slots; they follow the type alone since 2026-10-22, so that split
+can't return). Everything the thumb sets follows: the track variant's height, the bar's grip width, the travel.
+
+### Grip
+
+The white grip's shadow (`0 0.5px 1px rgb(0 0 0 / .1)`, label-inside and colour bars) stays outside the depth
+settings: it is the grip's edge on near-white plates and colours, not a lift, so it must hold at Elevation 0 and every
+Shadow setting, as ColorPicker's ring does. No shadow role is this at the defaults: the control and field roles are a
+1px lip plus a lift, and the rest edge is 0 by default.
+
+## Review note, 2026-11-21
+
+- **What changed:** the slider's knob grows with the type size, like the icons and check boxes beside it.
+- **Why:** it stayed 16px at every type, so at type 16 it looked small in a taller control.

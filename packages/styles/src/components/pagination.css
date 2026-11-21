@@ -17,7 +17,7 @@
     --_leading: var(--area-control-md-leading);
     /* spec: a page number grows past its square from here, as Primer's 32 minimum with 6 sides;
        Untitled and shadcn fix the square, which clips four digits. */
-    --_page-inset: var(--area-space-6);
+    --_page-inset: var(--area-gap-md); /* 6, compact 4, comfortable 8 */
 
     display: flex;
     font-size: var(--_text);

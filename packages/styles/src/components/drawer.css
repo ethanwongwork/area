@@ -49,7 +49,7 @@
     --_drawer-inset: calc(var(--_drawer-outer) - var(--area-border-width));
     /* spec: shadcn's Sheet is 384 wide (max-w-sm, shadcn--sheet-right); md is Dialog's 480. The public
        `--area-drawer-inline-size` replaces the default width (plan B6.3); a size class still overrides it. */
-    --_drawer-size: var(--area-drawer-inline-size, 384px); /* spec */
+    --_drawer-size: var(--area-drawer-inline-size, var(--_modal-sm)); /* spec: Dialog's sm (dialog.css), at every type */
     /* Header, body and footer stand the block gap apart (popup.css, plan B6.2): 16 at most, 12 at Compact. */
     --_block-inset: var(--_drawer-outer);
     --_drawer-from: 100% 0;
@@ -74,8 +74,8 @@
     translate: none;
     transition: translate var(--_drawer-in) var(--area-ease-drawer);
   }
-  .area-drawer--md { --_drawer-size: calc(var(--area-space-96) * 5); }
-  .area-drawer--sm { --_drawer-size: 384px; /* spec */ }
+  .area-drawer--md { --_drawer-size: var(--_modal-md); }
+  .area-drawer--sm { --_drawer-size: var(--_modal-sm); /* spec: shadcn 384 */ }
   .area-drawer--end { --_drawer-from: 100% 0; }
   .area-drawer--end:dir(rtl) { --_drawer-from: -100% 0; }
   .area-drawer--start {

@@ -48,19 +48,16 @@ const CLEAN = ['asset-row', 'board', 'setting-row', 'page-header', 'stepper', 't
   'accordion', 'asset-card', 'avatar', 'calendar', 'card', 'chart', 'choice', 'code-block', 'combobox', 'command-palette',
   'design-card', 'editable-text', 'file-tile', 'file-upload', 'hatnote', 'inline-list', 'link-groups', 'meter', 'nav', 'plan',
   'popover', 'preview-frame', 'queue', 'reference-list', 'section-heading', 'separator', 'slider', 'surface',
-  'table-of-contents', 'token-row', 'video-player'];
+  'table-of-contents', 'token-row', 'video-player',
+  // The waiting list cleared (system status 2026-11-18, step C6): each holdout took the role that equals it at the
+  // default, an icon-to-label gap of 6 the md control's gap-md, the Description list's justified 16 two ui-clusters,
+  // the opacity field's "%" side 8 ui-cluster, Pagination's page side 6 gap-md.
+  'attachment', 'color-picker', 'description-list', 'message', 'pagination', 'tag-picker', 'turn-notice'];
 // Fixed spaces still waiting in other families on 2026-11-14 (a ratchet: a count may fall, never rise; a family that
 // reaches 0 leaves the list). Each hit either moves to a role or, where it is a mark, a hit area, a platform constant or a
 // measured media size, says "at every density" on its line.
-const WAITING = {
-  // Each of these is a value whose role would move it at the default (leftovers pass, 2026-11-14), listed rather than
-  // moved: an icon-to-label gap of 6 (attachment, description-list ×2, message, tag-picker, turn-notice; the row's role is
-  // ui-cluster, 8 at the default), the Description list's justified inset 16 and its More row's twin (inset-surface-md
-  // is 14), the opacity field's "%" side 8 (the field's text side is 9), Pagination's page side 6 (a control's text side,
-  // (H − 1cap) / 2 less the edge, is 9 at the default).
-  'attachment.css': 1, 'color-picker.css': 1, 'description-list.css': 4, 'message.css': 1, 'pagination.css': 1,
-  'tag-picker.css': 1, 'turn-notice.css': 1,
-};
+// Empty since step C6 (2026-11-18): a family that gains a fixed space fails until it takes a role or says why.
+const WAITING = {};
 
 test('space between pieces of UI reads a density role, or says it holds at every density', () => {
   const report = [];
@@ -121,7 +118,7 @@ const MOVED = {
   'stepper, timeline content gap': ['var(--area-gap-row)', 12],
   'stepper, timeline events apart': ['calc(var(--area-ui-cluster) * 2)', 16],
   'tabs lg gap': ['calc(24px - 4px * var(--area-ui-gap-step))', 24],
-  'otp slots, alert icon and action gaps, page header parent': ['var(--area-ui-cluster)', 8],
+  'otp slots, alert icon and action gaps, page header parent, color picker "%" side': ['var(--area-ui-cluster)', 8],
   'menu two-line block': ['calc((var(--area-ui-row) - var(--area-ui-leading)) / 2)', 6],
   'empty state md media': ['calc(var(--area-ui-cluster) * 2)', 16],
   'empty state md actions': ['var(--area-gap-section)', 24],
@@ -129,10 +126,12 @@ const MOVED = {
   'shortcut list groups': ['calc(32px - 8px * var(--area-ui-gap-step))', 32],
   'shortcut list name to keys': ['var(--area-gap-section)', 24],
   // The leftovers pass (2026-11-14).
-  'accordion trigger gap, chart legend, inline list items, link groups rule': ['calc(var(--area-ui-cluster) * 2)', 16],
+  'accordion trigger gap, chart legend, inline list items, link groups rule, description list justified inset': ['calc(var(--area-ui-cluster) * 2)', 16],
   'row sides (nav, table of contents), held at every density': ['var(--area-ui-row-inset)', 8],
   'nav marker rows, table of contents title start': ['calc(var(--area-ui-row-inset) * 2)', 16],
   'video player clock side': ['calc((var(--area-control-md) - var(--area-space-6)) / 2)', 12],
+  // Step C6 (2026-11-18).
+  'icon-to-label gap of 6 (attachment, description list, message, tag picker, turn notice), pagination page side': ['var(--area-gap-md)', 6],
 };
 
 test('every moved space is whole at every type and density, and the default holds', () => {

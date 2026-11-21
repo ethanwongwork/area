@@ -18,7 +18,7 @@
  * `layerCss()` as CSS (what ships, live, so a subtree that sets its own ground re-derives). layers.test.ts proves the
  * two agree and that every combination keeps text readable and controls, frames and selection visible.
  */
-import { type Rgb, oklchToRgb, rgbToOklab, labToLch, parseHex, SRGB, toHex, clampRgb } from "./oklab.ts";
+import { type Rgb, oklchToRgb, oklabToRgb, rgbToOklab, labToLch, parseHex, SRGB, toHex, clampRgb } from "./oklab.ts";
 import { findCusp, maxChromaAt } from "./gamut.ts";
 
 // ---------------------------------------------------------------------------
@@ -351,6 +351,44 @@ export const tintedDarken = (page: number, chroma: number, bound: number) => dar
  * Both are 0 up to the defaults. */
 export const TINT_LIFT = { layer: { from: 0.3, perL: 4 }, fill: { from: 0.315, perL: 4.9 } } as const;
 
+/**
+ * Colours held on the ground (plan B, docs/research/system-status-2026-11-18, 2026-11-19). The tone and hue outlines
+ * (`<tone>-border`, `-border-strong`), the light status and label marks (`fg-<tone>-mark`, which the hue icons read) and the
+ * dark vivid inks (`fg-<role>-vivid`, syntax) are palette colours solved once, on white or on the default dark surface, so
+ * on a gray light page, a recessed ground or a lighter dark one they missed their floors (the cross-setting sweeps). The
+ * hued inks already follow the ground (the darkens above); these follow it the same way: each keeps its colour wherever it
+ * holds its floor on the ground under it and moves only as far as the floor needs where it does not.
+ *
+ *   light  its linear sRGB scaled down by just enough for the WCAG floor on the deepest ground it can sit on (`hold`: the
+ *          recessed layer, a darker card, a tile or a well, less the tint margin). A scale of linear sRGB is the colour
+ *          `color-mix(in oklab, x, black d)` gives for some d, so it darkens exactly as the hued inks do, solved per colour.
+ *   dark   its linear sRGB scaled up for the WCAG floor on the lightest ground (`hold`: the raised layer, a lighter card,
+ *          a tile, a well or a floating surface, plus the tint margin), then, where an APCA floor applies, its encoded
+ *          sRGB scaled up for it, which is exact in APCA's luminance. Neither leaves sRGB (each stops at the brightest
+ *          channel's 1). The vivid inks are held on the code ground (`code`: the raised layer or a lighter card).
+ *
+ * The targets are the policy floors with the quantisation margin the solvers use (semantic/stroke.ts: 1.31, 1.91, Lc 15.1;
+ * INK_TARGET), so a rounded hex never lands under them. At the defaults the light outlines move only on the recessed
+ * grounds' account (the sweeps measured them under their floors there); nothing else moves.
+ */
+export const HOLD = {
+  light: { stroke: 1.31, strokeHover: 1.92, mark: INK_TARGET.edge },
+  dark: { stroke: 1.32, strokeHover: 1.92, strokeHoverApca: 15.5, vivid: INK_TARGET.text, vividApca: 61 },
+} as const;
+/** The dark APCA content floor (Lc 60, contrast/assertions.ts) the dark secondary inks are held to on the fills they sit on,
+ * and the disabled ink's (Lc 20), each with half a point for the rounded hex and the tinted neutrals. */
+export const DARK_INK_APCA = { content: 60.5, disabled: 20.5 } as const;
+
+/**
+ * The selected plate at Selection Accent (`selection-surface-<ground>`, the accent's soft surface) keeps the smallest
+ * state step from the ground's hover plate (color/layer-checks.ts MIN hover: light 0.009, dark 0.035, as ΔE OK), plus
+ * 0.002 for the rounded hex. At a low Accent strength the soft surface nears grey, and at 30 it sat on the hover plate;
+ * there it moves in lightness away from hover by just the rest of the step its hue and chroma do not already make, on
+ * the side it sits on (so it never passes through the hover plate), and past hover (darker in light, lighter in dark, as
+ * the neutral selected fill sits) where it sits on it exactly. Where it already reads apart it keeps its colour.
+ */
+export const SELECTED_STEP = { light: 0.011, dark: 0.037 } as const;
+
 // ---------------------------------------------------------------------------
 // The model, as numbers
 // ---------------------------------------------------------------------------
@@ -379,6 +417,10 @@ export interface LayerLightness {
   ink: { body: number; muted: number; subtle: number; disabled: number; edge: number; edgeHover: number };
   /** How far the vivid and tonal inks mix toward black (light) and tinted labels toward white (dark), 0 to 1. */
   vividDarken: number; tonalDarken: number; tintLift: number; tintLiftFill: number;
+  /** The ground a held colour is solved on (HOLD), untinted: the deepest in light, the lightest in dark. */
+  hold: number;
+  /** The code ground the dark vivid inks are held on: the raised layer or a lighter card (light: the page or a darker card). */
+  code: number;
 }
 
 const clamp01 = (L: number) => Math.min(1, Math.max(0, L));
@@ -420,7 +462,7 @@ export function layerLightnessAt(theme: "light" | "dark", g: number, n: number, 
       disabled: page + DISABLED_SHARE.light * (muted - page),
       edge: edgeInk, edgeHover: edgeInk + INK_TODAY.light.edgeHover,
     };
-    return { page, raised, recessed, card, tile, frame, frameRaised, well, float, plate: card - PLATE_STEP.light, stripe: page - 0.6 * s, step: s, fill, edge, ink, vividDarken: darkenFor(Math.min(page, card), VIVID_Y), tonalDarken: darkenFor(deepest, TONAL_Y), tintLift: 0, tintLiftFill: 0 };
+    return { page, raised, recessed, card, tile, frame, frameRaised, well, float, plate: card - PLATE_STEP.light, stripe: page - 0.6 * s, step: s, fill, edge, ink, vividDarken: darkenFor(Math.min(page, card), VIVID_Y), tonalDarken: darkenFor(deepest, TONAL_Y), tintLift: 0, tintLiftFill: 0, hold: deepest, code: markGround };
   }
   // The floor arrives over the first whole step of Layer contrast (positions 0 to 12), as the CSS has it, so a position
   // past Flat doesn't jump a black page's layers to 0.12 at once.
@@ -441,18 +483,24 @@ export function layerLightnessAt(theme: "light" | "dark", g: number, n: number, 
   // so at the lightest grounds (24 + 8) both inks are white and the room is what white allows.
   const edgeInk = Math.max(INK_TODAY.dark.edge, inkOn("dark", top[0], INK_TARGET.edge));
   const firmest = top[2] + PRESS_ROOM.dark;
-  const muted = Math.max(INK_TODAY.dark.muted, inkOn("dark", firmest, INK_TARGET.text));
+  // Muted and subtle also keep the APCA content floor on the lightest hover fill (DARK_INK_APCA; plan B, 2026-11-19): at
+  // the Layers extremes the text target alone left them at Lc 54 to 58 on a hovered menu row. At the defaults it binds
+  // nothing, so they are unchanged there.
+  const contentOnHover = inkApcaDark(top[1], DARK_INK_APCA.content);
+  const muted = Math.max(INK_TODAY.dark.muted, inkOn("dark", firmest, INK_TARGET.text), contentOnHover);
   const ink = {
     body: Math.max(INK_TODAY.dark.body, inkOn("dark", firmest, INK_TARGET.text)),
     muted,
-    // Subtle: the darkest ink that keeps the text target on the lightest hover fill, never lighter than muted.
-    subtle: Math.min(muted, Math.max(SUBTLE_TODAY.dark, inkOn("dark", top[1], INK_TARGET.text))),
-    disabled: raised + DISABLED_SHARE.dark * (muted - raised),
+    // Subtle: the darkest ink that keeps the text target and the APCA floor on the lightest hover fill, never lighter than muted.
+    subtle: Math.min(muted, Math.max(SUBTLE_TODAY.dark, inkOn("dark", top[1], INK_TARGET.text), contentOnHover)),
+    // Disabled: its share of the way to muted, and never under the disabled floor's Lc 20 on the raised layer (a black page
+    // with flat Layers left it at Lc 19.3).
+    disabled: Math.max(raised + DISABLED_SHARE.dark * (muted - raised), inkApcaDark(raised, DARK_INK_APCA.disabled)),
     edge: edgeInk, edgeHover: Math.min(1, edgeInk + INK_TODAY.dark.edgeHover),
   };
   const toWhite = (L: number, { from, perL }: { from: number; perL: number }) => Math.min(1, Math.max(0, (L - from) * perL));
   const tintLift = toWhite(Math.max(raised, card, tile, well, float), TINT_LIFT.layer), tintLiftFill = toWhite(top[1], TINT_LIFT.fill);
-  return { page, raised, recessed, card, tile, frame, frameRaised, well, float, plate: Math.max(card + PLATE_STEP.dark, DARK_FILL_FLOOR), stripe: raised + 0.5 * s, step: s, fill, edge, ink, vividDarken: 0, tonalDarken: 0, tintLift, tintLiftFill };
+  return { page, raised, recessed, card, tile, frame, frameRaised, well, float, plate: Math.max(card + PLATE_STEP.dark, DARK_FILL_FLOOR), stripe: raised + 0.5 * s, step: s, fill, edge, ink, vividDarken: 0, tonalDarken: 0, tintLift, tintLiftFill, hold: Math.max(raised, card, tile, well, float), code: Math.max(raised, card) };
 }
 
 /** The Neutral setting's tint: the hue and chroma of its own ramp, at 50 in light and 900 in dark. */
@@ -511,6 +559,71 @@ export function inkHex(theme: "light" | "dark", L: number, cast: Cast, share = D
   return layerHex(theme, moved, { hue: cast.hue, chroma: cast.chroma * share });
 }
 
+// ---------------------------------------------------------------------------
+// Held colours (HOLD) and the dark APCA inks, as numbers
+// ---------------------------------------------------------------------------
+
+const linear = (c: number) => (c <= 0.04045 ? c / 12.92 : ((c + 0.055) / 1.055) ** 2.4);
+const encode = (c: number) => (c <= 0.0031308 ? 12.92 * c : 1.055 * c ** (1 / 2.4) - 0.055);
+const wcagY = ([r, g, b]: readonly number[]) => 0.2126 * r! + 0.7152 * g! + 0.0722 * b!;
+/** APCA's luminance of encoded sRGB channels (apca-w3 sRGBtoY: a plain 2.4 power). */
+const apcaY = ([r, g, b]: readonly number[]) => 0.2126729 * r! ** 2.4 + 0.7151522 * g! ** 2.4 + 0.072175 * b! ** 2.4;
+/** APCA's luminance of a gray of OKLab lightness L, after its black clamp (0.022, 1.414). */
+export const apcaGroundY = (L: number) => {
+  const y = Math.max(0, 1.055 * Math.max(0, L) ** 1.25 - 0.055) ** 2.4;
+  return y + Math.max(0, 0.022 - y) ** 1.414;
+};
+/** The APCA luminance light text needs for `lc` on a dark gray of lightness L (reverse polarity: Lc = 114 (Yt^0.62 − Yb^0.65) − 2.7). */
+export const apcaTextY = (L: number, lc: number) => ((lc / 100 + 0.027) / 1.14 + apcaGroundY(L) ** 0.65) ** (1 / 0.62);
+/** The darkest gray (its OKLab lightness) that keeps `lc` on a dark gray of lightness `bg`. */
+export const inkApcaDark = (bg: number, lc: number) => Math.min(1, ((apcaTextY(bg, lc) ** (1 / 2.4) + 0.055) / 1.055) ** 0.8);
+
+/** The tint margin a held colour's ground takes (HUED_INK_MARGIN past HUED_INK_FREE), darker in light and lighter in dark. */
+export const holdMargin = (chroma: number) => HUED_INK_MARGIN * Math.max(0, chroma - HUED_INK_FREE);
+/** A colour held to `ratio` on a light ground of lightness `ground`: its linear sRGB scaled down only as far as that needs. */
+export function holdLight(hex: string, ground: number, ratio: number): string {
+  const rgb = parseHex(hex).map(linear), Y = Math.max(1e-6, wcagY(rgb));
+  const k = Math.min(1, Math.max(0, (ground ** 3 + 0.05) / ratio - 0.05) / Y);
+  return k >= 1 ? hex : toHex(rgb.map(c => encode(c * k)) as unknown as Rgb);
+}
+/** How far toward white (in encoded sRGB) a colour of APCA luminance under `target` moves to reach it: none when it holds. */
+const whiteLift = (e: readonly number[], target: number) => {
+  const slope = 2.4 * (1 - (0.2126729 * e[0]! + 0.7151522 * e[1]! + 0.072175 * e[2]!));
+  const gate = Math.min(1, Math.max(0, (target - apcaY(e)) / HOLD_EDGE));
+  return Math.min(1, Math.max(0, 1 - (1 - target) / Math.max(1e-6, slope))) * gate;
+};
+/** The width of the step a held colour's moves switch on over (as FRAME_EDGE), in luminance. */
+const HOLD_EDGE = 0.0001;
+/** A colour held to `ratio` (and Lc `apca`, if given) on a dark ground of lightness `ground`: lightened only as far as that needs. */
+export function holdDark(hex: string, ground: number, ratio: number, apca?: number): string {
+  const rgb = parseHex(hex).map(linear), Y = Math.max(1e-6, wcagY(rgb));
+  const need = Math.min(1, ratio * (ground ** 3 + 0.05) - 0.05);
+  const k = Math.min(1 / Math.max(1e-6, ...rgb), Math.max(1, need / Y));
+  let e = rgb.map(c => encode(c * k)), moved = k > 1;
+  if (apca !== undefined) {
+    const target = apcaTextY(ground, apca);
+    const c = Math.min(1 / Math.max(1e-6, ...e), Math.max(1, (target / Math.max(1e-6, apcaY(e))) ** (1 / 2.4)));
+    if (c > 1) { e = e.map(x => x * c); moved = true; }
+    // A bright channel can stop the scale short (a light red at its 255): then the rest of the way toward white, by the
+    // tangent of APCA's luminance at white (convex in the mix, so the tangent never falls short), and only if short.
+    const t = whiteLift(e, target);
+    if (t > 0) { e = e.map(x => x + t * (1 - x)); moved = true; }
+  }
+  return moved ? toHex(e as unknown as Rgb) : hex;
+}
+
+/**
+ * The accent's selected plate on a ground whose hover plate has lightness `hover` (SELECTED_STEP): the accent surface where
+ * it reads apart from the hover plate, else moved in lightness past it by the rest of the step. As oklab(from …) does it.
+ */
+export function heldSelectedHex(theme: "light" | "dark", accentHex: string, hover: number, cast: Cast): string {
+  const A = rgbToOklab(parseHex(accentHex), SRGB), C = castChroma(theme, hover, cast), h = cast.hue * Math.PI / 180;
+  const T = SELECTED_STEP[theme], dab2 = (A.a - C * Math.cos(h)) ** 2 + (A.b - C * Math.sin(h)) ** 2;
+  const req = Math.sqrt(Math.max(0, T * T - dab2)), keep = Math.min(1, Math.max(0, (Math.abs(A.L - hover) - req) / FRAME_EDGE));
+  const target = hover + (Math.sign(A.L - hover) || (theme === "light" ? -1 : 1)) * req;
+  return toHex(clampRgb(oklabToRgb({ L: A.L + (1 - keep) * (target - A.L), a: A.a, b: A.b }, SRGB)));
+}
+
 /** Every token the layers own. The neutral axis no longer writes these; base.ts derives them. */
 export const LAYER_COLOR_TOKENS = [
   "bg-page", "bg-surface", "bg-subtle", "bg-stripe", "bg-code",
@@ -561,6 +674,16 @@ const P = "--area-";
 const v = (name: string) => `var(${P}${name})`;
 const num = (x: number) => String(Number(x.toFixed(6)));
 
+/** apcaGroundY and apcaTextY as CSS: the APCA luminance light text needs for `lc` on a dark gray of lightness `L`. */
+function apcaTextYCss(L: string, lc: number): string {
+  const y = `pow(max(0, 1.055 * pow(${L}, 1.25) - 0.055), 2.4)`;
+  return `pow(${num((lc / 100 + 0.027) / 1.14)} + pow(${y} + pow(max(0, 0.022 - ${y}), 1.414), 0.65), ${num(1 / 0.62)})`;
+}
+/** inkApcaDark as CSS: the darkest gray that keeps `lc` on a dark gray of lightness `bg`. */
+function inkApcaDarkCss(bg: string, lc: number): string {
+  return `min(1, pow((pow(${apcaTextYCss(bg, lc)}, ${num(1 / 2.4)}) + 0.055) / 1.055, 0.8))`;
+}
+
 /** The light and dark lightness of every role, as CSS math over the three settings. */
 export function layerLightnessCss(): Record<string, string> {
   const gl = v("ground-light"), gd = v("ground-dark"), nl = v("layers-light"), nd = v("layers-dark");
@@ -569,6 +692,8 @@ export function layerLightnessCss(): Record<string, string> {
   const tint = `${num(HUED_INK_MARGIN)} * max(0, ${v("cast-chroma-light")} - ${num(HUED_INK_FREE)})`;
   const tintedTonal = `calc(min(${v("layer-light-recessed")}, ${v("layer-light-card")}, ${v("layer-light-tile")}, ${v("layer-light-well")}) - ${tint})`;
   const tintedVivid = `calc(min(${gl}, ${v("layer-light-card")}) - ${tint})`;
+  // The held colours' grounds (HOLD): light's is the tonal inks' own; dark's the lightest ground, lighter by the same margin.
+  const tintDark = `${num(HUED_INK_MARGIN)} * max(0, ${v("cast-chroma-dark")} - ${num(HUED_INK_FREE)})`;
   const sl = v("layer-light-step"), sd = v("layer-dark-step");
   const lf = (x: string, m: string) => `calc(${x} - ${m} * ${sl})`;
   // Dark fills step from the rest fill, the step shrinking where the selected fill would pass DARK_FILL_CEILING.
@@ -639,15 +764,23 @@ export function layerLightnessCss(): Record<string, string> {
     "layer-light-disabled": `calc(${gl} + ${num(DISABLED_SHARE.light)} * (${v("layer-light-muted")} - ${gl}))`,
     "layer-light-edge": inkLight(deep(0), INK_TARGET.edge, INK_TODAY.light.edge),
     "layer-dark-body": inkDark(firmestDark, INK_TARGET.text, INK_TODAY.dark.body),
-    "layer-dark-muted": inkDark(firmestDark, INK_TARGET.text, INK_TODAY.dark.muted),
-    "layer-dark-subtle": `min(${v("layer-dark-muted")}, ${inkDark(top(1), INK_TARGET.text, SUBTLE_TODAY.dark)})`,
-    "layer-dark-disabled": `calc(${v("layer-dark-raised")} + ${num(DISABLED_SHARE.dark)} * (${v("layer-dark-muted")} - ${v("layer-dark-raised")}))`,
+    // Muted and subtle keep the APCA content floor on the lightest hover fill too, disabled its own on the raised layer (DARK_INK_APCA).
+    "layer-dark-content-hover": inkApcaDarkCss(top(1), DARK_INK_APCA.content),
+    "layer-dark-muted": `max(${inkDark(firmestDark, INK_TARGET.text, INK_TODAY.dark.muted)}, ${v("layer-dark-content-hover")})`,
+    "layer-dark-subtle": `min(${v("layer-dark-muted")}, max(${inkDark(top(1), INK_TARGET.text, SUBTLE_TODAY.dark)}, ${v("layer-dark-content-hover")}))`,
+    "layer-dark-disabled": `max(calc(${v("layer-dark-raised")} + ${num(DISABLED_SHARE.dark)} * (${v("layer-dark-muted")} - ${v("layer-dark-raised")})), ${inkApcaDarkCss(v("layer-dark-raised"), DARK_INK_APCA.disabled)})`,
     "layer-dark-edge": inkDark(top(0), INK_TARGET.edge, INK_TODAY.dark.edge),
     "layer-light-vivid-darken": `calc(1 - min(1, ${root3(`max(0, (${cube(tintedVivid)} + 0.05) / ${num(INK_TARGET.text)} - 0.05) / ${num(VIVID_Y)}`)}))`,
     "layer-light-tonal-darken": `calc(1 - min(1, ${root3(`max(0, (${cube(tintedTonal)} + 0.05) / ${num(INK_TARGET.text)} - 0.05) / ${num(TONAL_Y)}`)}))`,
     // The status and label tones' darken, for the Tone contrast floor's target and bound (axes/tone-floor.ts); the
     // tonal one's at 4.5 and wherever Contrast is raised.
     "layer-light-floor-darken": `calc(1 - min(1, ${root3(`max(0, (${cube(tintedTonal)} + 0.05) / ${floorAt("target", INK_TARGET.text)} - 0.05) / ${floorAt("y", TONAL_Y)}`)}))`,
+    "layer-light-hold": tintedTonal,
+    "layer-dark-hold": `calc(max(${v("layer-dark-raised")}, ${v("layer-dark-card")}, ${v("layer-dark-tile")}, ${v("layer-dark-well")}, ${v("layer-dark-float")}) + ${tintDark})`,
+    "layer-dark-code": `calc(max(${v("layer-dark-raised")}, ${v("layer-dark-card")}) + ${tintDark})`,
+    // The APCA luminance a held colour reaches on each (apcaTextY): the hover outlines' on the lightest ground, the vivid inks' on code.
+    "layer-dark-hold-apca": apcaTextYCss(v("layer-dark-hold"), HOLD.dark.strokeHoverApca),
+    "layer-dark-code-apca": apcaTextYCss(v("layer-dark-code"), HOLD.dark.vividApca),
     "layer-dark-tint-lift": `clamp(0, calc((max(${v("layer-dark-raised")}, ${v("layer-dark-card")}, ${v("layer-dark-tile")}, ${v("layer-dark-well")}, ${v("layer-dark-float")}) - ${num(TINT_LIFT.layer.from)}) * ${num(TINT_LIFT.layer.perL)}), 1)`,
     "layer-dark-tint-lift-fill": `clamp(0, calc((${top(1)} - ${num(TINT_LIFT.fill.from)}) * ${num(TINT_LIFT.fill.perL)}), 1)`,
   });
@@ -705,6 +838,50 @@ function color(light: string, dark: string, share = "1"): string {
 /** A text ink (inkHex as CSS): Text tint's share of the cast, moved INK_MARGIN × the strength away from its ground. */
 function inkColor(light: string, dark: string): string {
   return color(`calc(${light} - ${num(INK_MARGIN)} * ${v("cast-chroma-light")})`, `calc(${dark} + ${num(INK_MARGIN)} * ${v("cast-chroma-dark")})`, v("ink-tint"));
+}
+
+const LUM = "max(0.000001, 0.2126 * r + 0.7152 * g + 0.0722 * b)";
+// A channel converted from linear light can land a hair under 0, where pow() has no value: each is floored at 0.
+const APCA_LUM = "max(0.000001, 0.2126729 * pow(max(0, r), 2.4) + 0.7151522 * pow(max(0, g), 2.4) + 0.072175 * pow(max(0, b), 2.4))";
+const CAP = "1 / max(0.000001, r, g, b)";
+/** holdLight as CSS: `color` held to `ratio` on the light hold ground, its linear sRGB scaled down only as far as that needs. */
+export function holdLightCss(color: string, ratio: number): string {
+  const k = `min(1, max(0, (pow(${v("layer-light-hold")}, 3) + 0.05) / ${num(ratio)} - 0.05) / ${LUM})`;
+  return `color(from ${color} srgb-linear calc(r * ${k}) calc(g * ${k}) calc(b * ${k}))`;
+}
+/** holdDark as CSS on a dark ground (`hold` or `code`): `ratio`, then, with `apca`, that ground's APCA target (HOLD). */
+export function holdDarkCss(color: string, ground: "hold" | "code", ratio: number, apca = false): string {
+  const G = v(`layer-dark-${ground}`);
+  const k = `min(${CAP}, max(1, min(1, ${num(ratio)} * (pow(${G}, 3) + 0.05) - 0.05) / ${LUM}))`;
+  const lit = `color(from ${color} srgb-linear calc(r * ${k}) calc(g * ${k}) calc(b * ${k}))`;
+  if (!apca) return lit;
+  const T = v(`layer-dark-${ground}-apca`);
+  const c = `min(${CAP}, max(1, pow(${T} / ${APCA_LUM}, ${num(1 / 2.4)})))`;
+  const scaled = `color(from ${lit} srgb calc(r * ${c}) calc(g * ${c}) calc(b * ${c}))`;
+  // whiteLift: the rest of the way toward white where a bright channel stopped the scale, by the tangent at white.
+  const slope = "max(0.000001, 2.4 * (1 - (0.2126729 * r + 0.7151522 * g + 0.072175 * b)))";
+  const t = `(clamp(0, 1 - (1 - ${T}) / ${slope}, 1) * clamp(0, (${T} - ${APCA_LUM}) / ${num(HOLD_EDGE)}, 1))`;
+  return `color(from ${scaled} srgb calc(r + ${t} * (1 - r)) calc(g + ${t} * (1 - g)) calc(b + ${t} * (1 - b)))`;
+}
+/** A hued colour held on the ground in both modes (HOLD): `light-dark()` of the two. */
+export const holdCss = (color: string, light: number, dark: number, apca = false) =>
+  `light-dark(${holdLightCss(color, light)}, ${holdDarkCss(color, "hold", dark, apca)})`;
+
+/**
+ * heldSelectedHex as CSS: the accent surface `accent` as Selection Accent's plate on `ground`, held SELECTED_STEP from the
+ * ground's hover plate (its lightness `layer-<mode>-<ground>-fill-1`, its a and b the cast's chroma there at the cast's hue).
+ */
+export function heldSelectedCss(accent: string, ground: string): string {
+  const side = (theme: "light" | "dark") => {
+    const H = v(`layer-${theme}-${ground}-fill-1`), C = castChromaCss(theme, H), hue = `calc(${v(`cast-hue-${theme}`)} * 1deg)`;
+    const T = SELECTED_STEP[theme];
+    const req = `sqrt(max(0, ${num(T * T)} - (pow(a - ${C} * cos(${hue}), 2) + pow(b - ${C} * sin(${hue}), 2))))`;
+    const keep = `clamp(0, (max(l - ${H}, ${H} - l) - ${req}) / ${num(FRAME_EDGE)}, 1)`;
+    // The side it moves to: the one it sits on, so it never crosses the hover plate; past hover where it sits on it.
+    const side = `(sign(l - ${H}) ${theme === "light" ? "-" : "+"} (1 - abs(sign(l - ${H}))))`;
+    return `oklab(from ${accent} calc(l + (1 - ${keep}) * (${H} + ${side} * ${req} - l)) a b)`;
+  };
+  return `light-dark(${side("light")}, ${side("dark")})`;
 }
 
 /** An edge at standard contrast: its distance below the light page, above the dark raised layer. base.ts mixes the
@@ -835,9 +1012,10 @@ export function layerCss(): Record<string, string> {
   };
   // The hued inks: Theme and Accent write each one's rung (`<token>-rung`, axes/color.ts); in light it mixes toward
   // black by the page's darken for its bound, exact in luminance (see VIVID_ROLES, TONAL_ROLES).
+  // In dark the vivid inks are held on the code ground (HOLD; syntax on a lighter dark ground was Lc 53.5 at 24 + 8).
   for (const { token, darken } of HUED_INKS) {
-    const rung = v(`${token}-rung`);
-    out[`${P}${token}`] = `light-dark(color-mix(in oklab, ${rung}, black calc(${v(`layer-light-${darken}-darken`)} * 100%)), ${rung})`;
+    const rung = v(`${token}-rung`), dark = darken === "vivid" ? holdDarkCss(rung, "code", HOLD.dark.vivid, true) : rung;
+    out[`${P}${token}`] = `light-dark(color-mix(in oklab, ${rung}, black calc(${v(`layer-light-${darken}-darken`)} * 100%)), ${dark})`;
   }
   const suffix = ["", "-hover", "-active"];
   // `bg-component` is the page's fill until a surface points it at its own ground; `-page` keeps the page's, so a region
@@ -846,10 +1024,11 @@ export function layerCss(): Record<string, string> {
     suffix.forEach((s, i) => { out[`${P}${prefix}${s}`] = both(`${ground}-fill-${i}`); });
   // The Selection role on a raised or recessed ground, as base.ts writes it on the page: the ground's pressed fill (or
   // hovered, for a band) mixed toward the accent when Selection is Accent. A surface points the role at these.
-  const mix = (fill: string, accent: string) => `color-mix(in srgb, var(${P}${fill}), var(${P}${accent}) calc(var(${P}selection-accent) * 100%))`;
+  // The selected plates at Accent keep a state step from the ground's hover plate (SELECTED_STEP, heldSelectedCss).
+  const mix = (fill: string, accent: string) => `color-mix(in srgb, var(${P}${fill}), ${accent.startsWith("light-dark(") ? accent : `var(${P}${accent})`} calc(var(${P}selection-accent) * 100%))`;
   for (const ground of ["page", "raised", "recessed", "card", "tile", "frame", "frame-raised", "well", "float"] as const) Object.assign(out, {
-    [`${P}selection-surface-${ground}`]: mix(`bg-component-${ground}-active`, "accent-surface"),
-    [`${P}selection-surface-${ground}-hover`]: mix(`bg-component-${ground}-active`, "accent-surface-hover"),
+    [`${P}selection-surface-${ground}`]: mix(`bg-component-${ground}-active`, heldSelectedCss(v("accent-surface"), ground)),
+    [`${P}selection-surface-${ground}-hover`]: mix(`bg-component-${ground}-active`, heldSelectedCss(v("accent-surface-hover"), ground)),
     [`${P}selection-band-${ground}`]: mix(`bg-component-${ground}-hover`, "accent-surface"),
     [`${P}selection-band-${ground}-hover`]: mix(`bg-component-${ground}-active`, "accent-surface-hover"),
   });

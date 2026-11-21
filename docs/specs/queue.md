@@ -32,6 +32,8 @@ order.
 | actions | Send now (ghost sm) and Remove (icon), over the row's end on hover or focus; always on a failed row (Retry in place of Send now) and on touch. The last one ends as far from the row's end as from its top, never under 4, and the buttons' corner is the row's less that same inset | Cursor hover actions; Codex Steer + Delete; Edit summary's row buttons |
 | paused | not a prop or state of Queue: the app passes `title` ("N queued, paused") after the person stops a run, until the next send (`apps/desktop/src/chat/chat.tsx`, `session.queuePaused`) | Codex "Queue paused because you interrupted" |
 
+- A sending row dims its text by `opacity-pending` (0.6), the role Message shares.
+
 ## Feedback log
 
 - 2026-10-25 · owner: "Drop the line on Edit summary, Queue and Plan too, and tighten the bar Plan's spacing as shown"
@@ -147,3 +149,7 @@ summary's row buttons (the row's corner less their inset).
 ## State paint (plan B7.11), 2026-11-14
 
 - Row actions hide only inside `@media (hover: hover)`; on touch they sit in the row, shown (the margin moved to the base rule).
+
+## System status step C, 2026-11-18 (shared sources)
+
+0.6 became the `opacity-pending` role. Nothing moved.

@@ -97,6 +97,8 @@ Cells were 7px (md) before the second pass.
 | palette · hover | the same, lighter and inside only: inset 1px white 70% + inset 2px black 15% | Owner round 20 | — |
 | disabled | 50% on a disabled cell; a disabled picker dims once as a whole (`aria-disabled`) | Audit "Disabled": controls and pickers dim to 50%; audit F-14 | — |
 
+- The palette's stacking is named: its ring 1, `--_layer-chosen` 2, `--_layer-focus` 3 (DESIGN_SYSTEM.md, "Local stacking"). The hover and chosen rings stay literal white and black 15%: state paint for a palette that does not change with the theme, no role equal.
+
 ## States
 
 | State | Slot · property changes | Evidence |
@@ -275,3 +277,7 @@ changes instant)? Recommendation: keep the 100ms fade; it is short enough not to
 ## State paint (plan B7.2, B7.3), 2026-11-14
 
 - Cells press to `bg-pressed`, the chosen cell included.
+
+## System status step C, 2026-11-18 (shared sources)
+
+Bare z-index 2 and 3 became named local layers. Nothing moved.

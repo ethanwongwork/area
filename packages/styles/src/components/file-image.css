@@ -16,7 +16,7 @@
  * ------------------------------------------------------------------------- */
 @layer area.components {
   .area-file-image {
-    --_size: var(--area-folder-size, 64px); /* spec: Finder iconSize 64, as Folder and File page */
+    --_size: var(--area-folder-size, var(--_figure-md)); /* spec: Finder iconSize 64, as Folder and File page */
     --_edge: max(var(--area-stroke-width), round(down, calc(var(--_size) / 96), 1px)); /* spec: Folder's outline edge */
     position: relative;
     display: inline-block;
@@ -25,9 +25,9 @@
     block-size: var(--_size);
     vertical-align: middle;
   }
-  .area-file-image--sm { --_size: 48px; } /* spec: Folder sm */
-  .area-file-image--md { --_size: 64px; } /* spec: Finder iconSize 64 */
-  .area-file-image--lg { --_size: 96px; } /* spec: Folder lg */
+  .area-file-image--sm { --_size: var(--_figure-sm); } /* spec: Folder sm */
+  .area-file-image--md { --_size: var(--_figure-md); } /* spec: Finder iconSize 64 */
+  .area-file-image--lg { --_size: var(--_figure-lg); } /* spec: Folder lg */
 
   .area-file-image__figure {
     --_fw: round(nearest, calc(var(--_size) * 0.92), 2px); /* spec: Folder's figure width */

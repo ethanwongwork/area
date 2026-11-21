@@ -68,7 +68,7 @@
   .area-property-list[data-dragging] { cursor: grabbing; }
   .area-property-list[data-dragging] .area-property-list__handle { cursor: grabbing; }
   /* spec: the row being moved stays in place, faded, while a line marks where it will land. */
-  .area-property-list__item[data-dragging] > :not(.area-property-list__handle) { opacity: 0.4; /* spec */ }
+  .area-property-list__item[data-dragging] > :not(.area-property-list__handle) { opacity: 0.4; /* spec: the dragged row's place, its own meaning (not pending, not disabled) */ }
   .area-property-list__indicator {
     position: absolute;
     inset-inline: 0;

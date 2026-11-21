@@ -11,8 +11,12 @@
 export const TOLERANCE = 0.1;
 // A box taller than the largest control (lg, 38 at type 13 / density 32, plus room) holds more than one line of
 // controls or a tall part, so its single text is not centred by design (a Panel row with a colour well, a list row with
-// a picture).
+// a picture). The limit follows the run's type and density: lg as the page resolves var(--area-control-lg) where the
+// specimens are drawn (measure-page.js `scale`, 2026-11-19; at type 16 / density 36 lg is 46, and a fixed 40 skipped
+// every large control), plus the same room. MAX_BOX is the default run's value, for a capture without `scale`.
+export const ROOM = 2;
 export const MAX_BOX = 40;
+export const maxBox = scale => scale?.control?.lg > 0 ? scale.control.lg + ROOM : MAX_BOX;
 
 // The control and row boxes. `match` is a class token or a role; `against` measures the label against a part of the
 // box instead of the box (Switch: its track); `only` limits the texts to a part's (Switch: its label).
@@ -51,7 +55,7 @@ const has = (node, cls) => node.cls.split(/\s+/).includes(cls);
 const matches = (node, m) => (m.cls ? has(node, m.cls) : true) && (m.role ? node.attrs?.role === m.role : true);
 
 /** Every checked box in a tile: [{ box, node index, offsets: [{ text, offset }] }]. */
-export function capOffsets(tile) {
+export function capOffsets(tile, limit = MAX_BOX) {
   const nodes = tile.nodes ?? [];
   const kids = nodes.map(() => []);
   nodes.forEach((n, i) => { if (n.parent >= 0) kids[n.parent].push(i); });
@@ -73,7 +77,7 @@ export function capOffsets(tile) {
   const out = [];
   nodes.forEach((n, i) => {
     const entry = boxOf[i];
-    if (!entry || n.r.h <= 0 || n.r.h > MAX_BOX || Number(n.opacity) === 0 || scaled(i)) return;
+    if (!entry || n.r.h <= 0 || n.r.h > limit || Number(n.opacity) === 0 || scaled(i)) return;
     const texts = (tile.texts ?? []).filter(t => owner[t.node] === i && Number(t.opacity) !== 0 && !hidden(t) && (!entry.only || within(t.node, entry.only)));
     if (!texts.length) return;
     // One line: every text a single line box, all on one line.
@@ -101,11 +105,14 @@ export const rules = [
       const violations = [];
       let checked = 0;
       const seen = new Map();
+      const limits = new Set();
       for (const family of families) {
         const data = family.light ?? family.dark;
+        const limit = maxBox(data.scale);
+        limits.add(limit);
         // One violation per family and box kind: its tiles, and the offsets they show.
         const per = new Map();
-        for (const tile of data.tiles) for (const found of capOffsets(tile)) {
+        for (const tile of data.tiles) for (const found of capOffsets(tile, limit)) {
           for (const { offset } of found.offsets) {
             checked++;
             const bucket = per.get(found.box.name) ?? { box: found.box, offsets: new Set(), bad: new Set(), tiles: new Set() };
@@ -124,7 +131,7 @@ export const rules = [
         }
       }
       const exact = [...seen].filter(([, all]) => all.every(o => Math.abs(o) <= TOLERANCE)).length;
-      return { checked, violations, summary: `${seen.size} family boxes, ${exact} exact`, table: Object.fromEntries(seen) };
+      return { checked, violations, summary: `${seen.size} family boxes, ${exact} exact; boxes to ${[...limits].sort((a, b) => a - b).join(" / ")} px`, table: Object.fromEntries(seen) };
     },
   },
 ];

@@ -114,6 +114,8 @@ footer action in the opposite corner by the same rule (12/12).
 Inset equations: close top = inset + header offset + close margin = 16 + (16 − 28)/2 +
 (28 − 32)/2 = 8; close side = 16 + (16 − 32)/2 = 8; icon = 8 + (32 − 16)/2 = 16.
 
+- Dialog and Drawer share their two common widths from one recipe in `dialog.css`, `--_modal-sm` (384) and `--_modal-md` (480); lg 720 and xl 880 are Dialog's own. Every width is fixed at every type and density (a measured panel width against the window).
+
 ## Radius audit (pass 2)
 
 Rule: a child that sits in a corner at offset o shares the corner's centre when its radius is
@@ -348,3 +350,7 @@ Open questions: none new.
 
 ## Behaviour engine (plan C5), 2026-11-15
 - C5.3: initial focus moved off the close control to the body's first control (`focusInitial`); the scrollbar gutter is kept while the page is locked (`lockPageScroll`); the backdrop rule is the shared `useBackdropDismiss`. C5.4: `dismissOnBackdrop` (default true). C5.1: a toast raised over an open dialog is in the top layer inside it and can be pressed. Verified by tests/behaviour modal suite; supersedes "focus on the close" in Verification above.
+
+## System status step C, 2026-11-18 (shared sources)
+
+Dialog's and Drawer's 384 and 480 became one named pair, so one name is one width in both. Nothing moved.

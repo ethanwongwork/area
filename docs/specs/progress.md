@@ -74,7 +74,7 @@ Read from the nodes of `area--size-small`, `-medium`, `-large`, `area--accent`,
 | Slot · property | Area value | Basis | Reason when it differs from the basis |
 |---|---|---|---|
 | rail · colour | **`fill-track`** (display.css:311), the Layers ground's faint edge (layers.ts:227); #e2e2e2 when S5 set it; `--_progress-track` overrides | Audit S5 (owner 2026-09-30): one off-track grey with Switch and Slider (slider.css:32, switch.css:27) | Figma #e6 and Untitled #e5. Was `fill-toggle` mixed 20% toward `bg-surface` ≈ #dd, and before that `bg-component-active` #eee |
-| rail · thickness | 4 / 6 / 8 (display.css:334-336) | Figma 4 = sm; Untitled 8 = lg | Default md sits between |
+| rail · thickness | 4 / 6 / 8 at every type and density (progress.css, marked "at every type": a line's thickness) | Figma 4 = sm; Untitled 8 = lg | Default md sits between |
 | radius | `radius-full` | Figma and Untitled both round a thin bar to a pill | — |
 | fill | `selection-solid` (display.css:306), neutral by default | Owner; emphasis roles (D1) | Figma and Untitled use brand blue: a theme's Selection accent |
 | indeterminate | 35% segment travelling −100% → 340% of its width, 1.8s `ease-linear` × `duration-loop` (display.css:342-356); mirrored in RTL (358-361); at loop 0 a full-width still stripe (display.css:343-349) | Distinguishable from a full bar; a stopped 35% segment would read as 35% done (audit E-9) | — |
@@ -195,3 +195,13 @@ progress", which describes the indeterminate loop; a value change is a state cha
 - **Why:** the system evaluation's motion items (docs/research/system-evaluation-2026-11-11, section 5, A5), owner-approved
   2026-11-11; the rules are in docs/MOTION.md (Tokens, Roles, Recipes) and kept by cohesion.test.mjs and
   tests/behaviour/suites/motion.test.mjs. The motion tables above are history; these values are current.
+
+## Settings pass, 2026-11-21 (step C: icon weight and size tiers)
+
+From docs/research/system-status-2026-11-18 (section 3, step C1–C2). At the shipped defaults (type 13, density 32) nothing moves: every box, mask and stroke measured the same before and after, and 2x screenshots of every part are pixel-identical in light and dark.
+
+### Sizes
+
+The track's thickness (4 / 6 / 8) holds at every type and density, each line marked "at every type": it is a line, not
+a box, as a rule's width holds, and nothing on the control, icon, mark or text ladders is 4 to 8 at the defaults. Plan's
+segmented bar reads Progress sm, so it holds too.

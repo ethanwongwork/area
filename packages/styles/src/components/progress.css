@@ -2,7 +2,7 @@
 @layer area.components {
   /* --- Progress ----------------------------------------------------------- */
   .area-progress {
-    --_progress-size: var(--area-space-6);
+    --_progress-size: var(--area-space-6); /* spec, at every type: md's (below) */
     --_progress-fill: var(--area-selection-solid);
     inline-size: 100%;
     block-size: var(--_progress-size);
@@ -35,9 +35,12 @@
   }
   .area-progress:dir(rtl) .area-progress__bar { --_progress-dir: -1; }
 
-  .area-progress--sm { --_progress-size: var(--area-space-4); }
-  .area-progress--md { --_progress-size: var(--area-space-6); }
-  .area-progress--lg { --_progress-size: var(--area-space-8); }
+  /* The bar's thickness is a line, not a box (docs/specs/progress.md, "Sizes"): 4 / 6 / 8 at every type and density, as
+     a rule's width holds (Cursor's 4 and Plan's segments, GitHub's 8). Nothing on the height, icon or mark ladders is 4 to
+     8 at the defaults, so no role carries it. */
+  .area-progress--sm { --_progress-size: var(--area-space-4); } /* spec, at every type: a line's thickness */
+  .area-progress--md { --_progress-size: var(--area-space-6); } /* spec, at every type */
+  .area-progress--lg { --_progress-size: var(--area-space-8); } /* spec, at every type */
 
   /*
    * Indeterminate is a travelling segment rather than a full-width pulse, so it cannot

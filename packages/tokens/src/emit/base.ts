@@ -13,7 +13,7 @@
 import { PREFIX } from "../axes/schema.ts";
 import { MOTION_AXIS, duration } from "../axes/motion.ts";
 import { SOFT_EDGE, SOFT_EDGE_FILTER } from "../axes/surface.ts";
-import { type GroundEdge, contrastMix, layerCss, onGround, rawEdge, strokeEdge, strokeEdgeHover } from "../color/layers.ts";
+import { type GroundEdge, HOLD, contrastMix, heldSelectedCss, holdCss, holdLightCss, layerCss, onGround, rawEdge, strokeEdge, strokeEdgeHover } from "../color/layers.ts";
 import { depthDerived } from "../axes/depth.ts";
 import { strokeGroupDerived } from "../axes/stroke-groups.ts";
 import { accentDerived, statusDerived } from "../axes/accent.ts";
@@ -105,6 +105,9 @@ export function baseTokens(): Record<string, string> {
   // The one disabled dimming, for controls that dim rather than repaint (audit S21b; was 0.5
   // written in 17 rules). Text fields repaint instead (DESIGN_SYSTEM "Shared state paint").
   out[`${PREFIX}opacity-disabled`] = "0.5";
+  // The one pending dimming (system status 2026-11-18, step C4): an item that is on its way and not yet there, a message
+  // or a queued prompt being sent, dims its words to 0.6 (Codex's opacity-60). It was 0.6 written in Message and Queue.
+  out[`${PREFIX}opacity-pending`] = "0.6";
 
   // The scale an overlay enters from and leaves to (docs/MOTION.md, "Overlays"; owner 2026-11-07, system gaps C7): Dialog,
   // Command palette, Popover, Menu, Select's list, Tooltip and Hover card. Was 0.97 written in each (Radix Themes 0.97;
@@ -219,10 +222,16 @@ function derivedOnPage(): Record<string, string> {
     // them: today's neutral-100 / 750, now a step from the page.
     ...layerCss(),
     // Tonal strokes (`<tone>-border`, `-border-strong`: outline Badges and Buttons, Box model, tone frames): the axes write
-    // each as its rung (axes/color.ts) and it goes the same share of the way to its tone's ink as the neutral edges go to
-    // theirs (owner, 2026-10-18: "the contrast control doesnt look like it equally applies to all component colors").
+    // each as its rung (axes/color.ts), held on the ground under it (color/layers.ts HOLD, plan B 2026-11-19: as fixed
+    // rungs they vanished on a gray light page, a recessed ground and a lighter dark one), and it goes the same share of the
+    // way to its tone's ink as the neutral edges go to theirs (owner, 2026-10-18: "the contrast control doesnt look like it
+    // equally applies to all component colors").
     ...Object.fromEntries(Object.entries(SEMANTIC_ALIASES).filter(([, alias]) => alias.kind === "stroke" || alias.kind === "strokeHover")
-      .map(([name]) => [`${PREFIX}${name}`, contrastMix(`var(${PREFIX}${name}-rung)`, `var(${PREFIX}fg-${name.replace(/-border(-strong)?$/, "")})`)])),
+      .map(([name, alias]) => {
+        const hover = alias.kind === "strokeHover";
+        const held = holdCss(`var(${PREFIX}${name}-rung)`, hover ? HOLD.light.strokeHover : HOLD.light.stroke, hover ? HOLD.dark.strokeHover : HOLD.dark.stroke, hover);
+        return [`${PREFIX}${name}`, contrastMix(held, `var(${PREFIX}fg-${name.replace(/-border(-strong)?$/, "")})`)];
+      })),
     // The neutral soft-mark plate (audit S6a): Badge soft, Chip input, soft Count. Translucent, so a mark stays visible
     // on a hovered or selected row plate; hover lays bg-hover's 5% wash over it (6% + 5% of 94% = 10.7%).
     [`${PREFIX}bg-mark`]: "light-dark(rgb(0 0 0 / 0.06), rgb(255 255 255 / 0.1))",
@@ -294,13 +303,15 @@ function derivedOnPage(): Record<string, string> {
       "fg-on-action": ["fg-on-neutral", "fg-on-accent"],
       "fg-action": ["fg-default", "fg-accent"],
     }),
+    // The selected plate and its hover (Selection Neutral: the selected fill; Accent: the accent's soft surface, held a
+    // state step from the hover plate, color/layers.ts SELECTED_STEP), on the page as on every ground (layers.css).
+    [`${PREFIX}selection-surface`]: `color-mix(in srgb, var(${PREFIX}bg-component-active), ${heldSelectedCss(`var(${PREFIX}accent-surface)`, "page")} calc(var(${PREFIX}selection-accent) * 100%))`,
+    [`${PREFIX}selection-surface-hover`]: `color-mix(in srgb, var(${PREFIX}bg-component-active), ${heldSelectedCss(`var(${PREFIX}accent-surface-hover)`, "page")} calc(var(${PREFIX}selection-accent) * 100%))`,
     ...role("selection", "selection-accent", {
       "selection-solid": ["neutral-solid", "accent-solid"],
       "selection-solid-hover": ["neutral-solid-hover", "accent-solid-hover"],
       "fg-on-selection": ["fg-on-neutral", "fg-on-accent"],
       "fg-selection": ["fg-default", "fg-accent"],
-      "selection-surface": ["bg-component-active", "accent-surface"],
-      "selection-surface-hover": ["bg-component-active", "accent-surface-hover"],
       "selection-band": ["bg-component-hover", "accent-surface"],
       "selection-band-hover": ["bg-component-active", "accent-surface-hover"],
       "selection-edge": ["edge-control-hover", "edge-accent"],
@@ -343,18 +354,20 @@ function derivedOnPage(): Record<string, string> {
     // same context colour at low alpha rather than an unrelated neutral shadow.
     // A status mark's ink (owner, 2026-11-07, system gaps C5): the icon a status surface leads with (Alert, Toast),
     // a brighter rung than the tone's words, 3.5:1 or more on white (owner, 2026-09-27: more vivid); in dark the
-    // tone's own ink. One role, so Alert and Toast no longer each hard-code the four.
-    [`${PREFIX}fg-danger-mark`]: `light-dark(var(${PREFIX}red-500), var(${PREFIX}fg-danger))`,
-    [`${PREFIX}fg-warning-mark`]: `light-dark(var(${PREFIX}orange-550), var(${PREFIX}fg-warning))`,
-    [`${PREFIX}fg-success-mark`]: `light-dark(var(${PREFIX}green-550), var(${PREFIX}fg-success))`,
-    [`${PREFIX}fg-info-mark`]: `light-dark(var(${PREFIX}blue-500), var(${PREFIX}fg-info))`,
+    // tone's own ink. One role, so Alert and Toast no longer each hard-code the four. In light the rung is held at 3:1 on
+    // the deepest ground (color/layers.ts HOLD; plan B 2026-11-19: brown, orange, yellow and green were 2.64 to 2.85 on a
+    // gray page), so it is the rung itself wherever that holds.
+    [`${PREFIX}fg-danger-mark`]: `light-dark(${holdLightCss(`var(${PREFIX}red-500)`, HOLD.light.mark)}, var(${PREFIX}fg-danger))`,
+    [`${PREFIX}fg-warning-mark`]: `light-dark(${holdLightCss(`var(${PREFIX}orange-550)`, HOLD.light.mark)}, var(${PREFIX}fg-warning))`,
+    [`${PREFIX}fg-success-mark`]: `light-dark(${holdLightCss(`var(${PREFIX}green-550)`, HOLD.light.mark)}, var(${PREFIX}fg-success))`,
+    [`${PREFIX}fg-info-mark`]: `light-dark(${holdLightCss(`var(${PREFIX}blue-500)`, HOLD.light.mark)}, var(${PREFIX}fg-info))`,
     // Caution and discovery (components audit 2026-11-07, O4: Alert, Toast and Indicator take Button's seven tones), by
     // the same rule: the first rung from 500 that clears 3.5:1 on white (yellow 500 is 3.0, 550 3.7; purple 500 4.7).
-    [`${PREFIX}fg-caution-mark`]: `light-dark(var(${PREFIX}yellow-550), var(${PREFIX}fg-caution))`,
-    [`${PREFIX}fg-discovery-mark`]: `light-dark(var(${PREFIX}purple-500), var(${PREFIX}fg-discovery))`,
+    [`${PREFIX}fg-caution-mark`]: `light-dark(${holdLightCss(`var(${PREFIX}yellow-550)`, HOLD.light.mark)}, var(${PREFIX}fg-caution))`,
+    [`${PREFIX}fg-discovery-mark`]: `light-dark(${holdLightCss(`var(${PREFIX}purple-500)`, HOLD.light.mark)}, var(${PREFIX}fg-discovery))`,
     // The label tones' marks (components audit D5, 2026-11-07), by the same rule (semantic/hues.ts markRung): pink 500,
     // brown 550, gray's warm 500. Their icon role reads them, so every hue has an icon ink.
-    ...Object.fromEntries(LABEL_MARK_TONES.map(tone => [`${PREFIX}fg-${tone}-mark`, `light-dark(var(${PREFIX}${TONE_FAMILY[tone]}-${markRung(TONE_FAMILY[tone]!)}), var(${PREFIX}fg-${tone}))`])),
+    ...Object.fromEntries(LABEL_MARK_TONES.map(tone => [`${PREFIX}fg-${tone}-mark`, `light-dark(${holdLightCss(`var(${PREFIX}${TONE_FAMILY[tone]}-${markRung(TONE_FAMILY[tone]!)})`, HOLD.light.mark)}, var(${PREFIX}fg-${tone}))`])),
     // Every label hue's full set of roles (components audit D5; semantic/hues.ts): text, icon, border, the tint and its
     // steps, the accent and its words, and the translucent ground and ring. Tag, Board and Link read these.
     ...hueRoleCss(PREFIX),

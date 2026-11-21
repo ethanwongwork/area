@@ -163,6 +163,8 @@ Basis order: owner → target-product agreement → primary product for this con
 primary design system → peer/baseline consistency. No target product has the component, so design
 systems and Area's peers decide.
 
+- A page number's side is `gap-md` (6, Compact 4, Comfortable 8 at type 13).
+
 ## States
 
 | State | Slot · property changes | Evidence |
@@ -261,3 +263,7 @@ Pages press at `bg-component-pressed`, one step past selected (Notion presses at
 ## State paint (plan B7.2), 2026-11-14
 
 - The current page presses (its plate rule outranked the press).
+
+## System status step C, 2026-11-18 (shared sources)
+
+Its density holdout took `gap-md`; off the waiting list. Nothing moved at the defaults.

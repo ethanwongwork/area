@@ -34,6 +34,8 @@ for one release; `status` wins. The CSS modifiers keep their names (`area-turn-n
 | gap | 6 between the error's icon and words (Step's icon gap); 8 before the rule | Step; codex 8 | — |
 | action | ghost sm Button after the text | cursor Retry | — |
 
+- The icon gap is `gap-md` (6, Compact 4, Comfortable 8 at type 13), as the steps it sits among.
+
 ## Behavior and accessibility
 
 `role="status"` for stopped and compacted, `role="alert"` for error, so the ending is announced once. The action is a
@@ -123,3 +125,7 @@ Retry, text, mark and button share a centre (95.9). Light and dark checked. Verd
 - The words-to-rule gap is `ui-cluster` (6 / 8 / 10). Values at type 13 Compact / Default / Comfortable; unchanged at the default. Listed, not moved: the icon gap 6 (the row role is 8 at the default).
 - Why: docs/research/system-evaluation-2026-11-11 (plan B6.1, B6.5, B8.2, B2.2; README §5, phase2/leftovers.md); the owner took every recommendation on 2026-11-11. Fix the rule, not the instance.
 - Verdict: awaiting the owner.
+
+## System status step C, 2026-11-18 (shared sources)
+
+Its density holdout took `gap-md`; off the waiting list. Nothing moved at the defaults.

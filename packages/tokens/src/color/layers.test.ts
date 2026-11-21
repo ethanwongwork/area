@@ -9,6 +9,7 @@ import {
   DEFAULT_INK_TINT, INK_TINT_STEPS, TINT_HUES, TINT_STEP, TINT_STEPS, inkHex, CARD_TONE_STEPS, type CardTone, tintedDarken, TONAL_Y, VIVID_Y, toneFloorDarken,
   EDGE_OFFSET, PRESS_ROOM, edgeShift, FRAME_SAME, POSITIONS, SIGNED_POSITIONS, layersAt, cardToneAt, inkShareAt,
   layersPosition, cardTonePosition, inkTintPosition, DEFAULT_LAYERS_DARK, DEFAULT_LAYERS_LIGHT, tintChromaAt, tintPosition, fillStepAt, fillPosition,
+  HOLD, apcaTextY,
 } from "./layers.ts";
 import { wcagContrastHex } from "./contrast.ts";
 import { CHROMATIC_SCALES, NEUTRAL_SCALES } from "./presets.ts";
@@ -106,7 +107,9 @@ describe("layers: the shipped CSS computes what the model does", () => {
         ["well", m.well], ["well-fill-0", m.fill.well[0]], ["well-fill-1", m.fill.well[1]], ["well-fill-2", m.fill.well[2]],
         ["float", m.float], ["float-fill-0", m.fill.float[0]], ["float-fill-1", m.fill.float[1]], ["float-fill-2", m.fill.float[2]],
         ["body", m.ink.body], ["muted", m.ink.muted], ["subtle", m.ink.subtle], ["disabled", m.ink.disabled], ["edge", m.ink.edge],
-        ...(theme === "light" ? [["vivid-darken", m.vividDarken], ["tonal-darken", m.tonalDarken]] as Array<[string, number]> : [["tint-lift", m.tintLift], ["tint-lift-fill", m.tintLiftFill]] as Array<[string, number]>),
+        ["hold", m.hold],
+        ...(theme === "light" ? [["vivid-darken", m.vividDarken], ["tonal-darken", m.tonalDarken]] as Array<[string, number]> : [["tint-lift", m.tintLift], ["tint-lift-fill", m.tintLiftFill], ["code", m.code],
+          ["hold-apca", apcaTextY(m.hold, HOLD.dark.strokeHoverApca)], ["code-apca", apcaTextY(m.code, HOLD.dark.vividApca)]] as Array<[string, number]>),
       ];
       for (const [k, x] of pairs) expect(c[p + k], `${theme} ${g}/${n} fill ${f.hover}/${f.selected} card ${tone} ${k}`).toBeCloseTo(x, 6);
     }
@@ -260,9 +263,11 @@ describe("layers: Layers 4 is Area as it was", () => {
     });
   });
   // Dark muted steps back (plan A3.1, 2026-11-11): floored at #b9b9b9, the APCA content floor, no longer #c5c5c5.
+  // Muted is #bbbbbb here since plan B (2026-11-19): #b9b9b9 measured Lc 59.5 on the hovered menu row (#303030), under the
+  // APCA content floor subtle (muted's equal at this step) is held to there (DARK_INK_APCA). At the default, 8 + 0, it is #b9b9b9.
   it("dark 8 + 4 keeps the near-black page and today's inks", () => {
     const t = layerTokens("dark", { groundLight: 100, groundDark: 8, layersLight: 4, layersDark: 4 }, { chroma: 0, hue: 0 });
-    expect(t).toMatchObject({ "bg-page": "#020202", "fg-default": "#eeeeee", "fg-muted": "#b9b9b9", "stroke-control": "#939393", "stroke-control-hover": "#a4a4a4", "border-decorative": "#282828", "border-card": "#333333", "border-float": "#4b4b4b" });
+    expect(t).toMatchObject({ "bg-page": "#020202", "fg-default": "#eeeeee", "fg-muted": "#bbbbbb", "stroke-control": "#939393", "stroke-control-hover": "#a4a4a4", "border-decorative": "#282828", "border-card": "#333333", "border-float": "#4b4b4b" });
   });
 });
 

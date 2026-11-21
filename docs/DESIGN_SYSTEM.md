@@ -417,6 +417,12 @@ own step.
 - **Loading is not disabled.** A loading Button stays focusable at full ink (`aria-busy`,
   `cursor: progress`) and ignores clicks. A loading Composer keeps its field editable and
   turns send into Stop.
+- **Pending is not disabled either** (system status 2026-11-18, step C4). An item still on its way (a Message being
+  sent, a queued prompt sending) dims its words by `opacity-pending` (0.6); its actions and its status stay at full
+  opacity. A partial opacity is always a role (`opacity-disabled`, `opacity-pending`), a fade's own 0 and 1, or a
+  keyframe's step; a different meaning keeps its own measured value with its reason on the line (Property list's dragged
+  row, 0.4, the place a row leaves while it moves; Indicator's pulse ring, from 0.6 in its keyframes).
+  `packages/react/tests/opacity.test.mjs` reads the sources.
 - **Joined soft controls** (soft Button group, soft Split button) share the component fill
   with the quiet ink, no hairline, and row plates on hover and press.
 - **Floating placement** is one engine (`useAnchoredPosition`):
@@ -1198,6 +1204,18 @@ fails one that does.
     curve for that size; a component that sets its own icon line sets `--area-type-icon-line: 1` beside it (File tile,
     File page).
   - Never shrink a 16 drawing to 12 with CSS.
+  - **Drawn marks follow the icon weight** (2026-11-21, step C of docs/research/system-status-2026-11-18). A mark a
+    component draws itself as an SVG data-URI (Select's chevron and check, Checkbox's check, Plan's tick and cross,
+    Spinner's ring) can't read a custom property, so it is a private property restated under
+    `@container style(--area-type-base: N)` at every other type step (12, 14, 15, 16; the weight follows the type axis
+    alone, so these are all its values). Its line is its type-13 line times Glyph's change: the weight's ratio to type
+    13's, and, where the mark fills the type's icon slot, the slot's line ratio too. An inline SVG reads the weight
+    itself (`calc(var(--area-weight-icon) * k)`). A mark that must stay on whole pixels (Checkbox's 2px dash) holds,
+    with its reason. Stroke width (the frame) is not the icon weight and moves neither. `icon-weight.test.mjs` enforces it.
+  - **Size tiers follow the settings** (same pass). A size modifier (`--xs` to `--lg`) sets its height or size from a
+    role the settings move: a control height, an icon slot, a mark, a text size, or a derivation of one (Slider's thumb
+    is the icon slot, as Switch's follows its track). A tier that should hold (a line's thickness, Progress 4 / 6 / 8; a
+    drawing's grid) says "at every type" and why on its line. `size-tiers.test.mjs` enforces it, with a waiting list.
   - Icons are drawn in `packages/icons/sources` and generated, never hand-edited in
     `glyphs.ts`. Process: [icon spec](specs/icons.md) and the `area-icon-construction` skill.
   - A few components still use Fluent cuts (Color picker, Copy button); replace them with
@@ -1273,9 +1291,16 @@ How the files fit together is in [Architecture](ARCHITECTURE.md). The rules:
   - A picker that renders a group and a visible legend keeps `label` as a fallback name, and
     `aria-label` wins.
 - **Logical properties** (`inline-size`, `padding-inline`), so direction follows the scope.
-- **Stacking.** Components stack only locally (z-index 0–2 inside their own box). Floating
+- **Stacking.** Components stack only locally, inside their own box. Floating
   surfaces use the top layer, the `z-*` scale is for product chrome, and the modal backdrop
   is `--area-scrim`.
+- **Local stacking** (system status 2026-11-18, step C7). A `z-index` in a component is `0`, `1` or `-1` (a part over or
+  under its neighbours, `auto` to leave the context), a named local layer, or a `z-*` role for product chrome. A local
+  layer is a private property named for what sits there, `--_layer-<name>`, declared once on the family's root with its
+  order in a comment (Table's `--_layer-header: 2` over the sticky column's 1 and `--_layer-corner: 3` over both; Card's
+  `--_layer-controls: 2` over the stretched link; Color swatch picker's chosen and focused cells), so a third level is
+  read as a decision, never a bare `2` or `3`. `packages/react/tests/z-index.test.mjs` reads the sources; the families
+  still writing bare levels wait on its list.
 
 ## Announcements
 

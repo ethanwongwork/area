@@ -6,7 +6,8 @@
    * as round): the ring and the arc are SVG masks, rasterised with anti-aliasing at any scale,
    * and the arc has round caps (ChatGPT draws its spinner as SVG). Both are drawn on a 16 unit
    * box with a 2 unit stroke, so the stroke is 1/8 of the size at every size (Primer 16 / 2,
-   * Untitled 4 on 32): 1.5 at sm, 2 at md, 3 at lg.
+   * Untitled 4 on 32): 1.5 at sm, 2 at md, 3 at lg at type 13. The line follows the icon weight (the ladder after the
+   * sizes, below).
    */
   .area-spinner {
     --_size: var(--area-icon-md);
@@ -65,7 +66,13 @@
   .area-spinner[data-determinate]::before { content: none; }
   .area-spinner > svg { display: block; inline-size: 100%; block-size: 100%; rotate: -90deg; overflow: visible; }
   .area-spinner__track,
-  .area-spinner__arc { fill: none; stroke-width: 2px; /* spec: the spinning ring's line, 1/8 of the 16 grid */ }
+  .area-spinner__arc {
+    fill: none;
+    /* spec: the spinning ring's line, 2 on the 16 grid (1/8) at type 13, following the icon weight as the masks' ladder
+       does: the weight over type 13's 1.045 (2 / 1.045 = 1.913876), times the slot's line ratio where the ring fills
+       the icon slot (--_spinner-line; 1 at sm and lg). */
+    stroke-width: calc(var(--area-weight-icon) * 1.913876 * var(--_spinner-line, var(--area-type-icon-line, 1)));
+  }
   .area-spinner__track { stroke: color-mix(in srgb, var(--_indicator) 25%, transparent); /* spec: the spinning ring's track */ }
   .area-spinner__arc {
     stroke: var(--_indicator);
@@ -81,9 +88,51 @@
     .area-spinner__arc { stroke: CanvasText; }
   }
 
-  .area-spinner--sm { --_size: var(--area-space-12); }
-  .area-spinner--md { --_size: var(--area-space-16); }
-  .area-spinner--lg { --_size: var(--area-space-24); }
+  /* The tiers follow the type's icon slots (docs/specs/spinner.md, "Icon weight and sizes"): 12 / 16 / 24 at type 12-14, sm the xs
+     slot (16 at type 16), md the icon slot (20 from type 15), lg the icon slot and 8 (28 from type 15). They were 12 / 16 /
+     24 at every type, so a spinner in a field or a row at type 16 was smaller than the glyphs beside it. sm and lg take the
+     icon weight's ratio alone (a Glyph at a fixed size); md and the spinner in a Button or Badge fill the type's icon slot,
+     whose line ratio they also take, as Glyph does there. */
+  .area-spinner--sm { --_size: var(--area-icon-xs); --_spinner-line: 1; }
+  .area-spinner--md { --_size: var(--area-icon-md); }
+  .area-spinner--lg { --_size: calc(var(--area-icon-lg) + var(--area-space-8)); --_spinner-line: 1; }
+
+  /* Icon weight (DESIGN_SYSTEM.md, "Drawn marks follow the icon weight"): the ring and the arc are masks, which can't
+     take a variable stroke, so they are restated at the other type steps, their line the type-13 2 (1/8 of the box)
+     times Glyph's change: the icon weight's ratio to type 13's (0.964 / 1.045 / 1.125 / 1.205 / 1.286 at types 12-16)
+     and, in the icon slot, its line ratio (0.8846 at 15 and 16). packages/react/tests/icon-weight.test.mjs checks it. */
+  @container style(--area-type-base: 12) {
+    .area-spinner {
+      --_ring: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='8' cy='8' r='7' fill='none' stroke='black' stroke-width='1.845'/%3E%3C/svg%3E");
+      --_arc: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M8 1a7 7 0 0 1 7 7' fill='none' stroke='black' stroke-width='1.845' stroke-linecap='round'/%3E%3C/svg%3E");
+    }
+  }
+  @container style(--area-type-base: 14) {
+    .area-spinner {
+      --_ring: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='8' cy='8' r='7' fill='none' stroke='black' stroke-width='2.153'/%3E%3C/svg%3E");
+      --_arc: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M8 1a7 7 0 0 1 7 7' fill='none' stroke='black' stroke-width='2.153' stroke-linecap='round'/%3E%3C/svg%3E");
+    }
+  }
+  @container style(--area-type-base: 15) {
+    .area-spinner {
+      --_ring: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='8' cy='8' r='7' fill='none' stroke='black' stroke-width='2.04'/%3E%3C/svg%3E");
+      --_arc: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M8 1a7 7 0 0 1 7 7' fill='none' stroke='black' stroke-width='2.04' stroke-linecap='round'/%3E%3C/svg%3E");
+    }
+    .area-spinner--sm, .area-spinner--lg {
+      --_ring: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='8' cy='8' r='7' fill='none' stroke='black' stroke-width='2.306'/%3E%3C/svg%3E");
+      --_arc: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M8 1a7 7 0 0 1 7 7' fill='none' stroke='black' stroke-width='2.306' stroke-linecap='round'/%3E%3C/svg%3E");
+    }
+  }
+  @container style(--area-type-base: 16) {
+    .area-spinner {
+      --_ring: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='8' cy='8' r='7' fill='none' stroke='black' stroke-width='2.177'/%3E%3C/svg%3E");
+      --_arc: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M8 1a7 7 0 0 1 7 7' fill='none' stroke='black' stroke-width='2.177' stroke-linecap='round'/%3E%3C/svg%3E");
+    }
+    .area-spinner--sm, .area-spinner--lg {
+      --_ring: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Ccircle cx='8' cy='8' r='7' fill='none' stroke='black' stroke-width='2.461'/%3E%3C/svg%3E");
+      --_arc: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M8 1a7 7 0 0 1 7 7' fill='none' stroke='black' stroke-width='2.461' stroke-linecap='round'/%3E%3C/svg%3E");
+    }
+  }
 
   @keyframes area-spin {
     to { rotate: 360deg; }

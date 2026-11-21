@@ -97,7 +97,7 @@ The gaps above predate audit S14: the label gap is now 6 at md and lg.
 | control · radius | min(`radius-small` 6, size / 4): 4 / 4 / 5 (choice.css:67) | Untitled 4 at 16 | Notion 3 and Figma 2 are squarer; kept (third pass), see below |
 | control · rest edge | **`edge-control-hover` #d4d4d4** (choice.css:48) | Notion 19% warm ≈ #d4, Untitled #d4d4d4 (second pass) | Was `edge-control` #e2e2e2, a field's edge, faint on a 16px box |
 | control · checked | `selection-solid` (neutral default #282828), mark `fg-on-selection` #fafafa (choice.css:20-22) | Owner 2026-09-26; emphasis roles 2026-09-29 | Notion fills its blue; Figma keeps a light face with a dark check. The accent comes from a theme's Selection role, not a tone |
-| mark · geometry | check 1.5 stroke and dash 2px bar, drawn 1:1 on the control's 16 / 20 grid (choice.css, "Sizes"; 2026-10-07) | Figma 1.5px check on a 16 grid (`figma--checkbox-checked`) | Was 1.75 on a 16 viewBox masked at 75% of the padding box (1.15px, off-grid). Notion's filled glyph is 9.17px, Untitled's check 12px |
+| mark · geometry | check 1.5 stroke at type 13, following the icon weight ("Icon weight" below), and dash 2px bar at every type, drawn 1:1 on the control's 16 / 20 grid (choice.css, "Sizes"; 2026-10-07) | Figma 1.5px check on a 16 grid (`figma--checkbox-checked`) | Was 1.75 on a 16 viewBox masked at 75% of the padding box (1.15px, off-grid). Notion's filled glyph is 9.17px, Untitled's check 12px |
 | control · shadow | none (computed 2026-09-28) | Outline pass: controls at rest carry no shadow; neither product nor Untitled has one | The audit had `shadow-1`; since removed |
 | gap | 6 at md and lg, `gap-md` / `gap-lg` (choice.css:9, :404, :410); compact md 6 | Control tier; peer Button (audit S14) | Untitled 8 / 12. Was 8 / 8 until audit S14 |
 | hit area | label, min-block 24 (choice.css:74) | WCAG 2.5.8 target; Figma's 24px row | — |
@@ -417,3 +417,24 @@ and media options keep the container corner, the recipe's *block* value.
 ## State paint (plan B7.2, B7.3), 2026-11-14
 
 - Soft rows press to `bg-component-pressed`, the checked row included.
+
+## Settings pass, 2026-11-21 (step C: icon weight and size tiers)
+
+From docs/research/system-status-2026-11-18 (section 3, step C1–C2). At the shipped defaults (type 13, density 32) nothing moves: every box, mask and stroke measured the same before and after, and 2x screenshots of every part are pixel-identical in light and dark.
+
+### Icon weight
+
+The check is a mask, so its line can't read `--area-weight-icon`: `--_check` (md and lg) is restated under
+`@container style(--area-type-base: N)` at types 12, 14, 15 and 16, its 1.5 line times the weight's ratio to type 13's,
+as a Glyph drawn at a fixed size (the drawing is 1:1 on its 16 / 20 grid): 1.384 / 1.5 / 1.615 / 1.730 / 1.846 at types
+12-16. The dash stays a 2px bar at every type: it is centred on whole pixels, and the ratio (1.85 to 2.46) rounds to 2
+at each step (`icon-weight.test.mjs` lists it with that reason). The grids (16 / 20) and Radio's dot (6 / 8) are marked
+"at every type": drawn 1:1, so they stay on whole pixels while the box follows the type (14 to 24).
+
+- **Open (owner):** at type 16 the md box is 20 and the check still the 16 drawing; stepping to the 20 drawing there is a
+  separate choice.
+
+## Review note, 2026-11-21
+
+- **What changed:** the check's line now follows the type size's icon weight; the dash keeps its crisp 2px bar.
+- **Why:** a fixed line read heavier than the icons beside it at type 12 and lighter at type 16.

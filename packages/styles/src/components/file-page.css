@@ -17,7 +17,7 @@
  * ------------------------------------------------------------------------- */
 @layer area.components {
   .area-file-page {
-    --_size: var(--area-folder-size, 64px); /* spec: Finder iconSize 64 */
+    --_size: var(--area-folder-size, var(--_figure-md)); /* spec: Finder iconSize 64 */
     /* Near flat (owner, 2026-10-18: "a bit strong/too dark on the dark end"): Finder's page moves 0.7 L top to foot,
        Fluent's none; Area's about 1 L. The flap 4–5 L under the page at its crease (Finder L92 on a L96.5 page), lighter
        toward its edge ("make the fold gradient darkest color much lighter"). */
@@ -29,9 +29,9 @@
     block-size: var(--_size);
     vertical-align: middle;
   }
-  .area-file-page--sm { --_size: 48px; } /* spec: Folder sm */
-  .area-file-page--md { --_size: 64px; } /* spec: Finder iconSize 64 */
-  .area-file-page--lg { --_size: 96px; } /* spec: Folder lg */
+  .area-file-page--sm { --_size: var(--_figure-sm); } /* spec: Folder sm */
+  .area-file-page--md { --_size: var(--_figure-md); } /* spec: Finder iconSize 64 */
+  .area-file-page--lg { --_size: var(--_figure-lg); } /* spec: Folder lg */
 
   /* The page: 72% of the square wide, its height from the drawing's 360 × 440 (88%; Finder's 344 × 454 of 512), both
      rounded to even pixels and centred, so its outer edges land on whole pixels, as Folder's. 70 × 86 at 96, 46 × 56 at

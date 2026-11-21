@@ -167,7 +167,9 @@ test('B6.2: a surface\'s block gap is the md inset, never more than its own inse
 
 test('B6.3: the modal family and the palette expose their widths', () => {
   assert.match(bodyOf('.area-dialog'), /--_dialog-size:\s*var\(--area-dialog-inline-size,/);
-  assert.match(bodyOf('.area-drawer'), /--_drawer-size:\s*var\(--area-drawer-inline-size, 384px\)/);
+  assert.match(bodyOf('.area-drawer'), /--_drawer-size:\s*var\(--area-drawer-inline-size, var\(--_modal-sm\)\)/);
+  // Dialog and Drawer read one pair of widths (system status 2026-11-18, step C3): sm 384, md 480.
+  assert.match(bodyOf(':where(.area-dialog, .area-drawer)'), /--_modal-sm:\s*384px;[^}]*--_modal-md:\s*calc\(var\(--area-space-96\) \* 5\)/);
   assert.match(bodyOf('.area-command-palette'), /var\(--area-command-palette-inline-size, 600px\)/);
   assert.match(bodyOf('.area-confirm-dialog'), /var\(--area-confirm-dialog-inline-size, 420px\)/);
 });

@@ -203,6 +203,8 @@ behaviour("list", ({ it, gap }) => {
   });
 
   it("Command palette: Ctrl+N and Ctrl+P move the highlight, as Down and Up (C2.3)", async page => {
+    // Off Apple platforms the browser keeps Ctrl+N (new window) and Ctrl+P (print) for itself: the page never sees them.
+    if (process.platform !== "darwin") return;
     await page.click("#open-palette"); await page.settle();
     const highlighted = () => page.eval(() => document.querySelector("dialog:modal [role=option][aria-selected=true], dialog:modal [data-highlighted]")?.textContent.trim());
     must((await highlighted()) === "Export", "the first row is highlighted");

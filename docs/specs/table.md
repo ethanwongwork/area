@@ -131,6 +131,8 @@ table with shared row plates ([cohesion audit](../research/cohesion-audit.md#thi
    and per-cell "open" chips (`notion--body-row--hover` nodes 4, 11). Area's opt-in
    `interactive` rows keep the shared hover plate.
 
+- Sticky stacking is named on the root: the first column 1, `--_layer-header` 2, `--_layer-corner` 3.
+
 ## States
 
 | State | Slot · property changes | Evidence |
@@ -399,3 +401,7 @@ Compact / Default / Comfortable; each is whole at type 12 to 16 and every densit
 ## State paint (plan B7.2, B7.11), 2026-11-14
 
 - A selected row presses (cells, flush overhang, sticky column); the unfocused quiet plate stands aside while held (`:not(:active)`). The unsorted sort mark hides only inside `@media (hover: hover)`.
+
+## System status step C, 2026-11-18 (shared sources)
+
+Bare z-index 2 and 3 became named local layers. Nothing moved.

@@ -66,8 +66,8 @@ Read from the nodes of `area--size-small`, `area--default`, `area--size-large`,
 
 | Slot · property | Area value | Basis | Reason when it differs from the basis |
 |---|---|---|---|
-| size | 12 / 16 / 24 (`space-*`, display.css:213-215); md = `icon-md` | Icon slot it stands in for (Button, Input, Badge icon slots are 16) | Untitled's standalone indicator starts at 32; its button spinner is 20 because its button icons are 20 |
-| stroke | **1/8 of the size: 1.5 / 2 / 3** (one 16-unit SVG mask, stroke 2) | Primer 16 / 2, Untitled 4 on 32 | Was 2px at every size, thin at lg. A 2.5px md option was reviewed and not taken (owner, batch 6) |
+| size | 12 / 16 / 24 at type 13: sm `icon-xs`, md `icon-md`, lg `icon-lg` + 8 (16 / 20 / 28 at type 16) | Icon slot it stands in for (Button, Input, Badge icon slots are 16) | Untitled's standalone indicator starts at 32; its button spinner is 20 because its button icons are 20 |
+| stroke | **1/8 of the size at type 13: 1.5 / 2 / 3** (one 16-unit SVG mask, stroke 2), following the icon weight ("Icon weight and sizes" below) | Primer 16 / 2, Untitled 4 on 32 | Was 2px at every size, thin at lg. A 2.5px md option was reviewed and not taken (owner, batch 6) |
 | construction | **SVG masks for ring and arc; round caps** | ChatGPT draws its spinner as SVG | Owner 2026-09-28: the conic gradient and hard-edged radial mask looked pixelated, and 2px cap dots did not read as round |
 | arc | 25% | Untitled ~28% (indicator), ~25% (button) | — |
 | arc ink | `selection-solid` (display.css:216), neutral by default; `currentColor` inside a Button | Owner; emphasis roles (D1) | Untitled brand |
@@ -235,3 +235,26 @@ own; the evidence below came from that family's research
 - **Why:** docs/research/components-audit-2026-11-07/primer.md (Spinner `delay`, the loading ladder); WRITING.md's ladder says under a second, nothing. The
   owner took every recommendation ("Take all recs", 2026-11-07).
 - **Verdict:** awaiting the owner.
+
+## Settings pass, 2026-11-21 (step C: icon weight and size tiers)
+
+From docs/research/system-status-2026-11-18 (section 3, step C1–C2). At the shipped defaults (type 13, density 32) nothing moves: every box, mask and stroke measured the same before and after, and 2x screenshots of every part are pixel-identical in light and dark.
+
+### Icon weight and sizes
+
+- **Sizes.** sm is the xs icon slot (12, 16 at type 16), md the icon slot (16, 20 from type 15), lg the icon slot and
+  8 (24, 28 from type 15). They were 12 / 16 / 24 at every type, so a spinner at type 16 was smaller than the glyphs beside
+  it. lg takes the slot and 8 rather than mark-lg (24 at every type) so it stays above md where md grows; icon-xl (24 at
+  the defaults) was not used because Compact makes it 16, md's size.
+- **Line.** The ring and arc are masks: `--_ring` and `--_arc` are restated under `@container style(--area-type-base: N)`
+  at types 12, 14, 15 and 16, their 2 line times Glyph's change: the weight's ratio to type 13's, and on the default and
+  md ring (and in a Button or Badge, which size it to their icon slot) the slot's line ratio (0.8846 from type 15); sm
+  and lg take the weight's ratio alone. md: 1.845 / 2 / 2.153 / 2.040 / 2.177 units at types 12-16 (2.72 px in its 20 box
+  at type 16). The determinate ring is an inline SVG, so its line reads the weight directly:
+  `calc(var(--area-weight-icon) * 1.913876 * var(--_spinner-line, var(--area-type-icon-line, 1)))`, 2 at type 13.
+  `SPINNER_CAP` (Spinner.tsx) still assumes the 2 line: at type 16 the round caps reach about 0.1 of a unit further.
+
+## Review note, 2026-11-21
+
+- **What changed:** the spinner grows with the type size like the icons beside it, and its line follows the icon weight.
+- **Why:** it stayed 12 / 16 / 24 with a fixed line, so it shrank and thinned next to everything else at larger type.

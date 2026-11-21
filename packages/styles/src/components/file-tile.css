@@ -20,7 +20,7 @@
  * ------------------------------------------------------------------------- */
 @layer area.components {
   .area-file-tile {
-    --_figure: var(--area-file-tile-figure, 64px); /* spec: Finder iconSize 64 */
+    --_figure: var(--area-file-tile-figure, var(--_figure-md)); /* spec: Finder iconSize 64 */
     --area-folder-size: var(--_figure); /* Folder and File page draw at the figure's size */
     display: flex;
     flex-direction: column;
@@ -36,9 +36,9 @@
        its two lines instead of running on (round 83: a tile outside a grid ran its name on one line). */
     max-inline-size: calc(var(--_figure) + 2 * var(--area-space-24)); /* spec: the grid's column, pick */
   }
-  .area-file-tile--sm { --_figure: 48px; } /* spec: Folder sm */
-  .area-file-tile--md { --_figure: 64px; } /* spec: Finder iconSize 64 */
-  .area-file-tile--lg { --_figure: 96px; } /* spec: Folder lg */
+  .area-file-tile--sm { --_figure: var(--_figure-sm); } /* spec: Folder sm */
+  .area-file-tile--md { --_figure: var(--_figure-md); } /* spec: Finder iconSize 64 */
+  .area-file-tile--lg { --_figure: var(--_figure-lg); } /* spec: Folder lg */
 
   .area-file-tile__figure {
     position: relative;
@@ -94,11 +94,11 @@
 
   /* The grid: a ListBox grid whose cells are tiles, as wide as a figure plus 24 each side, filling the row. */
   .area-file-grid {
-    --area-file-tile-figure: 64px; /* spec: Finder iconSize 64 */
+    --area-file-tile-figure: var(--_figure-md); /* spec: Finder iconSize 64 */
   }
-  .area-file-grid--sm { --area-file-tile-figure: 48px; } /* spec: Folder sm */
-  .area-file-grid--md { --area-file-tile-figure: 64px; } /* spec: Finder iconSize 64 */
-  .area-file-grid--lg { --area-file-tile-figure: 96px; } /* spec: Folder lg */
+  .area-file-grid--sm { --area-file-tile-figure: var(--_figure-sm); } /* spec: Folder sm */
+  .area-file-grid--md { --area-file-tile-figure: var(--_figure-md); } /* spec: Finder iconSize 64 */
+  .area-file-grid--lg { --area-file-tile-figure: var(--_figure-lg); } /* spec: Folder lg */
   .area-file-grid.area-list-box--grid:has(> .area-list-box__item),
   .area-file-grid.area-list-box--grid .area-list-box__options {
     grid-template-columns: repeat(auto-fill, minmax(calc(var(--area-file-tile-figure) + 2 * var(--area-space-24)), 1fr)); /* spec: pick */

@@ -1,6 +1,39 @@
 # Handoff
 
-## Current state (2026-11-15)
+## Current state (2026-11-19)
+- **System status and plan step A (worktree `variable-serif-typeface-df1f42`, branch
+  `claude/design-system-refinement-c3351f`, 2026-11-19, uncommitted).** `docs/research/system-status-2026-11-18/README.md`
+  is the evaluation (status, the 62 settings and what fails when they move, components against the settings, what open
+  source systems do, work plan A–J, owner decisions). Step A built: cross-setting sweeps in
+  `packages/tokens/src/sweeps/` (colour 5,400 combinations, geometry 36,450, a ratchet over `known-failures.ts`: 21
+  entries, defects for plan B and owner decisions); `check:rendered` takes `--set`, `--corner`, `--families`, `--fast`,
+  unknown settings fail loudly, MAX_BOX follows the page's large control, per-corner baselines in
+  `scripts/rendered/known-failures/`, `check:rendered:corners` (eight corners, one at a time, a capture lock); CI gains
+  `changes`, `behaviour`, `rendered`, `rendered-corners` and `output` jobs. Not verified: the new CI jobs have never
+  run on a runner (baselines were recorded with macOS Edge); corner runs over every family (only the 21-family fast
+  subset ran). **Step B built (2026-11-20, PR #244):** tone and hue outlines, light marks,
+  dark vivid inks, dark secondary inks and the accent selected plate now hold their floors on every ground
+  (`color/layers.ts` HOLD, six `layer-*` helpers); 19 defect entries removed from `known-failures.ts`, four owner
+  decisions remain; light tone outlines are slightly darker at defaults; built CSS grew 11% (area.css 3.51 → 3.90 MB),
+  worth a shortening pass. CI: first run's browser jobs failed to launch Edge in time and hung; launchers now wait 60 s,
+  print Edge's stderr, time out every call, and Linux has its own baselines in `scripts/rendered/platforms/linux/`
+  (the rendered jobs fail and upload `proposed-baseline/` until one is read and committed).
+  **Step C built (2026-11-21, uncommitted at the time of writing):** drawn icons (Select chevron and check, Checkbox
+  check, Plan tick, Spinner) follow the type's icon weight through `@container style(--area-type-base: N)` steps
+  (Stroke width is the frame width, not icon weight, so the audit's "ignores Stroke width" was wrong); Spinner, Slider
+  thumb and Switch travel scale with type; one figure scale for the five file families, named plot heights, modal
+  widths and palette top; a media glass recipe (video-player.css) read by Attachment; `--area-opacity-pending` (the
+  one new token); the density waiting list is empty; named local layers for z-index (DESIGN_SYSTEM "Local stacking");
+  new ratchet tests icon-weight, size-tiers, literal-paint, z-index, opacity. Nothing moves at the defaults (full
+  `check:rendered` unchanged, 429/429 behaviour). Touched families stay In review; their reasons were not rewritten
+  in `component-status.mjs`. Owner decisions open: whether file figures, plot heights, modal widths scale with type;
+  a `mark-xs` role for Presence sm; Select's chevron weight (1.125 against Glyph's 1.045 at type 13); Switch travel
+  proportion; Spinner lg's role. CI second run: behaviour 420/429 on Linux (headless Linux reports no mouse, so
+  `@media (hover: hover)` is false: both launchers now pass a mouse via `--blink-settings`; Ctrl+N/P test scoped to
+  macOS, the browser keeps those keys elsewhere); rendered captures hang mid-run on Linux only (being hardened).
+  Next: plan D (simplify the settings; needs the owner's picks). Phase 3 below merged as PR #235.
+
+## Earlier state (2026-11-15)
 - **Project evaluation and Phase 3 start (worktree `area-project-eval-3594b0`, 2026-11-15, uncommitted).** Where it
   stands: origin/main through #234 holds Phases 0–2 of the system evaluation (PR #233) and CI split (#234); no open PRs.
   6 families are owner-Complete, 119 In review with reasons (Phases 1–2 reopened them), 1 intentionally unrefined, 2

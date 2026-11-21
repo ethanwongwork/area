@@ -71,13 +71,13 @@
   /* The person's message on its way (Queue's paint for a sending row): after the long wait the bubble dims to Queue's
      60% and "Sending…" shows; until then the line keeps its place, unseen (Spinner's delay). Not sent: Turn notice's
      error line, the words in the default ink, the mark in the danger ink, Retry after them. */
-  .area-message--sending { --_sending-opacity: 0.6; /* spec: Queue's sending opacity (Codex opacity-60) */ }
+  .area-message--sending { --_sending-opacity: var(--area-opacity-pending); /* Queue's sending opacity (Codex opacity-60) */ }
   .area-message--sending:not([data-waiting]) > :is(.area-message__bubble, .area-message__stack) { opacity: var(--_sending-opacity); }
   .area-message--sending[data-waiting] > .area-message__status { visibility: hidden; }
   .area-message__status {
     display: flex;
     align-items: center;
-    gap: var(--area-space-6); /* Turn notice's icon gap */
+    gap: var(--area-gap-md); /* Turn notice's icon gap */
     min-block-size: var(--area-control-sm); /* the Retry Button's row, so the line is one height with or without it */
     margin: 0;
     color: var(--area-fg-muted);
