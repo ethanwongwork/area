@@ -2627,4 +2627,5 @@ of the S's shape kept); the outside quarters of the 3 and 2 that run into a ball
 and meet the ball); the 8's sides 67 to 79 (its weight is on the spine); the small figures at 72 are 16% under the
 figures, a point past the 12 to 15% aim (74 fills ⁸'s counters at 16 px); their sides now 4.8 units tighter each
 (their advances kept); `clean.nine_six`, `figs.nine_even`, `nine_solve`, `nine_tail` and `G_TAIL` stay in the code,
-uncalled; `bold.far_from_ball` (0.81 round 6, for the moved ball) is still read but finds nothing to rename.
+uncalled; `bold.far_from_ball` (0.81 round 6, written for the moved ball) is still in the engine, not checked
+against the 0.80 ball this pass.
