@@ -990,13 +990,13 @@ def nine_tail(font):
 # tail (`nine_tail`, `G_TAIL`, `nine_solve`). The 9 is 0.80's Regular outline point for point (build/snap080, our own
 # drawing, as it shipped): heights 721 / -9 (the figures' lines), sides 92 at the extremes (the capital round), top
 # 47; brought up to date by (1) the tail's bottom pair on the figures' hairline 47 (hair.py's reading: 42.5 at the
-# tail's inside above the lowest point; the inner lowest node up 5 with its handles), (2) the crotch one corner: the 7-unit step between the bowl's underside and the tail's inner
-# edge (two corners) folded, the curve's end slid along its own tangent onto the tail's edge (what `charset.fold_steps`
-# did for the small forms), (3) the left extreme and the counter's upright run marked smooth (their handles were on one
-# line already), (4) one curvature at every smooth node by handle lengths (the counter's lowest 2.51, the bowl's
-# lowest 1.25 after the fold: `loops.even_nodes`; nodes and the outline's shape kept). The 6 is the 9 turned half round, point for point (0.80's own 6 differed from the turned
-# 9 by 2 to 4 units at its nodes and 18 at one handle). Advance and sides by spacing; the small, tabular and ∂ forms
-# follow from these.
+# tail's inside above the lowest point; the inner lowest node up 5 with its handles), (2) the crotch one corner: the
+# 7-unit step between the bowl's underside and the tail's inner edge dropped, the edge leaving from the curve's end (the
+# small forms crossed themselves on that step: `charset.fold_steps` is no longer needed), (3) the left extreme and the
+# counter's upright run marked smooth (their handles were on one line already), (4) one curvature at every smooth node
+# by handle lengths (the counter's lowest 2.51 > 1.17: `loops.even_nodes`; nodes kept). The 6 is the 9 turned half
+# round, point for point (0.80's own 6 differed from the turned 9 by 2 to 4 units at its nodes and 18 at one handle).
+# Advance and sides by spacing; the small, tabular and ∂ forms follow from these.
 NINE_080 = [
     [(57, 471, 'curve', False), (57, 342, None, False), (151, 240, None, False), (279, 240, 'curve', True),
      (346, 240, None, False), (399, 268, None, False), (457, 327, 'curve', False), (464, 325, 'line', False),
@@ -1015,25 +1015,19 @@ NINE_HAIR = 47          # the figures' hairline (hair.HAIR_CAP)
 
 
 def _fold_crotch(P):
-    """The crotch's short straight between two corners (the bowl's underside curve, then a step onto the tail's
-    upright inner edge) folded into one corner: the curve's end slides along its end tangent to the edge's x, its
-    handle with it; the step's second corner is dropped."""
+    """The crotch's short straight between two corners (the bowl's underside curve, then a 7-unit step onto the tail's
+    upright inner edge) made one corner: the step's second corner is dropped and the tail's inner edge leaves from the
+    curve's end (its first handle kept, so it leans 2.5 degrees from upright over its first third). The underside
+    keeps 0.80's curve: sliding its end up the tangent onto the edge (the first build of this pass) thinned the bowl's
+    lower stroke by the crotch, and the Bold's ₉ read thinner than the mid master's there (audit_rays, ⅑)."""
     n = len(P)
     for i, q in enumerate(P):
         nx = P[(i + 1) % n]
         if (q[2] == "curve" and not q[3] and nx[2] == "line" and not nx[3] and math.dist(q[:2], nx[:2]) < 12
                 and P[(i + 2) % n][2] is None and abs(P[(i + 2) % n][0] - nx[0]) < 0.5):
-            h = P[i - 1]
-            d = (q[0] - h[0], q[1] - h[1])
-            if abs(d[0]) < 1e-6:
-                continue
-            t = (nx[0] - q[0]) / d[0]
-            dx, dy = nx[0] - q[0], t * d[1]
             Q = [list(p) for p in P]
-            Q[i][0], Q[i][1] = nx[0], round(q[1] + dy)
-            Q[i - 1][0], Q[i - 1][1] = round(h[0] + dx), round(h[1] + dy)
             del Q[(i + 1) % n]
-            return [tuple(p) for p in Q], (q[:2], (Q[i][0], Q[i][1]))
+            return [tuple(p) for p in Q], (q[:2], nx[:2])
     return P, None
 
 
