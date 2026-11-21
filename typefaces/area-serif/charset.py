@@ -3127,6 +3127,37 @@ def sterling(font):
     return "; ".join(out) or "kept"
 
 
+# 0.84 (Regular pass 4, item 10; the cohesion study: ¤ stood low and small, its centre at 242, its top 0.66 of the
+# cap height). The currency sign is a sign: its ring centred on the maths axis (m.math_y, 313) and sized from the
+# figures: its outer diameter the 0's ink width (504); the ring's weights (sides 42, top and bottom 48) and the four
+# arms (48 across, reaching 88 past the ring, at 45 degrees, ends cut square) as drawn. The ink then stands 0.80 of
+# the cap height at its top, where the references' stand 0.79 to 0.83.
+CURRENCY_RING = (42, 48)
+CURRENCY_ARM = (48, 88)
+
+
+def currency_sign(font, m):
+    name = next((g.name for g in font if 0xA4 in g.unicodes), None)
+    if name is None or "zero" not in font:
+        return "no currency sign"
+    zb = bounds(gp(font, "zero"))
+    R = (zb[2] - zb[0]) / 2
+    g = font[name]
+    ob = bounds(gp(font, name))
+    side = ob[0]
+    cx, cy = R + CURRENCY_ARM[1], m.math_y
+    p = ring(cx, cy, R, R, *CURRENCY_RING)
+    for sx in (-1, 1):
+        for sy in (-1, 1):
+            u = (sx / math.sqrt(2), sy / math.sqrt(2))
+            a = (cx + u[0] * (R - CURRENCY_RING[0] / 2), cy + u[1] * (R - CURRENCY_RING[0] / 2))
+            b = (cx + u[0] * (R + CURRENCY_ARM[1]), cy + u[1] * (R + CURRENCY_ARM[1]))
+            p = union(p, bar(a, b, CURRENCY_ARM[0]))
+    put(font, name, p, 0, list(g.unicodes), lsb=side, rsb=side)
+    nb = bounds(gp(font, name))
+    return f"{name}: centre {(ob[1] + ob[3]) / 2:.0f} > {(nb[1] + nb[3]) / 2:.0f}, ring {R * 2:.0f}, ink {ob[3] - ob[1]:.0f} > {nb[3] - nb[1]:.0f}"
+
+
 # 0.84 (Regular pass 4, item 8; the cohesion study: ð stopped at 736, under b d h k l's ascender line). Its ascender
 # and its bar go up together to the ascender line (ASC, 780) as one piece: every point of the outline from where the
 # ascender's inner edge leaves the bowl (the crotch, the last corner over the bowl's right extreme) round to the
@@ -4248,6 +4279,7 @@ def run(font, lightened):
     print("charset: eth", eth_ascender(font))                          # 0.84 (pass 4, item 8)
     print("charset: sign weights", cap_strokes(font))                  # 0.71
     print("charset: sterling", sterling(font))                         # 0.84 (pass 4, item 9)
+    print("charset: currency sign", currency_sign(font, m))            # 0.84 (pass 4, item 10)
     print("charset: Eng", eng_capital(font))                           # 0.75
     print("charset: degree", degree_ring(font))                        # 0.75
     print("charset: fractions", fractions(font))                       # 0.72
