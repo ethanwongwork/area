@@ -5074,7 +5074,9 @@ def bold_font(reg, stem=STEM, **over):
             cs_ = glyph_contours(f_["dollar"])
             new_, log_ = _DOL.true_crossing(cs_)
             if new_ is not cs_:                       # 0.84 (pass 3, owner item 3): S's construction at this master's zero
-                new2_, log2_ = _DOL.spine_s(new_, f_)
+                # the mid master (a sparse layer, no zero) at the spine that far between the Regular's and this master's
+                w_ = None if f_ is font else _DOL.spine_width(reg) + (_DOL.spine_width(font) - _DOL.spine_width(reg)) * tm_a
+                new2_, log2_ = _DOL.spine_s(new_, f_, w_)
                 new_, log_ = new2_, log_ + "; " + log2_
             if new_ is not cs_:
                 for c, P in zip(f_["dollar"].contours, new_):

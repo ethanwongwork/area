@@ -395,6 +395,17 @@ def _fit_one(segs, p0, p3):
     return cub(v)
 
 
+def spine_width(font):
+    """The $'s spine on this font: the zero's side (its round widest) x the thick-diagonal share, as S's is O's."""
+    import spine as SP
+    save = dict(SP.NAMES)
+    SP.NAMES["dollar"] = SPINE_ROUND
+    try:
+        return SP.wide(font, "dollar")[0]
+    finally:
+        SP.NAMES.clear(); SP.NAMES.update(save)
+
+
 def spine_s(cs, font, W=None):
     """The rule above on $'s contours cs (after true_crossing). Returns (new contours, log) or (cs, reason)."""
     import spine as SP
@@ -420,12 +431,7 @@ def spine_s(cs, font, W=None):
     if A.signed_area(S) * A.signed_area(P[0]) < 0:
         pass
     if W is None:
-        save = dict(SP.NAMES)
-        SP.NAMES["dollar"] = SPINE_ROUND
-        try:
-            W, side = SP.wide(font, "dollar")
-        finally:
-            SP.NAMES.clear(); SP.NAMES.update(save)
+        W = spine_width(font)
     info = {}
     tried = []
     for cand in (S, A._reverse(S)):
