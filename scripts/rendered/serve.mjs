@@ -15,10 +15,18 @@ const TYPES = {
 
 export const DIST = fileURLToPath(new URL("../../apps/desktop/dist/", import.meta.url));
 
-/** Serves `root` on 127.0.0.1:`port` (0 = any free port). Resolves to { url, port, close }. */
+/**
+ * Serves `root` on 127.0.0.1:`port` (0 = any free port). Resolves to { url, port, close, inflight }. `inflight()` lists
+ * the responses not yet finished (path, age, bytes written), for reading a hung capture: a page waiting on a font or a
+ * media stream that never arrives shows here.
+ */
 export function serve(root = DIST, port = 0) {
   const base = resolve(root);
+  const open = new Set();
   const server = createServer(async (req, res) => {
+    const entry = { path: req.url, since: Date.now(), res };
+    open.add(entry);
+    res.once("close", () => open.delete(entry));
     try {
       const path = decodeURIComponent(new URL(req.url, "http://x").pathname);
       let file = normalize(join(base, path));
@@ -33,7 +41,8 @@ export function serve(root = DIST, port = 0) {
     server.once("error", fail);
     server.listen(port, "127.0.0.1", () => {
       const actual = server.address().port;
-      ok({ url: `http://127.0.0.1:${actual}/`, port: actual, close: () => new Promise(done => { server.close(() => done()); server.closeAllConnections(); }) });
+      const inflight = () => [...open].map(({ path, since, res }) => ({ path, ms: Date.now() - since, sent: res.socket?.bytesWritten ?? null, finished: res.writableFinished }));
+      ok({ url: `http://127.0.0.1:${actual}/`, port: actual, inflight, close: () => new Promise(done => { server.close(() => done()); server.closeAllConnections(); }) });
     });
   });
 }

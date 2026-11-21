@@ -230,6 +230,7 @@ jobs:
 
       # On every run, pass or fail: report.json lists every violation and snapshot value, and on a platform with no
       # baseline yet, proposed-baseline/ holds the one this run would record (docs/DEVELOPMENT.md, Continuous integration).
+      # _hangs/ holds each failed family attempt's page state and screenshot.
       - name: Reports
         if: always()
         uses: actions/upload-artifact@v4
@@ -238,6 +239,7 @@ jobs:
           path: |
             .cache/rendered/check/report.json
             .cache/rendered/check/proposed-baseline/
+            .cache/rendered/check/_hangs/
           if-no-files-found: ignore
 
   rendered-corners:
@@ -299,6 +301,7 @@ jobs:
           path: |
             .cache/rendered/corners/*/report.json
             .cache/rendered/corners/*/proposed-baseline/
+            .cache/rendered/corners/*/_hangs/
           if-no-files-found: ignore
 
   output:

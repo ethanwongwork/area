@@ -36,7 +36,7 @@ const assertSafe = args => {
 // 2-core CI runner is slower than a laptop's; a call with no answer (a hung or crashed renderer) fails the run with the
 // call's name instead of waiting for the job's time limit (CI run 44583214909 hung 32 minutes on one).
 const LAUNCH_MS = Number(process.env.AREA_RENDERED_LAUNCH_TIMEOUT) || 60000;
-const CALL_MS = Number(process.env.AREA_RENDERED_CALL_TIMEOUT) || 120000;
+export const CALL_MS = Number(process.env.AREA_RENDERED_CALL_TIMEOUT) || 120000;
 let announced = false;
 
 /** Starts a headless browser in a fresh profile. Resolves to { newPage, close, version, command }. */
@@ -46,6 +46,8 @@ export async function launch({ profileRoot = process.env.AREA_RENDERED_PROFILE_R
   const args = assertSafe([
     "--headless=new", "--guest", "--disable-features=msImplicitSignin,Translate,MediaRouter", "--disable-sync",
     "--disable-extensions", "--no-first-run", "--no-default-browser-check", "--disable-background-networking",
+    // A headless Linux browser has no pointer, so `@media (hover: hover)` is false: say there is a mouse, as on a desktop.
+    "--blink-settings=primaryHoverType=2,availableHoverTypes=2,primaryPointerType=4,availablePointerTypes=4",
     "--disable-component-update", "--hide-scrollbars", "--mute-audio", "--force-color-profile=srgb",
     "--disable-renderer-backgrounding", "--disable-background-timer-throttling", "--disable-backgrounding-occluded-windows",
     "--font-render-hinting=none", `--user-data-dir=${profile}`, "--remote-debugging-port=0", "about:blank",
@@ -99,11 +101,17 @@ export async function launch({ profileRoot = process.env.AREA_RENDERED_PROFILE_R
     if (message.method === "Target.targetCrashed") failAll(`a page's renderer crashed (status ${message.params.status}, error code ${message.params.errorCode})`);
     if (message.method) for (const fn of listeners.get(message.sessionId ?? "") ?? []) fn(message.method, message.params);
   });
-  const send = (method, params = {}, sessionId) => new Promise((ok, fail) => {
-    if (gone) { fail(new Error(`${method}: ${gone}`)); return; }
+  // `label` names what the call waited for (an in-page wait, a measure) in its errors; `ms` is its own deadline. A call
+  // with no answer fails with `error.hang` set, so a capture can tell a hung page from a failed call.
+  const send = (method, params = {}, sessionId, { ms = CALL_MS, label } = {}) => new Promise((ok, fail) => {
+    const what = label ? `${label} (${method})` : method;
+    if (gone) { fail(Object.assign(new Error(`${what}: ${gone}`), { gone: true })); return; }
     const key = ++id;
-    const timer = setTimeout(() => { pending.delete(key); fail(new Error(`${method}: no answer in ${CALL_MS / 1000} s (a hung page; AREA_RENDERED_CALL_TIMEOUT)`)); }, CALL_MS);
-    pending.set(key, { method, timer, settle: message => message.error ? fail(new Error(`${method}: ${JSON.stringify(message.error)}`)) : ok(message.result) });
+    const timer = setTimeout(() => {
+      pending.delete(key);
+      fail(Object.assign(new Error(`${what}: no answer in ${ms / 1000} s (a hung page; ${ms === CALL_MS ? "AREA_RENDERED_CALL_TIMEOUT" : "its own deadline"})`), { hang: true, label, method }));
+    }, ms);
+    pending.set(key, { method: what, timer, settle: message => message.error ? fail(Object.assign(new Error(`${what}: ${JSON.stringify(message.error)}`), gone ? { gone: true } : {})) : ok(message.result) });
     ws.send(JSON.stringify({ id: key, method, params, ...(sessionId ? { sessionId } : {}) }));
   });
 
@@ -126,7 +134,8 @@ export async function launch({ profileRoot = process.env.AREA_RENDERED_PROFILE_R
     const { sessionId } = await send("Target.attachToTarget", { targetId, flatten: true });
     const own = new Set();
     listeners.set(sessionId, own);
-    const call = (method, params) => send(method, params, sessionId);
+    const call = (method, params, how) => send(method, params, sessionId, how);
+    let performance = false;
     await call("Page.enable");
     await call("Runtime.enable");
     await call("Emulation.setFocusEmulationEnabled", { enabled: true });
@@ -138,8 +147,9 @@ export async function launch({ profileRoot = process.env.AREA_RENDERED_PROFILE_R
         page.width = w; page.height = h; page.scale = s;
         await call("Emulation.setDeviceMetricsOverride", { width: w, height: h, deviceScaleFactor: s, mobile: false });
       },
-      async eval(expression) {
-        const result = await call("Runtime.evaluate", { expression, awaitPromise: true, returnByValue: true, userGesture: true });
+      /** Evaluates `expression` (awaiting a promise); `label` and `ms` as for send. */
+      async eval(expression, how) {
+        const result = await call("Runtime.evaluate", { expression, awaitPromise: true, returnByValue: true, userGesture: true }, how);
         if (result.exceptionDetails) throw new Error(result.exceptionDetails.exception?.description || result.exceptionDetails.text);
         return result.result.value;
       },
@@ -154,15 +164,21 @@ export async function launch({ profileRoot = process.env.AREA_RENDERED_PROFILE_R
         await loaded;
       },
       /** A PNG of a clip in CSS px at the page's device scale (or the whole viewport). */
-      async shot(clip) {
+      async shot(clip, how) {
         const result = await call("Page.captureScreenshot", {
           format: "png", captureBeyondViewport: false, fromSurface: true,
           ...(clip ? { clip: { ...clip, scale: 1 } } : {}),
-        });
+        }, how);
         return Buffer.from(result.data, "base64");
       },
+      /** The renderer's counters (Performance.getMetrics) as { JSHeapUsedSize, Nodes, LayoutCount, … }. */
+      async metrics(ms = CALL_MS) {
+        if (!performance) { await call("Performance.enable", {}, { ms, label: "metrics" }); performance = true; }
+        const { metrics } = await call("Performance.getMetrics", {}, { ms, label: "metrics" });
+        return Object.fromEntries(metrics.map(({ name, value }) => [name, value]));
+      },
       async mouse(type, x, y, extra = {}) { await call("Input.dispatchMouseEvent", { type, x, y, button: "none", ...extra }); },
-      async close() { listeners.delete(sessionId); await send("Target.closeTarget", { targetId }).catch(() => {}); },
+      async close() { listeners.delete(sessionId); await send("Target.closeTarget", { targetId }, undefined, { ms: 10000 }).catch(() => {}); },
     };
     await page.size(width, height, scale);
     return page;
@@ -175,5 +191,5 @@ export async function launch({ profileRoot = process.env.AREA_RENDERED_PROFILE_R
     ws.close();
     for (let tries = 0; tries < 5; tries++) { try { rmSync(profile, { recursive: true, force: true }); break; } catch { await wait(200); } }
   }
-  return { newPage, close, version: info.Browser, command };
+  return { newPage, close, version: info.Browser, command, alive: () => !gone, get gone() { return gone; } };
 }

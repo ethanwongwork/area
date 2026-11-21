@@ -108,6 +108,8 @@ async function launchEdge() {
   // A guest profile that never signs in (an Edge profile would sign into the owner's account), on a free port.
   const args = ["--guest", "--disable-features=msImplicitSignin", `--user-data-dir=${profile}`, "--remote-debugging-port=0",
     "--no-first-run", "--no-default-browser-check", "--disable-extensions", "--disable-sync", "--disable-background-networking",
+    // A headless Linux browser has no pointer, so `@media (hover: hover)` is false and no hover paint applies: say there is a mouse.
+    "--blink-settings=primaryHoverType=2,availableHoverTypes=2,primaryPointerType=4,availablePointerTypes=4",
     "--disable-component-update", "--disable-breakpad", "--disable-crash-reporter", "--disable-renderer-backgrounding", "--disable-background-timer-throttling",
     "--disable-backgrounding-occluded-windows", "--force-device-scale-factor=1", "--lang=en-US", "--font-render-hinting=none",
     `--window-size=${VIEWPORT.width},${VIEWPORT.height}`, "about:blank"];

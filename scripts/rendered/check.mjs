@@ -144,6 +144,10 @@ export async function check(options) {
   let families = load(run.out);
   if (run.subset) families = families.filter(family => run.families.includes(family.slug));
   if (!families.length) throw new Error(`No captured families in ${run.out}${options.reuse ? " (run without --reuse first)" : ""}`);
+  // Never a pass with a family missing: every family checked was captured in both themes.
+  const half = families.filter(family => !family.light || !family.dark);
+  if (half.length) throw new Error(`Not captured in both themes: ${half.map(family => `${family.slug} (${family.light ? "no dark" : "no light"})`).join(", ")}`);
+  if (run.subset) { const absent = run.families.filter(slug => !families.some(family => family.slug === slug)); if (absent.length) throw new Error(`Not captured: ${absent.join(", ")}`); }
   // A capture made at other settings than asked for (a --reuse of the wrong folder) would check the wrong baseline.
   const capturedAt = families[0].light?.settings ?? families[0].dark?.settings ?? {};
   const at = await moved(capturedAt);

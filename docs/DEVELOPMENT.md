@@ -225,6 +225,23 @@ only the dark floating edge reads pixels. It never gates on picture diffs.
   Headless Chromium on Linux may differ from macOS Edge by a subpixel in text
   rasterisation, which is why the tolerances are in CSS px from the DOM; a baseline that
   differs only on the runner is a finding about the runner, not a reason to widen a rule.
+- **A hung page** (the runner's captures hung on Linux, 2026-11-19 and -20, in a
+  different family each time, never on macOS). Every in-page wait has its own deadline
+  and name (`settle the open section`, `fonts after load`, …; `AREA_RENDERED_WAIT_TIMEOUT`,
+  30 s); fonts that never settle fail naming the faces still loading. A family that fails
+  is diagnosed (whether the page answers, its hash, visibility, fonts, running animations,
+  elements, media, whether timers fire and frames run, the renderer's heap and nodes, the
+  server's responses still open, a screenshot) into `<out>/_hangs/<theme>-<slug>-<n>.json`
+  and `.png` (uploaded with the reports), then retried once in a fresh browser and page.
+  One that fails twice is named at the end and the run fails:
+  a check never passes with a family missing. In CI each family's line also gives the time
+  into the run, the page's JS heap and DOM nodes (`AREA_RENDERED_STATS=1` locally).
+  `AREA_RENDERED_SIMULATE_HANG=<slug>[@<theme>][:<attempts>]` makes that family's settle
+  never resolve, to test the path. `AREA_RENDERED_SERIAL=1` captures the themes one after
+  the other (about twice the time); `AREA_RENDERED_RECYCLE=<n>` opens a fresh browser after
+  every n families (off: a few off-tile lengths, such as a hidden overlay's offset, depend
+  on what the page drew before, so a recycled run records them differently; the rules
+  passed either way on 2026-11-21).
 - **Edge only as a guest.** Every launcher (`scripts/rendered/cdp-lib.mjs`,
   `tests/behaviour/harness.mjs`) starts Edge with `--guest --disable-features=msImplicitSignin`
   in a fresh profile; without them Edge signs the profile into the owner's account.
