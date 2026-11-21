@@ -449,3 +449,74 @@ def section_joins(font, name="section"):
     for c, P in zip(g.contours, cs):
         c.points = [Point(x, y, t, smooth=s_) for x, y, t, s_ in P]
     return f"{name}: left ({'; '.join(tried)})"
+
+
+# 0.84 (Regular pass 4, item A3). With its crotches filleted (section_joins) the § has a neck at each: from the
+# counter's end (its pointed corner) across the ink to the fillet. Towards the Bold the engine carries the fillet in
+# with the stroke and the counter's end hardly moves: the neck thinned 50.7 > 48.4 > 45.5 at 400 / 666 / 800 (the
+# sharp crotch before was a corner, read as one and skipped). In a master heavier than the Regular the neck is held
+# to the Regular's (SECTION_NECK): the fillet (its two nodes, each with both handles) moves straight away from the
+# counter's end by what is short. The counter, the spine and every other point stay as the engine drew them. Looked at
+# on snap084g's Bold: the branch neck's law (bold.NECK, 1.22) moved the left fillet 34 out and the side bulged over
+# the notch; the Regular's neck (19 out) leaves the left notch as deep as the right one (whose neck the engine already
+# holds at 1.5 times the Regular's).
+SECTION_NECK = 1.0
+
+
+def section_necks(reg, font, v, name="section"):
+    import white as WHITE
+    from ufoLib2.objects import Point
+    if name not in reg or name not in font or v["f"] <= 0:
+        return None
+    R = [[(p.x, p.y, p.type, p.smooth) for p in c.points] for c in reg[name].contours]
+    N = [[(p.x, p.y, p.type, p.smooth) for p in c.points] for c in font[name].contours]
+    if len(R) != 2 or [len(P) for P in R] != [len(P) for P in N]:
+        return f"{name}: necks left (structure)"
+    oi = max(range(2), key=lambda k: abs(A.signed_area(R[k])))
+    ci = 1 - oi
+    import math
+
+    def corners(P):
+        n = len(P)
+        out = []
+        for i, q in enumerate(P):
+            if q[2] is None:
+                continue
+            a, b = P[(i - 1) % n], P[(i + 1) % n]
+            u = A.unit((q[0] - a[0], q[1] - a[1]))
+            w = A.unit((b[0] - q[0], b[1] - q[1]))
+            out.append((math.degrees(math.acos(max(-1, min(1, u[0] * w[0] + u[1] * w[1])))), i))
+        return [i for _a, i in sorted(out, reverse=True)[:2]]
+
+    def neck(cs, k):
+        c = cs[ci][k][:2]
+        D = WHITE._dense(cs[oi], 1.0)
+        best = min(D, key=lambda d: math.dist(d[:2], c))
+        return math.dist(best[:2], c), best
+
+    share = SECTION_NECK
+    P = [list(q) for q in N[oi]]
+    n = len(P)
+    on = [i for i, q in enumerate(P) if q[2]]
+    log = []
+    for k in corners(R[ci]):
+        n0, b0 = neck(R, k)
+        n1, b1 = neck(N, k)
+        want = n0 * share
+        if n1 >= want - 0.5:
+            log.append(f"neck {n0:.1f} > {n1:.1f} (law {want:.1f}) kept")
+            continue
+        s0 = b1[2]                                   # the fillet: the outer segment the neck lands on
+        s1 = on[(on.index(s0) + 1) % len(on)]
+        c = N[ci][k][:2]
+        u = A.unit((b1[0] - c[0], b1[1] - c[1]))
+        d = want - n1
+        for m in (s0, s1):
+            for j in ((m - 1) % n, m, (m + 1) % n):
+                P[j][0] += u[0] * d
+                P[j][1] += u[1] * d
+        log.append(f"neck {n0:.1f} > {n1:.1f} > {want:.1f} (fillet {d:.1f} out)")
+    N[oi] = [(round(q[0]), round(q[1]), q[2], q[3]) for q in P]
+    for c_, Pn in zip(font[name].contours, N):
+        c_.points = [Point(x, y, t, smooth=s_) for x, y, t, s_ in Pn]
+    return f"{name}: " + "; ".join(log)

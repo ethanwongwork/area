@@ -5058,6 +5058,11 @@ def bold_font(reg, stem=STEM, **over):
     at_ = _AT.master(reg, font, lambda R_c, cs: _amp_sides(R_c, cs, "at"), tm_a, layer if v["f"] > 0 else None)
     if at_:
         notes.append(at_)
+    # 0.84 (Regular pass 4, item A3): §'s necks at its filleted crotches held to the Regular's towards the Bold
+    import symbols as _SYM
+    sec_ = _SYM.section_necks(reg, font, v)
+    if sec_:
+        notes.append(sec_)
     # owner round 8 (0.82, item 16): (C) (R) (P) take one ring (circled.py): the Regular's outer outline, the counter
     # at this master's side and top (the references' upright stress, side their share of the stem, top 0.87 of it),
     # and this master's C, R or P scaled and weighted as the references' letter in a ring. Their ring had the opposite
