@@ -33,7 +33,8 @@ export function behaviour(fixture, define, { query = "" } = {}) {
     page.steps = [];
     await fn(page);
   };
-  const it = (name, fn, { query: q, fresh = true } = {}) => test(name, { timeout: 30000 }, () => run(fn, q, fresh));
+  // `timeout` is for a test that sweeps many page loads: 20 s on a laptop is over 30 s on a CI runner.
+  const it = (name, fn, { query: q, fresh = true, timeout = 30000 } = {}) => test(name, { timeout }, () => run(fn, q, fresh));
   const gap = (item, name, fn, { query: q, fresh = true } = {}) => test(`[expected failure ${item}] ${name}`, { timeout: 30000 }, async t => {
     try { await run(fn, q, fresh); }
     catch (error) {

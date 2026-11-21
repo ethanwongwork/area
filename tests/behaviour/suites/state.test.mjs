@@ -114,6 +114,6 @@ behaviour("state", ({ it }) => {
         }
       }
       console.log(`closest step (${theme}, ${selection}): ${closest.step.toFixed(3)}:1, ${closest.selector} ${closest.a} → ${closest.b} at ${closest.query}`);
-    });
+    }, { timeout: 120000 });
   }
 });

@@ -18,6 +18,11 @@
   worth a shortening pass. CI: first run's browser jobs failed to launch Edge in time and hung; launchers now wait 60 s,
   print Edge's stderr, time out every call, and Linux has its own baselines in `scripts/rendered/platforms/linux/`
   (the rendered jobs fail and upload `proposed-baseline/` until one is read and committed).
+  **CI run 3 (2026-11-21):** hover tests pass on Linux with the mouse flag; the four press sweeps timed out at 30 s
+  (21 s on a laptop) and now have 120 s. Rendered jobs completed: a page still hangs once or twice per run on Linux
+  (cause unproven; `_hangs/` shows a renderer that stops answering, no request open) and the retry in a fresh browser
+  captured every family. Linux baseline committed from that run; its Linux-only entries are cap offsets up to 0.5 px
+  from DejaVu Sans (the runner has no system UI font) and one unexplained dark tooltip edge at large-comfy-pill.
   **Step C built (2026-11-21, uncommitted at the time of writing):** drawn icons (Select chevron and check, Checkbox
   check, Plan tick, Spinner) follow the type's icon weight through `@container style(--area-type-base: N)` steps
   (Stroke width is the frame width, not icon weight, so the audit's "ignores Stroke width" was wrong); Spinner, Slider

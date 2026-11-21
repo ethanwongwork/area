@@ -1,0 +1,629 @@
+{
+  "rule": "corners",
+  "item": "A2, B1",
+  "about": "Every family's corner per painted part (its own parts, and parts of no family of their own)",
+  "values": {
+    "accordion · area-accordion-item": [
+      "0px"
+    ],
+    "alert · area-alert": [
+      "0px",
+      "10px",
+      "16px"
+    ],
+    "alignment-picker · area-alignment-picker": [
+      "8px"
+    ],
+    "alignment-picker · area-alignment-picker__dot": [
+      "9999px"
+    ],
+    "alignment-picker · area-alignment-picker__cell": [
+      "4px"
+    ],
+    "approval · area-approval": [
+      "16px"
+    ],
+    "approval · area-approval__option": [
+      "8px"
+    ],
+    "approval · area-approval__field": [
+      "0px"
+    ],
+    "approval · area-approval__tile": [
+      "8px"
+    ],
+    "approval · area-approval__visual": [
+      "4px"
+    ],
+    "asset-card · area-asset-card": [
+      "16px"
+    ],
+    "asset-card · area-asset-card__frame": [
+      "11px",
+      "16px"
+    ],
+    "asset-card · area-asset-card__cell": [
+      "11px"
+    ],
+    "asset-card · area-asset-card__badge": [
+      "9999px"
+    ],
+    "asset-card · area-asset-card__name": [
+      "9999px"
+    ],
+    "asset-row · area-asset-row__preview": [
+      "6px"
+    ],
+    "attachment · area-attachment": [
+      "8px"
+    ],
+    "attachment · area-attachment__image": [
+      "8px"
+    ],
+    "attachment · area-attachment__play": [
+      "9999px"
+    ],
+    "attachment · area-attachment__badge": [
+      "4px"
+    ],
+    "attachment · area-attachment__overlay": [
+      "8px"
+    ],
+    "avatar · area-avatar": [
+      "8px",
+      "9999px"
+    ],
+    "avatar · area-avatar__image": [
+      "0px"
+    ],
+    "avatar · area-presence": [
+      "9999px"
+    ],
+    "badge · area-badge": [
+      "4px",
+      "9999px"
+    ],
+    "board · area-board-column": [
+      "16px"
+    ],
+    "board · area-board-card": [
+      "8px"
+    ],
+    "board · area-board-card__actions": [
+      "4px"
+    ],
+    "box-model · area-box-model": [
+      "16px"
+    ],
+    "box-model · area-box-model__border": [
+      "16px"
+    ],
+    "box-model · area-box-model__padding": [
+      "8px"
+    ],
+    "box-model · area-box-model__content": [
+      "6px"
+    ],
+    "button · area-button": [
+      "10px",
+      "8px",
+      "9999px"
+    ],
+    "calendar · area-calendar": [
+      "16px"
+    ],
+    "calendar · area-calendar__day": [
+      "8px",
+      "9999px"
+    ],
+    "calendar · area-calendar__marker": [
+      "9999px"
+    ],
+    "card · area-card": [
+      "10px",
+      "12px",
+      "4px",
+      "8px"
+    ],
+    "card · area-card__media": [
+      "4px",
+      "9px 9px 0px 0px"
+    ],
+    "chart · area-chart__svg": [
+      "0px"
+    ],
+    "chart · area-table-wrapper": [
+      "16px"
+    ],
+    "chart · area-chart__key": [
+      "2px"
+    ],
+    "checkbox · area-checkbox__control": [
+      "4px"
+    ],
+    "checkbox · area-checkbox": [
+      "10px",
+      "16px"
+    ],
+    "checkbox · area-checkbox__visual": [
+      "16px"
+    ],
+    "chip · area-chip": [
+      "8px",
+      "9999px"
+    ],
+    "chip · area-chip__swatch": [
+      "9999px"
+    ],
+    "citation · area-citation": [
+      "9999px"
+    ],
+    "code · area-code": [
+      "6px"
+    ],
+    "code · area-code__swatch": [
+      "3.5px"
+    ],
+    "code · area-table-wrapper": [
+      "16px"
+    ],
+    "code-block · area-code-block": [
+      "0px",
+      "16px"
+    ],
+    "code-block · area-code-block__line": [
+      "0px"
+    ],
+    "code-block · area-code-block__toggle": [
+      "0px"
+    ],
+    "code-block · area-code-block__actions": [
+      "8px"
+    ],
+    "color-picker · area-color-picker": [
+      "16px"
+    ],
+    "color-picker · area-color-picker__area": [
+      "8px"
+    ],
+    "color-picker · area-color-picker__thumb": [
+      "9999px"
+    ],
+    "color-picker · area-color-picker__channel": [
+      "0px"
+    ],
+    "color-picker · area-color-picker__slider": [
+      "9999px"
+    ],
+    "color-picker · area-color-picker__preview": [
+      "8px"
+    ],
+    "color-picker · area-color-picker__preview-new": [
+      "0px"
+    ],
+    "color-picker · area-color-picker__preview-original": [
+      "0px"
+    ],
+    "color-picker · area-color-picker__contrast-pair": [
+      "9999px"
+    ],
+    "color-picker · area-color-picker__band": [
+      "8px"
+    ],
+    "color-picker · area-color-picker__plane": [
+      "8px"
+    ],
+    "color-swatch · area-color-swatch": [
+      "4px",
+      "6px"
+    ],
+    "color-swatch-picker · area-color-swatch-picker__cell": [
+      "10px",
+      "8px"
+    ],
+    "command-palette · area-command-palette": [
+      "16px"
+    ],
+    "command-palette · area-command-palette__search": [
+      "0px"
+    ],
+    "command-palette · area-command-palette__input": [
+      "0px"
+    ],
+    "command-palette · area-command-palette__preview": [
+      "0px"
+    ],
+    "composer · area-composer": [
+      "16px",
+      "23px"
+    ],
+    "composer · area-composer__input": [
+      "0px"
+    ],
+    "composer-menu · area-composer-menu": [
+      "12px"
+    ],
+    "count · area-count": [
+      "4px",
+      "9999px"
+    ],
+    "custom-select · area-custom-select__trigger": [
+      "10px",
+      "8px"
+    ],
+    "date-picker · area-date-picker__trigger": [
+      "10px",
+      "8px"
+    ],
+    "description-list · area-description-list": [
+      "16px"
+    ],
+    "design-card · area-design-card__ground": [
+      "16px"
+    ],
+    "dialog · area-dialog": [
+      "16px"
+    ],
+    "drawer · area-drawer": [
+      "0px",
+      "16px 16px 0px 0px"
+    ],
+    "edit-summary · area-edit-summary": [
+      "16px"
+    ],
+    "edit-summary · area-edit-summary__actions": [
+      "8px"
+    ],
+    "edit-summary · area-diff": [
+      "8px"
+    ],
+    "edit-summary · area-diff__lines": [
+      "0px"
+    ],
+    "edit-summary · area-diff__line": [
+      "0px"
+    ],
+    "edit-summary · area-diff__fold": [
+      "0px"
+    ],
+    "edit-summary · area-diff__comment": [
+      "4px"
+    ],
+    "edit-summary · area-diff__note": [
+      "0px"
+    ],
+    "editable-text · area-editable-text__input": [
+      "6px"
+    ],
+    "empty-state · area-empty-state__icon": [
+      "14px",
+      "8px"
+    ],
+    "file-image · area-file-image__figure": [
+      "4px",
+      "5px",
+      "8px"
+    ],
+    "file-image · area-file-image__picture": [
+      "0px"
+    ],
+    "file-upload · area-file-upload": [
+      "16px"
+    ],
+    "file-upload · area-file-upload__icon": [
+      "10px"
+    ],
+    "file-upload · area-file-upload-item": [
+      "16px"
+    ],
+    "file-upload · area-file-upload-item__icon": [
+      "10px"
+    ],
+    "file-upload · area-file-upload-item__separator": [
+      "0px"
+    ],
+    "filter-bar · area-filter-bar__dirty": [
+      "9999px"
+    ],
+    "indicator · area-presence": [
+      "9999px"
+    ],
+    "indicator · area-indicator": [
+      "9999px"
+    ],
+    "input · area-input": [
+      "10px",
+      "8px"
+    ],
+    "input · area-input__control": [
+      "0px"
+    ],
+    "input-group · area-input-group": [
+      "10px",
+      "8px"
+    ],
+    "input-group · area-input-group__text": [
+      "0px"
+    ],
+    "kbd · area-kbd": [
+      "6px"
+    ],
+    "kbd · area-table-wrapper": [
+      "16px"
+    ],
+    "link-groups · area-link-groups": [
+      "0px"
+    ],
+    "list-box · area-list-box__item": [
+      "8px"
+    ],
+    "mention · area-mention": [
+      "9999px"
+    ],
+    "menu · area-menu": [
+      "12px"
+    ],
+    "menu · area-menu__separator": [
+      "0px"
+    ],
+    "menu · area-menu__header": [
+      "0px"
+    ],
+    "menu · area-menu__footer": [
+      "0px"
+    ],
+    "message · area-message__bubble": [
+      "16px",
+      "16px 16px 4px 16px",
+      "16px 4px 16px 16px",
+      "16px 4px 4px 16px"
+    ],
+    "message · area-message__cursor": [
+      "9999px"
+    ],
+    "meter · area-meter__segment": [
+      "0px"
+    ],
+    "meter · area-meter__swatch": [
+      "2px"
+    ],
+    "meter · area-meter__rest": [
+      "0px"
+    ],
+    "nav · area-nav__item": [
+      "8px"
+    ],
+    "nav · area-nav__row": [
+      "8px"
+    ],
+    "nav · area-nav__picture": [
+      "6px"
+    ],
+    "nav · area-nav__label": [
+      "0px"
+    ],
+    "number-field · area-number-field": [
+      "10px",
+      "8px"
+    ],
+    "number-field · area-number-field__control": [
+      "0px"
+    ],
+    "otp-field · area-otp-field__slot": [
+      "10px",
+      "8px"
+    ],
+    "otp-field · area-otp-field__control": [
+      "0px"
+    ],
+    "pagination · area-pagination__page": [
+      "10px",
+      "8px"
+    ],
+    "panel · area-panel": [
+      "0px",
+      "16px"
+    ],
+    "plan · area-plan": [
+      "16px"
+    ],
+    "plan · area-plan__steps": [
+      "16px"
+    ],
+    "popover · area-popover": [
+      "16px"
+    ],
+    "popover · area-popover__media": [
+      "4px"
+    ],
+    "popover · area-popover__arrow": [
+      "0px"
+    ],
+    "progress · area-progress": [
+      "9999px"
+    ],
+    "progress · area-progress__bar": [
+      "9999px"
+    ],
+    "queue · area-queue": [
+      "16px"
+    ],
+    "queue · area-queue__actions": [
+      "8px"
+    ],
+    "radio · area-radio__control": [
+      "9999px"
+    ],
+    "radio · area-radio": [
+      "10px",
+      "16px"
+    ],
+    "radio · area-radio__visual": [
+      "16px"
+    ],
+    "scroll-area · area-scroll-area": [
+      "16px"
+    ],
+    "scroll-area · area-scroll-area__thumb": [
+      "9999px"
+    ],
+    "segmented · area-segmented": [
+      "10px",
+      "8px"
+    ],
+    "select · area-select": [
+      "10px",
+      "8px"
+    ],
+    "selection-bar · area-selection-bar": [
+      "16px"
+    ],
+    "separator · area-separator": [
+      "0px"
+    ],
+    "setting-row · area-settings-group__rows": [
+      "16px"
+    ],
+    "setting-row · area-setting-row__modified": [
+      "9999px"
+    ],
+    "shortcut-list · area-shortcut-list__item": [
+      "0px"
+    ],
+    "skeleton · area-skeleton": [
+      "4px",
+      "9999px"
+    ],
+    "slider · area-slider__control": [
+      "0px"
+    ],
+    "slider · area-slider__rail": [
+      "8px",
+      "9999px"
+    ],
+    "slider · area-slider__fill": [
+      "0px",
+      "0px 8px 8px 0px",
+      "8px 0px 0px 8px"
+    ],
+    "slider · area-slider__thumb": [
+      "8px",
+      "9999px"
+    ],
+    "slider · area-slider__buffer": [
+      "0px"
+    ],
+    "spinner · area-spinner": [
+      "0px"
+    ],
+    "splitter · area-splitter": [
+      "16px"
+    ],
+    "step · area-step__body": [
+      "0px"
+    ],
+    "step · area-step__verb": [
+      "0px"
+    ],
+    "stepper · area-stepper-step__marker": [
+      "6px"
+    ],
+    "surface · area-surface": [
+      "10px",
+      "12px",
+      "8px"
+    ],
+    "switch · area-switch__control": [
+      "0px"
+    ],
+    "switch · area-switch__track": [
+      "4px",
+      "9999px"
+    ],
+    "switch · area-switch__thumb": [
+      "4px",
+      "9999px"
+    ],
+    "table · area-table-wrapper": [
+      "16px"
+    ],
+    "table · area-table__cell--numeric": [
+      "0px"
+    ],
+    "table · area-table__cell--fit": [
+      "0px"
+    ],
+    "tabs · area-tabs__list": [
+      "0px"
+    ],
+    "tabs · area-tabs__unseen": [
+      "9999px"
+    ],
+    "tag · area-tag": [
+      "6px"
+    ],
+    "tag-picker · area-tag-picker__field": [
+      "10px",
+      "8px"
+    ],
+    "tag-picker · area-tag-picker__input": [
+      "0px"
+    ],
+    "textarea · area-textarea": [
+      "8px"
+    ],
+    "timeline · area-timeline-item__dot": [
+      "9999px"
+    ],
+    "titlebar · area-titlebar": [
+      "0px",
+      "16px"
+    ],
+    "toast · area-toast": [
+      "10px",
+      "16px"
+    ],
+    "toggle-group · area-toggle-group": [
+      "10px",
+      "8px"
+    ],
+    "toolbar · area-toolbar__separator": [
+      "0px"
+    ],
+    "toolbar · area-toolbar": [
+      "10px",
+      "16px",
+      "18px"
+    ],
+    "tooltip · area-tooltip": [
+      "10px"
+    ],
+    "tree-view · area-tree-view__check": [
+      "4px"
+    ],
+    "tree-view · area-tree-view__unseen": [
+      "9999px"
+    ],
+    "video-player · area-video-player__media": [
+      "0px"
+    ],
+    "video-player · area-video-player__start": [
+      "9999px"
+    ],
+    "video-player · area-video-player__range": [
+      "0px"
+    ],
+    "video-player · area-video-player__surface": [
+      "8px"
+    ],
+    "video-player · area-video-player__clock": [
+      "8px"
+    ],
+    "video-player · area-video-player__group": [
+      "8px"
+    ],
+    "video-player · area-video-player__controls": [
+      "16px"
+    ]
+  }
+}

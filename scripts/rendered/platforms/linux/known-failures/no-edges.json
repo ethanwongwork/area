@@ -1,0 +1,258 @@
+{
+  "about": "Violations of assert rules on linux (Edg/157.0.4341.60) at the no-edges corner (surface=0 stroke=0 elevation=0) that fail today, read from CI run 44935633585 on 2026-11-21. check:rendered on linux fails on any violation not listed here and on any listed one that no longer fails.",
+  "settings": {
+    "surface": "0",
+    "stroke": "0",
+    "elevation": "0"
+  },
+  "known": [
+    {
+      "rule": "cap-centring",
+      "key": "badge · Badge",
+      "item": "B5.1",
+      "finding": "VS2",
+      "note": "also at the defaults: the mark recipe's whole-pixel baseline (plan, Optical spacing: marks share one whole-pixel cap baseline) rounds (H + 1cap) / 2 to a pixel, so the cap sits up to 0.5 off centre (Kbd 0.11, lg Badge/Tag 0.38); it conflicts with the 0.1 cap rule for marks: the owner picks one (leftovers 2026-11-14)",
+      "value": "offsets 0.5 in 1 tile (size-lg)"
+    },
+    {
+      "rule": "cap-centring",
+      "key": "button · Button",
+      "item": "B2.2",
+      "finding": "VA1",
+      "value": "offsets 0.11 in 44 tiles (default, pill, action-accent …)",
+      "note": "Linux only: the CI runner has no system UI font and draws text in DejaVu Sans, so the cap sits up to half a pixel off where it sits on macOS. A text-metric difference, not a component defect (read 2026-11-21)."
+    },
+    {
+      "rule": "cap-centring",
+      "key": "button · Kbd",
+      "item": "B5.1",
+      "finding": "VS2",
+      "note": "also at the defaults: the mark recipe's whole-pixel baseline (plan, Optical spacing: marks share one whole-pixel cap baseline) rounds (H + 1cap) / 2 to a pixel, so the cap sits up to 0.5 off centre (Kbd 0.11, lg Badge/Tag 0.38); it conflicts with the 0.1 cap rule for marks: the owner picks one (leftovers 2026-11-14)",
+      "value": "offsets -0.5 in 1 tile (with-shortcut)"
+    },
+    {
+      "rule": "cap-centring",
+      "key": "command-palette · Menu row",
+      "item": "B2.2",
+      "finding": "VN8",
+      "value": "offsets 0.11 in 6 tiles (default, preview, no-footer …)",
+      "note": "Linux only: the CI runner has no system UI font and draws text in DejaVu Sans, so the cap sits up to half a pixel off where it sits on macOS. A text-metric difference, not a component defect (read 2026-11-21)."
+    },
+    {
+      "rule": "cap-centring",
+      "key": "command-palette · Kbd",
+      "item": "B5.1",
+      "finding": "VS2",
+      "note": "also at the defaults: the mark recipe's whole-pixel baseline (plan, Optical spacing: marks share one whole-pixel cap baseline) rounds (H + 1cap) / 2 to a pixel, so the cap sits up to 0.5 off centre (Kbd 0.11, lg Badge/Tag 0.38); it conflicts with the 0.1 cap rule for marks: the owner picks one (leftovers 2026-11-14)",
+      "value": "offsets -0.5 in 8 tiles (default, preview, modal …)"
+    },
+    {
+      "rule": "cap-centring",
+      "key": "command-palette · Button",
+      "item": "B2.2",
+      "finding": "VA1",
+      "value": "offsets 0.11 in 1 tile (modal)",
+      "note": "Linux only: the CI runner has no system UI font and draws text in DejaVu Sans, so the cap sits up to half a pixel off where it sits on macOS. A text-metric difference, not a component defect (read 2026-11-21)."
+    },
+    {
+      "rule": "cap-centring",
+      "key": "count · Nav row",
+      "item": "B2.2",
+      "finding": "VN8",
+      "value": "offsets 0.11 in 2 tiles (nav, zero-hidden)",
+      "note": "Linux only: the CI runner has no system UI font and draws text in DejaVu Sans, so the cap sits up to half a pixel off where it sits on macOS. A text-metric difference, not a component defect (read 2026-11-21)."
+    },
+    {
+      "rule": "cap-centring",
+      "key": "count · Tab",
+      "item": "B2.2",
+      "finding": "VN8",
+      "value": "offsets 0.11 in 1 tile (tabs)",
+      "note": "Linux only: the CI runner has no system UI font and draws text in DejaVu Sans, so the cap sits up to half a pixel off where it sits on macOS. A text-metric difference, not a component defect (read 2026-11-21)."
+    },
+    {
+      "rule": "cap-centring",
+      "key": "custom-select · Custom select",
+      "item": "B2.2",
+      "finding": "VA1",
+      "value": "offsets 0.11 in 19 tiles (default, variant-soft, variant-ghost …)",
+      "note": "Linux only: the CI runner has no system UI font and draws text in DejaVu Sans, so the cap sits up to half a pixel off where it sits on macOS. A text-metric difference, not a component defect (read 2026-11-21)."
+    },
+    {
+      "rule": "cap-centring",
+      "key": "dialog · Button",
+      "item": "B2.2",
+      "finding": "VA1",
+      "value": "offsets 0.11 in 11 tiles (default, size-sm, size-md …)",
+      "note": "Linux only: the CI runner has no system UI font and draws text in DejaVu Sans, so the cap sits up to half a pixel off where it sits on macOS. A text-metric difference, not a component defect (read 2026-11-21)."
+    },
+    {
+      "rule": "cap-centring",
+      "key": "input · Input (affix, segments, text)",
+      "item": "B2.2",
+      "finding": "VA1",
+      "value": "offsets 0.11 in 2 tiles (phone, affix)",
+      "note": "Linux only: the CI runner has no system UI font and draws text in DejaVu Sans, so the cap sits up to half a pixel off where it sits on macOS. A text-metric difference, not a component defect (read 2026-11-21)."
+    },
+    {
+      "rule": "cap-centring",
+      "key": "kbd · Kbd",
+      "item": "B5.1",
+      "finding": "VS2",
+      "note": "also at the defaults: the mark recipe's whole-pixel baseline (plan, Optical spacing: marks share one whole-pixel cap baseline) rounds (H + 1cap) / 2 to a pixel, so the cap sits up to 0.5 off centre (Kbd 0.11, lg Badge/Tag 0.38); it conflicts with the 0.1 cap rule for marks: the owner picks one (leftovers 2026-11-14)",
+      "value": "offsets -0.5 in 18 tiles (default, on-color, sm …)"
+    },
+    {
+      "rule": "cap-centring",
+      "key": "kbd · Button",
+      "item": "B2.2",
+      "finding": "VA1",
+      "value": "offsets 0.11 in 7 tiles (on-color, template-in-outline-button, template-in-ghost-button …)",
+      "note": "Linux only: the CI runner has no system UI font and draws text in DejaVu Sans, so the cap sits up to half a pixel off where it sits on macOS. A text-metric difference, not a component defect (read 2026-11-21)."
+    },
+    {
+      "rule": "cap-centring",
+      "key": "kbd · Tooltip",
+      "item": "B2.2",
+      "finding": "VN8",
+      "value": "offsets 0.11 in 1 tile (on-emphasis)",
+      "note": "Linux only: the CI runner has no system UI font and draws text in DejaVu Sans, so the cap sits up to half a pixel off where it sits on macOS. A text-metric difference, not a component defect (read 2026-11-21)."
+    },
+    {
+      "rule": "cap-centring",
+      "key": "kbd · Menu row",
+      "item": "B2.2",
+      "finding": "VN8",
+      "value": "offsets 0.11 in 2 tiles (template-in-menu, template-in-command-palette)",
+      "note": "Linux only: the CI runner has no system UI font and draws text in DejaVu Sans, so the cap sits up to half a pixel off where it sits on macOS. A text-metric difference, not a component defect (read 2026-11-21)."
+    },
+    {
+      "rule": "cap-centring",
+      "key": "kbd · Nav row",
+      "item": "B2.2",
+      "finding": "VN8",
+      "value": "offsets 0.11 in 1 tile (template-in-nav)",
+      "note": "Linux only: the CI runner has no system UI font and draws text in DejaVu Sans, so the cap sits up to half a pixel off where it sits on macOS. A text-metric difference, not a component defect (read 2026-11-21)."
+    },
+    {
+      "rule": "cap-centring",
+      "key": "menu · Menu row",
+      "item": "B2.2",
+      "finding": "VN8",
+      "value": "offsets 0.11 in 11 tiles (default, danger, icons …)",
+      "note": "Linux only: the CI runner has no system UI font and draws text in DejaVu Sans, so the cap sits up to half a pixel off where it sits on macOS. A text-metric difference, not a component defect (read 2026-11-21)."
+    },
+    {
+      "rule": "cap-centring",
+      "key": "menu · Kbd",
+      "item": "B5.1",
+      "finding": "VS2",
+      "note": "also at the defaults: the mark recipe's whole-pixel baseline (plan, Optical spacing: marks share one whole-pixel cap baseline) rounds (H + 1cap) / 2 to a pixel, so the cap sits up to 0.5 off centre (Kbd 0.11, lg Badge/Tag 0.38); it conflicts with the 0.1 cap rule for marks: the owner picks one (leftovers 2026-11-14)",
+      "value": "offsets -0.5 in 4 tiles (icons, shortcuts, content-trailing …)"
+    },
+    {
+      "rule": "cap-centring",
+      "key": "menu · Button",
+      "item": "B2.2",
+      "finding": "VA1",
+      "value": "offsets 0.11 in 3 tiles (submenu, behavior-scrolling-rows, behavior-menu-button)",
+      "note": "Linux only: the CI runner has no system UI font and draws text in DejaVu Sans, so the cap sits up to half a pixel off where it sits on macOS. A text-metric difference, not a component defect (read 2026-11-21)."
+    },
+    {
+      "rule": "cap-centring",
+      "key": "popover · Button",
+      "item": "B2.2",
+      "finding": "VA1",
+      "value": "offsets 0.11 in 5 tiles (anchored, teaching, field …)",
+      "note": "Linux only: the CI runner has no system UI font and draws text in DejaVu Sans, so the cap sits up to half a pixel off where it sits on macOS. A text-metric difference, not a component defect (read 2026-11-21)."
+    },
+    {
+      "rule": "cap-centring",
+      "key": "segmented · Segmented item",
+      "item": "B2.2",
+      "finding": "VA1",
+      "value": "offsets 0.11 in 7 tiles (default, size-small, size-medium …)",
+      "note": "Linux only: the CI runner has no system UI font and draws text in DejaVu Sans, so the cap sits up to half a pixel off where it sits on macOS. A text-metric difference, not a component defect (read 2026-11-21)."
+    },
+    {
+      "rule": "cap-centring",
+      "key": "slider · Button",
+      "item": "B2.2",
+      "finding": "VA1",
+      "value": "offsets 0.11 in 1 tile (with-option)",
+      "note": "Linux only: the CI runner has no system UI font and draws text in DejaVu Sans, so the cap sits up to half a pixel off where it sits on macOS. A text-metric difference, not a component defect (read 2026-11-21)."
+    },
+    {
+      "rule": "cap-centring",
+      "key": "slider · Number field",
+      "item": "B2.2",
+      "finding": "VA1",
+      "value": "offsets 0.11 in 1 tile (with-input)",
+      "note": "Linux only: the CI runner has no system UI font and draws text in DejaVu Sans, so the cap sits up to half a pixel off where it sits on macOS. A text-metric difference, not a component defect (read 2026-11-21)."
+    },
+    {
+      "rule": "cap-centring",
+      "key": "switch · Switch label on its track",
+      "item": "B2.2",
+      "finding": "VA2",
+      "value": "offsets 0.11 in 21 tiles (default, long, neutral …)",
+      "note": "Linux only: the CI runner has no system UI font and draws text in DejaVu Sans, so the cap sits up to half a pixel off where it sits on macOS. A text-metric difference, not a component defect (read 2026-11-21)."
+    },
+    {
+      "rule": "cap-centring",
+      "key": "table · Button",
+      "item": "B2.2",
+      "finding": "VA1",
+      "value": "offsets 0.11 in 1 tile (sorting)",
+      "note": "Linux only: the CI runner has no system UI font and draws text in DejaVu Sans, so the cap sits up to half a pixel off where it sits on macOS. A text-metric difference, not a component defect (read 2026-11-21)."
+    },
+    {
+      "rule": "cap-centring",
+      "key": "tabs · Tab",
+      "item": "B2.2",
+      "finding": "VN8",
+      "value": "offsets 0.11 in 11 tiles (default, selection-plate, selection-plate-sm …)",
+      "note": "Linux only: the CI runner has no system UI font and draws text in DejaVu Sans, so the cap sits up to half a pixel off where it sits on macOS. A text-metric difference, not a component defect (read 2026-11-21)."
+    },
+    {
+      "rule": "cap-centring",
+      "key": "tag · Tag",
+      "item": "B5.1",
+      "finding": "VS2",
+      "note": "also at the defaults: the mark recipe's whole-pixel baseline (plan, Optical spacing: marks share one whole-pixel cap baseline) rounds (H + 1cap) / 2 to a pixel, so the cap sits up to 0.5 off centre (Kbd 0.11, lg Badge/Tag 0.38); it conflicts with the 0.1 cap rule for marks: the owner picks one (leftovers 2026-11-14)",
+      "value": "offsets 0.5 in 1 tile (size-lg)"
+    },
+    {
+      "rule": "cap-centring",
+      "key": "toast · Button",
+      "item": "B2.2",
+      "finding": "VA1",
+      "value": "offsets 0.11 in 2 tiles (action, toaster)",
+      "note": "Linux only: the CI runner has no system UI font and draws text in DejaVu Sans, so the cap sits up to half a pixel off where it sits on macOS. A text-metric difference, not a component defect (read 2026-11-21)."
+    },
+    {
+      "rule": "cap-centring",
+      "key": "tooltip · Tooltip",
+      "item": "B2.2",
+      "finding": "VN8",
+      "value": "offsets 0.11 in 6 tiles (open, side, bottom …)",
+      "note": "Linux only: the CI runner has no system UI font and draws text in DejaVu Sans, so the cap sits up to half a pixel off where it sits on macOS. A text-metric difference, not a component defect (read 2026-11-21)."
+    },
+    {
+      "rule": "cap-centring",
+      "key": "tooltip · Button",
+      "item": "B2.2",
+      "finding": "VA1",
+      "value": "offsets 0.11 in 7 tiles (open, side, bottom …)",
+      "note": "Linux only: the CI runner has no system UI font and draws text in DejaVu Sans, so the cap sits up to half a pixel off where it sits on macOS. A text-metric difference, not a component defect (read 2026-11-21)."
+    },
+    {
+      "rule": "cap-centring",
+      "key": "tooltip · Kbd",
+      "item": "B5.1",
+      "finding": "VS2",
+      "note": "also at the defaults: the mark recipe's whole-pixel baseline (plan, Optical spacing: marks share one whole-pixel cap baseline) rounds (H + 1cap) / 2 to a pixel, so the cap sits up to 0.5 off centre (Kbd 0.11, lg Badge/Tag 0.38); it conflicts with the 0.1 cap rule for marks: the owner picks one (leftovers 2026-11-14)",
+      "value": "offsets -0.5 in 1 tile (kbd)"
+    }
+  ]
+}
