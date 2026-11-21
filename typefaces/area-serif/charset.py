@@ -769,13 +769,52 @@ def small_figures(font):
             u = list(g.unicodes)
             put(font, name, path, w, u, lsb=SUP_SIDE + lsb0 * 0.5, rsb=SUP_SIDE + lsb0 * 0.5)
     names = [f + s for f in FIGS for s in ("superior", "inferior")]
+    before = {n: [[(p.x, p.y) for p in c.points] for c in font[n].contours] for n in names}
     CLEAN.lighten(font, names, -SUP_BOLD_FIG)
+    folded = fold_steps(font, names, before)
+    if folded:
+        print("small figures: steps folded", folded)
     for base, name in (("a", "ordfeminine"), ("o", "ordmasculine")):
         p = moved(gp(font, base), 0, 0, SUP_SCALE)
         x0, y0, x1, y1 = bounds(p)
         p = moved(p, 0, SUP_TOP - one_top * SUP_SCALE)               # the superior figures' baseline
         put(font, name, p, 0, list(font[name].unicodes), lsb=SUP_SIDE + 6, rsb=SUP_SIDE + 6)
     CLEAN.lighten(font, ["ordfeminine", "ordmasculine"], -SUP_BOLD)
+
+
+# 0.84 (Regular pass 4, item A1): the 9's crotch (and the 6's, turned) is a short step, a straight of 7 between two
+# corners where the counter's lower curve meets the tail's inner edge (figs.nine_tail). Made heavier by SUP_BOLD_FIG,
+# the tail's edge moves 8 toward the counter and passes the curve's end: the step turns back on itself and the contour
+# crosses itself (pathlint, ⁶ ₆ ⁹ ₉). Where the heavier outline's step runs against the scaled one, the two edges
+# meet before it: the step's first corner goes where the curve's end tangent meets the next edge's line, and the
+# step's second corner is dropped. The full-size figures are not touched.
+def fold_steps(font, names, before):
+    out = []
+    for name in names:
+        g = font[name]
+        for c, old in zip(g.contours, before[name]):
+            P, n = c.points, len(c.points)
+            for i in range(n):
+                a, b = P[i], P[(i + 1) % n]
+                if not (a.type and b.type == "line"):
+                    continue
+                o0, o1 = old[i], old[(i + 1) % n]
+                vo = (o1[0] - o0[0], o1[1] - o0[1])
+                vn = (b.x - a.x, b.y - a.y)
+                if vo[0] * vn[0] + vo[1] * vn[1] >= 0 or math.hypot(*vo) > 20:
+                    continue
+                pa, pb = P[(i - 1) % n], P[(i + 2) % n]
+                d1 = (a.x - pa.x, a.y - pa.y)
+                d2 = (pb.x - b.x, pb.y - b.y)
+                den = d1[0] * d2[1] - d1[1] * d2[0]
+                if abs(den) < 1e-9:
+                    continue
+                t = ((b.x - a.x) * d2[1] - (b.y - a.y) * d2[0]) / den
+                a.x, a.y = round(a.x + d1[0] * t), round(a.y + d1[1] * t)
+                del c.points[(i + 1) % n]
+                out.append(f"{name} ({a.x}, {a.y})")
+                break
+    return out
 
 
 # ---------------------------------------------------------------- 3. dashes, bullet, maths widths
