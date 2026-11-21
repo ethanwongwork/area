@@ -1187,16 +1187,14 @@ def normalize(font):
     print("clean: 5", CLEAN.five_heel(font))                             # 0.69
     print("clean: 5", CLEAN.five_bowl(font))                             # 0.79: the bowl's lowest and widest points
     print("clean: 5", CLEAN.five_stem(font))                             # 0.81 (owner): the upright stroke's lean
-    print("clean: 9 and 6", CLEAN.nine_six(font))                        # 0.81 (owner): the long stroke's lower quarter
-    import figs as FIGS_                                                 # 0.84 (pass 3, owner item 4): the 9's tail g.ss02's
-    print("figs: 9 and 6 tail", FIGS_.nine_tail(font))
+    # clean.nine_six (0.81 owner round 2) and figs.nine_tail (0.84 pass 3): withdrawn, the 9 and 6 are 0.80's again
+    # (0.84 Regular pass 5, item 1: figs.nine_080, below)
     print("balance: capital serifs", BALANCE.cap_serifs(font))           # 0.70: 77 on every upright stem
     print("balance: zero", BALANCE.zero_weight(font))                    # 0.70: sides 87
     print("clean: S curves", CLEAN.even_s(font, HARMONIZE_SET))          # 0.70: 3's hook
     print("clean: curve joins", CLEAN.true_curves(font, HARMONIZE_SET))  # 0.70: u's tail, y's tail
     print("even: thickness round the counters", EVEN.run(font))         # 0.77: before the letters are copied into others
-    import figs as FIGS                               # 0.83 (Regular pass, letters 1): the 9 by one solve of curvature and
-    print("figs: 9 and 6", FIGS.nine_even(font))      # thickness together; the 6 the 9 turned
+    # figs.nine_even (0.83 letters 1, one solve of the 0.81 shape): withdrawn with it (pass 5, item 1)
     import loops as LOOPS
     print("loops:", LOOPS.g_loop(font))                                  # 0.81: g's lower loop, one construction
     nodes = CLEAN.add_nodes(font, HARMONIZE_SET)                         # 0.69: extremes and inflections get a node
@@ -1215,7 +1213,8 @@ def normalize(font):
     print("figs: f", FIGS.f_foot(font))               # 0.83 (letters 7): f's right foot n's
     import hair as HAIR                               # 0.84 (pass 2, strokes): a round stroke's thin place on the
     print("hair: thin places", HAIR.hairlines(font))  # ladder's hairline (J f 5 G 6 9 8 C c e), the inner node moves
-    print("figs: 9 6 handles", FIGS_.in_triangle(font, ("nine", "six")))   # 0.84 (pass 3, item 4): the inner node moved
+    import figs as FIGS_                              # 0.84 (Regular pass 5, item 1): the owner's 0.80 9 and 6, brought
+    print("figs: 9 and 6 of 0.80", FIGS_.nine_080(font))   # up to date (hairline, crotch, one curvature); after every rule
     # hair.spines (0.84, pass 2, strokes 3): withdrawn. Handle lengths and node moves alone gave S one swell at 93.4
     # but broke the curvature at the bowls' counter extremes (14.9 at (457, 159), 4.1 at (147, 570)); holding those,
     # the spine cannot reach one swell (S 94.4 to 96.3, s widest off the middle). It needs a spine construction:

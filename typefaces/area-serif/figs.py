@@ -980,3 +980,122 @@ def nine_tail(font):
         _put(g, new)
         out.append(f"{name}: lowest {xl - dx} > {xl}, right side down to {yq:.0f} (inside {yqi:.0f})")
     return "; ".join(out)
+
+
+# ------------------------------------------------------------------ 0.84 (Regular pass 5, item 1): the 9 and 6 of 0.80
+# The owner (21 November): "The 0.80 9 and 6 were much better from a shape and curve perspective... can you take those
+# exact curves and tails and just make any updates on thickness and bezier curve points/measurements just to bring it up
+# to date with the latest build?" Every later reshaping is withdrawn: 0.81 owner round 2's lower quarter and lean
+# (`clean.nine_six`), 0.83's one solve (`nine_even`), 0.84's hairline node move (`hair.hairlines`) and pass 3's g.ss02
+# tail (`nine_tail`, `G_TAIL`, `nine_solve`). The 9 is 0.80's Regular outline point for point (build/snap080, our own
+# drawing, as it shipped): heights 721 / -9 (the figures' lines), sides 92 at the extremes (the capital round), top
+# 47; brought up to date by (1) the tail's bottom pair on the figures' hairline 47 (hair.py's reading: 42.5 at the
+# tail's inside above the lowest point; the inner lowest node up 5 with its handles), (2) the crotch one corner: the 7-unit step between the bowl's underside and the tail's inner
+# edge (two corners) folded, the curve's end slid along its own tangent onto the tail's edge (what `charset.fold_steps`
+# did for the small forms), (3) the left extreme and the counter's upright run marked smooth (their handles were on one
+# line already), (4) one curvature at every smooth node by handle lengths (the counter's lowest 2.51, the bowl's
+# lowest 1.25 after the fold: `loops.even_nodes`; nodes and the outline's shape kept). The 6 is the 9 turned half round, point for point (0.80's own 6 differed from the turned
+# 9 by 2 to 4 units at its nodes and 18 at one handle). Advance and sides by spacing; the small, tabular and ∂ forms
+# follow from these.
+NINE_080 = [
+    [(57, 471, 'curve', False), (57, 342, None, False), (151, 240, None, False), (279, 240, 'curve', True),
+     (346, 240, None, False), (399, 268, None, False), (457, 327, 'curve', False), (464, 325, 'line', False),
+     (464, 165, None, False), (386, 39, None, False), (279, 39, 'curve', True), (235, 39, None, False),
+     (177, 60, None, False), (177, 87, 'curve', True), (177, 114, None, False), (159, 136, None, False),
+     (133, 136, 'curve', True), (107, 136, None, False), (89, 115, None, False), (89, 87, 'curve', True),
+     (89, 33, None, False), (158, -9, None, False), (249, -9, 'curve', True), (428, -9, None, False),
+     (559, 171, None, False), (559, 400, 'curve', True), (559, 586, None, False), (455, 721, None, False),
+     (308, 721, 'curve', True), (171, 721, None, False), (57, 611, None, False)],
+    [(467, 369, 'line', False), (407, 313, None, False), (361, 292, None, False), (293, 292, 'curve', True),
+     (213, 292, None, False), (149, 365, None, False), (149, 475, 'curve', True), (149, 580, None, False),
+     (212, 674, None, False), (304, 674, 'curve', True), (398, 674, None, False), (467, 575, None, False),
+     (467, 450, 'curve', False)],
+]
+NINE_HAIR = 47          # the figures' hairline (hair.HAIR_CAP)
+
+
+def _fold_crotch(P):
+    """The crotch's short straight between two corners (the bowl's underside curve, then a step onto the tail's
+    upright inner edge) folded into one corner: the curve's end slides along its end tangent to the edge's x, its
+    handle with it; the step's second corner is dropped."""
+    n = len(P)
+    for i, q in enumerate(P):
+        nx = P[(i + 1) % n]
+        if (q[2] == "curve" and not q[3] and nx[2] == "line" and not nx[3] and math.dist(q[:2], nx[:2]) < 12
+                and P[(i + 2) % n][2] is None and abs(P[(i + 2) % n][0] - nx[0]) < 0.5):
+            h = P[i - 1]
+            d = (q[0] - h[0], q[1] - h[1])
+            if abs(d[0]) < 1e-6:
+                continue
+            t = (nx[0] - q[0]) / d[0]
+            dx, dy = nx[0] - q[0], t * d[1]
+            Q = [list(p) for p in P]
+            Q[i][0], Q[i][1] = nx[0], round(q[1] + dy)
+            Q[i - 1][0], Q[i - 1][1] = round(h[0] + dx), round(h[1] + dy)
+            del Q[(i + 1) % n]
+            return [tuple(p) for p in Q], (q[:2], (Q[i][0], Q[i][1]))
+    return P, None
+
+
+def nine_construct():
+    """0.80's 9 brought up to date (see NINE_080); returns (contours, log)."""
+    import loops as LOOPS
+    out, log = [], []
+    outer, counter = [list(q) for q in NINE_080[0]], [list(q) for q in NINE_080[1]]
+    # (3) smooth where the handles already lie on one line
+    for P in (outer, counter):
+        n = len(P)
+        for i, q in enumerate(P):
+            if not q[2] or q[3]:
+                continue
+            a, b = P[i - 1], P[(i + 1) % n]
+            va, vb = (q[0] - a[0], q[1] - a[1]), (b[0] - q[0], b[1] - q[1])
+            if math.hypot(*va) < 1 or math.hypot(*vb) < 1:
+                continue
+            cross = (va[0] * vb[1] - va[1] * vb[0]) / (math.hypot(*va) * math.hypot(*vb))
+            dot = va[0] * vb[0] + va[1] * vb[1]
+            if abs(cross) < 1e-3 and dot > 0:
+                q[3] = True
+    # (2) the crotch one corner
+    outer, folded = _fold_crotch([tuple(q) for q in outer])
+    log.append(f"crotch {folded}")
+    # (1) the tail's bottom pair (the lowest pair of level extremes) on the figures' hairline, read and moved as
+    # hair.hairlines reads and moves it (its thinnest place within reach of the pair; only the inner node moves, upright)
+    import hair as HAIR
+    cs = [[tuple(q) for q in outer], [tuple(q) for q in counter]]
+    bottom = min([p for p in HAIR.pairs(cs) if p[2] == "bottom"], key=lambda p: p[0][3])
+    dy, w0, w1 = HAIR.solve(cs, bottom[0], bottom[1], bottom[2], NINE_HAIR)
+    if dy:
+        cs[bottom[1][0]] = HAIR._move(cs[bottom[1][0]], bottom[1][1], dy)
+    outer, counter = [list(q) for q in cs[0]], [list(q) for q in cs[1]]
+    log.append(f"tail bottom {w0:.1f} > {w1:.1f} ({dy:+d})")
+    # (4) one curvature at the counter's smooth nodes, handle lengths only
+    import curvecheck as K
+    cs = [[tuple(q) for q in outer], [tuple(q) for q in counter]]
+    r0 = K.report("nine", cs, (-1000, 2000))[1]
+    new = []
+    for P in cs:
+        Q = [(round(q[0]), round(q[1]), q[2], q[3]) for q in LOOPS.even_nodes(P, (-1000, 2000))[0]]
+        Q = _in_triangle([list(q) for q in Q])
+        new.append([(round(q[0]), round(q[1]), q[2], q[3]) for q in Q])
+    r1 = K.report("nine", new, (-1000, 2000))[1]
+    log.append(f"curvature {r0:.2f} > {r1:.2f}")
+    return new, log
+
+
+def nine_080(font):
+    """Put the 9 (and the 6, the 9 turned half round) of NINE_080 in the font, before spacing."""
+    from ufoLib2.objects import Contour, Point
+    cs, log = nine_construct()
+    for name, turned in (("nine", False), ("six", True)):
+        if name not in font:
+            continue
+        g = font[name]
+        sx, sy = g.width + 1, 712
+        new = [[(sx - q[0], sy - q[1], q[2], q[3]) for q in P] if turned else P for P in cs]
+        g.clearContours()
+        for P in new:
+            c = Contour()
+            c.points = [Point(x, y, t, smooth=sm) for x, y, t, sm in P]
+            g.contours.append(c)
+    return "; ".join(log)

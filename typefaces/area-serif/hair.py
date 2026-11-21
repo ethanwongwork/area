@@ -26,7 +26,7 @@ HAIR_LC, HAIR_CAP = 43, 47
 # the x-height in a figure, the 5's bowl under its flat stroke)
 STROKES = {
     "J": ("bottom",), "f": ("top",), "five": ("bowl",), "G": ("bottom",), "C": ("bottom",),
-    "six": ("top",), "nine": ("bottom",), "eight": ("top", "bottom"), "c": ("bottom",), "e": ("bottom",),
+    "eight": ("top", "bottom"), "c": ("bottom",), "e": ("bottom",),
 }
 CAPS = set("JGC") | {"five", "six", "nine", "eight"}
 
