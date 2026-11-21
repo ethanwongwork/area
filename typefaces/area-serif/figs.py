@@ -910,6 +910,22 @@ def _in_triangle(P, share=0.95):
     return P
 
 
+def in_triangle(font, names):
+    """`_in_triangle` on finished glyphs (after hair.hairlines moved the 9's inner lowest node up with its own
+    handles, the neck's far handle stood under it: an extreme inside the curve, and the heavier small 9s crossed
+    themselves)."""
+    out = []
+    for n in names:
+        if n not in font:
+            continue
+        cs = _pts(font[n])
+        new = [[(round(q[0]), round(q[1]), q[2], q[3]) for q in _in_triangle([list(q) for q in P])] for P in cs]
+        moved = sum(a != b for P, Q in zip(cs, new) for a, b in zip(P, Q))
+        _put(font[n], new)
+        out.append(f"{n}: {moved} handles")
+    return out
+
+
 def nine_tail(font):
     import loops as LOOPS
     if "nine" not in font:
