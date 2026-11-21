@@ -3045,6 +3045,88 @@ def cap_strokes(font):
     return done
 
 
+# 0.84 (Regular pass 4, item 9; the cohesion study: £ read dark, its ink 1.15 of the figures' median where € sits
+# with them). Its upright (the bowl's stroke) was 98 to 101 across over the bar and its foot 95 tall, against the
+# capital round's 92 at its widest and the figures' flat strokes' 73. The rule, in the figures' own terms: the upright
+# at most the capitals' round (STERLING_ROUND), the whole drawing made lighter level by `clean.lighten` (each node
+# sideways along its own normal, round ends kept round) by the least that brings the upright's widest across to it,
+# read in level spans corrected by the stroke's lean; the foot's top edge (its level extreme over the foot's lowest
+# point) comes down to the figures' flat stroke over the foot's bottom (balance.FIG_FLAT, 73). The bar stays H's
+# crossbar (49, SIGN_BAR).
+STERLING_ROUND = 92
+STERLING_FOOT = 73
+
+
+def _sterling_widest(font, name):
+    p = gp(font, name)
+    best = 0.0
+    for lo, hi in ((150, 330), (405, 560)):
+        mids = {}
+        for y in range(lo, hi, 5):
+            sp = [s_ for s_ in scan_h(p, y) if s_[0] < 330 and s_[1] - s_[0] > 40]
+            if sp:
+                mids[y] = sp[0]
+        for y, (a, b) in mids.items():
+            if y - 10 in mids and y + 10 in mids:
+                lean = ((mids[y + 10][0] + mids[y + 10][1]) - (mids[y - 10][0] + mids[y - 10][1])) / 2 / 20
+                best = max(best, (b - a) / math.sqrt(1 + lean * lean))
+    return best
+
+
+def sterling(font):
+    name = next((g.name for g in font if 0xA3 in g.unicodes), None)
+    if name is None:
+        return "no sterling"
+    g = font[name]
+    w0 = _sterling_widest(font, name)
+    out = []
+    if w0 > STERLING_ROUND + 0.5:
+        a = (w0 - STERLING_ROUND) / 2
+        for _ in range(4):
+            snap_ = [[(q.x, q.y) for q in c.points] for c in g.contours]
+            CLEAN.lighten(font, [name], a)
+            w = _sterling_widest(font, name)
+            if abs(w - STERLING_ROUND) <= 0.5:
+                break
+            for c, P in zip(g.contours, snap_):
+                for q, (x, y) in zip(c.points, P):
+                    q.x, q.y = x, y
+            a += (w - STERLING_ROUND) / 2
+        for c in g.contours:
+            for q in c.points:
+                q.x, q.y = round(q.x), round(q.y)
+        out.append(f"upright {w0:.1f} > {_sterling_widest(font, name):.1f} (lighter by {a:.1f} a side)")
+    # the foot: its lowest level extreme right of the upright, and the level extreme over it
+    for c in g.contours:
+        P, n = c.points, len(c.points)
+        lv = [i for i, q in enumerate(P) if q.type == "curve" and P[i - 1].type is None and P[(i + 1) % n].type is None
+              and P[i - 1].y == q.y == P[(i + 1) % n].y]
+        low = [i for i in lv if P[i].x > 350 and P[i].y < 10]
+        if not low:
+            continue
+        b = P[low[0]]
+        tops = [i for i in lv if abs(P[i].x - b.x) < 60 and 40 < P[i].y - b.y < 140]
+        if not tops:
+            continue
+        t = tops[0]
+        d = (b.y + STERLING_FOOT) - P[t].y
+        if d < 0:
+            # the handles on to the corner where the foot meets the upright follow by their share of the run (the
+            # node's own handles whole), so the top edge stays one curve with no turn back (pathlint)
+            step = -1 if P[t - 1].x < P[t].x else 1
+            k, far = (t + 2 * step) % n, []
+            while P[k].type is None:
+                far.append(k)
+                k = (k + step) % n
+            xc, xt = P[k].x, P[t].x
+            for j in far:
+                P[j].y += round(d * (P[j].x - xc) / (xt - xc))
+            for k in (t - 1, t, (t + 1) % n):
+                P[k].y += d
+            out.append(f"foot {P[t].y - d - b.y:.0f} > {STERLING_FOOT}")
+    return "; ".join(out) or "kept"
+
+
 # 0.84 (Regular pass 4, item 8; the cohesion study: ð stopped at 736, under b d h k l's ascender line). Its ascender
 # and its bar go up together to the ascender line (ASC, 780) as one piece: every point of the outline from where the
 # ascender's inner edge leaves the bowl (the crotch, the last corner over the bowl's right extreme) round to the
@@ -4165,6 +4247,7 @@ def run(font, lightened):
     print("charset: mirrored pairs", mirrors(font))                    # 0.71
     print("charset: eth", eth_ascender(font))                          # 0.84 (pass 4, item 8)
     print("charset: sign weights", cap_strokes(font))                  # 0.71
+    print("charset: sterling", sterling(font))                         # 0.84 (pass 4, item 9)
     print("charset: Eng", eng_capital(font))                           # 0.75
     print("charset: degree", degree_ring(font))                        # 0.75
     print("charset: fractions", fractions(font))                       # 0.72
