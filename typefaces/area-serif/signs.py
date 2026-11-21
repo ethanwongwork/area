@@ -887,9 +887,10 @@ def _arm(J, u, L, w0, d, a0, lead=0.5, enter=1.6, hold=0.55):
         h2 = (tp[0] + (m[0] - tp[0]) * hold, tp[1] + (m[1] - tp[1]) * hold)
         sides.append((s0, h1, h2, tp))
     (l0, l1, l2, l3), (r0, r1, r2, r3) = sides
-    steps = [l0, ("c", l1, l2, l3)]
+    straight = abs(phi) < 1e-9                          # 0.84 pass 4: straight sides as lines (a straight cubic took a
+    steps = [l0, l3 if straight else ("c", l1, l2, l3)]  # turn between the masters, audit_axis)
     steps += _arc(c, r, l3, tip, ccw=False) + _arc(c, r, tip, r3, ccw=False)
-    steps.append(("c", r2, r1, r0))
+    steps.append(r0 if straight else ("c", r2, r1, r0))
     return steps
 
 
@@ -924,6 +925,8 @@ def _between(A, B, a, mid_w, side, k=0.55, ay=None):
     sgn = -1 if B[1] < A[1] else 1
     p0 = (x + side * a, A[1] + sgn * ay)
     p1 = (x + side * a, B[1] - sgn * ay)
+    if abs(mid_w / 2 - a) < 1e-9:                      # 0.84 pass 4: an upright of one width is a line
+        return [p1]
     m = (x + side * mid_w / 2, ym)
     d0, d1 = ym - p0[1], p1[1] - ym
     return [("c", (p0[0], p0[1] + d0 * k), (m[0], m[1] - d0 * k), m),
