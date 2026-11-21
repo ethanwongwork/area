@@ -2432,3 +2432,51 @@ Audits against snap084d's (`build/owner9/pass3/audit-084d-v3`, `chk-084d-v3`, `s
 
 Advances: S and its 10 accented forms 586 > 580, s and its 10 forms 474 > 472 (the bowls' outer extremes come in as the
 stroke thins); x, X, ‰ and the currency signs unchanged.
+
+## Regular pass 3 (0.84), owner's visual notes (20 November 2026)
+
+The owner looked at snap084f at the Regular and named eight things that look wrong. Each was read as a part, fixed by
+a construction that runs where the glyph is built (normalize, or the master construction for & $ @), judged by eye on
+large renders before (red, snap084f) over after and in a text line at 16 / 20 / 24 / 48 px
+(`build/owner10/<item>/`, `build/owner10/text-*.png`), and committed one by one. No measuring campaign; no glyph off
+the list touched; reference faces not opened. Tools: `build/owner10/tools/` (`zoom.py`, `text.py`, `big.sh`, the
+`try*.py` trials on snap084f's UFOs, `renders.sh`).
+
+| # | Item (owner) | Cause | Construction | Now |
+|---|---|---|---|---|
+| 1 | & bottom crossing: "should not be like this" | the bowl's thin stroke was still turning inside the diagonal (the 0.84 ease, curvature 1/450 at the diagonal's centreline): its edges came out about 17 degrees steeper than they went in, a step and a notch at each corner | `amp.construct` (`THROUGH`): through the diagonal both edges are two straight parallels (from 10 before the lower edge to 10 past the upper, and past where the outside meets the tail's top), at the direction half way between the bowl's own arrival and the arm's; after the diagonal one cubic per edge into the arm's line, handles on the lines' corner, ARM_R x half the turn long (at least 45), the turn at most 10 degrees and ending 50 before v's serif | each edge one straight line across the diagonal in every master; curvecheck on the Regular glyph 0 faults (was 0); the arm above and v's serif as they were |
+| 2 | § "rough parts" | four points where the middle loop runs into the S strokes: two notches outside, the counter's two ends | `symbols.section_joins`: a concave fillet of 0.30 the capital stem at each crotch, then every smooth node evened (curvecheck 3 > 0 faults, worst 1.46 > 1.17). Guarded by the masters: the counter's ends rounded (a fillet, or the corner slid along the straight with no new node) sent the Bold § to its upright parts (a node bending 1.6 to 2.5 degrees half way), so they stay corners; `_round_end` is kept for a later pass | outside smooth; the counter's two pointed ends **not done** |
+| 3 | $ "thick/heavy, base it on the current S" | its stroke was Libre Baskerville's ball-ended drawing at its own weight (spine some 110) | `dollar.spine_s`: the S under the bar (six crossing edges' one curves) rebuilt by S's `spine.construct`, spine = the zero's side x 0.949 = 82.6, ends and balls kept; cut at the bar, true_crossing again; Regular and every master | ink 1.43 > 1.27 of the figures' median; reads with "$42" |
+| 4 | 9 and 6: "slanted too much, more like the single storey g" | one long quarter from the bowl's right extreme to a lowest point at 0.27 of the width (0.81's NINE_QUARTER 0.90, lean 23.5): a slanted line in the middle | `figs.nine_tail`: g.ss02's tail (lowest point at its 0.460 share, each edge upright off the right side and round into the lowest point at g's quarter, handles 0.55); `nine_solve` now also solves the tail's handles | 9 curvecheck 0 faults, worst 1.18 (the solve had failed on the new tail, 2.51); 6 the 9 turned |
+| 5 | @ "looks weird still"; a centred, ring more circular | with one white all round the ring followed the a: 0.943 as wide as tall | `at.ROUND`: the ring a circle (width 865 = height); the a centred, side whites 197 (top and bottom 172) | advance 939 > 988 |
+| 6 | ½ ¾ % ‰ light | small figures 4 units a side heavier than scaled (stem 54, 1.16 for their size); bar 48 | `charset.SUP_BOLD_FIG` 8 (stem 62, Georgia Pro's 1.33), `FRACTION_BAR` 56, ‰'s lower zeros one advance apart (they ran together) | superiors' ink 0.320 > 0.349 of a figure, ½ 0.84 > 0.94, % 0.97 > 1.09; even in the 16 to 24 px line |
+| 7 | B D bottom inside "too steep, extremely thick" | the counter left the stem 98 (B) / 104 (D) over its floor (its top corner turns in 11); unchanged since 0.83 | `hair.bowl_foot`: the stem node one bowl-bottom stroke (47) over the floor, a quarter's upright handle, a level handle meeting the floor's other curve at one curvature | lighter, flatter corner; curvecheck reads the turn off the stem as an ease at 1.00 (as the drawing's own corners) |
+| 8 | Æ "larger A" | the A half 326 wide against the E half's 522 (0.62) | `charset.ae_wide`: the leg leans out about the apex to 0.9 of the E half (foot whole, brackets with the leg, crossbar stretched, leg thickness kept across) | A half 470; advance 856 > 1008; æ has no such fault (left) |
+
+Light and Bold were looked at for all eight items (`build/owner10/masters/Light-before-red-after-grey.png`,
+`Bold-...`, `text-300-400-800.png`). They hold the change, with these exceptions. The ampersand's lower counter at the
+Bold has a flatter floor and a tighter turn into the crossing. At the Light its outer lower left is a little fuller.
+The § crotch fillets read as small round notches at the Bold.
+
+### Full build, the audits, `build/snap084g`
+
+`caffeinate -i build.py`, about 27 minutes (`build/snap084g/full-084g.log`), the fourth full build of this pass. The
+first stopped in the mid master: it is a sparse layer with no zero (`dollar.spine_s` now takes the spine part way
+between the Regular and the master). The second sent the Bold § to its upright parts (`section_joins` is now
+guarded). The third passed, but pathlint read the 9's neck handle under its node (`figs.in_triangle` after
+hair.hairlines). The earlier builds and audits are kept in `build/owner10/*-first`, `*-second`. Every audit was run
+once on snap084f (`build/owner10/audit-084f`, `chk-084f`) and on snap084g (`audit-084g`, `chk-084g`).
+
+| Audit | snap084f | snap084g |
+|---|---|---|
+| audit_axis Bold / Light, audit_bold Bold / Light, audit_kern, interpolation, curvecheck regions and hooks (Light, Bold) | | unchanged |
+| fallbacks | Bold registered, ℗; Light ℗ | the same |
+| audit_rays | 1 (six) | 2: **@** thinner at 532.9 than at 400 (51.5 < 56.1 at (212, -12), the ring's lower left: the ring is a circle at the Regular, not yet read through the mid master); **§** thinner at 800 than at 666.3 (45.5 < 48.4 at (124, 462), the upper crotch's fillet). The six is cured by the new tail |
+| Regular: audit_charset | (22 errors only because 0.84f's bar is 48 against the rule's new 56) | 0 errors |
+| Regular: curvecheck regions, hooks | pass | pass |
+| Regular: pathlint | 0 / 150 / 29 | **4** / 155 / 28: the small 6s and 9s (⁶ ₆ ⁹ ₉) cross themselves at the neck under the ball (the tail's tighter neck after 8 units a side); warnings: Æ's outer bracket handle, ⁵ ₅ ¹ handles, ₈ bends 3.5 (all the heavier small figures and the A leg's new lean) |
+
+Left open, honestly: the § counter's two ends (refused by the Bold engine; `_round_end` kept); the four small-figure
+crossings, the @ and § rays readings above (each one more build cycle); B's and D's new corner reads as an ease of
+1.00 in curvecheck's whole-glyph reading (a bracket's turn, as the letters' own); the Bold ampersand's flatter lower
+counter.
