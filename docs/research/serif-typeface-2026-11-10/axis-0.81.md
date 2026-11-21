@@ -2480,3 +2480,70 @@ Left open, honestly: the § counter's two ends (refused by the Bold engine; `_ro
 crossings, the @ and § rays readings above (each one more build cycle); B's and D's new corner reads as an ease of
 1.00 in curvecheck's whole-glyph reading (a bracket's turn, as the letters' own); the Bold ampersand's flatter lower
 counter.
+
+## Regular pass 4 (0.84), cohesion against the set (20 November 2026)
+
+Two parts: the three regressions snap084g's audits left (A), and nine glyphs a comparison study found do not sit with
+the set (B; the study's sheets and numbers in `build/owner10/refs/`, read as evidence only; the directions are in
+Area's own terms). Each item a construction that runs where the glyph is built, judged by eye on large renders
+before (red, snap084g) over after and in a text line at 16 / 20 / 24 / 48 px (`build/owner11/<item>/big.png`,
+`text.png`; the trials `try*` beside them), committed one by one. No glyph off the list touched on purpose; what a
+shared rule carries along is listed. Reference faces not opened. Tools: `build/owner11/tools/` (`renders.sh`,
+`dt.py` the largest inscribed circle in bands, `thick.py` audit_rays' reader on a UFO glyph, `atrays.py` the @
+construction read across the masters, `secneck.py` the § rule on a snapshot's Bold, `rayat.py` one place's rays on a
+variable font, `diffg.py` the glyphs two builds differ in, `stage.py` and `split.py` for one commit per item).
+
+The record's heading the brief asked to rename already read "Regular pass 3 (0.84), owner's visual notes" at HEAD
+(c4171070): nothing to rename.
+
+| # | Item | Cause | Construction | Now |
+|---|---|---|---|---|
+| A1 | ⁶ ₆ ⁹ ₉ crossed themselves (pathlint 4 errors) | the 9's crotch is a 7-unit straight between two corners (figs.nine_tail); made heavier by SUP_BOLD_FIG the tail's edge passed the curve's end and the step turned back | `charset.fold_steps` (in `small_figures`): where the heavier step runs against the scaled one, its first corner where the curve's end tangent meets the next edge, the second dropped | pathlint 0 errors; six, nine unchanged (`diffg.py`) |
+| A2 | @ thinner at 532.9 than 400 (56.1 > 51.5 at (212, -12)) | the inside's left quarters solved alone came out fuller than the outside's in the mid master and the Bold (0.64 against 0.58 of their reach): the ring's lower left was thinner in the mid master (50.6) than the Regular (55.2) | `at.construct` (`INSIDE_LEFT`): both left quarters inside take the outside's shares, as the upper right did | on the construction every place rises 400 > mid > Bold (lower left 55.3 > 62.0 > 67.7); the Regular moves a unit or two inside the upper left |
+| A3 | § thinner at 800 than 666 (48.4 > 45.5 at (124, 462)) | with the crotches filleted (pass 3) the neck from the counter's pointed end to the left fillet is read; the engine carried the fillet in with the stroke (neck 64.9 at 400, 45.6 at the Bold; the right one 85.7) | `symbols.section_necks` (`bold.bold_font`): towards the Bold each end of the left fillet slides back along its neighbouring curve's own tangent (its fillet-side handle with it) until the neck is the Regular's (SECTION_NECK 1.0): a wider, shallower fillet. First shipped as the fillet moved out whole; the first full build's audit_axis read an inflection in the stroke above it between the masters (622.7), so it was redone (also tried: with the curves either side following, the left side bulged; the counter's end slid back, an inflection in the counter; the branch law 1.22, a 34-unit move) | the Regular's § and `section_joins` untouched, so no fallback; at the Bold the left crotch is a shallow scoop where the right stays a notch; audit_rays clear |
+| 4 | « » ‹ › small and light | Libre Baskerville's chevrons, 50 across both arms, top 407 | `charset.guillemets`, `signs.guillemet`: v's diagonals (down arm 74, up arm 39), the vertex flat, ends level at 0.96 / 0.08 x-height, run 0.38 of the height, « 0.40 apart; a construction in every master at v's laws | ‹ 255 x 457 (advance 308 > 383), « 438 x 457 (463 > 566); › » turned over. The first full build's Bold « had its chevrons touching at the foot: the gap now grows by what the thick arm gains level |
+| 5 | figures uneven | the 7's diagonal 46.6 across (a capital thin) | `balance.seven_diagonal`: 0.955 capital stems (82), the inner edge out parallel | 7 82.1; 2's spine and 3's bowls already 92.0 / 92.2 at their thickest (dt.py): left; 0 not plainly light in "0123456789": left. In the first full build the Light's thinner diagonal ran the outer top corner over the bar (718): `symbols.seven_end` slides it down the edge to the Regular's share of the bar in such a master (the Light's 7 ends 689) |
+| 6 | small figures' weight-for-size | (check) | none | ¹ ⁴ stems 62 = 0.54 x 86 + 16, ² ³ curves 65 to 66 = 0.54 x 92 + 16, ² base 55 = 0.54 x 73 + 16: one law; no change |
+| 7 | † ‡ thin and short | the asterisk's arm (32 swelling to 78) on a cap-height upright | **withdrawn** (reverted, a70956bf). Built: `signs.dagger` with separate upright and arm weights, `charset.dagger_info` (upright 78 from a round head on 780 to the crossing, tapering to a 43 foot; arms 50 to 54; straight sides as lines). Both full builds' audit_axis read a turn in ‡ between the masters: the engine moved each round end's tip node off its handles' line (Bold head 12 under, foot 11 under; Light foot 5 over). The fix (`symbols.level_tips`: a node between two level handles back onto their line) clears it on snap084h's masters, but no build was left to prove it in the pipeline | the daggers are snap084g's in the code; build/snap084h was built with item 7's. Patches for the next pass: `build/owner11/i07/retry` (the construction, its follow-up, level_tips) |
+| 8 | ð stopped at 736 | the drawing's | `charset.eth_ascender`: ascender, bar and cut end up whole to 780, the run between bowl and bar drawn longer | top 777 in the Regular (cap_strokes' 83 for ð then trims the run and the bar's end, edges in by up to 6), 778 in the Light and the Bold (762 before) |
+| 9 | £ dark | upright 99 across, foot 95 tall | `charset.sterling`: lighter level by the least that brings the upright to 92 (3.7 a side), the foot's top to 73 over its bottom (the handles to the upright by their share) | upright 91.5, foot 73, bar 49 |
+| 10 | ¤ low and small | centre 245, ring 413 | `charset.currency_sign`: ring centred on 313, outer diameter the 0's ink width (504), ring weights and arms as drawn | ink 514 tall, top 0.80 cap |
+| 11 | maths signs narrow | the + box 424 | `charset.math_widths` (`MATH_INK`, the figures' median ink 494), `maths`, `tilde_signs`: every operator on the minus follows; ÷'s bar the minus; × TIMES_BOX; ~ and ∞ the operators' sides | + 494 square; advance 612 kept; ~ 510 > 612, ∞ 704 > 859 |
+| 12 | → short | 2 axes (626) | `charset.arrows`: the arrow's share of the + box (626 / 424): 729; ↑ ↓ ↕ keep the baseline-to-two-axes extent | → ← ↔ ↗ ↖ ↘ ↙ 729 long |
+
+Carried along by the shared rules, not on the list: ¬ (built on the minus: 494 wide now), ≠'s = (its slash as it
+was), seven.ss06, seven.tf and the small 7s (built from the 7), and the asciitilde's advance (now the operators'
+612). The ~ and ≈ waves keep their 22.5-degree slope, so at the wider box they are 1.165 times taller (the wave's
+height follows its length at the owner's slope).
+
+Light and Bold were looked at for every item (`build/owner11/masters/Light-1..3.png`, `Bold-1..3.png`, red snap084g
+over grey snap084h; `text-300-400-800.png` the variable font at 300 / 400 / 800, 16 / 24 / 48 px). They hold, with
+what the first full build showed and the follow-ups fixed: the Bold « (chevrons touching), the Light 7 (bar end over
+the top), the Bold § (an inflection, redone as fillet ends sliding along their curves). At the Bold the § left crotch
+is now a shallow scoop beside the right one's notch; the ¤ ring at every weight is the 0's width.
+
+### Full build, the audits, `build/snap084h`
+
+`caffeinate -i build.py` twice (the brief's one full build and one more for the regressions it showed): the first
+kept as `build/owner11/snap084h-first` with its audits (`audit-084h-first`, `chk-084h-first`); the second is
+`build/snap084h` (`full-084h.log`, the notes), audited in `build/owner11/audit-084h` and `chk-084h`
+(`build/owner11/tools/audits.sh`), against snap084g's (`build/owner10/audit-084g`, `chk-084g`). No kerning refit:
+the maths' advance is unchanged (612) and the guillemets', ~'s, ∞'s and the arrows' new advances carry no pair the
+kerning audit reads differently.
+
+| Audit | snap084g | snap084h |
+|---|---|---|
+| fallbacks | Bold registered, ℗; Light ℗ | the same |
+| audit_rays | 2 (@ at 532.9, § at 800) | **ok** (464 glyphs, 27,036 places) |
+| audit_axis Bold / Light | ok (thin: cedi, ogonek, one.ss01 as before) | first build: turns daggerdbl, § (622.7 / 355.9), crossings 7 seven.ss06 ⁷ ₇ (317 to 322); second build: § and the sevens clear, **daggerdbl turns at 396 / 425 remain** (item 7, reverted in the code afterwards) |
+| audit_bold Bold / Light | 428 / 429 on target, Light clean | the same on target; Light one "other": seven height 0..718. audit_bold reads the engine's own 7 (glyph_bold), before `symbols.seven_end`; the shipped Light 7 stands 0..712 |
+| audit_kern | | unchanged |
+| curvecheck regions and hooks, Light and Bold | | unchanged |
+| interpolation (fontTools) | 62 not compatible (the struck glyphs) | the same |
+| Regular: audit_charset | 0 errors | 0 errors |
+| Regular: curvecheck, hooks | pass | pass |
+| Regular: pathlint | 4 / 155 / 28 | **0** / 154 / 30 (the currency sign's warning gone; info: ↗ ↘ a smooth node 0.6 units off its line after whole units at the new length) |
+
+Left open: item 7 (above); the 7 in a run ("7777") reads a little heavy at 82 where the figures' mean stroke would
+ask about 67 (the brief's number kept); the guillemets' and ¤'s ends are cut sharp (the plain stroke end's radius 7
+does not reach them); ~ and ≈ are 1.165 times taller (their slope kept).
