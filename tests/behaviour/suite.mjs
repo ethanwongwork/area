@@ -21,7 +21,8 @@ export function must(condition, message) { if (!condition) throw new Error(`Prec
 
 export function behaviour(fixture, define, { query = "" } = {}) {
   let page;
-  before(async () => { page = await open(fixture, { query }); });
+  // A launch that hangs fails the suite in two minutes rather than holding the run.
+  before(async () => { page = await open(fixture, { query }); }, { timeout: 120000 });
   after(async () => { await page?.close(); });
   // `fresh: false` reuses the page when it already shows that query: for tests that only read, or that touch only
   // their own part of the fixture (a form of their own), so a suite of many small checks stays fast.

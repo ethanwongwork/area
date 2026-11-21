@@ -3,6 +3,11 @@
 # build and playground mapping, and a consumer install of the built packages. See docs/DEVELOPMENT.md.
 # The token and contrast tests sweep every setting position (tens of thousands of cases, about 20 minutes on a
 # runner), so they run as their own job beside the others rather than inside the other job's time limit.
+# The browser jobs (behaviour suites, rendered checks at the defaults and at the settings corners) and the output job
+# (`area check`) run when CSS, tokens, React, the app or the checks themselves change (the `changes` job), and always
+# on main and on a manual run. They drive headless Microsoft Edge, installed from Microsoft's stable channel, and only
+# ever as a guest with implicit sign-in off (scripts/rendered/cdp-lib.mjs and tests/behaviour/harness.mjs refuse
+# otherwise). Each runs its captures one at a time: parallel captures starve a machine.
 name: CI
 
 on:
@@ -90,5 +95,250 @@ jobs:
             git status --short --untracked-files=no
             git diff --stat
             echo "A build step changed tracked files: regenerate locally and commit the result."
+            exit 1
+          fi
+
+  # Which of the path-filtered jobs a pull request needs: the files it changes against its base.
+  changes:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      browser: ${{ steps.filter.outputs.browser }}
+      output: ${{ steps.filter.outputs.output }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - id: filter
+        name: Changed paths
+        env:
+          EVENT: ${{ github.event_name }}
+          BASE: ${{ github.event.pull_request.base.sha }}
+        run: |
+          if [ "$EVENT" != "pull_request" ]; then
+            echo "browser=true" >> "$GITHUB_OUTPUT"
+            echo "output=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          changed="$(git diff --name-only "$BASE"...HEAD)"
+          echo "$changed"
+          # Component CSS, tokens, React, icons, the app (its gallery and demos), the checks and the lockfile.
+          if echo "$changed" | grep -Eq '^(packages/(tokens|styles|react|icons)/|apps/desktop/|scripts/rendered/|tests/behaviour/|package(-lock)?\.json$|\.github/workflows/)'; then
+            echo "browser=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "browser=false" >> "$GITHUB_OUTPUT"
+          fi
+          if echo "$changed" | grep -Eq '^(packages/|package(-lock)?\.json$|\.github/workflows/)'; then
+            echo "output=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "output=false" >> "$GITHUB_OUTPUT"
+          fi
+
+  behaviour:
+    name: Behaviour suites (headless Edge)
+    needs: changes
+    if: needs.changes.outputs.browser == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    env:
+      ELECTRON_SKIP_BINARY_DOWNLOAD: "1"
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install
+        run: npm ci --no-audit --no-fund
+
+      - name: Microsoft Edge (stable)
+        run: |
+          if ! command -v microsoft-edge-stable >/dev/null; then
+            curl -fsSL https://packages.microsoft.com/keys/microsoft.asc | sudo gpg --dearmor -o /usr/share/keyrings/microsoft-edge.gpg
+            echo "deb [arch=amd64 signed-by=/usr/share/keyrings/microsoft-edge.gpg] https://packages.microsoft.com/repos/edge stable main" | sudo tee /etc/apt/sources.list.d/microsoft-edge.list
+            sudo apt-get update
+            sudo apt-get install -y microsoft-edge-stable
+          fi
+          # Ubuntu 24.04 blocks the unprivileged user namespaces Chromium's sandbox uses.
+          sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
+          echo "AREA_BEHAVIOUR_EDGE=$(command -v microsoft-edge-stable)" >> "$GITHUB_ENV"
+          # What the browser runs on, for reading a failed launch: version, cores, memory, shared memory, fonts.
+          microsoft-edge-stable --version
+          echo "cores: $(nproc)"; free -m; df -h /dev/shm
+          echo "sans-serif: $(fc-match sans-serif)"
+
+      - name: Build packages
+        run: npm run build
+
+      # run.mjs starts Edge once first and stops with its cause if it cannot; the step limit keeps a hang from taking
+      # the job's 40 minutes (a full run is about 2 minutes on a laptop).
+      - name: Behaviour suites
+        timeout-minutes: 20
+        run: npm run test:behaviour
+
+  rendered:
+    name: Rendered checks (defaults, every family)
+    needs: changes
+    if: needs.changes.outputs.browser == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      ELECTRON_SKIP_BINARY_DOWNLOAD: "1"
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install
+        run: |
+          npm ci --no-audit --no-fund
+          node -e "require.resolve('sharp')" || npm install --no-save --no-audit --no-fund sharp
+
+      - name: Microsoft Edge (stable)
+        run: |
+          if ! command -v microsoft-edge-stable >/dev/null; then
+            curl -fsSL https://packages.microsoft.com/keys/microsoft.asc | sudo gpg --dearmor -o /usr/share/keyrings/microsoft-edge.gpg
+            echo "deb [arch=amd64 signed-by=/usr/share/keyrings/microsoft-edge.gpg] https://packages.microsoft.com/repos/edge stable main" | sudo tee /etc/apt/sources.list.d/microsoft-edge.list
+            sudo apt-get update
+            sudo apt-get install -y microsoft-edge-stable
+          fi
+          sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
+          echo "AREA_RENDERED_BROWSER=$(command -v microsoft-edge-stable)" >> "$GITHUB_ENV"
+          # What the browser runs on, for reading a failed launch: version, cores, memory, shared memory, fonts.
+          microsoft-edge-stable --version
+          echo "cores: $(nproc)"; free -m; df -h /dev/shm
+          echo "sans-serif: $(fc-match sans-serif)"
+
+      - name: Build packages and the desktop app
+        run: |
+          npm run build
+          npm run build -w @area/desktop
+
+      - name: Browser starts (headless guest Edge loads a page)
+        timeout-minutes: 3
+        run: node scripts/rendered/probe.mjs
+
+      - name: check:rendered (defaults, every family)
+        timeout-minutes: 30
+        run: npm run check:rendered
+
+      # On every run, pass or fail: report.json lists every violation and snapshot value, and on a platform with no
+      # baseline yet, proposed-baseline/ holds the one this run would record (docs/DEVELOPMENT.md, Continuous integration).
+      - name: Reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: rendered-defaults
+          path: |
+            .cache/rendered/check/report.json
+            .cache/rendered/check/proposed-baseline/
+          if-no-files-found: ignore
+
+  rendered-corners:
+    name: Rendered checks (settings corners, fast subset)
+    needs: changes
+    if: needs.changes.outputs.browser == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      ELECTRON_SKIP_BINARY_DOWNLOAD: "1"
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install
+        run: |
+          npm ci --no-audit --no-fund
+          node -e "require.resolve('sharp')" || npm install --no-save --no-audit --no-fund sharp
+
+      - name: Microsoft Edge (stable)
+        run: |
+          if ! command -v microsoft-edge-stable >/dev/null; then
+            curl -fsSL https://packages.microsoft.com/keys/microsoft.asc | sudo gpg --dearmor -o /usr/share/keyrings/microsoft-edge.gpg
+            echo "deb [arch=amd64 signed-by=/usr/share/keyrings/microsoft-edge.gpg] https://packages.microsoft.com/repos/edge stable main" | sudo tee /etc/apt/sources.list.d/microsoft-edge.list
+            sudo apt-get update
+            sudo apt-get install -y microsoft-edge-stable
+          fi
+          sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
+          echo "AREA_RENDERED_BROWSER=$(command -v microsoft-edge-stable)" >> "$GITHUB_ENV"
+          # What the browser runs on, for reading a failed launch: version, cores, memory, shared memory, fonts.
+          microsoft-edge-stable --version
+          echo "cores: $(nproc)"; free -m; df -h /dev/shm
+          echo "sans-serif: $(fc-match sans-serif)"
+
+      - name: Build packages and the desktop app
+        run: |
+          npm run build
+          npm run build -w @area/desktop
+
+      - name: Browser starts (headless guest Edge loads a page)
+        timeout-minutes: 3
+        run: node scripts/rendered/probe.mjs
+
+      # The defaults run in full in the rendered job, so they are left out here. Seven corners at about 4.5 minutes
+      # each on the runner (run 44583214909).
+      - name: check:rendered:corners (fast subset, one corner at a time)
+        timeout-minutes: 50
+        run: npm run check:rendered:corners -- --fast --skip defaults
+
+      - name: Reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: rendered-corners
+          path: |
+            .cache/rendered/corners/*/report.json
+            .cache/rendered/corners/*/proposed-baseline/
+          if-no-files-found: ignore
+
+  output:
+    name: Output (area init, build and check)
+    needs: changes
+    if: needs.changes.outputs.output == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      ELECTRON_SKIP_BINARY_DOWNLOAD: "1"
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install
+        run: npm ci --no-audit --no-fund
+
+      - name: Build packages
+        run: npm run build
+
+      - name: Output tests
+        run: npm run test:output
+
+      # The repository holds no system the app saved, so `area check` runs on the starter system (Area's defaults)
+      # written out by `area init` and `area build`: a file that keeps to the system passes, one that does not fails.
+      - name: area check on the starter system
+        run: |
+          area="$GITHUB_WORKSPACE/packages/output/bin/area.mjs"
+          dir="$(mktemp -d)"
+          cd "$dir"
+          node "$area" init --name Starter
+          node "$area" build
+          printf '.ok { color: var(--area-fg-accent); padding: var(--area-space-4); }\n' > good.css
+          printf '.bad { color: #123456; padding: 13px; }\n' > bad.css
+          node "$area" check good.css
+          if node "$area" check bad.css; then
+            echo "area check passed a file with a literal colour and length"
             exit 1
           fi

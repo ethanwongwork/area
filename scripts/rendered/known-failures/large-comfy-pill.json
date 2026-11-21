@@ -1,0 +1,8 @@
+{
+ "about": "Violations of assert rules at the large-comfy-pill corner (type=16 density=36 radius=pill) that fail today: the baseline check:rendered compares against at these settings, as known-failures.json is at the defaults. Each entry's note says whether it is a component defect or a rule still to be scaled.",
+ "settings": {"type":"16","density":"36","radius":"pill"},
+ "known": [
+  {"rule":"cap-centring","key":"badge · Badge","item":"B5.1","finding":"VS2","note":"also at the defaults: the mark recipe's whole-pixel baseline (plan, Optical spacing: marks share one whole-pixel cap baseline) rounds (H + 1cap) / 2 to a pixel, so the cap sits up to 0.5 off centre (Kbd 0.11, lg Badge/Tag 0.38); it conflicts with the 0.1 cap rule for marks: the owner picks one (leftovers 2026-11-14)","value":"offsets 0.3 in 1 tile (size-lg)"},
+  {"rule":"cap-centring","key":"tag · Tag","item":"B5.1","finding":"VS2","note":"also at the defaults: the mark recipe's whole-pixel baseline (plan, Optical spacing: marks share one whole-pixel cap baseline) rounds (H + 1cap) / 2 to a pixel, so the cap sits up to 0.5 off centre (Kbd 0.11, lg Badge/Tag 0.38); it conflicts with the 0.1 cap rule for marks: the owner picks one (leftovers 2026-11-14)","value":"offsets 0.3 in 1 tile (size-lg)"}
+ ]
+}

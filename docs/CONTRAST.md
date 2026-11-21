@@ -18,8 +18,11 @@ text surfaces, the floating ground and the hovered plates (`contrast/assertions.
 Layers step, tint and Text tint (`layer-checks.ts`). Dark muted is floored at #b9b9b9 (10.6:1 on the page), down from
 #c5c5c5 (12:1, only 1.49 off the default ink): the plan's 8:1 is under the dark APCA content floor (Lc 60) on the fills
 muted sits on, and the floor binds, so dark's default-to-muted step is 1.70 against light's 2.5 (`layers.test.ts`, "the
-ink ladder"). In dark at the defaults subtle is muted for the same reason. Disabled ink is exempt (WCAG 1.4.3) and held
-to 1.9:1.
+ink ladder"). In dark at the defaults subtle is muted for the same reason. Past the defaults both also keep the APCA
+content floor on the lightest hover fill (`DARK_INK_APCA`, plan B, 2026-11-19): the text target alone left them at Lc 54
+to 58 on a hovered menu row at the Layers extremes, and at 8 + 4 muted is #bbbbbb (#b9b9b9 measured Lc 59.5 on its
+hovered row); the defaults are unchanged. Disabled ink is exempt (WCAG 1.4.3) and held to 1.9:1, and in dark to Lc 20 on
+the raised layer as well (a black page with flat Layers had it at Lc 19.3).
 
 Tinted grays (Tint hue and strength, `axes/tint.ts`) keep these targets by construction: the inks are solved for
 lightness as if every colour were gray, and a tint changes a colour's luminance at the same lightness, so text moves 0.25
@@ -34,6 +37,22 @@ edges on red and orange pages under 3:1. On a tinted light page the hued inks (v
 lowers a page's luminance at the same lightness: a red tint at 8 on a 92 page had left danger's vivid ink at 4.3:1.
 `layers.test.ts` checks every vivid and tonal ink, of every named accent and every hue at full and lowest strength, on
 every tinted page (hues in 15° steps, Tint 1 to 16).
+
+**Outlines, marks and dark vivid inks follow the ground too** (`HOLD`, color/layers.ts; plan B, 2026-11-19). The tone and
+hue outlines (`<tone>-border` at 1.3:1, `-border-strong` at 1.9:1 and, in dark, Lc 15), the light status and label marks
+(`fg-<tone>-mark`, which the hue icons read, 3:1) and the dark vivid inks (`fg-<role>-vivid`, syntax, 4.5:1 and Lc 60 on
+the code ground) are palette colours solved once, so as fixed rungs they missed their floors on a gray light page, on the
+recessed grounds (subtle, tile, well, at the defaults too: 1.22:1 on `bg-well`) and on a lighter or black dark page with
+raised Layers (the cross-setting sweeps, `src/sweeps/`). Each now keeps its colour wherever it holds its floor on the
+ground under it and moves only as far as the floor needs where it does not: in light its linear sRGB scales down for the
+deepest ground it can sit on (the recessed layer, a darker card, a tile, a well), which is the hued inks' mix toward black
+solved per colour; in dark it scales up for the lightest (the raised layer, a lighter card, a tile, a well, a floating
+surface; the code ground for the vivid inks), then its encoded sRGB for an APCA floor, and toward white where a channel
+reaches 255. At the defaults only the light tone and hue outlines move (each about 1.31 / 1.92:1 on the well, 1.40 /
+2.06:1 on the surface, from 1.31 / 1.92 there); dark and the marks are unchanged. Contrast then mixes each outline toward
+its ink as before. The colour sweep measures each on every ground at every combination it crosses, against the floor its
+own assertion declares, and the CSS paints what the sweep's model computes (2026-11-19: 192,000 values across 3,000
+combinations painted in Electron, each within one 8-bit step of the model but for one boundary case noted in the plan).
 
 Any accent the settings can make is gated too (`contrast/accents.test.ts`): every pairing that reads an accent token, on
 the palette's eleven and the 72 hues, at every Accent strength, on every neutral, in both modes, and the solid pairings at
@@ -203,6 +222,15 @@ value 2.08:1, a toned disabled Button's label 1.93:1 (ghost discovery on the dan
 steps back to the hover plate and never further, so its words keep the contrast asserted on `bg-component-hover`
 (`contrast/assertions.ts`) and the plate keeps Hover fill's step from its ground (25 at the least, never transparent).
 The row's own mark (a List box check, a Table checkbox) still says which is selected.
+
+**The accent's selected plate keeps a step from hover** (`SELECTED_STEP`, color/layers.ts; plan B, 2026-11-19). At
+Selection Accent a selected row is the accent's soft surface, which at a low Accent strength nears grey: at 30 (and 60 in
+dark) it sat within the Layers gate's smallest hover step of the hover plate (ΔE OK 0.005). The plate (and its hover) now
+keeps that step plus a rounding margin (0.011 light, 0.037 dark) from each ground's hover plate: where its hue and chroma
+already make it, it keeps its colour; elsewhere its lightness moves away from hover by the rest, on the side it sits on
+(past hover, darker in light and lighter in dark, where it sits on it). Hover never moves. Its words hold on the moved
+plate: the selection ink at 5.1:1 or more in light and Lc 66 in dark; dark muted text (a count) measures Lc 59.1 at the
+lowest, above the Lc 58.7 it has on the neutral selected plate of the same ground.
 
 `packages/styles/src/forced-colors.css` uses system colors for required marks, selected
 states, invalid indications and focus; Select restores its native arrow. These rules do

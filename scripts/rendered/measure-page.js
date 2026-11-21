@@ -179,7 +179,32 @@
     const title = el.querySelector(".studio-section__link")?.textContent?.trim();
     const cards = [...el.querySelectorAll(".gallery-asset")];
     const r = el.getBoundingClientRect();
-    return { slug, name: title, section: { w: r2(r.width), h: r2(r.height) }, tiles: cards.map(card => measureTile(card, cap)) };
+    const tiles = cards.map(card => measureTile(card, cap));
+    return { slug, name: title, section: { w: r2(r.width), h: r2(r.height) }, scale: scaleOf(el), tiles };
+  }
+
+  /**
+   * The run's control ladder and text size where the specimens are drawn (inside a tile's stage, so in the specimens'
+   * scope): the heights var(--area-control-xs … xl) resolve to and the body text size, read from a hidden probe.
+   * Rules whose tolerances follow type and density read these instead of the lengths at type 13 / density 32.
+   */
+  function scaleOf(sectionEl) {
+    const holder = sectionEl.querySelector(".gallery-tile__stage") ?? sectionEl.querySelector(".gallery-tile__view") ?? sectionEl;
+    const probe = document.createElement("div");
+    probe.setAttribute("aria-hidden", "true");
+    probe.style.cssText = "position:absolute;visibility:hidden;pointer-events:none;left:0;top:0;width:0;display:flex;align-items:flex-start";
+    const sizes = ["xs", "sm", "md", "lg", "xl"];
+    for (const size of sizes) { const bar = document.createElement("div"); bar.style.cssText = `width:1px;flex:none;height:var(--area-control-${size}, 0px)`; probe.append(bar); }
+    const text = document.createElement("span");
+    text.textContent = "H";
+    text.style.cssText = "font-size:var(--area-type-base, inherit)";
+    probe.append(text);
+    holder.append(probe);
+    const control = Object.fromEntries(sizes.map((size, i) => [size, r2(probe.children[i].getBoundingClientRect().height)]));
+    const textSize = parseFloat(getComputedStyle(text).fontSize);
+    probe.remove();
+    const attr = name => holder.closest(`[data-area-${name}]`)?.getAttribute(`data-area-${name}`) ?? null;
+    return { control, text: textSize, type: attr("type"), density: attr("density") };
   }
 
   /** An open overlay `el` (wherever it is in the document), relative to the tile `card`'s frame. */

@@ -40,7 +40,7 @@ npm test               # token math, axes and the contrast gate
 | App content, demos, tiles | `npm run build -w @area/desktop`, `npm run check:playgrounds -w @area/desktop`, `npm run typecheck` |
 | App CSS (`apps/desktop/src/studio.css`, `src/styles/`) | `npm run check:app-css -w @area/desktop` (rule 13: no app rule restyles an Area component) |
 | Component CSS, manifest, React | `npm run build` (parity and token refs run in the styles build), `npm run typecheck`, `node --test packages/react/tests/<family>.test.mjs` and `cohesion.test.mjs`, `npm run check:docs -w @area/desktop`, then the app |
-| Tokens, colour, focus, state paint | `npm test` and `node packages/tokens/src/contrast/report.ts` (exits non-zero on a failure). Never lower a floor or add a waiver to pass |
+| Tokens, colour, focus, state paint | `npm test` (includes the cross-setting sweeps in `packages/tokens/src/sweeps/`) and `node packages/tokens/src/contrast/report.ts` (exits non-zero on a failure). Never lower a floor or add a waiver to pass |
 | Package exports | `npm run test:consumer` after a build |
 | Icons | The `area-icon-construction` skill's gate; `npm run test:icons` |
 | App chat code | `npm run test:desktop` |
@@ -54,7 +54,17 @@ Rendered lengths, corners, marks, header bars, the dark floating edge and the ga
 
 ## Continuous integration
 
-`.github/workflows/ci.yml` runs on every pull request and on `main` (Ubuntu, Node 24) as two jobs side by side.
+`.github/workflows/ci.yml` runs on every pull request and on `main` (Ubuntu, Node 24) as two jobs side by side, and the browser and output jobs below.
+**Cross-setting sweeps** (`packages/tokens/src/sweeps/`, part of `npm test`, about 25 s). `colour.test.ts` crosses
+mode × neutral × four accents × Accent strength × Status colours × Tone contrast × Tone tint × ground and Layers (the
+default and the extremes), 5,400 combinations. It checks every declared pairing at its floor (APCA in dark), tone
+strokes and hue icons on every ground, state plates apart by the Layers gate's hover step, and stroke groups against
+1.2. `geometry.test.ts` crosses Type × Density × Corner × Stroke width × Focus ring × Selected stroke × Contrast,
+36,450 combinations. Today's misses are listed in `known-failures.ts`, each with its finding in
+`docs/research/system-status-2026-11-18/README.md`, as a defect or a decision. A new failure fails the run, and so
+does a listed one that no longer fails: delete its entry in the change that fixes it. Never widen an entry or lower a
+floor to pass. `SWEEP_REPORT=1 npx vitest run src/sweeps` (in `packages/tokens`) prints each entry as measured.
+
 **Token, axis and contrast tests** (`npm ci`, then `npm test`; about 20 minutes, since its sweeps cover every
 setting position; its own job since 2026-11-15, when it outgrew the shared 30-minute limit). **checks** (about
 fifteen minutes, most of it the build) runs:
@@ -70,9 +80,38 @@ fifteen minutes, most of it the build) runs:
 9. `test:consumer`;
 10. a check that the build left tracked files unchanged.
 
-It skips the Electron binary and checks nothing in a browser. Preview, rendered contrast,
-forced colours and a 1x display still need a session. `npm ci` refuses a lockfile that
+Four more jobs run when CSS, tokens, React, icons, the app, the checks or the lockfile change
+(a `changes` job reads the pull request's paths; on `main` and a manual run they always run):
+**behaviour** (`npm run build`, then `test:behaviour` in headless Edge), **rendered**
+(`check:rendered` at the defaults, every family), **rendered-corners** (the corners' fast subset)
+and **output** (`test:output`, then `area init`, `area build` and `area check` on the starter
+system: a file that keeps to the system passes, one with a literal colour fails; the repository
+holds no system the app saved). They install Microsoft Edge (stable) and skip the Electron
+binary. Preview, rendered contrast, forced colours and a 1x display still need a session. `npm ci` refuses a lockfile that
 disagrees with a workspace's `package.json`; run `npm install` and commit the lockfile.
+
+**The browser jobs on the runner** (first run, 2026-11-19, run 44583214909). Edge keeps its sandbox (the
+`kernel.apparmor_restrict_unprivileged_userns=0` sysctl is enough: the corners job captured with it), so never add
+`--no-sandbox` to pass. Each Edge step prints the version, cores, memory, `/dev/shm` and the sans-serif font. A
+launch waits up to 60 s for the DevTools port (`AREA_RENDERED_LAUNCH_TIMEOUT`, `AREA_BEHAVIOUR_LAUNCH_TIMEOUT`, in ms)
+and fails with the command line, exit code and Edge's last stderr lines. `test:behaviour` starts Edge once before any
+suite and stops there if it cannot. The rendered jobs run `node scripts/rendered/probe.mjs` first (it loads one page and
+prints the version and command). A protocol call with no answer in 120 s, or a renderer crash, fails the capture,
+naming the call (`AREA_RENDERED_CALL_TIMEOUT`); the first run's corners job hung 32 minutes on one. Every step has its
+own time limit.
+
+**Platform baselines.** Text metrics differ by platform: macOS and Linux round a face's ascent differently and draw
+the ink ascent with different rasterisers. So the same build measures a quarter pixel apart on the runner. On the first
+run, cap centring at type 12 found 24 Linux-only offsets of -0.25 px, and 8 macOS entries did not fail. The app's fonts
+are served from the build, so installing fonts cannot close that gap. macOS keeps the baselines where they are
+(`scripts/rendered/known-failures.json`, `known-failures/`, `snapshots/`). Linux keeps its own under
+`scripts/rendered/platforms/linux/`, with the same layout and the same rules and tolerances. A run on a platform with no
+baseline compares with macOS's, so it shows exactly what differs. It fails, and it writes the baseline it would record
+to `<capture>/proposed-baseline/`. The reports job uploads that folder and `report.json` on every run, pass or fail
+(artifacts `rendered-defaults` and `rendered-corners`). To record Linux: download the artifact and read every entry
+marked "NEW on linux". Then commit `platforms/linux/` with a note on each: a component defect, or a platform
+difference in text metrics. `AREA_RENDERED_PLATFORM=linux` reads and writes Linux's files from a Mac (for example
+with `--reuse --prune-known`).
 
 ## Verifying in the app
 
@@ -132,6 +171,46 @@ only the dark floating edge reads pixels. It never gates on picture diffs.
   `npm run check:rendered -- --reuse --update <rule id>` (for example `marks`), review
   the diff of `scripts/rendered/snapshots/<rule id>.json`, and say why in the commit.
   Never update a snapshot or a known failure to make an unintended change pass.
+- **Other settings.** `npm run check:rendered -- --set type=16 --set density=36` (repeatable;
+  ids and values are the registry's, `packages/tokens` config, so build first). An unknown
+  setting or value fails before a browser opens, and a value the page did not apply (no
+  element carries `data-area-<axis>` with it) fails after it opens: the app drops values it
+  doesn't know without a word. `-- --corner <id>` runs a named corner of
+  `scripts/rendered/corners.json`; `-- --families a,b,c` or `-- --fast` (the corners file's
+  subset: overlays, marks, rows, controls) captures only those families. At any settings
+  other than the defaults the snapshot rules (header bars, marks, corners) are skipped with
+  a note, since a setting is meant to move them, and the assert rules (cap centring, dark
+  floating edge, tile names, wrap tiles, extent, visible at rest), which are invariants,
+  run against that corner's baseline, `scripts/rendered/known-failures/<corner id>.json`
+  (an unnamed set of settings gets an id from its pairs). The defaults keep
+  `known-failures.json` and `snapshots/`. Record a corner's baseline with `-- --corner <id>
+  --reuse --seed-known` only after reading every violation, and give each entry a note:
+  a component defect (with the plan item) or a rule still to be scaled. On a family subset
+  only those families' known failures and per-family snapshot values are compared (marks,
+  one table across families, is skipped).
+- **Tolerances that follow the settings.** Cap centring skips a box taller than the large
+  control (more than one line of controls by design); that limit is the page's own
+  `var(--area-control-lg)` where the specimens are drawn plus 2 px (40 at type 13 /
+  density 32, 50 at type 16 / density 36), read per family by `measure-page.js` (`scale`).
+  The 0.1 px centring tolerance itself is fixed (an open owner question). No other rule's
+  constant depends on type or density: the edge zone (2 CSS px), the extent tolerance
+  (0.5 px) and the text rules are not lengths of a control.
+- **The corners.** `npm run check:rendered:corners` runs every corner one after another,
+  light and dark: defaults; type 12 + density 28 + radius 0; type 16 + density 36 + pill;
+  surface 2 + stroke 8 + bold focus ring + selected stroke 3; surface 0 + stroke 0 +
+  elevation 0; the grounds (light 90 with flat layers, dark 24 with layers 100); accent
+  yellow at 30% on buttons and selection; tone contrast 2.5 + tone tint 160. Every family
+  is about 5 minutes a corner on an idle machine, so about 40 minutes for all.
+  `npm run check:rendered:corners:fast` (or `-- --fast`) runs the subset, about a minute a
+  corner (100–160 s measured with other work running; 14.7 min for all eight on
+  2026-11-19), for routine use; `-- --only a,b`, `-- --skip defaults`. The corner
+  baselines were first recorded from the fast subset, so a full corner run reports the
+  other families' violations as new until they are read and recorded.
+- **One capture at a time.** Captures side by side starve the machine (families went from
+  6–15 s to 100–200 s each on 2026-11-18), so a capture takes a lock
+  (`.cache/rendered/capture.lock`) and a second one fails at once, naming the first. Don't
+  run a capture beside the token suite or another session's browsers either; run long
+  ones in the background with a log, and say how long they will take first.
 - **One family for a review page.** `npm run capture:rendered -- <slug> …` writes
   `.cache/rendered/capture/<slug>/light.png`, `dark.png` and the measures (`--theme dark`,
   `--no-png`, `--set type=12 --set density=28` for Compact). Families whose tiles are cut
@@ -139,10 +218,17 @@ only the dark floating edge reads pixels. It never gates on picture diffs.
   `node scripts/rendered/merge.mjs` writes `measure.json` and `index.json`,
   `node scripts/rendered/open.mjs <slug>[/<tile>]` captures overlays open, and
   `node scripts/rendered/sheets.mjs` writes contact sheets.
-- **Not in CI.** It needs a Chromium browser. CI would need Chrome or Edge on the runner
-  (`AREA_RENDERED_BROWSER`), the desktop build first, and the bundled fonts; headless
-  Chromium versions differ from Electron's by a subpixel in text rasterisation, which is
-  why its tolerances are in CSS px from the DOM.
+- **In CI** (since 2026-11-19, untested on the runner when written): the `rendered` job runs
+  `check:rendered` at the defaults over every family, and `rendered-corners` runs
+  `check:rendered:corners -- --fast --skip defaults`, each after the packages and desktop
+  build, with Microsoft Edge installed from its stable channel (`AREA_RENDERED_BROWSER`).
+  Headless Chromium on Linux may differ from macOS Edge by a subpixel in text
+  rasterisation, which is why the tolerances are in CSS px from the DOM; a baseline that
+  differs only on the runner is a finding about the runner, not a reason to widen a rule.
+- **Edge only as a guest.** Every launcher (`scripts/rendered/cdp-lib.mjs`,
+  `tests/behaviour/harness.mjs`) starts Edge with `--guest --disable-features=msImplicitSignin`
+  in a fresh profile; without them Edge signs the profile into the owner's account.
+  `cdp-lib.mjs` refuses to launch without them. Anything new that starts Edge does the same.
 
 ## Icons
 

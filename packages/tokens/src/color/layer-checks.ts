@@ -95,7 +95,7 @@ export function resolveCss(css: Record<string, string>, vars: Record<string, num
 /** The shipped lightness CSS resolved for one mode on a page of lightness `g`. */
 export function cssLightnessAt(theme: "light" | "dark", g: number, n: number, f: FillSelection = DEFAULT_FILL, tone: CardTone = "auto") {
   const auto = tone === "auto" ? 1 : 0, k = tone === "auto" ? 0 : tone;
-  return resolveCss(layerLightnessCss(), { "cast-chroma-light": 0, "ground-light": theme === "light" ? g : 1, "ground-dark": theme === "dark" ? g : 0, "layers-light": theme === "light" ? n : 8 - n, "layers-dark": theme === "dark" ? n : 8 - n, "fill-hover-step": f.hover, "fill-selected-step": f.selected,
+  return resolveCss(layerLightnessCss(), { "cast-chroma-light": 0, "cast-chroma-dark": 0, "ground-light": theme === "light" ? g : 1, "ground-dark": theme === "dark" ? g : 0, "layers-light": theme === "light" ? n : 8 - n, "layers-dark": theme === "dark" ? n : 8 - n, "fill-hover-step": f.hover, "fill-selected-step": f.selected,
     "card-tone-light-auto": theme === "light" ? auto : 1, "card-tone-light": theme === "light" ? k : 0, "card-tone-dark-auto": theme === "dark" ? auto : 1, "card-tone-dark": theme === "dark" ? k : 0 });
 }
 /** The same at a whole ground step. */
