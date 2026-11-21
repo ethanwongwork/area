@@ -70,6 +70,7 @@ EVEN_WHITE = True                   # 0.84: the white between the a and the ring
 # width ROUND of its height, every master: the references' ring runs 0.941 to 1.012); the a stays centred across the
 # counter (the white left of its bowl the white right of its stem), the side whites taking the extra width
 ROUND = 1.0
+INSIDE_LEFT = True                  # 0.84 pass 4: the inside's left quarters at the outside's shares (construct)
 RISE = 0.02                         # the ring's right extremes over its centre, of its height (0.84 pass 2; it was the
                                     # drawn 0.107, 90 over 843: the owner read the right side as protruding)
 # the references' medians at their 300 / 400 / 700, placed at Area's stems 55 / 78 / 140
@@ -443,6 +444,17 @@ def construct(R):
         qa, qb = Q._reach(4)
         Q.kinds[4] = "F"
         Q.lens[4] = [P.lens[3][0] / ra * qa, P.lens[3][1] / rb * qb]
+        if INSIDE_LEFT:
+            # 0.84 (Regular pass 4, item A2): the left quarters inside take the outside's shares too. Solved alone,
+            # the inside's left quarters came out fuller than the outside's in the mid master and the Bold (0.64
+            # against 0.58 of their reach; the Regular 0.62 and 0.62), so the ring's lower left, 45 degrees off the
+            # bottom, was thinner in the mid master than in the Regular (50.6 against 55.2) and the variable font read
+            # it thinning on the way (56.1 > 51.5 at 532.9)
+            for qi, pi in ((5, 4), (6, 5)):
+                ra, rb = P._reach(pi)
+                qa, qb = Q._reach(qi)
+                Q.kinds[qi] = "F"
+                Q.lens[qi] = [P.lens[pi][0] / ra * qa, P.lens[pi][1] / rb * qb]
     Q.solve()
     sP, sQ = P.segs(), Q.segs()
     outer = []
