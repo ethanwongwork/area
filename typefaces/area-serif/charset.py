@@ -750,9 +750,44 @@ SUP_BOLD = 4.0          # units added on each side after scaling (the ordinals �
 # of their size: 1.16 times heavier than scaled, Serrif's 1.15), its hairline 33. Now the heavier reference's share,
 # Georgia Pro's 1.33: stem 0.54 x 86 x 1.33 = 62, so 8 on each side (the hairline 25 + 16 = 41, the contrast a small
 # figure's). The fraction bar, % and ‰ follow (their figures are these; the bar below)
-SUP_BOLD_FIG = 8.0
+SUP_BOLD_FIG = 8.0      # (0.84 pass 3; replaced in pass 5 by SUP_STEM_FIG below)
+# 0.84 (Regular pass 5, item 4; the owner: "The fractions look better, not quite as thin but perhaps they can be a bit
+# thicker?", anything drawn lighter than the full figures no more than 18% thinner, 12 to 15% if the counters stay
+# open). The small figures' stem is set, not their added weight: SUP_STEM_FIG of the figures' 86, and every stroke in
+# proportion: the upright strokes by an outline moved level (lighten, as before), the level strokes (the hairlines,
+# 0.54 x 47 = 25 when only the uprights were thickened) by the same move turned upright, so the hairline keeps the
+# figures' share of the stem (47 / 86); the figure is first narrowed upright by what that move adds, so its height
+# (and the superiors' and inferiors' lines) stays. Tried 70, 72, 73 (build/owner12/item4): 72 is the heaviest at
+# which ⁸ ⁶ ⁹ ⁴ and ‰'s zeros keep their counters open at 16 px
+SUP_STEM_FIG = 72
+FIG_STEM, FIG_HAIR = 86, 47
 SUP_SIDE = 14           # each side bearing, after scaling
 FIGS = "zero one two three four five six seven eight nine".split()
+
+
+def small_weights(stem=None):
+    """Each side's level move (uprights) and upright move (level strokes) that bring the scaled figures' stem to
+    SUP_STEM_FIG and their hairline to the same share of it as the figures' (FIG_HAIR / FIG_STEM)."""
+    stem = stem or SUP_STEM_FIG
+    sx = (stem - SUP_SCALE * FIG_STEM) / 2
+    sy = (stem * FIG_HAIR / FIG_STEM - SUP_SCALE * FIG_HAIR) / 2
+    return sx, sy
+
+
+def lighten_upright(font, names, amount):
+    """clean.lighten turned a quarter: the outline moved upright (level strokes heavier), on the glyph with x and y
+    swapped and swapped back."""
+    for n_ in names:
+        g = font[n_]
+        for c in g.contours:
+            for p in c.points:
+                p.x, p.y = p.y, p.x
+    CLEAN.lighten(font, names, amount)               # it reads the ink's side from the turned outline itself
+    for n_ in names:
+        g = font[n_]
+        for c in g.contours:
+            for p in c.points:
+                p.x, p.y = p.y, p.x
 
 
 def small_figures(font):
@@ -769,7 +804,25 @@ def small_figures(font):
             u = list(g.unicodes)
             put(font, name, path, w, u, lsb=SUP_SIDE + lsb0 * 0.5, rsb=SUP_SIDE + lsb0 * 0.5)
     names = [f + s for f in FIGS for s in ("superior", "inferior")]
-    CLEAN.lighten(font, names, -SUP_BOLD_FIG)
+    sx, sy = small_weights()
+    for n_ in names:                                  # narrowed upright by what the upright move adds: heights kept
+        g = font[n_]
+        ys = [p.y for c in g.contours for p in c.points]
+        y0, y1 = min(ys), max(ys)
+        k = (y1 - y0 - 2 * sy) / (y1 - y0)
+        cy = (y0 + y1) / 2
+        for c in g.contours:
+            for p in c.points:
+                p.y = round(cy + (p.y - cy) * k)
+    CLEAN.lighten(font, names, -sx)
+    lighten_upright(font, names, -sy)
+    import figs as F_                                 # the two moves leave a handle past its curve's corner or a smooth
+    for n_ in names:                                  # node a degree or two off its line: put back (whole units)
+        for c in font[n_].contours:
+            P = [[p.x, p.y, p.type, p.smooth] for p in c.points]
+            P = F_.collinear([tuple(q) for q in F_._in_triangle(P)])
+            for p, q in zip(c.points, P):
+                p.x, p.y = round(q[0]), round(q[1])
     # charset.fold_steps (0.84 pass 4, A1): withdrawn, the full-size 9's crotch is one corner again (pass 5, item 1)
     for base, name in (("a", "ordfeminine"), ("o", "ordmasculine")):
         p = moved(gp(font, base), 0, 0, SUP_SCALE)
@@ -2276,7 +2329,7 @@ def align_anchors(font):
 # minus and dashes are 52 (0.60 H stems); the plus had a 40 upright on a 52 bar (derive thickens level strokes for
 # contrast and lighten thins upright ones: Libre Baskerville's was 52 on 50), the not sign 39 on 50, the bar 65, the
 # underscore 72, the slash 41 at its top and 49 at its foot.
-FRACTION_BAR = 56       # the bar of the fraction slash, the percent sign and every fraction, level width (they ran 40 to 54;
+FRACTION_BAR = round(56 * SUP_STEM_FIG / 62)   # 0.84 pass 5: in proportion to the small figures' stem (56 at 62); the bar of the fraction slash, the percent sign and every fraction, level width (they ran 40 to 54;
                         # 48 until 0.84 pass 3: raised with the small figures' stem, 54 > 62, x 1.15)
 
 
