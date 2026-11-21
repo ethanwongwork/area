@@ -25,17 +25,30 @@
 // longer fails (so the list shrinks as fixes land: remove the line, or run --prune-known). A snapshot rule records
 // values today (header bar heights, marks, corners, the dark edge) in snapshots/<rule>.json and fails when any value
 // changes; a deliberate change is accepted with --update <rule>.
-import { existsSync, readdirSync, readFileSync, writeFileSync, mkdirSync } from "node:fs";
-import { join, resolve } from "node:path";
+import { existsSync, readdirSync, readFileSync, rmSync, writeFileSync, mkdirSync } from "node:fs";
+import { join, relative, resolve } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { capture, OUT } from "./capture.mjs";
 import { describe, idOf, moved, readCorners, validateSet } from "./settings.mjs";
 
 const HERE = fileURLToPath(new URL(".", import.meta.url));
-const KNOWN = join(HERE, "known-failures.json");
-const KNOWN_DIR = join(HERE, "known-failures");
-const SNAPSHOTS = join(HERE, "snapshots");
 const CAPTURE = join(OUT, "check");
+
+// Baselines per platform. Text metrics differ between the platforms' font stacks (macOS rounds a face's ascent and
+// descent differently from Linux, and the ink ascent of "H" comes from each rasteriser), so the same build measures a
+// quarter pixel apart on the CI runner (run 44583214909: cap centring offsets -0.25 on Linux in tiles that are exact on
+// macOS). macOS, where the owner judges the app, keeps the baselines at the top of scripts/rendered/; another platform
+// keeps its own under platforms/<platform>/, with the same layout. The rules and their tolerances are the same
+// everywhere. AREA_RENDERED_PLATFORM overrides the platform's name.
+export const HOME_PLATFORM = "darwin";
+export const PLATFORM = process.env.AREA_RENDERED_PLATFORM || process.platform;
+export const baselineRoot = (platform = PLATFORM) => platform === HOME_PLATFORM ? HERE : join(HERE, "platforms", platform);
+const KNOWN = join(baselineRoot(), "known-failures.json");
+const KNOWN_DIR = join(baselineRoot(), "known-failures");
+const SNAPSHOTS = join(baselineRoot(), "snapshots");
+const HOME = { known: join(HERE, "known-failures.json"), knownDir: join(HERE, "known-failures"), snapshots: join(HERE, "snapshots") };
+// Where a run on a platform with no baseline yet writes the one it would record (uploaded by CI), never into the tree.
+const PROPOSED = "proposed-baseline";
 
 function parse(argv) {
   const options = { reuse: false, update: [], prune: false, rules: [], verbose: false, out: undefined, set: {}, families: [], corner: undefined, fast: false };
@@ -112,7 +125,8 @@ export async function resolveRun(options) {
   const subset = families.length > 0;
   const out = options.out ?? (defaults && !subset ? CAPTURE : join(OUT, "corners", `${id}${subset ? (options.fast && !options.families.length ? "-fast" : "-subset") : ""}`));
   const known = defaults ? KNOWN : join(KNOWN_DIR, `${id}.json`);
-  return { set, changed, defaults, id, families: [...new Set(families)], subset, out, known, about: corner?.about };
+  const homeKnown = defaults ? HOME.known : join(HOME.knownDir, `${id}.json`);
+  return { set, changed, defaults, id, families: [...new Set(families)], subset, out, known, homeKnown, about: corner?.about };
 }
 const keyOf = v => [v.family, v.tile, v.theme, v.part].filter(x => x !== undefined && x !== "").join(" · ");
 
@@ -138,9 +152,19 @@ export async function check(options) {
   const slugs = new Set(families.map(family => family.slug));
   const rules = (await loadRules()).filter(rule => !options.rules.length || options.rules.includes(rule.id));
   const knownFile = run.known;
-  let known = readKnown(knownFile);
-  const report = { ms: 0, settings: run.changed, corner: run.id, baseline: knownFile, families: families.length, tiles: families.reduce((n, f) => n + (f.light?.tiles.length ?? 0), 0), rules: [] };
-  let failed = false;
+  // A platform with no baseline for this run yet is compared with macOS's (so the run shows exactly how the platform
+  // differs) and fails; the baseline it would record is written under <out>/proposed-baseline for review.
+  const unrecorded = PLATFORM !== HOME_PLATFORM && !options.seed && !existsSync(knownFile);
+  const proposedDir = join(run.out, PROPOSED);
+  rmSync(proposedDir, { recursive: true, force: true });
+  const proposedPath = file => join(proposedDir, relative(HERE, file));
+  let known = readKnown(unrecorded ? run.homeKnown : knownFile);
+  const report = { ms: 0, platform: PLATFORM, browser: families[0].light?.browser ?? families[0].dark?.browser, settings: run.changed, corner: run.id, baseline: knownFile, unrecorded: [], families: families.length, tiles: families.reduce((n, f) => n + (f.light?.tiles.length ?? 0), 0), rules: [] };
+  if (unrecorded) {
+    report.unrecorded.push(relative(HERE, knownFile));
+    lines.push(`✗ no ${PLATFORM} baseline at ${relative(HERE, knownFile)}: compared with macOS's ${relative(HERE, run.homeKnown)}; the baseline this run would record is in ${proposedPath(knownFile)}`);
+  }
+  let failed = unrecorded;
   for (const rule of rules) {
     const entry = { id: rule.id, item: rule.item, expectedToday: rule.expectedToday, kind: rule.kind, title: rule.title };
     if (rule.kind === "snapshot" && !run.defaults) {
@@ -157,11 +181,23 @@ export async function check(options) {
     }
     const result = rule.run(families);
     if (rule.kind === "snapshot") {
-      const file = join(SNAPSHOTS, `${rule.id}.json`);
+      let file = join(SNAPSHOTS, `${rule.id}.json`);
       const values = result.values;
       entry.count = Object.keys(values).length;
       entry.summary = result.summary;
       if (run.subset && options.update.includes(rule.id)) throw new Error(`--update ${rule.id} needs a run over every family`);
+      // No snapshot on this platform yet: propose this run's, fail, and compare with macOS's.
+      if (PLATFORM !== HOME_PLATFORM && !existsSync(file) && !options.update.includes(rule.id)) {
+        const proposed = proposedPath(file);
+        mkdirSync(join(proposed, ".."), { recursive: true });
+        writeFileSync(proposed, JSON.stringify({ rule: rule.id, item: rule.item, about: rule.title, values }, null, 1) + "\n");
+        entry.unrecorded = proposed;
+        report.unrecorded.push(relative(HERE, file));
+        failed = true;
+        lines.push(`✗ ${rule.id} (${rule.item}, snapshot): no ${PLATFORM} snapshot at ${relative(HERE, file)}; this run's is in ${proposed}`);
+        file = join(HOME.snapshots, `${rule.id}.json`);
+        if (!existsSync(file)) { report.rules.push(entry); continue; }
+      }
       if (options.update.includes(rule.id) || !existsSync(file)) {
         mkdirSync(SNAPSHOTS, { recursive: true });
         writeFileSync(file, JSON.stringify({ rule: rule.id, item: rule.item, about: rule.title, values }, null, 1) + "\n");
@@ -176,7 +212,7 @@ export async function check(options) {
         }
         entry.changed = changed;
         if (changed.length) failed = true;
-        lines.push(`${changed.length ? "✗" : "✓"} ${rule.id} (${rule.item}, snapshot): ${entry.count} values${changed.length ? `, ${changed.length} changed` : ", unchanged"}${result.summary ? ` — ${result.summary}` : ""}`);
+        lines.push(`${changed.length ? "✗" : "✓"} ${rule.id} (${rule.item}, snapshot${entry.unrecorded ? ", against macOS" : ""}): ${entry.count} values${changed.length ? `, ${changed.length} changed` : ", unchanged"}${result.summary ? ` — ${result.summary}` : ""}`);
         for (const c of changed.slice(0, options.verbose ? Infinity : 8)) lines.push(`    ${c.key}: ${JSON.stringify(c.was)} → ${JSON.stringify(c.now)}`);
         if (changed.length) lines.push(`    a deliberate change: npm run check:rendered -- --reuse --update ${rule.id}`);
       }
@@ -192,9 +228,9 @@ export async function check(options) {
       if (options.prune && fixed.length) { const gone = new Set(fixed.map(k => k.key)); known = known.filter(k => !(k.rule === rule.id && gone.has(k.key))); entry.pruned = fixed.length; }
       const bad = fresh.length || (fixed.length && !options.prune);
       if (bad) failed = true;
-      lines.push(`${bad ? "✗" : "✓"} ${rule.id} (${rule.item}${run.defaults ? "" : ", invariant"}): ${result.checked} checked, ${violations.length} violations (${violations.length - fresh.length} known, ${fresh.length} new)${fixed.length ? `, ${fixed.length} listed but fixed${options.prune ? " (pruned)" : ""}` : ""}${result.summary ? ` — ${result.summary}` : ""}`);
+      lines.push(`${bad ? "✗" : "✓"} ${rule.id} (${rule.item}${run.defaults ? "" : ", invariant"}${unrecorded ? ", against macOS" : ""}): ${result.checked} checked, ${violations.length} violations (${violations.length - fresh.length} known, ${fresh.length} new)${fixed.length ? `, ${fixed.length} listed but fixed${options.prune ? " (pruned)" : ""}` : ""}${result.summary ? ` — ${result.summary}` : ""}`);
       for (const v of fresh.slice(0, options.verbose ? Infinity : 8)) lines.push(`    new: ${v.key}: ${v.detail ?? JSON.stringify(v.value)}`);
-      for (const k of fixed.slice(0, options.verbose ? Infinity : 8)) lines.push(`    fixed, remove from ${knownFile.slice(HERE.length)}: ${k.key}`);
+      for (const k of fixed.slice(0, options.verbose ? Infinity : 8)) lines.push(`    fixed, remove from ${relative(HERE, unrecorded ? run.homeKnown : knownFile)}: ${k.key}`);
     }
     report.rules.push(entry);
   }
@@ -220,6 +256,20 @@ export async function check(options) {
     }
     write(known);
   } else if (options.prune) write(known);
+  // The baseline an unrecorded platform would start from: every violation of this run, each keeping macOS's entry
+  // (plan item, finding, note) where macOS lists the same key, else marked new on this platform to be read.
+  if (unrecorded) {
+    const home = new Map(readKnown(run.homeKnown).map(k => [`${k.rule}|${k.key}`, k]));
+    const entries = [];
+    for (const entry of report.rules) for (const v of entry.all ?? []) {
+      const rule = rules.find(r => r.id === entry.id);
+      const base = home.get(`${entry.id}|${v.key}`);
+      entries.push(base ? { ...base, value: v.detail ?? v.value }
+        : { rule: entry.id, key: v.key, ...(rule.attribute?.(v) ?? { item: "?", finding: "?" }), value: v.detail ?? v.value, note: `NEW on ${PLATFORM}: not listed on macOS; read it and say whether it is a component defect or a platform difference in text metrics` });
+    }
+    writeKnown(entries, proposedPath(knownFile), `Violations of assert rules on ${PLATFORM} (${report.browser ?? "the browser"}) at ${run.defaults ? "the defaults" : `the ${run.id} corner (${describe(run.changed)})`} that fail today, proposed by a run with no ${PLATFORM} baseline. Read each before committing it to ${relative(HERE, knownFile)}.`, run.defaults ? {} : { settings: run.changed });
+    report.proposed = proposedDir;
+  }
   report.ms = Date.now() - started;
   report.failed = failed;
   mkdirSync(run.out, { recursive: true });

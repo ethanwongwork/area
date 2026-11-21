@@ -33,7 +33,7 @@ export function serve(root = DIST, port = 0) {
     server.once("error", fail);
     server.listen(port, "127.0.0.1", () => {
       const actual = server.address().port;
-      ok({ url: `http://127.0.0.1:${actual}/`, port: actual, close: () => new Promise(done => server.close(() => done())) });
+      ok({ url: `http://127.0.0.1:${actual}/`, port: actual, close: () => new Promise(done => { server.close(() => done()); server.closeAllConnections(); }) });
     });
   });
 }

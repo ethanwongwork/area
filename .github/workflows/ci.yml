@@ -165,12 +165,18 @@ jobs:
           # Ubuntu 24.04 blocks the unprivileged user namespaces Chromium's sandbox uses.
           sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
           echo "AREA_BEHAVIOUR_EDGE=$(command -v microsoft-edge-stable)" >> "$GITHUB_ENV"
+          # What the browser runs on, for reading a failed launch: version, cores, memory, shared memory, fonts.
           microsoft-edge-stable --version
+          echo "cores: $(nproc)"; free -m; df -h /dev/shm
+          echo "sans-serif: $(fc-match sans-serif)"
 
       - name: Build packages
         run: npm run build
 
+      # run.mjs starts Edge once first and stops with its cause if it cannot; the step limit keeps a hang from taking
+      # the job's 40 minutes (a full run is about 2 minutes on a laptop).
       - name: Behaviour suites
+        timeout-minutes: 20
         run: npm run test:behaviour
 
   rendered:
@@ -204,22 +210,34 @@ jobs:
           fi
           sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
           echo "AREA_RENDERED_BROWSER=$(command -v microsoft-edge-stable)" >> "$GITHUB_ENV"
+          # What the browser runs on, for reading a failed launch: version, cores, memory, shared memory, fonts.
           microsoft-edge-stable --version
+          echo "cores: $(nproc)"; free -m; df -h /dev/shm
+          echo "sans-serif: $(fc-match sans-serif)"
 
       - name: Build packages and the desktop app
         run: |
           npm run build
           npm run build -w @area/desktop
 
+      - name: Browser starts (headless guest Edge loads a page)
+        timeout-minutes: 3
+        run: node scripts/rendered/probe.mjs
+
       - name: check:rendered (defaults, every family)
+        timeout-minutes: 30
         run: npm run check:rendered
 
+      # On every run, pass or fail: report.json lists every violation and snapshot value, and on a platform with no
+      # baseline yet, proposed-baseline/ holds the one this run would record (docs/DEVELOPMENT.md, Continuous integration).
       - name: Reports
-        if: failure()
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: rendered-defaults
-          path: .cache/rendered/check/report.json
+          path: |
+            .cache/rendered/check/report.json
+            .cache/rendered/check/proposed-baseline/
           if-no-files-found: ignore
 
   rendered-corners:
@@ -227,7 +245,7 @@ jobs:
     needs: changes
     if: needs.changes.outputs.browser == 'true'
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    timeout-minutes: 60
     env:
       ELECTRON_SKIP_BINARY_DOWNLOAD: "1"
     steps:
@@ -253,23 +271,34 @@ jobs:
           fi
           sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
           echo "AREA_RENDERED_BROWSER=$(command -v microsoft-edge-stable)" >> "$GITHUB_ENV"
+          # What the browser runs on, for reading a failed launch: version, cores, memory, shared memory, fonts.
           microsoft-edge-stable --version
+          echo "cores: $(nproc)"; free -m; df -h /dev/shm
+          echo "sans-serif: $(fc-match sans-serif)"
 
       - name: Build packages and the desktop app
         run: |
           npm run build
           npm run build -w @area/desktop
 
-      # The defaults run in full in the rendered job, so they are left out here.
+      - name: Browser starts (headless guest Edge loads a page)
+        timeout-minutes: 3
+        run: node scripts/rendered/probe.mjs
+
+      # The defaults run in full in the rendered job, so they are left out here. Seven corners at about 4.5 minutes
+      # each on the runner (run 44583214909).
       - name: check:rendered:corners (fast subset, one corner at a time)
+        timeout-minutes: 50
         run: npm run check:rendered:corners -- --fast --skip defaults
 
       - name: Reports
-        if: failure()
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: rendered-corners
-          path: .cache/rendered/corners/*/report.json
+          path: |
+            .cache/rendered/corners/*/report.json
+            .cache/rendered/corners/*/proposed-baseline/
           if-no-files-found: ignore
 
   output:

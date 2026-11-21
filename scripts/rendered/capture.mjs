@@ -304,10 +304,15 @@ async function captureLocked(options, log, started) {
   // One browser per theme, run side by side: each page is its browser's only, front tab, so it draws every frame.
   const browsers = [];
   const results = {};
+  // The first theme to fail stops the other at once (its browser closes, so its waiting call fails), and both settle
+  // before the server closes, so a failed launch never leaves the other browser running.
+  let first = null;
+  const stop = async error => { if (first) return; first = error; await Promise.all(browsers.map(browser => browser.close())); };
   try {
-    await Promise.all(themes.map(async theme => {
+    await Promise.allSettled(themes.map(theme => (async () => {
       const browser = await launch();
       browsers.push(browser);
+      if (first) throw first;
       const page = await openOverview(browser, server.url, { theme, set: options.set });
       const all = await familiesOn(page);
       const slugs = options.slugs.length ? options.slugs : all;
@@ -348,7 +353,8 @@ async function captureLocked(options, log, started) {
         if (options.verbose !== false) log(`${theme} ${slug}: ${data.tiles.length} tiles${fix ? ` ${JSON.stringify(fix)}` : ""} (${((Date.now() - t0) / 1000).toFixed(1)} s)`);
       }
       await page.close();
-    }));
+    })().catch(stop)));
+    if (first) throw first;
   } finally {
     await Promise.all(browsers.map(browser => browser.close()));
     await server.close();

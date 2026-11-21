@@ -90,6 +90,29 @@ holds no system the app saved). They install Microsoft Edge (stable) and skip th
 binary. Preview, rendered contrast, forced colours and a 1x display still need a session. `npm ci` refuses a lockfile that
 disagrees with a workspace's `package.json`; run `npm install` and commit the lockfile.
 
+**The browser jobs on the runner** (first run, 2026-11-19, run 44583214909). Edge keeps its sandbox (the
+`kernel.apparmor_restrict_unprivileged_userns=0` sysctl is enough: the corners job captured with it), so never add
+`--no-sandbox` to pass. Each Edge step prints the version, cores, memory, `/dev/shm` and the sans-serif font. A
+launch waits up to 60 s for the DevTools port (`AREA_RENDERED_LAUNCH_TIMEOUT`, `AREA_BEHAVIOUR_LAUNCH_TIMEOUT`, in ms)
+and fails with the command line, exit code and Edge's last stderr lines. `test:behaviour` starts Edge once before any
+suite and stops there if it cannot. The rendered jobs run `node scripts/rendered/probe.mjs` first (it loads one page and
+prints the version and command). A protocol call with no answer in 120 s, or a renderer crash, fails the capture,
+naming the call (`AREA_RENDERED_CALL_TIMEOUT`); the first run's corners job hung 32 minutes on one. Every step has its
+own time limit.
+
+**Platform baselines.** Text metrics differ by platform: macOS and Linux round a face's ascent differently and draw
+the ink ascent with different rasterisers. So the same build measures a quarter pixel apart on the runner. On the first
+run, cap centring at type 12 found 24 Linux-only offsets of -0.25 px, and 8 macOS entries did not fail. The app's fonts
+are served from the build, so installing fonts cannot close that gap. macOS keeps the baselines where they are
+(`scripts/rendered/known-failures.json`, `known-failures/`, `snapshots/`). Linux keeps its own under
+`scripts/rendered/platforms/linux/`, with the same layout and the same rules and tolerances. A run on a platform with no
+baseline compares with macOS's, so it shows exactly what differs. It fails, and it writes the baseline it would record
+to `<capture>/proposed-baseline/`. The reports job uploads that folder and `report.json` on every run, pass or fail
+(artifacts `rendered-defaults` and `rendered-corners`). To record Linux: download the artifact and read every entry
+marked "NEW on linux". Then commit `platforms/linux/` with a note on each: a component defect, or a platform
+difference in text metrics. `AREA_RENDERED_PLATFORM=linux` reads and writes Linux's files from a Mac (for example
+with `--reuse --prune-known`).
+
 ## Verifying in the app
 
 The app is the source of truth, so every visible change is judged there.

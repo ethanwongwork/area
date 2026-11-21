@@ -98,6 +98,10 @@ function serve(files) {
   return new Promise(r => server.listen(0, "127.0.0.1", () => r(server)));
 }
 
+// How long a launch may take to open its DevTools port (ms): a cold first start on a 2-core CI runner is slower than a
+// laptop's. A launch that fails names the command and Edge's last stderr lines, and kills what it started.
+const LAUNCH_MS = Number(process.env.AREA_BEHAVIOUR_LAUNCH_TIMEOUT) || 60000;
+
 async function launchEdge() {
   if (!existsSync(EDGE)) throw new Error(`No browser at ${EDGE}: set AREA_BEHAVIOUR_EDGE to a Chromium binary`);
   const profile = await mkdtemp(join(tmpdir(), "area-behaviour-"));
@@ -108,18 +112,56 @@ async function launchEdge() {
     "--disable-backgrounding-occluded-windows", "--force-device-scale-factor=1", "--lang=en-US", "--font-render-hinting=none",
     `--window-size=${VIEWPORT.width},${VIEWPORT.height}`, "about:blank"];
   if (!process.env.AREA_BEHAVIOUR_HEADED) args.unshift("--headless=new");
+  const command = [EDGE, ...args].map(a => /\s/.test(a) ? JSON.stringify(a) : a).join(" ");
+  const t0 = Date.now();
   const proc = spawn(EDGE, args, { stdio: ["ignore", "ignore", "pipe"] });
-  let stderr = ""; proc.stderr.on("data", d => { stderr += d; });
+  let stderr = ""; proc.stderr.on("data", d => { stderr = (stderr + d).slice(-4000); });
+  let exited = null;
+  proc.once("error", error => { exited ??= error.message; });
+  proc.once("exit", (code, signal) => { exited = `code ${code}, signal ${signal}`; });
+  const fail = async what => {
+    try { proc.kill("SIGKILL"); } catch {}
+    proc.stderr.destroy();
+    await rm(profile, { recursive: true, force: true }).catch(() => {});
+    return new Error(`${what}\n  command: ${command}\n  stderr (last lines):\n${stderr.trim().split("\n").filter(Boolean).slice(-25).map(l => "    " + l).join("\n") || "    (none)"}`);
+  };
   const portFile = join(profile, "DevToolsActivePort");
-  for (let i = 0; i < 200 && !existsSync(portFile); i++) await sleep(50);
-  if (!existsSync(portFile)) { proc.kill(); throw new Error("Edge did not open a DevTools port:\n" + stderr.slice(-2000)); }
+  while (!existsSync(portFile) && Date.now() - t0 < LAUNCH_MS) {
+    if (exited) throw await fail(`Edge exited at launch (${exited}) after ${Date.now() - t0} ms`);
+    await sleep(50);
+  }
+  if (!existsSync(portFile)) throw await fail(`Edge did not open a DevTools port in ${LAUNCH_MS / 1000} s (AREA_BEHAVIOUR_LAUNCH_TIMEOUT)`);
   let text = "";
   for (let i = 0; i < 50 && !text.includes("\n"); i++) { text = await readFile(portFile, "utf8"); if (!text.includes("\n")) await sleep(20); }
   const [port, path] = text.trim().split("\n");
   // Edge's helpers (the crash handler among them) inherit the stderr pipe and can outlive the browser, which would keep
   // this process alive: stop listening once the port is open.
   proc.stderr.destroy();
-  return { proc, profile, url: `ws://127.0.0.1:${port}${path}` };
+  return { proc, profile, url: `ws://127.0.0.1:${port}${path}`, command, ms: Date.now() - t0 };
+}
+
+/**
+ * Starts Edge once, reads its version and closes it: run.mjs calls this before any suite, so a browser that cannot start
+ * fails the run once, with the cause, instead of failing every test in every suite. Resolves to { version, command, ms }.
+ */
+export async function probeEdge() {
+  const edge = await launchEdge();
+  const ws = new WebSocket(edge.url);
+  try {
+    await new Promise((r, j) => { ws.addEventListener("open", r, { once: true }); ws.addEventListener("error", () => j(new Error(`Edge's DevTools socket did not open\n  command: ${edge.command}`)), { once: true }); });
+    const conn = new Connection(ws);
+    const { product } = await conn.send("Browser.getVersion");
+    await Promise.race([conn.send("Browser.close").catch(() => {}), sleep(2000)]);
+    return { version: product, command: edge.command, ms: edge.ms };
+  } finally {
+    ws.close();
+    await new Promise(r => {
+      if (edge.proc.exitCode !== null || edge.proc.signalCode !== null) return r();
+      const t = setTimeout(() => { edge.proc.kill("SIGKILL"); r(); }, 3000);
+      edge.proc.once("exit", () => { clearTimeout(t); r(); });
+    });
+    await rm(edge.profile, { recursive: true, force: true }).catch(() => {});
+  }
 }
 
 class Connection {
@@ -310,9 +352,13 @@ export async function open(name, { query = "" } = {}) {
     "/app.css": { type: "text/css", body: css },
   });
   const origin = `http://127.0.0.1:${server.address().port}`;
-  const edge = await launchEdge();
+  // A launch that fails closes the fixture server too: a server left listening keeps the suite's process alive, and
+  // node --test then waits on it until the job's time limit (CI run 44583214909, 40 minutes).
+  let edge;
+  try { edge = await launchEdge(); } catch (e) { server.closeAllConnections(); server.close(); throw e; }
   const ws = new WebSocket(edge.url);
-  await new Promise((r, j) => { ws.addEventListener("open", r, { once: true }); ws.addEventListener("error", j, { once: true }); });
+  try { await new Promise((r, j) => { ws.addEventListener("open", r, { once: true }); ws.addEventListener("error", () => j(new Error("Edge's DevTools socket did not open")), { once: true }); }); }
+  catch (e) { edge.proc.kill("SIGKILL"); server.closeAllConnections(); server.close(); throw e; }
   const conn = new Connection(ws);
   // A guest window can't open a second tab over the protocol: drive the tab it started with.
   let targetId;
