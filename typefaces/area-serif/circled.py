@@ -32,6 +32,13 @@ import at as AT
 LIB = "area.circled"
 GLYPHS = {"copyright": "C", "registered": "R", "uni2117": "P"}
 TOP_SIDE = 0.87
+# 0.84 (Regular pass 6, item 4): at the Regular the ring's top and bottom the small figures' hairline (39: TOP_SIDE of
+# the side, 0.899, inside the references' 0.79 to 0.95) and the letter the small figures' weights (stem 72, hairline
+# 39) where the references gave 64 / 42 (C), 54 / 42 (R P); the masters take the Regular's additions by the stem's
+# law as before
+import ladder as LD
+TOP_SIDE = LD.SMALL_HAIR / (0.557 * LD.STEM)
+LETTER_OWN = (LD.SMALL_STEM, LD.SMALL_HAIR)
 SIDE = {55.0: 0.714, 78.0: 0.557, 140.0: 0.406}
 LETTER = {   # height of the counter, centre dx (counter's width), dy (counter's height), thick / ring side, thin / ring top
     "C": {55.0: (0.626, -0.025, 0.002, 1.43, 1.06), 78.0: (0.636, -0.024, 0.003, 1.47, 1.12), 140.0: (0.651, -0.019, 0.003, 2.23, 1.22)},
@@ -160,6 +167,8 @@ def construct(R, kind, R0=None):
     L = R["letters"][kind]
     thick0, thin0, (x0, y0, x1, y1) = letter_reading(L, kind)
     want_thick, want_thin = k_thick * side, k_thin * top
+    if R0 is None and LETTER_OWN:
+        want_thick, want_thin = LETTER_OWN
     if R0 is None:
         # the Regular: scaled so that, with its upright strokes made want_thin, its height is the share of the
         # counter; then its strokes made the references' weights

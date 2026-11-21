@@ -445,6 +445,9 @@ SLASHES = {
     "lslash": ("l", 1.00, 1.40, 0.45),       # centre at the x-height on the ascender stem
 }
 O_SLASH = {"Oslash": ("O", 0.06, 0.10), "oslash": ("o", 0.07, 0.10)}   # past the bowl, below and above; in from the side
+# 0.84 (Regular pass 6, item 4): a slash across a letter is the sign stroke across itself, as every struck stroke
+# (stray.STRUCK); Ø ø Ł ł were the base's bar (49)
+STRUCK_W = LD.SIGN
 
 
 def bars(font, m):
@@ -472,7 +475,7 @@ def bars(font, m):
         b = gp(font, base)
         cap = base.isupper()
         S = m.cap_stem if cap else m.stem
-        w = m.cap_bar if cap else m.low_bar
+        w = STRUCK_W                                 # 0.84 pass 6: the struck strokes' law (was the base's bar)
         y = yc * (CAP_HEIGHT if cap else X_HEIGHT)
         st = [s for s in scan_h(b, y) if s[1] - s[0] < S * 1.4][0]
         cx = (st[0] + st[1]) / 2
@@ -483,7 +486,7 @@ def bars(font, m):
     for name, (base, past, inset) in O_SLASH.items():
         b = gp(font, base)
         x0, y0, x1, y1 = bounds(b)
-        w = (m.cap_bar if base.isupper() else m.low_bar)
+        w = STRUCK_W                                 # 0.84 pass 6 (was the base's bar, 49 / 49)
         h = y1 - y0
         STRUCK[name] = (base, [bar((x0 + inset * (x1 - x0), y0 - past * h), (x1 - inset * (x1 - x0), y1 + past * h), w)])
         p = union(b, bar((x0 + inset * (x1 - x0), y0 - past * h), (x1 - inset * (x1 - x0), y1 + past * h), w))

@@ -425,6 +425,7 @@ DIAG_HALVES = [   # glyph, direction, target, (band low, band high): only edges 
     ("A", -1, CAP_THICK_DIAG, (0, 712)), ("V", -1, CAP_THICK_DIAG, (0, 712)), ("W", -1, CAP_THICK_DIAG, (0, 712)),
     ("M", -1, CAP_THICK_DIAG, (0, 712)), ("N", -1, CAP_THICK_DIAG, (0, 712)), ("K", -1, CAP_THICK_DIAG, (0, 712)),
     ("Y", -1, CAP_THICK_DIAG, (356, 712)), ("Z", 1, CAP_THICK_DIAG, (0, 712)),
+    ("Nhookleft", -1, CAP_THICK_DIAG, (0, 712)),     # 0.84 pass 6, item 4: Ɲ's thick diagonal N's (it read 99.8)
 ]
 
 

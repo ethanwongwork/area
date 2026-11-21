@@ -488,8 +488,9 @@ def audit(font):
     p = C.gp(font, "degree")
     b_ = C.bounds(p)
     ringw = [round(s_[1] - s_[0]) for s_ in C.scan_h(p, (b_[1] + b_[3]) / 2)]
-    if ringw[:1] != [C.STROKE_UP]:
-        bad.append(f"degree: ring {ringw}, the capital hairline {C.STROKE_UP}")
+    import stray as ST_                         # 0.84 pass 6: the ring's sides the sign stroke (stray.DEGREE)
+    if ringw[:1] != [ST_.DEGREE[0]]:
+        bad.append(f"degree: ring {ringw}, stray.DEGREE's side {ST_.DEGREE[0]}")
     for cp in (0x1EB5, 0x1EAB, 0x1EAA):
         g = next((g for g in font if cp in g.unicodes), None)
         if g is not None and len(g.components) >= 3:

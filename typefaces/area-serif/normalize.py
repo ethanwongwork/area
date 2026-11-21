@@ -1227,6 +1227,8 @@ def normalize(font):
     import cross as CROSS                             # 0.84 (pass 2, crossing construction): x and X two straight
     print("cross:", CROSS.regular(font))              # strokes, each one through the other, at v's and V's weights
     print("hair: dots", HAIR.dots(font, "letters"), HAIR.quote_head(font))   # 0.84 (pass 2, item 6): j's dot i's; ’
+    import stray as STRAY                             # 0.84 (pass 6, item 4): 4's crossbar, Ə ə bars on the ladder
+    print("stray: letters", STRAY.run_letters(font))
     #                                                   curvature; before spacing and the charset, so ³ ₃ ¾ follow
     delta, moved, opened = SPACING.run(font)          # last: it reads the finished outlines
     CLEAN.owner_final(font, json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "owner_edits.json"))))
@@ -1234,6 +1236,7 @@ def normalize(font):
     print("spacing: symmetric letters, equal sides", SPACING.symmetric_sides(font))   # 0.84: before the letters built on them
     import charset as CHARSET                         # 0.47: the full character set, on the finished letters
     n_light, tab = CHARSET.run(font, letters)
+    print("stray: signs", STRAY.run_signs(font))     # 0.84 (pass 6, item 4): ™ ℠ ° ¶ on the ladder
     print("hair: mark dots", HAIR.dots(font, "marks"))   # 0.84 (pass 2, item 6): one dot per case on the marks
     print("hair: seams", HAIR.seams(font))           # 0.84 (pass 2, item 8): Ƭ one outline across its seam
     print("hair: shafts", HAIR.shafts(font))         # 0.84 (pass 2, item 8): ↔ ↕ shaft the hairline in whole units
@@ -1251,6 +1254,7 @@ def normalize(font):
     # of a node left a crossing (Astroke, 0.69) or a 19-unit scrap (Estroke, 0.70) whenever the letter changed.
     import re
     import overlap as OVERLAP                         # 0.81: each struck glyph's letter and strokes, before the merge
+    print("stray: struck strokes", STRAY.struck_strokes(font))   # 0.84 (pass 6, item 4): one stroke, before the merge
     struck_parts = OVERLAP.source_struck(font)
     struck = [g.name for g in font if g.components and g.contours and re.search(r"(stroke|bar|middletilde)$", g.name)]
     for name in ["Eopen"] + sorted(struck):
@@ -1259,6 +1263,8 @@ def normalize(font):
             P = c.points
             if abs(sum(P[i].x * P[(i + 1) % len(P)].y - P[(i + 1) % len(P)].x * P[i].y for i in range(len(P)))) / 2 < 60:
                 font[name].contours.remove(c)
+    for name in struck:                               # 0.84 pass 6: a merge that leaves a curve of no length (Ⱥ's
+        STRAY.drop_null(font[name])                   # heavier slash ending on the A's edge) drops it
     rest = [g.name for g in font if g.contours and g.name not in HARMONIZE_SET]
     seams = CLEAN.true_joins(font, rest, max_deg=15)  # 0.69: seams left where charset joined two outlines (fl, OE, carons)
     print(f"clean: seams {len(seams)}", seams)
