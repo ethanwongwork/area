@@ -64,6 +64,12 @@ LIFT = 0.011                        # the a's centre over the ring's, of the rin
 # and a 1.9 jump; 0.3 to 0.6 clean)
 DIVE = {"re": 400.0 / 408.0, "dx": 200.0 / 816.0, "in": 0.5}
 EVEN_WHITE = True                   # 0.84: the white between the a and the ring one width all round (construct)
+# 0.84 (Regular pass 3, the owner's visual notes, item 5: "the @ looks weird still"; before, "the a can be more centred
+# horizontally and the line around it can be a bit more circular overall"). With the white one width all round the
+# ring's width followed from the a: 0.943 of its height at the Regular, an upright oval. The ring is now a circle (its
+# width ROUND of its height, every master: the references' ring runs 0.941 to 1.012); the a stays centred across the
+# counter (the white left of its bowl the white right of its stem), the side whites taking the extra width
+ROUND = 1.0
 RISE = 0.02                         # the ring's right extremes over its centre, of its height (0.84 pass 2; it was the
                                     # drawn 0.107, 90 over 843: the owner read the right side as protruding)
 # the references' medians at their 300 / 400 / 700, placed at Area's stems 55 / 78 / 140
@@ -370,6 +376,9 @@ def construct(R):
         # height off the a at 20 to 30 degrees, the top 189)
         white = ((H - tt - tb) - ah) / 2
         Wd = tl + white + a_w + white + tr
+        if ROUND:
+            Wd = max(Wd, ROUND * H)
+            white = (Wd - tl - tr - a_w) / 2
         right_white = white
     else:
         Wd = sh["wh"] * H
