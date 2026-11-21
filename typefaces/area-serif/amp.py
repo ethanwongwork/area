@@ -37,6 +37,8 @@ The 550 instance is the construction at the readings half way (the Bold's mid la
 """
 import math
 
+import ladder as LD
+
 import numpy as np
 from scipy.optimize import minimize
 
@@ -133,7 +135,7 @@ TENSION = 0.56          # handles' share of their reach where nothing else decid
 RATIO = 1.25            # curvecheck.RATIO
 EASE = 0.45             # curvecheck.EASE
 ARM_FILLET = 0.30       # 0.82 item 19: the crotch under the arm (at.FILLET's share of the stem, the @'s a)
-TAIL_CUT = 30.0          # 0.84: the tail's cut end across, the serif tip (joins.END_MIN)
+TAIL_CUT = float(LD.TIP)          # 0.84: the tail's cut end across, the serif tip (joins.END_MIN)
 SOFT = 7.0               # 0.84: a free end's corners, the letters' serif-tip radius (derive.SOFT, measured 7.0 on H n I l)
 RIBBON_SEGS = (1, 3, 4, 5, 6, 7, 8, 9)   # 0.84: the P segments whose width is evened (`even_ribbon`)
 # 0.84 (Regular pass 2, second pass; the owner: "not smooth, the stroke doesn't look continuous through the bottom

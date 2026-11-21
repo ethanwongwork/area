@@ -12,6 +12,7 @@ by geometry and runs with joins.py, after lightening and before spacing. One val
 import math
 
 import clean
+import ladder as LD
 import joins
 from normalize import _diag_edges
 
@@ -190,7 +191,7 @@ def diag(g, sign, target, y_at):
     return before, after
 
 
-THIN_LOW = 39          # lowercase thin diagonals: 0.50 of n's stem, the floor the guidelines set for any thin stroke
+THIN_LOW = LD.THIN_DIAG          # lowercase thin diagonals: 0.50 of n's stem, the floor the guidelines set for any thin stroke
                        # (34-36 before). Not the arcs' 43: v x y already carry 4-9% more ink than their class
 THIN_CAP_DIAG = 48     # capital thin diagonals: 0.56 of H's stem, the value M's and K's already held (A V W X Y were
                        # 0.42-0.49, lighter than every other thin stroke of the capitals, and X V K read light)
@@ -214,8 +215,8 @@ def diagonals(font):
     return done
 
 
-CAP_THIN = 47                  # clean.THIN_CAP after lightening
-FIG_THIN = 47                  # 0.55 of H's stem, the capitals' and the lowercase's share
+CAP_THIN = LD.CAP_HAIR                  # clean.THIN_CAP after lightening
+FIG_THIN = LD.CAP_HAIR                  # 0.55 of H's stem, the capitals' and the lowercase's share
 ARCS = [("zero", "top", (25, 75)), ("zero", "bottom", (25, 75)), ("two", "top", (25, 75)), ("three", "top", (30, 75)),
         ("three", "bottom", (25, 70)), ("five", "bottom", (25, 75)), ("six", "bottom", (25, 75)),
         ("eight", "top", (25, 75)), ("eight", "bottom", (25, 75)), ("nine", "top", (25, 75))]
@@ -343,7 +344,7 @@ def desc_feet(font):
 E_EYE_LEFT = 9                  # the eye's left side moves out: the stroke above the bar 1.09 to 0.98 stems
 E_BAR = 41                      # the bar's thickness, taken from its underside (its top stays at 0.615 x)
 G_EAR_IN = 20                   # the ear's end comes in: 0.27 to 0.23 x-heights past the bowl, still the longest
-G_LOOP_THIN = 43                # the loop's lower arc: the lowercase hairline
+G_LOOP_THIN = LD.HAIR                # the loop's lower arc: the lowercase hairline
 G_EAR_NECK = 63                 # the ear's neck, top to underside: r's neck (it was 74, 0.95 stems; references about 0.5)
 G_LOOP_TOP = 10                 # the loop's top stroke, 1.16 stems across (references 0.89 to 1.10): its inside edge up
 
@@ -843,7 +844,7 @@ def _slide(p, q, y):
 # underside, its foot along the baseline. Checked by eye in "7777" and "2.7": at 0.955 (82) the 7 stood out dark,
 # so it takes 0.79 (68), between the old thin and the capitals' thick.
 SEVEN_DIAG = 0.79
-CAP_STEM = 86
+CAP_STEM = LD.CAP_STEM
 
 
 def seven_diagonal(font):

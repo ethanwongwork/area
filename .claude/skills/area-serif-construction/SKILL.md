@@ -58,6 +58,28 @@ stem (86), except where the table says otherwise.
 Along any one stroke the thickness moves through this ladder in one direction, with no step back: `swell.py` reports
 the fastest change (under 0.5 units of thickness per unit travelled on a branch, under 0.2 on o and c) and any bump.
 
+## The stroke ladder (0.84, Regular pass 6)
+
+Owner, 21 November: "The thickness of strokes should be defined to be a range of values and set as a specific number
+of values." Every named straight stroke and hairline of the Regular takes one of these steps, from `ladder.py` (never
+a loose literal; a value between two steps is a taper or a junction). Masters carry each step by its own law.
+
+| Step | `ladder` | Units | Where |
+|---|---|---|---|
+| Tip | `TIP` | 30 | every serif's end, the ampersand's tail cut |
+| Small-figure hairline | `SMALL_HAIR` | 39 | ⁰..⁹ ₀..₉ and the fractions' level strokes (72 x 47 / 86); % ‰ © ® ℗ ™ ℠ ° hairlines |
+| Thin diagonal | `THIN_DIAG` | 39 | v w x y; the small figures' thin diagonals |
+| Lowercase hairline | `HAIR` | 43 | o's top; the @'s ring top and bottom, its a's thins |
+| Capital / figure hairline | `CAP_HAIR` | 47 | O's top, the figures' (zero's top), Ə's bar, 4's crossbar, currency bars |
+| Lowercase bar | `BAR` | 52 | t f's bar |
+| Sign stroke | `SIGN` | see pass 6 item 3 | maths operators, dashes, slashes and bars, arrows, interface symbols, #, struck letters' bars, the fraction slash |
+| Small-figure stem | `SMALL_STEM` | 72 | small figures' stems; % ‰ zeros' sides, © ® ℗ ™ ℠ strokes |
+| Thick diagonal / figure flat | `THICK_DIAG` | 74 | v w x y's thick; the @'s a's stem (figures' flats 73) |
+| Lowercase stem | `STEM` | 78 | n |
+| Lowercase round | `ROUND` | 82 | o's side |
+| Capital stem | `CAP_STEM` | 86 | H; capitals' thick diagonals |
+| Capital round | `CAP_ROUND` | 92 | O's side, £'s upright |
+
 ## The parts
 
 | Part | Construction | Letters | Rule | Check |

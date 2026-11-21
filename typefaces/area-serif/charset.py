@@ -29,6 +29,7 @@ from fontTools.misc.transform import Transform
 from ufoLib2.objects import Component
 
 import clean as CLEAN
+import ladder as LD
 
 X_HEIGHT, CAP_HEIGHT, ASC = 520, 712, 780
 # The set a UI and web text face covers (check.py fails on any one missing): Basic Latin, Latin-1, Latin Extended-A,
@@ -759,7 +760,7 @@ SUP_BOLD_FIG = 8.0      # (0.84 pass 3; replaced in pass 5 by SUP_STEM_FIG below
 # figures' share of the stem (47 / 86); the figure is first narrowed upright by what that move adds, so its height
 # (and the superiors' and inferiors' lines) stays. Tried 70, 72, 73 (build/owner12/item4): 72 is the heaviest at
 # which ⁸ ⁶ ⁹ ⁴ and ‰'s zeros keep their counters open at 16 px
-SUP_STEM_FIG = 72
+SUP_STEM_FIG = LD.SMALL_STEM
 FIG_STEM, FIG_HAIR = 86, 47
 SUP_SIDE = 14           # each side bearing, after scaling
 FIGS = "zero one two three four five six seven eight nine".split()
@@ -2596,7 +2597,7 @@ def _contour_path(c):
 # heaviest where Area's S is 102, the yen's bars 63 where a capital's thin strokes are 46 to 49, the cent's c scaled
 # with the capitals (0.94). The stroke is the case's hairline (47 capitals, 43 lowercase), where and as long as
 # Libre Baskerville had it; the yen's bars are H's crossbar, as the won's, the ruble's and the lira's.
-STROKE_UP, STROKE_LOW = 47, 43          # the ladder's hairlines (balance.CAP_THIN, clean.THIN_ARCH x stem)
+STROKE_UP, STROKE_LOW = LD.CAP_HAIR, LD.HAIR          # the ladder's hairlines (balance.CAP_THIN, clean.THIN_ARCH x stem)
 CURRENCY_BAR = STROKE_UP                # 0.84 (pass 2, leftovers): every currency sign's bar, one value
 
 
@@ -3103,7 +3104,7 @@ def cap_strokes(font):
 # read in level spans corrected by the stroke's lean; the foot's top edge (its level extreme over the foot's lowest
 # point) comes down to the figures' flat stroke over the foot's bottom (balance.FIG_FLAT, 73). The bar stays H's
 # crossbar (49, SIGN_BAR).
-STERLING_ROUND = 92
+STERLING_ROUND = LD.CAP_ROUND
 STERLING_FOOT = 73
 
 
@@ -4370,7 +4371,7 @@ def run(font, lightened):
 # or over, the lowercase's (88) where it stands to the x-height.
 EXT_STEM_MIN = 6
 EXT_SERIF_MIN, EXT_SERIF_MAX = 80, 130
-CAP_STEM_W = 86
+CAP_STEM_W = LD.CAP_STEM
 LC_BALL = 88
 GLOTTALS = ("glottalstop", "glottalstopreversed", "Glottalstopsmall", "glottalstopsmall")
 

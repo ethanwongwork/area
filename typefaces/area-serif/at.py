@@ -42,12 +42,13 @@ Area's 55, 78 and 140). The mid master (600) is the construction at the readings
 import math
 
 import amp as A
+import ladder as LD
 
 LIB = "area.at"
 CAP = 712.0
 TOP = round(0.985 * CAP)            # 701: the references' ring top over the cap height
 BOTTOM = round(-0.231 * CAP)        # -164
-REG_STEM, REG_H = 78.0, 43.0
+REG_STEM, REG_H = float(LD.STEM), float(LD.HAIR)
 LEFT = 0.86 * REG_STEM / REG_H      # ring's left side over the hairline (67.1 at the Regular's 43)
 RIGHT = 0.883 * LEFT                # ring's right side (59.2); 0.84 pass 6: RIGHT_REG below
 # 0.84 (Regular pass 6, item 1, the owner: "the @ still needs work"). The right extreme 60 at the Regular, a share of
@@ -94,10 +95,10 @@ SHARES = {55.0: {"ah": 0.545, "athin": 1.18, "astem": 0.984, "wh": 0.941},
 # reads them on the stem's logarithm as before
 # The Light's thin takes the same share (1.0: the Light's a 37 against the references' 43.7), so the a's thin does
 # not stand heavier in the Light than in the Regular (audit_rays)
-A_OWN = {55.0: {"athin": 1.0}, 78.0: {"athin": 43.0 / REG_H, "astem": 74.0 / REG_STEM}}
+A_OWN = {55.0: {"athin": 1.0}, 78.0: {"athin": LD.HAIR / REG_H, "astem": LD.THICK_DIAG / REG_STEM}}
 # 0.84 pass 6, item 1a: the ring leaves the a's foot at the a's thin (44 at the Regular; it was the a's exit stroke, 65,
 # heavier than the ring's right extreme, 59: a lump at 325 to 345 degrees), and swells from there to the right extreme
-FOOT = 44.0 / 43.0
+FOOT = 44.0 / LD.HAIR
 INNER_MONO = True
 MONO_W = 250
 

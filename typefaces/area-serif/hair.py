@@ -16,6 +16,8 @@ ligatures, the figures' small forms and the struck letters follow (the rule runs
 """
 import math
 
+import ladder as LD
+
 import numpy as np
 
 REACH = 40          # edge places read within this of either extreme node
@@ -414,7 +416,7 @@ def bowl_sides(font, control="P"):
 # 0.94 stems), every capital thick diagonal the capital stem, 86 (the median of A V W M N K Y Z was 86.5; Y's
 # comment: both references 1.01 of H). Z's arms the capitals' arm, 46 (balance.CAP_ARM): the arm's inner edge moves,
 # its corner on the diagonal sliding along the diagonal.
-CAP_THICK_DIAG = 86
+CAP_THICK_DIAG = LD.CAP_STEM
 DIAG_HALVES = [   # glyph, direction, target, (band low, band high): only edges with their middle inside
     # x and X withdrawn (0.84): their halves set to 39 / 74 and 48 put an inflection into X's curve 21 between the
     # masters (audit_axis turns at 551.7 and 372.3), x's nodes off their lines by 1.34 half way (drift), and the Bold x's
