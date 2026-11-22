@@ -1288,8 +1288,10 @@ def normalize(font):
     print(f"arms: {len(signs)} signs drawn from one half or one arm", sorted(signs))
     CHARSET.turned_pairs(font)                        # 0.74: after the node rules, the turned glyphs once more
     CHARSET.mirrors(font)
-    import amp as AMP                                 # 0.82 (owner round 8, item 9): the ampersand, one construction
-    print("amp:", AMP.regular(font))                  # on the finished o, a and v; after every node rule
+    # AMP.regular (0.82 to 0.84: amp.py's construction of the ampersand) withdrawn in 0.85 (Regular pass 8): the owner
+    # took 0.81's drawing back ("this old ampersand looks better"); amp.py stays, its Chain and helpers serve @ (C) $ ...
+    import amp81 as AMP81                             # 0.85 (Regular pass 8): 0.81's ampersand, its loop upright, on
+    print("amp81:", AMP81.regular(font))              # the ladder; after every node rule
     import sigma as SIGMA                             # 0.83 (Regular pass, item A): the summation and Esh, one
     print("sigma:", SIGMA.regular(font))              # construction from E's arm and beak, Z's and A's diagonals
     import at as AT                                   # 0.82 (owner round 8, item 15): the @, one construction: a ring

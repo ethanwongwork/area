@@ -4877,7 +4877,10 @@ def bold_font(reg, stem=STEM, **over):
                 q.y = round(ncy + (q0.y - rcy) * s_)
         notes.append(f"divide: dots x{s_:.3f}, at least the bar off it")
     tm_a = (dict(axis_map(stem))[MID_WEIGHT] - REG_STEM) / (stem - REG_STEM) if v["f"] > 0 else None
-    amp_ = _AMP.master(reg, font, _amp_sides, tm_a, layer if v["f"] > 0 else None)
+    # 0.85 (Regular pass 8): _AMP.master withdrawn with amp.regular; the ampersand is 0.81's (amp81), grown by this
+    # master's laws in the same way (one point structure, the mid master at the readings that far along)
+    import amp81 as _AMP81
+    amp_ = _AMP81.master(reg, font, _amp_sides, tm_a, layer if v["f"] > 0 else None)
     # 0.84 (pass 2, crossing construction): x and X in the mid master too, built at the readings half way (cross.mid)
     if v["f"] > 0:
         notes += _CROSS.mid(reg, font, layer, tm_a)
