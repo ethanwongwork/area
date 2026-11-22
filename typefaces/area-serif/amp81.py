@@ -646,10 +646,48 @@ def open_loop(cs, cs0, R0, R):
     return e
 
 
+def _inflections(s):
+    v = [_d1(s, t / 40) for t in range(1, 40)]
+    a = [_d2(s, t / 40) for t in range(1, 40)]
+    c = [p[0] * q[1] - p[1] * q[0] for p, q in zip(v, a)]
+    c = [x for x in c if abs(x) > 1e-6]
+    return sum(1 for x, y in zip(c, c[1:]) if x * y < 0)
+
+
+def no_new_turns(cs, cs0):
+    """A curve the growth and the loop's opening bent into an inflection its Regular curve does not have: its two
+    handle lengths scaled (directions kept), least change, until it has none (audit_axis turns)."""
+    fixed = 0
+    for P, P0 in zip(cs, cs0):
+        for idx, kind in _segs(P):
+            if kind != "C":
+                continue
+            s, s0 = _seg_pts(P, idx), _seg_pts(P0, idx)
+            if _inflections(s) <= _inflections(s0):
+                continue
+            best = None
+            for fa in [0.5 + 0.05 * k for k in range(51)]:
+                for fb in [0.5 + 0.05 * k for k in range(51)]:
+                    t = (s[0], (s[0][0] + (s[1][0] - s[0][0]) * fa, s[0][1] + (s[1][1] - s[0][1]) * fa),
+                         (s[3][0] + (s[2][0] - s[3][0]) * fb, s[3][1] + (s[2][1] - s[3][1]) * fb), s[3])
+                    if _inflections(t) > _inflections(s0):
+                        continue
+                    cost = abs(fa - 1) + abs(fb - 1)
+                    if best is None or cost < best[0]:
+                        best = (cost, t)
+            if best:
+                t = best[1]
+                P[idx[1]] = (t[1][0], t[1][1], None, False)
+                P[idx[2]] = (t[2][0], t[2][1], None, False)
+                fixed += 1
+    return fixed
+
+
 def master_contours(R0, R, cs0=None):
     cs0 = cs0 or regular_contours()[0]
     cs = grow([list(P) for P in cs0], R0, R)
     e = open_loop(cs, cs0, R0, R)
+    no_new_turns(cs, cs0)
     for P in cs:                                        # a smooth node after a line: the curve's handle on the line
         n = len(P)
         for i, q in enumerate(P):
@@ -668,6 +706,7 @@ def master_contours(R0, R, cs0=None):
         for i, q in enumerate(P):
             if q[2] and q[3]:
                 even_node(P, i, 1.22, (0.5, 0.025, 45))   # a master's growth bends more: a wider search
+    no_new_turns(cs, cs0)
     return _round(cs), e
 
 
