@@ -2722,3 +2722,78 @@ plain end's 67), as they were at 65; the plain end's wider face newly rounds ₺
 their crossbars (49); ≠ unread by audit_rays; the small figures stay 21% under the figures in mean stroke (pass 5's
 72 kept, its counters' limit at 16 px).
 
+
+## Regular pass 7 (0.84), Latin letter repairs (21 November 2026)
+
+The owner: "please also audit the latin characters as well and fix any errors there too. Focus on the 400 weight only",
+after saying repeated passes had changed shapes they liked. The list came from the read-only stroke audit of snap084i
+(`build/owner12/study/stroke/`); every item was re-read on snap084k first (`build/owner14/remeasure/`, the same
+`stroke.py` and `likeparts.py`). Every repair is local and lives in one new module, `latin.py`, called in normalize
+after `hair.even_more`: a fault is found by its place (a node within 4 units of the audit's place), only the curves
+there are rebuilt, the masters read the Regular's points as before (no point added or removed). Each glyph touched was
+drawn snap084k (red) over the new outline (blue) with nodes and set at 16 / 24 / 48 px (`build/owner14/<item>/overlay.png`,
+`text.png`); `build/owner14/tools/` holds the helpers (`nd.py` points and node readings, `dev.py` largest outline move,
+`wprobe.py` the stroke audit's width and curvature reading for one glyph, `probe.py` before / after, `ov.sh`,
+`renders.sh`). No reference face was opened.
+
+**The construction** (`latin.mend`, `chain_fit`, `refit`, `whole_best`): the curves between two nodes are rebuilt as
+the same number of cubics; the ends meet the curves kept outside at one curvature (within 1.15, else 1.3); an inner node
+may slide at most 15 units along the span (a ray read at it stays where it was), an extreme keeps its place and its
+level or upright tangent; no handle past its triangle (an S curve has none), no bent node, a fillet into a corner turns
+one way; whole units chosen so the nodes keep their curvature (an end's or extreme's handle keeps its line); kept only
+where the glyph's curvecheck jumps fall, no flat place appears and the outline stays within 4 units. The first version
+(items 1 and 2 as first committed) had none of the place and triangle guards: it left 16 new pathlint warnings
+(extremes off their nodes, handles past their triangles) and a ß reading over audit_charset's cap; the guards took
+some repairs back (below).
+
+| # | Item | On snap084k | What was done | Largest move | Now (stroke audit reading) |
+|---|---|---|---|---|---|
+| 1 | ß | jump 17.6 at (411, 250), inflection | one curve (314, 364) to (449, 225), G2 both ends: cleared the jump, but the stroke read across at the node came to 85.5 / 85.7 where audit_charset caps ß at 83 + 2.5 (it read 84.0) | | **left** (entry kept in `SPANS`' comment) |
+| 2 | ə Ə | ə 11.0 at (424, 247), Ə 6.66 at (582, 346) | ə: the fillet from the counter's extreme to the bar's corner at the bowl's curvature, free tangent at the corner (`SPANS`, "ease") | ə 0.8 | ə 11.0 > 4.4, its inflection gone; **Ə left**: every fillet that clears its jump runs a handle past its triangle or widens the bowl's swell 4.6 > 5.3 |
+| 3 | y tail | -209, thinnest 33.9, balls j 80.7 y 82.4 | one attempt in the Regular first (`loops.tail_law` at -233 with the ball at 88, then `round_tail`; and the inside's lowest point raised 4 to 10): every variant left the Regular y with 1 to 3 curvecheck faults and a width bump of 4.4 to 5.4 at the ball's neck; at -233 the thinnest reaches 39 only with the inside raised 10 and still one fault | | **left**: the construction the record names (a third cubic on the outside, a ball-height rule) is needed; it was not reached, so neither depth nor thin was shipped (each alone fails curvecheck in the Regular) |
+| 4 | r ɍ | wave 0.69, inflection at (323, 450), neck 28.1 | `r_branch`: the outer node on the stem and its handle +3, the crotch curve's handles 34 / 56 > 64 / 38 (least change for n's neck read the same way, no wave, the arm's top no worse), the curve into the ball by `smooth_curve` | 3.0 | wave and inflection gone; neck 27.5 > 29.9 (n 30.4 on the same reading); the top's jump 2.18 > 2.10; parts.check holds; advance unchanged |
+| 5 | a æ, a.ss03 | a æ 3.74 at (222, 46); a.ss03 dip 5.5 | a æ: a clean rebuild needs the counter's lowest node to slide off its extreme (pathlint: no node at the extreme): left. a.ss03: see item 8 | | **left** |
+| 6 | G Ǥ | bottom 52.2; dip 4.4 at (513, 10) | as item 8 | | **left** |
+| 7 | n h m u, ħ fh ffh | bumps 4.04 / 3.18 / 3.63 | `swells`: one handle along its own line, least change, until the width along each edge (largest inscribed circle) no longer rises and falls away from its nodes: the outer handle into the stem x0.86 (n h ħ fh ffh), x0.90 (m), x0.88 (u) | 3.8 | no bump; ḩ follows (component) |
+| 8 | b q g.ss02 (and G, a.ss03, Ƈ Ɠ Ƒ Ʉ ƈ ǥ ⱥ) | dips 4.4 to 5.7 | these are a least width 15 to 25 units from the node (0.4 to 0.5 units under the node's on the in-build reading); a 4% handle change clears the audit's reading, but no reading the build can carry agrees with the audit's on where the dip is | | **left** |
+| 9 | ɦ ƥ ɽ ɗ ɠ stems | 80 / 81 | `stem_edges`: ɦ ƥ's leaning edge upright (111 / 118 > 113 / 120); ɗ ɠ the counter's straight 461 > 464 (542 - 78; moving 542 put a width bump into ɠ's hook). ɽ's (125 > 127) built, then **withdrawn**: the first full build's Bold hook took a curvature fault at its node 31 (1.41x) | 3.0 | ɦ ƥ ɗ ɠ 78; ɽ 80 (ᶑ is not in the font) |
+| 10 | ɛ Ɛ | thin 44.2, jumps | ɛ (366, 288) cleared by `jumps`; ɛ (150, 167), Ɛ's four and Ɛ's thin left (no rebuild within 4 units; Ɛ is merged with its stroke before this rule) | 0.4 | ɛ one jump fewer |
+| 11 | Ɲ | thick diagonal 99.8 | `n_hook_diagonal`: only the upper edge moves, parallel, its ends sliding on the cap line and up the right stem (the notch with it), so the left stem, vertex and hook keep every point: 86.3 in the Regular. **Withdrawn**: the first full build's Bold hook took node 53's fault again (1.44x, curvecheck --hooks 16 > 17), as pass 6's attempt did; the function stays, not called | | 99.8 (as snap084k) |
+| 12 | hooked jumps, dips, balls | ɗ ɲ Ɫ Ʈ Ɽ ɠ ɥ 2.7 to 4.7 | `jumps`: ɲ (212, 384), Ɫ (305, 351) (64, 395) (323, 425), Ʈ (223, 666), ɥ cleared; Ɽ (a 5.6 dip beside it), Ɫ (89, 467) (a flat place), ɗ, ɠ, Ʈ (557, -139), Ƭ, ɦ, ƥ, Ɠ left by the guards; the dips as item 8; Ƭ Ɓ's 45 is the inscribed circle of the curl's end, not a straight thickness: left | 2.5 | |
+| 13 | Œ ª Ꞌ | Œ 3.0 and an inflection at the seam; ª 4.1, Ꞌ 3.2 | ª (111, 406) and Ꞌ cleared (ª's width bump went with it); Œ: the inflection is the step from E's bar (712) to O's overshoot (721) inside one curve, and no rebuild of the seam stays within reach: left | 3.7 | |
+| 14 | case accents | 6.2 / 5.2 / 4.9 | acute.case, hungarumlaut.case (both curves), dblgravecomb.case (both) and their comb forms cleared | 2.8 | the accented capitals follow (components) |
+| 15 | B upper bowl | 97.8 against 93.1 | settled, nothing changed: 97.4 is a level cut at y 500, 48 under the bowl's extreme where the stroke leans; across the stroke there it reads 92.7, at the extreme 93.1, under the rule's 95 ("Across the stroke, never along a scan line") | | |
+| 16 | ﬆ s_p | 5.85 / 6.3 | s_p (391, 687) took a flat place beside it and (70, 395) a turned handle at a retracted node; ﬆ a handle past its triangle: all left | | |
+
+Regular checks after the pass (AREA_BOLD=0): curvecheck and curvecheck --hooks pass, parts.check clean, audit_charset 0
+errors, pathlint 0 errors / 132 warnings / 35 info (snap084k 135 / 33: three warnings gone (r, ɍ, ə handles past
+their triangle), two infos new (r ɍ node 6 bends 2.7 degrees, 0.6 units, from `smooth_curve`'s rounding)). 28 drawn
+glyphs changed, every one within 3.8 units except Ɲ's diagonal (the item itself).
+
+### Full build, the audits, `build/snap084l`
+
+`caffeinate -i build.py` twice. The first (`build/owner14/snap084l-first`, audits `build/owner14/audit-084l-first`)
+showed two regressions of this pass, both in curvecheck --hooks on the Bold (16 > 18): Ɲ node 53 (1.44x, the fault
+pass 6's attempt took) and ɽ node 31 (1.41x, from its stem edge made upright). Both were withdrawn (commit 304bdfdd).
+The second (`build/snap084l`, `full-084l.log`; once retried past a `.DS_Store` inside the Bold UFO) is audited in
+`build/owner14/audit-084l` (`build/owner11/tools/audits.sh`, then pathlint, curvecheck, curvecheck --hooks and
+audit_charset on the Regular), against `build/owner13/audit-084k`.
+
+| Audit | snap084k | snap084l |
+|---|---|---|
+| fallbacks | none | none |
+| audit_axis Bold / Light | turns ok; thin cedi, ogonek, one.ss01 | the same (files identical) |
+| audit_bold Bold / Light | 432 / 433 on target; g's neck; Light seven 0..718 | the same |
+| audit_rays | ok (463 glyphs) | ok; Ʈ's thinnest 38.9 > 39.8 at 400 (33.0 > 34.5 at 300) and Ꞌ's read thicker |
+| audit_kern, curvecheck Light / Bold, hooks Light / Bold (5 / 16), interpolation | | unchanged |
+| Regular: audit_charset, curvecheck, hooks, parts.check | 0 errors, pass, pass, clean | the same |
+| Regular: pathlint | 0 / 135 / 33 | 0 / 132 / 35 (r ɍ ə's handles past their triangles gone; r ɍ node 6 bends 2.7 degrees, 0.6 units, from `smooth_curve`'s rounding: info) |
+
+No advance changed (every touched glyph keeps its width), so the kerning was not refit.
+
+Left open: ß (item 1, the audit_charset cap), Ə, the y tail (item 3: needs the outside's third cubic and a ball-height
+rule; neither depth nor thin can ship alone without a curvecheck fault in the Regular), a æ's counter (its lowest node
+would have to leave its extreme), every width dip read 15 to 25 units off its node (b q g.ss02 G Ǥ a.ss03 Ƈ Ɠ Ƒ Ʉ ƈ ǥ
+ⱥ: no in-build reading agrees with the audit's on where they are), Ɲ's diagonal and ɽ's stem (Bold hook faults), the
+Ƭ Ɓ curl ends, Œ's seam, ﬆ and s_p, and the hooked jumps the guards refused (ɗ ɠ Ʈ (557, -139) Ƭ ɦ ƥ Ɠ Ɽ Ɫ (89, 467)
+Ɛ ɛ (150, 167)). r's top node keeps a 2.10 jump (2.18 before; not on the list).
