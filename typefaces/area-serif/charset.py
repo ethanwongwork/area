@@ -778,6 +778,49 @@ def small_weights(stem=None):
     return sx, sy
 
 
+def small_box_moves(w, h, stem=None):
+    """0.85 (Regular pass 9): each side's level and upright move for a small figure first narrowed about its middle
+    by twice the move (w, h its scaled box), so its box stays the scaled figure's and its stem is `stem` and its
+    hairline FIG_HAIR / FIG_STEM of it: a x k + 2 s = target with k = 1 - 2 s / w, s = (target - a) / 2 (1 - a / w)."""
+    stem = stem or SUP_STEM_FIG
+    a, b = SUP_SCALE * FIG_STEM, SUP_SCALE * FIG_HAIR
+    return (stem - a) / (2 * (1 - a / w)), (stem * FIG_HAIR / FIG_STEM - b) / (2 * (1 - b / h))
+
+
+def small_cut_ends(g, longest=40, soft=12, level=0.15):
+    """0.85 (Regular pass 9): the cut ends of a small figure's level strokes (the 3's waist, the 1's flag, the serifs'
+    ends of 1 and 4, the bars' ends of 2 4 5): an upright line between two corners, shorter than `longest`, each
+    corner (with its soft corner, a curve under `soft` long) running on level. The level move would push them out
+    with the stem's sides and lengthen the stroke (the small 3's waist read 12% long); they stay where the scaled
+    figure has them. Returns [(contour, [node indices, the upright line's first], x)]."""
+    out = []
+    for ci, c in enumerate(g.contours):
+        P, n = c.points, len(c.points)
+        on = [i for i in range(n) if P[i].type]
+        for k, i in enumerate(on):
+            j = on[(k + 1) % len(on)]
+            if P[j].type != "line":
+                continue
+            dx, dy = P[j].x - P[i].x, P[j].y - P[i].y
+            if not (3 <= abs(dy) < longest and abs(dx) <= 0.15 * abs(dy)):
+                continue
+            group, ok = [i, j], True
+            for node, step in ((i, -1), (j, 1)):
+                kk = on.index(node)
+                nb = on[(kk + step) % len(on)]
+                seg_curve = P[(node + step) % n].type is None
+                if seg_curve and math.hypot(P[nb].x - P[node].x, P[nb].y - P[node].y) < soft:
+                    group.append(nb)                  # the soft corner
+                    node = nb
+                q = P[(node + step) % n]               # the edge that runs on from the corner
+                ex, ey = q.x - P[node].x, q.y - P[node].y
+                if not (abs(ex) > 1e-6 and abs(ey) <= level * abs(ex)):
+                    ok = False
+            if ok:
+                out.append((ci, group, P[i].x))
+    return out
+
+
 def lighten_upright(font, names, amount):
     """clean.lighten turned a quarter: the outline moved upright (level strokes heavier), on the glyph with x and y
     swapped and swapped back."""
@@ -808,18 +851,40 @@ def small_figures(font):
             u = list(g.unicodes)
             put(font, name, path, w, u, lsb=SUP_SIDE + lsb0 * 0.5, rsb=SUP_SIDE + lsb0 * 0.5)
     names = [f + s for f in FIGS for s in ("superior", "inferior")]
-    sx, sy = small_weights()
-    for n_ in names:                                  # narrowed upright by what the upright move adds: heights kept
+    sx0, _sy0 = small_weights()
+    for n_ in names:
+        # 0.85 (Regular pass 9, the owner on the small 3: "the top part looks smashed"): narrowed level as well as
+        # upright, each by what its move adds, so the figure keeps its full-size figure's box (it was narrowed upright
+        # only, and every small figure stood 9 to 10% wider for its height than its figure: the 3's upper bowl squat,
+        # its ball low, its waist long). Both moves solved on the narrowed figure (small_box_moves), so the stem is
+        # SUP_STEM_FIG and the hairline FIG_HAIR / FIG_STEM of it exactly; the side bearings stay what they were
         g = font[n_]
+        xs = [p.x for c in g.contours for p in c.points]
         ys = [p.y for c in g.contours for p in c.points]
-        y0, y1 = min(ys), max(ys)
-        k = (y1 - y0 - 2 * sy) / (y1 - y0)
-        cy = (y0 + y1) / 2
+        x0, x1, y0, y1 = min(xs), max(xs), min(ys), max(ys)
+        sx, sy = small_box_moves(x1 - x0, y1 - y0)
+        kx, ky = (x1 - x0 - 2 * sx) / (x1 - x0), (y1 - y0 - 2 * sy) / (y1 - y0)
+        cx, cy = (x0 + x1) / 2, (y0 + y1) / 2
+        ends = small_cut_ends(g)
         for c in g.contours:
             for p in c.points:
-                p.y = round(cy + (p.y - cy) * k)
-    CLEAN.lighten(font, names, -sx)
-    lighten_upright(font, names, -sy)
+                p.x, p.y = round(cx + (p.x - cx) * kx), round(cy + (p.y - cy) * ky)
+        CLEAN.lighten(font, [n_], -sx)
+        lighten_upright(font, [n_], -sy)
+        for ci, group, x_ in ends:                    # a level stroke's cut end stays where the figure has it
+            P = g.contours[ci].points
+            d = x_ - P[group[0]].x
+            n = len(P)
+            moved_ = set()
+            for i in group:
+                for j in ((i - 1) % n, i, (i + 1) % n):
+                    if (j == i or P[j].type is None) and j not in moved_:
+                        P[j].x = round(P[j].x + d)
+                        moved_.add(j)
+        for c in g.contours:                          # the white beside the ink as before (it stood sx0 inside)
+            for p in c.points:
+                p.x = round(p.x - sx0)
+        g.width = round(g.width - 2 * sx0)
     import figs as F_                                 # the two moves leave a handle past its curve's corner or a smooth
     for n_ in names:                                  # node a degree or two off its line: put back (whole units)
         for c in font[n_].contours:
