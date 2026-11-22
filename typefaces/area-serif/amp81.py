@@ -21,8 +21,11 @@ serif, the tail ending in a cut), with one change of form and the rules that cam
    sides agrees (curvecheck's 1.25); the arm's bracket (the curve from its straight lower edge into the serif) leaves
    the straight at no more than 0.40 of its tightest (curvecheck's ease).
 
-The crossings are 0.81's: each hidden edge runs on as one arc (the visible ends' tangents either side of their chord),
-none of 0.84's `amp.py` shape decisions (the even bowl taper, `THROUGH`, the arm curving into the crossing) applies.
+The crossings (0.85, Regular pass 9; the owner: "make sure the line intersections are clean, as if a stroke is going
+through all of them. the points should line up both ways"): `crossings`, in the Regular and in every master, moves the
+crossings' corners and their own handles only, until every edge reads as one stroke through (`edge_reading`): along
+the diagonal straight on, elsewhere one curve whose curvature runs evenly through the hidden part. None of 0.84's
+`amp.py` shape decisions (the even bowl taper, `THROUGH`, the arm curving into the crossing) applies.
 
 In a master (`master`, called from `bold.bold_font` where `amp.master` was): the Regular's outline with every node moved
 along its normal by half its stroke's growth, the growth the Regular's thickness there times the master's own law for
@@ -345,9 +348,360 @@ def _round(cs):
     return out
 
 
+# --- the crossings (0.85, Regular pass 9). The owner: "make sure the line intersections are clean, as if a stroke is
+# going through all of them. the points should line up both ways." Two crossings, each two strokes, each stroke two
+# edges. An edge is seen before the crossing (P1, ending on a corner) and after it (P2, starting on a corner); the part
+# between is hidden under the other stroke. Clean (edge_reading): P1 carried on reaches P2's first point along P2's
+# direction and P2 carried back reaches P1's last along P1's; on the diagonal straight on, elsewhere one curve whose
+# curvature runs evenly from P1's to P2's. Upper crossing: the loop's left stroke runs on as the diagonal, the loop's
+# right stroke as the bowl (the counter's right side becoming the bowl's outside); lower: the diagonal runs on as the
+# tail, the bowl as the arm.
+# Points in the 66 / 10 / 12 numbering of the built glyph (after the tail's cut): (contour, index), in travel order.
+X_EDGES = {
+    "upper: loop's left into the diagonal, outer": (((0, 57), (0, 58), (0, 59), (0, 60)), ((1, 6), (1, 7))),
+    "upper: loop's left into the diagonal, inner": (((2, 3), (2, 2), (2, 1), (2, 0)), ((0, 48), (0, 47))),
+    "upper: loop's right into the bowl, upper": (((2, 9), (2, 10), (2, 11), (2, 0)), ((0, 60), (0, 61), (0, 62), (0, 63))),
+    "upper: loop's right into the bowl, lower": (((0, 51), (0, 50), (0, 49), (0, 48)), ((1, 6), (1, 5), (1, 4), (1, 3))),
+    "lower: diagonal into the tail, upper": (((0, 48), (0, 47)), ((0, 22), (0, 21), (0, 20), (0, 19))),
+    "lower: diagonal into the tail, lower": (((1, 6), (1, 7)), ((0, 3), (0, 4), (0, 5), (0, 6))),
+    "lower: bowl into the arm, outer": (((0, 0), (0, 1), (0, 2), (0, 3)), ((0, 22), (0, 23))),
+    "lower: bowl into the arm, inner": (((1, 0), (1, 9), (1, 8), (1, 7)), ((0, 47), (0, 46), (0, 45), (0, 44))),
+}
+# The diagonal's two edges are the crossings' straight reference: every corner slides on one of them
+X_UPPER, X_LOWER = ((0, 48), (0, 47)), ((1, 6), (1, 7))
+X_CORNERS = {(0, 48): X_UPPER, (0, 47): X_UPPER, (2, 0): X_UPPER, (0, 22): X_UPPER,
+             (1, 6): X_LOWER, (1, 7): X_LOWER, (0, 60): X_LOWER, (0, 3): X_LOWER}
+X_FIXED = set()                     # corners that do not slide (none: the arm's corner slides, its straight turning
+                                    # about its far node, whose bracket handle follows onto it)
+X_TOL = (1.0, 1.0)
+KEEP_K = 20000.0                    # a curve's far end keeps its curvature (curvecheck's 1.25 across its smooth node)                  # units, degrees (the owner's brief)
+
+
+def _piece(cs, keys):
+    return [tuple(cs[c][i][:2]) for c, i in keys]
+
+
+def _tan(s, t):
+    if len(s) == 2:
+        return _unit((s[1][0] - s[0][0], s[1][1] - s[0][1]))
+    return _unit(_d1(s, t))
+
+
+def _kap(s, t):
+    return 0.0 if len(s) == 2 else _k(s, t)
+
+
+def _dir(t):
+    return math.atan2(t[1], t[0])
+
+
+def _dang(a, b):
+    """a - b in degrees, in (-180, 180]."""
+    return math.degrees((a - b + math.pi) % (2 * math.pi) - math.pi)
+
+
+def _line_off(p, u, q):
+    """Distance of q from the line through p along u."""
+    return abs((q[0] - p[0]) * u[1] - (q[1] - p[1]) * u[0])
+
+
+def edge_reading(s1, s2, ref=None, straight=False):
+    """One edge through a crossing: P1 (s1) seen before, P2 (s2) after, the corners s1[-1] and s2[0] at the hidden
+    part's ends. Returns fwd and back as (offset units, angle degrees).
+    straight (one side is an edge of the diagonal, which runs straight through both crossings): the hidden part is
+    that straight carried on. fwd: P1 carried on to P2's first corner (a line straight on, a curve along its tangent),
+    the corner's distance from it and P2's direction against it; back: P2 carried back to P1's last corner the same
+    way.
+    Otherwise (two curves, or a curve into the arm's straight) the hidden part is one curve whose curvature runs
+    evenly from P1's end curvature k1 to P2's start curvature k2 (a line's 0) over its length L, so the edge is
+    curvature continuous through the crossing: leaving along P1 it turns L (2 k1 + k2) / 6 before its chord and
+    L (k1 + 2 k2) / 6 after it. fwd: P1's direction against the chord less the first (and the offset that leaves at
+    the far corner, L sin of it); back: P2's against the chord less the second. In a master (ref: the Regular's
+    (s1, s2)) such an edge is read against the Regular's: its two directions against the chord the Regular's (the
+    master's growth leaves short handles whose end curvature says nothing of the stroke's)."""
+    c1, c2 = s1[-1], s2[0]
+    t1, t2 = _tan(s1, 1.0), _tan(s2, 0.0)
+    L = math.dist(c1, c2)
+    if straight:
+        fwd = (_line_off(c1, t1, c2), _dang(_dir(t2), _dir(t1)))
+        back = (_line_off(c2, t2, c1), _dang(_dir(t2), _dir(t1)))
+        return fwd, back
+    ch = _dir((c2[0] - c1[0], c2[1] - c1[1]))
+    if ref is not None:
+        r1, r2 = ref
+        rch = _dir((r2[0][0] - r1[-1][0], r2[0][1] - r1[-1][1]))
+        e1 = _dang(ch, _dir(t1)) - _dang(rch, _dir(_tan(r1, 1.0)))
+        e2 = _dang(_dir(t2), ch) - _dang(_dir(_tan(r2, 0.0)), rch)
+        return (L * math.sin(math.radians(abs(e1))), e1), (L * math.sin(math.radians(abs(e2))), e2)
+    k1, k2 = _kap(s1, 1.0), _kap(s2, 0.0)
+    e1 = _dang(ch, _dir(t1)) - math.degrees(L * (2 * k1 + k2) / 6)
+    e2 = _dang(_dir(t2), ch) - math.degrees(L * (k1 + 2 * k2) / 6)
+    return (L * math.sin(math.radians(abs(e1))), e1), (L * math.sin(math.radians(abs(e2))), e2)
+
+
+def _straight(k1, k2):
+    D = X_UPPER + X_LOWER
+    return any(len(k) == 2 and k[0] in D and k[1] in D for k in (k1, k2))
+
+
+def crossing_edges(cs, ref=None):
+    """Each edge's reading (edge_reading; ref the Regular's contours in a master), its kinds and the hidden part's
+    length, by X_EDGES' names."""
+    out = {}
+    for name, (k1, k2) in X_EDGES.items():
+        s1, s2 = _piece(cs, k1), _piece(cs, k2)
+        fwd, back = edge_reading(s1, s2, None if ref is None else (_piece(ref, k1), _piece(ref, k2)), _straight(k1, k2))
+        out[name] = dict(fwd=fwd, back=back, hidden=math.dist(s1[-1], s2[0]),
+                         kinds=("line" if len(s1) == 2 else "curve") + " > " + ("line" if len(s2) == 2 else "curve"))
+    return out
+
+
+def _dip(s, n=64, wave=0.10):
+    """A curve's flat place as curvecheck reads it (its `curves`: |k| at 65 places, a fall and a rise each by more
+    than WAVE of the largest): the depth of the deepest such fall over the largest, 0 where there is none, and
+    otherwise at least WAVE (so a curvecheck fault always reads over it)."""
+    ks = [abs(_k(s, i / n)) for i in range(n + 1)]
+    top = max(ks) or 1e-9
+    waves, ref, d, deep, peak = 0, ks[0], 0, 0.0, ks[0]
+    for v in ks[1:]:
+        if abs(v - ref) < wave * top:
+            continue
+        sgn = 1 if v > ref else -1
+        if d == -1 and sgn == 1:
+            waves += 1
+            deep = max(deep, (peak - low) / top)
+        if sgn == -1 and d != -1:
+            peak = ref
+        if sgn == -1:
+            low = v
+        d, ref = sgn, v
+    return max(deep, wave) if waves else 0.0
+
+
+def _dip_soft(s, n=32):
+    """The deepest fall of |k| between two higher places, over its largest (continuous: for the solver)."""
+    ks = [abs(_k(s, i / n)) for i in range(n + 1)]
+    top = max(ks) or 1e-9
+    left, right = [0.0] * (n + 1), [0.0] * (n + 1)
+    for j in range(1, n + 1):
+        left[j] = max(left[j - 1], ks[j - 1])
+    for j in range(n - 1, -1, -1):
+        right[j] = max(right[j + 1], ks[j + 1])
+    return max(max(0.0, min(left[j], right[j]) - ks[j]) for j in range(1, n)) / top
+
+
+def crossings(cs, keep=0.05, ref=None):
+    """The crossings made clean: every edge of X_EDGES within X_TOL both ways (edge_reading). Nothing moves but the
+    eight corners and the handles beside them (and the arm's bracket handle, turned onto its straight): every corner
+    slides on the diagonal's edge it lies on (both crossings are read against the diagonal; its edges stay); a curve
+    carrying on the diagonal takes its direction at the corner (only the handle's length free); the other corner
+    handles are free. Solved together, least change, with what curvecheck reads held: each curve's far end in the
+    curvature band its smooth node allows (1.18 across it), no flat place, no new inflection. Then whole units: the
+    moved points rounded and tried a unit or three about (a corner with its handle together) on the same readings.
+    In a master ref is the Regular's contours (edge_reading reads a curved edge against the Regular's). Returns
+    (contours, notes: moves, the solve's cost, the readings before rounding)."""
+    import numpy as np
+    from scipy.optimize import least_squares
+    cs = [list(P) for P in cs]
+    if [len(P) for P in cs] != [N_OUT, 10, 12]:
+        return cs, dict(moved={}, cost=0.0, skipped=True)
+    D = X_UPPER + X_LOWER
+    line = {}
+    for k, Lk in X_CORNERS.items():
+        a, b = _piece(cs, Lk)
+        line[k] = (a, _unit((b[0] - a[0], b[1] - a[1])))
+    s0 = {k: (cs[k[0]][k[1]][0] - o[0]) * u[0] + (cs[k[0]][k[1]][1] - o[1]) * u[1] for k, (o, u) in line.items()}
+    aligned, free = {}, set()
+    for name, (k1, k2) in X_EDGES.items():
+        for keys, other, end in ((k1, k2, -1), (k2, k1, 0)):
+            if len(keys) != 4:
+                continue
+            h, node = (keys[-2], keys[-1]) if end == -1 else (keys[1], keys[0])
+            if len(other) == 2 and other[0] in D and other[1] in D:
+                aligned[h] = (node, other, end)
+            else:
+                free.add(h)
+    free -= set(aligned)
+    corners, al, fr = list(line), list(aligned), sorted(free)
+    follow = []                                         # (corner, smooth node at the straight's far end, its handle)
+    for k in corners:
+        P = cs[k[0]]
+        n = len(P)
+        for st in (-1, 1):
+            m = (k[1] + st) % n
+            if P[m][2] and P[m][3] and ((st == 1 and P[m][2] == "line") or (st == -1 and P[k[1]][2] == "line")):
+                h = (m + st) % n
+                if not P[h][2]:
+                    follow.append((k, (k[0], m), (k[0], h)))
+    base = {k: cs[k[0]][k[1]][:2] for k in corners + al + fr + [h for _c, _m, h in follow]}
+    far_k = {}
+    for name, (k1, k2) in X_EDGES.items():
+        for keys in (k1, k2):
+            if len(keys) == 4:
+                far_k[keys] = _k(_piece(cs, keys), 0.0 if keys[-1] in line else 1.0)
+    # each far end is a smooth node: the curvature on its other side (a curve this does not touch) and the band its
+    # own may move in, curvecheck's ratio across the node (RATIO_MAX; no more than it was where it was more)
+    band = {}
+    for keys, k0 in far_k.items():
+        ci, node = keys[0] if keys[-1] in line else keys[-1]
+        P = cs[ci]
+        n = len(P)
+        S = _segs(P)
+        segs = [idx for idx, kd in S if idx[0] == node or idx[-1] == node]
+        mine = {i for c_, i in keys}
+        other = [idx for idx in segs if not set(idx) <= mine]
+        if len(other) != 1 or len(other[0]) != 4:
+            continue
+        o = other[0]
+        ko = abs(_k(_seg_pts(P, o), 0.0 if o[0] == node else 1.0))
+        r0 = max(abs(k0), ko) / max(1e-9, min(abs(k0), ko))
+        rm = 1.18 if r0 < 1.27 else r0                    # (a node a little past it is brought back)
+        band[keys] = (ko / rm, ko * rm)
+    n_x = len(corners) + len(al) + 2 * len(fr)
+
+    def place(x):
+        Q = [list(P) for P in cs]
+        j = 0
+        for k in corners:
+            o, u = line[k]
+            s = s0[k] + (0.0 if k in X_FIXED else x[j])
+            Q[k[0]][k[1]] = (o[0] + u[0] * s, o[1] + u[1] * s) + tuple(Q[k[0]][k[1]][2:])
+            j += 1
+        for h in al:
+            node, other, end = aligned[h]
+            a, b = _piece(cs, other)
+            u = _unit((b[0] - a[0], b[1] - a[1]))
+            p = Q[node[0]][node[1]]
+            L = max(5.0, math.dist(base[h], cs[node[0]][node[1]][:2]) * (1 + x[j]))
+            sg = -1 if end == -1 else 1                  # P1's last handle lies back along the straight, P2's first on
+            Q[h[0]][h[1]] = (p[0] + sg * u[0] * L, p[1] + sg * u[1] * L, None, False)
+            j += 1
+        for h in fr:
+            p = base[h]
+            Q[h[0]][h[1]] = (p[0] + x[j], p[1] + x[j + 1], None, False)
+            j += 2
+        for c, m, h in follow:
+            pc, pm = Q[c[0]][c[1]], Q[m[0]][m[1]]
+            u = _unit((pm[0] - pc[0], pm[1] - pc[1]))
+            L = math.dist(base[h], pm[:2])
+            Q[h[0]][h[1]] = (pm[0] + u[0] * L, pm[1] + u[1] * L, None, False)
+        return Q
+
+    watch = list(far_k)
+    for c, m, h in follow:                               # the bracket its handle belongs to
+        P = cs[m[0]]
+        st = 1 if (h[1] - m[1]) % len(P) == 1 else -1
+        idx = [(m[1] + st * j) % len(P) for j in range(4)]
+        watch.append(tuple((m[0], i) for i in (idx if st == 1 else idx[::-1])))
+    dips0 = {keys: _dip(_piece(cs, keys)) for keys in watch}
+    soft0 = {keys: _dip_soft(_piece(cs, keys)) for keys in watch}
+    dip_max = {keys: (0.0 if d_ < 0.16 else d_) for keys, d_ in dips0.items()}    # a small flat place taken away
+    sign0 = {}                                           # a curve without an inflection keeps none
+    for keys in watch:
+        s_ = _piece(cs, keys)
+        if _inflections(s_) == 0:
+            sign0[keys] = 1.0 if _k(s_, 0.5) > 0 else -1.0
+
+    def resid(x):
+        Q = place(x)
+        r = []
+        for name, (k1, k2) in X_EDGES.items():
+            rf = None if ref is None else (_piece(ref, k1), _piece(ref, k2))
+            (fo, fa), (bo, ba) = edge_reading(_piece(Q, k1), _piece(Q, k2), rf, _straight(k1, k2))
+            r += [fo, fa, bo, ba]
+        for keys, k0 in far_k.items():                   # the far ends' curvature: in its band, near what it was
+            s_ = _piece(Q, keys)
+            kk = _k(s_, 0.0 if keys[-1] in line else 1.0)
+            r.append(0.1 * KEEP_K * (kk - k0))
+            if keys in band:
+                lo, hi = band[keys]
+                r.append(10 * KEEP_K * (max(0.0, abs(kk) - hi) + max(0.0, lo - abs(kk))))
+        for keys in watch:                               # no flat place (WAVE 0.10), no new inflection
+            s_ = _piece(Q, keys)
+            r.append(2000 * max(0.0, _dip_soft(s_) - max(0.06, soft0[keys] if dip_max[keys] else 0.0)))
+            if keys in sign0:
+                r.append(KEEP_K * sum(max(0.0, -sign0[keys] * _k(s_, t / 12) + 2e-4) for t in range(13)))
+        sc = [1.0] * len(corners) + [30.0] * len(al) + [1.0] * (2 * len(fr))
+        r += [keep * v * w for v, w in zip(x, sc)]       # least change
+        return np.array(r, float)
+
+    sol = least_squares(resid, np.zeros(n_x), method="trf", max_nfev=2500, xtol=1e-10, ftol=1e-10)
+    Q = place(sol.x)
+    pre = crossing_edges(Q, ref)
+    # whole units: the moved points rounded, then each moved handle tried a unit either way (corners stay on their
+    # straight's nearest whole point), least squares of the same readings, until nothing better
+    Q = _round(Q)
+
+    def refollow(Q_):
+        for c, m, h in follow:
+            pc, pm = Q_[c[0]][c[1]], Q_[m[0]][m[1]]
+            u = _unit((pm[0] - pc[0], pm[1] - pc[1]))
+            L = math.dist(base[h], pm[:2])
+            Q_[h[0]][h[1]] = (round(pm[0] + u[0] * L), round(pm[1] + u[1] * L), None, False)
+        return Q_
+
+    def cost(Q_):
+        """The readings, plus what curvecheck reads as a fault (a far end out of its band, a flat place, a new
+        inflection) weighed so heavily that the search first takes it away."""
+        r = []
+        for name, (k1, k2) in X_EDGES.items():
+            rf = None if ref is None else (_piece(ref, k1), _piece(ref, k2))
+            (fo, fa), (bo, ba) = edge_reading(_piece(Q_, k1), _piece(Q_, k2), rf, _straight(k1, k2))
+            r += [v / X_TOL[0] for v in (fo, bo)] + [v / X_TOL[1] for v in (fa, ba)]
+        for keys, k0 in far_k.items():
+            s_ = _piece(Q_, keys)
+            kk = _k(s_, 0.0 if keys[-1] in line else 1.0)
+            r.append(0.1 * KEEP_K * (kk - k0))
+            if keys in band:
+                lo, hi = band[keys]
+                r.append(1e3 * KEEP_K * (max(0.0, abs(kk) - hi) + max(0.0, lo - abs(kk))))
+        for keys in watch:
+            s_ = _piece(Q_, keys)
+            r.append(1e4 * max(0.0, _dip(s_) - dip_max[keys]))
+            if keys in sign0:
+                r.append(1e3 * KEEP_K * sum(max(0.0, -sign0[keys] * _k(s_, t / 12)) for t in range(13)))
+        return sum(v * v for v in r)
+    handles = [h for h in al + fr] + corners             # corners too: a unit off their straight at most
+    best = cost(Q)
+    for r_ in (1, 1, 2, 3):                              # a unit about, then further for a short handle's angle
+        steps = [(a_, b_) for a_ in range(-r_, r_ + 1) for b_ in range(-r_, r_ + 1) if a_ or b_]
+        for _ in range(8):
+            better = False
+            for h in handles:
+                for dx_, dy_ in steps:
+                    T = [list(P) for P in Q]
+                    x_, y_, t_, sm_ = T[h[0]][h[1]]
+                    T[h[0]][h[1]] = (x_ + dx_, y_ + dy_, t_, sm_)
+                    c_ = cost(refollow(T))
+                    if c_ < best - 1e-9:
+                        Q, best, better = T, c_, True
+            if not better:
+                break
+        for h in al:                                     # a corner and its handle on a straight's direction together
+            node = aligned[h][0]
+            for _ in range(3):
+                better = False
+                for dn in [(a_, b_) for a_ in (-1, 0, 1) for b_ in (-1, 0, 1)]:
+                    for dh in [(a_, b_) for a_ in range(-2, 3) for b_ in range(-2, 3)]:
+                        if dn == (0, 0) and dh == (0, 0):
+                            continue
+                        T = [list(P) for P in Q]
+                        x_, y_, t_, sm_ = T[node[0]][node[1]]
+                        T[node[0]][node[1]] = (x_ + dn[0], y_ + dn[1], t_, sm_)
+                        x_, y_, t_, sm_ = T[h[0]][h[1]]
+                        T[h[0]][h[1]] = (x_ + dh[0], y_ + dh[1], t_, sm_)
+                        c_ = cost(refollow(T))
+                        if c_ < best - 1e-9:
+                            Q, best, better = T, c_, True
+                if not better:
+                    break
+    moved = {k: math.dist(base[k], Q[k[0]][k[1]][:2]) for k in base}
+    return Q, dict(moved=moved, cost=float(sol.cost), solved=pre)
+
+
 def construct(lean=None, steps=None):
     """The Regular's contours (unrounded) and notes. steps: which rules to apply (default all)."""
-    steps = steps or ("upright", "top", "diagonal", "tail", "smooth")
+    steps = steps or ("upright", "top", "diagonal", "tail", "smooth", "crossings")
     cs = [list(P) for P in BASE]
     notes = {}
     if "upright" in steps:
@@ -364,6 +718,9 @@ def construct(lean=None, steps=None):
                     even_node(P, i)
     if "tail" in steps:
         cs[0] = tail_cut(cs[0])
+    if "crossings" in steps:                            # 0.85 (Regular pass 9): the crossings clean
+        cs, xn = crossings(cs)
+        notes["crossings"] = xn
     return cs, notes
 
 
@@ -707,6 +1064,7 @@ def master_contours(R0, R, cs0=None):
             if q[2] and q[3]:
                 even_node(P, i, 1.22, (0.5, 0.025, 45))   # a master's growth bends more: a wider search
     no_new_turns(cs, cs0)
+    cs, _xn = crossings(cs, ref=cs0)                    # 0.85 (Regular pass 9): the crossings clean in every master
     return _round(cs), e
 
 
