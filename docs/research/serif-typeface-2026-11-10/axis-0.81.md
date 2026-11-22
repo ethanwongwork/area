@@ -2797,3 +2797,158 @@ would have to leave its extreme), every width dip read 15 to 25 units off its no
 ⱥ: no in-build reading agrees with the audit's on where they are), Ɲ's diagonal and ɽ's stem (Bold hook faults), the
 Ƭ Ɓ curl ends, Œ's seam, ﬆ and s_p, and the hooked jumps the guards refused (ɗ ɠ Ʈ (557, -139) Ƭ ɦ ƥ Ɠ Ɽ Ɫ (89, 467)
 Ɛ ɛ (150, 167)). r's top node keeps a 2.10 jump (2.18 before; not on the list).
+
+## Regular pass 8 (0.85), the ampersand and the close of the round (21 November 2026)
+
+The owner, on the 0.81 Regular ampersand (`build/snap081`): "this old ampersand looks better, but the top part looks like
+it leans a little bit to the right side." The close of the round: that ampersand back with one correction, the version
+0.85, one full build and every standing check, a last look at the whole Regular. Figures `build/owner15/amp/`, the
+final look `build/owner15/final/`; tools `build/owner15/amp/tools/` (`lean.py` the loop's lean, `axis.py` the loop with
+its axis, `chk.py` curvecheck and pathlint on the whole glyph, `dev81.py` the distance to 0.81, `try.py` a trial on
+snap084l's letters, `turns2.py` audit_axis's own turn reading for the &, `text.py` text lines in any master),
+`build/owner15/tools/contact.py` (contact sheets). No reference face was opened.
+
+### Item 1: the ampersand of 0.81, its loop upright
+
+`amp81.py`. The shape is 0.81's Regular outline, point for point (`BASE`: the upper loop, the long diagonal, the big
+lower-left bowl, the arm rising to its flat serif, the tail's cut); none of 0.84's `amp.py` shape decisions (the even
+bowl taper, `THROUGH`, the arm curving into the crossing). 0.81's crossings already read as continuous strokes: each
+hidden edge's visible ends have tangents either side of their chord (one arc, no step): the spine's lower edge 214.5
+and 208.8 degrees about a chord of 214.6, its upper edge 218 and 205.6 about 210.7, the bowl's inside into the arm 41.6
+and 50.7 about 46.7; the bowl's outside into the arm 46.8 and 55.5 about 46.3 (0.5 degrees of S, kept).
+
+**The lean, measured** (`lean.py`): the midpoints of level chords across the outer loop (its upper half) and across
+its counter, a line fitted through each. 0.81: the outer loop leans +4.0 degrees (top to the right), the counter -0.9;
+the outer top extreme at x 348, the counter's at 335, the middle of the side extremes (outer and counter both) 339.5;
+the outer's right extreme 45 units higher than its left (581 / 536). The outer loop is slanted, not turned: its top is
+right of its middle and its right side high, as a shear makes them (a turn about the foot moved the top left but
+raised the right extreme further: tried first, left). **The correction** (`upright`): the upper half of the outer loop
+and of its counter sheared level about the height of each one's side extremes (nothing below moves, so the loop's foot
+and its corners on the diagonal stay), every extreme's handles put back on their axis. Candidates (`LEAN_CANDIDATES`,
+`build/owner15/amp/candidates.png`, `candidates-loop.png`, `pick-loop.png`, the blue line the side extremes' middle):
+
+| | outer top moved | counter top moved | lean outer / counter (degrees) | tops x (outer / counter) | side extremes' middle |
+|---|---|---|---|---|---|
+| 0.81 | | | +4.0 / -0.9 | 348 / 335 | 339.5 |
+| A | -8.5 | 0 | +2.0 / -0.8 | 340 / 335 | 339 |
+| **B (taken)** | **-11** | **+2** | **+1.4 / -0.3** | **337 / 337** | **338.5 / 339.5** |
+| C | -14 | -1 | +0.7 / -1.1 | 334 / 334 | 338.5 |
+
+B puts both tops on one vertical within 1.5 units of the sides' middle; looked at large, A still tips right at the
+top, C starts to lean back. The remaining +1.4 is the teardrop's own form (its foot points down-left into the diagonal).
+
+**Brought up to date**: the diagonal the capital stem (`ladder.CAP_STEM` 86; 0.81 92: both straight edges in 3); the
+loop's top the capital hairline (`CAP_HAIR` 47; 0.81 62: the counter stretched upright about its foot, top 659 > 674);
+the loop's sides 79 and the bowl's left 93 left (1 unit off `STEM` and `CAP_ROUND`), the bowl's bottom 64 left (a round
+stroke tapering into the diagonal, not a step); O's lines (721 / -9, as 0.81); the tail's cut the tip (`TIP` 30; 0.81
+21: 4.5 each way along itself) with both corners on 7, their nodes corners (the corner rule's free end); inner corners
+sharp; the arm's bracket off its straight at 0.40 of its tightest (curvecheck read 1.00 on 0.81's); every smooth node's
+handle lengths at one curvature (0.81's loop left extreme read 1.26). Regular: curvecheck on the glyph 0 faults, worst
+1.19 (0.81: 3 faults, worst 1.26), pathlint 0 / 0 / 0 on the &. Distance to 0.81 (`dev81.py`): outside the loop at most
+4.5 units (the tail's cut end), the diagonal 2.8, the bowl 4.3; in the loop 15.1 (the counter's raised top). Advance
+814 (0.81 810, 084l 809: the side bearings the spacing rule left, the tail 4.5 longer).
+
+**Masters** (`amp81.master`, in `bold.bold_font` where `amp.master` was): each edge offset by half its stroke's growth:
+the stroke read across by the shortest of a fan of rays about the normal, the growth the master's own law for that
+thickness (v's thin at the thin diagonal, o's hairline at the hairline, n's stem at the stem, linear between: the
+readings `amp.readings` already took); a corner where its two edges' offsets meet; a curve refitted through its offset
+points with its end tangents kept (smooth nodes stay smooth, extremes stay extremes), no handle past its triangle; a
+level extreme on O's lines stays on it and the stroke's other edge takes the growth; the serif moved whole (slab by the
+tip's law, each half out by the arm's growth); the tail's cut with the tail's sides; the loop's counter widened level as
+o's counter changes (Bold +30); a curve the growth bent into an inflection its Regular curve lacks has its handle
+lengths solved out of it (`no_new_turns`: the first full build's audit_axis read curve 14, the loop's outside from the
+crotch up, turning at 752 between the mid master and the Bold). One point structure (66 / 10 / 12) in every master and
+the mid master at the readings that far along. Light: advance 801, curvecheck 0 faults; Bold: 846 (084l 871, 0.81 885),
+curvecheck four node jumps 1.27 to 1.34 and eleven flat places (not a standing check on the masters; 0.81's Bold read
+ten faults, worst 4.43, and its counter closed to a slit); the loop upright in both (tops on one vertical). Renders
+`build/owner15/amp/{Light,Regular,Bold}-side-overlay.png` (0.81 | snap084l | 085a and over each other),
+`text-{Light,Regular,Bold}.png` ("R&D, Q&A, Fish & Chips, 3 & 4" at 16 / 24 / 48), `masters-axis.png`.
+
+**Withdrawn**: `amp.regular` (normalize) and `amp.master` (`bold.bold_font`) are no longer called; `amp.py` stays
+(its `Chain`, `readings`, `_flat`, `_mix` and helpers serve the @, (C) (R) (P), $ and the summation). With them the
+0.82 to 0.84 ampersand rules lapse: the construction skeleton (`REG`, `loop_rule`, `LOOP`, `BOWL_R`), the 0.84 crossings
+(`even_ribbon`, `ribbon_width`, `bowl_taper`, `ARM_*`, `TAPER_*`, `THROUGH*`, `soft_cut`'s use on the tail), `widen` and
+`spread`.
+
+### Item 2: version 0.85
+
+`version.BUILD` "0.85": the one place the build sets the version (`derive.metrics` writes versionMajor 0 and
+versionMinor 850 into every master; the name table's "Version 0.850", the unique ID and head.fontRevision follow;
+audit_charset checks it).
+
+### Full build, the audits, `build/snap085a`
+
+`caffeinate -i build.py`, two full builds. The first (`build/owner15/snap085a-first`, audits
+`build/owner15/audit-085a-first`) read one new fault: audit_axis turns, the &'s curve 14 (the loop's outside from the
+crotch up) gaining an inflection at 752.3 between the mid master and the Bold (the same fault the stem-55 run printed as
+314.2). Fixed by `amp81.no_new_turns` (commit e7a179cd; the Regular unchanged). The second is `build/snap085a`
+(`full-085a.log`). A `.DS_Store` written into a UFO while the build replaced it stopped five runs at the save (Regular,
+Bold, Light in turn; deleting it before the run and a cleaner during it did not win the race); the last run moved the
+three old UFOs aside first (`build/owner15/stale/`), which the build does not read, and passed. Audits in
+`build/owner15/audit-085a` (`build/owner11/tools/audits.sh`, then pathlint, curvecheck and its hooks, audit_charset and
+parts.check on the Regular) against `build/owner14/audit-084l`. evaluate.py is not part of the standing run (not in
+084l's set) and was not run.
+
+| Audit | snap084l | snap085a |
+|---|---|---|
+| fallbacks | none | none |
+| version | 0.840 | 0.850 (name 5 "Version 0.850", head 0.850, every master's versionMinor 850) |
+| audit_axis Bold / Light (turns, crossings, thin ...) | turns ok; thin cedi, ogonek, one.ss01 | the same (files identical) |
+| audit_bold Bold / Light | | identical |
+| audit_rays | ok | ok; the &'s thinnest 38.9 > 33.2 at 400, 32.3 > 28.6 at 300, 41.9 > 42.2 at 800 (0.81's spine where it crosses and the bowl's bottom into the diagonal, both thinner than amp.py's; read, not flagged) |
+| audit_kern, curvecheck Light / Bold, hooks Light / Bold, interpolation | | identical |
+| Regular: audit_charset | 0 errors, & ink 2.53 | 0 errors, & ink 2.77 (at most 3.0) |
+| Regular: curvecheck, hooks, parts.check | pass, pass, 0 errors | the same |
+| Regular: pathlint | 0 / 132 / 35 | 0 / 132 / 35 (the & clean) |
+
+What moved against snap084l: the ampersand only, in every master and the mid layer (`dev.py --all` on the Regular:
+1 glyph); the Regular's advance 809 > 814, Light 795 > 801, Bold 871 > 846. Kerning was not refit (the & keys move
+with their master's rule as before).
+
+### The final look at 400
+
+Contact sheets of the whole Regular from snap085a (`build/owner15/final/`: `lowercase.png`, `capitals.png`,
+`figures.png` (figures, small figures, fractions), `punctuation.png`, `currency.png`, `maths.png`,
+`arrows-symbols.png`, `marks.png`, `accented-1..5.png`, `alternates.png`, `other.png`) and text lines at 16 / 24 / 48 px
+mixing them (`text-1.png` .. `text-3.png`, `text-check.png`). Each was looked at; nothing was changed from this look.
+What still reads off, most visible first:
+
+| # | Glyph | What reads off | Sheet |
+|---|---|---|---|
+| 1 | ‹ › | lighter and taller than « », as if from another face, beside each other in text | `final/text-check.png`, `punctuation.png` |
+| 2 | ¶ | the bowl and the two stems read darker than any letter around it at 16 to 24 px | `final/text-check.png`, `text-2.png` |
+| 3 | $ | still a touch dark beside the figures (carried) | `final/currency.png`, `text-2.png` |
+| 4 | ‰ | at 16 px the third zero reads as a separate small o ("%o") | `final/text-2.png` |
+| 5 | ŀ | the middle dot is large and crowds the next l | `final/lowercase.png`, `text-check.png` |
+| 6 | ⌥ | small and light beside the other key signs; its slanted stroke thinner than its bars | `final/arrows-symbols.png`, `text-check.png` |
+| 7 | ﬆ (s_t) | the long s and the t joined read awkward, the join high (carried) | `final/lowercase.png` |
+| 8 | Œ | the seam between O and E reads at 48 px (carried) | `final/text-1.png`, `capitals.png` |
+| 9 | † ‡ | the arms' ball ends read heavy for the stem (carried) | `final/punctuation.png` |
+| 10 | Ŋ | the hook hangs further below the baseline than J's | `final/capitals.png` |
+| 11 | ß | the upper curve's change of curvature still visible at 48 px (carried) | `final/lowercase.png` |
+| 12 | Ɲ | the diagonal heavy beside N's (carried) | `final/capitals.png` |
+
+### The round's open items
+
+| Item | Where it stands |
+|---|---|
+| y tail depth and thin | open: needs the outside's third cubic and a ball-height rule (pass 7, item 3) |
+| ß and Ə curvature | open: ß's fix crosses audit_charset's cap; Ə's fillet runs a handle past its triangle (pass 7) |
+| a / æ bowl bottom | open: the counter's lowest node would have to leave its extreme |
+| G bottom | open: the dip read 15 to 25 units off its node (pass 7, item 8) |
+| b q bowl-join dips | open: as G |
+| Ɲ diagonal | open: withdrawn, the Bold hook's fault (pass 7, item 11) |
+| ɽ stem | open: withdrawn, the Bold hook's fault (pass 7, item 9) |
+| § pointed counter ends | open: refused by the Bold engine (`_round_end` kept) |
+| † ‡ | open: the arms' ends heavy |
+| Ɛ | open: its jumps and thin left (merged before the rule) |
+| Œ | open: the seam |
+| ﬆ s_p | open: flat place and handles past their triangles |
+| $ slightly dark | open |
+| & | done this pass (0.81's, upright loop); its Bold master reads a little compact (846) with four node jumps 1.27 to 1.34 and flat places in curvecheck (not a standing check on masters) |
+| ‹ › weight against « » | new (final look) |
+| ¶ dark | new |
+| ‰ at 16 px | new |
+| ŀ dot | new |
+| ⌥ light | new |
+| Ŋ hook depth | new |
