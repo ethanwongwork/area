@@ -892,6 +892,17 @@ def small_figures(font):
             P = F_.collinear([tuple(q) for q in F_._in_triangle(P)])
             for p, q in zip(c.points, P):
                 p.x, p.y = round(q[0]), round(q[1])
+    # 0.85 (pass 9): each inferior is its superior moved (whole units), so the two are one outline: narrowed about
+    # their own middles, their rounding had parted (a handle past its meeting point in ₈ and ₅ only)
+    for fig in FIGS:
+        sup, inf = font[fig + "superior"], font[fig + "inferior"]
+        if [len(c.points) for c in sup.contours] != [len(c.points) for c in inf.contours]:
+            continue
+        sb, ib = bounds(gp(font, fig + "superior")), bounds(gp(font, fig + "inferior"))
+        dx, dy = round(ib[0] - sb[0]), round(ib[1] - sb[1])
+        for cs_, ci_ in zip(sup.contours, inf.contours):
+            for p, q in zip(cs_.points, ci_.points):
+                q.x, q.y, q.type, q.smooth = p.x + dx, p.y + dy, p.type, p.smooth
     # charset.fold_steps (0.84 pass 4, A1): withdrawn, the full-size 9's crotch is one corner again (pass 5, item 1)
     for base, name in (("a", "ordfeminine"), ("o", "ordmasculine")):
         p = moved(gp(font, base), 0, 0, SUP_SCALE)

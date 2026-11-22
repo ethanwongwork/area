@@ -3549,6 +3549,26 @@ def _match(B_, P, scale, far=20.0, skip=20.0, narrow=(1.0, 1.0)):
     return best[1]
 
 
+def _rot_match(B_, P, scale, narrow=(1.0, 1.0)):
+    """0.85 (Regular pass 9): P made point for point from B_ (the same number and kinds of points, in order from
+    some start): the start whose points lie nearest B_ scaled, narrowed and set on P's box, or None."""
+    if len(B_) != len(P):
+        return None
+    bx, by = [q[0] for q in B_], [q[1] for q in B_]
+    px, py = [q[0] for q in P], [q[1] for q in P]
+    mx, my = (min(bx) + max(bx)) / 2, (min(by) + max(by)) / 2
+    cx, cy = (min(px) + max(px)) / 2, (min(py) + max(py)) / 2
+    T = [((q[0] - mx) * scale * narrow[0] + cx, (q[1] - my) * scale * narrow[1] + cy, q[2]) for q in B_]
+    n, best = len(B_), None
+    for k in range(n):
+        if any((T[(k + i) % n][2] is None) != (P[i][2] is None) for i in range(n)):
+            continue
+        d = sum(math.dist(T[(k + i) % n][:2], P[i][:2]) for i in range(n))
+        if best is None or d < best[0]:
+            best = (d, [(k + i) % n for i in range(n)])
+    return None if best is None else best[1]
+
+
 def kin_parts(reg, g, out, rep, v):
     """Contours of g that are a KIN part: each point moved by the part's own glyph's move, turned and scaled; or a
     SMALL glyph: each point moved by its figure's point's move, at the small glyphs' scale."""
@@ -3578,9 +3598,15 @@ def kin_parts(reg, g, out, rep, v):
         new = []
         for P, BR, BB in zip(mine, bR, bB):
             idx = _match(BR, P, CHARSET.SUP_SCALE, narrow=narrow)
-            alt = _match(BR, P, CHARSET.SUP_SCALE) if narrow != (1.0, 1.0) else None
-            if idx is None or (alt is not None and sum(x is None for x in alt) < sum(x is None for x in idx)):
-                idx = alt                                      # (the 1: its held serif ends make its box)
+            if narrow != (1.0, 1.0):                           # the plain reading where it matches more (the 1: its
+                for alt in (_match(BR, P, CHARSET.SUP_SCALE),  # held serif ends make its box), and further off for
+                            _match(BR, P, CHARSET.SUP_SCALE, far=36.0, narrow=narrow)):  # a counter's corner the
+                    if alt is not None and (idx is None or       # heavier strokes moved (the small 4's crotch)
+                                            sum(x is None for x in alt) < sum(x is None for x in idx)):
+                        idx = alt
+                rot = _rot_match(BR, P, CHARSET.SUP_SCALE, narrow)    # made point for point: the nearest start
+                if rot is not None and (idx is None or any(x is None for x in idx)):
+                    idx = rot
             if idx is None or len(BR) != len(BB):
                 return out, rep
             mv = [None if j is None else ((BB[j][0] - BR[j][0]) * CHARSET.SUP_SCALE, (BB[j][1] - BR[j][1]) * CHARSET.SUP_SCALE)
