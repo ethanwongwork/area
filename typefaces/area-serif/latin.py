@@ -906,13 +906,14 @@ def swells(font, names=None):
 
 
 # ------------------------------------------------------------------------------------------------ hooked stems (item 9)
-# ɦ ƥ ɽ ɗ ɠ: a stem whose one edge leans 2 units (ɦ 111 to 113 over its length) or runs 2 units into the counter
+# ɦ ƥ ɗ ɠ: a stem whose one edge leans 2 units (ɦ 111 to 113 over its length) or runs 2 units into the counter
 # (ɗ ɠ: the counter's straight at 461, the stem's other edge at 542) reads 80 / 81 where n's is 78. The edge (its two
 # nodes and the handles that run on along it) is made upright at the class stem from the edge kept: the counter
 # side of ɦ ƥ ɽ (straight, upright) and, on ɗ ɠ, the stem's right edge (542; moving it put a width bump into ɠ's hook).
 #   glyph: [(a point on the edge to move, the x it takes as an offset from the kept edge's x, kept edge x)]
 STEM_EDGES = {
-    "hhook": [((111, 540), +1, 191)], "phook": [((118, 540), +1, 198)], "rtail": [((125, 380), +1, 205)],
+    # ɽ (rtail, 125 > 127) withdrawn: the Bold's hook took a curvature fault at node 31 (1.41) in the full build
+    "hhook": [((111, 540), +1, 191)], "phook": [((118, 540), +1, 198)],
     "dhook": [((461, 303), +1, 542)], "ghook": [((461, 303), +1, 542)],
 }
 
