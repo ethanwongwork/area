@@ -1302,6 +1302,7 @@ def normalize(font):
     print("latin: jumps", LATIN.jumps(font))
     print("latin: swells", LATIN.swells(font))
     print("latin: hooked stems", LATIN.stem_edges(font))
+    print("latin:", LATIN.n_hook_diagonal(font))
     print("latin: r's branch", LATIN.r_branch(font))
     import symbols as SYMBOLS                         # 0.82 (owner round 8, item 18): the hook above's curves meet at
     for n_ in SYMBOLS.HOOKS:                          # one curvature (handle lengths only; its ~30 composites follow)
