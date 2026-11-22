@@ -1,5 +1,6 @@
 """Builds Area Serif: derive.py (Libre Baskerville -> Area Serif source), then TTF and WOFF2.
 Usage: .venv/bin/python build.py   (keeps the last TTF in build/previous/ for qa.py --diff)"""
+import math
 import os
 import shutil
 from fontTools.ttLib import newTable
@@ -35,6 +36,7 @@ def main():
     head = ttf["head"]                       # Windows clips outside these: cover every glyph
     ttf["OS/2"].usWinAscent = max(head.yMax, ttf["hhea"].ascent)
     ttf["OS/2"].usWinDescent = max(-head.yMin, -ttf["hhea"].descent)
+    ttf["OS/2"].fsType = 0                   # 0.84 (item 10): installable, as the OFL allows (was 4, preview and print)
     path = os.path.join(OUT, "AreaSerif-Regular.ttf")
     if os.path.exists(path):
         os.makedirs(os.path.join(OUT, "previous"), exist_ok=True)
@@ -104,18 +106,45 @@ def variable(ufo):
         dict(value=w, name=n, **(dict(flags=0x2, linkedValue=700) if w == 400 else {}))
         for w, n in WAX.named() if w >= low])], macNames=False)
     unhinted(vf)
-    head = vf["head"]
-    vf["OS/2"].usWinAscent = max(head.yMax, vf["hhea"].ascent)
-    vf["OS/2"].usWinDescent = max(-head.yMin, -vf["hhea"].descent)
+    # 0.84 (pass 2, item 10; build/owner9/research/ui-web.md): Windows clips outside usWin, and the variable font's head
+    # holds only the default master's box (at 800 Ḯ reaches 1121, a mark -263). usWin from the tallest and deepest
+    # glyph in every master and layer; the line metrics (hhea, typo with USE_TYPO_METRICS) are not touched.
+    hi, lo = all_masters_box([reg_vf, bold_ufo, light_ufo] + ([thin_ufo] if thin_ufo is not None else []))
+    win = (max(hi, vf["hhea"].ascent), max(-lo, -vf["hhea"].descent))
+    vf["OS/2"].usWinAscent, vf["OS/2"].usWinDescent = win
+    vf["OS/2"].fsType = 0
     path = os.path.join(OUT, "AreaSerif[wght].ttf")
     vf.save(path)
     vf.flavor = "woff2"
     vf.save(os.path.join(OUT, "AreaSerif[wght].woff2"))
+    from fontTools.ttLib import TTFont as _TT          # the static Regular takes the same win box (one family)
+    spath = os.path.join(OUT, "AreaSerif-Regular.ttf")
+    st = _TT(spath)
+    st["OS/2"].usWinAscent, st["OS/2"].usWinDescent = max(win[0], st["OS/2"].usWinAscent), max(win[1], st["OS/2"].usWinDescent)
+    st.save(spath)
+    st.flavor = "woff2"
+    st.save(os.path.join(OUT, "AreaSerif-Regular.woff2"))
+    print(f"usWin {win[0]} / {win[1]} from every master")
     fb = [n for n, r in reports.items() if r.get("fallback")]
     tfb = [n for n, r in treports.items() if r.get("fallback")]
     print("built", path, f"(Bold stem {stem}; {len(fb)} glyphs on a fallback: {', '.join(sorted(fb))}; Light stem {BOLD.LIGHT_STEM}; "
           f"{len(lfb)} on a fallback: {', '.join(sorted(lfb))}"
           + (f"; {WAX.LOW_NAME} stem {WAX.THIN_STEM}; {len(tfb)} on a fallback: {', '.join(sorted(tfb))}" if thin_ufo is not None else "") + ")")
+
+
+def all_masters_box(ufos):
+    """The highest and lowest ink over every glyph of every layer of the given UFOs."""
+    hi, lo = 0, 0
+    for u in ufos:
+        for layer in u.layers:
+            for g in layer:
+                try:
+                    b = g.getBounds(layer)
+                except Exception:          # noqa: BLE001  a component whose base the layer lacks
+                    b = g.getBounds(u.layers.defaultLayer) if g.components else None
+                if b is not None:
+                    hi, lo = max(hi, b.yMax), min(lo, b.yMin)
+    return int(math.ceil(hi)), int(math.floor(lo))
 
 
 def kern_masters(reg, masters, reg_shapes=None):

@@ -323,8 +323,9 @@ def audit(font):
                      if c.points[(i + 1) % len(c.points)].type == "line" and p.y == c.points[(i + 1) % len(c.points)].y
                      and abs(p.x - c.points[(i + 1) % len(c.points)].x) >= 60})
         thick = [b - a for a, b in zip(ys, ys[1:]) if 40 <= b - a <= 70]
-        if any(abs(t - m.cap_bar) > 1.5 for t in thick[:1]):
-            bad.append(f"{g.name}: bar {thick[0]:.0f}, H's crossbar {m.cap_bar:.0f}")
+        want_bar = C.CURRENCY_BAR if g.name == "euro" else m.cap_bar      # 0.84: a currency sign's bar, one value
+        if any(abs(t - want_bar) > 1.5 for t in thick[:1]):
+            bad.append(f"{g.name}: bar {thick[0]:.0f}, want {want_bar:.0f}")
     kr = next((g for g in font if 0x138 in g.unicodes), None)
     if kr is not None:
         K, G = on_points(font, "k"), set(on_points(font, kr.name))
@@ -487,8 +488,9 @@ def audit(font):
     p = C.gp(font, "degree")
     b_ = C.bounds(p)
     ringw = [round(s_[1] - s_[0]) for s_ in C.scan_h(p, (b_[1] + b_[3]) / 2)]
-    if ringw[:1] != [C.STROKE_UP]:
-        bad.append(f"degree: ring {ringw}, the capital hairline {C.STROKE_UP}")
+    import stray as ST_                         # 0.84 pass 6: the ring's sides the sign stroke (stray.DEGREE)
+    if ringw[:1] != [ST_.DEGREE[0]]:
+        bad.append(f"degree: ring {ringw}, stray.DEGREE's side {ST_.DEGREE[0]}")
     for cp in (0x1EB5, 0x1EAB, 0x1EAA):
         g = next((g for g in font if cp in g.unicodes), None)
         if g is not None and len(g.components) >= 3:
@@ -523,10 +525,12 @@ def audit_079(font, bad, notes, bold=None):
     for name in ("S.ss03", "s.ss03", "dollar.ss03"):
         if name in font:
             bad.append(f"{name}: there is one S, one s and one dollar (0.79, 0.80)")
-    # 0.80: the one dollar ends in balls (the owner's pick), so it is not the S, whose ends are barbs
-    S_, D_ = on_points(font, "S"), set(on_points(font, "dollar"))
-    if max(sum(1 for (x, y) in S_ if (x + dx, y) in D_) / len(S_) for dx in range(-80, 81)) > 0.6:
-        bad.append("dollar: it is the S and a stroke (barb ends), not the ball-end dollar")
+    # 0.80: the one dollar ends in balls (the owner's pick). 0.84 (pass 5, item 2, owner): it is the real S with round
+    # ends, so none of the S's barb corners may be in it (the S's other points are, by construction)
+    D_ = set(on_points(font, "dollar"))
+    barbs = [(p.x, p.y) for c in font["S"].contours for p in c.points if p.type and not p.smooth]
+    if any(b in D_ for b in barbs):
+        bad.append("dollar: it carries the S's barb ends, not round ends")
     # 0.80: every flag's underside is one curve (n's and k's were two, 18 units shorter at the stem)
     for name, x, y in CLEAN.flag_unders(font, apply=False):
         bad.append(f"{name}: the flag at {x},{y} has a two-curve underside, not i's one curve")

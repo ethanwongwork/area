@@ -636,6 +636,8 @@ def main():
         "after": a.after_label, "before": a.before_label,
         "snaps": {k: s.label for k, s in snaps.items()},
         "xh": now.font["OS/2"].sxHeight, "cap": now.font["OS/2"].sCapHeight,
+        # the viewer's fixed frame: the line's top and bottom (hhea), the same for every glyph and weight
+        "asc": now.font["hhea"].ascent, "desc": now.font["hhea"].descent,
         "axis": AX["axis"], "kind": AX["kind"], "stops": AX["stops"],
         "names": {str(k): v for k, v in AX["names"].items()},
         "wmap": {k: [[w, s.own(w)] for w in AX["samples"]] for k, s in snaps.items()},

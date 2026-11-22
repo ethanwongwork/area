@@ -42,25 +42,65 @@ Area's 55, 78 and 140). The mid master (600) is the construction at the readings
 import math
 
 import amp as A
+import ladder as LD
 
 LIB = "area.at"
 CAP = 712.0
 TOP = round(0.985 * CAP)            # 701: the references' ring top over the cap height
 BOTTOM = round(-0.231 * CAP)        # -164
-REG_STEM, REG_H = 78.0, 43.0
+REG_STEM, REG_H = float(LD.STEM), float(LD.HAIR)
 LEFT = 0.86 * REG_STEM / REG_H      # ring's left side over the hairline (67.1 at the Regular's 43)
-RIGHT = 0.883 * LEFT                # ring's right side (59.2)
+RIGHT = 0.883 * LEFT                # ring's right side (59.2); 0.84 pass 6: RIGHT_REG below
+# 0.84 (Regular pass 6, item 1, the owner: "the @ still needs work"). The right extreme 60 at the Regular, a share of
+# its hairline carried into each master as the left's is (RIGHT_REG / 43: the masters' right side moves from 59.2 by
+# the same 1.3%); the ring from the a's foot to it swells monotonically from the a's bottom stroke (43) to 60
+RIGHT = 60.0 / REG_H
 CUT = 36.7 / 43.0                   # the tail's cut over the hairline (the drawn tail)
 TAIL = (0.0865, 0.1293)             # the tail's outer end: in from the ring's right, up from its bottom (drawn), shares
 TAIL_DIR = (107.0, 74.0)            # the tail's direction at its cut (drawn)
+# 0.84 (Regular pass 6, item 1c): the tail's outer end on the ring's own oval, TAIL_ANGLE degrees round from its
+# centre (0 right, counter-clockwise; the drawn end stood at 318 and 1.11 of the radius, a spiral out of the ring), at
+# TAIL_R of the radius, leaving along the oval's tangent turned TAIL_TURN degrees outward; None keeps the drawn end
+TAIL_ANGLE, TAIL_R, TAIL_TURN = 305.0, 1.02, 3.0
 WHITE_RL = 1.24                     # white right of the a's stem over white left of its bowl
 LIFT = 0.011                        # the a's centre over the ring's, of the ring's height
-RISE = 0.107                        # the ring's right extremes over its centre, of its height (the drawn: 90 over 843),
-                                    # so the stroke out of the a's foot climbs as one long turn
+# 0.84 (Regular pass 2, second pass): the ring's dive into the a's foot (construct). The right extreme 0.02 of the
+# height over the centre (RISE; it was 0.107); the outer edge from there down a spiral whose radius falls steadily from
+# "re" of the ring's half width at the extreme (400 at the Regular, the right quarter's own) to the foot, which stands "dx"
+# of the ring's width left of the extreme (200 at the Regular). Tried at the Regular: re 400 / 450, dx 200 / 205 / 220;
+# 450 and 220 dropped the a's foot 30 under its bowl with a tight inner hook, 205 broke the foot's curve. The inner
+# edge's foot stands "in" of the a's own offset right of the outer's (0 left a boxy hook, 1 a near-straight inner run
+# and a 1.9 jump; 0.3 to 0.6 clean)
+DIVE = {"re": 400.0 / 408.0, "dx": 200.0 / 816.0, "in": 0.5}
+EVEN_WHITE = True                   # 0.84: the white between the a and the ring one width all round (construct)
+# 0.84 (Regular pass 3, the owner's visual notes, item 5: "the @ looks weird still"; before, "the a can be more centred
+# horizontally and the line around it can be a bit more circular overall"). With the white one width all round the
+# ring's width followed from the a: 0.943 of its height at the Regular, an upright oval. The ring is now a circle (its
+# width ROUND of its height, every master: the references' ring runs 0.941 to 1.012); the a stays centred across the
+# counter (the white left of its bowl the white right of its stem), the side whites taking the extra width
+ROUND = 1.0
+INSIDE_LEFT = True                  # 0.84 pass 4: the inside's left quarters at the outside's shares (construct)
+RISE = 0.02                         # the ring's right extremes over its centre, of its height (0.84 pass 2; it was the
+                                    # drawn 0.107, 90 over 843: the owner read the right side as protruding)
 # the references' medians at their 300 / 400 / 700, placed at Area's stems 55 / 78 / 140
 SHARES = {55.0: {"ah": 0.545, "athin": 1.18, "astem": 0.984, "wh": 0.941},
           78.0: {"ah": 0.558, "athin": 1.21, "astem": 0.841, "wh": 0.968},
           140.0: {"ah": 0.597, "athin": 1.26, "astem": 0.778, "wh": 1.012}}
+
+
+# 0.84 (Regular pass 6, item 1b, the owner: the inner a "reads grey and monoline", stem 66, thins 53): at the Regular
+# the a takes its own contrast, the letters' ladder: stem the thick diagonal / figure flat (74), top and bottom the
+# lowercase hairline (43, the ring's own thin: share 1.0). Its height stays the references' share ("ah"), so its size
+# holds and the counter opens by what the strokes lose. Light and Bold keep the references' shares; the mid master
+# reads them on the stem's logarithm as before
+# The Light's thin takes the same share (1.0: the Light's a 37 against the references' 43.7), so the a's thin does
+# not stand heavier in the Light than in the Regular (audit_rays)
+A_OWN = {55.0: {"athin": 1.0}, 78.0: {"athin": LD.HAIR / REG_H, "astem": LD.THICK_DIAG / REG_STEM}}
+# 0.84 pass 6, item 1a: the ring leaves the a's foot at the a's thin (44 at the Regular; it was the a's exit stroke, 65,
+# heavier than the ring's right extreme, 59: a lump at 325 to 345 degrees), and swells from there to the right extreme
+FOOT = 44.0 / LD.HAIR
+INNER_MONO = True
+MONO_W = 250
 
 
 def shares(stem):
@@ -69,8 +109,9 @@ def shares(stem):
     for a, b in zip(ks, ks[1:]):
         if a <= s <= b:
             t = math.log(s / a) / math.log(b / a)
-            return {k: SHARES[a][k] + (SHARES[b][k] - SHARES[a][k]) * t for k in SHARES[a]}
-    return dict(SHARES[ks[-1]])
+            S0, S1 = dict(SHARES[a], **A_OWN.get(a, {})), dict(SHARES[b], **A_OWN.get(b, {}))
+            return {k: S0[k] + (S1[k] - S0[k]) * t for k in S0}
+    return dict(SHARES[ks[-1]], **A_OWN.get(ks[-1], {}))
 
 
 # ------------------------------------------------------------------ readings
@@ -261,6 +302,11 @@ class Ring(A.Chain):
                 ak = [abs(k) for k in ks]
                 dip = max(min(max(ak[:m + 1]), max(ak[m:])) - ak[m] for m in range(17)) / top_
                 out.append(20 * max(0.0, dip - 0.04))
+            for i, sg in getattr(self, "mono", {}).items():
+                # 0.84 pass 2: |k| only rising (sg 1) or only falling (sg -1) along this curve
+                ak = [abs(A.curvature(S[i], t / 16)) for t in range(17)]
+                top_ = max(ak) or 1e-9
+                out.append(getattr(self, "mono_w", 40) * sum(max(0.0, -sg * (b_ - a_)) for a_, b_ in zip(ak, ak[1:])) / top_)
             for n in range(1, len(self.nodes) - 1):
                 if not self.smooth[n]:
                     continue
@@ -268,7 +314,8 @@ class Ring(A.Chain):
                 ka, kb = ("C" if ka == "F" else ka), ("C" if kb == "F" else kb)     # a fixed curve is a curve
                 if ka == "C" and kb == "C":
                     k1, k2 = A.curvature(S[n - 1], 1.0), A.curvature(S[n], 0.0)
-                    out.append(8 * max(0.0, abs(math.log((abs(k1) + 1e-6) / (abs(k2) + 1e-6))) - math.log(1.2)))
+                    tol = getattr(self, "tight", {}).get(n, 1.2)
+                    out.append((30 if n in getattr(self, "tight", {}) else 8) * max(0.0, abs(math.log((abs(k1) + 1e-6) / (abs(k2) + 1e-6))) - math.log(tol)))
                 elif ka != kb and (self.kinds[n - 1] != "F" and self.kinds[n] != "F"):
                     s, at = (S[n], 0.0) if kb == "C" else (S[n - 1], 1.0)
                     u0 = A.unit((s[1][0] - s[0][0], s[1][1] - s[0][1]))
@@ -285,15 +332,58 @@ class Ring(A.Chain):
         return self.cost
 
 
+def SG_g2(p0, T0, k0, p3, T1, k1):
+    import signs as SG
+    c = SG._g2_cubic(p0, T0, k0, p3, T1, k1, balanced=True)
+    if c is None:
+        raise ValueError("at: no G2 cubic for the dive")
+    return c
+
+
+def _spiral(p_end, k_end, k_start, s, n=2000):
+    """A spiral run backwards from p_end (travelling up, upright there) for arc length s, curvature linear in arc
+    length from k_start (at the start, the foot) to k_end (at p_end); the curve turns left (counter-clockwise) as it
+    runs forward. Returns the points from the start to p_end with their tangent angles and curvatures."""
+    pts = [(p_end[0], p_end[1], math.pi / 2, k_end)]
+    x, y, th = p_end[0], p_end[1], math.pi / 2
+    ds = s / n
+    for i in range(n):
+        u = 1 - (i + 0.5) / n
+        k = k_start + (k_end - k_start) * u
+        th_mid = th - k * ds / 2
+        x, y = x - math.cos(th_mid) * ds, y - math.sin(th_mid) * ds
+        th -= k * ds
+        pts.append((x, y, th, k_start + (k_end - k_start) * (1 - (i + 1) / n)))
+    return pts[::-1]
+
+
+def _dive(p_ext, re, dx):
+    """The spiral from a level foot to the upright right extreme p_ext, curvature 1/re at the extreme, its foot dx to
+    the left: (foot, mid point, mid tangent, k mid, k foot, k extreme)."""
+    ke = 1.0 / re
+    def run(kf):
+        s = (math.pi / 2) / ((kf + ke) / 2)                  # a quarter turn
+        return _spiral(p_ext, ke, kf, s)
+    lo_, hi_ = ke, 0.2
+    for _ in range(60):
+        kf = (lo_ + hi_) / 2
+        pts = run(kf)
+        if p_ext[0] - pts[0][0] > dx:                      # too wide: the foot tighter
+            lo_ = kf
+        else:
+            hi_ = kf
+    pts = run(kf)
+    m = pts[len(pts) // 2]
+    return (pts[0][0], pts[0][1]), (m[0], m[1]), (math.cos(m[2]), math.sin(m[2])), m[3], kf, ke
+
+
 # ------------------------------------------------------------------ the construction
 def construct(R):
     """R: readings (this master's, or mixed). Returns ([outer segments, counter points], info)."""
     sh = shares(R["stem"])
     h = R["h"]
     H = TOP - BOTTOM
-    Wd = sh["wh"] * H
     tl, tr, tt, tb = LEFT * h, RIGHT * h, h, h
-    cx, cy = Wd / 2, (TOP + BOTTOM) / 2
     # the a: height the references' share of the ring's counter, strokes their weights
     ah = sh["ah"] * (H - tt - tb)
     athin = sh["athin"] * h
@@ -303,9 +393,25 @@ def construct(R):
     a = [[(q[0] * k, q[1] * k) + tuple(q[2:]) for q in P] for P in R["a"]]
     a = embolden(a, dx, dy)
     c0 = a[0]
-    left_in, right_in = tl, Wd - tr
     a_w = c0[0][0] - c0[8][0]                    # bowl's left extreme to the stem's right edge
-    white = (right_in - left_in - a_w) / (1 + WHITE_RL)
+    if EVEN_WHITE:
+        # 0.84 (Regular pass 2, item 3; the owner: the right side "comes out too much ... it can be flatter"): the white
+        # between the a and the ring the same all round: each side's white the white over and under the a (the ring's
+        # counter less the a's height, halved), so the ring's width follows from the a's (it was the references' 0.968
+        # of the height, with the white right of the stem 1.24 of the left: the right stood 245 per mille of the
+        # height off the a at 20 to 30 degrees, the top 189)
+        white = ((H - tt - tb) - ah) / 2
+        Wd = tl + white + a_w + white + tr
+        if ROUND:
+            Wd = max(Wd, ROUND * H)
+            white = (Wd - tl - tr - a_w) / 2
+        right_white = white
+    else:
+        Wd = sh["wh"] * H
+        white = (Wd - tr - tl - a_w) / (1 + WHITE_RL)
+        right_white = white * WHITE_RL
+    cx, cy = Wd / 2, (TOP + BOTTOM) / 2
+    left_in = tl
     ox = left_in + white - c0[8][0]
     oy = cy + LIFT * H - (c0[5][1] + c0[11][1]) / 2
     a = [[(q[0] + ox, q[1] + oy) + tuple(q[2:]) for q in P] for P in a]
@@ -316,20 +422,78 @@ def construct(R):
     ry = cy + RISE * H
     Po = {"r": (Wd, ry), "t": (cx, TOP), "l": (0.0, cy), "b": (cx, BOTTOM)}
     Pi = {"r": (Wd - tr, ry), "t": (cx, TOP - tt), "l": (tl, cy), "b": (cx, BOTTOM + tb)}
-    td = A.unit(TAIL_DIR)
-    T1 = (Wd * (1 - TAIL[0]), BOTTOM + TAIL[1] * H)
+    if TAIL_ANGLE is None:
+        td = A.unit(TAIL_DIR)
+        T1 = (Wd * (1 - TAIL[0]), BOTTOM + TAIL[1] * H)
+    else:
+        th_ = math.radians(TAIL_ANGLE)
+        rx_, ry_ = Wd / 2, H / 2
+        T1 = (cx + TAIL_R * rx_ * math.cos(th_), cy + TAIL_R * ry_ * math.sin(th_))
+        tg = A.unit((-rx_ * math.sin(th_), ry_ * math.cos(th_)))          # the oval's tangent, counter-clockwise
+        tt_ = math.radians(-TAIL_TURN)                                     # turned outward (clockwise)
+        td = (tg[0] * math.cos(tt_) - tg[1] * math.sin(tt_), tg[0] * math.sin(tt_) + tg[1] * math.cos(tt_))
     nt = (-td[1], td[0])
     T2 = (T1[0] + nt[0] * CUT * h, T1[1] + nt[1] * CUT * h)
     d14 = A.unit((c0[15][0] - c0[14][0], c0[15][1] - c0[14][1]))
     # the a's foot (crotch to the foot's lowest point, the stem's edge to the exit's lowest point) keeps the a's own
     # curves (kind "F"); the ring is solved on from them
-    P = Ring([(pt(14), d14), (pt(17), Rt), (Po["r"], U), (Po["t"], L), (Po["l"], D), (Po["b"], Rt), (T1, td)],
-             ["F"] + ["C"] * 5, [False, True, True, True, True, True, False], OUT_T)
-    Q = Ring([(pt(0), D), (pt(27), D), (pt(24), Rt), (Pi["r"], U), (Pi["t"], L), (Pi["l"], D), (Pi["b"], Rt), (T2, td)],
-             ["L", "F"] + ["C"] * 5, [False, True, True, True, True, True, True, False], IN_T)
-    P.lens[0] = [math.dist(pt(14), pt(15)), math.dist(pt(17), pt(16))]
-    Q.lens[1] = [math.dist(pt(27), pt(26)), math.dist(pt(24), pt(25))]
+    if DIVE:
+        # 0.84 (Regular pass 2, second pass; the owner: "the right side appears to protrude more, it should be flatter
+        # and/or the tail can move slightly to make the arc appear not as steep/dramatic of a turn"): the ring's outer
+        # edge from the right extreme down into the a's foot is one spiral, its curvature rising steadily (linear in
+        # arc length) from the right quarter's (DIVE["re"]) to the foot's, turning a quarter; it ends where it is level,
+        # DIVE["dx"] left of the extreme: the ring leaves the a there (lower than the a's own foot, so the turn is wider).
+        # Two cubics (a node half way along), each G2 at both ends; the a's foot curve re-solved into it
+        foot, mid, tm_, km, kf, ke = _dive((Wd, ry), DIVE["re"] * Wd / 2, DIVE["dx"] * Wd)
+        if FOOT is None:
+            wf_ = DIVE.get("w", 1.0) * (pt(24)[1] - pt(17)[1])    # the stroke out of the foot: the a's own exit
+        else:
+            wf_ = FOOT * athin                                      # 0.84 pass 6: the a's thin (FOOT)
+        nm = (-tm_[1], tm_[0])                                      # the mid node's inward normal (left of travel)
+        wm = (wf_ + tr) / 2
+        midi = (mid[0] + nm[0] * wm, mid[1] + nm[1] * wm)
+        f24 = (foot[0] + DIVE.get("in", 0.5) * (pt(24)[0] - pt(17)[0]), foot[1] + wf_)   # the inner foot: half way between the parallel and the a's own
+        P = Ring([(pt(14), d14), (foot, Rt), (mid, tm_), (Po["r"], U), (Po["t"], L), (Po["l"], D), (Po["b"], Rt), (T1, td)],
+                 ["C", "F", "F"] + ["C"] * 4, [False, True, True, True, True, True, True, False], OUT_T)
+        cd1 = SG_g2(foot, Rt, kf, mid, tm_, km)
+        cd2 = SG_g2(mid, tm_, km, Po["r"], U, ke)
+        P.lens[1] = [math.dist(cd1[0], cd1[1]), math.dist(cd1[3], cd1[2])]
+        P.lens[2] = [math.dist(cd2[0], cd2[1]), math.dist(cd2[3], cd2[2])]
+        P.mono = {0: -1, 3: -1}                # the a's foot curve and extreme to top: the curvature only falls
+        P.tight = {3: 1.03, 1: 1.1}            # one curvature at the extreme (and nearly at the foot)
+        Q = Ring([(pt(0), D), (pt(27), D), (f24, Rt), (midi, tm_), (Pi["r"], U), (Pi["t"], L), (Pi["l"], D), (Pi["b"], Rt), (T2, td)],
+                 ["L"] + ["C"] * 7, [False, True, True, True, True, True, True, True, False], IN_T)
+        Q.tight = {3: 1.1, 4: 1.1, 7: 1.05}    # the inner edge's middle node, side and bottom at one curvature
+        if INNER_MONO:
+            Q.mono = {2: -1, 3: -1}            # 0.84 pass 6: the inner edge from the foot up only loosens, as the outer
+            Q.mono_w = MONO_W
+    else:
+        P = Ring([(pt(14), d14), (pt(17), Rt), (Po["r"], U), (Po["t"], L), (Po["l"], D), (Po["b"], Rt), (T1, td)],
+                 ["F"] + ["C"] * 5, [False, True, True, True, True, True, False], OUT_T)
+        Q = Ring([(pt(0), D), (pt(27), D), (pt(24), Rt), (Pi["r"], U), (Pi["t"], L), (Pi["l"], D), (Pi["b"], Rt), (T2, td)],
+                 ["L", "F"] + ["C"] * 5, [False, True, True, True, True, True, True, False], IN_T)
+        P.lens[0] = [math.dist(pt(14), pt(15)), math.dist(pt(17), pt(16))]
+        Q.lens[1] = [math.dist(pt(27), pt(26)), math.dist(pt(24), pt(25))]
     P.solve()
+    if DIVE:
+        # 0.84 pass 2: the ring's upper right quarter inside takes the outside's shares of its reach (with the right
+        # extreme lower, the inside solved alone went boxier than the outside and thinned the Bold's ring 25 to 40
+        # degrees off the top to 43 against 53 at the top); the ring then thins steadily from the side to the top
+        ra, rb = P._reach(3)
+        qa, qb = Q._reach(4)
+        Q.kinds[4] = "F"
+        Q.lens[4] = [P.lens[3][0] / ra * qa, P.lens[3][1] / rb * qb]
+        if INSIDE_LEFT:
+            # 0.84 (Regular pass 4, item A2): the left quarters inside take the outside's shares too. Solved alone,
+            # the inside's left quarters came out fuller than the outside's in the mid master and the Bold (0.64
+            # against 0.58 of their reach; the Regular 0.62 and 0.62), so the ring's lower left, 45 degrees off the
+            # bottom, was thinner in the mid master than in the Regular (50.6 against 55.2) and the variable font read
+            # it thinning on the way (56.1 > 51.5 at 532.9)
+            for qi, pi in ((5, 4), (6, 5)):
+                ra, rb = P._reach(pi)
+                qa, qb = Q._reach(qi)
+                Q.kinds[qi] = "F"
+                Q.lens[qi] = [P.lens[pi][0] / ra * qa, P.lens[pi][1] / rb * qb]
     Q.solve()
     sP, sQ = P.segs(), Q.segs()
     outer = []
@@ -343,9 +507,13 @@ def construct(R):
             outer.append(("L", (pt(i), pt(i), pt(i + 1), pt(i + 1))))
             i += 1
     outer += [("C", s) for s in sP]
+    k_cut = len(outer)
     outer.append(("L", (T1, T1, T2, T2)))
     for kind, s in reversed(list(zip(Q.kinds, sQ))):
         outer.append(("L" if kind == "L" else "C", (s[3], s[2], s[1], s[0])))
+    # 0.84 (Regular pass 2, second pass; the corner rule, item 5): the tail's cut is a free end, both its corners on the
+    # letters' serif-tip radius (it was left sharp)
+    outer = A.soft_cut(outer, k_cut, A.SOFT)
     # the a's two crotches (the spur's into the bowl's top, the bowl's bottom into the foot) rounded: each a fillet of
     # FILLET the a's stem (owner, 17 November: "the a in the @ looks much sharper / not as smooth at thicker weights";
     # at 800 the made-heavier a's crotches read as a notch and a pinch). Bottom first, so the top's index holds
@@ -353,7 +521,7 @@ def construct(R):
     outer = fillet(outer, 5, r_f)
     outer = fillet(outer, 1, r_f)
     info = {"k": k, "dx": dx, "dy": dy, "width": Wd, "ring": (tl, tr, tt, tb), "a_stem": sh["astem"] * R["stem"],
-            "a_thin": athin, "a_h": ah, "white": (white, white * WHITE_RL), "shares": sh}
+            "a_thin": athin, "a_h": ah, "white": (white, right_white), "shares": sh}
     return outer, c1, info
 
 

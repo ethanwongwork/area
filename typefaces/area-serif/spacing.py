@@ -923,3 +923,98 @@ def open_between(reg, master, style, codepoints, stem_of, reg_shapes=None, base=
                 master.kerning[(a, b)] = new
                 opened.append((a, b, round(gap, 1), km, new))
     return dict(weight=w, t=t, floor=floor, opened=opened)
+
+
+# 0.84 (Regular pass 2, placement). The census (build/owner9/place/report.md, 3.1) found 26 glyphs whose drawing is its
+# own mirror image (every point within 1.6 of the turned outline) with sides a unit or two apart: H 54 / 56 (Georgia
+# Pro's 49 / 51 carried through REFERENCE), I, o, 0, the period, the bar, the degree... A symmetric drawing gets equal
+# sides: the outline moves by whole units and the advance takes the rest, the change rounded to the wider side (an odd
+# total gains a unit). Its accented letters keep their marks over it (they move with it), a glyph that carries it as
+# a later part (a ligature, a mark, a tabular figure) keeps it where it was. Kerning is not refit: every change is one
+# or two units.
+SYMMETRY_TOL = 1.6
+
+
+def _samples(g, n):
+    """The outline's points, every curve and line cut n times, closing segments included."""
+    out = []
+    for c in g.contours:
+        P = c.points
+        s0 = next(i for i, q in enumerate(P) if q.type)
+        Q = P[s0:] + P[:s0] + [P[s0]]
+        prev, buf = Q[0], []
+        for q in Q[1:]:
+            if q.type is None:
+                buf.append(q)
+                continue
+            for k in range(n):
+                t = k / n
+                if len(buf) == 2:
+                    u = 1 - t
+                    a, b, cc, d = prev, buf[0], buf[1], q
+                    out.append((u ** 3 * a.x + 3 * u * u * t * b.x + 3 * u * t * t * cc.x + t ** 3 * d.x,
+                                u ** 3 * a.y + 3 * u * u * t * b.y + 3 * u * t * t * cc.y + t ** 3 * d.y))
+                else:
+                    out.append((prev.x + (q.x - prev.x) * t, prev.y + (q.y - prev.y) * t))
+            prev, buf = q, []
+    return out
+
+
+def _symmetric(font, g):
+    """Every point of the outline (each segment cut ten times) within SYMMETRY_TOL of the outline turned over (cut
+    eighty times)."""
+    from scipy.spatial import cKDTree
+    pts, dense = _samples(g, 10), _samples(g, 80)
+    if len(pts) < 3:
+        return False
+    xs = [x for x, _ in dense]
+    mid = min(xs) + max(xs)
+    d, _ = cKDTree(dense).query([(mid - x, y) for x, y in pts])
+    return max(d) <= SYMMETRY_TOL
+
+
+def symmetric_sides(font):
+    import math
+    import charset as C
+    moved = {}
+    for g in font:
+        if g.components or not g.contours or g.width <= 0 or not _symmetric(font, g):
+            continue
+        b = C.bounds(C.gp(font, g.name))
+        lsb, rsb = b[0], g.width - b[2]
+        delta = lsb - rsb
+        if abs(delta) < 1 or abs(delta) > 6:      # (a drawing on half units, ◆'s 0.75, cannot be centred)
+            continue
+        dl = math.ceil(-delta / 2 - 1e-9)
+        dr = dl + delta
+        dr = round(dr)
+        for c in g.contours:
+            for p in c.points:
+                p.x += dl
+        for a in g.anchors:
+            a.x += dl
+        g.width += dl + dr
+        moved[g.name] = (dl, dl + dr, f"{lsb:g}/{rsb:g}>{lsb + dl:g}/{rsb + dr:g}")
+    for g in font:
+        if not g.components:
+            continue
+        first = g.components[0].baseGlyph
+        accented = first in moved and not g.name.endswith(".tf") and all(
+            any(a.name.startswith("_") for a in font[c.baseGlyph].anchors) for c in g.components[1:])             and g.components[0].transformation[4] == 0          # a letter and marks (each attaches by an anchor)
+        for k, comp in enumerate(g.components):
+            if comp.baseGlyph not in moved:
+                continue
+            dl, dw, _ = moved[comp.baseGlyph]
+            t = comp.transformation
+            if k == 0 and accented:
+                continue
+            comp.transformation = (t[0], t[1], t[2], t[3], t[4] - dl, t[5])
+        if accented:
+            dl, dw, _ = moved[first]
+            for comp in g.components[1:]:
+                t = comp.transformation
+                comp.transformation = (t[0], t[1], t[2], t[3], t[4] + dl, t[5])
+            for a in g.anchors:
+                a.x += dl
+            g.width += dw
+    return [f"{n} {v[2]}" for n, v in sorted(moved.items())]

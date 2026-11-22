@@ -12,6 +12,7 @@ by geometry and runs with joins.py, after lightening and before spacing. One val
 import math
 
 import clean
+import ladder as LD
 import joins
 from normalize import _diag_edges
 
@@ -190,7 +191,7 @@ def diag(g, sign, target, y_at):
     return before, after
 
 
-THIN_LOW = 39          # lowercase thin diagonals: 0.50 of n's stem, the floor the guidelines set for any thin stroke
+THIN_LOW = LD.THIN_DIAG          # lowercase thin diagonals: 0.50 of n's stem, the floor the guidelines set for any thin stroke
                        # (34-36 before). Not the arcs' 43: v x y already carry 4-9% more ink than their class
 THIN_CAP_DIAG = 48     # capital thin diagonals: 0.56 of H's stem, the value M's and K's already held (A V W X Y were
                        # 0.42-0.49, lighter than every other thin stroke of the capitals, and X V K read light)
@@ -214,8 +215,8 @@ def diagonals(font):
     return done
 
 
-CAP_THIN = 47                  # clean.THIN_CAP after lightening
-FIG_THIN = 47                  # 0.55 of H's stem, the capitals' and the lowercase's share
+CAP_THIN = LD.CAP_HAIR                  # clean.THIN_CAP after lightening
+FIG_THIN = LD.CAP_HAIR                  # 0.55 of H's stem, the capitals' and the lowercase's share
 ARCS = [("zero", "top", (25, 75)), ("zero", "bottom", (25, 75)), ("two", "top", (25, 75)), ("three", "top", (30, 75)),
         ("three", "bottom", (25, 70)), ("five", "bottom", (25, 75)), ("six", "bottom", (25, 75)),
         ("eight", "top", (25, 75)), ("eight", "bottom", (25, 75)), ("nine", "top", (25, 75))]
@@ -343,7 +344,7 @@ def desc_feet(font):
 E_EYE_LEFT = 9                  # the eye's left side moves out: the stroke above the bar 1.09 to 0.98 stems
 E_BAR = 41                      # the bar's thickness, taken from its underside (its top stays at 0.615 x)
 G_EAR_IN = 20                   # the ear's end comes in: 0.27 to 0.23 x-heights past the bowl, still the longest
-G_LOOP_THIN = 43                # the loop's lower arc: the lowercase hairline
+G_LOOP_THIN = LD.HAIR                # the loop's lower arc: the lowercase hairline
 G_EAR_NECK = 63                 # the ear's neck, top to underside: r's neck (it was 74, 0.95 stems; references about 0.5)
 G_LOOP_TOP = 10                 # the loop's top stroke, 1.16 stems across (references 0.89 to 1.10): its inside edge up
 
@@ -835,6 +836,51 @@ def _slide(p, q, y):
     p.y = y
 
 
+# 0.84 (Regular pass 4, item 5; the cohesion study: the 7 read light among the figures, its mean stroke 0.82 of the
+# figures' median). Its diagonal was 46.6 across (a capital thin diagonal's weight, V's 48) where every other figure's
+# heavy stroke is a capital round's (92) or the capital stem: it takes the capitals' thick diagonal, SEVEN_DIAG of the
+# capital stem (the ladder's thick diagonal, 0.94 to 0.97: 82 of 86). The outer edge (the 7's right side, its top
+# corner and the foot's right corner) holds; the inner edge moves out parallel: its top end slides along the bar's
+# underside, its foot along the baseline. Checked by eye in "7777" and "2.7": at 0.955 (82) the 7 stood out dark,
+# so it takes 0.79 (68), between the old thin and the capitals' thick.
+SEVEN_DIAG = 0.79
+CAP_STEM = LD.CAP_STEM
+
+
+def seven_diagonal(font):
+    import math
+    if "seven" not in font:
+        return "no 7"
+    P = font["seven"].contours[0].points
+    n = len(P)
+    # the diagonal's two edges: the longest straights running more up than across
+    lines = []
+    for i, q in enumerate(P):
+        a = P[i - 1]
+        if q.type == "line" and a.type and abs(q.y - a.y) > 400:
+            lines.append((abs(q.y - a.y), (i - 1) % n, i))
+    if len(lines) != 2:
+        return f"7: {len(lines)} long straights, left"
+    (_, i0, i1), (_, j0, j1) = lines
+    # the outer edge is the one further right at mid height
+    def x_at(a, b, y):
+        return P[a].x + (y - P[a].y) * (P[b].x - P[a].x) / (P[b].y - P[a].y)
+    if x_at(i0, i1, 356) > x_at(j0, j1, 356):
+        (i0, i1), (j0, j1) = (j0, j1), (i0, i1)
+    a, b = P[j0], P[j1]                                  # outer
+    ux, uy = b.x - a.x, b.y - a.y
+    L = math.hypot(ux, uy)
+    target = SEVEN_DIAG * CAP_STEM
+    out = []
+    for k in (i0, i1):                                   # the inner edge's two ends
+        q = P[k]
+        dist = abs((q.x - a.x) * uy - (q.y - a.y) * ux) / L
+        dx = (target - dist) * L / abs(uy)               # level move that adds (target - dist) across
+        out.append(f"{dist:.1f}")
+        q.x = round(q.x - dx)
+    return f"7 diagonal {' / '.join(out)} > {target:.1f}"
+
+
 def fig_flats(font, cap=CAP):
     done = []
     # 2: the base's top edge comes down; its left end and the diagonal's start slide down the diagonal
@@ -969,4 +1015,83 @@ def zero_weight(font):
             for q in [e] + hs:
                 q.x -= sg * d
             done.append(f"0 side {was}>{ZERO_SIDE}")
+    return done
+
+
+# 0.84 (Regular pass 2, placement). The census (build/owner9/place/report.md, 2.1) found edges a unit or two off their
+# line: a and ae's bowls -9, b-hook's -11 (o's -10), the Schwa 722 (O's 721), fi's and ffi's bar 519 (f's 520), the
+# turned v's point 531, q-hook-tail's spur 518 (q's 520); and the head serifs of n m p r (and eng, n with a left hook,
+# p and r struck, h with a hook) with their stem corner at 529 where i's, j's and u's are at 530, r with a tail's at
+# 516. The rules, run on every letter once every letter is drawn:
+#   a level edge (two on-curve points, a straight between them, 5 units or longer) within ZONE_FLAT of a line's flat
+#   value stands on it, or within ZONE_ROUND of its round value (a vertex's flat) stands on that; a round extreme (a
+#   node whose two handles are level with it) within ZONE_ROUND of a round value stands on it; the points move with
+#   their handles. Lowercase: flat 0 520 780 -224, round -10 530 780 -233; capitals and figures: flat 0 712, round
+#   -9 721. r's ball (528, two under) is its own rule and is outside ZONE_ROUND.
+#   Withdrawn after the full build (084b): the head serifs on i's line (n m p r eng ... from 529 to 530, the flag moved
+#   whole). With the corner on 530 the masters' height pin read n's and m's arch differently: the Bold's counter top
+#   464 > 469 (the arch 5 thinner), the Light's 490 > 487, audit_bold lost n's and m's level stroke, r's ball rose to
+#   534. The head serifs keep 529 until the masters pin a flag corner apart from an arch's overshoot (or i's family
+#   takes 529, not tried in a full build).
+ZONE_FLAT, ZONE_ROUND = 2, 1
+ZONES = {"low": ((0, 520, 780, -224), (-10, 530, 780, -233)), "up": ((0, 712), (-9, 721))}
+def _zone_kind(font, g):
+    import unicodedata
+    us = g.unicodes or (font[g.name.split(".")[0]].unicodes if g.name.split(".")[0] in font else [])
+    cat = unicodedata.category(chr(us[0])) if us else ""
+    return "low" if cat == "Ll" else "up" if cat in ("Lu", "Nd") else None
+
+
+def zone_lines(font):
+    done = []
+    for g in font:
+        if not g.contours:
+            continue
+        kind = _zone_kind(font, g)
+        if kind is None:
+            continue
+        flats, rounds = ZONES[kind]
+        moved = []
+        for c in g.contours:
+            P, n = c.points, len(c.points)
+            hit = {}
+            for i, p in enumerate(P):
+                q = P[(i + 1) % n]
+                if p.type and q.type == "line" and p.y == q.y and abs(p.x - q.x) >= 5:
+                    t = next((v for v in flats if 0 < abs(p.y - v) <= ZONE_FLAT), None)
+                    if t is None:
+                        t = next((v for v in rounds if 0 < abs(p.y - v) <= ZONE_ROUND), None)
+                    if t is not None:
+                        hit[i] = hit[(i + 1) % n] = t - p.y
+                a, b = P[i - 1], P[(i + 1) % n]
+                if p.type and p.smooth and a.type is None and b.type is None and a.y == p.y == b.y:
+                    t = next((v for v in rounds if 0 < abs(p.y - v) <= ZONE_ROUND), None)
+                    if t is not None:
+                        hit[i] = t - p.y
+            for i, d in hit.items():
+                for j in (i - 1, i, (i + 1) % n):
+                    if j == i or P[j].type is None:
+                        P[j].y += d
+                moved.append(f"{P[i].y - d}>{P[i].y}")
+        if kind == "low":                                # a foot cut short of the baseline (pi's left leg, -1 to -3)
+            for c in g.contours:
+                P, n = c.points, len(c.points)
+                for i, p in enumerate(P):
+                    q = P[(i + 1) % n]
+                    if p.type and q.type == "line" and -3 <= min(p.y, q.y) and max(p.y, q.y) < 0 and \
+                            10 <= abs(p.x - q.x) <= 80:
+                        moved.append(f"cut {p.y}/{q.y}>0")
+                        p.y = q.y = 0
+        if g.name == "s_t":                              # the ligature's s at s's height (its top stood 6 over)
+            top = max(p.y for p in font["s"].contours[0].points)
+            join = max(p.x for c in g.contours for p in c.points if p.type and p.y == top and not p.smooth) \
+                if any(p.type and p.y == top and not p.smooth for c in g.contours for p in c.points) else None
+            over = max(p.y for c in g.contours for p in c.points if p.y <= top + 8 and join is not None and p.x < join) - top
+            for c in g.contours:
+                for p in c.points:
+                    if top < p.y <= top + 8 and join is not None and p.x < join:
+                        moved.append(f"s top {p.y}>{p.y - over}")
+                        p.y -= over
+        if moved:
+            done.append(f"{g.name} " + " ".join(sorted(set(moved))))
     return done

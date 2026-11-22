@@ -939,3 +939,79 @@ def g_loop_master(R, N, laws, yr, rounds=6):
                     best = (0, found[1], float(dd), found[2])
                     break
     return best[3], before, best[0], best[1]          # faults (a gained turn counts ten), places short
+
+
+# ------------------------------------------------------------------------------------ one tail law for j and y (0.84)
+# Regular pass 2 (0.84, strokes and sizes, item 2). The stroke audit read y's tail thinnest 33.9 against j's 38.6, its
+# lowest point at -209 against j's and g's -233 (round_tail keeps "ball, depth, stroke and reach": it never chose
+# -209, it kept the source drawing's), and the balls 80.7 / 82.4 across against the round ends' 88 (a c f). One law:
+#   depth: every descender tail's outside reaches the descender's round line (-233, j's and g's; every reference
+#     measured puts y's lowest point with j's and g's), the inside's lowest point moving with it;
+#   ball: the round ends' part, 88 across (joins.round_ends2), the ball's seven points (neck to left side) scaled about
+#     the neck by 88 over the ball's fitted diameter (least-squares circle, neck over the top to the left side);
+#   the tail (ball, both lowest points) moves down whole and its two straight edges run on along themselves by as much
+#   (moved alone, the tail turned off the thin diagonal sooner and thinned to 32.6; stretched upright about the
+#   straight's end, the bottom went heavy, 72, against a 31 departure; an inside solved for j's thinnest found no
+#   smooth tail);
+# then round_tail solves both tails on the moved places as before.
+# Withdrawn (0.84): the depth. With y's tail at -233 by either move the rule could not keep the stroke or the curve:
+# moved whole and run on, thinnest 35 (j 38) and curvecheck 3 faults on y (a flat place, 98% valley, the neck's handles
+# 3.2 degrees off one line), the inside's lowest point left 12 units from the neck; letting it move right thinned the
+# stroke to 32. y keeps -209 until the tail is drawn again from its centreline. The stroke: with the ball scaled about its
+# centre y's thinnest came to j's (38.5) but its neck curve took an inflection and a 98% flat place; scaled about the
+# neck (kept) y's thinnest stays 33.6 against j's 40: not brought to one law here.
+TAIL_DEPTH = None        # -233 tried and withdrawn (below): y keeps the drawing's -209
+TAIL_BALL = 88.0
+
+
+def _ball_fit(P, iN, iC):
+    """Least-squares circle through the ball's outline from its neck over its top to its left side."""
+    pts = []
+    for k0 in range(iN, iC, 3):
+        c = [(P[k0 + k].x, P[k0 + k].y) for k in range(4)]
+        pts += [K.pt(("C", c), t / 20) for t in range(21)]
+    import numpy as np
+    A = np.array([[2 * x, 2 * y, 1] for x, y in pts]); b = np.array([x * x + y * y for x, y in pts])
+    cx, cy, c0 = np.linalg.lstsq(A, b, rcond=None)[0]
+    return 2 * math.sqrt(c0 + cx * cx + cy * cy)
+
+
+def _tail_idx(g):
+    oc = max(g.contours, key=lambda c: len(c.points))
+    P = oc.points
+    n = len(P)
+    on = [i for i, p in enumerate(P) if p.type]
+    iB = min(on, key=lambda i: (P[i].y, P[i].x))
+    return oc, P, n, iB
+
+
+def tail_thin(g):
+    _oc, P, n, iB = _tail_idx(g)
+    iC, iBi, iDi = (iB - 3) % n, (iB - 12) % n, (iB - 15) % n
+    seg = lambda i: tuple((P[(i + k) % n].x, P[(i + k) % n].y) for k in range(4))   # noqa: E731
+    o1, o2 = seg(iB), seg(iC)
+    return _thinnest([seg(iDi), seg(iBi)], [o2, o1])
+
+
+def tail_law(font, names=("j", "y")):
+    import copy
+    log = []
+    for name in names:
+        g = font[name]
+        _oc, P, n, iB = _tail_idx(g)
+        iC, iT, iN, iBi = (iB - 3) % n, (iB - 6) % n, (iB - 9) % n, (iB - 12) % n
+        dy = 0 if TAIL_DEPTH is None else TAIL_DEPTH - P[iB].y   # the tail (inside's lowest point to the outside's, the ball) moves down whole
+        for k in range(-14, 3):
+            P[(iB + k) % n].y += dy
+        for i, j in (((iB - 15) % n, (iB - 16) % n), ((iB + 3) % n, (iB + 4) % n)):   # and its straight edges run on
+            if dy and P[i].y != P[j].y:                                                # as far down along themselves
+                t = dy / (P[i].y - P[j].y)
+                P[i].x, P[i].y = round(P[i].x + t * (P[i].x - P[j].x)), round(P[i].y + t * (P[i].y - P[j].y))
+        D = _ball_fit(P, iN, iC)
+        r = TAIL_BALL / D
+        cx, cy = P[iN].x, P[iN].y        # about the neck: the tail's join to the ball stays (about the ball's centre the
+        for k in range(7):               # neck moved out and y's neck curve took an inflection)
+            i = (iN + k) % n
+            P[i].x, P[i].y = round(cx + r * (P[i].x - cx)), round(cy + r * (P[i].y - cy))
+        log.append(f"{name}: depth {dy:+.0f}, ball {D:.1f} > {TAIL_BALL:.0f} (x{r:.3f})")
+    return log

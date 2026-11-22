@@ -32,6 +32,13 @@ import at as AT
 LIB = "area.circled"
 GLYPHS = {"copyright": "C", "registered": "R", "uni2117": "P"}
 TOP_SIDE = 0.87
+# 0.84 (Regular pass 6, item 4): at the Regular the ring's top and bottom the small figures' hairline (39: TOP_SIDE of
+# the side, 0.899, inside the references' 0.79 to 0.95) and the letter the small figures' weights (stem 72, hairline
+# 39) where the references gave 64 / 42 (C), 54 / 42 (R P); the masters take the Regular's additions by the stem's
+# law as before
+import ladder as LD
+TOP_SIDE = LD.SMALL_HAIR / (0.557 * LD.STEM)
+LETTER_OWN = (LD.SMALL_STEM, LD.SMALL_HAIR)
 SIDE = {55.0: 0.714, 78.0: 0.557, 140.0: 0.406}
 LETTER = {   # height of the counter, centre dx (counter's width), dy (counter's height), thick / ring side, thin / ring top
     "C": {55.0: (0.626, -0.025, 0.002, 1.43, 1.06), 78.0: (0.636, -0.024, 0.003, 1.47, 1.12), 140.0: (0.651, -0.019, 0.003, 2.23, 1.22)},
@@ -94,13 +101,15 @@ def letter_reading(cs, kind):
 def readings(font, ring):
     """The master's stem (n's, as amp reads v and o: here the a.ss03's stem, the same law), its letters C R P, and the
     ring's outer outline (the Regular's ©)."""
-    stem = AT.readings(font)["stem"]
-    return {"stem": stem, "ring": ring,
+    ra = AT.readings(font)
+    stem = ra["stem"]
+    return {"stem": stem, "h": ra["h"], "ring": ring,
             "letters": {k: [[(p.x, p.y, p.type, p.smooth) for p in c.points] for c in font[k].contours] for k in ("C", "R", "P")}}
 
 
 def _mix(R0, R1, t):
-    out = {"stem": R0["stem"] + (R1["stem"] - R0["stem"]) * t, "ring": R0["ring"], "letters": {}}
+    out = {"stem": R0["stem"] + (R1["stem"] - R0["stem"]) * t, "h": R0["h"] + (R1["h"] - R0["h"]) * t, "ring": R0["ring"],
+           "letters": {}}
     for k in R0["letters"]:
         out["letters"][k] = [[(p[0] + (q[0] - p[0]) * t, p[1] + (q[1] - p[1]) * t, p[2], p[3]) for p, q in zip(P, Q)]
                              for P, Q in zip(R0["letters"][k], R1["letters"][k])]
@@ -160,6 +169,8 @@ def construct(R, kind, R0=None):
     L = R["letters"][kind]
     thick0, thin0, (x0, y0, x1, y1) = letter_reading(L, kind)
     want_thick, want_thin = k_thick * side, k_thin * top
+    if R0 is None and LETTER_OWN:
+        want_thick, want_thin = LETTER_OWN
     if R0 is None:
         # the Regular: scaled so that, with its upright strokes made want_thin, its height is the share of the
         # counter; then its strokes made the references' weights
@@ -171,6 +182,11 @@ def construct(R, kind, R0=None):
         # thicker in the Light than in the Regular (audit_rays 49.2 > 42.0 at 300)
         _c, i0 = construct(R0, kind)
         law = stem / R0["stem"]
+        if stem < R0["stem"] and LETTER_OWN:
+            # 0.84 pass 6: towards the Light the Regular's larger additions (the small figures' weights) shrink by the
+            # hairline's law, not the stem's (by the stem's the R's serif ends read 0.69 of the Regular at 300, under
+            # the tip's law: audit_axis thin)
+            law = R["h"] / R0["h"]
         ex, ey = i0["dx"] * law, i0["dy"] * law
         k = (hs * chh - ey) / (y1 - y0)
     mx, my = (x0 + x1) / 2, (y0 + y1) / 2

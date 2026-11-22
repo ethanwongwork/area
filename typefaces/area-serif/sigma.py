@@ -49,9 +49,13 @@ NAMES = ("Esh", "summation")
 # capitals' 0.42 flat read "chipped" to the owner mid-height). Esh is the letter: cap height, E's arms both, places
 # from the median summation (VX, VY above), sharp.
 KIND = {
-    "Esh": dict(span=(CAP, 0.0), w_e=W_E, bot=None, angles=None, flat=0.0),
-    "summation": dict(span=(CAP, -0.25 * CAP), w_e=0.79 * CAP / 600.0, bot=0.90, angles=(55.0, 52.0), flat=0.13),
+    "Esh": dict(span=(CAP, 0.0), w_e=W_E, bot=None, angles=None, flat=0.42),
+    "summation": dict(span=(CAP, -0.25 * CAP), w_e=0.79 * CAP / 600.0, bot=None, angles=(55.0, 52.0), flat=0.42),
 }
+# 0.84 (Regular pass 2, item 4; the owner: "is the top part of summation supposed to be thicker?"): both bars E's arm
+# again. The bottom bar was 0.90 of n's stem (70, the references' operator mark) under a 46 top: Area's own letters
+# give no reason for a difference (E's top and bottom arms are both 46, balance.CAP_ARM), so the two agree; the top
+# read heavier because the thick diagonal (Z's, 89 upright) joins it in a wide dark corner, not by the bar
 SPAN = {k: v["span"] for k, v in KIND.items()}
 
 
@@ -330,3 +334,7 @@ def master(reg, font, sides, name):
     font[name].width = width
     return (f"{name}: construction, bars {R['t']:.0f}, thick {R['td']:.0f}, thin {R['tn']:.0f}, flat "
             f"{info['flat']:.0f}, width {_wd(R, name):.0f}, bottom bar {info['tb']:.0f}")
+
+# 0.84 (Regular pass 2, item 5, one corner rule): the point where the two diagonals meet is a vertex finished as A's
+# apex, a flat 0.42 of the capital stem (36) across the bisector (KIND flat 0.42 for both; it was 0.13, 11, on the
+# summation, Georgia Pro's, and sharp on Esh)

@@ -421,6 +421,13 @@ def nine_solve(cs0, name="nine"):
     if cb is None or ob is None:
         return None, "no level bottom under the counter"
     n0 = len(cs0[0])
+    # the tail's own places: its lowest point and the ball's outer side (the neck's curve keeps its handles: solved,
+    # its handle ran under the inside's lowest point and made an extreme inside the curve)
+    P0_ = cs0[0]
+    on0 = [i for i, q in enumerate(P0_) if q[2]]
+    lo0 = min(on0, key=lambda i: (P0_[i][1], P0_[i][0]))
+    ball0 = min((i for i in on0 if P0_[i][1] < cs0[1][cb][1] - 120), key=lambda i: P0_[i][0])
+    tail_nodes = {lo0, ball0}
     H = []                                               # (contour, handle, its node)
     for ci, P in enumerate(cs0):
         n = len(P)
@@ -428,7 +435,10 @@ def nine_solve(cs0, name="nine"):
             if q[2] is not None:
                 continue
             own = i - 1 if P[i - 1][2] else (i + 1) % n
-            if ci == 1 or (ci == 0 and min((i - ob) % n0, (ob - i) % n0) <= 2):
+            # 0.84 (pass 3, owner item 4): with the tail g.ss02's (`nine_tail`), its own handles (the outline under the
+            # bowl: the lowest point, the ball) join the solve, so the ball's node keeps one curvature too
+            tail = ci == 0 and own in tail_nodes
+            if ci == 1 or (ci == 0 and min((i - ob) % n0, (ob - i) % n0) <= 2) or tail:
                 H.append((ci, i, own))
     NODES = [(1, cb), (0, ob)]
     bad0, w0 = K.report(name, cs0, yr)[:2]
@@ -831,3 +841,467 @@ def f_foot(font):
         if abs(p.y) <= 30 and p.x > b + proj - 8:
             p.x -= round(proj - want)
     return f"f's right foot {proj:.0f} > {want:.0f}"
+
+
+# ------------------------------------------------------------------ 0.84 Regular pass 3 (the owner's visual notes, item 4)
+# The owner: "the 9 bottom right part is slanted too much, the bottom part should be more like the single storey g";
+# earlier "the 6 and the 9 ... the bottom right part suddenly became more steep of a curve". The 9's tail was one long
+# quarter from the bowl's right extreme (400 up) to a lowest point far left (0.27 of the way from the ball's outer
+# side to the right side): its middle ran as a slanted line (`clean.nine_six`'s 0.90 quarter and 23.5-degree lean). It
+# now takes g.ss02's tail, read on the same font (`g_tail_shape`): the lowest point (outside and inside on one upright)
+# at g's share of the way from the ball's outer side to the stem's outer edge; each edge leaves the right side upright
+# and turns round into the lowest point as g's runs down its stem and turns its quarter, in one cubic (its upright
+# handle reaches down past the right side to where g's quarter would start, for that quarter's width at g's height over
+# width, plus g's quarter handle share of that height; its level handle g's share of the width); the ball and the
+# bowl stay; then every smooth node of the tail at one curvature (loops.even_nodes, handle lengths only). The 6 is the 9
+# turned half round, point for point, as before.
+G_TAIL = (0.460, 0.92, 0.95, 0.55)
+
+
+def g_tail_shape(font):
+    """g.ss02's tail read on the font: (lowest point's share from the ball's outer side to the stem's outer edge,
+    outside quarter height over width, inside quarter height over width, quarter handle share)."""
+    P = _pts(font["g.ss02"])[0]
+    on = [q for q in P if q[2]]
+    lo = min(on, key=lambda q: (q[1], q[0]))
+    lows = [q for q in on if q[1] < 0]
+    ball_x = min(q[0] for q in lows)
+    stem_x = max(q[0] for q in on if q[1] < 10)
+    # the outside quarter: from the stem's last node (upright tangent) to the lowest point
+    n = len(P)
+    i_lo = P.index(lo)
+    # the stem's lowest node on the outside: the on-curve node at stem_x nearest the baseline
+    qo = min((q for q in on if q[0] == stem_x), key=lambda q: abs(q[1]))
+    # the inside lowest: the level node right above the outside's lowest point
+    inner = [q for q in on if q[1] < 0 and abs(q[0] - lo[0]) < 3 and q[1] > lo[1] + 10]
+    li = min(inner, key=lambda q: q[1])
+    si = min((q for q in on if q[1] < 0.5 and q[0] < stem_x and q[0] > li[0] + 50), key=lambda q: -q[0])
+    share = (lo[0] - ball_x) / (stem_x - ball_x)
+    ho = (qo[1] - lo[1]) / (qo[0] - lo[0])
+    hi = (si[1] - li[1]) / (si[0] - li[0])
+    # the handle share at the lowest point (outside)
+    nb = [P[(i_lo + 1) % n], P[(i_lo - 1) % n]]
+    h = max(abs(q[0] - lo[0]) for q in nb if q[2] is None)
+    return share, ho, hi, h / (qo[0] - lo[0])
+
+
+def _in_triangle(P, share=0.95):
+    """Every cubic's handles kept short of where its two end tangents meet (share of the way): a handle past it puts
+    an extreme inside the curve (pathlint)."""
+    n = len(P)
+    on = [i for i, q in enumerate(P) if q[2]]
+    for a, i in enumerate(on):
+        j = on[(a + 1) % len(on)]
+        if (i + 3) % n != j:
+            continue
+        p0, h1, h2, p3 = P[i], P[(i + 1) % n], P[(i + 2) % n], P[j]
+        d1 = (h1[0] - p0[0], h1[1] - p0[1])
+        d2 = (h2[0] - p3[0], h2[1] - p3[1])
+        den = d1[0] * d2[1] - d1[1] * d2[0]
+        if abs(den) < 1e-9:
+            continue
+        t = ((p3[0] - p0[0]) * d2[1] - (p3[1] - p0[1]) * d2[0]) / den
+        u = ((p3[0] - p0[0]) * d1[1] - (p3[1] - p0[1]) * d1[0]) / den
+        if t > 0 and u > 0:                                  # the meeting point t (u) handle lengths away
+            if t * share < 1:
+                h1[0], h1[1] = p0[0] + d1[0] * share * t, p0[1] + d1[1] * share * t
+            if u * share < 1:
+                h2[0], h2[1] = p3[0] + d2[0] * share * u, p3[1] + d2[1] * share * u
+    return P
+
+
+def in_triangle(font, names):
+    """`_in_triangle` on finished glyphs (after hair.hairlines moved the 9's inner lowest node up with its own
+    handles, the neck's far handle stood under it: an extreme inside the curve, and the heavier small 9s crossed
+    themselves)."""
+    out = []
+    for n in names:
+        if n not in font:
+            continue
+        cs = _pts(font[n])
+        new = [[(round(q[0]), round(q[1]), q[2], q[3]) for q in _in_triangle([list(q) for q in P])] for P in cs]
+        moved = sum(a != b for P, Q in zip(cs, new) for a, b in zip(P, Q))
+        _put(font[n], new)
+        out.append(f"{n}: {moved} handles")
+    return out
+
+
+def nine_tail(font):
+    import loops as LOOPS
+    if "nine" not in font:
+        return "no 9"
+    # g.ss02 is finished later (the charset, single_g_points and the tail rule); here, before it is, its finished tail
+    # as `g_tail_shape` reads it on the build (snap084f: 0.460, 0.92 / 0.95, 0.55). At this point in normalize the
+    # source's own g.ss02 reads 0.505, 0.69 / 0.58, 0.64: not the drawing the owner compares with
+    share, ho, hi, hk = G_TAIL
+    out = [f"g.ss02: lowest at {share:.3f}, quarters {ho:.2f} / {hi:.2f} high over wide, handles {hk:.2f}"]
+    for name, turned in (("nine", False), ("six", True)):
+        g = font[name]
+        cs = _pts(g)
+        sx, sy = g.width + 1, 712
+        if turned:
+            cs = [[(sx - q[0], sy - q[1], q[2], q[3]) for q in P] for P in cs]
+        P = [list(q) for q in cs[0]]
+        n = len(P)
+        on = [i for i, q in enumerate(P) if q[2]]
+        lo = min(on, key=lambda i: (P[i][1], P[i][0]))
+        rt = max(on, key=lambda i: P[i][0])
+        level = [i for i in on if P[(i - 1) % n][2] is None and P[(i + 1) % n][2] is None
+                 and P[(i - 1) % n][1] == P[i][1] == P[(i + 1) % n][1]]
+        ilo = min((i for i in level if P[lo][1] + 10 < P[i][1] < P[rt][1] - 100), key=lambda i: P[i][1])
+        # the cubic lo -> rt (outside), and the inside's cubic into ilo from the tail's top (the bowl's crotch)
+        if (lo + 3) % n != rt or P[(ilo - 3) % n][2] is None:
+            out.append(f"{name}: the tail is not one cubic each side; left")
+            continue
+        top_i = (ilo - 3) % n
+        ball_x = min(P[i][0] for i in on if P[i][1] < P[ilo][1] + 60)
+        xr, yr_ = P[rt][0], P[rt][1]
+        xl = round(ball_x + share * (xr - ball_x))
+        dx = xl - P[lo][0]
+        for i in (lo, ilo):                                  # the lowest points (outside, inside) move level with their
+            for k in (-1, 0, 1):                             # handles
+                P[(i + k) % n][0] += dx
+        # outside: rt's downward handle and lo's level handle
+        w = xr - xl
+        yq = P[lo][1] + ho * w
+        P[(rt - 1) % n][0], P[(rt - 1) % n][1] = xr, round(yr_ - ((yr_ - yq) + hk * (yq - P[lo][1])))
+        P[(lo + 1) % n][0], P[(lo + 1) % n][1] = round(xl + hk * w), P[lo][1]
+        # inside: from the tail's top (upright) down to ilo
+        xt, yt = P[top_i][0], P[top_i][1]
+        wi = xt - xl
+        yqi = P[ilo][1] + hi * wi
+        P[(top_i + 1) % n][0], P[(top_i + 1) % n][1] = xt, round(yt - ((yt - yqi) + hk * (yqi - P[ilo][1])))
+        P[(ilo - 1) % n][0], P[(ilo - 1) % n][1] = round(xl + hk * wi), P[ilo][1]
+        Q, log = LOOPS.even_nodes([tuple(q) for q in P], (-1000, 2000))
+        Q = _in_triangle([list(q) for q in Q])
+        new = [[(round(q[0]), round(q[1]), q[2], q[3]) for q in Q]] + cs[1:]
+        if turned:
+            new = [[(sx - q[0], sy - q[1], q[2], q[3]) for q in Pc] for Pc in new]
+        _put(g, new)
+        out.append(f"{name}: lowest {xl - dx} > {xl}, right side down to {yq:.0f} (inside {yqi:.0f})")
+    return "; ".join(out)
+
+
+# ------------------------------------------------------------------ 0.84 (Regular pass 5, item 1): the 9 and 6 of 0.80
+# The owner (21 November): "The 0.80 9 and 6 were much better from a shape and curve perspective... can you take those
+# exact curves and tails and just make any updates on thickness and bezier curve points/measurements just to bring it up
+# to date with the latest build?" Every later reshaping is withdrawn: 0.81 owner round 2's lower quarter and lean
+# (`clean.nine_six`), 0.83's one solve (`nine_even`), 0.84's hairline node move (`hair.hairlines`) and pass 3's g.ss02
+# tail (`nine_tail`, `G_TAIL`, `nine_solve`). The 9 is 0.80's Regular outline point for point (build/snap080, our own
+# drawing, as it shipped): heights 721 / -9 (the figures' lines), sides 92 at the extremes (the capital round), top
+# 47; brought up to date by (1) the tail's bottom pair on the figures' hairline 47 (hair.py's reading: 42.5 at the
+# tail's inside above the lowest point; the inner lowest node up 5 with its handles), (2) the crotch one corner: the
+# 7-unit step between the bowl's underside and the tail's inner edge dropped, the edge leaving from the curve's end (the
+# small forms crossed themselves on that step: `charset.fold_steps` is no longer needed), (3) the left extreme and the
+# counter's upright run marked smooth (their handles were on one line already), (4) one curvature at every smooth node
+# by handle lengths (the counter's lowest 2.51 > 1.17: `loops.even_nodes`; nodes kept). The 6 is the 9 turned half
+# round, point for point (0.80's own 6 differed from the turned 9 by 2 to 4 units at its nodes and 18 at one handle).
+# Advance and sides by spacing; the small, tabular and ∂ forms follow from these.
+NINE_080 = [
+    [(57, 471, 'curve', False), (57, 342, None, False), (151, 240, None, False), (279, 240, 'curve', True),
+     (346, 240, None, False), (399, 268, None, False), (457, 327, 'curve', False), (464, 325, 'line', False),
+     (464, 165, None, False), (386, 39, None, False), (279, 39, 'curve', True), (235, 39, None, False),
+     (177, 60, None, False), (177, 87, 'curve', True), (177, 114, None, False), (159, 136, None, False),
+     (133, 136, 'curve', True), (107, 136, None, False), (89, 115, None, False), (89, 87, 'curve', True),
+     (89, 33, None, False), (158, -9, None, False), (249, -9, 'curve', True), (428, -9, None, False),
+     (559, 171, None, False), (559, 400, 'curve', True), (559, 586, None, False), (455, 721, None, False),
+     (308, 721, 'curve', True), (171, 721, None, False), (57, 611, None, False)],
+    [(467, 369, 'line', False), (407, 313, None, False), (361, 292, None, False), (293, 292, 'curve', True),
+     (213, 292, None, False), (149, 365, None, False), (149, 475, 'curve', True), (149, 580, None, False),
+     (212, 674, None, False), (304, 674, 'curve', True), (398, 674, None, False), (467, 575, None, False),
+     (467, 450, 'curve', False)],
+]
+NINE_HAIR = 47          # the figures' hairline (hair.HAIR_CAP)
+
+
+def _fold_crotch(P):
+    """The crotch's short straight between two corners (the bowl's underside curve, then a 7-unit step onto the tail's
+    upright inner edge) made one corner: the step's second corner is dropped and the tail's inner edge leaves from the
+    curve's end (its first handle kept, so it leans 2.5 degrees from upright over its first third). The underside
+    keeps 0.80's curve: sliding its end up the tangent onto the edge (the first build of this pass) thinned the bowl's
+    lower stroke by the crotch, and the Bold's ₉ read thinner than the mid master's there (audit_rays, ⅑)."""
+    n = len(P)
+    for i, q in enumerate(P):
+        nx = P[(i + 1) % n]
+        if (q[2] == "curve" and not q[3] and nx[2] == "line" and not nx[3] and math.dist(q[:2], nx[:2]) < 12
+                and P[(i + 2) % n][2] is None and abs(P[(i + 2) % n][0] - nx[0]) < 0.5):
+            Q = [list(p) for p in P]
+            del Q[(i + 1) % n]
+            return [tuple(p) for p in Q], (q[:2], nx[:2])
+    return P, None
+
+
+def nine_construct():
+    """0.80's 9 brought up to date (see NINE_080); returns (contours, log)."""
+    import loops as LOOPS
+    out, log = [], []
+    outer, counter = [list(q) for q in NINE_080[0]], [list(q) for q in NINE_080[1]]
+    # (3) smooth where the handles already lie on one line
+    for P in (outer, counter):
+        n = len(P)
+        for i, q in enumerate(P):
+            if not q[2] or q[3]:
+                continue
+            a, b = P[i - 1], P[(i + 1) % n]
+            va, vb = (q[0] - a[0], q[1] - a[1]), (b[0] - q[0], b[1] - q[1])
+            if math.hypot(*va) < 1 or math.hypot(*vb) < 1:
+                continue
+            cross = (va[0] * vb[1] - va[1] * vb[0]) / (math.hypot(*va) * math.hypot(*vb))
+            dot = va[0] * vb[0] + va[1] * vb[1]
+            if abs(cross) < 1e-3 and dot > 0:
+                q[3] = True
+    # (2) the crotch one corner
+    outer, folded = _fold_crotch([tuple(q) for q in outer])
+    log.append(f"crotch {folded}")
+    # (1) the tail's bottom pair (the lowest pair of level extremes) on the figures' hairline, read and moved as
+    # hair.hairlines reads and moves it (its thinnest place within reach of the pair; only the inner node moves, upright)
+    import hair as HAIR
+    cs = [[tuple(q) for q in outer], [tuple(q) for q in counter]]
+    bottom = min([p for p in HAIR.pairs(cs) if p[2] == "bottom"], key=lambda p: p[0][3])
+    dy, w0, w1 = HAIR.solve(cs, bottom[0], bottom[1], bottom[2], NINE_HAIR)
+    if dy:
+        cs[bottom[1][0]] = HAIR._move(cs[bottom[1][0]], bottom[1][1], dy)
+    outer, counter = [list(q) for q in cs[0]], [list(q) for q in cs[1]]
+    log.append(f"tail bottom {w0:.1f} > {w1:.1f} ({dy:+d})")
+    # (4) one curvature at the counter's smooth nodes, handle lengths only
+    import curvecheck as K
+    cs = [[tuple(q) for q in outer], [tuple(q) for q in counter]]
+    r0 = K.report("nine", cs, (-1000, 2000))[1]
+    new = []
+    for P in cs:
+        Q = [(round(q[0]), round(q[1]), q[2], q[3]) for q in LOOPS.even_nodes(P, (-1000, 2000))[0]]
+        Q = _in_triangle([list(q) for q in Q])
+        new.append([(round(q[0]), round(q[1]), q[2], q[3]) for q in Q])
+    r1 = K.report("nine", new, (-1000, 2000))[1]
+    log.append(f"curvature {r0:.2f} > {r1:.2f}")
+    return new, log
+
+
+def nine_080(font):
+    """Put the 9 (and the 6, the 9 turned half round) of NINE_080 in the font, before spacing."""
+    from ufoLib2.objects import Contour, Point
+    cs, log = nine_construct()
+    for name, turned in (("nine", False), ("six", True)):
+        if name not in font:
+            continue
+        g = font[name]
+        sx, sy = g.width + 1, 712
+        new = [[(sx - q[0], sy - q[1], q[2], q[3]) for q in P] if turned else P for P in cs]
+        g.clearContours()
+        for P in new:
+            c = Contour()
+            c.points = [Point(x, y, t, smooth=sm) for x, y, t, sm in P]
+            g.contours.append(c)
+    return "; ".join(log)
+
+
+# ------------------------------------------------------------------ 0.84 (Regular pass 5, item 3): the figures as one family
+# The owner (21 November): "The number set overall looks very inconsistent and the curves don't look very smooth or
+# mathematically precise/even. The 5 and 3 look a bit off especially." Read on build/snap084i (build/owner12/item3,
+# the quarters' handle shares and the extremes' strokes): 0 and 8 are even (every bowl quarter's two handles within
+# 0.03 of each other, outside 0.56 to 0.58, inside 0.58 to 0.62); the 3's and the 5's bowl quarters were lopsided, one
+# handle long and the other short on what is one arc (the 3's inside 0.44 / 0.58, 0.48 / 0.67, 0.62 / 0.46; the 5's
+# 0.66 / 0.52, 0.64 / 0.57, 0.50 / 0.58, 0.44 / 0.57, 0.51 / 0.64), so each arc ran flat and then turned tight: the
+# lumps. The 2's inside 0.55 / 0.64. Balls: 2 3 6 9 88 across, their far point 49 over the sides; the 5's 88 by 44.
+# Strokes at the extremes 92 except the 5's bowl side 91.
+# The rule (`figure_family`): (1) the 5's ball the others' (88 across, far point FIG_BALL_RISE over its sides, quarter
+# handles FIG_BALL_SIDE / FIG_BALL_APEX); (2) each bowl quarter of the listed edges (FAMILY_EDGES) takes one share on
+# both handles, near the family's tension (outside 0.57, inside 0.60, the o's and the 0's and 8's), solved together
+# with one curvature at every smooth node (curvecheck's ratio) and the least change, the quarters' shared extremes free
+# to slide along their own tangent a few units; quarters that run into a ball on the outside keep theirs (one cubic
+# cannot both be even and meet the ball's curvature: that is where they are lopsided by construction); (3) every
+# smooth node then at one curvature by handle lengths (`loops.even_nodes`, target 1.1); (4) the 5's bowl side on the
+# capital round (92: the counter's extreme moves level). Kept only where curvecheck's faults do not grow.
+FAMILY = {"outer": 0.57, "inner": 0.60}
+FAMILY_EDGES = {"three": ("inner",), "five": ("inner", "outer"), "two": ("inner",)}
+FIG_BALL_RISE, FIG_BALL_SIDE, FIG_BALL_APEX = 49 / 88, 0.55, 0.59
+FIG_ROUND = 92
+
+
+def _quarters(P, minsize=70):
+    m = len(P)
+    on = [i for i, q in enumerate(P) if q[2]]
+    out = []
+    for k, i in enumerate(on):
+        j = on[(k + 1) % len(on)]
+        if (j - i) % m != 3:
+            continue
+        a, h1, h2, b = P[i], P[(i + 1) % m], P[(i + 2) % m], P[j]
+        lev = lambda p, h: abs(h[1] - p[1]) < 0.6 and abs(h[0] - p[0]) > 0.6   # noqa: E731
+        up = lambda p, h: abs(h[0] - p[0]) < 0.6 and abs(h[1] - p[1]) > 0.6    # noqa: E731
+        w, hg = abs(b[0] - a[0]), abs(b[1] - a[1])
+        if max(w, hg) < minsize or min(w, hg) < 20:
+            continue
+        if (lev(a, h1) and up(b, h2)) or (up(a, h1) and lev(b, h2)):
+            out.append((i, j, lev(a, h1)))
+    return out
+
+
+def _shares(P, q):
+    i, j, la = q
+    m = len(P)
+    a, h1, h2, b = P[i], P[(i + 1) % m], P[(i + 2) % m], P[j]
+    w, hg = abs(b[0] - a[0]), abs(b[1] - a[1])
+    return math.dist(a[:2], h1[:2]) / (w if la else hg), math.dist(b[:2], h2[:2]) / (hg if la else w)
+
+
+def _set_shares(P, q, s1, s2):
+    i, j, la = q
+    m = len(P)
+    a, b = P[i], P[j]
+    w, hg = abs(b[0] - a[0]), abs(b[1] - a[1])
+    sx, sy = (1 if b[0] > a[0] else -1), (1 if b[1] > a[1] else -1)
+    if la:
+        P[(i + 1) % m] = (a[0] + sx * s1 * w, a[1], None, False)
+        P[(i + 2) % m] = (b[0], b[1] - sy * s2 * hg, None, False)
+    else:
+        P[(i + 1) % m] = (a[0], a[1] + sy * s1 * hg, None, False)
+        P[(i + 2) % m] = (b[0] - sx * s2 * w, b[1], None, False)
+
+
+def _edge_side(cs, P, q):
+    """'outer' when the quarter bulges away from the ink, 'inner' (a counter's edge) when into it."""
+    import hair as H
+    i, j, la = q
+    m = len(P)
+    a, h1, h2, b = P[i], P[(i + 1) % m], P[(i + 2) % m], P[j]
+    M = ((a[0] + 3 * h1[0] + 3 * h2[0] + b[0]) / 8, (a[1] + 3 * h1[1] + 3 * h2[1] + b[1]) / 8)
+    C = ((a[0] + b[0]) / 2, (a[1] + b[1]) / 2)
+    d = (M[0] - C[0], M[1] - C[1])
+    L = math.hypot(*d)
+    polys = [H._flat(Pc) for Pc in cs]
+    return "inner" if H._inside((M[0] + 4 * d[0] / L, M[1] + 4 * d[1] / L), polys) else "outer"
+
+
+def _fig_balls(P):
+    """(side, far point, side) index triples: two upright smooth nodes 60 to 120 apart at one height, a level node
+    between them under 70 off."""
+    n = len(P)
+    out = []
+    def kind(m, ax):
+        return (P[m - 1][2] is None and P[(m + 1) % n][2] is None and abs(P[m - 1][ax] - P[m][ax]) < 0.6
+                and abs(P[(m + 1) % n][ax] - P[m][ax]) < 0.6)
+    for i, q in enumerate(P):
+        j, k = (i + 3) % n, (i + 6) % n
+        if not (q[2] and P[j][2] and P[k][2]):
+            continue
+        if (kind(i, 0) and kind(k, 0) and kind(j, 1) and 60 < abs(P[k][0] - q[0]) < 120
+                and abs(P[k][1] - q[1]) < 2 and abs(P[j][1] - q[1]) < 70):
+            out.append((i, j, k))
+    return out
+
+
+def one_ball(P, d=88):
+    """Each ball the figures' ball: d across, its far point FIG_BALL_RISE x d over the sides, centred between them."""
+    P = [list(q) for q in P]
+    n = len(P)
+    log = []
+    for i, j, k in _fig_balls(P):
+        y = (P[i][1] + P[k][1]) / 2
+        cx = (P[i][0] + P[k][0]) / 2
+        sg = 1 if P[j][1] > y else -1
+        dirx = 1 if P[k][0] > P[i][0] else -1
+        rise = FIG_BALL_RISE * d
+        was = (abs(P[k][0] - P[i][0]), abs(P[j][1] - y))
+        for m, x in ((i, cx - dirx * d / 2), (k, cx + dirx * d / 2)):
+            dx = x - P[m][0]
+            for t in (-1, 0, 1):
+                P[(m + t) % n][0] += dx
+        ay = y + sg * rise
+        P[j][0], P[j][1] = cx, ay
+        P[(i + 1) % n][:2] = [P[i][0], y + sg * FIG_BALL_SIDE * rise]
+        P[(k - 1) % n][:2] = [P[k][0], y + sg * FIG_BALL_SIDE * rise]
+        P[(j - 1) % n][:2] = [cx - dirx * FIG_BALL_APEX * d / 2, ay]
+        P[(j + 1) % n][:2] = [cx + dirx * FIG_BALL_APEX * d / 2, ay]
+        if was != (d, round(rise)):
+            log.append(f"ball {was[0]:.0f}x{was[1]:.0f} > {d}x{rise:.0f}")
+    return [tuple(q) for q in P], log
+
+
+def family_solve(P0, sides, free, movew=0.05, maxmove=30):
+    """The free quarters' shares (one share both ends, near the family's) and their shared extremes' slides, solved
+    with one curvature at every smooth node and the least change (L-BFGS-B)."""
+    import numpy as np
+    from scipy.optimize import minimize
+    import curvecheck as K
+    Qall = _quarters(P0)
+    m = len(P0)
+    Q = [q for q in Qall if q[:2] in free]
+    s0 = np.array([s for q in Q for s in _shares(P0, q)])
+    ends = {}
+    for q in Qall:
+        for e in q[:2]:
+            ends.setdefault(e, []).append(q[:2] in free)
+    movable = [e for e, fl in ends.items() if len(fl) == 2 and all(fl)]
+    level = lambda e: abs(P0[(e + 1) % m][1] - P0[e][1]) < 0.6 and abs(P0[e - 1][1] - P0[e][1]) < 0.6  # noqa: E731
+    nv = len(s0)
+
+    def build(x):
+        P = list(P0)
+        for k, e in enumerate(movable):
+            P[e] = ((P0[e][0] + x[nv + k], P0[e][1]) if level(e) else (P0[e][0], P0[e][1] + x[nv + k])) + P0[e][2:]
+        for k, q in enumerate(Q):
+            _set_shares(P, q, x[2 * k], x[2 * k + 1])
+        return P
+
+    def cost(x):
+        P = build(x)
+        c = 0.0
+        for i, xy, g1, ka, kb, r, flip, kinds in K.nodes(P, (-1000, 2000)):
+            if kinds == "CC" and r is not None and not flip and math.isfinite(r):
+                c += 30 * math.log(r) ** 2
+        for k, q in enumerate(Q):
+            c += 40 * (x[2 * k] - x[2 * k + 1]) ** 2 + 10 * ((x[2 * k] + x[2 * k + 1]) / 2 - FAMILY[sides[q[:2]]]) ** 2
+        return c + np.sum((x[:nv] - s0) ** 2) + movew * np.sum(x[nv:] ** 2)
+    x0 = np.concatenate([s0, np.zeros(len(movable))])
+    r = minimize(cost, x0, method="L-BFGS-B", bounds=[(0.42, 0.75)] * nv + [(-maxmove, maxmove)] * len(movable))
+    return [(round(q[0]), round(q[1]), q[2], q[3]) for q in build(r.x)], [(q[:2], tuple(s0[2*k:2*k+2]), tuple(r.x[2*k:2*k+2])) for k, q in enumerate(Q)]
+
+
+def _round_side(cs, name):
+    """The 5's bowl side on the capital round: the counter's right extreme moves level (with its handles) until the
+    stroke across the outer right extreme is FIG_ROUND."""
+    P = [list(q) for q in cs[0]]
+    n = len(P)
+    up = [i for i, q in enumerate(P) if q[2] and q[3] and P[i - 1][2] is None and P[(i + 1) % n][2] is None
+          and abs(P[i - 1][0] - q[0]) < 0.6 and abs(P[(i + 1) % n][0] - q[0]) < 0.6]
+    o = max(up, key=lambda i: P[i][0])
+    inner = [i for i in up if i != o and abs(P[i][1] - P[o][1]) < 40 and P[i][0] < P[o][0]]
+    if not inner:
+        return cs, None
+    c = max(inner, key=lambda i: P[i][0])
+    w = P[o][0] - P[c][0]
+    dx = w - FIG_ROUND
+    for t in (-1, 0, 1):
+        P[(c + t) % n][0] += dx
+    return [[tuple(q) for q in P]] + cs[1:], (w, FIG_ROUND)
+
+
+def figure_family(font):
+    import curvecheck as K
+    import loops as L
+    out = []
+    for name, edges in FAMILY_EDGES.items():
+        if name not in font:
+            continue
+        cs = _pts(font[name])
+        bad0, w0 = K.report(name, cs, (-1000, 2000))[:2]
+        P0, blog = one_ball(cs[0]) if name == "five" else (cs[0], [])
+        sides = {q[:2]: _edge_side(cs, cs[0], q) for q in _quarters(P0)}
+        free = {k for k, s in sides.items() if s in edges}
+        P, shares_ = family_solve(P0, sides, free)
+        P = [(round(q[0]), round(q[1]), q[2], q[3]) for q in L.even_nodes(P, (-1000, 2000), target=1.1)[0]]
+        new = [P] + cs[1:]
+        side = None
+        if name == "five":
+            new, side = _round_side(new, name)
+        new = [[(round(q[0]), round(q[1]), q[2], q[3]) for q in _in_triangle([list(q) for q in Pc])] for Pc in new]
+        bad1, w1 = K.report(name, new, (-1000, 2000))[:2]
+        if len(bad1) > len(bad0):
+            out.append(f"{name}: left (faults {len(bad0)} > {len(bad1)})")
+            continue
+        _put(font[name], new)
+        sh = ", ".join(f"{a:.2f}/{b:.2f}>{c:.2f}/{d:.2f}" for _k, (a, b), (c, d) in shares_)
+        out.append(f"{name}: {'; '.join(blog)} quarters {sh}; side {side}; worst {w0:.2f} > {w1:.2f}, faults "
+                   f"{len(bad0)} > {len(bad1)}")
+    return "; ".join(out)

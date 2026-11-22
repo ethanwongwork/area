@@ -26,20 +26,21 @@ svg .gl82{stroke:var(--line);vector-effect:non-scaling-stroke;stroke-width:1}
 svg .gl82t{fill:var(--ink3);font-family:var(--ui)}
 .c82-filters{display:flex;gap:6px;flex-wrap:wrap}
 /* viewer */
-.p82v{position:fixed;inset:0;z-index:50;background:var(--bg);display:grid;grid-template-rows:auto minmax(0,1fr) auto}
+/* the stage fills the whole dialog and never changes size as the bar or the notes below wrap, so a fixed frame stays put on screen */
+.p82v{position:fixed;inset:0;z-index:50;background:var(--bg);display:block}
 .p82v[hidden]{display:none}
 .p82v-bar{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;padding:10px max(16px,env(safe-area-inset-left,0px));border-bottom:1px solid var(--line);background:var(--surface)}
-.p82v-bar{position:relative;padding-right:56px!important}
+.p82v-bar{position:absolute;top:0;left:0;right:0;z-index:2;padding-right:56px!important}
 .p82v-bar #v-x{position:absolute;right:max(16px,env(safe-area-inset-right,0px));top:10px}
 .p82v-bar .ttl{font:400 20px/1.2 var(--serif);margin-right:auto;min-width:0}
 .p82v-bar .ttl small{font:500 11px var(--mono);color:var(--ink3);margin-left:8px}
 .p82v-bar button.ic{border:1px solid var(--line);background:var(--surface);border-radius:7px;min-width:32px;height:30px;cursor:pointer;color:var(--ink2);font-size:14px;padding:0 8px}
 .p82v-bar button.ic:hover{color:var(--ink);background:var(--sunk)}
 .p82v-bar label{display:inline-flex;gap:6px;align-items:center;font-size:13px;color:var(--ink2)}
-.p82v-stage{position:relative;overflow:hidden;touch-action:none;cursor:grab;background:var(--surface)}
+.p82v-stage{position:absolute;inset:0;overflow:hidden;touch-action:none;cursor:grab;background:var(--surface)}
 .p82v-stage.drag{cursor:grabbing}
 .p82v-stage svg{position:absolute;inset:0;width:100%;height:100%;display:block}
-.p82v-foot{display:flex;flex-wrap:wrap;gap:6px 16px;padding:8px max(16px,env(safe-area-inset-left,0px));border-top:1px solid var(--line);font-size:12px;color:var(--ink3);background:var(--surface)}
+.p82v-foot{position:absolute;left:0;right:0;bottom:0;z-index:2;display:flex;flex-wrap:wrap;gap:6px 16px;padding:8px max(16px,env(safe-area-inset-left,0px));border-top:1px solid var(--line);font-size:12px;color:var(--ink3);background:var(--surface)}
 .p82v-foot b{color:var(--ink2);font-weight:600}
 svg .vg-a{fill:var(--glyph)} svg .vg-e{fill:none;stroke:var(--ink);vector-effect:non-scaling-stroke;stroke-width:1}
 svg .vg-b{fill:none;stroke:var(--ref);vector-effect:non-scaling-stroke;stroke-width:1.4}
@@ -48,6 +49,8 @@ svg .vh{stroke:var(--ok);vector-effect:non-scaling-stroke;stroke-width:1;fill:no
 svg .vn{fill:var(--ink)} svg .vo{fill:var(--surface);stroke:var(--ok);vector-effect:non-scaling-stroke;stroke-width:1}
 svg .vnb{fill:var(--ref)} svg .vob{fill:var(--surface);stroke:var(--ref);vector-effect:non-scaling-stroke;stroke-width:1}
 svg .vlab{fill:var(--ink3);font-family:var(--mono)}
+svg .vsb{stroke:var(--ink3);stroke-opacity:.55;vector-effect:non-scaling-stroke;stroke-width:1;stroke-dasharray:3 4}
+svg .vsb-b{stroke:var(--ref);stroke-opacity:.5;vector-effect:non-scaling-stroke;stroke-width:1;stroke-dasharray:2 5}
 svg .vt-a{fill:var(--glyph);stroke:var(--ink);stroke-width:1;vector-effect:non-scaling-stroke}
 svg .vt-b{fill:none;stroke:var(--ref);stroke-width:1.4;vector-effect:non-scaling-stroke}
 /* live whole set */
@@ -343,32 +346,43 @@ const V=(function(){
     g.innerHTML=st.nl.map(([o,dx,red])=>nodesSVG(o,dx,u,red)).join(''); }
   function drawLabels(){ const g=$q('#v-lab',svg); if(!g) return; const [W]=size(), w=W/view.s, u=1/view.s, left=view.x-w/2+8*u;
     g.innerHTML=GUIDES.map(([y,l])=>'<text class="vlab" x="'+left+'" y="'+(-y-4*u)+'" font-size="'+11*u+'">'+l+' '+y+'</text>').join('')+(st&&st.labels?st.labels.map(t=>'<text class="vlab" x="'+t[0]+'" y="'+(t[1]+16*u)+'" font-size="'+12*u+'">'+esc(t[2])+'</text>').join(''):''); }
-  function fit(){ const b=st&&st.box; if(!b) return; const [W,H]=size(); view.x=(b[0]+b[2])/2; view.y=(b[1]+b[3])/2; view.s=Math.min(W/(b[2]-b[0]),H/(b[3]-b[1]))*0.86; apply(); }
+  // the bar and the notes lie over the stage; the frame is fitted into the space between fixed reserves for them
+  function reserves(){ const [W]=size(); return W<760?[190,120]:[96,72]; }
+  function fit(){ const b=st&&st.box; if(!b) return; const [W,H]=size(), [T,B]=reserves(), h=Math.max(60,H-T-B);
+    view.s=Math.min(W/(b[2]-b[0]),h/(b[3]-b[1]))*0.94; view.x=(b[0]+b[2])/2; view.y=(b[1]+b[3])/2-(T-B)/2/view.s; apply(); }
   function zoom(f,cx,cy){ const [W,H]=size(); if(cx==null){cx=W/2;cy=H/2;} const px=view.x+(cx-W/2)/view.s, py=view.y+(cy-H/2)/view.s;
     view.s=Math.max(0.02,Math.min(80,view.s*f)); view.x=px-(cx-W/2)/view.s; view.y=py-(cy-H/2)/view.s; apply(); }
   function guides(x0,x1){ return GUIDES.map(([y])=>'<line class="gl82" x1="'+x0+'" x2="'+x1+'" y1="'+(-y)+'" y2="'+(-y)+'"/>').join(''); }
-  /* vector mode */
+  /* vector mode. The frame is fixed for the whole list the viewer was opened on: the origin (x 0) and the baseline
+     stay where they are for every glyph, weight and comparison. Vertically it runs from the font's line top to its
+     line bottom (hhea ascender and descender); horizontally from 0 to the widest advance in the list. Ink is never
+     used to place the frame, so an accent or a bar past the sidebearing cannot move the letter under it. */
+  function frameOf(){ if(st.frame) return st.frame; let adv=0;
+    for(const it of st.seq) for(const k of new Set([it.f,it.l,'r82','before','v080','now'])){ if(!k||!P.O[k]||!P.O[k][it.g]) continue;
+      for(const x of weightsOf(k,it.g)){ const o=out(k,it.g,x); if(o) adv=Math.max(adv,o[0]); } }
+    st.frame={adv:adv||600}; return st.frame; }
+  function sbTxt(o){ const bb=bboxOf(o); return bb[0]>bb[2]||!o[1].length?'':', sidebearings '+bb[0]+' / '+(o[0]-bb[2]); }
   function drawVec(refit){ const it=st.seq[st.i], w=st.w, fs=it.f, ls=st.cmp||it.l;
-    const a=out(fs,it.g,w), b=ls?out(ls,it.g,w):null; let s='', box=null, labels=[], nl=[];
-    const m=(!b&&mode!=='after')?'after':mode;
-    const add=(o,dx,kind)=>{ const bb=bboxOf(o); const bx=[Math.min(bb[0],0)+dx,Math.min(-bb[3],-P.cap),Math.max(bb[2],o[0])+dx,Math.max(-bb[1],0)];
-      box=box?[Math.min(box[0],bx[0]),Math.min(box[1],bx[1]),Math.max(box[2],bx[2]),Math.max(box[3],bx[3])]:bx;
-      const d=ttPath(o,dx);
+    const a=out(fs,it.g,w), b=ls?out(ls,it.g,w):null; let s='', sb='', labels=[], nl=[];
+    const m=(!b&&mode!=='after')?'after':mode, F=frameOf(), GAP=160, top=-P.asc, bot=-P.desc;
+    const sbl=(x,red)=>'<line class="'+(red?'vsb-b':'vsb')+'" x1="'+x+'" x2="'+x+'" y1="'+top+'" y2="'+bot+'"/>';
+    const add=(o,dx,kind)=>{ const d=ttPath(o,dx);
+      sb+=sbl(dx,kind!=='a')+sbl(dx+o[0],kind!=='a');
       if(kind==='a') s+='<path class="vg-a" d="'+d+'"/><path class="vg-e" d="'+d+'"/>';
       else if(kind==='bf') s+='<path class="vg-bf" d="'+d+'"/><path class="vg-b" d="'+d+'"/>';
       else s+='<path class="vg-b" d="'+d+'"/>'; };
     if(a&&(m==='after'||m==='overlay')) add(a,0,'a');
     if(b&&m==='before') add(b,0,'bf');
     if(b&&m==='overlay') add(b,0,'b');
-    if(m==='side'&&a&&b){ add(b,0,'bf'); const dx=Math.max(b[0],bboxOf(b)[2])+120; add(a,dx,'a'); labels=[[0,0,SNAPLABEL[ls]],[dx,0,SNAPLABEL[fs]]]; nl=[[b,0,1],[a,dx,0]]; }
+    const side=m==='side'&&a&&b, dxs=F.adv+GAP;
+    if(side){ add(b,0,'bf'); add(a,dxs,'a'); labels=[[0,0,SNAPLABEL[ls]],[dxs,0,SNAPLABEL[fs]]]; nl=[[b,0,1],[a,dxs,0]]; }
     else if(m==='before'&&b) nl=[[b,0,1]]; else { if(a) nl.push([a,0,0]); if(m==='overlay'&&b) nl.push([b,0,1]); }
-    if(!box) box=[0,-P.cap,600,0];
-    const pad=120; box=[box[0]-pad,box[1]-pad,box[2]+pad,box[3]+pad*1.4];
-    svg.innerHTML='<g>'+guides(-20000,20000)+'</g>'+s+'<g id="v-nodes"></g><g id="v-lab"></g>';
+    const pad=90, box=[-pad,top-pad*0.5,(side?dxs+F.adv:F.adv)+pad,bot+pad*0.7];
+    svg.innerHTML='<g>'+guides(-20000,20000)+'</g><g>'+sb+'</g>'+s+'<g id="v-nodes"></g><g id="v-lab"></g>';
     st.box=box; st.labels=labels; st.nl=nl; if(refit) fit(); else apply();
     let dv=b?P.dev[it.g+'|'+w+'|'+fs+'|'+ls]:null; if(dv===undefined) dv=null;
     $q('#v-ttl').innerHTML=esc(P.ch[it.g]||it.g)+'<small>'+esc(it.g)+(P.uni[it.g]?' &middot; U+'+P.uni[it.g]:'')+' &middot; '+w+'</small>';
-    $q('#v-foot').innerHTML='<span><b>'+esc(st.title)+'</b> &middot; '+(st.i+1)+' of '+st.seq.length+'</span><span>Grey: '+esc(SNAPLABEL[fs])+(a?', advance '+a[0]:'')+'</span>'+(b?'<span style="color:var(--ref)">Red: '+esc(SNAPLABEL[ls])+esc(ownNote(ls,w))+', advance '+b[0]+'</span>':'')+(dv!=null?'<span>Furthest move '+(dv===0?'none':dv+' units')+'</span>':'')+'<span>TrueType points of the variable font at '+w+' (squares on the curve, circles off)</span><span class="hint">Wheel or pinch to zoom, drag to pan, arrows step, Esc closes</span>';
+    $q('#v-foot').innerHTML='<span><b>'+esc(st.title)+'</b> &middot; '+(st.i+1)+' of '+st.seq.length+'</span><span>Grey: '+esc(SNAPLABEL[fs])+(a?', advance '+a[0]+sbTxt(a):'')+'</span>'+(b?'<span style="color:var(--ref)">Red: '+esc(SNAPLABEL[ls])+esc(ownNote(ls,w))+', advance '+b[0]+sbTxt(b)+'</span>':'')+'<span>Frame fixed for this list: origin, baseline, line top '+P.asc+' and bottom '+P.desc+'; dashed lines are each drawing\'s advance (0 and its width)</span>'+(dv!=null?'<span>Furthest move '+(dv===0?'none':dv+' units')+'</span>':'')+'<span>TrueType points of the variable font at '+w+' (squares on the curve, circles off)</span><span class="hint">Wheel or pinch to zoom, drag to pan, arrows step, Esc closes</span>';
     seg($q('#v-w'),weightsOf(fs,it.g).map(x=>[x,String(x)]),w,k=>{st.w=+k;drawVec(false);});
     const SHORT={r82:P.r82,before:P.before,v080:'0.80',prev:'082e',now:P.after};
     const cm=(it.l?[['base',SHORT[it.l]||(SNAPLABEL[it.l]||'').split(' (')[0]]]:[]);
@@ -389,7 +403,7 @@ const V=(function(){
     if(m==='side'){ const tb=$q('#v-tb',svg), ta=$q('#v-ta',svg); let wb=1000; try{ wb=tb.getComputedTextLength(); }catch(e){} ta.setAttribute('x',String(Math.round(wb+120))); labels=[[0,0,st.lb],[Math.round(wb+120),0,st.la]]; }
     let bb=null; try{ const g=[...svg.querySelectorAll('text[id]')].map(e=>e.getBBox()); if(g.length) bb=[Math.min(...g.map(r=>r.x)),Math.min(...g.map(r=>r.y)),Math.max(...g.map(r=>r.x+r.width)),Math.max(...g.map(r=>r.y+r.height))]; }catch(e){}
     if(!bb) bb=[0,-P.cap-200,800,250];
-    st.box=[bb[0]-80,bb[1]-60,bb[2]+80,bb[3]+60]; st.labels=labels; if(refit) fit(); else apply();
+    st.box=[Math.min(bb[0],0)-80,-P.asc-45,bb[2]+80,-P.desc+60]; st.labels=labels; if(refit) fit(); else apply(); // line top to bottom, as the drawings
     $q('#v-ttl').innerHTML=esc(it.t)+'<small>'+esc(it.g)+(it.u?' &middot; U+'+it.u:'')+(it.feat?' &middot; '+it.feat:'')+' &middot; '+w+'</small>';
     $q('#v-foot').innerHTML='<span><b>'+esc(st.title)+'</b> &middot; '+(st.i+1)+' of '+st.seq.length+'</span><span>Live text in the embedded fonts at 1,000 units: grey '+esc(st.la)+esc(ownNote(KA,w))+(m!=='after'?', red '+esc(st.lb)+esc(ownNote(KB,w)):'')+'</span><span class="hint">Nodes are shown only on the cards\' drawings</span><span class="hint">Wheel or pinch to zoom, drag to pan, arrows step, Esc closes</span>';
     seg($q('#v-w'),P.stops.map(x=>[x,String(x)]),w,k=>{st.w=+k;$q('#v-wr').value=k;$q('#v-wrv').textContent=k;drawLive(false);});
@@ -400,7 +414,7 @@ const V=(function(){
   function draw(refit){ if(st.kind==='vec') drawVec(refit); else drawLive(refit); }
   function show(){ lastFocus=document.activeElement; root.hidden=false; document.documentElement.style.overflow='hidden'; requestAnimationFrame(()=>{ draw(true); $q('#v-x').focus(); }); }
   function close(){ root.hidden=true; document.documentElement.style.overflow=''; svg.innerHTML=''; if(lastFocus&&lastFocus.focus) lastFocus.focus(); }
-  function step(d){ if(!st) return; st.i=(st.i+d+st.seq.length)%st.seq.length; if(st.kind==='vec'){ const ws=weightsOf(st.seq[st.i].f,st.seq[st.i].g); if(!ws.includes(st.w)) st.w=ws.reduce((p,x)=>Math.abs(x-st.w)<Math.abs(p-st.w)?x:p,ws[0]); } draw(true); }
+  function step(d){ if(!st) return; st.i=(st.i+d+st.seq.length)%st.seq.length; if(st.kind==='vec'){ const ws=weightsOf(st.seq[st.i].f,st.seq[st.i].g); if(!ws.includes(st.w)) st.w=ws.reduce((p,x)=>Math.abs(x-st.w)<Math.abs(p-st.w)?x:p,ws[0]); } draw(st.kind!=='vec'); } // the drawings keep the frame and zoom
   $q('#v-nodes').checked=nodes; $q('#v-nodes').onchange=e=>{nodes=e.target.checked;LS.set('vn',nodes?'1':'0');draw(false);};
   $q('#v-wr').oninput=e=>{ st.w=+e.target.value; $q('#v-wrv').textContent=st.w; drawLive(false); };
   $q('#v-wr').min=P.axis[0]; $q('#v-wr').max=P.axis[2];

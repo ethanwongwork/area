@@ -331,6 +331,12 @@ def klass(font, name):
             return "low"
         if base != name and base in font:
             return klass(font, base)
+        # 0.84 (placement): an unencoded accented letter (the Dutch J with acute, reached by a feature) is its letter:
+        # as "base" its J was placed at (7, 14), the offsets scaled for the letter's class and the composite's apart
+        if g.components and g.components[0].baseGlyph in font and font[g.components[0].baseGlyph].unicodes:
+            first = klass(font, g.components[0].baseGlyph)
+            if first in ("up", "low"):
+                return first
         return "base"
     ch = chr(u)
     cat = unicodedata.category(ch)
@@ -855,6 +861,7 @@ def metrics(font):
     i.openTypeOS2TypoLineGap = i.openTypeHheaLineGap = 0
     i.openTypeOS2Selection = [7]
     i.openTypeOS2WeightClass = 400
+    i.openTypeOS2Type = []                             # 0.84: fsType 0, installable (the OFL allows it; it was 4)
     from version import BUILD                          # 0.74: the font's version is the build's (it said 0.003)
     i.versionMajor, i.versionMinor = int(BUILD.split('.')[0]), int(BUILD.split('.')[1].ljust(3, '0'))
     i.copyright = ("Copyright 2012 The Libre Baskerville Project Authors (https://github.com/impallari/Libre-Baskerville). "

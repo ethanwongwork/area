@@ -183,7 +183,7 @@ def _at_x(B, x):
     return None
 
 
-def true_crossing(cs):
+def true_crossing(cs, bridges=None):
     """cs: [[(x, y, type, smooth)]] of $ (a master's or the Regular's). Returns (new contours, log) or (cs, reason)."""
     P = [[list(q) for q in C] for C in cs]
     xs = _lines_x(P)
@@ -244,6 +244,8 @@ def true_crossing(cs):
         (B1, B2), rms = _bridge(fl, tl, fr, tr, xm, samples, weights, y0, math.atan2(d[1], d[0]), kl, kr, lev,
                                 (math.dist(ls[2], ls[3]), math.dist(rs[2], rs[3])))
         t1, t2 = _at_x(B1, nbl), _at_x(B2, nbr)
+        if bridges is not None:
+            bridges.append((l, r, B1, B2))
         if t1 is None or t2 is None:
             return cs, "a crossing edge does not reach the bar, left"
         Lp = A.sub(B1, 0.0, t1)                                 # fl -> the left bar edge
@@ -301,3 +303,456 @@ def check(cs):
         steps.append(round(_run_on(l[5], xm) - _run_on(r[5], xm), 1))     # where each meets the bar's middle
     sx = [q[0] for C in P for q in C if q[2] and not (bl - 1 <= q[0] <= br + 1)]
     return {"steps": steps, "bar_off": (bl + br) / 2 - (min(sx) + max(sx)) / 2, "pairs": len(prs)}
+
+
+# ------------------------------------------------------------------ 0.84 (Regular pass 3, the owner's visual notes, item 3)
+# The owner: "$ still looks a bit thick/heavy, base the shape more on the current S". The $ keeps its own drawing's
+# path and its ball ends (the owner's 0.80 choice) but its stroke is now S's construction (`spine.py`): the stroke from
+# the top pair of level extremes (on the bar's middle) to the bottom pair is one ribbon, the drawn stroke's centreline
+# and one width law, the ends' hairlines kept and one maximum at the spine's middle, W = the figures' round widest (the
+# zero's side) times the ladder's thick-diagonal share, as S's is O's times it: the $ sits among the figures. Built on
+# the S the bar hides: each of the six crossing edges is the one curve `true_crossing` made of its two pieces (a node
+# on the bar's middle), the S one closed contour through them; after the construction each crossing edge is cut at the
+# bar's edges again and every piece written back (a piece that spans two of the S's cubics is one cubic again, its end
+# tangents kept, its handles fitted), then `true_crossing` once more. In the Regular (normalize) and in every master
+# (bold.bold_font, after the engine and the dollar's own end rule), each at its own zero.
+SPINE_ROUND = "zero"
+
+
+def _walk_s(P, prs, bridges):
+    """The S the bar hides, as one closed list of cubics [(ctrl (4 points), end tag, smooth)]: tags ('o', ci, i) for a
+    node of the $ and ('m', k) for the node on the bar's middle of crossing k; handles tagged alongside."""
+    far = {}
+    for k, (l, r, B1, B2) in enumerate(bridges):
+        far.setdefault((l[0], l[2]), []).append((k, "l", (l[0], l[1])))
+        far.setdefault((r[0], r[2]), []).append((k, "r", (r[0], r[1])))
+    nxt = {}
+    for ci, C in enumerate(P):
+        on = [i for i, q in enumerate(C) if q[2]]
+        for a, i in enumerate(on):
+            j = on[(a + 1) % len(on)]
+            offs = [(ci, (i + m) % len(C)) for m in range(1, (j - i) % len(C))]
+            nxt[(ci, i)] = ((ci, j), offs)
+    prv = {v[0]: (k, v[1]) for k, v in nxt.items()}
+
+    def step(node, fwd):
+        if fwd:
+            to, offs = nxt[node]
+            return to, offs
+        frm, offs = prv[node]
+        return frm, list(reversed(offs))
+    l, r, B1, B2 = bridges[0]
+    start = (l[0], l[2])
+    node, fwd = start, nxt[start][0] == (l[0], l[1])         # facing pair 0's own bar node: the first move a bridge
+    pt = lambda t: tuple(P[t[0]][t[1]][:2])                   # noqa: E731
+    out, seen = [], 0
+    while True:
+        seen += 1
+        if seen > 200:
+            raise ValueError("the S does not close")
+        hit = [e for e in far.get(node, ()) if step(node, fwd)[0] == e[2]]
+        if hit:                                                # the piece into the bar: take the bridge
+            k, side, bar_node = hit[0]
+            l, r, B1, B2 = bridges[k]
+            if side == "l":
+                out.append((B1, ("m", k), ("b", k, 0), "C"))
+                out.append((B2, ("o", r[0], r[2]), ("b", k, 1), "C"))
+                node, ob = (r[0], r[2]), (r[0], r[1])
+            else:
+                out.append(((B2[3], B2[2], B2[1], B2[0]), ("m", k), ("b", k, 1), "C"))
+                out.append(((B1[3], B1[2], B1[1], B1[0]), ("o", l[0], l[2]), ("b", k, 0), "C"))
+                node, ob = (l[0], l[2]), (l[0], l[1])
+            fwd = nxt[node][0] != ob
+        else:
+            to, offs = step(node, fwd)
+            if len(offs) == 2:
+                out.append(((pt(node), pt(offs[0]), pt(offs[1]), pt(to)), ("o",) + to, (offs[0], offs[1]), "C"))
+            else:
+                out.append(((pt(node), pt(node), pt(to), pt(to)), ("o",) + to, None, "L"))
+            node = to
+        if node == start and out:
+            break
+    return out
+
+
+def _fit_one(segs, p0, p3):
+    """One cubic from p0 to p3 along a run of cubics (their end tangents kept), handle lengths fitted."""
+    from scipy.optimize import least_squares
+    pts = np.array([A.bez(s_, k / 30) for s_ in segs for k in range(31)])
+    s0, s1 = segs[0], segs[-1]
+    t0 = A.unit((s0[1][0] - s0[0][0], s0[1][1] - s0[0][1])) if math.dist(s0[1], s0[0]) > 1e-6 else A.unit((s0[3][0] - s0[0][0], s0[3][1] - s0[0][1]))
+    t3 = A.unit((s1[3][0] - s1[2][0], s1[3][1] - s1[2][1])) if math.dist(s1[3], s1[2]) > 1e-6 else A.unit((s1[3][0] - s1[0][0], s1[3][1] - s1[0][1]))
+    ch = math.dist(p0, p3)
+
+    def cub(v):
+        return (p0, (p0[0] + t0[0] * v[0], p0[1] + t0[1] * v[0]), (p3[0] - t3[0] * v[1], p3[1] - t3[1] * v[1]), p3)
+
+    def res(v):
+        c = cub(v)
+        q = np.array([A.bez(c, k / 60) for k in range(61)])
+        return np.min(np.hypot(pts[:, None, 0] - q[None, :, 0], pts[:, None, 1] - q[None, :, 1]), axis=1)
+    v = least_squares(res, [ch / 3, ch / 3], bounds=([1, 1], [ch, ch])).x
+    return cub(v)
+
+
+def spine_width(font):
+    """The $'s spine on this font: the zero's side (its round widest) x the thick-diagonal share, as S's is O's."""
+    import spine as SP
+    save = dict(SP.NAMES)
+    SP.NAMES["dollar"] = SPINE_ROUND
+    try:
+        return SP.wide(font, "dollar")[0]
+    finally:
+        SP.NAMES.clear(); SP.NAMES.update(save)
+
+
+def spine_s(cs, font, W=None):
+    """The rule above on $'s contours cs (after true_crossing). Returns (new contours, log) or (cs, reason)."""
+    import spine as SP
+    bridges = []
+    new_, log0 = true_crossing(cs, bridges)
+    if new_ is cs or len(bridges) != 6:
+        return cs, "spine: crossing not found, left"
+    P = [[list(q) for q in C] for C in new_]
+    # the bridges were solved on the bar centred: their far nodes are the written ones
+    try:
+        segs = _walk_s(P, [(l, r, B1, B2) for l, r, B1, B2 in bridges], bridges)
+    except (KeyError, ValueError) as e:
+        return cs, f"spine: {e}, left"
+    # the S as a UFO point list
+    S, tags = [], []
+    for ctrl, tag, htags, kind in segs:
+        if kind == "C":
+            S += [(ctrl[1][0], ctrl[1][1], None, False), (ctrl[2][0], ctrl[2][1], None, False)]
+            tags += [None, None]
+        sm = True if tag[0] == "m" else bool(P[tag[1]][tag[2]][3])
+        S.append((ctrl[3][0], ctrl[3][1], "curve" if kind == "C" else "line", sm))
+        tags.append(tag)
+    if A.signed_area(S) * A.signed_area(P[0]) < 0:
+        pass
+    if W is None:
+        W = spine_width(font)
+    info = {}
+    tried = []
+    for cand in (S, A._reverse(S)):
+        try:
+            out = SP.construct([cand], 0, W, info)[0]
+            S_used = cand
+            break
+        except ValueError as e:
+            tried.append(str(e))
+    else:
+        return cs, "spine: " + "; ".join(tried) + ", left"
+    rev = S_used is not S
+    if rev:
+        out = A._reverse(out)                               # back to the walk's order (points correspond again)
+    # the new S's cubics in the walk's order
+    on = [i for i, q in enumerate(out) if q[2]]
+    cub = []
+    for a_, i in enumerate(on):
+        j = on[(a_ + 1) % len(on)]
+        p0 = out[i][:2]
+        if (j - i) % len(out) == 3:
+            cub.append((p0, out[(i + 1) % len(out)][:2], out[(i + 2) % len(out)][:2], out[j][:2]))
+        else:
+            cub.append((p0, p0, out[j][:2], out[j][:2]))
+    # walk index of each segment ends: segs[m] ends at node tag; the new cubic ending there is the one ending at the
+    # m-th on-curve point of out
+    ends = [i for i, q in enumerate(out) if q[2]]
+    seg_new = {}
+    for m in range(len(segs)):
+        e = ends[m]
+        k_ = on.index(e)
+        seg_new[m] = cub[(k_ - 1) % len(cub)]
+    # write back the $'s own nodes and handles from the S
+    for m, (ctrl, tag, htags, kind) in enumerate(segs):
+        c = seg_new[m]
+        if tag[0] == "o":
+            P[tag[1]][tag[2]][0], P[tag[1]][tag[2]][1] = c[3]
+        if htags and htags[0] != "b" and kind == "C":
+            (a1, a2), (b1, b2) = htags
+            P[a1][a2][0], P[a1][a2][1] = c[1]
+            P[b1][b2][0], P[b1][b2][1] = c[2]
+    # each crossing: the two new cubics either side of its middle node, cut at the bar's edges, the pieces written
+    xs = _lines_x(P)
+    bl, br = xs[0], xs[-1]
+    for k, (l, r, B1, B2) in enumerate(bridges):
+        m = next(m for m, sg in enumerate(segs) if sg[1] == ("m", k))
+        c1, c2 = seg_new[m], seg_new[(m + 1) % len(segs)]
+        run = [c1, c2]
+        x0 = c1[0][0]
+        # the run from its far start to its far end; which end is the left far node
+        if x0 > c2[3][0]:
+            run = [(s_[3], s_[2], s_[1], s_[0]) for s_ in reversed(run)]
+        # sample the run, find the bar edges' crossings (parameter along the run)
+        def cut_at(x):
+            for q, s_ in enumerate(run):
+                t = _at_x(s_, x)
+                if t is not None:
+                    return q, t
+            return None
+        cl, cr = cut_at(bl), cut_at(br)
+        if cl is None or cr is None:
+            return cs, f"spine: crossing {k} misses the bar, left"
+        # left piece: far start -> the left bar edge; right piece: the right bar edge -> far end
+        lp = [run[q] if q < cl[0] else A.sub(run[q], 0.0, cl[1]) for q in range(cl[0] + 1)]
+        rp = [A.sub(run[q], cr[1], 1.0) if q == cr[0] else run[q] for q in range(cr[0], len(run))]
+        L1 = lp[0] if len(lp) == 1 else _fit_one(lp, lp[0][0], lp[-1][3])
+        R1 = rp[0] if len(rp) == 1 else _fit_one(rp, rp[0][0], rp[-1][3])
+        (lci, li, lfar, lh, _, _ls, _), (rci, ri, rfar, rh, _, _rs, _) = l, r
+        newl = (L1[3], L1[2], L1[1], L1[0])                         # bar node first, as true_crossing writes
+        for ci, i, (hn, hf), piece in ((lci, li, lh, newl), (rci, ri, rh, R1)):
+            P[ci][i][0], P[ci][i][1] = piece[0]
+            P[ci][hn][0], P[ci][hn][1] = piece[1]
+            P[ci][hf][0], P[ci][hf][1] = piece[2]
+    out_cs = [[(round(q[0]), round(q[1]), q[2], q[3]) for q in C] for C in P]
+    out_cs, log1 = true_crossing(out_cs)
+    return out_cs, f"spine {W:.1f} ({SPINE_ROUND}'s side x {SP.DIAG_SHARE:.3f}), ends {info.get('w0', 0):.0f} / {info.get('w1', 0):.0f}; {log1}"
+
+
+# ------------------------------------------------------------- 0.84 (Regular pass 5, item 2): $ is the real S, round ends
+# The owner (21 November): "Make the top part of the $ match the width of the S, the only difference between them
+# should just be the round ends on the $ sign. If you recommend just using the real S shape for the $ for consistency I
+# could be open to that." So the $ is built from the finished S (its width, spine, thins and height: the S's own
+# outline, point for point, from its top level extreme round to its bottom level extreme on both edges), only the two
+# barb terminals are replaced by round ends, and the bar is put through it:
+#   - a round end where the S has its barb: the ball's outer side on the barb's outer edge (the S's width kept), its
+#     far point (apex) at the barb's inner end (the bottom of the top barb, the top of the bottom one), across the
+#     figures' ball (2 3 5 6 9: 88 across, its sides BALL_RISE of the width over the apex; quarters at BALL_SIDE of
+#     their rise at the sides and BALL_APEX of their run at the apex); the outer edge from the S's level extreme to the
+#     ball's side one quarter (OUTER tension), the inside from the ball's other side to the S's inner level extreme one
+#     quarter (INNER), then every smooth node at one curvature by handle lengths (the balls' own handles kept);
+#   - the bar the currency bar (47, `charset.CURRENCY_BAR`) centred on the S's ink, from BAR_Y top to bottom with the
+#     plain stroke's soft corners (7); the union is one outline with two counters (skia-pathops), every master alike.
+# In a master the same construction on the master's S, its ball the master's 3's, its bar the engine's bar width.
+BALL_D = 88
+BALL_RISE = 49 / 88
+BALL_SIDE, BALL_APEX = 0.56, 0.59
+OUTER, INNER = 0.57, 0.60
+BAR_Y = (-101, 813)
+BAR_R = 7
+
+
+def _s_places(P):
+    """The S's four level extremes (outer top, inner top, inner bottom, outer bottom) by what they are."""
+    n = len(P)
+    lev = [i for i, q in enumerate(P) if q[2] and q[3] and P[i - 1][2] is None and P[(i + 1) % n][2] is None
+           and abs(P[i - 1][1] - q[1]) < 0.6 and abs(P[(i + 1) % n][1] - q[1]) < 0.6]
+    ys = sorted(lev, key=lambda i: P[i][1])
+    return ys[-1], ys[-2], ys[1], ys[0]
+
+
+def with_balls(P, d=BALL_D):
+    """The S's contour P with its two barbs replaced by round ends; returns the new point list."""
+    P = [tuple(q) for q in P]
+    n = len(P)
+    ot, it, ib, ob = _s_places(P)
+    seq = lambda a, b: [(a + k) % n for k in range(1, (b - a) % n)]   # noqa: E731
+    top_t, bot_t = seq(it, ot), seq(ib, ob)
+    rise = BALL_RISE * d
+    # top: barb's outer edge (rightmost) and its inner end (lowest)
+    xr, yb = max(P[i][0] for i in top_t), min(P[i][1] for i in top_t)
+    xl, yt = min(P[i][0] for i in bot_t), max(P[i][1] for i in bot_t)
+    def quarter(a, b, sa, sb, a_level):
+        """a -> b, a's tangent level (or upright), b's the other; handles shares of their own sides."""
+        w, h = b[0] - a[0], b[1] - a[1]
+        if a_level:
+            return [(a[0] + sa * w, a[1], None, False), (b[0], b[1] - sb * h, None, False)]
+        return [(a[0], a[1] + sa * h, None, False), (b[0] - sb * w, b[1], None, False)]
+    out = []
+    # from the inner top round the top ball to the outer top
+    i_top, o_top = P[it], P[ot]
+    s_in, apex, s_out = (xr - d, yb + rise), (xr - d / 2, yb), (xr, yb + rise)
+    top = ([P[it]] + quarter(i_top, s_in, INNER, INNER, True) + [(s_in[0], s_in[1], "curve", True)]
+           + quarter(s_in, apex, BALL_SIDE, BALL_APEX, False) + [(apex[0], apex[1], "curve", True)]
+           + quarter(apex, s_out, BALL_APEX, BALL_SIDE, True) + [(s_out[0], s_out[1], "curve", True)]
+           + quarter(s_out, o_top, OUTER, OUTER, False))
+    i_bot, o_bot = P[ib], P[ob]
+    b_in, bapex, b_out = (xl + d, yt - rise), (xl + d / 2, yt), (xl, yt - rise)
+    bot = ([P[ib]] + quarter(i_bot, b_in, INNER, INNER, True) + [(b_in[0], b_in[1], "curve", True)]
+           + quarter(b_in, bapex, BALL_SIDE, BALL_APEX, False) + [(bapex[0], bapex[1], "curve", True)]
+           + quarter(bapex, b_out, BALL_APEX, BALL_SIDE, True) + [(b_out[0], b_out[1], "curve", True)]
+           + quarter(b_out, o_bot, OUTER, OUTER, False))
+    # the S's own points: outer top .. inner bottom, outer bottom .. inner top (both kept whole)
+    keep1 = [P[(ot + k) % n] for k in range((ib - ot) % n)]          # ot .. before ib
+    keep2 = [P[(ob + k) % n] for k in range((it - ob) % n)]          # ob .. before it
+    Q = keep2 + top + keep1 + bot
+    # the S kept its own points at the four extremes: their handles on the new side follow the quarter rule above;
+    # one curvature at every smooth node (handle lengths), the balls' quarters kept
+    return Q
+
+
+def _even_keep_balls(Q, d):
+    """One curvature at every smooth node by handle lengths (loops.even_nodes)."""
+    import loops as L
+    new, _log = L.even_nodes([tuple(q) for q in Q], (-1000, 2000))
+    return [tuple(q) for q in new]
+
+
+def _soft_bar(x0, x1, y0, y1, r=BAR_R):
+    import pathops
+    p = pathops.Path()
+    pen = p.getPen()
+    k = 0.552 * r
+    pen.moveTo((x0, y0 + r))
+    pen.lineTo((x0, y1 - r)); pen.curveTo((x0, y1 - r + k), (x0 + r - k, y1), (x0 + r, y1))
+    pen.lineTo((x1 - r, y1)); pen.curveTo((x1 - r + k, y1), (x1, y1 - r + k), (x1, y1 - r))
+    pen.lineTo((x1, y0 + r)); pen.curveTo((x1, y0 + r - k), (x1 - r + k, y0), (x1 - r, y0))
+    pen.lineTo((x0 + r, y0)); pen.curveTo((x0 + r - k, y0), (x0, y0 + r - k), (x0, y0 + r))
+    pen.closePath()
+    return p
+
+
+def _to_points(path):
+    from fontTools.pens.recordingPen import RecordingPen
+    rp = RecordingPen()
+    path.draw(rp)
+    cs, cur = [], None
+    for op, args in rp.value:
+        if op == "moveTo":
+            cur = [(args[0][0], args[0][1], "line", False)]
+        elif op == "lineTo":
+            cur.append((args[0][0], args[0][1], "line", False))
+        elif op == "curveTo":
+            cur += [(args[0][0], args[0][1], None, False), (args[1][0], args[1][1], None, False),
+                    (args[2][0], args[2][1], "curve", False)]
+        elif op in ("closePath", "endPath"):
+            if len(cur) > 1 and abs(cur[-1][0] - cur[0][0]) < 1e-6 and abs(cur[-1][1] - cur[0][1]) < 1e-6:
+                last = cur.pop()
+                cur[0] = (cur[0][0], cur[0][1], last[2], False)
+            cs.append(cur)
+    out = []
+    for P in cs:
+        P = [(round(q[0]), round(q[1]), q[2], q[3]) for q in P]
+        n = len(P)
+        Q = []
+        for i, q in enumerate(P):                     # smooth where the two sides leave on one line
+            if q[2]:
+                a, b = P[i - 1], P[(i + 1) % n]
+                va, vb = (q[0] - a[0], q[1] - a[1]), (b[0] - q[0], b[1] - q[1])
+                la, lb = math.hypot(*va), math.hypot(*vb)
+                sm = la > 0.5 and lb > 0.5 and abs(va[0] * vb[1] - va[1] * vb[0]) / (la * lb) < 0.02 and \
+                    va[0] * vb[0] + va[1] * vb[1] > 0 and not (a[2] and b[2])
+                q = (q[0], q[1], q[2], sm)
+            Q.append(q)
+        # start at the highest on-curve point, leftmost of those (one start in every master)
+        on = [i for i, q in enumerate(Q) if q[2]]
+        s = max(on, key=lambda i: (Q[i][1], -Q[i][0]))
+        out.append(Q[s:] + Q[:s])
+    out.sort(key=lambda P: -abs(sum(P[i][0] * P[(i + 1) % len(P)][1] - P[(i + 1) % len(P)][0] * P[i][1]
+                                    for i in range(len(P)))))
+    return out
+
+
+def from_s(S_cs, d=BALL_D, bar_w=47, bar_y=BAR_Y):
+    """$ from the S's contours: (contours, side bearings source) with round ends and the bar."""
+    import pathops
+    import figs as F
+    Q = with_balls(S_cs[0], d)
+    Q = _even_keep_balls(Q, d)
+    Q = F._in_triangle([list(q) for q in Q])
+    Q = [(round(q[0]), round(q[1]), q[2], q[3]) for q in Q]
+    xs = [q[0] for q in Q if q[2]]
+    p = pathops.Path()
+    pen = p.getPen()
+    on = [i for i, q in enumerate(Q) if q[2]]
+    pen.moveTo(Q[on[0]][:2])
+    n = len(Q)
+    for k, i in enumerate(on):
+        j = on[(k + 1) % len(on)]
+        if (j - i) % n == 3:
+            pen.curveTo(Q[(i + 1) % n][:2], Q[(i + 2) % n][:2], Q[j][:2])
+        else:
+            pen.lineTo(Q[j][:2])
+    pen.closePath()
+    from fontTools.pens.boundsPen import BoundsPen
+    cx = (min(q[0] for q in Q) + max(q[0] for q in Q)) / 2     # the S's ink box's middle (its extremes are nodes)
+    bar = _soft_bar(cx - bar_w / 2, cx + bar_w / 2, bar_y[0], bar_y[1])
+    u = pathops.op(p, bar, pathops.PathOp.UNION)
+    return _to_points(u), Q
+
+
+def regular(font):
+    """The Regular's $ from its finished S (run after the charset and the S's spine)."""
+    from ufoLib2.objects import Contour, Point
+    import charset as CH
+    if "dollar" not in font or "S" not in font:
+        return "no $"
+    S = font["S"]
+    cs, Q = from_s([[(p.x, p.y, p.type, p.smooth) for p in c.points] for c in S.contours], BALL_D,
+                   CH.CURRENCY_BAR, BAR_Y)
+    g = font["dollar"]
+    g.clearContours()
+    for P in cs:
+        c = Contour()
+        c.points = [Point(x, y, t, smooth=sm) for x, y, t, sm in P]
+        g.contours.append(c)
+    g.width = S.width                                  # the S's sides
+    import curvecheck as K
+    return f"$ from S: {len(cs)} contours, {sum(len(P) for P in cs)} points; curvecheck {K.report('dollar', cs, (-1000, 2000))[1]:.2f}"
+
+
+def ball_width(font, name="three"):
+    """The figures' ball on this font: the 3's upper ball, across its two upright side nodes (88 in the Regular)."""
+    P = [(p.x, p.y, p.type, p.smooth) for p in font[name].contours[0].points]
+    n = len(P)
+    ys = [q[1] for q in P]
+    mid = (max(ys) + min(ys)) / 2
+    up = [i for i, q in enumerate(P) if q[2] and q[3] and q[1] > mid and abs(P[i - 1][0] - q[0]) < 0.6
+          and abs(P[(i + 1) % n][0] - q[0]) < 0.6]
+    best = None
+    for i in up:
+        for j in up:
+            dx = P[j][0] - P[i][0]
+            if 50 < dx < 160 and abs(P[j][1] - P[i][1]) < 3 and (best is None or P[i][0] < best[0]):
+                best = (P[i][0], dx)
+    return best[1] if best else None
+
+
+def _bar(cs):
+    """The bar's width (its top stub's two upright edges) and extent on an engine's $."""
+    pts = [q for P in cs for q in P]
+    top = max(q[1] for q in pts)
+    bot = min(q[1] for q in pts)
+    xs = sorted({q[0] for P in cs for i, q in enumerate(P) if q[2] == "line" and P[i - 1][2]
+                 and abs(P[i - 1][0] - q[0]) < 0.6 and abs(P[i - 1][1] - q[1]) >= 40 and min(q[1], P[i - 1][1]) > top - 140})
+    return (xs[-1] - xs[0] if len(xs) >= 2 else None), (bot, top)
+
+
+def master(reg, font, layer=None, t=None):
+    """In a master (and its mid layer, at t of the way from the Regular): the same construction on the master's own S,
+    its ball the master's 3's, its bar the engine's bar. The S and the ball in the mid layer are the Regular's and the
+    master's that far between (the layer has no S)."""
+    from ufoLib2.objects import Contour, Point
+    notes = []
+    def S_of(f_):
+        return [[(p.x, p.y, p.type, p.smooth) for p in c.points] for c in f_["S"].contours]
+    for f_, tag in ((font, ""), (layer, " (mid)")):
+        if f_ is None or "dollar" not in f_:
+            continue
+        if f_ is font:
+            S, d = S_of(font), ball_width(font)
+        else:
+            Sr, Sm = S_of(reg), S_of(font)
+            if [len(P) for P in Sr] != [len(P) for P in Sm]:
+                notes.append(f"dollar{tag}: S not compatible, left")
+                continue
+            S = [[(a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t, a[2], a[3]) for a, b in zip(Pr, Pm)]
+                 for Pr, Pm in zip(Sr, Sm)]
+            d = ball_width(reg) + (ball_width(font) - ball_width(reg)) * t
+        old = [[(p.x, p.y, p.type, p.smooth) for p in c.points] for c in f_["dollar"].contours]
+        bw, by = _bar(old)
+        cs, _Q = from_s(S, d, bw, by)
+        if [len(P) for P in cs] != [len(P) for P in old]:
+            notes.append(f"dollar{tag}: structure {[len(P) for P in cs]} against the Regular's {[len(P) for P in old]}; left")
+            continue
+        g = f_["dollar"]
+        g.clearContours()
+        for P in cs:
+            c = Contour()
+            c.points = [Point(x, y, t_, smooth=sm) for x, y, t_, sm in P]
+            g.contours.append(c)
+        if f_ is font:
+            g.width = font["S"].width                  # the S's sides, as in the Regular
+        notes.append(f"dollar{tag}: from S, ball {d:.1f}, bar {bw:.1f}")
+    return notes

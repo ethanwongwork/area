@@ -15,6 +15,8 @@ import math
 
 import numpy as np
 
+import ladder as LD
+
 REG_STEM = 78
 STEM = 140                        # the Bold's lowercase stem: the one number (128 is `bold.vector(128)`)
 STEM_REF = 140                    # the stem the references' ratios were read at
@@ -49,6 +51,9 @@ LEVEL_THICK = 1.57                         # g's loop at its top, 81 > 127 (Geor
 # hyphen 1.39 and 1.44, dashes 1.28 and 1.44, plus 1.28 to 1.42, equals 1.29 and 1.43, slash 1.37 and 1.37, bar 1.35
 # and 1.43, less-than 1.33 and 1.43 (Georgia Pro, Serrif). Mean 1.37.
 SIGN = 1.37
+# 0.84 (Regular pass 6, item 3): a straight sign stroke is the ladder's sign stroke (58; it was the minus's 52, read
+# 50 to 55): the band the sign law reads, ahead of the upright signs' bracket law
+SIGN_BAND = (50, LD.SIGN + 2)
 # An upright stroke lighter than a stem in a sign (bracket 73, brace 73): bracket 1.76 and 1.75, brace 1.80 and 1.79.
 SIGN_UPRIGHT = 1.77
 BULLET = 1.22                              # the bullet's width: 1.20, 1.24
@@ -361,11 +366,11 @@ def x_target(t, straight, v):
     if v.get("sub") == "small sign" and THIN_READ <= t < 130:   # 0.81: SIGN_K
         return t * sign_ratio(v)
     if v.get("sub") == "sign":
-        if 56 <= t < 76:
-            return t * (1 + (SIGN_UPRIGHT - 1) * v["f"])
-        if 50 <= t <= 55:                        # owner round 8 (0.82): a straight one the minus's own law (ft), level
+        if SIGN_BAND[0] <= t <= SIGN_BAND[1]:    # owner round 8 (0.82): a straight one the minus's own law (ft), level
             return t * (1 + (SIGN - 1) * (v["ft"] if straight else v["f"]))   # or upright (the plus's upright stroke
             #                                      was 44 beside its level 40 at 300); a curved one as before
+        if 56 <= t < 76:
+            return t * (1 + (SIGN_UPRIGHT - 1) * v["f"])
     if v["f"] < 0 and (t >= 76 or (straight and t >= 64) or (t >= 56 and not straight)):
         # 0.81, towards the Light: a thick part loses in proportion to itself, as the stem does (78 > 55). The
         # Bold's gains are amounts (the stem's 62, s's turns 1.26 of the round stroke's 64, measured on Bold
@@ -474,7 +479,7 @@ def y_target(t, straight, v):
     if t >= 64:                                  # a thick level stroke: only a curved one (the top of g's loop,
         return None if straight or t > 130 else t * (v["stem"] / REG_STEM if v["f"] < 0 else 1 + (LEVEL_THICK - 1) * v["f"])   # Q's tail); bold() lets through
         #                                          only those between two facing extremes
-    if v.get("sub") == "sign" and straight and 50 <= t <= 55:
+    if v.get("sub") == "sign" and straight and SIGN_BAND[0] <= t <= SIGN_BAND[1]:
         return t * (1 + (SIGN - 1) * f)
     if v.get("sub") == "small sign" and THIN_READ <= t <= 130:
         return t * sign_ratio(v)
@@ -515,7 +520,7 @@ def diag_target(t, v):
     f = v["f"]
     if v.get("sub") == "small sign":
         return t * sign_ratio(v)
-    if v.get("sub") == "sign" and 50 <= t <= 55:
+    if v.get("sub") == "sign" and SIGN_BAND[0] <= t <= SIGN_BAND[1]:
         return t * (1 + (SIGN - 1) * v["ft"])    # owner round 8 (0.82): a slanted plain stroke takes the minus's law
     if v.get("sub") == "sign" and f < 0:
         # axis round 2: towards the Light every slanted stroke of a sign takes the sign law, as its plain strokes do
@@ -2292,6 +2297,26 @@ HINTS = {
 # bold_font), which replaces what the engine makes of it; the engine reads it with no hint (the 0.82 hints named the
 # old drawing's knots, 0 / 46 and 666 / 712, which the operator's bars no longer have)
 HINTS["summation"] = {}
+
+
+def open_tail_knots(reg):
+    """0.84 (pass 2, strokes 1): hair.hairlines moves c's and e's counter bottom (their lower stroke to the hairline),
+    so the open-tail hints name the Regular's own knots: the outside's bottom and the counter's, read on the Regular
+    (the pair of level extremes facing across the ink), the stroke's Regular height between them."""
+    import hair as HAIR
+    for name in ("c", "e"):
+        if name not in reg or name not in HINTS:
+            continue
+        cs = [[(p.x, p.y, p.type, p.smooth) for p in c.points] for c in reg[name].contours]
+        prs = [p for p in HAIR.pairs(cs) if p[2] == "bottom"]
+        if not prs:
+            continue
+        outer, inner, _k = min(prs, key=lambda p: p[0][3])
+        lo, hi = outer[3], inner[3]
+        ys = HINTS[name]["y"]
+        for i, h in enumerate(ys):
+            if h[3] == "open tail":
+                ys[i] = (lo, hi, (lambda t: (lambda v: open_tail(t, v)))(hi - lo), "open tail")
 # owner round 8 (0.82): the increment is drawn with A's weights (thin left, thick right, a level base): it takes the
 # capitals' laws, as A does, not the plain strokes' sign law
 HINTS["increment"] = {}
@@ -3476,16 +3501,19 @@ SMALL = {f + s_: f for f in ("zero", "one", "two", "three", "four", "five", "six
 SMALL.update(ordfeminine="a", ordmasculine="o")
 
 
-def _match(B_, P, scale, far=20.0, skip=20.0):
-    """For each point of P, the index of the point of B_ (scaled about its box and set on P's box) it was made
-    from, or None for a point the figure no longer has (a node added to one since): the cheapest alignment of the
-    two in order round the contour (a point to a point of the same kind within `far`; a point of P left out costs
-    `skip`, a point of B_ left out nothing)."""
+def _match(B_, P, scale, far=20.0, skip=20.0, narrow=(1.0, 1.0)):
+    """For each point of P, the index of the point of B_ (scaled about its box, narrowed about its middle by
+    `narrow` as charset.small_figures narrows it, and set on P's box) it was made from, or None for a point the
+    figure no longer has (a node added to one since): the cheapest alignment of the two in order round the contour
+    (a point to a point of the same kind within `far`; a point of P left out costs `skip`, a point of B_ left out
+    nothing)."""
     bx, by = [q[0] for q in B_], [q[1] for q in B_]
     px, py = [q[0] for q in P], [q[1] for q in P]
-    cx = (min(px) + max(px)) / 2 - (min(bx) + max(bx)) / 2 * scale
-    cy = (min(py) + max(py)) / 2 - (min(by) + max(by)) / 2 * scale
-    T = [(q[0] * scale + cx, q[1] * scale + cy, q[2]) for q in B_]
+    mx, my = (min(bx) + max(bx)) / 2, (min(by) + max(by)) / 2
+    kx, ky = narrow
+    cx = (min(px) + max(px)) / 2
+    cy = (min(py) + max(py)) / 2
+    T = [((q[0] - mx) * scale * kx + cx, (q[1] - my) * scale * ky + cy, q[2]) for q in B_]
     n, m = len(T), len(P)
     INF = float("inf")
     best = None
@@ -3521,6 +3549,26 @@ def _match(B_, P, scale, far=20.0, skip=20.0):
     return best[1]
 
 
+def _rot_match(B_, P, scale, narrow=(1.0, 1.0)):
+    """0.85 (Regular pass 9): P made point for point from B_ (the same number and kinds of points, in order from
+    some start): the start whose points lie nearest B_ scaled, narrowed and set on P's box, or None."""
+    if len(B_) != len(P):
+        return None
+    bx, by = [q[0] for q in B_], [q[1] for q in B_]
+    px, py = [q[0] for q in P], [q[1] for q in P]
+    mx, my = (min(bx) + max(bx)) / 2, (min(by) + max(by)) / 2
+    cx, cy = (min(px) + max(px)) / 2, (min(py) + max(py)) / 2
+    T = [((q[0] - mx) * scale * narrow[0] + cx, (q[1] - my) * scale * narrow[1] + cy, q[2]) for q in B_]
+    n, best = len(B_), None
+    for k in range(n):
+        if any((T[(k + i) % n][2] is None) != (P[i][2] is None) for i in range(n)):
+            continue
+        d = sum(math.dist(T[(k + i) % n][:2], P[i][:2]) for i in range(n))
+        if best is None or d < best[0]:
+            best = (d, [(k + i) % n for i in range(n)])
+    return None if best is None else best[1]
+
+
 def kin_parts(reg, g, out, rep, v):
     """Contours of g that are a KIN part: each point moved by the part's own glyph's move, turned and scaled; or a
     SMALL glyph: each point moved by its figure's point's move, at the small glyphs' scale."""
@@ -3539,9 +3587,26 @@ def kin_parts(reg, g, out, rep, v):
         mine = glyph_contours(g)
         if len(bR) != len(mine):
             return out, rep
+        # 0.85 (Regular pass 9): a small figure is its figure scaled and narrowed both ways (charset.small_box_moves)
+        narrow = (1.0, 1.0)
+        if base_name in CHARSET.FIGS:
+            ax = [q[0] for P in bR for q in P]
+            ay = [q[1] for P in bR for q in P]
+            w_, h_ = (max(ax) - min(ax)) * CHARSET.SUP_SCALE, (max(ay) - min(ay)) * CHARSET.SUP_SCALE
+            sx_, sy_ = CHARSET.small_box_moves(w_, h_)
+            narrow = ((w_ - 2 * sx_) / w_, (h_ - 2 * sy_) / h_)
         new = []
         for P, BR, BB in zip(mine, bR, bB):
-            idx = _match(BR, P, CHARSET.SUP_SCALE)
+            idx = _match(BR, P, CHARSET.SUP_SCALE, narrow=narrow)
+            if narrow != (1.0, 1.0):                           # the plain reading where it matches more (the 1: its
+                for alt in (_match(BR, P, CHARSET.SUP_SCALE),  # held serif ends make its box), and further off for
+                            _match(BR, P, CHARSET.SUP_SCALE, far=36.0, narrow=narrow)):  # a counter's corner the
+                    if alt is not None and (idx is None or       # heavier strokes moved (the small 4's crotch)
+                                            sum(x is None for x in alt) < sum(x is None for x in idx)):
+                        idx = alt
+                rot = _rot_match(BR, P, CHARSET.SUP_SCALE, narrow)    # made point for point: the nearest start
+                if rot is not None and (idx is None or any(x is None for x in idx)):
+                    idx = rot
             if idx is None or len(BR) != len(BB):
                 return out, rep
             mv = [None if j is None else ((BB[j][0] - BR[j][0]) * CHARSET.SUP_SCALE, (BB[j][1] - BR[j][1]) * CHARSET.SUP_SCALE)
@@ -3949,6 +4014,7 @@ def bold_font(reg, stem=STEM, **over):
     import arms as ARMS
     import white as WHITE
     signs = [g.name for g in reg if ARMS.is_sign(g)]          # 0.81 round 3: signs of arms, after the letters
+    open_tail_knots(reg)                                       # 0.84: c's and e's lower stroke as the Regular now has it
     law = None
     for g in [g for g in reg if g.name not in signs] + [reg[n] for n in signs]:
         if not g.contours:
@@ -4354,6 +4420,19 @@ def bold_font(reg, stem=STEM, **over):
             evened.append(f"{name} " + " ".join(f"{x:+.1f}" for x in d_))
             resided.add(name)
     notes.append(f"round letters' ends (TL TR BL BR): {', '.join(evened)}")
+    # 0.84 (pass 2, spine construction): S and s are one stroke from the top pair of level extremes to the bottom
+    # pair, built again here from this master's centreline and the width law at this master's O and o sides
+    # (spine.py), after the terminal rules above, so the ends stay theirs
+    import spine as _SPINE
+    sp_note, sp_names = _SPINE.master(reg, font, struck)
+    notes.append(sp_note)
+    resided.update(sp_names)
+    # 0.84 (pass 2, crossing construction): x and X two straight strokes, each one line through the other, at this
+    # master's v and V weights, the serif-end openings as the engine and the crossing rules above left them (cross.py)
+    import cross as _CROSS
+    cr_note, cr_names = _CROSS.master(reg, font, struck)
+    notes.append(cr_note)
+    resided.update(cr_names)
     # owner round 8, item 14: g's loop under its bowl as in the Regular, its ear at the ball law's reach
     looped = []
     for name in G_LOOPED:
@@ -4838,7 +4917,13 @@ def bold_font(reg, stem=STEM, **over):
                 q.y = round(ncy + (q0.y - rcy) * s_)
         notes.append(f"divide: dots x{s_:.3f}, at least the bar off it")
     tm_a = (dict(axis_map(stem))[MID_WEIGHT] - REG_STEM) / (stem - REG_STEM) if v["f"] > 0 else None
-    amp_ = _AMP.master(reg, font, _amp_sides, tm_a, layer if v["f"] > 0 else None)
+    # 0.85 (Regular pass 8): _AMP.master withdrawn with amp.regular; the ampersand is 0.81's (amp81), grown by this
+    # master's laws in the same way (one point structure, the mid master at the readings that far along)
+    import amp81 as _AMP81
+    amp_ = _AMP81.master(reg, font, _amp_sides, tm_a, layer if v["f"] > 0 else None)
+    # 0.84 (pass 2, crossing construction): x and X in the mid master too, built at the readings half way (cross.mid)
+    if v["f"] > 0:
+        notes += _CROSS.mid(reg, font, layer, tm_a)
     if amp_:
         notes.append(amp_)
     # owner round 8 (0.82, item 10): symbols whose strokes the engine read the wrong way along the axis (symbols.py):
@@ -5021,25 +5106,33 @@ def bold_font(reg, stem=STEM, **over):
     at_ = _AT.master(reg, font, lambda R_c, cs: _amp_sides(R_c, cs, "at"), tm_a, layer if v["f"] > 0 else None)
     if at_:
         notes.append(at_)
+    # 0.84 (Regular pass 4, item A3): §'s necks at its filleted crotches held to the Regular's towards the Bold
+    import symbols as _SYM
+    sec_ = _SYM.section_necks(reg, font, v)
+    if sec_:
+        notes.append(sec_)
+    for nm_ in ("seven", "seven.ss06", "sevensuperior", "seveninferior"):
+        sv_ = _SYM.seven_end(reg, font, nm_)                   # 0.84 (pass 4, item 5): the 7's bar end in the masters
+        if sv_:
+            notes.append(sv_)
     # owner round 8 (0.82, item 16): (C) (R) (P) take one ring (circled.py): the Regular's outer outline, the counter
     # at this master's side and top (the references' upright stress, side their share of the stem, top 0.87 of it),
     # and this master's C, R or P scaled and weighted as the references' letter in a ring. Their ring had the opposite
     # stress (52 top against 40 sides at 400) and © carried Libre Baskerville's C
     import circled as _CIRC
     notes += _CIRC.master(reg, font, layer if v["f"] > 0 else None, tm_a)
+    # 0.84 (Regular pass 6, item 4): the engine's reading of © ® ℗ is replaced here whole by the construction, so a
+    # fallback the engine took on them (its own outline, now discarded) is not the glyph's: the report says what built it
+    for n_ in _CIRC.GLYPHS:
+        if n_ in reports and n_ in font and _CIRC.LIB in reg[n_].lib if n_ in reg else False:
+            fb_ = reports[n_].pop("fallback", None)
+            reports[n_]["construction"] = "circled.py" + (f" (the engine's reading had fallen back: {fb_})" if fb_ else "")
     # owner round 8 (0.82, item 17): $'s S one outline through its bar in this master (and its mid master): each of
     # the six edges crossing the bar refitted as one curve and cut at the bar's edges, the bar centred on the S, the
     # stubs one length (dollar.py). The engine moved the corners on the bar as its knots: the edges either side of
     # the bar missed each other by up to 24 units at 300 and 41 at 800
-    import dollar as _DOL
-    for f_, tag_ in ((font, ""), (layer, " (mid)")):
-        if "dollar" in f_ and (f_ is font or v["f"] > 0):
-            cs_ = glyph_contours(f_["dollar"])
-            new_, log_ = _DOL.true_crossing(cs_)
-            if new_ is not cs_:
-                for c, P in zip(f_["dollar"].contours, new_):
-                    c.points = [Point(x, y, t, smooth=s_) for x, y, t, s_ in P]
-            notes.append(f"dollar{tag_}: {log_}")
+    import dollar as _DOL                       # 0.84 (Regular pass 5, item 2): $ is this master's S with round ends
+    notes += _DOL.master(reg, font, layer if v["f"] > 0 else None, tm_a)   # and the bar (the mid layer at tm_a)
     # 0.79: an f ligature's sides are its letters' (0.78: every one 4 wider on the left than f, ff 22 on the right)
     def _sides(f_, n):
         xs = [q.x for c in f_[n].contours for q in c.points]

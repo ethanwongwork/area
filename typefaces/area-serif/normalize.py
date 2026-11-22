@@ -1182,24 +1182,27 @@ def normalize(font):
     print("balance: B", BALANCE.B_lower(font))                           # 0.67: the lower bowl at the O's weight
     print("joins: extremes", JOINS.even_extremes(font))                  # 0.68: C G S s, the arc into the spur
     print("balance: figures", BALANCE.fig_flats(font))                   # 0.68: 2 5 7 flat strokes 73; N, 1
+    print("balance: 7", BALANCE.seven_diagonal(font))                     # 0.84 (pass 4, item 5): the capitals' thick
     print("clean: joins to straights", CLEAN.true_joins(font, HARMONIZE_SET))   # 0.68
     print("clean: 5", CLEAN.five_heel(font))                             # 0.69
     print("clean: 5", CLEAN.five_bowl(font))                             # 0.79: the bowl's lowest and widest points
     print("clean: 5", CLEAN.five_stem(font))                             # 0.81 (owner): the upright stroke's lean
-    print("clean: 9 and 6", CLEAN.nine_six(font))                        # 0.81 (owner): the long stroke's lower quarter
+    # clean.nine_six (0.81 owner round 2) and figs.nine_tail (0.84 pass 3): withdrawn, the 9 and 6 are 0.80's again
+    # (0.84 Regular pass 5, item 1: figs.nine_080, below)
     print("balance: capital serifs", BALANCE.cap_serifs(font))           # 0.70: 77 on every upright stem
     print("balance: zero", BALANCE.zero_weight(font))                    # 0.70: sides 87
     print("clean: S curves", CLEAN.even_s(font, HARMONIZE_SET))          # 0.70: 3's hook
     print("clean: curve joins", CLEAN.true_curves(font, HARMONIZE_SET))  # 0.70: u's tail, y's tail
     print("even: thickness round the counters", EVEN.run(font))         # 0.77: before the letters are copied into others
-    import figs as FIGS                               # 0.83 (Regular pass, letters 1): the 9 by one solve of curvature and
-    print("figs: 9 and 6", FIGS.nine_even(font))      # thickness together; the 6 the 9 turned
+    # figs.nine_even (0.83 letters 1, one solve of the 0.81 shape): withdrawn with it (pass 5, item 1)
     import loops as LOOPS
     print("loops:", LOOPS.g_loop(font))                                  # 0.81: g's lower loop, one construction
     nodes = CLEAN.add_nodes(font, HARMONIZE_SET)                         # 0.69: extremes and inflections get a node
     print(f"clean: nodes added {len(nodes)}", nodes)
     # 0.81 round 3: j's and y's tails by g.ss02's rule, the a's exit (after the node rule: they read the extremes)
     if os.environ.get("AREA_081_TAILS", "1") != "0":     # 0: the comparison build without them
+        # LOOPS.tail_law (0.84, pass 2, strokes 2): withdrawn. j's and y's balls at 88 built in the Regular (y evened
+        # at its top), but the Bold's y took a 35% flat place in its tail (curvecheck on the Bold failed)
         print("loops:", LOOPS.round_tail(font, "j"), LOOPS.round_tail(font, "y"), LOOPS.a_exit(font))
     import figs as FIGS                               # 0.83 (Regular pass, item D): the 3's bowls: the upper ball's
     print("figs:", FIGS.regular(font))                # neck one curve, extremes at the references' shares, one
@@ -1208,12 +1211,35 @@ def normalize(font):
     print("figs: B P R, E F", FIGS.cap_bowls(font))   # 0.83 (letters 5): F's arm E's, P closes as R; one curvature
     print("figs: curves", FIGS.even_letters(font))     # 0.83 (letters 6): a e d G J r 2 at one curvature
     print("figs: f", FIGS.f_foot(font))               # 0.83 (letters 7): f's right foot n's
+    import hair as HAIR                               # 0.84 (pass 2, strokes): a round stroke's thin place on the
+    print("hair: thin places", HAIR.hairlines(font))  # ladder's hairline (J f 5 G 6 9 8 C c e), the inner node moves
+    import figs as FIGS_                              # 0.84 (Regular pass 5, item 1): the owner's 0.80 9 and 6, brought
+    print("figs: 9 and 6 of 0.80", FIGS_.nine_080(font))   # up to date (hairline, crotch, one curvature); after every rule
+    print("figs: family", FIGS_.figure_family(font))       # 0.84 (pass 5, item 3): 2 3 5 bowl quarters even, one ball
+    # hair.spines (0.84, pass 2, strokes 3): withdrawn. Handle lengths and node moves alone gave S one swell at 93.4
+    # but broke the curvature at the bowls' counter extremes (14.9 at (457, 159), 4.1 at (147, 570)); holding those,
+    # the spine cannot reach one swell (S 94.4 to 96.3, s widest off the middle). It needs a spine construction:
+    import spine as SPINE                             # 0.84 (pass 2, spine construction): S and s one stroke from the
+    print("spine:", SPINE.regular(font))              # top pair to the bottom pair, a centreline and one width law
+    print("hair: bowls", HAIR.bowl_sides(font))      # 0.84 (pass 2, strokes 4): B's upper bowl P's side
+    print("hair: bowl feet", HAIR.bowl_foot(font))   # 0.84 (pass 3, owner item 7): B D's bottom inside corner
+    print("hair: diagonals", HAIR.diagonals(font))   # 0.84 (pass 2, strokes 5): X x halves, capital thick 86, Z arms
+    import cross as CROSS                             # 0.84 (pass 2, crossing construction): x and X two straight
+    print("cross:", CROSS.regular(font))              # strokes, each one through the other, at v's and V's weights
+    print("hair: dots", HAIR.dots(font, "letters"), HAIR.quote_head(font))   # 0.84 (pass 2, item 6): j's dot i's; ’
+    import stray as STRAY                             # 0.84 (pass 6, item 4): 4's crossbar, Ə ə bars on the ladder
+    print("stray: letters", STRAY.run_letters(font))
     #                                                   curvature; before spacing and the charset, so ³ ₃ ¾ follow
     delta, moved, opened = SPACING.run(font)          # last: it reads the finished outlines
     CLEAN.owner_final(font, json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "owner_edits.json"))))
     print(f"spacing: {len(delta)} letters re-spaced, {moved} kerning pairs carried over, {len(opened)} near-touches opened")
+    print("spacing: symmetric letters, equal sides", SPACING.symmetric_sides(font))   # 0.84: before the letters built on them
     import charset as CHARSET                         # 0.47: the full character set, on the finished letters
     n_light, tab = CHARSET.run(font, letters)
+    print("stray: signs", STRAY.run_signs(font))     # 0.84 (pass 6, item 4): ™ ℠ ° ¶ on the ladder
+    print("hair: mark dots", HAIR.dots(font, "marks"))   # 0.84 (pass 2, item 6): one dot per case on the marks
+    print("hair: seams", HAIR.seams(font))           # 0.84 (pass 2, item 8): Ƭ one outline across its seam
+    print("hair: shafts", HAIR.shafts(font))         # 0.84 (pass 2, item 8): ↔ ↕ shaft the hairline in whole units
     print(f"charset: lightened {n_light} more glyphs; tabular figures {tab}")
     print("clean: flags' undersides", CLEAN.flag_unders(font))            # 0.80: n's and k's, one curve as i's
     print("charset: single-storey g", CHARSET.single_g(font))    # 0.77: g.ss02, from q and j
@@ -1221,12 +1247,14 @@ def normalize(font):
     alt_rep, alt_subs = ALTERNATES.run(font)
     print("alternates:", alt_rep)
     print("balance: descender feet", BALANCE.desc_feet(font))
+    print("balance: edges on their line", BALANCE.zone_lines(font))     # 0.84 (placement)
     print("clean: uncrossed", CLEAN.uncross(font))        # 0.65: every glyph, last of all
     # a base drawing whose path laps over itself, and (0.70) every letter with a stroke or bar drawn across it: merged
     # here, in the source. Left to the TrueType build's overlap removal, a stroke that meets the letter within a unit
     # of a node left a crossing (Astroke, 0.69) or a 19-unit scrap (Estroke, 0.70) whenever the letter changed.
     import re
     import overlap as OVERLAP                         # 0.81: each struck glyph's letter and strokes, before the merge
+    print("stray: struck strokes", STRAY.struck_strokes(font))   # 0.84 (pass 6, item 4): one stroke, before the merge
     struck_parts = OVERLAP.source_struck(font)
     struck = [g.name for g in font if g.components and g.contours and re.search(r"(stroke|bar|middletilde)$", g.name)]
     for name in ["Eopen"] + sorted(struck):
@@ -1235,6 +1263,8 @@ def normalize(font):
             P = c.points
             if abs(sum(P[i].x * P[(i + 1) % len(P)].y - P[(i + 1) % len(P)].x * P[i].y for i in range(len(P)))) / 2 < 60:
                 font[name].contours.remove(c)
+    for name in struck:                               # 0.84 pass 6: a merge that leaves a curve of no length (Ⱥ's
+        STRAY.drop_null(font[name])                   # heavier slash ending on the A's edge) drops it
     rest = [g.name for g in font if g.contours and g.name not in HARMONIZE_SET]
     seams = CLEAN.true_joins(font, rest, max_deg=15)  # 0.69: seams left where charset joined two outlines (fl, OE, carons)
     print(f"clean: seams {len(seams)}", seams)
@@ -1258,26 +1288,31 @@ def normalize(font):
     print(f"arms: {len(signs)} signs drawn from one half or one arm", sorted(signs))
     CHARSET.turned_pairs(font)                        # 0.74: after the node rules, the turned glyphs once more
     CHARSET.mirrors(font)
-    import amp as AMP                                 # 0.82 (owner round 8, item 9): the ampersand, one construction
-    print("amp:", AMP.regular(font))                  # on the finished o, a and v; after every node rule
+    # AMP.regular (0.82 to 0.84: amp.py's construction of the ampersand) withdrawn in 0.85 (Regular pass 8): the owner
+    # took 0.81's drawing back ("this old ampersand looks better"); amp.py stays, its Chain and helpers serve @ (C) $ ...
+    import amp81 as AMP81                             # 0.85 (Regular pass 8): 0.81's ampersand, its loop upright, on
+    print("amp81:", AMP81.regular(font))              # the ladder; after every node rule
     import sigma as SIGMA                             # 0.83 (Regular pass, item A): the summation and Esh, one
     print("sigma:", SIGMA.regular(font))              # construction from E's arm and beak, Z's and A's diagonals
     import at as AT                                   # 0.82 (owner round 8, item 15): the @, one construction: a ring
     print("at:", AT.regular(font))                    # of one stroke and Area's a.ss03 in it, joined at its foot
     import circled as CIRCLED                         # 0.82 (owner round 8, item 16): one ring for (C) (R) (P), the
     print("circled:", CIRCLED.regular(font))          # letters Area's C R P at the references' size and weight
+    print("hair: curves", HAIR.even_more(font))       # 0.84 (pass 2, item 7): ß ə Ə ɔ s_p ɍ © ® ℗ at one curvature
+    import latin as LATIN                             # 0.84 (pass 7): local repairs, a span rebuilt at one curvature
+    print("latin: spans", LATIN.spans(font))
+    print("latin: jumps", LATIN.jumps(font))
+    print("latin: swells", LATIN.swells(font))
+    print("latin: hooked stems", LATIN.stem_edges(font))
+    # LATIN.n_hook_diagonal (pass 7, item 11): withdrawn, the Bold's hook took node 53's fault again (16 > 17)
+    print("latin: r's branch", LATIN.r_branch(font))
     import symbols as SYMBOLS                         # 0.82 (owner round 8, item 18): the hook above's curves meet at
     for n_ in SYMBOLS.HOOKS:                          # one curvature (handle lengths only; its ~30 composites follow)
         print("hook above:", SYMBOLS.even_curves(font, n_))
-    import dollar as DOLLAR                           # 0.82 (owner round 8, item 17): $'s S one outline through its
-    if "dollar" in font:                              # bar, the bar centred on the S, its stubs one length
-        cs_ = [[(p.x, p.y, p.type, p.smooth) for p in c.points] for c in font["dollar"].contours]
-        new_, log_ = DOLLAR.true_crossing(cs_)
-        if new_ is not cs_:
-            from ufoLib2.objects import Point as _Pt
-            for c, P in zip(font["dollar"].contours, new_):
-                c.points = [_Pt(x, y, t, smooth=sm) for x, y, t, sm in P]
-        print("dollar:", log_)
+    print("symbols: section", SYMBOLS.section_joins(font))   # 0.84 (pass 3, owner item 2): § joins, no points
+    import dollar as DOLLAR                           # 0.84 (Regular pass 5, item 2): $ is the finished S with round
+    print("dollar:", DOLLAR.regular(font))            # ends and the currency bar (replaces true_crossing and spine_s)
+    print("spacing: symmetric drawings, equal sides", SPACING.symmetric_sides(font))   # 0.84 (placement)
     joined, promoted, copied, opened_all = SPACING.finish(font, CHARSET.COVERAGE)   # 0.73: beyond the core
     alts = sorted({b for pairs in alt_subs.values() for _a, b in pairs} | {"g.ss02", "one.ss01"} | ({"uni0261"} & set(font.keys())))
     order = font.lib.get("public.glyphOrder", [])

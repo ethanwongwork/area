@@ -272,3 +272,308 @@ def eth_bar(reg, font, name="eth"):
             P[idx].x, P[idx].y = round(t[0]), round(t[1])
     after = [round(((P[u].x - P[l_].x) ** 2 + (P[u].y - P[l_].y) ** 2) ** 0.5) for u, l_ in pairs]
     return f"{name}: bar x{law:.3f} (pairs across {before} > {after})"
+
+
+# 0.84 (Regular pass 3, the owner's visual notes, item 2: "§ has some rough parts that need smoothing"). The section
+# sign is Libre Baskerville's drawing: two S strokes whose middle loop is the upper stroke's spine and right side over
+# the lower stroke's spine and left side. Where each side runs into the other stroke the outline turned at a point:
+# the two crotches outside (left at the upper stroke's side, right at the lower's), a notch, and the counter's two ends
+# (top left, bottom right), a point between a curve and the spine's straight edge. Each is now a join, not a point:
+#   a crotch outside   a concave fillet of SECTION_CROTCH (the @'s a and the ampersand's arm: 0.30 of the stem; the
+#                      capitals' 86, figures and signs at cap size), as a branch leaves a stem;
+#   a counter's end    the counter is one smooth loop: its end is rounded where the two edges meet, cut back
+#                      SECTION_END along each (the turn there is some 60 degrees: a quarter of the loop's own side
+#                      radius, 0.5 of the counter's side's width across, so the end turns as the loop's sides do).
+# Both by `at.fillet` (both pieces cut back by arc length, one cubic along their tangents, handles 0.55 of the chord).
+# In the Regular only (normalize, before spacing): the masters' engine carries the Regular's points, as every other
+# point of this drawing.
+SECTION_CROTCH = 0.30 * 86
+SECTION_END = 0.5
+
+
+
+def _segs_of(P):
+    """A closed UFO point list [(x, y, type, smooth)] as [(kind, seg)] from its first on-curve point; seg the cubic
+    (lines as their thirds)."""
+    n = len(P)
+    s0 = next(i for i, q in enumerate(P) if q[2])
+    Q = P[s0:] + P[:s0]
+    out, offs, prev = [], [], Q[0]
+    for q in Q[1:] + [Q[0]]:
+        if q[2] is None:
+            offs.append(q)
+            continue
+        a, b = (prev[0], prev[1]), (q[0], q[1])
+        if len(offs) == 2:
+            out.append(("C", (a, (offs[0][0], offs[0][1]), (offs[1][0], offs[1][1]), b), prev[3]))
+        else:
+            out.append(("L", (a, (a[0] + (b[0] - a[0]) / 3, a[1] + (b[1] - a[1]) / 3),
+                              (a[0] + 2 * (b[0] - a[0]) / 3, a[1] + 2 * (b[1] - a[1]) / 3), b), prev[3]))
+        prev, offs = q, []
+    return out
+
+
+def _fillet(segs, k, r, share=0.55):
+    """at.fillet with its handles on the tangents' meeting point: the corner between segs[k] and segs[k + 1] cut back
+    by r along each, joined by one cubic whose handles run share of the way to where the two tangents meet (a sharp
+    notch would carry handles of a share of the chord past that point, a loop)."""
+    import at as AT
+    (ka, sa), (kb, sb) = segs[k], segs[k + 1]
+    a_kept, pa, ta = AT._cut(sa, r, True)
+    b_kept, pb, tb = AT._cut(sb, r, False)
+    t1 = A.meet(pa, ta, pb, (-tb[0], -tb[1]))
+    t2 = A.meet(pb, (-tb[0], -tb[1]), pa, ta)
+    ch = A.math.dist(pa, pb) if hasattr(A, "math") else 0
+    if t1 is None or t2 is None or t1 <= 0 or t2 <= 0:
+        t1 = t2 = 0.4 * ch
+    f = (pa, (pa[0] + ta[0] * share * t1, pa[1] + ta[1] * share * t1),
+         (pb[0] - tb[0] * share * t2, pb[1] - tb[1] * share * t2), pb)
+    if ka == "L":
+        a_kept = (sa[0], sa[0], pa, pa)
+    if kb == "L":
+        b_kept = (pb, pb, sb[3], sb[3])
+    return segs[:k] + [(ka, a_kept), ("C", f), (kb, b_kept)] + segs[k + 2:]
+
+
+def _round_end(segs, k, r):
+    """A counter's end where a curve meets the spine's straight edge: no new node. The corner slides r along the
+    straight and becomes smooth; the curve's handle there turns onto the straight's line, its length 0.55 of the way
+    to where the curve's other tangent meets that line (a fillet with new nodes left the Bold's counter ends bending
+    2.5 degrees half way, and the § fell back to its upright parts)."""
+    (ka, sa), (kb, sb) = segs[k], segs[(k + 1) % len(segs)]
+    if (ka == "L") == (kb == "L"):
+        return segs
+    if ka == "C":                                       # curve in, line out
+        c, ln = sa, sb
+        d = A.unit((ln[3][0] - ln[0][0], ln[3][1] - ln[0][1]))
+        p = (ln[0][0] + d[0] * r, ln[0][1] + d[1] * r)
+        t0 = A.unit((c[1][0] - c[0][0], c[1][1] - c[0][1]))
+        m = A.meet(c[0], t0, p, (-d[0], -d[1]))
+        L = 0.55 * (A.math.dist(p, (c[0][0] + t0[0] * m, c[0][1] + t0[1] * m)) if m and m > 0 else A.math.dist(c[0], p) / 3)
+        c2 = (c[0], c[1], (p[0] - d[0] * L, p[1] - d[1] * L), p)
+        ln2 = (p, ln[1], ln[2], ln[3])
+        out = list(segs); out[k] = (ka, c2); out[(k + 1) % len(segs)] = (kb, ln2)
+        return out
+    c, ln = sb, sa                                      # line in, curve out
+    d = A.unit((ln[0][0] - ln[3][0], ln[0][1] - ln[3][1]))   # from the corner back along the line
+    p = (ln[3][0] + d[0] * r, ln[3][1] + d[1] * r)
+    t3 = A.unit((c[2][0] - c[3][0], c[2][1] - c[3][1]))
+    m = A.meet(c[3], t3, p, (-d[0], -d[1]))
+    L = 0.55 * (A.math.dist(p, (c[3][0] + t3[0] * m, c[3][1] + t3[1] * m)) if m and m > 0 else A.math.dist(c[3], p) / 3)
+    c2 = (p, (p[0] - d[0] * L, p[1] - d[1] * L), c[2], c[3])
+    ln2 = (ln[0], ln[1], ln[2], p)
+    out = list(segs); out[k] = (ka, ln2); out[(k + 1) % len(segs)] = (kb, c2)
+    return out
+
+
+def _joins(cs, parts, name="section", evening=True):
+    """The joins on §'s contours cs: (new contours, log)."""
+    import math
+    outer_i = max(range(2), key=lambda k: abs(A.signed_area(cs[k])))
+    log = []
+    new = []
+    for ci, P in enumerate(cs):
+        segs = _segs_of(P)
+        sgn = 1 if A.signed_area(P) > 0 else -1
+        # the corner at the end of segs[k] (between segs[k] and segs[k + 1])
+        ks = []
+        for k in range(len(segs)):
+            (ka, sa, _), (kb, sb, _) = segs[k], segs[(k + 1) % len(segs)]
+            d_in = A.unit((sa[3][0] - sa[2][0], sa[3][1] - sa[2][1]))
+            d_out = A.unit((sb[1][0] - sb[0][0], sb[1][1] - sb[0][1]))
+            turn = math.degrees(math.asin(max(-1, min(1, d_in[0] * d_out[1] - d_in[1] * d_out[0]))))
+            ang = math.degrees(math.acos(max(-1, min(1, d_in[0] * d_out[0] + d_in[1] * d_out[1]))))
+            if ang < 20:
+                continue
+            if ci == outer_i and ka == kb == "C" and turn * sgn < 0:
+                if "crotch" in parts:
+                    ks.append((k, SECTION_CROTCH, "crotch"))
+            elif ci != outer_i and "end" in parts:
+                ks.append((k, None, "end"))
+        segs2 = [(k_, s_) for k_, s_, _ in segs]
+        # start the list after a smooth node, so no corner sits at the wrap
+        if ks:
+            first = next(k for k in range(len(segs)) if k not in {kk for kk, _r, _n in ks})
+            rot = (first + 1) % len(segs)
+            segs2 = segs2[rot:] + segs2[:rot]
+            ks = [((k - rot) % len(segs), r, kind) for k, r, kind in ks]
+        for k, r, kind in sorted(ks, reverse=True):
+            if r is None:
+                # the counter's side across at its widest (the loop's stroke): half of it
+                xs = [q[0] for q in P if q[2]]
+                r = SECTION_END * (max(xs) - min(xs)) / 4
+            segs2 = _fillet(segs2, k, r) if kind == "crotch" else _round_end(segs2, k, r)
+            log.append(f"{kind} {r:.0f}")
+        Pn = A.to_points(segs2)
+        if (A.signed_area(Pn) > 0) != (A.signed_area(P) > 0):
+            Pn = A._reverse(Pn)
+        new.append(Pn)
+    # then every smooth node at one curvature (loops.even_nodes, handle lengths only), kept where curvecheck's faults
+    # on the glyph fall (the fillets meet their curves tangent only)
+    import curvecheck as K
+    import loops as LP
+    yr = (-1000, 2000)
+    b0, w0 = K.report(name, new, yr)[:2]
+    ev = [[(round(q[0]), round(q[1]), q[2], q[3]) for q in LP.even_nodes(P, yr)[0]] for P in new]
+    b1, w1 = K.report(name, ev, yr)[:2]
+    if evening and (len(b1), w1) < (len(b0), w0):
+        new = ev
+        log.append(f"evened ({len(b0)} > {len(b1)} faults, worst {w0:.2f} > {w1:.2f})")
+    return new, log
+
+
+def section_joins(font, name="section"):
+    """The rule above on the Regular's §. Corners found by geometry: on the outline every corner between two curves
+    that turns into the ink (a crotch), on the counter every corner (its ends). Guarded by the masters: of the forms
+    below, the first the Bold's and the Light's engine carry soundly (`bold.glyph_bold` with no fallback) is kept: the
+    counter's ends moved the engine's reading of the spine's straight edges (a node bending 1.8 to 2.5 degrees half
+    way, the § fell back to its upright parts at the Bold)."""
+    import bold as BOLD
+    from ufoLib2.objects import Point
+    if name not in font:
+        return f"{name}: none"
+    g = font[name]
+    cs = [[(p.x, p.y, p.type, p.smooth) for p in c.points] for c in g.contours]
+    if len(cs) != 2 or g.lib.get("area.section_joins"):
+        return f"{name}: {len(cs)} contours; left"
+    tried = []
+    for parts, ev in ((("crotch", "end"), True), (("crotch", "end"), False), (("crotch",), True), (("crotch",), False)):
+        new, log = _joins(cs, parts, name, ev)
+        for c, Pn in zip(g.contours, new):
+            c.points = [Point(x, y, t, smooth=s_) for x, y, t, s_ in Pn]
+        bad = [st for st in (BOLD.STEM, 55.0) if BOLD.glyph_bold(g, BOLD.vector(st))[2].get("fallback")]
+        if not bad:
+            g.lib["area.section_joins"] = 1
+            return f"{name}: " + ", ".join(log) + (f" (masters refused: {'; '.join(tried)})" if tried else "")
+        tried.append("+".join(parts) + (" evened" if ev else "") + f" at {bad}")
+    for c, P in zip(g.contours, cs):
+        c.points = [Point(x, y, t, smooth=s_) for x, y, t, s_ in P]
+    return f"{name}: left ({'; '.join(tried)})"
+
+
+# 0.84 (Regular pass 4, item A3). With its crotches filleted (section_joins) the § has a neck at each: from the
+# counter's end (its pointed corner) across the ink to the fillet. Towards the Bold the engine carries the fillet in
+# with the stroke and the counter's end hardly moves: the neck thinned 50.7 > 48.4 > 45.5 at 400 / 666 / 800 (the
+# sharp crotch before was a corner, read as one and skipped). In a master heavier than the Regular the neck is held
+# to the Regular's (SECTION_NECK): the fillet's two ends slide back along their neighbouring curves' own tangents
+# (each with its fillet-side handle; the curves' near handles stay), a wider, shallower fillet. Every other point
+# stays as the engine drew it. Tried and withdrawn (build/owner11/a3, tools/secturns.py): the fillet moved out whole
+# (an inflection in the stroke above it between the masters, audit_axis turns at 622.7, even at a 6-unit move), the
+# fillet with the curves either side (the left side bulged past the lower bowl), the counter's end slid back along
+# the spine (an inflection in the counter), the branch neck's law 1.22 (a 34-unit move).
+SECTION_NECK = 1.0
+
+
+def section_necks(reg, font, v, name="section"):
+    import white as WHITE
+    from ufoLib2.objects import Point
+    if name not in reg or name not in font or v["f"] <= 0:
+        return None
+    R = [[(p.x, p.y, p.type, p.smooth) for p in c.points] for c in reg[name].contours]
+    N = [[(p.x, p.y, p.type, p.smooth) for p in c.points] for c in font[name].contours]
+    if len(R) != 2 or [len(P) for P in R] != [len(P) for P in N]:
+        return f"{name}: necks left (structure)"
+    oi = max(range(2), key=lambda k: abs(A.signed_area(R[k])))
+    ci = 1 - oi
+    import math
+
+    def corners(P):
+        n = len(P)
+        out = []
+        for i, q in enumerate(P):
+            if q[2] is None:
+                continue
+            a, b = P[(i - 1) % n], P[(i + 1) % n]
+            u = A.unit((q[0] - a[0], q[1] - a[1]))
+            w = A.unit((b[0] - q[0], b[1] - q[1]))
+            out.append((math.degrees(math.acos(max(-1, min(1, u[0] * w[0] + u[1] * w[1])))), i))
+        return [i for _a, i in sorted(out, reverse=True)[:2]]
+
+    def neck(cs, k):
+        c = cs[ci][k][:2]
+        D = WHITE._dense(cs[oi], 1.0)
+        best = min(D, key=lambda d: math.dist(d[:2], c))
+        return math.dist(best[:2], c), best
+
+    share = SECTION_NECK
+    P = [list(q) for q in N[oi]]
+    n = len(P)
+    on = [i for i, q in enumerate(P) if q[2]]
+    log = []
+    for k in corners(R[ci]):
+        n0, b0 = neck(R, k)
+        n1, b1 = neck(N, k)
+        want = n0 * share
+        if n1 >= want - 0.5:
+            log.append(f"neck {n0:.1f} > {n1:.1f} (law {want:.1f}) kept")
+            continue
+        s0 = b1[2]                                   # the fillet: the outer segment the neck lands on
+        s1 = on[(on.index(s0) + 1) % len(on)]
+        # each of the fillet's two nodes slides back along its neighbouring curve's own tangent (towards that curve's
+        # near handle, which stays), its fillet-side handle with it: no curve changes its direction at a node, so
+        # none gains a turn between the masters (moving the fillet out whole put an inflection into the stroke above
+        # it, audit_axis turns at 622.7)
+        P0 = [list(q) for q in P]
+        moves = []
+        for m, o, h in ((s0, (s0 - 1) % n, (s0 + 1) % n), (s1, (s1 + 1) % n, (s1 - 1) % n)):
+            L_ = math.dist(P0[m][:2], P0[o][:2])
+            moves.append((m, h, A.unit((P0[o][0] - P0[m][0], P0[o][1] - P0[m][1])), L_))
+
+        def apply(t):
+            Q_ = [list(q) for q in P0]
+            for m, h, e, L_ in moves:
+                tt = min(t, 0.8 * L_)
+                for j_ in (m, h):
+                    Q_[j_][0] += e[0] * tt
+                    Q_[j_][1] += e[1] * tt
+            cs_ = [list(N[0]), list(N[1])]
+            cs_[oi] = [tuple(q) for q in Q_]
+            return Q_, neck(cs_, k)[0]
+        lo_, hi_ = 0.0, 60.0
+        for _ in range(30):
+            mid_ = (lo_ + hi_) / 2
+            if apply(mid_)[1] < want:
+                lo_ = mid_
+            else:
+                hi_ = mid_
+        P, got = apply(hi_)
+        log.append(f"neck {n0:.1f} > {n1:.1f} > {got:.1f} (the fillet's ends {hi_:.1f} back along their curves)")
+    N[oi] = [(round(q[0]), round(q[1]), q[2], q[3]) for q in P]
+    for c_, Pn in zip(font[name].contours, N):
+        c_.points = [Point(x, y, t, smooth=s_) for x, y, t, s_ in Pn]
+    return f"{name}: " + "; ".join(log)
+
+
+# 0.84 (Regular pass 4, item 5, in the masters). With the 7's diagonal the capitals' thick (balance.seven_diagonal),
+# the Light's thinner diagonal brought its outer edge's top corner over the bar's top (718 against 712): the bar's
+# right end, a straight cut, turned back on itself (audit_axis crossings at 317). In a master where the cut is
+# shorter than the Regular's share of the bar (33 of 73), the corner slides down the diagonal's outer edge to that
+# share of the master's bar, and the cut's top corner comes level with it (the cut stays upright; the bar is that much
+# shorter).
+def seven_end(reg, font, name="seven"):
+    if name not in reg or name not in font:
+        return None
+    R, P = reg[name].contours[0].points, font[name].contours[0].points
+    if len(R) != len(P):
+        return f"{name}: end left (structure)"
+    n = len(P)
+    top_r = max(q.y for q in R)
+    i19 = max((i for i, q in enumerate(R) if q.type and q.y == top_r), key=lambda i: R[i].x)
+    i18, i17 = (i19 - 1) % n, (i19 - 2) % n
+    under = [i for i, q in enumerate(R) if q.type and top_r - 120 < q.y < top_r - 20 and q.x > R[i19].x - 200]
+    if not under or R[i18].type != "line" or R[i17].type != "line":
+        return f"{name}: end not found, left"
+    iu = min(under, key=lambda i: R[i].y)                      # the bar's underside where the diagonal leaves it
+    bar_r = top_r - R[iu].y
+    share = (top_r - R[i18].y) / bar_r
+    top_m = P[i19].y
+    under_m = P[iu].y
+    want = top_m - share * (top_m - under_m)
+    if P[i18].y <= want:
+        return f"{name}: end kept ({top_m - P[i18].y:.0f} of {top_m - under_m:.0f})"
+    a, b = P[i17], P[i18]
+    x = a.x + (want - a.y) * (b.x - a.x) / (b.y - a.y)
+    was = (b.x, b.y)
+    b.x, b.y = round(x), round(want)
+    P[i19].x = b.x
+    return f"{name}: end corner {was} > ({b.x}, {b.y})"
