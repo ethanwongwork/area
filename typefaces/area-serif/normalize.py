@@ -1299,6 +1299,7 @@ def normalize(font):
     print("hair: curves", HAIR.even_more(font))       # 0.84 (pass 2, item 7): ß ə Ə ɔ s_p ɍ © ® ℗ at one curvature
     import latin as LATIN                             # 0.84 (pass 7): local repairs, a span rebuilt at one curvature
     print("latin: spans", LATIN.spans(font))
+    print("latin: jumps", LATIN.jumps(font))
     import symbols as SYMBOLS                         # 0.82 (owner round 8, item 18): the hook above's curves meet at
     for n_ in SYMBOLS.HOOKS:                          # one curvature (handle lengths only; its ~30 composites follow)
         print("hook above:", SYMBOLS.even_curves(font, n_))
