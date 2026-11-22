@@ -373,7 +373,10 @@ X_CORNERS = {(0, 48): X_UPPER, (0, 47): X_UPPER, (2, 0): X_UPPER, (0, 22): X_UPP
              (1, 6): X_LOWER, (1, 7): X_LOWER, (0, 60): X_LOWER, (0, 3): X_LOWER}
 X_FIXED = set()                     # corners that do not slide (none: the arm's corner slides, its straight turning
                                     # about its far node, whose bracket handle follows onto it)
+X_SLIDE, X_SLIDE_MASTER = 8.0, 16.0  # how far a corner may slide on the diagonal (Regular; master, from the uncleaned)
 X_TOL = (1.0, 1.0)
+X_ARM = (((0, 22), (0, 23)), ((0, 47), (0, 46), (0, 45), (0, 44)))   # the arm's straight and its inner curve
+KEEP_PULL = 1.0                     # how hard a far end is held at its own curvature (inside its band)
 KEEP_K = 20000.0                    # a curve's far end keeps its curvature (curvecheck's 1.25 across its smooth node)                  # units, degrees (the owner's brief)
 
 
@@ -476,6 +479,14 @@ def _dip(s, n=64, wave=0.10):
             low = v
         d, ref = sgn, v
     return max(deep, wave) if waves else 0.0
+
+
+def _arm(cs):
+    """The arm's thinnest across, from its straight edge to its inner curve (the arm's corner may slide)."""
+    a, b = _piece(cs, X_ARM[0])
+    u = _unit((b[0] - a[0], b[1] - a[1]))
+    s = _piece(cs, X_ARM[1])
+    return min(_line_off(a, u, _bez(s, t / 40)) for t in range(41))
 
 
 def _dip_soft(s, n=32):
@@ -595,6 +606,7 @@ def crossings(cs, keep=0.05, ref=None):
         watch.append(tuple((m[0], i) for i in (idx if st == 1 else idx[::-1])))
     dips0 = {keys: _dip(_piece(cs, keys)) for keys in watch}
     soft0 = {keys: _dip_soft(_piece(cs, keys)) for keys in watch}
+    arm0 = _arm(cs)                                      # the arm no thinner for its corner's slide
     dip_max = {keys: (0.0 if d_ < 0.16 else d_) for keys, d_ in dips0.items()}    # a small flat place taken away
     sign0 = {}                                           # a curve without an inflection keeps none
     for keys in watch:
@@ -612,10 +624,11 @@ def crossings(cs, keep=0.05, ref=None):
         for keys, k0 in far_k.items():                   # the far ends' curvature: in its band, near what it was
             s_ = _piece(Q, keys)
             kk = _k(s_, 0.0 if keys[-1] in line else 1.0)
-            r.append(0.1 * KEEP_K * (kk - k0))
+            r.append(KEEP_PULL * KEEP_K * (kk - k0))
             if keys in band:
                 lo, hi = band[keys]
                 r.append(10 * KEEP_K * (max(0.0, abs(kk) - hi) + max(0.0, lo - abs(kk))))
+        r.append(200 * max(0.0, arm0 - 0.3 - _arm(Q)))
         for keys in watch:                               # no flat place (WAVE 0.10), no new inflection
             s_ = _piece(Q, keys)
             r.append(2000 * max(0.0, _dip_soft(s_) - max(0.06, soft0[keys] if dip_max[keys] else 0.0)))
@@ -625,7 +638,13 @@ def crossings(cs, keep=0.05, ref=None):
         r += [keep * v * w for v, w in zip(x, sc)]       # least change
         return np.array(r, float)
 
-    sol = least_squares(resid, np.zeros(n_x), method="trf", max_nfev=2500, xtol=1e-10, ftol=1e-10)
+    # a corner slides at most X_SLIDE along its straight (in a master, where the growth has placed the corners from
+    # the Regular's, X_SLIDE_MASTER): the crossings are cleaned where they are, not moved
+    lim = X_SLIDE if ref is None else X_SLIDE_MASTER
+    lo = np.full(n_x, -np.inf)
+    hi = np.full(n_x, np.inf)
+    lo[:len(corners)], hi[:len(corners)] = -lim, lim
+    sol = least_squares(resid, np.zeros(n_x), method="trf", bounds=(lo, hi), max_nfev=2500, xtol=1e-10, ftol=1e-10)
     Q = place(sol.x)
     pre = crossing_edges(Q, ref)
     # whole units: the moved points rounded, then each moved handle tried a unit either way (corners stay on their
@@ -643,7 +662,7 @@ def crossings(cs, keep=0.05, ref=None):
     def cost(Q_):
         """The readings, plus what curvecheck reads as a fault (a far end out of its band, a flat place, a new
         inflection) weighed so heavily that the search first takes it away."""
-        r = []
+        r = [1e3 * max(0.0, arm0 - 0.5 - _arm(Q_))]
         for name, (k1, k2) in X_EDGES.items():
             rf = None if ref is None else (_piece(ref, k1), _piece(ref, k2))
             (fo, fa), (bo, ba) = edge_reading(_piece(Q_, k1), _piece(Q_, k2), rf, _straight(k1, k2))
@@ -651,7 +670,7 @@ def crossings(cs, keep=0.05, ref=None):
         for keys, k0 in far_k.items():
             s_ = _piece(Q_, keys)
             kk = _k(s_, 0.0 if keys[-1] in line else 1.0)
-            r.append(0.1 * KEEP_K * (kk - k0))
+            r.append(KEEP_PULL * KEEP_K * (kk - k0))
             if keys in band:
                 lo, hi = band[keys]
                 r.append(1e3 * KEEP_K * (max(0.0, abs(kk) - hi) + max(0.0, lo - abs(kk))))
@@ -1040,11 +1059,29 @@ def no_new_turns(cs, cs0):
     return fixed
 
 
+def _before_crossings(cs0):
+    """The Regular as it stands before its crossings are cleaned, in cs0's place; cs0 itself where cs0 is not this
+    construction's (a point off it outside the crossings by more than the bracket handle's unit)."""
+    pre = _round(construct(steps=("upright", "top", "diagonal", "tail", "smooth"))[0])
+    if [len(P) for P in pre] != [len(P) for P in cs0]:
+        return cs0
+    dx = min(q[0] for P in cs0 for q in P) - min(q[0] for P in pre for q in P)
+    pre = [[(x + dx, y, t, sm) for x, y, t, sm in P] for P in pre]
+    near = set(X_CORNERS) | {k for k1, k2 in X_EDGES.values() for k in (k1[-2], k1[1], k2[1], k2[-2])}
+    off = max(math.dist(pre[ci][i][:2], cs0[ci][i][:2]) for ci in range(len(pre)) for i in range(len(pre[ci]))
+              if (ci, i) not in near)
+    return pre if off <= 1.5 else cs0
+
+
 def master_contours(R0, R, cs0=None):
+    """A master's contours (see the module's note). 0.85 (Regular pass 9): grown from the Regular before its
+    crossings were cleaned, then the crossings cleaned in the master against the Regular's (so nothing outside the
+    crossings moves for the Regular's cleaning: the growth refits whole curves and evens their nodes)."""
     cs0 = cs0 or regular_contours()[0]
-    cs = grow([list(P) for P in cs0], R0, R)
-    e = open_loop(cs, cs0, R0, R)
-    no_new_turns(cs, cs0)
+    base = _before_crossings(cs0)
+    cs = grow([list(P) for P in base], R0, R)
+    e = open_loop(cs, base, R0, R)
+    no_new_turns(cs, base)
     for P in cs:                                        # a smooth node after a line: the curve's handle on the line
         n = len(P)
         for i, q in enumerate(P):
@@ -1063,7 +1100,7 @@ def master_contours(R0, R, cs0=None):
         for i, q in enumerate(P):
             if q[2] and q[3]:
                 even_node(P, i, 1.22, (0.5, 0.025, 45))   # a master's growth bends more: a wider search
-    no_new_turns(cs, cs0)
+    no_new_turns(cs, base)
     cs, _xn = crossings(cs, ref=cs0)                    # 0.85 (Regular pass 9): the crossings clean in every master
     return _round(cs), e
 
