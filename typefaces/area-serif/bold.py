@@ -3501,16 +3501,19 @@ SMALL = {f + s_: f for f in ("zero", "one", "two", "three", "four", "five", "six
 SMALL.update(ordfeminine="a", ordmasculine="o")
 
 
-def _match(B_, P, scale, far=20.0, skip=20.0):
-    """For each point of P, the index of the point of B_ (scaled about its box and set on P's box) it was made
-    from, or None for a point the figure no longer has (a node added to one since): the cheapest alignment of the
-    two in order round the contour (a point to a point of the same kind within `far`; a point of P left out costs
-    `skip`, a point of B_ left out nothing)."""
+def _match(B_, P, scale, far=20.0, skip=20.0, narrow=(1.0, 1.0)):
+    """For each point of P, the index of the point of B_ (scaled about its box, narrowed about its middle by
+    `narrow` as charset.small_figures narrows it, and set on P's box) it was made from, or None for a point the
+    figure no longer has (a node added to one since): the cheapest alignment of the two in order round the contour
+    (a point to a point of the same kind within `far`; a point of P left out costs `skip`, a point of B_ left out
+    nothing)."""
     bx, by = [q[0] for q in B_], [q[1] for q in B_]
     px, py = [q[0] for q in P], [q[1] for q in P]
-    cx = (min(px) + max(px)) / 2 - (min(bx) + max(bx)) / 2 * scale
-    cy = (min(py) + max(py)) / 2 - (min(by) + max(by)) / 2 * scale
-    T = [(q[0] * scale + cx, q[1] * scale + cy, q[2]) for q in B_]
+    mx, my = (min(bx) + max(bx)) / 2, (min(by) + max(by)) / 2
+    kx, ky = narrow
+    cx = (min(px) + max(px)) / 2
+    cy = (min(py) + max(py)) / 2
+    T = [((q[0] - mx) * scale * kx + cx, (q[1] - my) * scale * ky + cy, q[2]) for q in B_]
     n, m = len(T), len(P)
     INF = float("inf")
     best = None
@@ -3564,9 +3567,20 @@ def kin_parts(reg, g, out, rep, v):
         mine = glyph_contours(g)
         if len(bR) != len(mine):
             return out, rep
+        # 0.85 (Regular pass 9): a small figure is its figure scaled and narrowed both ways (charset.small_box_moves)
+        narrow = (1.0, 1.0)
+        if base_name in CHARSET.FIGS:
+            ax = [q[0] for P in bR for q in P]
+            ay = [q[1] for P in bR for q in P]
+            w_, h_ = (max(ax) - min(ax)) * CHARSET.SUP_SCALE, (max(ay) - min(ay)) * CHARSET.SUP_SCALE
+            sx_, sy_ = CHARSET.small_box_moves(w_, h_)
+            narrow = ((w_ - 2 * sx_) / w_, (h_ - 2 * sy_) / h_)
         new = []
         for P, BR, BB in zip(mine, bR, bB):
-            idx = _match(BR, P, CHARSET.SUP_SCALE)
+            idx = _match(BR, P, CHARSET.SUP_SCALE, narrow=narrow)
+            alt = _match(BR, P, CHARSET.SUP_SCALE) if narrow != (1.0, 1.0) else None
+            if idx is None or (alt is not None and sum(x is None for x in alt) < sum(x is None for x in idx)):
+                idx = alt                                      # (the 1: its held serif ends make its box)
             if idx is None or len(BR) != len(BB):
                 return out, rep
             mv = [None if j is None else ((BB[j][0] - BR[j][0]) * CHARSET.SUP_SCALE, (BB[j][1] - BR[j][1]) * CHARSET.SUP_SCALE)
