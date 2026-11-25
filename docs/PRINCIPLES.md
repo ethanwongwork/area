@@ -8,9 +8,10 @@ looks like. Each principle states a rule and how to check it. Exact values live 
 
 Area is a design system tool. Its core is a broad, first-party library of components
 whose every variant looks exactly right in any combination of settings. The [product brief](BRIEF.md)
-(2026-09-27) describes the larger tool, which will turn a person's visual choices into a
-design system in their own repository. Today's work is its first step: a measured library,
-judged and accepted by the owner, component by component, in the desktop app.
+(2026-11-23) describes the larger tool: a layer beside the tools people already use, which
+holds a product's system and everything visual that belongs to it, gives it to any tool, and
+shows what those tools did with it. The measured library, judged and accepted by the owner,
+component by component, in the desktop app, is its starting point.
 
 - **The app is the source of truth** (owner, 2026-10-12). `apps/desktop` is built only from
   Area, and every component, icon, type style and colour is judged there.

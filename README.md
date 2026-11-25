@@ -74,7 +74,7 @@ Start with the first three; the rest are references.
 
 | Doc | Read it for |
 |---|---|
-| [Brief](docs/BRIEF.md) | The product scope (2026-09-27, with a status note): what Area is becoming |
+| [Brief](docs/BRIEF.md) | The product scope (2026-11-23): Area as a layer beside every tool; the Sep 27 brief is in `docs/archive/` |
 | [Principles](docs/PRINCIPLES.md) | What Area is, the principles every component reflects, the design language |
 | [Governance](docs/GOVERNANCE.md) | How the library grows: new component vs variant vs setting, vocabulary, lifecycle, where each fact lives |
 | [Architecture](docs/ARCHITECTURE.md) | How it is built in code, and the files a new component touches |
