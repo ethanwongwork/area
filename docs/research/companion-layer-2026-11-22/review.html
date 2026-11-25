@@ -1,0 +1,483 @@
+<title>Area Companion Layer</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one reading column. The loop figure (in → Area → out → back) opens the page, a companion-panel mock shows
+   the feel, then keep/reshape/park, the sequence, and the decisions as choice rows saved to `verdicts`. */
+:root {
+  --bg: #f5f6f7; --panel: #ffffff; --fg: #14171a; --muted: #5b636b; --line: #dcdfe3; --soft: #eceff1;
+  --accent: #2b5d86; --accent-soft: #e2ecf4; --ok: #2e7650; --ok-soft: #e2f1e8; --warn: #9a5b12; --warn-soft: #f8ecdb;
+  --off: #c24a2c; --mock-accent: #3b6ef5; --mock-ink: #1b1e22;
+  --sans: "Instrument Sans", ui-sans-serif, -apple-system, "Segoe UI", sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #050607; --panel: #101214; --fg: #e9ecee; --muted: #959ea6; --line: #23272b; --soft: #171a1d;
+  --accent: #82b6de; --accent-soft: #132433; --ok: #7cc89c; --ok-soft: #10251a; --warn: #e3a95c; --warn-soft: #2a1d0c;
+  --off: #ef7b5b; --mock-accent: #6f95ff; --mock-ink: #eef0f2; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #050607; --panel: #101214; --fg: #e9ecee; --muted: #959ea6; --line: #23272b; --soft: #171a1d;
+  --accent: #82b6de; --accent-soft: #132433; --ok: #7cc89c; --ok-soft: #10251a; --warn: #e3a95c; --warn-soft: #2a1d0c;
+  --off: #ef7b5b; --mock-accent: #6f95ff; --mock-ink: #eef0f2; color-scheme: dark }
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--fg); font: 15px/1.55 var(--sans); }
+.page { max-width: 920px; margin: 0 auto; padding-block: 40px 120px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); display: grid; gap: 44px; }
+section { display: grid; gap: 16px; min-width: 0; }
+h1 { font-size: 32px; line-height: 1.12; font-weight: 600; margin: 0; text-wrap: balance; letter-spacing: -0.015em; }
+h2 { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.07em; color: var(--muted); margin: 0; }
+h3 { font-size: 17px; font-weight: 600; margin: 0; text-wrap: balance; }
+p { margin: 0; max-width: 68ch; }
+.lede { font-size: 18px; line-height: 1.5; max-width: 60ch; }
+.muted { color: var(--muted); }
+code { font-family: var(--mono); font-size: 0.86em; }
+header { display: grid; gap: 14px; }
+.meta { font: 500 12px/1.4 var(--mono); color: var(--muted); }
+
+/* Loop figure */
+.loop { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1.25fr) auto minmax(0, 1fr); gap: 12px; align-items: stretch; }
+.col { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 14px; display: grid; gap: 8px; align-content: start; min-width: 0; }
+.col h3 { font-size: 14px; }
+.col ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.col li { font-size: 13.5px; padding: 6px 8px; border-radius: 7px; background: var(--soft); }
+.col.area { border-color: var(--accent); background: var(--accent-soft); }
+.col.area li { background: var(--panel); display: grid; gap: 1px; }
+.col.area li small { color: var(--muted); font-size: 12px; }
+.arrow { display: grid; place-items: center; color: var(--muted); font: 500 12px/1.2 var(--mono); text-align: center; gap: 4px; }
+.arrow span:first-child { font-size: 20px; }
+.back { grid-column: 1 / -1; display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 10px; align-items: center; background: var(--panel); border: 1px dashed var(--line); border-radius: 12px; padding: 12px 14px; font-size: 14px; }
+.back b { font-weight: 600; }
+@media (max-width: 760px) {
+  .loop { grid-template-columns: minmax(0, 1fr); }
+  .arrow { grid-auto-flow: column; justify-content: center; }
+  .arrow span:first-child { transform: rotate(90deg); }
+}
+
+/* Jobs */
+.jobs { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 10px; }
+.job { border-top: 2px solid var(--fg); padding-top: 10px; display: grid; gap: 6px; align-content: start; }
+.job strong { font-size: 15px; }
+.job p { font-size: 13.5px; color: var(--muted); }
+@media (max-width: 760px) { .jobs { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 420px) { .jobs { grid-template-columns: minmax(0, 1fr); } }
+
+/* Gap: three layers */
+.layers { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.layer { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 14px; display: grid; gap: 8px; align-content: start; }
+.layer .who { font: 500 11.5px/1.4 var(--mono); color: var(--muted); }
+.layer.empty { border-style: dashed; }
+.layer.empty .who { color: var(--warn); }
+@media (max-width: 680px) { .layers { grid-template-columns: minmax(0, 1fr); } }
+
+/* Companion mock */
+.mock-wrap { display: grid; grid-template-columns: minmax(0, 360px) minmax(0, 1fr); gap: 24px; align-items: start; }
+@media (max-width: 760px) { .mock-wrap { grid-template-columns: minmax(0, 1fr); } }
+.mock { background: var(--panel); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; box-shadow: 0 1px 2px rgb(0 0 0 / 0.04), 0 8px 24px rgb(0 0 0 / 0.06); font-size: 13px; }
+.mock-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 10px 12px; border-bottom: 1px solid var(--line); }
+.mock-head .sys { display: flex; align-items: center; gap: 8px; font-weight: 600; }
+.dot { width: 14px; height: 14px; border-radius: 4px; background: var(--mock-accent); }
+.pill { font: 500 11px/1 var(--mono); padding: 4px 6px; border-radius: 999px; background: var(--soft); color: var(--muted); white-space: nowrap; }
+.pill.ok { background: var(--ok-soft); color: var(--ok); }
+.mock-body { padding: 12px; display: grid; gap: 12px; }
+.card { border: 1px solid var(--line); border-radius: 10px; padding: 10px; display: grid; gap: 8px; }
+.card .t { font-weight: 600; }
+.card .s { color: var(--muted); font-size: 12px; }
+.pick { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.opt { border: 1px solid var(--line); border-radius: 8px; padding: 8px; display: grid; gap: 6px; background: var(--soft); }
+.opt.chosen { border-color: var(--mock-accent); box-shadow: 0 0 0 1px var(--mock-accent); }
+.mini { background: var(--panel); padding: 8px; display: grid; gap: 5px; border: 1px solid var(--line); }
+.mini.a { border-radius: 4px; } .mini.b { border-radius: 12px; }
+.bar { height: 6px; border-radius: 3px; background: var(--line); }
+.bar.w6 { width: 60%; } .bar.w8 { width: 80%; } .bar.w4 { width: 40%; }
+.btn-mini { height: 14px; width: 54%; border-radius: inherit; background: var(--mock-accent); }
+.mini.a .btn-mini { border-radius: 3px; } .mini.b .btn-mini { border-radius: 7px; }
+.opt small { font: 500 11px/1 var(--mono); color: var(--muted); }
+.ba { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.ba > div { display: grid; gap: 4px; }
+.ba small { font: 500 10.5px/1 var(--mono); color: var(--muted); }
+.shot { border: 1px solid var(--line); border-radius: 6px; padding: 6px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; min-height: 52px; background: var(--soft); }
+.shot i { display: block; border-radius: 4px; background: var(--panel); border: 1px solid var(--line); }
+.shot.after i:nth-child(2) { border-color: var(--off); }
+.flag { display: flex; gap: 8px; align-items: center; color: var(--off); font-size: 12.5px; }
+.sw { width: 12px; height: 12px; border-radius: 3px; background: #1a73e8; flex: none; }
+.actions { display: flex; gap: 6px; flex-wrap: wrap; }
+.actions span { font-size: 12px; padding: 5px 9px; border-radius: 7px; border: 1px solid var(--line); }
+.actions span.primary { background: var(--mock-ink); color: var(--panel); border-color: var(--mock-ink); }
+.tray { display: flex; gap: 6px; }
+.tray i { width: 22px; height: 22px; border-radius: 6px; border: 1px solid var(--line); }
+.notes { display: grid; gap: 14px; }
+.notes div { display: grid; gap: 4px; }
+.notes strong { font-size: 14.5px; }
+.notes p { font-size: 14px; color: var(--muted); }
+
+/* Keep / reshape / park */
+.fate { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.fate > div { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 14px; display: grid; gap: 10px; align-content: start; min-width: 0; }
+.fate ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 8px; }
+.fate li { font-size: 13.5px; display: grid; gap: 1px; }
+.fate li small { color: var(--muted); font-size: 12.5px; }
+.tag { justify-self: start; font: 500 11px/1 var(--mono); padding: 4px 7px; border-radius: 5px; }
+.tag.keep { background: var(--ok-soft); color: var(--ok); }
+.tag.reshape { background: var(--accent-soft); color: var(--accent); }
+.tag.park { background: var(--warn-soft); color: var(--warn); }
+@media (max-width: 760px) { .fate { grid-template-columns: minmax(0, 1fr); } }
+
+/* Sequence */
+.steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: var(--panel); }
+.steps li { display: grid; grid-template-columns: 44px minmax(0, 1fr) minmax(0, 1fr); gap: 14px; padding: 12px 14px; border-top: 1px solid var(--line); align-items: baseline; }
+.steps li:first-child { border-top: 0; }
+.steps .n { font: 500 13px/1 var(--mono); color: var(--muted); font-variant-numeric: tabular-nums; }
+.steps b { font-weight: 600; }
+.steps .proof { font-size: 13.5px; color: var(--muted); }
+@media (max-width: 640px) { .steps li { grid-template-columns: 32px minmax(0, 1fr); } .steps .proof { grid-column: 2; } }
+
+/* Model stages */
+.stages { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; }
+.stage { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 14px; display: grid; gap: 6px; align-content: start; }
+.stage .k { font: 500 11.5px/1 var(--mono); color: var(--muted); }
+.stage p { font-size: 13.5px; }
+.stage .lim { color: var(--muted); font-size: 12.5px; }
+.stage.now { border-color: var(--accent); }
+@media (max-width: 760px) { .stages { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 420px) { .stages { grid-template-columns: minmax(0, 1fr); } }
+
+/* Decisions */
+.bar-top { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between; position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--bg); padding-block: 10px; border-bottom: 1px solid var(--line); }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg); }
+#status { font-size: 13.5px; color: var(--muted); }
+button { font: 600 13.5px/1 var(--sans); padding: 9px 14px; border-radius: 8px; border: 1px solid var(--fg); background: var(--fg); color: var(--bg); cursor: pointer; }
+button:disabled { opacity: 0.45; cursor: default; }
+button:focus-visible, input:focus-visible, textarea:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.decisions { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+.decision { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; display: grid; gap: 10px; }
+.decision.done { border-color: var(--ok); }
+.decision fieldset { border: 0; margin: 0; padding: 0; display: grid; gap: 6px; min-width: 0; }
+.decision legend { display: flex; gap: 10px; align-items: baseline; padding: 0; margin-bottom: 4px; font-weight: 600; font-size: 15.5px; }
+.decision legend .id { font: 500 12px/1 var(--mono); color: var(--muted); }
+.why { font-size: 13.5px; color: var(--muted); }
+.option { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 10px; padding: 8px 10px; border-radius: 8px; border: 1px solid transparent; cursor: pointer; align-items: start; }
+.option:hover { background: var(--soft); }
+.option:has(input:checked) { border-color: var(--line); background: var(--soft); }
+.option input { margin: 3px 0 0; accent-color: var(--accent); }
+.option .text { display: grid; gap: 2px; }
+.option strong { font-weight: 500; font-size: 14.5px; }
+.option small { color: var(--muted); font-size: 13px; }
+.rec { margin-left: 8px; font: 500 10.5px/1 var(--mono); padding: 3px 6px; border-radius: 5px; background: var(--accent-soft); color: var(--accent); vertical-align: 2px; }
+.decision textarea { width: 100%; min-height: 38px; resize: vertical; font: 14px/1.4 var(--sans); padding: 8px 10px; border-radius: 8px; border: 1px solid var(--line); background: var(--bg); color: var(--fg); }
+.saved { font: 500 11.5px/1 var(--mono); color: var(--ok); }
+footer { font-size: 13px; color: var(--muted); display: grid; gap: 6px; }
+@media (prefers-reduced-motion: no-preference) { .decision { transition: border-color 160ms ease; } }
+</style>
+
+<div class="page">
+  <header>
+    <div class="meta">Study · 2026-11-22 · docs/research/companion-layer-2026-11-22</div>
+    <h1>Area as a layer beside every tool</h1>
+    <p class="lede">Area keeps what your product looks like, and why, in one place you own. It hands that to every tool that makes things for you, and shows you in pictures what those tools did with it.</p>
+    <p class="muted">Screens are still coded and drawn in the tools people already use. Area sits beside them as its own window. Nothing in the app has changed yet: this page asks the decisions, with my recommendation shown as the default for each.</p>
+  </header>
+
+  <section aria-labelledby="loop-h">
+    <h2 id="loop-h">The loop</h2>
+    <div class="loop">
+      <div class="col">
+        <h3>What you have</h3>
+        <ul><li>A website</li><li>A repo</li><li>A design file</li><li>A brand PDF, logos, images</li><li>Or nothing: answer a few questions</li></ul>
+      </div>
+      <div class="arrow" aria-hidden="true"><span>→</span><span>Capture</span></div>
+      <div class="col area">
+        <h3>Area</h3>
+        <ul>
+          <li>System<small>Foundations, components, patterns, versions</small></li>
+          <li>Brand<small>Logo, colors, type files, imagery, voice, rules</small></li>
+          <li>Taste<small>References, explorations, every pick and why</small></li>
+        </ul>
+      </div>
+      <div class="arrow" aria-hidden="true"><span>→</span><span>Connect</span></div>
+      <div class="col">
+        <h3>Your tools</h3>
+        <ul><li>Coding agents and editors</li><li>Terminal agents</li><li>Design apps</li><li>Chat apps and web builders</li><li>Local and open models</li></ul>
+      </div>
+      <div class="back"><span aria-hidden="true">↩</span><span><b>See and teach.</b> What the tools did comes back as pictures and plain words. Off-system changes are flagged, Fix or Keep goes back to the tool, and every pick goes into the taste log.</span></div>
+    </div>
+  </section>
+
+  <section aria-labelledby="jobs-h">
+    <h2 id="jobs-h">Five jobs</h2>
+    <div class="jobs">
+      <div class="job"><strong>Capture</strong><p>Point Area at what you have. It drafts a system and asks you to confirm it as choices.</p></div>
+      <div class="job"><strong>Keep</strong><p>System, brand, references and explorations, versioned, with every pick kept.</p></div>
+      <div class="job"><strong>Connect</strong><p>One button per tool. Area writes its setup, tests it, and shows which tools read what.</p></div>
+      <div class="job"><strong>See</strong><p>Each tool's changes as before and after, with off-system values flagged. No terminal.</p></div>
+      <div class="job"><strong>Teach</strong><p>Picks become written taste rules, then a judge, then, later and only if you choose, a model of your own.</p></div>
+    </div>
+  </section>
+
+  <section aria-labelledby="gap-h">
+    <h2 id="gap-h">Where the gap is</h2>
+    <p>Every generator and design tool now takes a design system, but each keeps it inside its own product, so a brand gets rebuilt in every tool and drifts. No one joins the three layers, and no one holds them in a form the owner keeps.</p>
+    <div class="layers">
+      <div class="layer"><span class="who">Held by design-system platforms</span><h3>System</h3><p class="muted">Tokens, components, docs. Served to agents over MCP, mostly at enterprise prices and with call quotas.</p></div>
+      <div class="layer"><span class="who">Held by brand platforms</span><h3>Brand</h3><p class="muted">Logos, assets, guideline text. No code tokens; one large platform forbids using its brand kits outside its own app.</p></div>
+      <div class="layer empty"><span class="who">Held by nobody</span><h3>Taste</h3><p class="muted">References, explorations, picks with pictures and the reasons. Lost in chats and comments today.</p></div>
+    </div>
+    <p class="muted">Agents also still drift with an MCP server connected. What works is files they read (AGENTS.md, skills) plus a check they can run on their own work. Area already has a generator, <code>area check</code> and a read-only MCP server.</p>
+  </section>
+
+  <section aria-labelledby="mock-h">
+    <h2 id="mock-h">How it feels: the companion panel</h2>
+    <div class="mock-wrap">
+      <div class="mock" role="img" aria-label="A narrow Area panel docked beside an editor, showing a pick request from an agent and an activity card with a flagged color">
+        <div class="mock-head"><span class="sys"><span class="dot"></span>Acme · 2.3</span><span class="pill ok">3 tools reading</span></div>
+        <div class="mock-body">
+          <div class="card">
+            <span class="t">Your agent asks</span>
+            <span class="s">Card corner for the pricing page</span>
+            <div class="pick">
+              <div class="opt"><div class="mini a"><div class="bar w8"></div><div class="bar w6"></div><div class="btn-mini"></div></div><small>A · 4</small></div>
+              <div class="opt chosen"><div class="mini b"><div class="bar w8"></div><div class="bar w6"></div><div class="btn-mini"></div></div><small>B · 12 · picked</small></div>
+            </div>
+          </div>
+          <div class="card">
+            <span class="t">Added a Pricing page</span>
+            <span class="s">3 files · Card, Button, Badge · 2 min ago</span>
+            <div class="ba">
+              <div><small>Before</small><div class="shot"><i></i><i></i><i></i></div></div>
+              <div><small>After</small><div class="shot after"><i></i><i></i><i></i></div></div>
+            </div>
+            <div class="flag"><span class="sw"></span>Two colors aren't from your system</div>
+            <div class="actions"><span class="primary">Use Accent</span><span>Keep them</span><span>Show code</span></div>
+          </div>
+          <div class="card">
+            <span class="t">Drag into any app</span>
+            <div class="tray"><i style="background:var(--mock-accent)"></i><i style="background:var(--mock-ink)"></i><i style="background:var(--soft)"></i><i style="background:var(--ok)"></i></div>
+          </div>
+        </div>
+      </div>
+      <div class="notes">
+        <div><strong>Three window sizes</strong><p>The full window, as the app is today. A narrow panel that stays on top beside your editor or design app. A quick find on a global shortcut: search tokens, colors, icons, logos and components, then copy or drag.</p></div>
+        <div><strong>Picks happen where you work</strong><p>An agent can ask a question that shows as a card inside Claude, Cursor or another host that draws MCP Apps. The answer goes to Area's taste log with both options rendered.</p></div>
+        <div><strong>Plain words</strong><p>Cards say "changed", "kept" and "sent back", never "commit" or "diff". The code is one click away for engineers.</p></div>
+        <div><strong>Setup in five minutes</strong><p>Start from a website, a repo, a design file or images. Confirm the draft as choices. Turn on the tools Area found on this Mac. Send one test prompt and watch it come back.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section aria-labelledby="fate-h">
+    <h2 id="fate-h">Simplifying today's app</h2>
+    <p>The app has four things: <b>Systems</b> (now with Brand and Explorations), <b>References</b>, <b>Connections</b> and <b>Activity</b>. Since Nov 10 it has been growing into a coding environment, with its own agent, line diffs, a file editor and a terminal. The layer gives that up: people build in their tools, and Area is what those tools read from and report to.</p>
+    <div class="fate">
+      <div><span class="tag keep">Keep</span><ul>
+        <li>System pages<small>Themes, Tokens, Colors, Type, Icons, Illustrations, Spacing to Motion, Components, Patterns, Versions</small></li>
+        <li>Settings as choices<small>All 64, laid out as Basics (~8) and More</small></li>
+        <li>Publish and versions<small>Connections follow versions</small></li>
+        <li>Generator, merge, check, MCP<small><code>packages/output</code> becomes the delivery engine</small></li>
+        <li>Setup and question cards<small>They become "confirm the draft" and the picker in other tools</small></li>
+      </ul></div>
+      <div><span class="tag reshape">Reshape</span><ul>
+        <li>Projects → Connections<small>A real folder, repo, design file or chat app that uses a system</small></li>
+        <li>Home → Activity<small>Across connections, with what needs you first</small></li>
+        <li>Changes → Activity cards<small>Pictures and plain words; the diff behind Show code</small></li>
+        <li>Chat → Ask about your system<small>Changes to the system itself, explanations, Setup. Coding stays in your tool</small></li>
+        <li>Coding apps → Add a tool<small>Detect, one button, test, undo</small></li>
+        <li>References → with adding<small>Drop, paste, a URL, capture a live page</small></li>
+      </ul></div>
+      <div><span class="tag park">Park</span><ul>
+        <li>Page editor and Flows<small>Drawing screens is the design tools' and agents' job</small></li>
+        <li>Files, editor, terminal<small>Every editor does it better</small></li>
+        <li>Save, review, publish to GitHub<small>Replaced by one action: Send to project</small></li>
+        <li>Discover and Following<small>Public sharing comes after the layer works</small></li>
+        <li>Labs in the nav<small>Behind a developer setting</small></li>
+      </ul></div>
+    </div>
+    <p class="muted">Parked means hidden with the code kept. The 126 component families stay as the starting point for a new system. Finishing a core 24 (the ones agents use most) matters more to the layer than reviewing all of them.</p>
+  </section>
+
+  <section aria-labelledby="model-h">
+    <h2 id="model-h">From picks to a model of your own</h2>
+    <p>The value is in the log of picks, and only if it is recorded right: both options rendered at true size, the question, the version, strength, "both bad", and a training flag that is off by default.</p>
+    <div class="stages">
+      <div class="stage now"><span class="k">Stage 0 · now</span><h3>Log</h3><p>One event per pick on every surface, kept beside the system.</p><p class="lim">No model yet. Picks without both options rendered can't train anything.</p></div>
+      <div class="stage now"><span class="k">Stage 1 · weeks</span><h3>Taste rules + judge</h3><p>Written rules you approve. A judge shown about 8 of your similar past picks.</p><p class="lim">About 60% agreement on close calls in current research. Ranks and flags; never decides.</p></div>
+      <div class="stage"><span class="k">Stage 2 · ~500 picks</span><h3>Scorer, then adapters</h3><p>A small per-person scorer, then a LoRA on an open model, on a Mac or hosted.</p><p class="lim">Gains over stage 1 unproven for design systems; goes stale with each version.</p></div>
+      <div class="stage"><span class="k">Stage 3 · later</span><h3>Brand model</h3><p>Drafts screens and imagery in the brand without a long prompt.</p><p class="lim">Research-grade. Still sits on top of stage 1, not in place of it.</p></div>
+    </div>
+    <p class="muted">Hosted fine-tuning is closing: one major provider stopped taking new organisations in May 2026. Open weights are where adapters live now, which fits building on open-source models.</p>
+  </section>
+
+  <section aria-labelledby="seq-h">
+    <h2 id="seq-h">Build sequence</h2>
+    <ol class="steps">
+      <li><span class="n">0</span><span><b>Decide and simplify.</b> Park, move Labs out of the nav, show Connections</span><span class="proof">The app shows four things and nothing is lost</span></li>
+      <li><span class="n">1</span><span><b>Connect.</b> DTCG tokens, Tailwind, skills, brand file; Add a tool for four coding tools; localhost server</span><span class="proof">Two tools connected in under 2 minutes, and both describe the brand back</span></li>
+      <li><span class="n">2</span><span><b>Capture.</b> Import from a website URL, then a repo, images and a PDF</span><span class="proof">A real site becomes a system that looks like it, in under 5 minutes</span></li>
+      <li><span class="n">3</span><span><b>See.</b> Activity cards from connected folders, with checks and before/after</span><span class="proof">An off-system change is caught and fixed from the card</span></li>
+      <li><span class="n">4</span><span><b>Panel, quick find, picks in other tools.</b> The taste log on every surface</span><span class="proof">A pick made inside another app lands in Area with both options</span></li>
+      <li><span class="n">5</span><span><b>Brand.</b> Logos, imagery, voice, fonts with licences; Copy for any AI; the remote connector</span><span class="proof">A brand lead with only a chat app gets on-brand output</span></li>
+      <li><span class="n">6</span><span><b>Taste stage 1.</b> Rules and the judge, with agreement shown honestly</span><span class="proof">The judge predicts the next 100 picks better than chance</span></li>
+      <li><span class="n">7</span><span><b>Taste stage 2.</b> Dataset export, a guided adapter, served to tools</span><span class="proof">Beats stage 1 on held-out picks, or we stay at stage 1</span></li>
+    </ol>
+  </section>
+
+  <section aria-labelledby="dec-h">
+    <div class="bar-top">
+      <h2 id="dec-h">Decisions</h2>
+      <span id="status" role="status">Loading your picks…</span>
+      <button type="button" id="take-all">Take every recommendation</button>
+    </div>
+    <ol class="decisions" id="list"></ol>
+  </section>
+
+  <footer>
+    <p>The full study, with Area's inventory, the package layout, every tool's install path and the sources, is in <code>docs/research/companion-layer-2026-11-22/README.md</code> and <code>sources.md</code>.</p>
+    <p>An undecided decision stays at its recommendation. Notes save as you type.</p>
+  </footer>
+</div>
+
+<template id="decision-t">
+  <li class="decision"><fieldset><legend><span class="id"></span><span class="title"></span></legend><p class="why"></p></fieldset><textarea placeholder="A note (optional)" aria-label="Note"></textarea><span class="saved" hidden>Saved</span></li>
+</template>
+
+<script>
+const DECISIONS = [
+  { id: "d1", title: "The one-sentence position", why: "Everything else follows from it.", options: [
+    ["a", "Keeps what your product looks like and why, gives it to every tool, shows what they did", "System, brand and taste in one place you own; the layer beside every tool.", true],
+    ["b", "A design system tool that writes to your repo", "Today's brief. Narrower; leaves out brand, taste and non-coding tools."],
+    ["c", "Your brand's own model", "Leads with the model, which is the least proven part today."] ] },
+  { id: "d2", title: "Projects", why: "Area-drawn projects duplicate design tools; connections follow the real work.", options: [
+    ["a", "Become Connections", "A real folder, repo, design file or chat app that uses a system, with its version and activity.", true],
+    ["b", "Keep Area-drawn projects beside connections", "Two kinds of project; more to explain."],
+    ["c", "Keep as they are", "Pages and layers drawn in Area."] ] },
+  { id: "d3", title: "Area's own chat", why: "A second coding agent competes with the tools Area connects to.", options: [
+    ["a", "Ask about your system only", "Changes to the system itself, explanations, Setup by chat. Coding happens in your own tool.", true],
+    ["b", "Keep coding in the project's folder too", "Today's engine, Keep/Undo per file."],
+    ["c", "Remove chat", "Setup stays a questionnaire."] ] },
+  { id: "d4", title: "Page editor and Flows", why: "Drawing and editing screens is what design tools and agents do.", options: [
+    ["a", "Park", "Hidden, code kept, not maintained.", true],
+    ["b", "Keep as a light sketch tool", "For quick layouts without another app."],
+    ["c", "Remove", "Delete the code."] ] },
+  { id: "d5", title: "Files, code editor, terminal", why: "Every editor does these better.", options: [
+    ["a", "Park", "Hidden, code kept.", true],
+    ["b", "Keep behind the setting, as now", "Off by default for technical people."] ] },
+  { id: "d6", title: "GitHub inside Area", why: "The connected tool and the repo host already handle save, review and merge.", options: [
+    ["a", "One action: Send to project", "Writes the generated files, and opens a pull request when you ask.", true],
+    ["b", "Keep save, review and publish", "Today's three actions through the GitHub command line."] ] },
+  { id: "d7", title: "First import source", why: "Import is a stub today and is the first thing a new person needs.", options: [
+    ["a", "A website URL", "Measured with the capture script: colors, type, logo, corners, spacing, screenshots. Works for anyone.", true],
+    ["b", "A repo", "Tokens and CSS from code; engineers first."],
+    ["c", "A design file", "Through the design tool's MCP, with its seat limits."],
+    ["d", "A brand PDF or images", "Brand teams first; less precise."] ] },
+  { id: "d8", title: "First tools supported", why: "Local install paths are solid in these four; chat apps need a hosted server.", options: [
+    ["a", "Claude Code, Cursor, VS Code, Codex", "One button each, tested and undoable.", true],
+    ["b", "Claude Desktop and ChatGPT first", "Reaches non-technical people sooner; needs the remote server first."],
+    ["c", "A design tool first", "Token import and a small plugin."] ] },
+  { id: "d9", title: "Window sizes", why: "A companion has to live beside other apps.", options: [
+    ["a", "Full window, companion panel, quick find", "All three.", true],
+    ["b", "Full window and quick find", "No docked panel."],
+    ["c", "Full window only", "As today."] ] },
+  { id: "d10", title: "Local or remote", why: "Chat apps and teammates can only reach a server on the internet.", options: [
+    ["a", "Local first, remote opt-in", "Area serves this Mac; a hosted connector with sign-in for chat apps and teams.", true],
+    ["b", "Local only", "No accounts or hosting; chat apps get Copy for any AI only."],
+    ["c", "Remote first", "Accounts from day one."] ] },
+  { id: "d11", title: "Where brand lives", why: "A system is the look plus its rules, and brand assets are part of the look.", options: [
+    ["a", "A Brand section in every system", "Logo, colors, type files, imagery, voice, rules.", true],
+    ["b", "A separate Brand place beside Systems", "Brands and systems linked."] ] },
+  { id: "d12", title: "Taste logging", why: "The log only has value if it starts early and is recorded right.", options: [
+    ["a", "Always log; training use off by default", "Per item and per collection; captures of other products never train.", true],
+    ["b", "Log only when turned on", "Less data, simpler consent."] ] },
+  { id: "d13", title: "The model", why: "Research shows retrieval and a personal judge come first; adapters need hundreds of clean pairs.", options: [
+    ["a", "Stages 0–1 now; adapters after ~500 picks", "No model promised yet; your data is kept and ready for one.", true],
+    ["b", "Build a local adapter flow early", "A demo sooner; little data to train on."],
+    ["c", "Skip the model", "Context and checks only."] ] },
+  { id: "d14", title: "Settings layout", why: "Every option stays; fewer show at first.", options: [
+    ["a", "Basics (~8) and More", "Accent, Neutral, Type, Corners, Density, Depth, Stroke, Motion first; the rest one click away.", true],
+    ["b", "As now", "Nine headings, all open."] ] },
+  { id: "d15", title: "Component priority", why: "Six of 126 families are Complete; agents use a small set most.", options: [
+    ["a", "Finish a core 24 to Complete first", "Button through Skeleton; the rest stay in review.", true],
+    ["b", "Keep reviewing all families in order", "As now."] ] },
+  { id: "d16", title: "The brief", why: "BRIEF.md, AGENTS.md and PRODUCT_UI.md describe today's product.", options: [
+    ["a", "Rewrite the brief from these picks", "Then update AGENTS.md's regions and PRODUCT_UI.", true],
+    ["b", "Append to the current brief", "Keep the Sep 27 text, add a section."] ] }
+];
+
+const list = document.getElementById("list");
+const statusLine = document.getElementById("status");
+const takeAll = document.getElementById("take-all");
+const tpl = document.getElementById("decision-t");
+const saved = new Map();
+let store = null;
+const recOf = d => d.options.find(o => o[3])[0];
+
+function render() {
+  list.textContent = "";
+  for (const d of DECISIONS) {
+    const entry = saved.get(d.id);
+    const pick = entry?.pick ?? recOf(d);
+    const li = tpl.content.firstElementChild.cloneNode(true);
+    li.classList.toggle("done", !!entry);
+    li.querySelector(".id").textContent = d.id;
+    li.querySelector(".title").textContent = d.title;
+    li.querySelector(".why").textContent = d.why;
+    const fieldset = li.querySelector("fieldset");
+    for (const [value, label, text, isRec] of d.options) {
+      const id = `${d.id}-${value}`;
+      const option = document.createElement("label");
+      option.className = "option";
+      option.htmlFor = id;
+      option.innerHTML = `<input type="radio" name="${d.id}" id="${id}" value="${value}"><span class="text"><span><strong></strong>${isRec ? '<span class="rec">Recommended</span>' : ""}</span><small></small></span>`;
+      option.querySelector("strong").textContent = `${value.toUpperCase()}. ${label}`;
+      option.querySelector("small").textContent = text;
+      const input = option.querySelector("input");
+      input.checked = value === pick;
+      input.disabled = !store;
+      input.addEventListener("change", () => save(d, value, li.querySelector("textarea").value));
+      fieldset.append(option);
+    }
+    const note = li.querySelector("textarea");
+    note.id = `${d.id}-note`;
+    note.value = entry?.note ?? "";
+    note.disabled = !store;
+    let timer;
+    note.addEventListener("input", () => { clearTimeout(timer); timer = setTimeout(() => save(d, saved.get(d.id)?.pick ?? pick, note.value), 700); });
+    li.querySelector(".saved").hidden = !entry;
+    list.append(li);
+  }
+  const decided = DECISIONS.filter(d => saved.has(d.id)).length;
+  takeAll.disabled = !store || decided === DECISIONS.length;
+  if (store) statusLine.textContent = decided ? `${decided} of ${DECISIONS.length} decided. The rest stay at the recommendation.` : "Nothing decided yet. Every decision is at the recommendation.";
+}
+
+async function save(d, pick, note) {
+  if (!store) return;
+  const opt = d.options.find(o => o[0] === pick);
+  const data = { pick, note: note || "", title: d.title, label: opt[1], recommended: recOf(d), at: new Date().toISOString() };
+  const before = saved.get(d.id);
+  if (before && before.pick === data.pick && (before.note || "") === data.note) return;
+  saved.set(d.id, data);
+  statusLine.textContent = "Saving…";
+  try { await store.collection("verdicts").doc(d.id).set(data); }
+  catch (e) { statusLine.textContent = "That pick didn't save. Try again in a moment."; }
+}
+
+takeAll.addEventListener("click", async () => {
+  takeAll.disabled = true;
+  for (const d of DECISIONS) if (!saved.has(d.id)) await save(d, recOf(d), "");
+});
+
+render();
+(async () => {
+  const db = await window.claude?.use?.("db");
+  if (!db) { statusLine.textContent = "Picks can't be saved in this view. Every decision shows its recommendation."; return; }
+  const timeout = setTimeout(() => { statusLine.textContent = "Your picks can't be reached yet. Showing the recommendations."; }, 10000);
+  db.collection("verdicts").onSnapshot(snap => {
+    clearTimeout(timeout);
+    const first = !store;
+    store = db;
+    saved.clear();
+    for (const doc of snap.docs) if (doc.exists) saved.set(doc.id, doc.data());
+    const active = document.activeElement;
+    if (first || !(active && active.tagName === "TEXTAREA")) render();
+    else statusLine.textContent = `${saved.size} of ${DECISIONS.length} decided.`;
+  }, () => { clearTimeout(timeout); statusLine.textContent = "Your picks can't be loaded. Showing the recommendations."; });
+})();
+</script>

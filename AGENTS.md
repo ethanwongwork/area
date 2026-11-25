@@ -28,6 +28,10 @@ components and accurate specs matter more than speed.
     Appearance, `apps/desktop/src/app-look.ts`); the Inspector's settings reach only the specimens. Its
     layout was measured at type 13, Compact. Its UI follows `docs/PRODUCT_UI.md`.
   - `apps/docs` is archived: don't extend it or check work there.
+- **Direction (owner, 2026-11-23):** Area becomes a layer beside other tools. It holds one system of
+  every visual element, connects it to any tool, shows tool work as pictures, and has a chat that prepares
+  briefs for agents. Read `docs/BRIEF.md` before changing the app's structure. The regions above stay
+  until the brief's build sequence reshapes them.
 - **One session at a time.** Before starting, check `origin/main` and open pull requests,
   so you don't build what another session has. When resuming, read `.Codex/HANDOFF.md`
   (Current state first).
